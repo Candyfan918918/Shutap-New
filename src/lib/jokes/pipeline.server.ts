@@ -29,7 +29,8 @@ import {
   fill,
   formatCandidates,
   formatExamples,
-  formatPremises,
+  formatOtherPremises,
+  formatPremise,
 } from './prompts.server'
 import {
   loadExamples,
@@ -75,7 +76,11 @@ export const BUDGET = {
 
 /* ───────────────────────────── shapes ───────────────────────────── */
 
-export type Premise = { t: string; used: boolean }
+/** Where stage 1 dealt a used premise. `spare` is held for regeneration. */
+export type PremiseSlot = 'take' | 'clapback' | 'roast' | 'spare'
+export const PREMISE_SLOTS: PremiseSlot[] = ['take', 'clapback', 'roast', 'spare']
+
+export type Premise = { t: string; used: boolean; slot?: PremiseSlot }
 
 export type CandidateRecord = {
   text: string
@@ -87,6 +92,8 @@ export type CandidateRecord = {
 
 export type GeneratedCard = {
   text: string
+  /** the premise this card was built on, for the record */
+  premise: string | null
   used_fallback: boolean
   judge_score: number | null
   judge_why: string | null
@@ -240,17 +247,39 @@ export function cleanLine(raw: string, slot: SlotKey): string {
 
 /* ───────────────────────── stage 1 · premises ───────────────────────── */
 
-export async function runPremisePass(situation: string): Promise<Premise[]> {
+/** Exactly four used, one per slot value — what stage 1 is asked for. */
+export function premisesAreDealt(premises: Premise[] | null | undefined): boolean {
+  if (!Array.isArray(premises)) return false
+  const used = premises.filter((p) => p && p.used)
+  if (used.length !== 4) return false
+  const slots = new Set(used.map((p) => p.slot))
+  return PREMISE_SLOTS.every((sl) => slots.has(sl))
+}
+
+/** The positional deal, when the model would not deal: the used premises
+ *  in order (then the rest, if fewer than four were marked) go
+ *  [0]→take, [1]→clapback, [2]→roast, [3]→spare. */
+export function dealPositionally(premises: Premise[]): Premise[] {
+  const out = premises.map((p) => ({ t: p.t, used: false as boolean, slot: undefined as PremiseSlot | undefined }))
+  const order = [...out.filter((_, i) => premises[i]!.used), ...out.filter((_, i) => !premises[i]!.used)]
+  order.slice(0, 4).forEach((p, i) => {
+    p.used = true
+    p.slot = PREMISE_SLOTS[i]
+  })
+  return out
+}
+
+async function askForPremises(situation: string): Promise<Premise[] | null> {
   const res = await callAgent({
     model: writerModel(),
     temperature: 1.0,
-    maxTokens: 2000,
+    maxTokens: 2200,
     timeoutMs: BUDGET.premises(),
     messages: [{ role: 'user', content: fill(PREMISE_PROMPT, { SITUATION: situation.slice(0, 1500) }) }],
   })
   if (res.error) {
     console.error('[joke-premises] gateway error', res.error)
-    return []
+    return null
   }
   const parsed = tryParseJson<{ premises?: unknown }>(res.text)
   const list = Array.isArray(parsed?.premises) ? parsed!.premises : []
@@ -260,29 +289,64 @@ export async function runPremisePass(situation: string): Promise<Premise[]> {
     const t = String(p?.t ?? p?.text ?? '').replace(/\s+/g, ' ').trim()
     if (!t || seen.has(t.toLowerCase())) continue
     seen.add(t.toLowerCase())
-    premises.push({ t, used: p?.used === true })
-  }
-  // Exactly four are meant to be marked. Fewer: promote from the top until
-  // there are four. More: keep the first four marked. Either way the writer
-  // gets four, never none.
-  const used = premises.filter((p) => p.used)
-  if (used.length > 4) {
-    let kept = 0
-    for (const p of premises) if (p.used) p.used = kept++ < 4
-  } else if (used.length < 4) {
-    let need = 4 - used.length
-    for (const p of premises) {
-      if (need <= 0) break
-      if (!p.used) { p.used = true; need-- }
-    }
+    const slot = String(p?.slot ?? '').toLowerCase()
+    premises.push({
+      t,
+      used: p?.used === true,
+      ...((PREMISE_SLOTS as string[]).includes(slot) ? { slot: slot as PremiseSlot } : {}),
+    })
   }
   return premises.slice(0, 12)
 }
 
-export function usedPremises(premises: Premise[] | null | undefined): string[] {
-  const list = Array.isArray(premises) ? premises : []
-  const used = list.filter((p) => p && p.used && p.t).map((p) => p.t)
-  return (used.length ? used : list.filter((p) => p && p.t).map((p) => p.t)).slice(0, 4)
+/** Stage 1. Twelve observations, four of them dealt to cards. A deal the
+ *  model got wrong (not four, or not one per slot) is asked for once more;
+ *  a second wrong deal is dealt positionally and logged. Persisted as-is. */
+export async function runPremisePass(situation: string): Promise<Premise[]> {
+  let last: Premise[] | null = null
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const got = await askForPremises(situation)
+    if (got === null) {
+      // The gateway itself failed: a second attempt is a second timeout.
+      break
+    }
+    if (premisesAreDealt(got)) return got
+    console.warn('[joke-premises] deal invalid', {
+      attempt,
+      used: got.filter((p) => p.used).length,
+      slots: got.filter((p) => p.used).map((p) => p.slot ?? null),
+    })
+    last = got
+  }
+  if (!last || last.length === 0) return []
+  console.warn('[joke-premises] dealing positionally')
+  return dealPositionally(last)
+}
+
+export type Deal = {
+  /** this card's premise, or null when nothing was dealt to it */
+  premise: string | null
+  /** the two dealt to the other cards */
+  others: string[]
+  /** held for regeneration; never shown to stage 2 or 3 on the first pass */
+  spare: string | null
+}
+
+/** What a card sees of the set's premises: its own, the other two, and the
+ *  spare. Premises without a deal (an older cache, a bare set) are dealt
+ *  positionally here rather than refused. */
+export function dealFor(premises: Premise[] | null | undefined, slot: SlotKey): Deal {
+  const list = Array.isArray(premises) ? premises.filter((p) => p && p.t) : []
+  const dealt = premisesAreDealt(list) ? list : dealPositionally(list)
+  const mine = SLOT_NAMES[slot] as PremiseSlot
+  const bySlot = (sl: PremiseSlot) => dealt.find((p) => p.used && p.slot === sl)?.t ?? null
+  return {
+    premise: bySlot(mine),
+    others: PREMISE_SLOTS.filter((sl) => sl !== mine && sl !== 'spare')
+      .map(bySlot)
+      .filter((t): t is string => !!t),
+    spare: bySlot('spare'),
+  }
 }
 
 /* ───────────────────────── stage 2 · candidates ───────────────────────── */
@@ -291,9 +355,24 @@ export type CandidateInput = {
   situation: string
   slot: SlotKey
   voice: JokeVoice
-  premises: string[]
+  /** this card's dealt premise */
+  premise: string | null
+  /** the two dealt to the other cards — taken, not to be built on */
+  otherPremises: string[]
   examples: { situation: string; line: string }[]
   roastTarget: string
+}
+
+/** The voice, with the house filling any field a voice left empty. A run
+ *  with nobody talking is the flat register; there is no voiceless mode. */
+function voiced(v: JokeVoice): JokeVoice {
+  return {
+    ...v,
+    label: v.label?.trim() || HOUSE_VOICE.label,
+    persona_prompt: v.persona_prompt?.trim() || HOUSE_VOICE.persona_prompt,
+    register_notes: v.register_notes?.trim() || HOUSE_VOICE.register_notes,
+    banned_moves: v.banned_moves?.trim() || HOUSE_VOICE.banned_moves,
+  }
 }
 
 function slotRule(slot: SlotKey, roastTarget: string): string {
@@ -303,9 +382,7 @@ function slotRule(slot: SlotKey, roastTarget: string): string {
 export async function runCandidatePass(
   input: CandidateInput,
 ): Promise<{ candidates: string[]; model: string; error?: string }> {
-  // No persona is not a neutral run — it is nobody talking, and nobody
-  // talking is the flat register. The house voice speaks instead.
-  const voice = input.voice.persona_prompt?.trim() ? input.voice : { ...HOUSE_VOICE, key: input.voice.key || HOUSE_VOICE.key }
+  const voice = voiced(input.voice)
   const prompt = fill(CANDIDATE_PROMPT, {
     VOICE_NAME: voice.label,
     VOICE_PERSONA: voice.persona_prompt,
@@ -314,7 +391,8 @@ export async function runCandidatePass(
     SLOT: SLOT_NAMES[input.slot],
     SLOT_RULE: slotRule(input.slot, input.roastTarget),
     SITUATION: input.situation.slice(0, 1500),
-    PREMISES: formatPremises(input.premises),
+    PREMISE: formatPremise(input.premise),
+    OTHER_PREMISES: formatOtherPremises(input.otherPremises),
     EXAMPLES: formatExamples(input.examples),
   })
   const res = await callAgent({
@@ -353,6 +431,8 @@ export async function runJudge(args: {
   situation: string
   slot: SlotKey
   roastTarget: string
+  premise: string | null
+  otherPremises: string[]
   candidates: string[]
 }): Promise<Verdict> {
   const model = judgeModel()
@@ -361,6 +441,8 @@ export async function runJudge(args: {
     SITUATION: args.situation.slice(0, 1500),
     SLOT: SLOT_NAMES[args.slot],
     SLOT_RULE: slotRule(args.slot, args.roastTarget),
+    PREMISE: formatPremise(args.premise),
+    OTHER_PREMISES: formatOtherPremises(args.otherPremises),
     CANDIDATES: formatCandidates(args.candidates),
   })
   const res = await callAgent({
@@ -413,6 +495,7 @@ export function fallbackCard(slot: SlotKey, voiceKey: string | null, avoid: stri
   const fresh = pool.filter((t) => !avoid.includes(t))
   return {
     text: pick(fresh.length ? fresh : pool),
+    premise: null,
     used_fallback: true,
     judge_score: null,
     judge_why: null,
@@ -429,13 +512,18 @@ export function fallbackCard(slot: SlotKey, voiceKey: string | null, avoid: stri
    pass) → floor. Pure of the database: the caller supplies premises,
    voice and examples so the eval script can run the identical ladder. */
 export async function generateFromInputs(
-  input: CandidateInput & { avoid?: string[] },
+  input: CandidateInput & { avoid?: string[]; spare?: string | null },
 ): Promise<GeneratedCard> {
   const avoid = new Set((input.avoid ?? []).map((t) => t.toLowerCase()))
   let writer: string | null = null
 
   for (let attempt = 0; attempt < 2; attempt++) {
-    const pass = await runCandidatePass(input)
+    // The second attempt is a regeneration: the dealt premise produced
+    // nothing the judge would pass, so the spare is dealt in its place.
+    // The spare is never shown to stage 2 or 3 otherwise.
+    const premise = attempt === 1 && input.spare ? input.spare : input.premise
+    if (attempt === 1) console.warn('[joke-candidates] regenerating', { slot: input.slot, spare: !!input.spare })
+    const pass = await runCandidatePass({ ...input, premise })
     writer = pass.model
     if (pass.error) {
       console.error('[joke-candidates] gateway error', { slot: input.slot, attempt, error: pass.error })
@@ -460,6 +548,8 @@ export async function generateFromInputs(
       situation: input.situation,
       slot: input.slot,
       roastTarget: input.roastTarget,
+      premise,
+      otherPremises: input.otherPremises,
       candidates: survivors.map((s) => s.text),
     })
     for (const r of verdict.rejected) {
@@ -472,6 +562,7 @@ export async function generateFromInputs(
     })
 
     const base = {
+      premise,
       prompt_version: PROMPT_VERSION,
       voice_key: input.voice.key,
       writer_model: writer,
@@ -585,7 +676,11 @@ export async function prepareSet(admin: Admin, set: SetRow): Promise<PreparedSet
 
   // The cache is keyed on the prompt version: observations an older premise
   // prompt made are not the observations this one would make.
-  let premises = stored.premises_version === PROMPT_VERSION && stored.premises ? stored.premises : null
+  // Cached premises count only if this prompt version made them AND they
+  // carry the deal — an earlier 2.1 cache has the observations but not the
+  // slots, and stage 2 needs the slots.
+  let premises =
+    stored.premises_version === PROMPT_VERSION && premisesAreDealt(stored.premises) ? stored.premises! : null
   if (!premises) {
     premises = await runPremisePass(situation)
     // An empty pass is not cached: the gateway may have been down, and the
@@ -628,11 +723,14 @@ export async function generateCard(
     voiceKey: prepared.voice.key,
     archetype: String(set.archetype ?? 'general'),
   })
+  const deal = dealFor(prepared.premises, slot)
   return generateFromInputs({
     situation,
     slot,
     voice: prepared.voice,
-    premises: usedPremises(prepared.premises),
+    premise: deal.premise,
+    otherPremises: deal.others,
+    spare: deal.spare,
     examples,
     roastTarget: prepared.roastTarget,
     avoid: args.avoid,

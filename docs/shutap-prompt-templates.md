@@ -4,7 +4,7 @@ Three prompts, one per pipeline stage. Kept in `src/lib/jokes/prompts.server.ts`
 
 Three cards. Take / Clapback / Roast. Unchanged.
 
-**v2.1** adds five named moves to stage 2 (§2, MOVES), two premise-pass notes (the errand, the institution), a third button type, and a hard ban list, all derived from the 50-reaction analysis in §7b. The pipeline shape is unchanged.
+**v2.1** adds five named moves to stage 2 (§2, MOVES), two premise-pass notes (the errand, the institution), a third button type, a hard ban list, premise-per-slot dealing (stage 1 assigns each used premise to a card, so no two cards build on the same observation), and the visible-vehicle rule (a comparison's second half must be something you can see). Derived from the 50-reaction analysis in §7b and the live Lovable set in §7c. The pipeline shape is unchanged; the stage 1 JSON gains one field.
 
 **What changed from v1, and why.** The 50-scene hand run produced correct premises and dead cards. Every card was a finding: accurate, one clause, landing on an abstract noun, said by nobody. v1 caused this directly — it banned every mechanism a joke uses to stop being a finding (speaker, heightening, escalation, a button, a landing image) and rewarded the one thing a finding is good at (naming the mechanism). Ranking ten findings does not produce a joke. Selection cannot fix an object-class error in generation. v2 changes what stage 2 is asked to produce. Stage 1 is nearly untouched because it was working.
 
@@ -15,7 +15,8 @@ Three cards. Take / Clapback / Roast. Unchanged.
 | var | source | example |
 |---|---|---|
 | `{{SITUATION}}` | `joke_sets.situation_clean`, post-scrub | "my mother-in-law reorganised my kitchen while I was at work…" |
-| `{{PREMISES}}` | `joke_sets.premises`, the 4 marked `used` | numbered list |
+| `{{PREMISE}}` | `joke_sets.premises`, the one whose `slot` matches this card | one line |
+| `{{OTHER_PREMISES}}` | the two `used` premises dealt to the other slots | numbered list |
 | `{{SLOT}}` | `slot_order[position]` | `roast` |
 | `{{SLOT_RULE}}` | constant, §4 below | the roast block |
 | `{{VOICE_NAME}}` | `joke_voices.label` | the petty historian |
@@ -111,11 +112,23 @@ Rules:
 - One sentence each. Shorter is better. The best observations are under
   twelve words.
 
-Then mark the 4 that are least obvious and most specific to this situation.
+Then mark the 4 that are least obvious and most specific to this situation,
+and DEAL THEM TO CARDS. Each card gets its own premise; no two cards build
+on the same observation. Deal by fit:
+  take      — the one that names the mechanism most cleanly
+  clapback  — the one that contains their own word, excuse, or rule
+  roast     — the one with the object, the errand, or the number in it
+  spare     — the fourth; held for regeneration
+If a used premise is about a user decision it may only be dealt to roast
+or spare.
 
 Return only JSON:
-{"premises":[{"t":"...","used":true},{"t":"...","used":false}, ...]}
-Exactly 12 items. Exactly 4 with used:true.
+{"premises":[{"t":"...","used":true,"slot":"take"},
+             {"t":"...","used":true,"slot":"clapback"},
+             {"t":"...","used":true,"slot":"roast"},
+             {"t":"...","used":true,"slot":"spare"},
+             {"t":"...","used":false}, ...]}
+Exactly 12 items. Exactly 4 with used:true, one per slot value.
 ```
 
 ---
@@ -143,16 +156,20 @@ CARD — {{SLOT}}
 SITUATION:
 {{SITUATION}}
 
-WHAT'S ACTUALLY GOING ON HERE:
-{{PREMISES}}
+YOUR PREMISE — build every candidate on this one:
+{{PREMISE}}
 
-These observations are your setups. They are not your lines. An observation
+TAKEN — these belong to the other two cards. Do not build on them; the
+reader gets all three cards and will notice the same joke three times:
+{{OTHER_PREMISES}}
+
+Your premise is your setup. It is not your line. An observation
 with a full stop after it is a finding, and a finding is what a joke looks
 like before anyone has said it out loud.
 
 THE BUILD — every candidate is made of these, in this order:
 
-1. PREMISE. Pick one observation. This is what the line is about.
+1. PREMISE. The one you were dealt. This is what the line is about.
 
 2. PICTURE. Take the observation one step past the fact. Not a new fact
    about the person — an image, a comparison, an extrapolation that the
@@ -162,6 +179,10 @@ THE BUILD — every candidate is made of these, in this order:
      Picture:      "He's moved his own son to Any Other Business."
      Observation:  "He brought a fork to an inspection."
      Picture:      "A night nurse who eats the patient."
+   VISIBLE VEHICLE. If the picture is a comparison, the second half must
+   be something you could see, hold, or point at. "Like a raccoon in a
+   bathrobe" — visible. "Like a quarterly report" — you cannot see a pour
+   that looks like a report; it is an abstraction wearing a simile. Out.
    The picture must be BUILT FROM a detail the user gave. "Table it" plus
    "work trip" earns "Any Other Business." It does not earn a mistress in
    another city — that is a fabricated fact, not a heightened one. If the
@@ -319,6 +340,13 @@ SITUATION:
 CARD — {{SLOT}}
 {{SLOT_RULE}}
 
+THIS CARD'S PREMISE:
+{{PREMISE}}
+
+PREMISES THAT BELONG TO THE OTHER CARDS (a candidate built on one of these
+is out):
+{{OTHER_PREMISES}}
+
 CANDIDATES:
 {{CANDIDATES}}
 
@@ -344,6 +372,9 @@ HARD RULES:
 7. No named real people. No ridicule of body, age, hair, anatomy,
    intelligence or sexual history. No insults to third parties who are not
    the target. Out.
+8. Built on this card's dealt premise, not one of the other two. A line
+   that is really the take's observation rewritten as a question is out.
+9. Any comparison has a visible vehicle. "Like a quarterly report" is out.
 6. Aimed at the other person's behaviour or the situation. The user's
    choices may take a glancing hit in the roast only. Their feelings, body,
    worth, or anything they said about themselves: out.
@@ -588,6 +619,30 @@ Median length 59 words. The roast budget goes to 50 because the interjections an
 By category: in-law scenes (29–38) were the strongest ten, and every one of them ran on engine 1 with a nameable errand. Parents-and-siblings was the weakest block, and the failures there were reactions that skipped the picture and went straight to the verdict or the instruction. Process-word scenes (5, 8, 25, 34, 36, 47, 50) all worked the same way: word → institution → button inside the institution. The seed bank has zero no-second-party scenes; that rule is untested by this set.
 
 The one thing the outside set does that the pipeline must not: it needs the other person to be stupid, ugly, or cheating to work about a third of the time. Every mechanic above works without that. The v2.1 ban list is the line between the two.
+
+---
+
+## 7c — The live Lovable set (v1, September 2026)
+
+Spill: the Household Budget spreadsheet. The three shipped cards:
+
+- take: "the coffee was an item on the spreadsheet. he cleared it from his own action list."
+- clapback: "household budget. was there a line item for the coffee?"
+- roast: "the spreadsheet was a budget for your infractions. he poured your coffee like a quarterly report."
+
+Failures, each mapped to the v2.1 rule that addresses it:
+
+| failure | rule |
+|---|---|
+| one premise (coffee = line item) across all three cards | premise dealt per slot, stage 1; judge rule 8 |
+| clapback is the take with a question mark; he answers "no" and moves on | answerability test; not-cross-examination; rule 8 |
+| "like a quarterly report" — a simile with nothing to see | visible vehicle; judge rule 9 |
+| zero numbers from a spill built on a severity scale | fake precision move; roast dealt the premise with the number |
+| corporate metaphor gestured at three times, never built | their word made a world; commitment ranking |
+| 15–18 words per card, no button | beat budget; button mandatory on roast and clapback |
+| "like nothing" unused | premise pass names the tell |
+
+The spill prints above the card in the product, so a restatement is read twice on one surface. That is a product amplifier of the naming test and a reason the test is weighted where it is.
 
 ---
 

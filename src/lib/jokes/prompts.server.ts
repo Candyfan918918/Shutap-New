@@ -12,7 +12,8 @@
 // cause. The premise cache on joke_sets is keyed on it too, so a changed
 // premise pass re-runs instead of serving observations an older prompt made.
 //
-// v2.1: stage 2 asks for a BUILD (premise → picture → landing → button) and
+// v2.1: stage 1 deals each used premise to a card (take / clapback / roast /
+// spare) so no two cards build on one observation; stage 2 asks for a BUILD (premise → picture → landing → button) and
 // names the moves that work; stage 3 ranks a picture above a finding; the
 // slot rules carry beat and word budgets; the house voice replaces the
 // voiceless run. See §7 and §7b of the doc for why.
@@ -98,11 +99,23 @@ Rules:
 - One sentence each. Shorter is better. The best observations are under
   twelve words.
 
-Then mark the 4 that are least obvious and most specific to this situation.
+Then mark the 4 that are least obvious and most specific to this situation,
+and DEAL THEM TO CARDS. Each card gets its own premise; no two cards build
+on the same observation. Deal by fit:
+  take      — the one that names the mechanism most cleanly
+  clapback  — the one that contains their own word, excuse, or rule
+  roast     — the one with the object, the errand, or the number in it
+  spare     — the fourth; held for regeneration
+If a used premise is about a user decision it may only be dealt to roast
+or spare.
 
 Return only JSON:
-{"premises":[{"t":"...","used":true},{"t":"...","used":false}, ...]}
-Exactly 12 items. Exactly 4 with used:true.`
+{"premises":[{"t":"...","used":true,"slot":"take"},
+             {"t":"...","used":true,"slot":"clapback"},
+             {"t":"...","used":true,"slot":"roast"},
+             {"t":"...","used":true,"slot":"spare"},
+             {"t":"...","used":false}, ...]}
+Exactly 12 items. Exactly 4 with used:true, one per slot value.`
 
 /* ───────────────────────── 2 — candidate pass ─────────────────────────
    Once per flip. Ten candidates in ONE call. Temperature 1.0.
@@ -123,16 +136,20 @@ CARD — {{SLOT}}
 SITUATION:
 {{SITUATION}}
 
-WHAT'S ACTUALLY GOING ON HERE:
-{{PREMISES}}
+YOUR PREMISE — build every candidate on this one:
+{{PREMISE}}
 
-These observations are your setups. They are not your lines. An observation
+TAKEN — these belong to the other two cards. Do not build on them; the
+reader gets all three cards and will notice the same joke three times:
+{{OTHER_PREMISES}}
+
+Your premise is your setup. It is not your line. An observation
 with a full stop after it is a finding, and a finding is what a joke looks
 like before anyone has said it out loud.
 
 THE BUILD — every candidate is made of these, in this order:
 
-1. PREMISE. Pick one observation. This is what the line is about.
+1. PREMISE. The one you were dealt. This is what the line is about.
 
 2. PICTURE. Take the observation one step past the fact. Not a new fact
    about the person — an image, a comparison, an extrapolation that the
@@ -142,6 +159,10 @@ THE BUILD — every candidate is made of these, in this order:
      Picture:      "He's moved his own son to Any Other Business."
      Observation:  "He brought a fork to an inspection."
      Picture:      "A night nurse who eats the patient."
+   VISIBLE VEHICLE. If the picture is a comparison, the second half must
+   be something you could see, hold, or point at. "Like a raccoon in a
+   bathrobe" — visible. "Like a quarterly report" — you cannot see a pour
+   that looks like a report; it is an abstraction wearing a simile. Out.
    The picture must be BUILT FROM a detail the user gave. "Table it" plus
    "work trip" earns "Any Other Business." It does not earn a mistress in
    another city — that is a fabricated fact, not a heightened one. If the
@@ -292,6 +313,13 @@ SITUATION:
 CARD — {{SLOT}}
 {{SLOT_RULE}}
 
+THIS CARD'S PREMISE:
+{{PREMISE}}
+
+PREMISES THAT BELONG TO THE OTHER CARDS (a candidate built on one of these
+is out):
+{{OTHER_PREMISES}}
+
 CANDIDATES:
 {{CANDIDATES}}
 
@@ -317,6 +345,9 @@ HARD RULES:
 7. No named real people. No ridicule of body, age, hair, anatomy,
    intelligence or sexual history. No insults to third parties who are not
    the target. Out.
+8. Built on this card's dealt premise, not one of the other two. A line
+   that is really the take's observation rewritten as a question is out.
+9. Any comparison has a visible vehicle. "Like a quarterly report" is out.
 6. Aimed at the other person's behaviour or the situation. The user's
    choices may take a glancing hit in the roast only. Their feelings, body,
    worth, or anything they said about themselves: out.
@@ -506,9 +537,14 @@ export function formatExamples(pairs: { situation: string; line: string }[]): st
   return pairs.map((p) => `SITUATION: ${p.situation}\nLINE: ${p.line}`).join('\n\n')
 }
 
-/** A numbered list, 1-based, for the premises the writer works from. */
-export function formatPremises(premises: string[]): string {
-  if (premises.length === 0) return '(no observations available — read the situation yourself, past the obvious)'
+/** This card's dealt premise, one line. */
+export function formatPremise(premise: string | null | undefined): string {
+  return premise?.trim() || '(no observation was dealt to this card — read the situation yourself, past the obvious)'
+}
+
+/** The two premises dealt to the other cards, numbered. */
+export function formatOtherPremises(premises: string[]): string {
+  if (premises.length === 0) return '(none)'
   return premises.map((p, i) => `${i + 1}. ${p}`).join('\n')
 }
 
