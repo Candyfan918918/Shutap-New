@@ -62,16 +62,19 @@ function wrap(text: string, perLine: number, maxLines: number): string[] {
   return kept
 }
 
-/** Pick the largest joke size that still fits in five lines. */
+/** Pick the largest joke size that still fits. A one-line take sits at the
+ *  top of the ladder; a three-beat, fifty-word roast walks down it until its
+ *  lines fit, and only the very last rung truncates. */
 function fitJoke(text: string): { size: number; lines: string[] } {
-  for (const size of [96, 86, 76, 68, 60]) {
+  for (const size of [96, 86, 76, 68, 60, 52, 46, 40]) {
     // Newsreader italic runs about .46em to the character.
     const perLine = Math.floor((VB_W - 2 * 70) / (size * 0.46))
-    const lines = wrap(text, perLine, 6)
-    if (lines.length <= (size >= 86 ? 4 : 5)) return { size, lines }
+    const maxLines = size >= 86 ? 4 : size >= 60 ? 5 : size >= 46 ? 7 : 8
+    const lines = wrap(text, perLine, maxLines + 1)
+    if (lines.length <= maxLines) return { size, lines }
   }
-  const size = 60
-  return { size, lines: wrap(text, Math.floor((VB_W - 140) / (size * 0.46)), 5) }
+  const size = 40
+  return { size, lines: wrap(text, Math.floor((VB_W - 140) / (size * 0.46)), 8) }
 }
 
 /** The eyes, drawn rather than imported — two rounded bars and two pupils. */

@@ -885,7 +885,9 @@ const HeldCard = z.object({
   set_id: z.string().uuid(),
   position: z.number().int().min(0).max(2),
   angle: z.string().max(64),
-  text: z.string().min(1).max(240),
+  // The roast's budget is fifty words; at seven characters a word with a
+  // fifth of slack, the longest card the writer will pass is under this.
+  text: z.string().min(1).max(480),
   used_fallback: z.boolean().optional(),
   judge_score: z.number().nullable().optional(),
 })

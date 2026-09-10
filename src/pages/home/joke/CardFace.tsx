@@ -17,6 +17,19 @@ import {
   lift,
 } from './ui'
 
+/** The joke's size, by length. A take is a sentence; a roast may be three
+ *  beats and fifty words, and it still has to sit on a nine-by-sixteen face
+ *  under the situation. Steps, not a formula, so two cards of similar length
+ *  read at the same size. */
+function jokeSize(text: string): number {
+  const n = text.length
+  if (n <= 110) return 8
+  if (n <= 170) return 6.8
+  if (n <= 240) return 5.9
+  if (n <= 320) return 5.2
+  return 4.7
+}
+
 export function CardFace({
   card,
   situation,
@@ -79,7 +92,7 @@ export function CardFace({
             {situation}
           </div>
         ) : null}
-        <div style={{ font: 'italic 400 8cqw/1.32 Newsreader,serif', letterSpacing: '-.01em', color: CARD_INK, textWrap: 'pretty', opacity: loading ? 0.35 : 1, transition: 'opacity .25s' }}>
+        <div style={{ font: `italic 400 ${jokeSize(card.text)}cqw/1.32 Newsreader,serif`, letterSpacing: '-.01em', color: CARD_INK, textWrap: 'pretty', opacity: loading ? 0.35 : 1, transition: 'opacity .25s' }}>
           {loading ? 'shuffling…' : card.text}
         </div>
       </div>

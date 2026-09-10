@@ -19,11 +19,13 @@ import { SLOT_KEYS } from './deck'
 import { FALLBACKS } from './deck.server'
 import {
   CANDIDATE_PROMPT,
+  HOUSE_VOICE,
   JUDGE_PROMPT,
   PREMISE_PROMPT,
   PROMPT_VERSION,
   SLOT_NAMES,
   SLOT_RULES,
+  SLOT_WORDS,
   fill,
   formatCandidates,
   formatExamples,
@@ -123,23 +125,57 @@ export function roastTargetLabel(key: string | null | undefined): string {
    applied here first so a banned construction never reaches it, and so a
    card is still safe when the judge is down. These are the rules from the
    writer's brief that a regex can catch. The list should only ever grow. */
-export const MAX_CHARS = 170 // what card-art can set in five lines at its smallest size
-export const MAX_WORDS = 32
+/** The slot rules state a word budget; a candidate a fifth over it is
+ *  still judged, further over it is out. Characters follow at roughly seven
+ *  a word, which is also what the card faces can set. */
+export function maxWordsFor(slot: SlotKey): number {
+  return Math.ceil(SLOT_WORDS[slot] * 1.2)
+}
+export function maxCharsFor(slot: SlotKey): number {
+  return maxWordsFor(slot) * 7
+}
 
-const ADVICE = /\b(you should|you could|you need to|you have to|you deserve|try to|try a|try telling|consider|i'?d recommend|i would recommend|next time|going forward|from now on|you'?re not crazy|you are not crazy|you'?re not wrong|it'?s okay to|it'?s ok to)\b/i
+/* Advice is an instruction to the USER. The take and the roast speak about
+   the other person, so a "you should" in them is aimed at the reader; the
+   clapback speaks TO the other person, where "you should have" is the
+   point, so it is exempt here and the judge decides. Reassurance is out on
+   every card. */
+const ADVICE = /\b(you should|you could|you need to|you have to|you deserve|try to|try a|try telling|consider|i'?d recommend|i would recommend|next time|going forward|from now on)\b/i
+const REASSURANCE = /\b(you'?re not crazy|you are not crazy|you'?re not wrong|you are not wrong|it'?s okay to|it'?s ok to|you did nothing wrong|you'?re allowed to)\b/i
 const CLINICAL = /\b(boundar(y|ies)|toxic|gaslight\w*|narcissis\w*|therap\w*|trauma\w*|trigger(ed|ing)?|heal(ing|ed)?|self[- ]care|red flags?|emotional (labou?r|abuse)|manipulat\w*|abus(e|ive|er)|diagnos\w*|disorder|anxiety|depress\w*|codependen\w*|enabl(er|ing)|validat\w*|closure|safe space|inner child|love[- ]bomb\w*)\b/i
 const BANNED: { rule: string; re: RegExp }[] = [
   { rule: 'welcome to X, population: you', re: /welcome to [^,.]{1,40},? population:? you/i },
   { rule: "congratulations, you've unlocked", re: /congratulations,? you'?ve unlocked/i },
-  // "that's not X, that's Y" is deliberately NOT here: since prompt 2.1.0 it
-  // is permitted when the second half is a genuine reframe, and only the
-  // judge can tell a reframe from a rename. A regex would throw out the
-  // good ones with the lazy ones.
+  // "that's not X, that's Y" is deliberately NOT here: it is permitted when
+  // the second half is a genuine picture, and only the judge can tell a
+  // picture from a rename. A regex would throw out the good ones too.
   { rule: "and somehow I'm the villain", re: /and somehow i'?m the villain/i },
   { rule: 'plot twist:', re: /\bplot twist\b/i },
   { rule: 'main character energy', re: /main character (energy|moment|syndrome|behaviou?r)/i },
   { rule: 'starts "Ah, yes,"', re: /^\s*["“'‘]?ah,? yes\b/i },
+  { rule: 'pet name for the user', re: /\b(oh,? )?(honey|darling|dummy|sweetie|sweetheart|hun|babe|babes|hon)\b/i },
 ]
+
+/* The landing-word kill list from the writer's brief. A line that ends on
+   one of these has landed on the mechanism, not on a thing you can see.
+   Grows the way the ban list grows: every time a card lands on an
+   abstraction in production, add the word. */
+const LANDING_KILL = new Set([
+  'comparable', 'procedural', 'organisational', 'organizational', 'structure', 'mechanism',
+  'decision', 'decisions', 'feelings', 'subject', 'record', 'precision', 'average', 'gap',
+  'question', 'dynamic', 'dynamics', 'pattern', 'behaviour', 'behavior', 'situation',
+  'relationship', 'process', 'priority', 'priorities', 'boundary', 'control', 'respect',
+  'accountability', 'responsibility', 'reality', 'truth', 'point', 'issue', 'problem',
+])
+
+function landingWord(line: string): string {
+  const words = line
+    .toLowerCase()
+    .replace(/[^a-z'\s-]/g, ' ')
+    .trim()
+    .split(/\s+/)
+  return (words[words.length - 1] ?? '').replace(/^'+|'+$/g, '')
+}
 
 /** Words of the situation the naming test compares against. */
 function contentWords(text: string): Set<string> {
@@ -153,15 +189,17 @@ function contentWords(text: string): Set<string> {
 }
 
 /** The reason a line fails a hard rule, or null when it passes. */
-export function hardRuleFailure(line: string, situation: string): string | null {
+export function hardRuleFailure(line: string, situation: string, slot: SlotKey = 'the_roast'): string | null {
   const t = line.trim()
   if (!t) return 'empty'
   const words = t.split(/\s+/).length
   if (words < 2) return 'too short'
-  if (t.length > MAX_CHARS || words > MAX_WORDS) return 'over length'
-  if (ADVICE.test(t)) return 'advice'
+  if (t.length > maxCharsFor(slot) || words > maxWordsFor(slot)) return 'over length'
+  if (slot !== 'the_clapback' && ADVICE.test(t)) return 'advice'
+  if (REASSURANCE.test(t)) return 'reassurance'
   if (CLINICAL.test(t)) return 'clinical vocabulary'
   for (const b of BANNED) if (b.re.test(t)) return `banned construction: ${b.rule}`
+  if (LANDING_KILL.has(landingWord(t))) return `abstract landing: ${landingWord(t)}`
   // The naming test, conservatively: a line whose EVERY content word was
   // typed by the user is a rearrangement. One new word passes it here; the
   // judge holds the higher bar.
@@ -173,8 +211,8 @@ export function hardRuleFailure(line: string, situation: string): string | null 
   return null
 }
 
-export function passesGuardrails(line: string, situation = ''): boolean {
-  return hardRuleFailure(line, situation) === null
+export function passesGuardrails(line: string, situation = '', slot: SlotKey = 'the_roast'): boolean {
+  return hardRuleFailure(line, situation, slot) === null
 }
 
 /* ───────────────────────── cleaning a line ───────────────────────── */
@@ -265,11 +303,14 @@ function slotRule(slot: SlotKey, roastTarget: string): string {
 export async function runCandidatePass(
   input: CandidateInput,
 ): Promise<{ candidates: string[]; model: string; error?: string }> {
+  // No persona is not a neutral run — it is nobody talking, and nobody
+  // talking is the flat register. The house voice speaks instead.
+  const voice = input.voice.persona_prompt?.trim() ? input.voice : { ...HOUSE_VOICE, key: input.voice.key || HOUSE_VOICE.key }
   const prompt = fill(CANDIDATE_PROMPT, {
-    VOICE_NAME: input.voice.label,
-    VOICE_PERSONA: input.voice.persona_prompt,
-    VOICE_REGISTER: input.voice.register_notes,
-    VOICE_BANNED: input.voice.banned_moves,
+    VOICE_NAME: voice.label,
+    VOICE_PERSONA: voice.persona_prompt,
+    VOICE_REGISTER: voice.register_notes,
+    VOICE_BANNED: voice.banned_moves,
     SLOT: SLOT_NAMES[input.slot],
     SLOT_RULE: slotRule(input.slot, input.roastTarget),
     SITUATION: input.situation.slice(0, 1500),
@@ -406,7 +447,7 @@ export async function generateFromInputs(
     const records: CandidateRecord[] = pass.candidates.map((text) => ({ text }))
     const survivors: { text: string; at: number }[] = []
     records.forEach((r, at) => {
-      const fail = hardRuleFailure(r.text, input.situation) ?? (avoid.has(r.text.toLowerCase()) ? 'repeat of the last card' : null)
+      const fail = hardRuleFailure(r.text, input.situation, input.slot) ?? (avoid.has(r.text.toLowerCase()) ? 'repeat of the last card' : null)
       if (fail) r.rejected = fail
       else survivors.push({ text: r.text, at })
     })
