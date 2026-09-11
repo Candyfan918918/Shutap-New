@@ -36,6 +36,7 @@ export function SetList({
   mark = true,
   onShare,
   onDownload,
+  onOpenRoom,
 }: {
   groups: SetGroup[]
   mark?: boolean
@@ -43,6 +44,8 @@ export function SetList({
    *  a record to read rather than a place to act. */
   onShare?: (card: JokeCard) => void
   onDownload?: (card: JokeCard) => void
+  /** Given, "in a room" stops being a label and becomes the way into it. */
+  onOpenRoom?: (roomId: string) => void
 }) {
   if (!groups.length) return null
   const acts = !!(onShare || onDownload)
@@ -90,9 +93,21 @@ export function SetList({
                 {acts ? (
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                     {card.room_id ? (
-                      <Eyebrow style={{ fontSize: 10, letterSpacing: '.14em', color: '#8e1c4c', marginRight: 'auto' }}>
-                        ◎ in a room
-                      </Eyebrow>
+                      onOpenRoom ? (
+                        <button
+                          type="button"
+                          onClick={() => onOpenRoom(card.room_id as string)}
+                          style={{ marginRight: 'auto', padding: 0, border: 'none', background: 'none', cursor: 'pointer' }}
+                        >
+                          <Eyebrow style={{ fontSize: 10, letterSpacing: '.14em', color: '#8e1c4c' }}>
+                            ◎ in a room →
+                          </Eyebrow>
+                        </button>
+                      ) : (
+                        <Eyebrow style={{ fontSize: 10, letterSpacing: '.14em', color: '#8e1c4c', marginRight: 'auto' }}>
+                          ◎ in a room
+                        </Eyebrow>
+                      )
                     ) : null}
                     {onShare ? <RowButton onClick={() => onShare(card)}>share</RowButton> : null}
                     {onDownload ? <RowButton onClick={() => onDownload(card)}>download</RowButton> : null}
