@@ -54,6 +54,21 @@ async function readUserFromRequest(): Promise<{ userId: string | null; token: st
 }
 
 
+// Tracking must never break a page render: if the service-role client is not
+// configured, silently skip instead of throwing.
+async function adminOrNull() {
+  try {
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    // Touch a property so the lazy proxy validates env now, inside this try.
+    void supabaseAdmin.from
+    return supabaseAdmin
+  } catch (e) {
+    console.error('[tracking] admin client unavailable:', e)
+    return null
+  }
+}
+
+
 function extractGeo(): { country: string | null; city: string | null; userAgent: string | null } {
   const req = getRequest()
   const h = req?.headers
