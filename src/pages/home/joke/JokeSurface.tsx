@@ -204,7 +204,10 @@ export function JokeSurface() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState<string | null>(null)
   const [upgradeOpen, setUpgradeOpen] = useState(false)
-  const [postedAlias, setPostedAlias] = useState<string | null>(null)
+  /** The card that just became a room, and the room it became. Held PER CARD:
+   *  a session-wide flag turned the offer under every other card into a
+   *  statement about a room that card is not in. */
+  const [posted, setPosted] = useState<{ cardId: string; roomId: string; alias: string } | null>(null)
 
   // ── the rest ──
   const [list, setList] = useState<JokeCard[]>([])
@@ -331,6 +334,13 @@ export function JokeSurface() {
       ? !!focus?.id && exportableIds.includes(focus.id)
       : !!focus && revealedSlotKeys.has(focus.angle)),
     [focus, exportableIds, revealedSlotKeys, signedIn],
+  )
+
+  /** The room the focused card is in, if it is in one — the one it was just
+   *  posted as, or the one the set list already knows about. */
+  const focusRoomId = useMemo(
+    () => focus?.room_id ?? (posted && focus?.id && posted.cardId === focus.id ? posted.roomId : null),
+    [focus, posted],
   )
 
   const refresh = useCallback(async () => {
@@ -469,7 +479,7 @@ export function JokeSurface() {
           }),
         )
         setSaved(null)
-        setPostedAlias(null)
+        setPosted(null)
         // They came back for the cards, not the hero: bring the deck into view
         // once it has rendered, with share and download under the open card.
         requestAnimationFrame(() => {
@@ -618,7 +628,7 @@ export function JokeSurface() {
       setSet({ id: res.set_id, situation: res.clean_text, archetype: res.archetype })
       setCards([])
       setSaved(null)
-      setPostedAlias(null)
+      setPosted(null)
       opened = { id: res.set_id, tier: res.tier }
       // No second scroll here: the send already scrolled to the band, and the
       // deck mounts directly under it. Two smooth scrolls in flight read as a flash.
@@ -1005,19 +1015,52 @@ export function JokeSurface() {
     if (!signedIn) { raiseGate('post', { type: 'post', position: target.position }); return }
     target = await ensureKept(target)
     if (!target.id) { raiseGate('post', { type: 'post', position: target.position }); return }
+    // Already a room: the thing to do with it is stand in it, not open a
+    // second one. The server hands back the same id anyway.
+    const already = target.room_id ?? (posted?.cardId === target.id ? posted.roomId : null)
+    if (already) { openRoom(already); return }
     setFocus(target)
     setPostCaption(roomCaption(target, set?.situation ?? target.situation ?? ''))
     setPostOpen(true)
   }
 
+  /** A room is somewhere you go. The stream resolves it and opens it on the
+   *  spot — the same deep link a published spill and a published scan use. */
+  function openRoom(roomId: string) {
+    setPostOpen(false)
+    void navigate({ to: '/stream', hash: `room-${roomId}` })
+  }
+
   async function confirmPost() {
     const target = focus
     if (!target?.id) return
+    const cardId = target.id
     setPosting(true)
     try {
-      const res = await postCard({ data: { card_id: target.id, caption: postCaption.trim() || undefined, ...ctx() } })
-      setPostedAlias(res.alias ?? alias?.display_name ?? 'you')
-      setPostOpen(false)
+      const res = await postCard({ data: { card_id: cardId, caption: postCaption.trim() || undefined, ...ctx() } })
+      const roomId = res.room_id
+      const who = res.alias ?? alias?.display_name ?? 'you'
+      const body = postCaption.trim() || roomCaption(target, set?.situation ?? target.situation ?? '')
+      // The room page reads a just-published room out of localStorage — a
+      // spill and a scan both write themselves in on publish, and a card that
+      // skipped this step opened as "quiet here" at /room?id=.
+      try {
+        const { appendUserRoom } = await import('@/pages/landing/modals/SpillModal')
+        appendUserRoom({
+          id: roomId,
+          title: target.text.slice(0, 90),
+          body,
+          support: 'heard',
+          pillar: null,
+          alias: who,
+          emoji: alias?.emoji,
+        })
+      } catch { /* the stream still has it from the database */ }
+      // From here the card carries its room, so the row under it offers the
+      // way in rather than a second posting.
+      setCards((prev) => prev.map((c) => (c.id === cardId ? { ...c, room_id: roomId } : c)))
+      setFocus((f) => (f && f.id === cardId ? { ...f, room_id: roomId } : f))
+      setPosted({ cardId, roomId, alias: who })
       jokeTrack('card_posted_to_room', tier, { slot: target.angle })
       say(res.already ? 'it was already a room — it still is.' : "it's a room now. no one owes you a reply.")
       void refresh()
@@ -1302,6 +1345,7 @@ export function JokeSurface() {
                         <CardActions
                           label={slot.label}
                           canPost={signedIn}
+                          posted={!!(dealt.room_id ?? (posted?.cardId === dealt.id ? posted.roomId : null))}
                           onPost={() => void doPost(dealt)}
                           onShare={() => void openShare(dealt)}
                           onDownload={() => void doSave(dealt)}
@@ -1359,10 +1403,14 @@ export function JokeSurface() {
                         <CompanionLine>
                           no mark, nothing of mine on it. post the roast in your room too? the owl who&apos;s been sitting in will lose it.
                         </CompanionLine>
-                        {postedAlias ? (
-                          <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, color: MUTED }}>
-                            ◎ it&apos;s a room now — {postedAlias} is on it. no one owes you a reply.
-                          </div>
+                        {focusRoomId ? (
+                          <>
+                            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, color: MUTED }}>
+                              ◎ it&apos;s a room now — {posted?.alias ?? alias?.display_name ?? 'you'} is on it. no one owes you a reply.
+                            </div>
+                            <Button variant="secondary" onClick={() => openRoom(focusRoomId)} full>open the room →</Button>
+                            <Button variant="ghost" size="sm" onClick={() => setSaved(null)} full>done</Button>
+                          </>
                         ) : (
                           <>
                             <Button variant="secondary" onClick={() => void doPost(focus)} full>post it in my room</Button>
@@ -1416,6 +1464,7 @@ export function JokeSurface() {
               mark={tier !== 'paying'}
               onShare={(card) => void openShare(card)}
               onDownload={(card) => void doSave(card)}
+              onOpenRoom={(roomId) => openRoom(roomId)}
             />
 
             <div style={{ marginTop: 6, background: 'radial-gradient(120% 120% at 10% 0%,rgba(127,119,221,.06),#fff 65%)', border: '1px solid rgba(11,8,15,.08)', borderRadius: 22, padding: 'clamp(20px,3vw,30px)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 18 }}>
@@ -1467,33 +1516,55 @@ export function JokeSurface() {
         onSaveAll={() => void doSaveSet()}
       />
 
-      {/* ── post as a room — the whole scene, shown before it goes out ── */}
+      {/* ── post as a room — the whole scene, shown before it goes out, and
+             the way in once it is one. The sheet does NOT close on success: a
+             post that left only a toast behind ended nowhere, and the offer it
+             replaced was the one thing on screen pointing at a room. ── */}
       <Sheet open={postOpen} onClose={() => setPostOpen(false)} width={520}>
-        <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 20, letterSpacing: '-.03em', color: INK }}>
-          post it as a room
-        </div>
-        <div style={{ fontFamily: SORA, fontSize: 12.5, color: FAINT }}>
-          the room opens with the whole scene — what happened, then the card. names are already scrubbed; edit the rest if you like.
-        </div>
-        <textarea
-          rows={6}
-          value={postCaption}
-          onChange={(e) => setPostCaption(e.target.value)}
-          style={{
-            width: '100%', resize: 'vertical', borderRadius: 14, padding: '12px 14px',
-            border: '1px solid rgba(11,8,15,.14)', background: '#fff', color: INK,
-            fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, lineHeight: 1.45, outline: 'none',
-          }}
-        />
-        <Button onClick={() => void confirmPost()} disabled={posting || !postCaption.trim()} full>
-          {posting ? 'opening the room…' : '◎ post it'}
-        </Button>
-        <Button variant="ghost" size="sm" onClick={() => setPostOpen(false)} full>
-          not now
-        </Button>
-        <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, color: FAINT, textAlign: 'center' }}>
-          it goes out under your alias, never your name. no one owes you a reply.
-        </div>
+        {focusRoomId ? (
+          <>
+            <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 20, letterSpacing: '-.03em', color: INK }}>
+              it&apos;s a room now
+            </div>
+            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.45, color: MUTED }}>
+              {posted?.alias ?? alias?.display_name ?? 'you'} is on it. no one owes you a reply — go and sit in it, or leave it open and come back to the cards.
+            </div>
+            <Button onClick={() => openRoom(focusRoomId)} full>
+              open the room →
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setPostOpen(false)} full>
+              stay with the cards
+            </Button>
+          </>
+        ) : (
+          <>
+            <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 20, letterSpacing: '-.03em', color: INK }}>
+              post it as a room
+            </div>
+            <div style={{ fontFamily: SORA, fontSize: 12.5, color: FAINT }}>
+              the room opens with the whole scene — what happened, then the card. names are already scrubbed; edit the rest if you like.
+            </div>
+            <textarea
+              rows={6}
+              value={postCaption}
+              onChange={(e) => setPostCaption(e.target.value)}
+              style={{
+                width: '100%', resize: 'vertical', borderRadius: 14, padding: '12px 14px',
+                border: '1px solid rgba(11,8,15,.14)', background: '#fff', color: INK,
+                fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, lineHeight: 1.45, outline: 'none',
+              }}
+            />
+            <Button onClick={() => void confirmPost()} disabled={posting || !postCaption.trim()} full>
+              {posting ? 'opening the room…' : '◎ post it'}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setPostOpen(false)} full>
+              not now
+            </Button>
+            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, color: FAINT, textAlign: 'center' }}>
+              it goes out under your alias, never your name. no one owes you a reply.
+            </div>
+          </>
+        )}
       </Sheet>
 
       <LimitSheet

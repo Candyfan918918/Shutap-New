@@ -55,6 +55,7 @@ function Pill({
 export function CardActions({
   label,
   canPost,
+  posted,
   onPost,
   onShare,
   onDownload,
@@ -62,6 +63,10 @@ export function CardActions({
   label: string
   /** Guests don't see it — a room needs a name on it. */
   canPost: boolean
+  /** This card is already a room. The pill stops offering to open a second
+   *  one and becomes the way into the one that exists — it is never removed,
+   *  because a row that loses a button reads as an action that failed. */
+  posted?: boolean
   onPost: () => void
   onShare: () => void
   onDownload: () => void
@@ -69,9 +74,9 @@ export function CardActions({
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
       {canPost ? (
-        <Pill strong onClick={onPost} ariaLabel={`post ${label} as a room`}>
+        <Pill strong onClick={onPost} ariaLabel={posted ? `open the room ${label} is in` : `post ${label} as a room`}>
           <span aria-hidden style={{ fontFamily: 'Inter,sans-serif', fontWeight: 400, fontSize: 13 }}>◎</span>
-          post as a room
+          {posted ? 'open its room' : 'post as a room'}
         </Pill>
       ) : null}
       <Pill onClick={onShare} ariaLabel={`share ${label}`}>share</Pill>
