@@ -5,7 +5,12 @@
  *     and must not carry chrome that means nothing outside this page.
  *   · nothing here is ever disabled or hidden, at any tier, guests included.
  *     Sharing is the growth mechanism; a guest tapping share opens the alias
- *     sheet at that moment rather than finding a lock beforehand.
+ *     sheet at that moment rather than finding a lock beforehand. This held
+ *     for two of the three: "post as a room" was hidden from guests behind a
+ *     canPost flag, so the row a guest read had a hole where the lead action
+ *     goes and the whole idea of a room never appeared. It is shown to
+ *     everyone now — a guest who taps it gets the same alias gate share and
+ *     download raise, and comes back to the card with the post waiting.
  *   · they are words, not glyphs. An arrow is not a label.
  *
  * "post as a room" is the only one that touches other people, so it leads the
@@ -54,26 +59,26 @@ function Pill({
 
 export function CardActions({
   label,
-  canPost,
+  posted,
   onPost,
   onShare,
   onDownload,
 }: {
   label: string
-  /** Guests don't see it — a room needs a name on it. */
-  canPost: boolean
+  /** This card is already a room. The pill stops offering to open a second
+   *  one and becomes the way into the one that exists — it is never removed,
+   *  because a row that loses a button reads as an action that failed. */
+  posted?: boolean
   onPost: () => void
   onShare: () => void
   onDownload: () => void
 }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-      {canPost ? (
-        <Pill strong onClick={onPost} ariaLabel={`post ${label} as a room`}>
-          <span aria-hidden style={{ fontFamily: 'Inter,sans-serif', fontWeight: 400, fontSize: 13 }}>◎</span>
-          post as a room
-        </Pill>
-      ) : null}
+      <Pill strong onClick={onPost} ariaLabel={posted ? `open the room ${label} is in` : `post ${label} as a room`}>
+        <span aria-hidden style={{ fontFamily: 'Inter,sans-serif', fontWeight: 400, fontSize: 13 }}>◎</span>
+        {posted ? 'open its room' : 'post as a room'}
+      </Pill>
       <Pill onClick={onShare} ariaLabel={`share ${label}`}>share</Pill>
       <Pill onClick={onDownload} ariaLabel={`download ${label}`}>download</Pill>
     </div>

@@ -177,7 +177,6 @@ export function JokeCardsDesign() {
   // A fresh shuffle per visit, like a fresh set would get.
   const [seed, setSeed] = useState(() => `design-${Math.random().toString(36).slice(2)}`)
 
-  const signedIn = tier !== 'guest'
   const written = useMemo(() => new Set<string>(SLOTS.map((s) => s.key)), [])
 
   const deck = useDeck({
@@ -289,7 +288,6 @@ export function JokeCardsDesign() {
                 {revealed ? (
                   <CardActions
                     label={slot.label}
-                    canPost={signedIn}
                     onPost={() => act('post')}
                     onShare={() => act('share')}
                     onDownload={() => act('download')}
@@ -362,10 +360,13 @@ export function JokeCardsDesign() {
                 <Badge tone="neutral">guest</Badge>
                 <Note>the card carries the mark: a tiled diagonal wash across the art. quiet enough to read the joke through, loud enough that a screenshot is obviously a guest&apos;s.</Note>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  <StillPill strong>
+                    <span style={{ fontFamily: INTER, fontWeight: 400, fontSize: 13 }}>◎</span>post as a room
+                  </StillPill>
                   <StillPill>share</StillPill>
                   <StillPill>download</StillPill>
                 </div>
-                <Note>share and download are present, never disabled. tapping either opens the alias sheet — sharing is the growth mechanism, so it is never hidden.</Note>
+                <Note>all three are present, never disabled. tapping any of them opens the alias sheet — a guest who wants a room should meet the gate holding the thing they asked for, not a row with the ask missing from it.</Note>
               </div>
             </div>
             <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>

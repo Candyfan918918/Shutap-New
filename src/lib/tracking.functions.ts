@@ -54,6 +54,21 @@ async function readUserFromRequest(): Promise<{ userId: string | null; token: st
 }
 
 
+// Tracking must never break a page render: if the service-role client is not
+// configured, silently skip instead of throwing.
+async function adminOrNull() {
+  try {
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    // Touch a property so the lazy proxy validates env now, inside this try.
+    void supabaseAdmin.from
+    return supabaseAdmin
+  } catch (e) {
+    console.error('[tracking] admin client unavailable:', e)
+    return null
+  }
+}
+
+
 function extractGeo(): { country: string | null; city: string | null; userAgent: string | null } {
   const req = getRequest()
   const h = req?.headers
@@ -86,7 +101,8 @@ export const upsertMyProfile = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const { userId } = await readUserFromRequest()
     if (!userId) return { ok: false, reason: 'no_auth' as const }
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const supabaseAdmin = await adminOrNull()
+    if (!supabaseAdmin) return { ok: false, reason: 'tracking_unavailable' as const }
     const geo = extractGeo()
     const now = new Date().toISOString()
     const existing = await supabaseAdmin
@@ -149,7 +165,8 @@ export const recordVisit = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => VisitIn.parse(d))
   .handler(async ({ data }) => {
     const { userId } = await readUserFromRequest()
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const supabaseAdmin = await adminOrNull()
+    if (!supabaseAdmin) return { ok: false, reason: 'tracking_unavailable' as const }
     const geo = extractGeo()
     let isRevisit = false
     if (userId) {
@@ -198,7 +215,8 @@ export const trackEventFn = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => EventIn.parse(d))
   .handler(async ({ data }) => {
     const { userId } = await readUserFromRequest()
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const supabaseAdmin = await adminOrNull()
+    if (!supabaseAdmin) return { ok: false, reason: 'tracking_unavailable' as const }
     const { error } = await supabaseAdmin.from('events').insert({
       user_id: userId,
       session_id: data.session_id ?? null,

@@ -758,6 +758,7 @@ function CardsTab({
             mark={tier !== 'paying'}
             onShare={onShare}
             onDownload={onDownload}
+            onOpenRoom={(roomId) => navigate('/stream#room-' + roomId)}
           />
           <MirrorMemory tier={tier} cards={cards} total={total} navigate={navigate} />
         </>
