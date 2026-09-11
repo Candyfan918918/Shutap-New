@@ -249,6 +249,16 @@ one the situation is already holding out:
   rumour." The errand is always earlier than what they told you, and
   earlier is where the joke is.
 
+- DEFLATE DOWNWARD. The picture goes from the feeling to the utility.
+  "Connection" becomes the Wi-Fi password. "Waiting for him to notice"
+  becomes the Netflix password. "Keeping in touch" becomes keeping a
+  witness. "My person" becomes a rental car. The second half is always
+  SMALLER, more administrative, and less romantic than the first — a
+  password, a subscription, a receipt, a rental, a bill. A metaphor that
+  goes UP (docuseries, treaty, Constitution, recasting) gets a nod; one
+  that goes DOWN to a utility gets the laugh. When both are available,
+  go down.
+
 - THE LINEUP. When there are two of something — two turkeys, two group
   chats, two lists, two salaries — put them side by side and let one of
   them lose. The user already said "like a lineup"; the picture finishes
@@ -396,6 +406,10 @@ output failed and they are weighted above the rest:
   line ARRIVES must be somewhere the user's own words could not reach. A line
   whose turn is a rearrangement of the spill has failed, however good the
   picture.
+- DIRECTION OF THE PICTURE. Downward beats upward. A deflation to a
+  household utility (password, subscription, receipt) ranks above an
+  inflation to an institution (treaty, docuseries, Constitution) on the
+  same premise.
 - COMMITMENT. If the line opened a metaphor (their word made a world),
   did it stay inside it to the button? A committed world beats three
   unrelated images.
@@ -643,6 +657,31 @@ Failures, each mapped to the v2.1 rule that addresses it:
 | "like nothing" unused | premise pass names the tell |
 
 The spill prints above the card in the product, so a restatement is read twice on one surface. That is a product amplifier of the naming test and a reason the test is weighted where it is.
+
+---
+
+## 7d — Editor's picks ledger (content mode)
+
+Content mode is a roast set aimed at a category ("to the girls still missing their ex") with no spill. The product never runs this — it always has a spill — but the same brief is used for @ShutapOfficial content, and the founder's picks are the best signal on register. Keep this ledger; every pick and every cut updates the rules above.
+
+**Round 1 — picked:**
+- He replied "ok." You've analysed it for three days. NASA has spent less time on bigger rocks.
+- You're not waiting for him to come back. You're waiting for him to notice you left. He noticed the Netflix password changed.
+- You don't need closure. You need Wi-Fi strong enough to download common sense. *(founder's)*
+- You still follow his mom. That's not keeping in touch. That's keeping a witness.
+- He was your person the way a rental is your car.
+- "We had a connection." You had a Wi-Fi password. He changed it.
+
+**Cut:** brunch/location/defusing · Constitution draft · Venmo audit · manifested/universe · side of the bed · Cabo tattoo · voicemail treaty · recasting · soft launch · parole officer/Pinterest · widget · hoodie on the lease · minutes for one chair · spreadsheet vs playlist · docuseries season two · "sweetheart", "baby", "ma'am" in any line.
+
+**What the picks share, now encoded:**
+1. Five of six land on a digital utility — password, subscription, follow, a one-word text. The cuts landed on romantic-genre props (hoodie, tattoo, voicemail, bed). → DEFLATE DOWNWARD move; judge ranks direction.
+2. Three of six take a genre word — connection, closure, my person — and literalise it into a household utility. → their-word-made-a-world, applied to the category's own vocabulary.
+3. Every pick uses a prop the whole category already owns (an ex who texted "ok", a Netflix login, his mom on Instagram). Every cut that invented an episode (Cabo, brunch, Venmo, soft launch) was cut. → CONTENT-MODE RULE: with no spill, specificity comes from the shared prop, never from an invented scene. The swap test inverts: the line must work on every girl in the category and on nobody outside it.
+4. ≤20 words, fragments allowed, three beats. Address words cut every time.
+5. The reversal shape survives when clause two is the smaller, truer version of clause one — "waiting for him to notice you left" → "he noticed the Netflix password."
+
+Next round: bring ten, expect four to survive. Log them here.
 
 ---
 

@@ -229,6 +229,16 @@ one the situation is already holding out:
   rumour." The errand is always earlier than what they told you, and
   earlier is where the joke is.
 
+- DEFLATE DOWNWARD. The picture goes from the feeling to the utility.
+  "Connection" becomes the Wi-Fi password. "Waiting for him to notice"
+  becomes the Netflix password. "Keeping in touch" becomes keeping a
+  witness. "My person" becomes a rental car. The second half is always
+  SMALLER, more administrative, and less romantic than the first — a
+  password, a subscription, a receipt, a rental, a bill. A metaphor that
+  goes UP (docuseries, treaty, Constitution, recasting) gets a nod; one
+  that goes DOWN to a utility gets the laugh. When both are available,
+  go down.
+
 - THE LINEUP. When there are two of something — two turkeys, two group
   chats, two lists, two salaries — put them side by side and let one of
   them lose. The user already said "like a lineup"; the picture finishes
@@ -369,6 +379,10 @@ output failed and they are weighted above the rest:
   line ARRIVES must be somewhere the user's own words could not reach. A line
   whose turn is a rearrangement of the spill has failed, however good the
   picture.
+- DIRECTION OF THE PICTURE. Downward beats upward. A deflation to a
+  household utility (password, subscription, receipt) ranks above an
+  inflation to an institution (treaty, docuseries, Constitution) on the
+  same premise.
 - COMMITMENT. If the line opened a metaphor (their word made a world),
   did it stay inside it to the button? A committed world beats three
   unrelated images.
