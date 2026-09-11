@@ -794,6 +794,20 @@ export function JokeSurface() {
     [set],
   )
 
+  /** The scene a card travels with, in a share caption or a room's opening
+   *  line. A card kept from an EARLIER set carries its own situation and must
+   *  use it; the open set's line used to win unconditionally, so a kept card
+   *  acted on from the list went out under whatever happened to be in the
+   *  composer. A card of the open set (a dealt one carries no situation of its
+   *  own) still takes the set's. */
+  const sceneOf = useCallback(
+    (c: JokeCard) =>
+      c.set_id && set && c.set_id !== set.id
+        ? c.situation ?? ''
+        : set?.situation ?? c.situation ?? '',
+    [set],
+  )
+
   type ExportQuery =
     | { card_id: string }
     | { set_id: string }
@@ -943,7 +957,7 @@ export function JokeSurface() {
     const files = items.map((i) => i.file)
     const blobs: NamedBlob[] = items.map((i) => ({ name: i.name, blob: i.blob }))
     const link = shareLink()
-    const text = caption.trim() || shareCaption(target, set?.situation ?? target.situation ?? '', link)
+    const text = caption.trim() || shareCaption(target, sceneOf(target), link)
     const done = (method: string) =>
       jokeTrack('share_completed', prep.res.tier, { channel, n_files: files.length, method })
 
@@ -1001,7 +1015,7 @@ export function JokeSurface() {
     setFocus(target)
     // The whole scene travels — the situation, the card, the way back — the
     // same way a spill or a scan does.
-    setCaption(shareCaption(target, set?.situation ?? target.situation ?? ''))
+    setCaption(shareCaption(target, sceneOf(target)))
     setPrepared(null)
     setShareOpen(true)
     void prepareShare(target)
@@ -1020,7 +1034,7 @@ export function JokeSurface() {
     const already = target.room_id ?? (posted?.cardId === target.id ? posted.roomId : null)
     if (already) { openRoom(already); return }
     setFocus(target)
-    setPostCaption(roomCaption(target, set?.situation ?? target.situation ?? ''))
+    setPostCaption(roomCaption(target, sceneOf(target)))
     setPostOpen(true)
   }
 
@@ -1040,7 +1054,7 @@ export function JokeSurface() {
       const res = await postCard({ data: { card_id: cardId, caption: postCaption.trim() || undefined, ...ctx() } })
       const roomId = res.room_id
       const who = res.alias ?? alias?.display_name ?? 'you'
-      const body = postCaption.trim() || roomCaption(target, set?.situation ?? target.situation ?? '')
+      const body = postCaption.trim() || roomCaption(target, sceneOf(target))
       // The room page reads a just-published room out of localStorage — a
       // spill and a scan both write themselves in on publish, and a card that
       // skipped this step opened as "quiet here" at /room?id=.
@@ -1456,13 +1470,14 @@ export function JokeSurface() {
                 🃏 {list.length} kept · {days <= 1 ? 'day one' : `${days} days of it`}
               </span>
             </div>
-            {/* The same card and the same two actions the deck offers, so a
-                card you kept reads identically here and in the profile. */}
+            {/* The same card and the same actions the deck offers, so a card
+                you kept reads identically here and in the profile. */}
             <SetList
               groups={groups}
               mark={tier !== 'paying'}
               onShare={(card) => void openShare(card)}
               onDownload={(card) => void doSave(card)}
+              onPost={(card) => void doPost(card)}
               onOpenRoom={(roomId) => openRoom(roomId)}
             />
 

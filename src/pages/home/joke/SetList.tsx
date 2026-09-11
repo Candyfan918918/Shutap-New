@@ -18,7 +18,7 @@
  * drift into two different ideas of what a kept card looks like. */
 import type { JokeCard } from '@/lib/jokes/deck'
 import { CardFace } from './CardFace'
-import { Eyebrow, MUTED, NEWS, SORA, FAINT } from './ui'
+import { Eyebrow, INK, MUTED, NEWS, SORA, FAINT } from './ui'
 
 export type SetGroup = { id: string; situation: string; cards: JokeCard[] }
 
@@ -36,19 +36,24 @@ export function SetList({
   mark = true,
   onShare,
   onDownload,
+  onPost,
   onOpenRoom,
 }: {
   groups: SetGroup[]
   mark?: boolean
-  /** Omit both and the cards render without an action row — the list is then
-   *  a record to read rather than a place to act. */
+  /** Omit them all and the cards render without an action row — the list is
+   *  then a record to read rather than a place to act. */
   onShare?: (card: JokeCard) => void
   onDownload?: (card: JokeCard) => void
+  /** A kept card can be posted from here too. Without this the deck was the
+   *  only place a room could be opened from, so a card read back an hour
+   *  later offered share and download and no way to say it out loud. */
+  onPost?: (card: JokeCard) => void
   /** Given, "in a room" stops being a label and becomes the way into it. */
   onOpenRoom?: (roomId: string) => void
 }) {
   if (!groups.length) return null
-  const acts = !!(onShare || onDownload)
+  const acts = !!(onShare || onDownload || onPost)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       {groups.map((group) => (
@@ -109,6 +114,12 @@ export function SetList({
                         </Eyebrow>
                       )
                     ) : null}
+                    {!card.room_id && onPost ? (
+                      <RowButton strong onClick={() => onPost(card)}>
+                        <span aria-hidden style={{ fontFamily: 'Inter,sans-serif', fontWeight: 400, fontSize: 13 }}>◎</span>
+                        post as a room
+                      </RowButton>
+                    ) : null}
                     {onShare ? <RowButton onClick={() => onShare(card)}>share</RowButton> : null}
                     {onDownload ? <RowButton onClick={() => onDownload(card)}>download</RowButton> : null}
                   </div>
@@ -122,9 +133,11 @@ export function SetList({
   )
 }
 
-/** The quiet action pill from the deck's card row, so a kept card offers the
- *  same two things in the same shape wherever it is read. */
-function RowButton({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+/** The action pill from the deck's card row, so a kept card offers the same
+ *  things in the same shape wherever it is read — including the one that
+ *  leads the row, drawn strong and pushed to the left exactly as it is under
+ *  a card in the deck. */
+function RowButton({ children, onClick, strong }: { children: React.ReactNode; onClick: () => void; strong?: boolean }) {
   return (
     <button
       type="button"
@@ -132,7 +145,10 @@ function RowButton({ children, onClick }: { children: React.ReactNode; onClick: 
       style={{
         display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
         height: 36, padding: '0 14px', borderRadius: 999, cursor: 'pointer',
-        background: 'transparent', border: '1px solid rgba(11,8,15,.08)', color: MUTED,
+        marginRight: strong ? 'auto' : undefined,
+        background: 'transparent',
+        border: strong ? '1.5px solid rgba(11,8,15,.16)' : '1px solid rgba(11,8,15,.08)',
+        color: strong ? INK : MUTED,
         fontFamily: SORA, fontWeight: 800, fontSize: 12, lineHeight: 1,
       }}
     >
