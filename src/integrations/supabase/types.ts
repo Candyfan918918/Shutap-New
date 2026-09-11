@@ -479,8 +479,8 @@ export type Database = {
           id: string
           is_seed: boolean
           judge_model: string | null
-          judge_why: string | null
           judge_score: number | null
+          judge_why: string | null
           position: number
           prompt_version: string | null
           room_id: string | null
@@ -500,8 +500,8 @@ export type Database = {
           id?: string
           is_seed?: boolean
           judge_model?: string | null
-          judge_why?: string | null
           judge_score?: number | null
+          judge_why?: string | null
           position?: number
           prompt_version?: string | null
           room_id?: string | null
@@ -521,8 +521,8 @@ export type Database = {
           id?: string
           is_seed?: boolean
           judge_model?: string | null
-          judge_why?: string | null
           judge_score?: number | null
+          judge_why?: string | null
           position?: number
           prompt_version?: string | null
           room_id?: string | null
