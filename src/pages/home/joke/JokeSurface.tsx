@@ -1344,7 +1344,6 @@ export function JokeSurface() {
                       {revealed && dealt ? (
                         <CardActions
                           label={slot.label}
-                          canPost={signedIn}
                           posted={!!(dealt.room_id ?? (posted?.cardId === dealt.id ? posted.roomId : null))}
                           onPost={() => void doPost(dealt)}
                           onShare={() => void openShare(dealt)}
