@@ -97,6 +97,9 @@ type Pending =
 
 type SetState = { id: string; situation: string; archetype: string }
 
+/** The folded set list, named so its header row can point at it. */
+const SET_LIST_ID = 'joke-set-list'
+
 /** The price line the upgrade sheet quotes: annual first, monthly as the
  *  alternative — the same order the subscribe page leads with. */
 /** Where a share lands on a browser that cannot hand files to an app itself.
@@ -208,6 +211,11 @@ export function JokeSurface() {
    *  a session-wide flag turned the offer under every other card into a
    *  statement about a room that card is not in. */
   const [posted, setPosted] = useState<{ cardId: string; roomId: string; alias: string } | null>(null)
+  /** The set list is FOLDED by default. Every card is rendered as a card —
+   *  9:16, full width on a phone — so a month of them pushed the landing page
+   *  down by several screens for the reader least in need of the pitch under
+   *  it. The header row says how much is in there and opens it. */
+  const [listOpen, setListOpen] = useState(false)
 
   // ── the rest ──
   const [list, setList] = useState<JokeCard[]>([])
@@ -1464,22 +1472,52 @@ export function JokeSurface() {
       {signedIn && list.length > 0 ? (
         <section style={{ background: 'rgba(16,12,20,.04)', padding: '0 clamp(16px,4vw,28px) clamp(36px,6vh,72px)' }}>
           <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap', paddingTop: 'clamp(24px,4vh,48px)' }}>
-              <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'clamp(20px,2.6vw,26px)', letterSpacing: '-.03em' }}>your set list</span>
+            {/* The fold. A line, not a panel: the count is the reason to open
+                it, so it sits in the same row as the title and the caret. */}
+            <button
+              type="button"
+              onClick={() => setListOpen((o) => !o)}
+              aria-expanded={listOpen}
+              aria-controls={SET_LIST_ID}
+              style={{
+                display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap',
+                paddingTop: 'clamp(24px,4vh,48px)', paddingBottom: 0, paddingLeft: 0, paddingRight: 0,
+                border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', width: '100%',
+              }}
+            >
+              <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'clamp(20px,2.6vw,26px)', letterSpacing: '-.03em', color: INK }}>
+                your set list
+              </span>
               <span style={{ fontFamily: SORA, fontSize: 13, color: '#8a7a84' }}>
                 🃏 {list.length} kept · {days <= 1 ? 'day one' : `${days} days of it`}
               </span>
-            </div>
+              <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: SORA, fontWeight: 800, fontSize: 12, color: ACCENT }}>
+                {listOpen ? 'fold it away' : 'read them'}
+                <span
+                  aria-hidden
+                  style={{ display: 'inline-block', transform: listOpen ? 'rotate(180deg)' : 'none', transition: 'transform .2s' }}
+                >
+                  ▾
+                </span>
+              </span>
+            </button>
             {/* The same card and the same actions the deck offers, so a card
-                you kept reads identically here and in the profile. */}
-            <SetList
-              groups={groups}
-              mark={tier !== 'paying'}
-              onShare={(card) => void openShare(card)}
-              onDownload={(card) => void doSave(card)}
-              onPost={(card) => void doPost(card)}
-              onOpenRoom={(roomId) => openRoom(roomId)}
-            />
+                you kept reads identically here and in the profile. Unmounted
+                while folded rather than hidden: every card renders its own
+                art, and three dozen of them are not worth laying out for a
+                section nobody has opened. */}
+            <div id={SET_LIST_ID} hidden={!listOpen}>
+              {listOpen ? (
+                <SetList
+                  groups={groups}
+                  mark={tier !== 'paying'}
+                  onShare={(card) => void openShare(card)}
+                  onDownload={(card) => void doSave(card)}
+                  onPost={(card) => void doPost(card)}
+                  onOpenRoom={(roomId) => openRoom(roomId)}
+                />
+              ) : null}
+            </div>
 
             <div style={{ marginTop: 6, background: 'radial-gradient(120% 120% at 10% 0%,rgba(127,119,221,.06),#fff 65%)', border: '1px solid rgba(11,8,15,.08)', borderRadius: 22, padding: 'clamp(20px,3vw,30px)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 18 }}>
               <div style={{ maxWidth: '52ch' }}>
