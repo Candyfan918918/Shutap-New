@@ -576,34 +576,53 @@ async function persistCard(
   },
 ): Promise<string | null> {
   const g = args.generated ?? null
-  const { data: card } = await admin
-    .from('joke_cards')
-    .upsert(
-      {
-        set_id: args.setId,
-        user_id: args.userId,
-        angle: args.angle,
-        card_text: args.text,
-        position: args.position,
-        used_fallback: args.used_fallback,
-        judge_score: args.judge_score,
-        is_seed: false,
-        corpus_eligible: false,
-        ...(g
-          ? {
-              prompt_version: g.prompt_version,
-              voice_key: g.voice_key,
-              writer_model: g.writer_model,
-              judge_model: g.judge_model,
-              judge_why: g.judge_why,
-              candidates: g.candidates,
-            }
-          : {}),
-      } as never,
-      { onConflict: 'set_id,position' },
-    )
-    .select('id')
-    .maybeSingle()
+  const row = {
+    set_id: args.setId,
+    user_id: args.userId,
+    angle: args.angle,
+    card_text: args.text,
+    position: args.position,
+    used_fallback: args.used_fallback,
+    judge_score: args.judge_score,
+    is_seed: false,
+    corpus_eligible: false,
+  }
+  const record = g
+    ? {
+        prompt_version: g.prompt_version,
+        voice_key: g.voice_key,
+        writer_model: g.writer_model,
+        judge_model: g.judge_model,
+        judge_why: g.judge_why,
+        candidates: g.candidates,
+      }
+    : {}
+  const write = (payload: Record<string, unknown>) =>
+    admin
+      .from('joke_cards')
+      .upsert(payload as never, { onConflict: 'set_id,position' })
+      .select('id')
+      .maybeSingle()
+
+  let { data: card, error } = await write({ ...row, ...record })
+  // The write used to swallow its error, and one whole day of cards went
+  // by with no record of how they were written: the REST layer's schema
+  // cache did not yet know the generator's columns, every upsert with them
+  // was refused, and the browser's "keep this card" re-saved each one bare.
+  // Now the refusal is logged, and the server stores the card itself —
+  // without its record, which is the loss to go and fix, never the card.
+  if (error && g) {
+    console.error('[joke-card] write with generation record refused; storing the card bare', {
+      set_id: args.setId,
+      position: args.position,
+      code: error.code,
+      message: error.message,
+    })
+    ;({ data: card, error } = await write(row))
+  }
+  if (error) {
+    console.error('[joke-card] write failed', { set_id: args.setId, position: args.position, code: error.code, message: error.message })
+  }
   if (card?.id) return card.id as string
   const { data: found } = await admin
     .from('joke_cards')
