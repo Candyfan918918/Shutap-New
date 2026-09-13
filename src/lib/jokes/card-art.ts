@@ -12,6 +12,11 @@
 export const VB_W = 1080
 export const VB_H = 1920
 
+// The safe area CardFace uses (13cqw 8.5cqw), in viewBox units: TikTok and
+// Reels lay their caption and chrome over a 9:16 card's edges.
+const SAFE_X = 92
+const SAFE_Y = 140
+
 export type CardArt = {
   /** the joke itself — the line that carries the card */
   text: string
@@ -68,13 +73,16 @@ function wrap(text: string, perLine: number, maxLines: number): string[] {
 function fitJoke(text: string): { size: number; lines: string[] } {
   for (const size of [96, 86, 76, 68, 60, 52, 46, 40]) {
     // Newsreader italic runs about .46em to the character.
-    const perLine = Math.floor((VB_W - 2 * 70) / (size * 0.46))
-    const maxLines = size >= 86 ? 4 : size >= 60 ? 5 : size >= 46 ? 7 : 8
+    const perLine = Math.floor((VB_W - 2 * SAFE_X) / (size * 0.46))
+    // The small rungs have the whole middle of the card to themselves — the
+    // header and footer are pinned — so a long roast steps down and runs
+    // longer instead of being cut at "…" with half the face empty.
+    const maxLines = size >= 86 ? 4 : size >= 60 ? 5 : size >= 52 ? 8 : size >= 46 ? 11 : 13
     const lines = wrap(text, perLine, maxLines + 1)
     if (lines.length <= maxLines) return { size, lines }
   }
   const size = 40
-  return { size, lines: wrap(text, Math.floor((VB_W - 140) / (size * 0.46)), 8) }
+  return { size, lines: wrap(text, Math.floor((VB_W - 2 * SAFE_X) / (size * 0.46)), 13) }
 }
 
 /** The eyes, drawn rather than imported — two rounded bars and two pupils. */
@@ -115,33 +123,38 @@ export function renderCardSvg(art: CardArt): string {
   const { size, lines } = fitJoke(art.text)
   const lead = size * 1.32
 
-  // Laid out from the bottom up: footer, then the joke, then the situation.
-  const footerY = VB_H - 108
-  const jokeBottom = footerY - 190
-  const jokeTop = jokeBottom - (lines.length - 1) * lead
-  const joke = lines
-    .map(
-      (l, i) =>
-        `<text x="70" y="${jokeTop + i * lead}" font-family="${VOICE}" font-style="italic" font-size="${size}" letter-spacing="-1" fill="#f7e8f0">${esc(l)}</text>`,
-    )
-    .join('')
+  // Header pinned to the top of the safe area, footer to the bottom, and the
+  // situation + joke centred as one block in what's left — as CardFace does.
+  const eyesH = 92
+  const headerBottom = SAFE_Y + eyesH
+  const footerSize = 42
+  const footerY = VB_H - SAFE_Y // baseline; the caps sit just above it
+  const zoneTop = headerBottom + 60
+  const zoneBottom = footerY - footerSize - 60
 
   const sitLines = art.situation ? wrap(art.situation.trim(), 42, 3) : []
+  const sitSize = 47
   const sitLead = 68
-  const sitBottom = jokeTop - size - 44
+  const sitH = sitLines.length ? (sitLines.length - 1) * sitLead + sitSize : 0
+  const sitGap = sitLines.length ? 44 : 0
+  const jokeH = (lines.length - 1) * lead + size
+  const blockTop = zoneTop + Math.max(0, (zoneBottom - zoneTop - (sitH + sitGap + jokeH)) / 2)
+
+  // y is a baseline: a line's caps start about .8em above it.
   const situation = sitLines
     .map(
       (l, i) =>
-        `<text x="70" y="${sitBottom - (sitLines.length - 1 - i) * sitLead}" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="47" fill="#9b8090">${esc(l)}</text>`,
+        `<text x="${SAFE_X}" y="${blockTop + sitSize * 0.8 + i * sitLead}" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="${sitSize}" fill="#9b8090">${esc(l)}</text>`,
     )
     .join('')
 
-  const markPill = art.mark
-    ? `<g>` +
-      `<rect x="${VB_W - 70 - 330}" y="${footerY - 44}" width="330" height="62" rx="31" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>` +
-      `<text x="${VB_W - 70 - 165}" y="${footerY - 2}" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700" font-size="34" letter-spacing="2" fill="rgba(247,232,240,.55)">made on shutap</text>` +
-      `</g>`
-    : ''
+  const jokeTop = blockTop + sitH + sitGap
+  const joke = lines
+    .map(
+      (l, i) =>
+        `<text x="${SAFE_X}" y="${jokeTop + size * 0.8 + i * lead}" font-family="${VOICE}" font-style="italic" font-size="${size}" letter-spacing="-1" fill="#f7e8f0">${esc(l)}</text>`,
+    )
+    .join('')
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${art.width}" height="${art.height}" viewBox="0 0 ${VB_W} ${VB_H}" preserveAspectRatio="xMidYMid slice">
   <defs>
@@ -161,15 +174,14 @@ export function renderCardSvg(art: CardArt): string {
   <rect width="${VB_W}" height="${VB_H}" fill="url(#grain)"/>
   ${art.mark ? watermark() : ''}
 
-  ${eyes(70, 96, 92, accent)}
-  <text x="188" y="182" font-family="${DISPLAY}" font-weight="800" font-size="76" letter-spacing="-3" fill="#f7e8f0">shut<tspan fill="${accent}">ap</tspan></text>
-  <text x="${VB_W - 70}" y="${172}" text-anchor="end" font-family="${DISPLAY}" font-weight="800" font-size="45" letter-spacing="12" fill="${accent}">${esc(art.label.toUpperCase())}</text>
+  ${eyes(SAFE_X, SAFE_Y, eyesH, accent)}
+  <text x="${SAFE_X + 118}" y="${SAFE_Y + 86}" font-family="${DISPLAY}" font-weight="800" font-size="76" letter-spacing="-3" fill="#f7e8f0">shut<tspan fill="${accent}">ap</tspan></text>
+  <text x="${VB_W - SAFE_X}" y="${SAFE_Y + 76}" text-anchor="end" font-family="${DISPLAY}" font-weight="800" font-size="40" letter-spacing="9" fill="${accent}">${esc(art.label.toUpperCase())}</text>
 
   ${situation}
   ${joke}
 
-  <text x="70" y="${footerY}" font-family="${VOICE}" font-style="italic" font-size="47" fill="#9b8090">said it on shutap.com</text>
-  ${markPill}
+  <text x="${SAFE_X}" y="${footerY}" font-family="${DISPLAY}" font-weight="800" font-size="${footerSize}" letter-spacing="1" fill="#9b8090">SHUTAP. Joke about it.</text>
 </svg>`
 }
 

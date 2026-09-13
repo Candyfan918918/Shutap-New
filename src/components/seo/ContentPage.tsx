@@ -131,7 +131,7 @@ export function ContentPage({
               paddingBottom: 2,
             }}
           >
-            shutap. speak up.
+            SHUTAP. Joke about it.
           </a>
         </p>
       </article>

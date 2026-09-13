@@ -145,7 +145,7 @@ export function PillarPage({
               paddingBottom: 2,
             }}
           >
-            Shutap. Speak Up.
+            SHUTAP. Joke about it.
           </a>
         </p>
       </article>
