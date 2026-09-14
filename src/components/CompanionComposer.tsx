@@ -142,7 +142,7 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
           <div style={{ flex: 1, fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14, color: '#fdfbf9', lineHeight: 1.5 }}>
             i'm the companion. tell me what's going on — i can find you a room, help you spill, scan how you're doing, or just answer.
           </div>
-          <div onClick={onClose} role="button" style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#6f666c', cursor: 'pointer', flex: 'none' }}>close</div>
+          <div onClick={onClose} role="button" style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#9b8090', cursor: 'pointer', flex: 'none' }}>close</div>
         </div>
         {due && due.beat && (
           <div style={{ marginBottom: 14, background: 'rgba(231,84,138,.08)', border: '.5px solid rgba(231,84,138,.28)', borderRadius: 16, padding: '14px 15px' }}>
@@ -168,7 +168,7 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
               <div
                 role="button"
                 onClick={() => setNoteOpen(true)}
-                style={{ display: 'inline-block', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#645b61', cursor: 'pointer', marginRight: 14 }}
+                style={{ display: 'inline-block', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#caaebb', cursor: 'pointer', marginRight: 14 }}
               >
                 add a note — optional
               </div>
@@ -184,7 +184,7 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
             <div
               role="button"
               onClick={onSnooze}
-              style={{ display: 'inline-block', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#6f666c', cursor: 'pointer' }}
+              style={{ display: 'inline-block', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#9b8090', cursor: 'pointer' }}
             >
               not now
             </div>
@@ -212,7 +212,7 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
           </svg>
           <div style={{ flex: 1 }}>
             <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 13, color: '#fdfbf9' }}>the mirror</div>
-            <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#645b61', marginTop: 1 }}>what i've noticed about you, over time</div>
+            <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#caaebb', marginTop: 1 }}>what i've noticed about you, over time</div>
           </div>
           <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#f7b8d4', flex: 'none' }}>open →</span>
         </div>
@@ -231,7 +231,7 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
                 <span style={{ fontSize: 20, flex: 'none' }}>{r.emoji}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontFamily: SORA, fontWeight: 600, fontSize: 13, color: '#fdfbf9', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.title}</div>
-                  <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12, color: '#6f666c', marginTop: 1 }}>{r.alias}</div>
+                  <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12, color: '#9b8090', marginTop: 1 }}>{r.alias}</div>
                 </div>
                 <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#f7b8d4', flex: 'none' }}>open →</span>
               </div>

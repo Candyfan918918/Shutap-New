@@ -314,7 +314,7 @@ function eyeSVG(size = 32) {
 
 function Thinking({ text = 'ok hang on…' }: { text?: string }) {
   return (
-    <div style={{ display: 'flex', gap: 5, alignItems: 'center', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14, color: '#6f666c' }}>
+    <div style={{ display: 'flex', gap: 5, alignItems: 'center', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14, color: '#9b8090' }}>
       <i style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', display: 'block', animation: 'blinkdot 1.2s infinite' }} />
       <i style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', display: 'block', animation: 'blinkdot 1.2s .2s infinite' }} />
       <i style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', display: 'block', animation: 'blinkdot 1.2s .4s infinite' }} />
@@ -331,7 +331,7 @@ function ChromeBar({ step, total, onClose }: { step: number; total: number; onCl
           <span key={i} style={{ height: 3, flex: 1, borderRadius: 2, background: i < step ? '#a52a5f' : 'rgba(255,255,255,.12)', transition: 'background .3s' }} />
         ))}
       </div>
-      <div role="button" onClick={onClose} style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#6f666c', cursor: 'pointer', flex: 'none' }}>close</div>
+      <div role="button" onClick={onClose} style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#9b8090', cursor: 'pointer', flex: 'none' }}>close</div>
     </div>
   )
 }
@@ -737,7 +737,7 @@ export function SpillModal({ open, onClose }: { open: boolean; onClose: () => vo
             })()}
 
             {thinking && phase === 'chat' && (
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14, color: '#6f666c' }}>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14, color: '#9b8090' }}>
                 <i style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', animation: 'blinkdot 1.2s infinite' }} />
                 <i style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', animation: 'blinkdot 1.2s .2s infinite' }} />
                 <i style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', animation: 'blinkdot 1.2s .4s infinite' }} />
@@ -800,7 +800,7 @@ export function SpillModal({ open, onClose }: { open: boolean; onClose: () => vo
             <div style={{ fontFamily: SORA, fontWeight: 600, fontSize: 10, letterSpacing: '.16em', textTransform: 'uppercase', color: '#a52a5f' }}>preview · in your words</div>
             <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#c4a0b2' }}>here’s your story — cleaned up a little, but still yours; did i keep it true? type right over anything to fix it, or tell me what to change below — then pick where it lives.</div>
             {composed.edit_summary && (
-              <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#6f666c' }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#9b8090' }}>
                 {eyeSVG(16)}<span>{composed.edit_summary}</span>
               </div>
             )}
@@ -810,7 +810,7 @@ export function SpillModal({ open, onClose }: { open: boolean; onClose: () => vo
               </div>
             )}
             <div style={{ background: 'rgba(255,255,255,.035)', border: '1px solid rgba(255,255,255,.1)', borderRadius: 18, padding: '20px 20px 18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Sora', fontWeight: 500, fontSize: 12.5, color: '#6f666c', marginBottom: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Sora', fontWeight: 500, fontSize: 12.5, color: '#9b8090', marginBottom: 12 }}>
                 {(() => {
                   let alias = 'you', emoji = '🩷'
                   try { const raw = typeof window !== 'undefined' ? localStorage.getItem('shutap_alias') : null
@@ -843,7 +843,7 @@ export function SpillModal({ open, onClose }: { open: boolean; onClose: () => vo
                 </div>
               )}
             </div>
-            <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#6f666c' }}>🔒 every edit gets re-checked by the privacy shield before it saves.</div>
+            <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#9b8090' }}>🔒 every edit gets re-checked by the privacy shield before it saves.</div>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.14)', borderRadius: 16, padding: '11px 14px', marginTop: 2 }}>
               <textarea
                 rows={1}

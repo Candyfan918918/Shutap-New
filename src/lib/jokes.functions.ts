@@ -1209,7 +1209,7 @@ export const postJokeCardToRoom = createServerFn({ method: 'POST' })
         card_id: z.string().uuid(),
         /** what the room says — the whole scene, edited or not. Absent, the
          *  server composes it: the situation, then the card. */
-        caption: z.string().max(1200).optional(),
+        caption: z.string().max(4400).optional(),
         ...Ctx,
       })
       .parse(d),

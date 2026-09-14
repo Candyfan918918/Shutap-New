@@ -501,7 +501,7 @@ export function ScanShareCard({
                 fontFamily: 'Newsreader,serif',
                 fontStyle: 'italic',
                 fontSize: 13,
-                color: '#6f666c',
+                color: '#9b8090',
               }}
             >
               what's your number? · shutap.com
