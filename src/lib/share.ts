@@ -359,7 +359,7 @@ function showSheet(id: string, opts: ShareOpts) {
   const capWrap = document.createElement('div')
   capWrap.style.cssText = 'margin-top:14px'
   capWrap.innerHTML =
-    '<div style="font-family:Sora,sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#6f666c;margin-bottom:6px">your caption · edit freely</div>'
+    '<div style="font-family:Sora,sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#9b8090;margin-bottom:6px">your caption · edit freely</div>'
   const cap = document.createElement('textarea')
   cap.rows = 2
   cap.value = opts.caption || ''
@@ -390,12 +390,12 @@ function showSheet(id: string, opts: ShareOpts) {
   const foot = document.createElement('div')
   foot.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px'
   foot.innerHTML =
-    '<span style="font-family:Newsreader,serif;font-style:italic;font-size:12px;color:#6f666c">' +
+    '<span style="font-family:Newsreader,serif;font-style:italic;font-size:12px;color:#9b8090">' +
     (opts.privacy || 'only this card leaves — never your words or name.') +
     '</span>'
   const no = document.createElement('span')
   no.textContent = 'not now'
-  no.style.cssText = 'font-family:Newsreader,serif;font-style:italic;font-size:13.5px;color:#6f666c;cursor:pointer;flex:none'
+  no.style.cssText = 'font-family:Newsreader,serif;font-style:italic;font-size:13.5px;color:#9b8090;cursor:pointer;flex:none'
   const close = () => {
     back.style.opacity = '0'
     sheet.style.transform = 'translateY(100%)'

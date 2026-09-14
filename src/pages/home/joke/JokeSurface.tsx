@@ -1598,6 +1598,7 @@ export function JokeSurface() {
             </div>
             <textarea
               rows={6}
+              maxLength={4400}
               value={postCaption}
               onChange={(e) => setPostCaption(e.target.value)}
               style={{
