@@ -179,30 +179,140 @@ export function voiceByKey(voices: JokeVoice[], key: string | null | undefined):
   return voices.find((v) => v.key === key) ?? SEED_VOICES.find((v) => v.key === key) ?? null
 }
 
-/** Up to `limit` situation→line pairs for a card. Selection order:
- *  (slot, voice, archetype) → (slot, voice) → (slot, any voice) → none.
- *  Never block on empty. */
+/* ───────────────────────── few-shot exclusion ─────────────────────────
+   A hall-of-fame row that is the same situation again teaches the model
+   to copy, not to write. Before a row can be an example it must be far
+   enough from this spill — cosine similarity under 0.80 — and must not
+   share both the archetype and the accusation verb. Fewer than two
+   survivors means none: none is better than a copy. */
+export const EXAMPLE_SIMILARITY_CUTOFF = 0.8
+
+const ACCUSATION_VERBS = ['gave', 'ruined', 'made', 'caused', 'destroyed', 'broke', 'wrecked', 'killed', 'cost', 'stole', 'took', 'ended', 'poisoned', 'infected']
+
+/** The accuser's verb in a spill, when the other party accused the user
+ *  of something ("said I gave her", "told me you ruined"). */
+export function accusationVerb(text: string): string | null {
+  const t = text.toLowerCase()
+  const m = /\b(?:said|says|saying|told|tells|claims?|claimed|accused|accuses|blamed|blames)\b[^.!?]{0,60}?\b(?:i|you|i'd|i've)\s+(?:had\s+)?(\w+)/.exec(t)
+  if (m && ACCUSATION_VERBS.includes(m[1]!)) return m[1]!
+  return null
+}
+
+function cosine(a: number[], b: number[]): number {
+  let dot = 0, na = 0, nb = 0
+  const n = Math.min(a.length, b.length)
+  for (let i = 0; i < n; i++) { dot += a[i]! * b[i]!; na += a[i]! * a[i]!; nb += b[i]! * b[i]! }
+  return na && nb ? dot / (Math.sqrt(na) * Math.sqrt(nb)) : 0
+}
+
+/** pgvector comes back through REST as its text form '[0.1,0.2,…]'. */
+function parseVector(v: unknown): number[] | null {
+  if (Array.isArray(v)) return v.map(Number)
+  if (typeof v === 'string' && v.startsWith('[')) {
+    try { const arr = JSON.parse(v) as unknown; return Array.isArray(arr) ? arr.map(Number) : null } catch { return null }
+  }
+  return null
+}
+
+export type ExampleSelection = {
+  examples: { situation: string; line: string }[]
+  examples_excluded: number
+  reasons: string[]
+}
+
+/** Up to `limit` situation→line pairs for a card, after exclusion.
+ *  Selection order: (slot, voice, archetype) → (slot, voice) → (slot, any
+ *  voice) → none. Never block on empty. */
 export async function loadExamples(
   admin: Admin | null,
-  args: { slot: SlotKey; voiceKey: string; archetype: string; limit?: number },
-): Promise<{ situation: string; line: string }[]> {
+  args: {
+    slot: SlotKey
+    voiceKey: string
+    archetype: string
+    limit?: number
+    situation?: string
+    /** the spill's embedding, when one could be made */
+    spillEmbedding?: number[] | null
+    trace?: { set_id?: string; position?: number }
+  },
+): Promise<ExampleSelection> {
   const limit = args.limit ?? 5
-  let rows: HallOfFameEntry[] = []
+  let rows: (HallOfFameEntry & { id?: string; embedding?: number[] | null })[] = []
   if (admin) {
     try {
       const { data } = await admin
         .from('joke_hall_of_fame')
-        .select('slot, voice_key, archetype, situation_clean, joke_text')
+        .select('id, slot, voice_key, archetype, situation_clean, joke_text, embedding')
         .eq('slot', args.slot)
         .eq('is_active', true)
         .limit(200)
-      if (Array.isArray(data)) rows = data as HallOfFameEntry[]
+      if (Array.isArray(data)) rows = data.map((r: any) => ({ ...r, embedding: parseVector(r.embedding) }))
     } catch (err) {
       console.error('[joke-hof] load failed; using seed', err)
     }
   }
   if (rows.length === 0) rows = SEED_HALL_OF_FAME.filter((h) => h.slot === args.slot)
-  return selectExamples(rows, args.voiceKey, args.archetype, limit)
+
+  // A row without an embedding gets one now, once, and keeps it.
+  if (admin && args.spillEmbedding) {
+    const { embedText, toVectorLiteral } = await import('@/lib/agents/embeddings.server')
+    for (const r of rows) {
+      if (r.embedding || !r.id) continue
+      const vec = await embedText(r.situation_clean)
+      if (!vec) continue
+      r.embedding = vec
+      try {
+        await admin.from('joke_hall_of_fame').update({ embedding: toVectorLiteral(vec) } as never).eq('id', r.id)
+      } catch (err) {
+        console.error('[joke-hof] could not store an embedding', { id: r.id, err })
+      }
+    }
+  }
+
+  const verb = args.situation ? accusationVerb(args.situation) : null
+  const reasons: string[] = []
+  const kept = rows.filter((r) => {
+    if (args.spillEmbedding && r.embedding) {
+      const sim = cosine(args.spillEmbedding, r.embedding)
+      if (sim >= EXAMPLE_SIMILARITY_CUTOFF) {
+        reasons.push(`similarity ${sim.toFixed(2)} (${r.id ?? 'seed'})`)
+        return false
+      }
+    }
+    if (verb && r.archetype === args.archetype && accusationVerb(r.situation_clean) === verb) {
+      reasons.push(`archetype+verb "${verb}" (${r.id ?? 'seed'})`)
+      return false
+    }
+    return true
+  })
+  let examples = selectExamples(kept, args.voiceKey, args.archetype, limit)
+  if (examples.length < 2) {
+    if (examples.length) reasons.push('fewer than two survive; proceeding with none')
+    examples = []
+  }
+  const out = { examples, examples_excluded: rows.length - kept.length, reasons }
+  console.log('[joke-examples]', {
+    ...(args.trace ?? {}),
+    slot: args.slot,
+    examples: examples.length,
+    examples_excluded: out.examples_excluded,
+    reason: reasons,
+  })
+  return out
+}
+
+/** Every active hall-of-fame line, all slots, for the exemplar-copy
+ *  guardrail. The seed stands in when the table is empty or unreachable. */
+export async function loadHallOfFameLines(admin: Admin | null): Promise<{ id: string; text: string }[]> {
+  if (admin) {
+    try {
+      const { data } = await admin.from('joke_hall_of_fame').select('id, joke_text').eq('is_active', true).limit(1000)
+      if (Array.isArray(data) && data.length) return data.map((r: any) => ({ id: `hof:${r.id}`, text: String(r.joke_text) }))
+    } catch (err) {
+      console.error('[joke-hof] lines load failed; using seed', err)
+    }
+  }
+  return SEED_HALL_OF_FAME.map((h, i) => ({ id: `seed:${i}`, text: h.joke_text }))
 }
 
 export function selectExamples(

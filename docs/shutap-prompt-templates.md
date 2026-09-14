@@ -592,6 +592,10 @@ output failed and they are weighted above the rest:
 - Does it use something only this situation has?
 - Is the premise one someone would actually have missed?
 - Rhythm. Does it have beats, or is it just true?
+- STOPS AT THE TURN. A line that ends on its picture ranks above the
+  same line with a clause explaining the picture. "Like a gift" beats
+  "like a gift with a card." If two candidates share their first
+  sentence, the shorter one wins unless the addition is a new picture.
 
 Length is never the criterion. Cut words that carry nothing, never cut the
 reasoning, never cut the picture.

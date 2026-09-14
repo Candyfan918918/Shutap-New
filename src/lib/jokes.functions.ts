@@ -32,6 +32,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { runScrub } from './agents/scrubber.functions'
 import { runClassifyCrisis } from './agents/guard.functions'
+import { runExtractSeriousFact } from './agents/serious-fact.functions'
 import { classifyArchetype, dealSlots } from './jokes/deck.server'
 import { generateCard, prepareSet, type GeneratedCard, type SetRow } from './jokes/pipeline.server'
 import { resolveJokeIdentity, resolveDay, resolveDayInfo, ipFlipLimit, ipSubjectKey } from './jokes/session.server'
@@ -238,7 +239,9 @@ export const submitJokeEntry = createServerFn({ method: 'POST' })
     const clean = scrubbed.clean_text
 
     // crisis overrides everything. no cards, no gate, no paywall, no signup.
-    const crisis = await runClassifyCrisis(clean)
+    // The serious-fact extractor runs beside the Guard, never inside it: a
+    // different system with a different purpose, and the Guard is unchanged.
+    const [crisis, seriousFact] = await Promise.all([runClassifyCrisis(clean), runExtractSeriousFact(clean)])
     if (crisis.crisis) {
       await supabaseAdmin.from('crisis_events').insert({
         alias_id: id.userId,
@@ -260,12 +263,14 @@ export const submitJokeEntry = createServerFn({ method: 'POST' })
         clean_text: clean,
         archetype,
         angles,
+        serious_fact: seriousFact,
         is_seed: false,
         corpus_eligible: false,
       } as never)
       .select('id')
       .single()
     if (error || !row) throw new Error(error?.message ?? 'could not open that set')
+    console.log('[joke-set] opened', { set_id: row.id, archetype, serious_fact: seriousFact })
 
     return {
       crisis: false,

@@ -620,6 +620,7 @@ export type Database = {
           archetype: string | null
           card_id: string | null
           created_at: string
+          embedding: string | null
           id: string
           is_active: boolean
           joke_text: string
@@ -633,6 +634,7 @@ export type Database = {
           archetype?: string | null
           card_id?: string | null
           created_at?: string
+          embedding?: string | null
           id?: string
           is_active?: boolean
           joke_text: string
@@ -646,6 +648,7 @@ export type Database = {
           archetype?: string | null
           card_id?: string | null
           created_at?: string
+          embedding?: string | null
           id?: string
           is_active?: boolean
           joke_text?: string
@@ -680,11 +683,13 @@ export type Database = {
           clean_text: string
           corpus_eligible: boolean
           created_at: string
+          embedding: string | null
           id: string
           is_seed: boolean
           premises: Json | null
           premises_version: string | null
           roast_target: string | null
+          serious_fact: string | null
           updated_at: string
           user_id: string | null
           voice_key: string | null
@@ -696,11 +701,13 @@ export type Database = {
           clean_text: string
           corpus_eligible?: boolean
           created_at?: string
+          embedding?: string | null
           id?: string
           is_seed?: boolean
           premises?: Json | null
           premises_version?: string | null
           roast_target?: string | null
+          serious_fact?: string | null
           updated_at?: string
           user_id?: string | null
           voice_key?: string | null
@@ -712,11 +719,13 @@ export type Database = {
           clean_text?: string
           corpus_eligible?: boolean
           created_at?: string
+          embedding?: string | null
           id?: string
           is_seed?: boolean
           premises?: Json | null
           premises_version?: string | null
           roast_target?: string | null
+          serious_fact?: string | null
           updated_at?: string
           user_id?: string | null
           voice_key?: string | null

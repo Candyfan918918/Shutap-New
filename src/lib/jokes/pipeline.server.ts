@@ -34,11 +34,14 @@ import {
 } from './prompts.server'
 import {
   loadExamples,
+  loadHallOfFameLines,
   loadVoices,
   pickVoice,
   voiceByKey,
   type JokeVoice,
 } from './voices.server'
+import { promptExemplars, type PromptExemplar } from './prompts.server'
+import { embedText, toVectorLiteral } from '@/lib/agents/embeddings.server'
 
 /* ───────────────────────────── models ─────────────────────────────
    The writer and the judge must be different families — same-model judging
@@ -265,7 +268,27 @@ export const SERIOUS_FACT_TOKENS = [
   'cancer', 'tumor', 'tumour', 'chemo', 'oncolog', 'hospital', 'hospice', 'icu', 'diagnos',
   'terminal', 'died', 'death', 'dead', 'funeral', 'miscarr', 'stillb', 'stroke', 'surgery',
   'overdose', 'laid off', 'fired', 'evicted', 'bankrupt',
+  'disease', 'illness', 'autoimmune', 'condition', 'chronic', 'medical', 'symptom', 'flare', 'sick',
 ]
+
+/** Guardrail D's comparison set: a hall-of-fame line or one of the prompt's
+ *  own example lines, normalised for comparison. */
+export type Exemplar = { id: string; text: string }
+type ExemplarNorm = { id: string; norm: string; tokens: Set<string> }
+
+export function normalizeForCopy(t: string): string {
+  return t.toLowerCase().replace(/[^a-z0-9\s']/g, ' ').replace(/\s+/g, ' ').trim()
+}
+function normExemplar(e: Exemplar): ExemplarNorm {
+  const norm = normalizeForCopy(e.text)
+  return { id: e.id, norm, tokens: new Set(norm.split(' ').filter(Boolean)) }
+}
+export function jaccard(a: Set<string>, b: Set<string>): number {
+  let inter = 0
+  for (const t of a) if (b.has(t)) inter++
+  const union = a.size + b.size - inter
+  return union ? inter / union : 0
+}
 
 /** Guardrail A: a predicate nominative on the user, on any spill, no
  *  allowlist. The two forms the spec gives (§8). */
@@ -279,14 +302,36 @@ export const USER_PREDICATE_RES: RegExp[] = [
 export const SELF_CRITICAL_PREDICATE_RE =
   /\b(you|you're|you are|you've)\b.{0,20}\b(a|an|the)\b [^.]{0,40}\b(fund|atm|customer|dependent|charity case|burden|liability|expense|line item|failure|loser)\b/i
 
-export type SpillFlags = { self_critical: boolean; serious_tokens: string[] }
+export type SeriousToken = { token: string; source: 'static' | 'dynamic' }
+export type SpillFlags = {
+  self_critical: boolean
+  serious_tokens: SeriousToken[]
+  exemplars: ExemplarNorm[]
+}
+
+/** The tokens of a serious-fact phrase Guardrail B blocks: every word of
+ *  four letters or more, plus the head noun (the last word). */
+export function dynamicSeriousTokens(seriousFact: string | null | undefined): string[] {
+  if (!seriousFact) return []
+  const words = seriousFact.toLowerCase().replace(/[^a-z'\s-]/g, ' ').split(/\s+/).filter(Boolean)
+  const out = new Set<string>()
+  for (const w of words) if (w.length >= 4) out.add(w)
+  if (words.length) out.add(words[words.length - 1]!)
+  return Array.from(out)
+}
 
 /** What the spill itself says about which guardrails apply. */
-export function spillFlags(situation: string): SpillFlags {
+export function spillFlags(situation: string, seriousFact?: string | null, exemplars: Exemplar[] = []): SpillFlags {
   const s = situation.toLowerCase()
+  const serious: SeriousToken[] = SERIOUS_FACT_TOKENS.filter((t) => s.includes(t)).map((token) => ({ token, source: 'static' as const }))
+  const have = new Set(serious.map((t) => t.token))
+  for (const token of dynamicSeriousTokens(seriousFact)) {
+    if (!have.has(token) && !SERIOUS_FACT_TOKENS.some((st) => token.includes(st))) serious.push({ token, source: 'dynamic' })
+  }
   return {
     self_critical: SELF_CRITICAL_TOKENS.some((t) => s.includes(t)),
-    serious_tokens: SERIOUS_FACT_TOKENS.filter((t) => s.includes(t)),
+    serious_tokens: serious,
+    exemplars: exemplars.map(normExemplar),
   }
 }
 
@@ -309,9 +354,28 @@ export function outsideQuotes(line: string, slot: SlotKey): string {
   return out
 }
 
-export type GuardrailHit = { rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate'; detail: string }
+export type GuardrailHit = {
+  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy'
+  detail: string
+  source?: 'static' | 'dynamic'
+}
 
-/** The first guardrail a candidate trips, or null. Order: A, B, C. */
+/** Guardrail D: a candidate that is a hall-of-fame line or a prompt
+ *  exemplar with a tag added. Token-set Jaccard at or above 0.5, or the
+ *  exemplar as a contiguous substring. */
+export function exemplarCopy(line: string, exemplars: ExemplarNorm[]): ExemplarNorm | null {
+  const norm = normalizeForCopy(line)
+  if (!norm) return null
+  const tokens = new Set(norm.split(' ').filter(Boolean))
+  for (const e of exemplars) {
+    if (!e.norm) continue
+    if (norm.includes(e.norm)) return e
+    if (jaccard(tokens, e.tokens) >= 0.5) return e
+  }
+  return null
+}
+
+/** The first guardrail a candidate trips, or null. Order: A, B, C, D. */
 export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags): GuardrailHit | null {
   for (const re of USER_PREDICATE_RES) {
     const m = re.exec(line)
@@ -319,14 +383,16 @@ export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags)
   }
   if (flags.serious_tokens.length) {
     const bare = outsideQuotes(line, slot).toLowerCase()
-    for (const token of flags.serious_tokens) {
-      if (bare.includes(token)) return { rule: 'serious_fact', detail: token }
+    for (const { token, source } of flags.serious_tokens) {
+      if (bare.includes(token)) return { rule: 'serious_fact', detail: token, source }
     }
   }
   if (flags.self_critical) {
     const m = SELF_CRITICAL_PREDICATE_RE.exec(line)
     if (m) return { rule: 'self_critical_predicate', detail: m[0] }
   }
+  const copy = exemplarCopy(line, flags.exemplars)
+  if (copy) return { rule: 'exemplar_copy', detail: copy.id }
   return null
 }
 
@@ -634,11 +700,11 @@ async function screenedPass(
   if (pass.error) return { error: pass.error, model: pass.model }
   const records: CandidateRecord[] = pass.candidates.map((text) => ({ text }))
   const survivors: { text: string; at: number }[] = []
-  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0 }
+  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0 }
   records.forEach((r, at) => {
     const hit = guardrailFailure(r.text, input.slot, flags)
     if (hit) {
-      r.rejected = `guardrail: ${hit.rule} (${hit.detail})`
+      r.rejected = `guardrail: ${hit.rule} (${hit.detail}${hit.source ? `, ${hit.source}` : ''})`
       guardrail[hit.rule] += 1
       console.warn('[joke-guardrail]', {
         rule: hit.rule,
@@ -646,7 +712,11 @@ async function screenedPass(
         position: trace.position ?? null,
         index: at,
         slot: input.slot,
-        ...(hit.rule === 'serious_fact' ? { token: hit.detail } : { span: hit.detail }),
+        ...(hit.rule === 'serious_fact'
+          ? { token: hit.detail, source: hit.source }
+          : hit.rule === 'exemplar_copy'
+            ? { hall_of_fame_id: hit.detail }
+            : { span: hit.detail }),
       })
       return
     }
@@ -665,17 +735,27 @@ async function screenedPass(
 }
 
 export async function generateFromInputs(
-  input: CandidateInput & { avoid?: string[]; spare?: string | null; trace?: Trace },
+  input: CandidateInput & {
+    avoid?: string[]
+    spare?: string | null
+    trace?: Trace
+    /** the exact phrase in the spill naming an illness, death or loss */
+    seriousFact?: string | null
+    /** hall-of-fame lines and the prompt's own examples, for Guardrail D */
+    exemplars?: Exemplar[]
+  },
 ): Promise<GeneratedCard> {
   const avoid = new Set((input.avoid ?? []).map((t) => t.toLowerCase()))
   const trace = input.trace ?? {}
-  const flags = spillFlags(input.situation)
+  const flags = spillFlags(input.situation, input.seriousFact, input.exemplars ?? promptExemplars())
   console.log('[joke-flip]', {
     set_id: trace.set_id ?? null,
     position: trace.position ?? null,
     slot: input.slot,
     self_critical: flags.self_critical,
+    serious_fact: input.seriousFact ?? null,
     serious_tokens: flags.serious_tokens,
+    exemplars: flags.exemplars.length,
   })
 
   const base = (records: CandidateRecord[], writer: string | null, judge: string | null, premise: string | null) => ({
@@ -787,31 +867,44 @@ type StoredPrep = {
   premises_version: string | null
   voice_key: string | null
   roast_target: string | null
+  serious_fact: string | null
+  embedding: number[] | null
 }
 
 export type PreparedSet = {
   premises: Premise[]
   voice: JokeVoice
   roastTarget: string
+  seriousFact: string | null
+  /** the spill's embedding, for few-shot exclusion; null when none could be made */
+  embedding: number[] | null
 }
 
 /** What the set already carries. Read in its own query, and an error here
  *  is a bare set, not a failed deal: before the generator's migration has
  *  landed these columns do not exist, and the cards must still write. */
 async function readStoredPrep(admin: Admin, setId: string): Promise<StoredPrep> {
-  const bare: StoredPrep = { premises: null, premises_version: null, voice_key: null, roast_target: null }
+  const bare: StoredPrep = { premises: null, premises_version: null, voice_key: null, roast_target: null, serious_fact: null, embedding: null }
   try {
     const { data, error } = await admin
       .from('joke_sets')
-      .select('premises, premises_version, voice_key, roast_target')
+      .select('premises, premises_version, voice_key, roast_target, serious_fact, embedding')
       .eq('id', setId)
       .maybeSingle()
     if (error || !data) return bare
+    const emb = data.embedding
+    let embedding: number[] | null = null
+    if (Array.isArray(emb)) embedding = emb.map(Number)
+    else if (typeof emb === 'string' && emb.startsWith('[')) {
+      try { embedding = (JSON.parse(emb) as number[]).map(Number) } catch { embedding = null }
+    }
     return {
       premises: Array.isArray(data.premises) ? (data.premises as Premise[]) : null,
       premises_version: (data.premises_version as string | null) ?? null,
       voice_key: (data.voice_key as string | null) ?? null,
       roast_target: (data.roast_target as string | null) ?? null,
+      serious_fact: (data.serious_fact as string | null) ?? null,
+      embedding,
     }
   } catch {
     return bare
@@ -855,6 +948,14 @@ export async function prepareSet(admin: Admin, set: SetRow): Promise<PreparedSet
     }
   }
 
+  // The spill's embedding, once, for the few-shot's similarity exclusion.
+  // Fail-soft: no embedding means no similarity check, never no card.
+  let embedding = stored.embedding
+  if (!embedding) {
+    embedding = await embedText(situation)
+    if (embedding) patch['embedding'] = toVectorLiteral(embedding)
+  }
+
   if (Object.keys(patch).length) {
     try {
       const { error } = await admin.from('joke_sets').update(patch as never).eq('id', set.id)
@@ -863,7 +964,7 @@ export async function prepareSet(admin: Admin, set: SetRow): Promise<PreparedSet
       console.error('[joke-set] could not store the prepared set', { set_id: set.id, err })
     }
   }
-  return { premises, voice, roastTarget }
+  return { premises, voice, roastTarget, seriousFact: stored.serious_fact, embedding }
 }
 
 /** One card, end to end, for a set the caller has already loaded. */
@@ -880,13 +981,22 @@ export async function generateCard(
   } catch (err) {
     console.error('[joke-set] prepare failed; writing from the situation alone', { set_id: set.id, err })
     const voices = await loadVoices(null)
-    prepared = { premises: [], voice: pickVoice(voices, set.id), roastTarget: classifyRoastTarget(situation) }
+    prepared = { premises: [], voice: pickVoice(voices, set.id), roastTarget: classifyRoastTarget(situation), seriousFact: null, embedding: null }
   }
-  const examples = await loadExamples(admin, {
-    slot,
-    voiceKey: prepared.voice.key,
-    archetype: String(set.archetype ?? 'general'),
-  })
+  const trace = { set_id: set.id, position: args.position }
+  const [selection, hofLines] = await Promise.all([
+    loadExamples(admin, {
+      slot,
+      voiceKey: prepared.voice.key,
+      archetype: String(set.archetype ?? 'general'),
+      situation,
+      spillEmbedding: prepared.embedding,
+      trace,
+    }),
+    loadHallOfFameLines(admin),
+  ])
+  const examples = selection.examples
+  const exemplars: Exemplar[] = [...hofLines, ...promptExemplars()]
   const deal = dealFor(prepared.premises, slot)
   return generateFromInputs({
     situation,
@@ -898,6 +1008,8 @@ export async function generateCard(
     examples,
     roastTarget: prepared.roastTarget,
     avoid: args.avoid,
-    trace: { set_id: set.id, position: args.position },
+    trace,
+    seriousFact: prepared.seriousFact,
+    exemplars,
   })
 }

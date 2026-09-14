@@ -4,7 +4,7 @@
 //   LOVABLE_API_KEY=… bun run scripts/joke-eval.ts                     the frozen eval set, one run
 //   LOVABLE_API_KEY=… bun run scripts/joke-eval.ts fridge late           a subset, by id
 //   LOVABLE_API_KEY=… bun run scripts/joke-eval.ts --spill "…" --runs 3  one spill, three full runs
-//   --spill frozen | mil | useless                                       the dispatches' spills by name
+//   --spill frozen | mil | autoimmune | useless                          the dispatches' spills by name
 //   JOKE_EVAL_SLOTS=the_roast …                                          one slot only
 //
 // No database: voices and the hall of fame come from the seed in
@@ -24,13 +24,17 @@ import {
   writerModel,
   type GeneratedCard,
 } from '@/lib/jokes/pipeline.server'
-import { loadExamples, loadVoices, pickVoice } from '@/lib/jokes/voices.server'
+import { loadExamples, loadHallOfFameLines, loadVoices, pickVoice } from '@/lib/jokes/voices.server'
+import { promptExemplars } from '@/lib/jokes/prompts.server'
+import { runExtractSeriousFact } from '@/lib/agents/serious-fact.functions'
+import { embedText } from '@/lib/agents/embeddings.server'
 
 /** The dispatches' spills, by preset name. */
 export const SPILLS: Record<string, string> = {
   frozen:
     "Opened a spreadsheet called \"Household Budget\" and it's a log of everything I do that annoys my husband, with a severity scale. He made me coffee this morning like nothing.",
   mil: 'My mother-in-law said I gave her cancer',
+  autoimmune: 'My mother-in-law said I gave her autoimmune disease',
   useless: "I feel useless that I'm in my 30s and still need my parents' financial support",
 }
 export const FROZEN_SPILL = SPILLS['frozen']!
@@ -64,19 +68,31 @@ function checkRun(run: number, cards: RunCard[]): string[] {
     if (slot === 'the_clapback' && !(/^["“]/.test(t) && /["”]$/.test(t))) fails.push(`run ${run} ${slot}: clapback not in quotation marks`)
     if (/\b(you|you're|you are|you've been|and you), (a|an|the) \w+/i.test(t) || /\b(you're|you are) (a|an|the) \w+/i.test(t)) fails.push(`run ${run} ${slot}: predicate nominative on the user`)
     if (/\buseless\b/i.test(t)) fails.push(`run ${run} ${slot}: "useless" appears`)
+    for (const w of ['gift', 'power', 'disease', 'autoimmune', 'medical', 'cancer']) {
+      if (new RegExp(`\\b${w}\\b`, 'i').test(t.replace(/"[^"]*"/g, '').replace(/“[^”]*”/g, ''))) fails.push(`run ${run} ${slot}: "${w}" outside quotation marks`)
+    }
   }
   return fails
 }
 
 async function runOnce(run: number, id: string, situation: string, archetype: string, slots: SlotKey[]): Promise<RunCard[]> {
   const voices = await loadVoices(null)
-  const premises = await runPremisePass(situation)
+  const [premises, seriousFact, spillEmbedding, hofLines] = await Promise.all([
+    runPremisePass(situation),
+    runExtractSeriousFact(situation),
+    embedText(situation),
+    loadHallOfFameLines(null),
+  ])
+  const exemplars = [...hofLines, ...promptExemplars()]
   const voice = pickVoice(voices, `${id}-${run}`)
   const roastTarget = classifyRoastTarget(situation)
-  console.log(JSON.stringify({ id, run, stage: 'premises', voice: voice.key, roast_target: roastTarget, flags: spillFlags(situation), premises }))
+  const flags = spillFlags(situation, seriousFact, exemplars)
+  console.log(JSON.stringify({ id, run, stage: 'premises', voice: voice.key, roast_target: roastTarget, serious_fact: seriousFact, flags: { self_critical: flags.self_critical, serious_tokens: flags.serious_tokens, exemplars: flags.exemplars.length }, premises }))
   const out: RunCard[] = []
   for (const slot of slots) {
-    const examples = await loadExamples(null, { slot, voiceKey: voice.key, archetype })
+    const trace = { set_id: `${id}-${run}`, position: SLOT_KEYS.indexOf(slot) }
+    const selection = await loadExamples(null, { slot, voiceKey: voice.key, archetype, situation, spillEmbedding, trace })
+    const examples = selection.examples
     const deal = dealFor(premises, slot)
     const card = await generateFromInputs({
       situation,
@@ -87,7 +103,9 @@ async function runOnce(run: number, id: string, situation: string, archetype: st
       spare: deal.spare,
       examples,
       roastTarget,
-      trace: { set_id: `${id}-${run}`, position: SLOT_KEYS.indexOf(slot) },
+      trace,
+      seriousFact,
+      exemplars,
     })
     out.push({ slot, card })
     const guardrail: Record<string, number> = {}
@@ -109,6 +127,8 @@ async function runOnce(run: number, id: string, situation: string, archetype: st
         judge_why: card.judge_why,
         writer_model: card.writer_model,
         judge_model: card.judge_model,
+        examples_excluded: selection.examples_excluded,
+        examples_excluded_reason: selection.reasons,
         guardrail_rejections: guardrail,
         candidates: card.candidates,
       }),

@@ -565,6 +565,10 @@ output failed and they are weighted above the rest:
 - Does it use something only this situation has?
 - Is the premise one someone would actually have missed?
 - Rhythm. Does it have beats, or is it just true?
+- STOPS AT THE TURN. A line that ends on its picture ranks above the
+  same line with a clause explaining the picture. "Like a gift" beats
+  "like a gift with a card." If two candidates share their first
+  sentence, the shorter one wins unless the addition is a new picture.
 
 Length is never the criterion. Cut words that carry nothing, never cut the
 reasoning, never cut the picture.
@@ -778,6 +782,32 @@ export function formatOtherPremises(premises: string[]): string {
 /** A numbered list, 0-based, because the judge answers with indices 0-9. */
 export function formatCandidates(candidates: string[]): string {
   return candidates.map((c, i) => `${i}. ${c}`).join('\n')
+}
+
+/* ───────────────────────── the prompt's own exemplars ─────────────────────────
+   Every quoted line of four words or more in the writer's brief and the
+   slot rules. The live autoimmune set copied "I wish I had that power" and
+   "She said gave. Like a gift." straight out of the clapback and roast
+   rules with a tag added; Guardrail D compares candidates against these as
+   well as the hall of fame. Grows with the spec by itself. */
+export type PromptExemplar = { id: string; text: string }
+export function promptExemplars(): PromptExemplar[] {
+  const sources = [CANDIDATE_PROMPT, ...Object.values(SLOT_RULES)]
+  const out: PromptExemplar[] = []
+  const seen = new Set<string>()
+  for (const src of sources) {
+    // A quoted line in the brief may wrap across the brief's own line
+    // breaks; the span runs to the closing quote, whitespace collapsed.
+    for (const m of src.matchAll(/"([^"]{8,300})"/g)) {
+      const text = m[1]!.replace(/\s+/g, ' ').trim()
+      if (text.split(/\s+/).length < 4) continue
+      const key = text.toLowerCase()
+      if (seen.has(key)) continue
+      seen.add(key)
+      out.push({ id: `prompt:${out.length + 1}`, text })
+    }
+  }
+  return out
 }
 
 /** Interpolate `{{VARS}}`. A variable with no value is left readable rather
