@@ -56,7 +56,10 @@ export function CardFace({
         borderRadius: '7cqw', overflow: 'hidden',
         background: CARD_GROUND, border: CARD_EDGE, boxShadow: CARD_SHADOW,
         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-        padding: '7cqw 6.5cqw', color: CARD_INK,
+        // A safe area, not a margin: at 9:16 the card is posted to TikTok and
+        // Reels, whose caption and chrome sit over the edges. The export in
+        // card-art.ts keeps the same insets in viewBox units.
+        padding: '13cqw 8.5cqw', color: CARD_INK,
       }}
     >
       <div style={{ position: 'absolute', width: '150%', height: '44%', left: '-25%', top: '14%', background: `radial-gradient(circle,${accent}4d,transparent 66%)`, filter: 'blur(4px)', pointerEvents: 'none' }} />
@@ -86,7 +89,7 @@ export function CardFace({
         </span>
       </div>
 
-      <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '4cqw' }}>
+      <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4cqw' }}>
         {situation ? (
           <div style={{ font: '400 4.4cqw/1.45 Inter,sans-serif', color: CARD_FAINT, maxWidth: '26ch' }}>
             {situation}
@@ -101,7 +104,7 @@ export function CardFace({
           diagonal wash above, which belongs to the image — a corner badge would
           be chrome the screenshot has to explain. */}
       <div style={{ position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '3cqw' }}>
-        <span style={{ font: 'italic 400 4.4cqw/1 Newsreader,serif', color: CARD_FAINT }}>said it on shutap.com</span>
+        <span style={{ font: '800 3.9cqw/1 Sora,sans-serif', letterSpacing: '.02em', color: CARD_FAINT }}>SHUTAP. Joke about it.</span>
       </div>
     </div>
     </div>

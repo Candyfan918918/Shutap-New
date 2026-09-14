@@ -4,7 +4,7 @@
 
 export const BRAND = {
   name: "Shutap",
-  tagline: "Shutap. Speak up.",
+  tagline: "SHUTAP. Joke about it.",
   // The entity sentence (locked) — goes in every machine-read surface.
   entitySentence:
     "life's a bitch, so make fun of it. type what happened, draw three angles, flip one and see what it does with it. pseudonymous — your real name never shows.",

@@ -29,7 +29,7 @@ export function SeoPage({ children }: { children: ReactNode }) {
       <footer style={{ borderTop: '.5px solid rgba(11,8,15,.08)' }}>
         <div style={{ maxWidth: 780, margin: '0 auto', padding: '18px 22px', display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 13, color: '#443c42' }}>shutap. speak up.</span>
+            <span style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 13, color: '#443c42' }}>SHUTAP. Joke about it.</span>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               <Link to="/about" style={footLink}>about</Link>
               <Link to="/methodology" style={footLink}>methodology</Link>
