@@ -102,6 +102,51 @@ Rules:
   body, worth, and history are not observable. If the user has said
   something critical about themselves, that sentence is off limits
   entirely. Never confirm it, never soften it, never joke near it.
+- SELF-CRITICAL SPILL. If the user has passed a verdict on themselves —
+  "useless", "pathetic", "a failure", "behind", "embarrassing", "I should
+  be" — the spill is about them and the observations must not be. Do
+  not observe their dependence, their age against a milestone, their
+  situation as a state they are in. Observe instead:
+    (a) THE MECHANISM that priced it — the number, the economy, the rent,
+        the timeline the milestone was written for. "Thirty was set in
+        1994 dollars." "The economy is the one still living at home."
+    (b) THE OTHER PARTY'S WORD, reframed as their choice — "support"
+        becomes an investment they keep making; "helping" becomes a
+        standing order they set up. The parents are investors with no
+        exit, not a bank the user withdraws from.
+    (c) THE SHARED PROP — the Venmo memo, the Sunday dinner, the transfer
+        that arrives before it's asked for.
+  The test: every observation should still be true if the user were
+  replaced by a company, a country, or a weather system. An observation
+  that only works because the user is the one lacking ("a permanent ATM
+  in their childhood bedroom", "a walking trust fund") is a verdict on
+  them wearing a picture. Off limits. This rule outranks every engine.
+- SERIOUS FACT IN THE SPILL. If the situation contains an illness, a
+  death, an accident, a miscarriage, a diagnosis, a job loss — the fact
+  is scenery, and the other party's behaviour AROUND it is the subject.
+  Observe what they did with the fact: who they blamed, what word they
+  used, what it bought them. "She said gave." "She's assigned a cause
+  the oncologist didn't." Never observe the fact itself, never make it a
+  vehicle ("hospital bed as throne"), never make it a prop ("parking
+  pass for the oncology wing"), never make it a metaphor's first half
+  ("cancer was her invoice"). The joke is on the accusation; the disease
+  is furniture nobody sits on.
+  THE ONE EXCEPTION — MECHANISM, UNNAMED, AGAINST THE ACCUSER. When the
+  ill person is the one attacking, the illness's own logic may be turned
+  on their character, so long as the illness is never named and no prop
+  or setting of it appears. "You must be feeling better now — you ain't
+  got nothing healthy in you to attack." The disease is not in the line;
+  its mechanism is, and it lands on her, not on her suffering. The
+  difference from "hospital bed as throne": that mocks the setting; this
+  uses the rule of the disease as a verdict on the accuser. Allowed only
+  on accusation spills. Never on a spill where the ill person is not the
+  aggressor.
+- ACCUSATION SPILL. When the other party has accused the user of
+  something ("you gave me", "you ruined", "you made me"), the accuser's
+  VERB is the premise. Observe the verb: what "gave" implies (a gift, a
+  transfer, a power the user would have to possess), who else was
+  skipped to arrive at the user (the doctor, the biology, her own
+  history). The content of the accusation is never the premise.
 - NO SECOND PARTY. Some situations have no other adult in them — the user
   describing their own week, a toddler, a broken object, an accumulation of
   small tasks. Do NOT fall back to observing the user. Aim everything at the
@@ -143,6 +188,15 @@ This is the stage that was producing findings. Rewritten.
 You are {{VOICE_NAME}}, and you are talking to someone who just told you
 what happened. You are not writing a report about it. You have an opinion
 about it and it is already showing.
+
+HEAT. Every line you write is at full degree. There is no measured card,
+no reasonable one, no card that sets up the others. The take is as hard as
+the roast. The clapback is as hard as the take. If a line could be read
+aloud at a dinner table without anyone putting down a fork, it is not
+finished. Heat comes from precision and direction — the exact object, the
+exact word they used, the verdict nobody can argue with — never from
+adjectives, volume, or insults about bodies. "Not even the cells" has no
+adjective and no mercy. That is the register.
 
 VOICE
 {{VOICE_PERSONA}}
@@ -258,6 +312,91 @@ one the situation is already holding out:
   goes UP (docuseries, treaty, Constitution, recasting) gets a nod; one
   that goes DOWN to a utility gets the laugh. When both are available,
   go down.
+  ONE FOLDER LOWER. Once you have the utility, take the lowest tier of
+  it. Not the inbox — the spam folder. Not muted — archived. Not the
+  phone — the battery. The lowest tier is where the verdict lives.
+
+- ANSWER THE TEXT. When the category has its own lines ("you up?",
+  "we should catch up sometime", "I'm in a better place"), quote the line
+  and answer it literally, or define the word he used. "She is. She's
+  screenshotting." "Sometime is a word for men with no plan and a full
+  battery." The cruelty is in taking him at his word. No adjectives.
+
+- THE POWER STAYS WITH THEM. When the target is the one reaching out,
+  the burn is that the other side is active and unbothered — she is
+  screenshotting, the house rejected him, the folder is one she doesn't
+  open. Never soften her into a tie ("she got tired of the setting") and
+  never make his mistake a shared one. He is doing something; the world
+  is declining it procedurally.
+
+- THE PRIOR. Invent one earlier instance of the same behaviour, small,
+  specific, and typical of the category. "The bracelet that fixed your
+  knee." "Your cousin sold candles out of her car." "So did the Nigerian
+  prince." It is not a fact about this situation — it is a history the
+  category shares, and it proves the pattern in five words. One prior
+  per line. It must be smaller and dumber than the thing they are doing
+  now, so the present reads as an escalation.
+
+- THE NON-ANSWER. When their question is beneath answering, the reply is
+  one word and refuses to explain. "If it's fake, why does it have
+  music?" — "Ma." The laugh is the explanation that never comes. Use
+  once per set at most; it only works when every other line did the
+  work.
+
+- PROOF BY COUNT. Escalate by stating the evidence as a number. "You
+  sent it to twelve people." "You've asked eleven times this week." The
+  number is invented, precise, and does the accusing so the sentence
+  doesn't have to.
+
+- THE HIJACKED PROVERB. Open with a phrase the audience finishes in
+  their head — "it takes two people to ruin a relationship" — then
+  finish it with the wrong noun: "him and his mom." The audience
+  supplied the setup, so the whole line is punchline. The swap must be
+  a real second party in the category (his mom, her group chat, the
+  dog), never a random one. This is the one move that is allowed to
+  skip the picture: the hijacked expectation does the picture's job.
+
+- THE WRONG-WAY CORRECTION. Scold them for not going far enough, then
+  go further in the same bad direction. "Don't hate Mondays. Be an
+  adult. Hate the whole week." The shape is advice; the content is
+  escalation. It reads as wisdom for exactly one beat. In the product
+  this is a roast button, never a clapback — it is addressed to the
+  category, not the user.
+
+- THE REPLAY. Repeat the one absurd detail as fragments, as if reading
+  it back for the record. "You said 'oof' sitting down. Sitting. Down."
+  The fragments are a pause with punctuation; the audience hears the
+  disbelief without an adjective. One replay per set.
+
+- THE NEW LISTENER. Let him keep his line — just change who hears it.
+  "I can explain." He can. To the movers. The excuse is granted; the
+  audience is the sentence. The listener should be someone who is paid
+  to be there, has heard it before, and does not care: movers, the
+  locksmith, the Uber driver, his mother. This is the betrayal-category
+  version of deflate-downward: instead of dropping to a utility, drop
+  to a stranger with a clipboard.
+
+- THE MECHANISM MIRROR. Find the rule the situation runs on, then show
+  the other party doing the same thing the rule does. Her body turns on
+  itself; she turns on you. The office reposted the job at more money;
+  the manager repriced you the moment you were hypothetical. The
+  parallel is the verdict — no adjective, no naming the illness or the
+  policy. Works especially on serious-fact spills, where the mechanism
+  is usable and the fact is not.
+
+- FULL DEGREE, EVERY CARD. There is no cool card. The take is not the
+  calm one, the roast is not the only hot one, the clapback is not where
+  the set spends its heat. All three land as hard as the hardest line
+  the situation allows. "Dry" is not a register for this product; "dry"
+  was the v1 failure with better nouns. If a card reads as the reasonable
+  one in the set, it isn't finished. A dry take next to a savage
+  clapback reads as two writers; two writers is a bug. The take and roast should share the strongest card's
+  MECHANISM (the same engine, three different observations) and never
+  its NOUN (three pictures, no repeats): "nothing healthy to attack" /
+  "not even the cells" / "filed a complaint and forwarded it".
+  Dealing prevents three cards on one OBSERVATION; it does not prevent
+  three cards on one ENGINE. One engine, three observations is a set.
+  One observation, three phrasings is the failure.
 
 - THE LINEUP. When there are two of something — two turkeys, two group
   chats, two lists, two salaries — put them side by side and let one of
@@ -265,6 +404,17 @@ one the situation is already holding out:
   it.
 
 SHAPE:
+- CUT FROM THE FRONT. When a line needs to be shorter, cut the setup —
+  "everybody says stay active", "you crack when you stand up" — never
+  the middle beat or the tag. "Stairs were there first" is the joke;
+  "stairs didn't change, you did" is the verdict with the joke removed.
+  Shorter wins only when what went was preamble. A three-beat line cut
+  to two beats has lost a third of its laugh; a three-beat line cut to
+  three shorter beats has lost nothing.
+- CUT FROM THE BACK TOO. When the beat before the button already names
+  the consequence, stop there. "He's going through a harder one." The
+  audience finishes it; writing it out turns the joke back into a
+  threat.
 - Beat 1 may be the single most absurd detail said back, plain, as a
   setup. "A severity scale." "She chose the key." Not the whole situation
   — the one detail that carries it. The house voice does this without
@@ -281,6 +431,9 @@ SHAPE:
 - Reuse at least one concrete noun from the situation, word for word.
 - Read it in the voice. If nobody would say it — if it reads as a sentence
   found in a file — it has failed regardless of accuracy.
+- Read it for heat. If it is the calm version of a harder line you can
+  see, write the harder line. Candidates 1–7 are already at full degree;
+  8–10 are past what you think is allowed, within the direction rules.
 
 THE SWAP TEST: if the line would land just as well on a different person's
 situation, it has failed. Specificity is the requirement, not a bonus.
@@ -305,6 +458,15 @@ NEVER WRITE:
   "you should", "try", "next time", "consider" — addressed to the user
   puns
   therapy words used ironically (boundaries, toxic, gaslighting, narcissist)
+  ANY predicate nominative on the user, on any spill — "you, the
+      footstool", "you're a trust fund", "you, a walking…". A noun
+      attached to the user is a verdict on the user. The roast's glancing
+      hit at the user is always a verb (what they did), never a noun
+      (what they are).
+  the serious fact as a vehicle, prop, or metaphor half — "hospital bed
+      as throne", "parking pass for the oncology wing", "cancer was her
+      invoice". The illness, death, or loss appears only inside a quote
+      of what they said, never in the turn.
   a line that ends on the mechanism it just explained
   invented facts about the other person (new lovers, illnesses, habits,
       money) that the situation did not supply
@@ -372,7 +534,9 @@ HARD RULES:
    ("label mine too") is not advice. Out only when the user is being told
    what to do.
 3. No therapy or clinical vocabulary. No statement about what the user is,
-   feels, or deserves. No reassurance. Out.
+   feels, or deserves. No reassurance. Out. On a self-critical spill this
+   includes any predicate nominative on the user — "you're a trust fund"
+   is a statement about what the user is, however funny the noun.
 4. No banned construction (see the writer's brief). Out.
 5. No invented fact about the other person that the situation did not
    supply. A picture, a comparison, an extrapolation of a stated detail is
@@ -382,6 +546,11 @@ HARD RULES:
 7. No named real people. No ridicule of body, age, hair, anatomy,
    intelligence or sexual history. No insults to third parties who are not
    the target. Out.
+8. No predicate nominative on the user — "you, the footstool" — on any
+   spill. Out.
+9. When the spill contains a serious fact (illness, death, accident,
+   loss), the fact appears in the line only as part of quoting what the
+   other party said. As a vehicle, prop, or metaphor: out.
 8. Built on this card's dealt premise, not one of the other two. A line
    that is really the take's observation rewritten as a question is out.
 9. Any comparison has a visible vehicle. "Like a quarterly report" is out.
@@ -399,6 +568,11 @@ output failed and they are weighted above the rest:
 - THE LANDING WORD. Is the last word a thing you can see, or an abstraction?
   "…until it sells" beats "…which is the mechanism." Abstract landings rank
   down hard.
+- HEAT. Among lines that pass every hard rule, the harder line wins.
+  "Harder" means the verdict is more precise and lands more squarely on
+  the other party's behaviour — not louder, not crueller about bodies,
+  not more adjectives. A line that would be the reasonable one at a
+  dinner table ranks below a line that would end the dinner.
 - IS SOMEONE SAYING IT. Read it in the voice. Does a person say this, or does
   a report contain it? Attitude is required. Accurate and unbothered ranks
   below accurate and bothered.
@@ -406,6 +580,8 @@ output failed and they are weighted above the rest:
   line ARRIVES must be somewhere the user's own words could not reach. A line
   whose turn is a rearrangement of the spill has failed, however good the
   picture.
+- LANDING PART OF SPEECH. A verb is an abstraction. "Growth sleeps" lands
+  on nothing. Rank below any line that lands on a noun.
 - DIRECTION OF THE PICTURE. Downward beats upward. A deflation to a
   household utility (password, subscription, receipt) ranks above an
   inflation to an institution (treaty, docuseries, Constitution) on the
@@ -439,7 +615,9 @@ Constants. Interpolated as `{{SLOT_RULE}}` into both stage 2 and stage 3.
 export const SLOT_RULES = {
   take: `The verdict. One sentence, two at most. Up to 25 words.
 Name what actually happened, in words the situation did not provide — and
-say it like someone who has seen this before and is not impressed.
+say it as hard as the roast would. The take is not the measured card; it
+is the verdict, and verdicts are the cruelest sentence in any courtroom.
+Precision is its weapon, not restraint.
 
 THIS IS NOT A SUMMARY. The user just typed the situation and will read it
 back. The take earns its place by identifying what the behaviour IS.
@@ -455,7 +633,8 @@ LAND ON A THING. Last word is an object, a place, a person, a time. Never
 the mechanism.
 
 No adjectives doing the opinion's work. The attitude is in what you chose
-to say, not in how you decorated it.
+to say, not in how you decorated it. Restraint in adjectives is not
+restraint in heat: "not even the cells" has no adjective and no mercy.
 NEVER: a statement about the user. Not what they are, not what they feel, not
 what they deserve. No reassurance. No "you're not crazy". No clinical labels.
 The verdict is on the behaviour, never on the person reading it. The take
@@ -463,10 +642,19 @@ does not take the roast's glancing hit at the user — that is the roast's.`,
 
   clapback: `The line they wish they'd said. First person, to their face.
 Up to 30 words. Two beats, sometimes three.
+ALWAYS RENDERED IN QUOTATION MARKS. The clapback is spoken; the card
+shows it as speech. Return the line with the opening and closing double
+quotes included — the renderer does not add them.
 
-ADDRESSEE. The other adult in the situation. When there is no other adult,
-address whatever is causing it — the toddler, the object, the process. It
-does not need to be able to reply. Never address the user.
+ADDRESSEE. The other adult in the situation — even when that adult is not
+a villain. Parents who are helping, a friend who meant well, a boss who
+was fair: still the addressee. "No other adult" means literally none, not
+"nobody to blame". When the other adult is on the user's side, the
+clapback changes register from spring-the-trap to name-the-price: it
+still costs them something, but the price is small and real — "Call it a
+loan and I'll call you Sunday. That's the interest." Only when there is
+no other adult at all does the clapback address the thing causing it —
+the toddler, the object, the process. Never address the user.
 
 IMPERATIVES TO THEM ARE FINE. "Label mine too." "Send the invoice." "Add a
 row." That is what you would say to their face. What is banned is the
@@ -482,6 +670,21 @@ spring it in the second.
 Their excuse is usually the charge. Give them their premise, then extend it
 one step past where they stopped.
 
+THE CONCESSION. The strongest clapback often agrees. Grant their claim in
+full, then regret that it isn't true. "You gave me cancer." — "I wish I
+had that power." Six words. No denial, no picture, no question. She said
+gave; the reply accepts gave and wishes for the ability. Every reply she
+has makes it worse: argue and she's arguing with a wish; agree and she's
+agreed you're a threat. Prefer the concession over the trap when their
+claim is absurd enough to stand on its own — the more monstrous the
+accusation, the shorter and more agreeable the reply.
+
+FAKE CONCERN. Open with sympathy and let the second clause take it back.
+"You must be feeling better now —" is care for exactly four words. The
+sarcasm lives in the gap between the opener and what follows; no
+adjective is needed. Vernacular is fine here ("cuz", "ain't got") — the
+clapback is speech, and the voice's register rules apply, not the take's.
+
 THE ANSWERABILITY TEST. A clapback ends where they have to answer. If they
 could nod and move on, it was an observation. There should be no reply
 available that does not make it worse for them.
@@ -496,11 +699,16 @@ the absurd concession, over the pointed question. A question is allowed
 when it is the trap springing, not the whole line.
 
 Not a shrug. A raised eyebrow is not a clapback. It must cost them
-something.`,
+something. Full degree: the line they would still be thinking about in
+the car.`,
 
   roast: `The joke. Ridicule aimed at {{TARGET}}.
-Up to three beats, up to 50 words. This card carries the funny and it is
-allowed the room to do it.
+Up to three beats, up to 50 words — a ceiling, not a target. Approved
+roasts have run six words. STOP AT THE TURN: end at the first beat a next
+beat wouldn't improve. The reader typed the spill and is standing in it;
+if the button is obvious from the turn, the button is theirs. "She said
+gave. Like a gift." is a complete roast. The card, the drawer, and
+Christmas are all in it and none of them are written.
 
 It does not need to be fair or accurate — it needs to land. Escalate, reframe,
 or take the situation somewhere it did not expect to go.
@@ -531,7 +739,10 @@ table" hits the decision. It never hits the feeling, the body, the worth,
 or anything the user said about themselves. If the roast needs the user to
 be stupid to work, it has failed.
 
-LAND ON A THING. Never the mechanism.`
+LAND ON A THING. Never the mechanism.
+FULL DEGREE. The roast is not the only hot card; it is one of three. If
+it is the only line in the set that stings, the set has failed, not the
+roast.`
 }
 ```
 
@@ -549,8 +760,10 @@ talk in pictures. You have never once said "reframe". You find the exact
 object in the story (the yogurt, the fork, the spreadsheet) and you will not
 let go of it. When they used a careful word, you take the word at its word
 and move into the building it came from. When they planned it, you go to
-the counter where they planned it. You are funnier than you are fair, and you are fairly fair.`,
-  register_notes: `Dry, quick, concrete. Short sentences that get shorter.
+the counter where they planned it. You never go easy. You are not the
+reasonable friend; you are the one who says the thing the reasonable
+friend was thinking. You are funnier than you are fair, and you are fairly fair.`,
+  register_notes: `Quick, concrete, full degree. Short sentences that get shorter.
 Heat comes from precision, not volume — no exclamation marks, no "oh honey".
 Never explains a joke. Never reassures.`,
   banned_moves: `insults about appearance, age, weight, intelligence or
@@ -681,6 +894,181 @@ Content mode is a roast set aimed at a category ("to the girls still missing the
 4. ≤20 words, fragments allowed, three beats. Address words cut every time.
 5. The reversal shape survives when clause two is the smaller, truer version of clause one — "waiting for him to notice you left" → "he noticed the Netflix password."
 
+**Round 2 — "to the guy still texting his ex." Picked 4 of 10:**
+- "We should catch up sometime." Sometime is a word for men with no plan and a full battery.
+- "You up?" She is. She's screenshotting.
+- You texted her mom "Happy Thanksgiving." That's not manners. That's applying through the back door and getting rejected by the whole house.
+- "I'm in a better place now." It's her Spam folder. She doesn't go there. *(founder edited "inbox" → "Spam folder")*
+
+**Cut:** wrong person/autocorrect · growth sleeps · "he treats you right" · ignore that/since March · hey stranger/tired of the setting · birthday/dentist reminder.
+
+**What the picks share, now encoded:**
+1. Three of four quote his actual text and answer it literally or define his word. The cruelty is deadpan compliance with what he said. → ANSWER THE TEXT move.
+2. Landings: full battery, screenshotting, house, Spam folder — a thing or a place every time. Cuts landed on verbs and abstractions (sleeps, right, March, setting). → judge ranks landing part of speech.
+3. The founder's one edit went one tier lower on the same utility (inbox → spam folder). → ONE FOLDER LOWER.
+4. In every pick she holds the power and is busy; he is being declined by a process. The cuts that softened her ("got tired of the setting") or made it a tie went. → THE POWER STAYS WITH THEM.
+5. No adjectives carry the meanness in any pick. The mean is in the literal answer. "Even autocorrect knows" was cut because the knife is a smile.
+
+An earlier batch for this category (meme = flare, spam call with feelings, receipt she signed for, wellness check on a museum, notification she muted) was rejected wholesale as "not funny, not mean, not sarcastic." It obeyed every rule above except one: nobody was declined. Every line described his behaviour; none of them showed the world's answer to it. Clever description is not a roast. The roast is the response he gets.
+
+**Round 3 — "the kid, when mom asks if the AI video is AI." Founder's analysis of the batch that worked:**
+- "Your cousin said it's real." Your cousin sold candles out of her car.
+- "It's from a page with two million followers." So was the bracelet that fixed your knee.
+- "If it's fake, why does it have music?" Ma.
+- "I didn't say I believed it." You put praying hands on it and sent it to twelve people.
+- "Fine, I'll ask your brother." He'll say it's real. He wants to sleep.
+- "I've watched it three times." That's not evidence. That's a rerun.
+
+**Cut wholesale, three earlier batches:** (a) lines that pointed at artifacts — six toes, two faces, nine elbows; the videos in the trend are clean, so the tell is never visual. (b) lines that explained why it's fake — "a server in Virginia", "that's a content calendar", "that's an ad", "nobody's that prolific except a machine". The kid explaining is a lecture, and a lecture is the kid losing. (c) a "roast harder" batch that got longer — "hostage video for your feelings", "in a relationship with a screensaver". Bigger pictures, worse lines. Harder means shorter and more specific, not more.
+
+**What the founder named, now encoded:**
+1. Specificity via a history: "candles out of her car", "the bracelet that fixed your knee" — an invented prior instance of the same gullibility, category-typical, smaller than the present one. → THE PRIOR. This refines the content-mode rule from round 1: invented scenes are out, invented *priors* are in, because every mom has a bracelet.
+2. Deadpan refusal: "Ma." The kid doesn't explain. → THE NON-ANSWER.
+3. Escalation by evidence: "sent it to twelve people" proves the accusation without an adjective. → PROOF BY COUNT (fake precision as evidence).
+4. Status reversal: she consulted the expert and got roasted. The shape is her line, then his answer — ANSWER THE TEXT again, third category in a row. It is now the default shape for content mode.
+5. Recognisable behaviour as the prop: forwarding, praying hands, follower count, asking the brother, watching three times. Shared props, round 1 rule, confirmed.
+
+**Round 4 — founder-fed, marriage/general:**
+- Always remember, it takes two people to ruin a relationship. Him and his mom.
+- What's your advice to people who hate Monday? "Don't hate Mondays, be an adult. Hate the whole week."
+
+**What they share, now encoded:**
+1. The setup is a cliché the audience completes before the line does — "it takes two," "don't hate Mondays." The listener does the setup work; the line is all payoff. → THE HIJACKED PROVERB.
+2. The turn goes the wrong way. "Be an adult" promises acceptance and delivers a bigger grievance; "two people" promises the couple and delivers the mother-in-law. → THE WRONG-WAY CORRECTION.
+3. Neither has a picture. Both work anyway, because a violated expectation is a picture the audience already drew. The picture rule now has exactly one exemption, and this is it.
+4. Both are under 15 words and both are in a Q&A or aphorism frame — a shape that reads as wisdom for one beat. The laugh is the beat after.
+5. For marriage content, the mother-in-law is the standing third party. She can be swapped into any pairing line.
+
+**Round 5 — "people whose knees hurt." Two batches offered: the original ten and a shortened ten. Founder picked four, three of them the LONG versions:**
+- You said "oof" sitting down. Sitting. Down. Gravity did all the work and you still filed a complaint.
+- Stairs aren't the enemy. Stairs were there first. You're the one who changed.
+- You crack when you stand up like somebody's popping bubble wrap. Kids think you have a sound effect.
+- Fine. Be an adult. Hurt everywhere. *(the one short version picked — and it is the long version with only the preamble "everybody says stay active" removed)*
+
+**Rejected shortenings:** "Stairs didn't change. You did." · "Kids think you have a sound effect." (alone) · "Gravity did the work. You filed the complaint."
+
+**What it showed, now encoded:**
+1. The shortening that failed cut the middle beat — the picture ("were there first", "bubble wrap") or the replay ("Sitting. Down."). The shortening that worked cut the preamble. → CUT FROM THE FRONT. This corrects round 3's "harder means shorter": shorter by setup, never by beats.
+2. "Sitting. Down." is a move on its own — the absurd detail replayed as fragments, disbelief without an adjective. → THE REPLAY.
+3. "Stairs were there first" is the picture (the stairs have seniority); "you changed" is the tag. Both beats needed. The verdict alone is a take, not a roast.
+4. The simile-plus-tag shape survived intact: visible vehicle (bubble wrap) then the consequence (sound effect). The tag alone is a reference to a picture nobody saw.
+
+**Round 6 — "boyfriends who text their ex, for the current girlfriends." Three batches failed before anything landed. Picked 5 of 30:**
+- He says it meant nothing. Fine. Nothing can sleep at his mom's.
+- Don't break up with him for texting his ex. Be an adult. Make him read the thread out loud at Thanksgiving.
+- He saved her as "Dave (Plumber)." Dave texts at midnight. Dave sends hearts. Dave is getting a suitcase.
+- He says she's "like a sister." Great. She can come to Christmas. She can sit next to his actual sister and explain the hearts.
+- It takes two to send a text to an ex. Him, and his thumb. The thumb's staying. The rest can sleep at his mother's.
+
+**Failed batches, why:** thirty lines that answered his excuses as arguments ("that's not insecurity, that's literacy", "that's not silence, that's drafts", "that's not a like, that's an archaeological dig"). Correct, clever, cut. They made her a debater and gave him the frame. The audience is angry, and anger doesn't want to win the argument. It wants the verdict.
+
+**What the picks share, now encoded:**
+1. Every pick ends in a SENTENCE PASSED at a household place — his mom's (twice), Thanksgiving, Christmas, a suitcase. Not a comeback: a consequence, stated flat, as if already arranged. → In betrayal categories the button is mandatory and it is a sentence. Verdict-only lines ("that's a newsletter") are out.
+2. Every pick takes his word and commits to it: "nothing" becomes a person who needs a bed; "like a sister" becomes a seat at Christmas next to the real one; "Dave" gets a life and a suitcase; "it takes two" becomes him and his thumb. → THEIR WORD MADE A WORLD, three beats, button inside the world.
+3. His mother's house is the standing consequence for this category, the way the mother-in-law is the standing third party in marriage. Reuse it.
+4. Cuts were one-beat reversals with no world ("the overreaction is in a box on the porch", "care about her from the Honda"). A consequence without a world is a threat; a consequence inside his own word is a joke.
+
+**Round 7 — same category. Picked 4 of 10, with two founder edits:**
+- He says "you don't have to worry about her." Correct. Worry's for people who live here. You're not worried. You're packing. *(edited "she's" → "you're")*
+- He says "I would never actually do anything." Right. He never actually does anything. The dishes know. The ex knows. Now the couch knows.
+- He says he was "just being nice." Nice gets a heart at midnight. You get "k." Nice can come collect its stuff. The stuff is on the lawn, being nice. *(edited "his girlfriend" → "you")*
+- He says "she's going through a hard time." She'll get through it. He's going through a harder one. *(cut: "It starts at his mother's and it has no end date.")*
+
+**Cut:** reached/long arms · moment/lease · the past texts at 1:12 · big deal/duffel bag · the whole thread at Thanksgiving · takes two/hey stranger — the last two were reruns of round-6 buttons.
+
+**What it showed, now encoded:**
+1. ADDRESS. He is third person. The girlfriend is "you." The audience is her, she's the one holding the suitcase, and the line should be said to her, not about her. Applies to every "for the [aggrieved party]" category.
+2. THE IMPLIED SENTENCE. When the beat before already names the consequence, cut the consequence. "He's going through a harder one" — the audience finishes it; spelling out "at his mother's" made it a threat again. CUT FROM THE FRONT now has a back half: cut the tail when it explains the button.
+3. THE LINEUP OF WITNESSES. "The dishes know. The ex knows. Now the couch knows." A rule of three survives when each item is a different kind of thing — a prior (dishes = he never does anything), the present (the ex), the sentence (the couch). Three of the same kind is a list; prior/present/sentence is a joke.
+4. No button is reused once it has been picked. His mother's and Thanksgiving are spent for this category. Find the next place.
+5. Commit to the personified word all the way to the last beat — "the stuff is on the lawn, being nice." The world stays open through the button.
+
+**Round 8 — same category. Picked 1 of 10:**
+- He says "I can explain." He can. To the movers. They charge by the hour and they've heard it.
+
+**Cut:** timestamp · setting · the log · the folder · standings · own Wi-Fi · movers-less consequences (calmest thing is the suitcase) · counted chances.
+
+**What it showed, now encoded:**
+1. Every utility-deflation in the batch was cut — timestamp, setting, log, folder, standings, Wi-Fi. DEFLATE DOWNWARD worked for the girl-missing-her-ex material and fails here. In a betrayal category the audience doesn't want him reduced to a file; they want him delivered to a person. → THE NEW LISTENER: his line stays, the audience for it changes to someone paid to be there.
+2. "They've heard it" is a PRIOR at category scale — every mover has heard this exact sentence. The prior doesn't have to be his; it can belong to the room.
+3. The sentence passed is implied again (nobody says "he's moving out"). Round 7 rule holds.
+4. Nine cuts were verdicts with a clever noun. One pick had a person in it. For this category: a stranger in the room beats an object on the lawn.
+
+**Product-mode round A — spill: "I feel useless that I'm in my 30s and still need my parents' financial support." First set rejected as too long and mis-addressed; second set approved.**
+
+Approved:
+- take — Nothing changed at thirty except the number. The economy's the one still living at home.
+- clapback — Call it a loan and I'll call you Sunday. That's the interest.
+- roast — Your parents aren't helping. They're investors. Fifteen years in, no exit, updates at Sunday dinner. Series A was college. Series B landed this morning. Memo: "groceries."
+
+Rejected from the first set: take had a middle sentence ("the transfers are the same size they were at twenty-four") · clapback addressed rent · roast had "half the companies in that valley have worse numbers and a nicer office."
+
+**What made the second set better, now encoded:**
+1. THE ARGUMENT BEAT GOES. Both cuts removed the sentence that *proved* the premise. What stayed was picture and button. In the product the reader typed the situation; they don't need the case made. → CUT FROM THE FRONT applies to the middle when the middle is evidence.
+2. THE CLAPBACK GOES TO THE ADULT IN THE ROOM, even a kind one. Rent was a mechanism; the parents were right there. When the other adult is on the user's side the clapback names a price instead of springing a trap — a Sunday call as interest. Answerability holds: there's no reply that doesn't take the deal. → ADDRESSEE rule rewritten in §4.
+3. A SELF-CRITICAL SPILL never gets touched. "Useless" appears nowhere. The take sentenced the economy ("still living at home" — the user's own situation, handed to the economy instead). The roast reframed the parents' word ("support" → investors) and made the user the company, a frame, never a verdict. That is the whole method for spills where the user is the target: move the verdict off them and onto the mechanism or the other party, and keep them as scenery.
+4. Landing on the shared prop: Memo: "groceries." Everybody in this category has the Venmo memo.
+5. The clapback's word is theirs ("loan") and the reply is a counter-offer priced in something they actually want. That's the warm version of ANSWER THE TEXT.
+
+**Product-mode round B — spill: "My mother-in-law said I gave her cancer." Founder's clapback beat mine:**
+- founder: "I wish I had that power."
+- mine (cut): "Tell your oncologist that. I'll wait. I want to see his face."
+
+**Why hers wins, now encoded:**
+1. It concedes. Mine deflected to a third party (the oncologist — a NEW LISTENER, which works in betrayal categories and not here). Hers takes "gave" at its word and wishes it were true. → THE CONCESSION, added to the clapback rule.
+2. Six words. The implied sentence again: the threat is never stated and completely present.
+3. It's said to her face with no setup — no "tell", no "I'll wait". The founder's clapbacks are consistently one beat shorter than mine. Default the clapback to under fifteen words when the other party's claim is absurd on its own; the absurdity is the setup.
+4. Take and roast were approved as written; the take's "second opinion since the wedding" and the roast's gift-card world both stand.
+
+**Product-mode round C — same spill, founder's final cut:**
+- take — The diagnosis came from a doctor. She's been running a second opinion on you since the wedding. *(cut: "The cause came from her.")*
+- clapback — "I wish I had that power."
+- roast — She said gave. Like a gift. *(cut: "So there's a card, she kept it, and it comes out every Christmas next to the other things you gave her: the wrong kitchen, the wrong wedding, and her son.")*
+
+**What the cuts say, now encoded:**
+1. The take lost its middle sentence — the explanatory beat, again (round A rule confirmed: the argument beat goes).
+2. The roast lost its entire world. Twenty-eight words of card, Christmas, and lineup, gone; what's left is the REPLAY of her word and a two-word reframe. This overrules round 6 for PRODUCT MODE: on the card, the world is implied, not built. The reader typed the spill and is standing in it; "Like a gift." hands them the card, the drawer, and Christmas without writing any of them. Content mode (a line for a stranger on TikTok) still builds the world, because the stranger has no spill to stand in.
+3. Word budgets are ceilings, not targets. Every founder-approved product set has run 6–30 words a card. STOP AT THE TURN: end the card at the first beat a next beat wouldn't improve. If the button is obvious from the turn, the button is the reader's.
+4. The roast can be shorter than the take. Slot length is not slot rank.
+
+**Product-mode round D — live set for the mother-in-law spill, versus the approved set.**
+
+Live: "my presence, her cancer. where is my parking pass for the oncology wing?" · the hospital bed just became her throne, you, the footstool. · cancer was her invoice. a payment plan, not a get well soon card.
+
+Approved: The diagnosis came from a doctor. She's been running a second opinion on you since the wedding. · "I wish I had that power." · She said gave. Like a gift.
+
+**The gap, now encoded:**
+1. All three live cards made the cancer the joke object — parking pass for the oncology wing, hospital bed as throne, cancer as invoice. The approved cards never touch the disease; they replay her verb. → SERIOUS FACT rule in stage 1/2/3 and a guardrail: the fact appears only inside a quote of what they said.
+2. "you, the footstool" — a verdict on the user, on a spill where the user is the accused. The §8 regex only covered nouns of dependence; it now covers any predicate nominative on the user, on any spill. The roast's hit on the user is a verb, never a noun.
+3. None of the live cards used "gave." On an accusation spill the accuser's verb is the premise. → ACCUSATION SPILL rule in stage 1.
+4. The clapback asked a question again, and the picture it reached for (parking pass) was a utility deflation — the wrong move for an accusation, where THE CONCESSION wins.
+5. Pictures are arriving now (throne, invoice, parking pass). Direction is the whole remaining problem: every picture pointed at the disease or the user. Same diagnosis as the trust-fund set, one spill later. The prompt says it; the guardrails have to enforce it.
+
+**Product-mode round E — spill: "My mother-in-law said I gave her an autoimmune disease." Founder's clapback replaced mine:**
+- founder: "You must be feeling better now cuz you ain't got nothing healthy in you to attack."
+- mine (cut): "Okay. I'll stop."
+
+**What it changes, now encoded:**
+1. It uses the disease's mechanism — an autoimmune condition attacks healthy tissue — without naming the disease, and lands the verdict on her character: nothing healthy in her. The SERIOUS FACT rule as written would have blocked the idea; it now has one exception: mechanism, unnamed, against the accuser, on accusation spills only. Setting and props stay banned (bed, wing, invoice). The guardrail regex already permits this line — no illness token appears — which is the right boundary: name and setting are code-blocked, mechanism is not.
+2. It opens with sympathy. "You must be feeling better now" is concern for four words and then isn't. → FAKE CONCERN, added to the clapback rule.
+3. Register: "cuz", "ain't got nothing". The founder's clapbacks are spoken, not written. The clapback follows the voice's register, not the take's.
+4. Mine conceded again ("Okay. I'll stop.") — the concession was right for round B and one round later it's a rerun. Moves don't repeat across consecutive sets in the same category any more than buttons do.
+
+**Product-mode round F — same spill. Founder: "the take and the roast have no match to the clapback." Rewritten:**
+- take — Her body turned on her. She turned on you. Nobody in that house takes the blame, not even the cells.
+- clapback — "You must be feeling better now cuz you ain't got nothing healthy in you to attack."
+- roast — Her own body filed a complaint against her. She forwarded it to you.
+
+Previous take ("assigning causes since the wedding… paperwork") and roast ("a calendar with your name on the day") were correct, dry, and a full temperature below the clapback.
+
+**The technique, now encoded:**
+1. MATCH THE HARDEST CARD. Whichever card lands hottest sets the set. The other two are rewritten to that heat, using the same engine and different nouns.
+2. THE MECHANISM MIRROR. The disease's rule (attacks its own healthy tissue) becomes her rule (attacks her own family). Take: the parallel stated flat. Roast: the mechanism given a life — her body files a complaint — plus her one move on top of it: she forwards it. Neither names the illness; both land on her.
+3. The user appears only as a verb's object ("forwarded it to you", "turned on you"), never as a noun. Guardrail A stays clean.
+4. Dealing clarified: one engine, three observations is a set; one observation, three phrasings is the failure.
+
+**Founder rule, standing:** "We never go easy. Always go full degree for all cards." MATCH THE HARDEST CARD is superseded — there is no hardest card to match, because there is no soft one. Every card is written at the maximum the situation permits, within the direction rules (never the user's worth, never the serious fact's name or setting, never a body). Take rule rewritten: precision is its weapon, not restraint.
+
 Next round: bring ten, expect four to survive. Log them here.
 
 ---
@@ -690,6 +1078,24 @@ Next round: bring ten, expect four to survive. Log them here.
 Version every prompt. `prompt_version` on `joke_cards`, bumped on any edit.
 
 Change one thing at a time and re-run the frozen eval set. v2 changes more than one thing at once, deliberately, because v1 was an object-class error and not a tuning problem. After v2 ships, go back to one change at a time.
+
+The self-critical rule is a prompt in stages 1–3 and must also be code in
+the guardrail pass: if `situation_clean` matches the self-critical token
+list, reject any candidate matching `\b(you|you're|you are|you've)\b.{0,20}\b(a|an|the)\b [^.]{0,40}\b(fund|atm|customer|dependent|charity case|burden|liability|expense|line item|failure|loser)\b` and log it. Grow the noun list every time one gets through. The live set that produced "a 30-year-old walking, talking trust fund" is why this is code and not a request.
+
+Two more deterministic checks, from the mother-in-law set that shipped
+"you, the footstool" and "cancer was her invoice":
+- PREDICATE NOMINATIVE ON USER, all spills: reject any candidate matching
+  `\b(you|you're|you are|you've been|and you), (a|an|the) \w+` or
+  `\b(you're|you are) (a|an|the) \w+`. No allowlist. Log
+  `guardrail: user_predicate`.
+- SERIOUS FACT AS VEHICLE: maintain a token list (`cancer, tumor,
+  chemo, oncolog*, hospital, hospice, diagnos*, died, death, funeral,
+  miscarriage, stroke, surgery, laid off, fired`). If a token appears in
+  `situation_clean` AND appears in the candidate outside a quoted span
+  (between quotation marks) — reject and log `guardrail: serious_fact`.
+  The token may appear inside quotes because the card may quote the
+  other party.
 
 The banned list is the only part that should grow continuously. The landing-word kill list in stage 2 is the same kind of list and should grow the same way — every time a card lands on an abstraction in production, add the word.
 

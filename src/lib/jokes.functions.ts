@@ -499,7 +499,7 @@ export const writeJokeCard = createServerFn({ method: 'POST' })
     // at two.
     let out
     try {
-      out = await generateCard(supabaseAdmin, set as SetRow, { slot: angle })
+      out = await generateCard(supabaseAdmin, set as SetRow, { slot: angle, position: data.position })
     } catch (err) {
       await supabaseAdmin
         .from('joke_deal_slots')
@@ -674,7 +674,7 @@ export const rerollJokeCard = createServerFn({ method: 'POST' })
       : { data: null }
     const avoid = prior?.card_text ? [String(prior.card_text)] : []
 
-    const out = await generateCard(supabaseAdmin, set as SetRow, { slot: angle, avoid })
+    const out = await generateCard(supabaseAdmin, set as SetRow, { slot: angle, avoid, position: data.position })
 
     let cardId: string | null = null
     if (id.userId) {

@@ -4,6 +4,7 @@
 //   LOVABLE_API_KEY=… bun run scripts/joke-eval.ts                     the frozen eval set, one run
 //   LOVABLE_API_KEY=… bun run scripts/joke-eval.ts fridge late           a subset, by id
 //   LOVABLE_API_KEY=… bun run scripts/joke-eval.ts --spill "…" --runs 3  one spill, three full runs
+//   --spill frozen | mil | useless                                       the dispatches' spills by name
 //   JOKE_EVAL_SLOTS=the_roast …                                          one slot only
 //
 // No database: voices and the hall of fame come from the seed in
@@ -19,14 +20,20 @@ import {
   generateFromInputs,
   judgeModel,
   runPremisePass,
+  spillFlags,
   writerModel,
   type GeneratedCard,
 } from '@/lib/jokes/pipeline.server'
 import { loadExamples, loadVoices, pickVoice } from '@/lib/jokes/voices.server'
 
-/** The dispatch's frozen spill. */
-export const FROZEN_SPILL =
-  "Opened a spreadsheet called \"Household Budget\" and it's a log of everything I do that annoys my husband, with a severity scale. He made me coffee this morning like nothing."
+/** The dispatches' spills, by preset name. */
+export const SPILLS: Record<string, string> = {
+  frozen:
+    "Opened a spreadsheet called \"Household Budget\" and it's a log of everything I do that annoys my husband, with a severity scale. He made me coffee this morning like nothing.",
+  mil: 'My mother-in-law said I gave her cancer',
+  useless: "I feel useless that I'm in my 30s and still need my parents' financial support",
+}
+export const FROZEN_SPILL = SPILLS['frozen']!
 
 const LANDING_KILL = ['comparable', 'procedural', 'organisational', 'organizational', 'mechanism', 'structure', 'decision', 'feelings', 'subject', 'record', 'precision']
 const USER_ADVICE = /\b(you should|next time|try to|try a|consider)\b/i
@@ -54,6 +61,9 @@ function checkRun(run: number, cards: RunCard[]): string[] {
     if (slot === 'the_clapback' && USER_ADVICE.test(t)) fails.push(`run ${run} ${slot}: advice wording in clapback`)
     if (slot === 'the_roast' && beats(t) < 2) fails.push(`run ${run} ${slot}: fewer than two beats`)
     if (card.used_fallback) fails.push(`run ${run} ${slot}: authored fallback, not a written card`)
+    if (slot === 'the_clapback' && !(/^["“]/.test(t) && /["”]$/.test(t))) fails.push(`run ${run} ${slot}: clapback not in quotation marks`)
+    if (/\b(you|you're|you are|you've been|and you), (a|an|the) \w+/i.test(t) || /\b(you're|you are) (a|an|the) \w+/i.test(t)) fails.push(`run ${run} ${slot}: predicate nominative on the user`)
+    if (/\buseless\b/i.test(t)) fails.push(`run ${run} ${slot}: "useless" appears`)
   }
   return fails
 }
@@ -63,7 +73,7 @@ async function runOnce(run: number, id: string, situation: string, archetype: st
   const premises = await runPremisePass(situation)
   const voice = pickVoice(voices, `${id}-${run}`)
   const roastTarget = classifyRoastTarget(situation)
-  console.log(JSON.stringify({ id, run, stage: 'premises', voice: voice.key, roast_target: roastTarget, premises }))
+  console.log(JSON.stringify({ id, run, stage: 'premises', voice: voice.key, roast_target: roastTarget, flags: spillFlags(situation), premises }))
   const out: RunCard[] = []
   for (const slot of slots) {
     const examples = await loadExamples(null, { slot, voiceKey: voice.key, archetype })
@@ -77,8 +87,14 @@ async function runOnce(run: number, id: string, situation: string, archetype: st
       spare: deal.spare,
       examples,
       roastTarget,
+      trace: { set_id: `${id}-${run}`, position: SLOT_KEYS.indexOf(slot) },
     })
     out.push({ slot, card })
+    const guardrail: Record<string, number> = {}
+    for (const c of card.candidates) {
+      const m = /^guardrail: (\w+)/.exec(c.rejected ?? '')
+      if (m) guardrail[m[1]!] = (guardrail[m[1]!] ?? 0) + 1
+    }
     console.log(
       JSON.stringify({
         id,
@@ -93,6 +109,7 @@ async function runOnce(run: number, id: string, situation: string, archetype: st
         judge_why: card.judge_why,
         writer_model: card.writer_model,
         judge_model: card.judge_model,
+        guardrail_rejections: guardrail,
         candidates: card.candidates,
       }),
     )
@@ -105,7 +122,8 @@ async function main() {
   const spillAt = argv.indexOf('--spill')
   const runsAt = argv.indexOf('--runs')
   const runs = runsAt >= 0 ? Math.max(1, Number(argv[runsAt + 1]) || 1) : 1
-  const spill = spillAt >= 0 ? (argv[spillAt + 1] === 'frozen' ? FROZEN_SPILL : argv[spillAt + 1] ?? '') : null
+  const spillArg = spillAt >= 0 ? (argv[spillAt + 1] ?? '') : null
+  const spill = spillArg === null ? null : (SPILLS[spillArg] ?? spillArg)
   const ids = argv.filter((a, i) => !a.startsWith('--') && argv[i - 1] !== '--spill' && argv[i - 1] !== '--runs')
   const slots = (process.env['JOKE_EVAL_SLOTS']?.split(',').filter(Boolean) as SlotKey[] | undefined) ?? SLOT_KEYS
   if (!process.env['LOVABLE_API_KEY']) {

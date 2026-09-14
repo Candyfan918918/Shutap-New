@@ -228,8 +228,10 @@ function isSpokenLine(slot: SlotKey): boolean {
   return slot === 'the_clapback'
 }
 
-/** House register: lowercase, one paragraph, straight quotes only on the
- *  spoken card. Two sentences survive — the brief allows them. */
+/** House register: lowercase, one paragraph. The clapback's quotation
+ *  marks are the model's — the prompt asks for them and nothing here adds
+ *  or removes them. A take or roast the model wrapped whole in quotes is
+ *  unwrapped; quotes inside a line are left alone. */
 export function cleanLine(raw: string, slot: SlotKey): string {
   let t = String(raw ?? '')
     .replace(/\s+/g, ' ')
@@ -237,15 +239,110 @@ export function cleanLine(raw: string, slot: SlotKey): string {
     .replace(/^\d+[.)]\s*/, '')
     .replace(/[“”]/g, '"')
     .replace(/[‘’]/g, "'")
-    .replace(/^["']+|["']+$/g, '')
     .trim()
-    .toLowerCase()
   if (!t) return ''
-  if (isSpokenLine(slot)) t = `"${t}"`
-  return t
+  if (!isSpokenLine(slot) && isWhollyQuoted(t)) t = t.slice(1, -1).trim()
+  return t.toLowerCase()
+}
+
+/** One pair of double quotes around the whole line and none inside. */
+export function isWhollyQuoted(t: string): boolean {
+  return t.length > 2 && t.startsWith('"') && t.endsWith('"') && !t.slice(1, -1).includes('"')
+}
+
+/* ───────────────────────── the guardrails ─────────────────────────
+   Deterministic, in code, before the judge: a prompt is a request and
+   these are the refusal. Each list is exported so it can grow. */
+
+/** Guardrail C's trigger: the user has passed a verdict on themselves. */
+export const SELF_CRITICAL_TOKENS = [
+  'useless', 'pathetic', 'failure', 'behind', 'embarrassing', 'loser', 'worthless', 'should be by now',
+]
+
+/** Guardrail B's tokens: a serious fact in the spill that may appear in a
+ *  card only inside a quote of what the other party said. */
+export const SERIOUS_FACT_TOKENS = [
+  'cancer', 'tumor', 'tumour', 'chemo', 'oncolog', 'hospital', 'hospice', 'icu', 'diagnos',
+  'terminal', 'died', 'death', 'dead', 'funeral', 'miscarr', 'stillb', 'stroke', 'surgery',
+  'overdose', 'laid off', 'fired', 'evicted', 'bankrupt',
+]
+
+/** Guardrail A: a predicate nominative on the user, on any spill, no
+ *  allowlist. The two forms the spec gives (§8). */
+export const USER_PREDICATE_RES: RegExp[] = [
+  /\b(you|you're|you are|you've been|and you), (a|an|the) \w+/i,
+  /\b(you're|you are) (a|an|the) \w+/i,
+]
+
+/** Guardrail C: on a self-critical spill, the user as subject with a noun
+ *  of dependence or verdict as predicate (§8). */
+export const SELF_CRITICAL_PREDICATE_RE =
+  /\b(you|you're|you are|you've)\b.{0,20}\b(a|an|the)\b [^.]{0,40}\b(fund|atm|customer|dependent|charity case|burden|liability|expense|line item|failure|loser)\b/i
+
+export type SpillFlags = { self_critical: boolean; serious_tokens: string[] }
+
+/** What the spill itself says about which guardrails apply. */
+export function spillFlags(situation: string): SpillFlags {
+  const s = situation.toLowerCase()
+  return {
+    self_critical: SELF_CRITICAL_TOKENS.some((t) => s.includes(t)),
+    serious_tokens: SERIOUS_FACT_TOKENS.filter((t) => s.includes(t)),
+  }
+}
+
+/** The text of a line with every quoted span removed. Straight or curly
+ *  double quotes open a span; a clapback's own enclosing pair is not a
+ *  span (the whole card is speech) and is unwrapped first. */
+export function outsideQuotes(line: string, slot: SlotKey): string {
+  let t = line.trim()
+  if (isSpokenLine(slot) && t.length > 1 && /^["“]/.test(t) && /["”]$/.test(t)) t = t.slice(1, -1)
+  let out = ''
+  let open: '"' | '“' | null = null
+  for (const ch of t) {
+    if (open === null) {
+      if (ch === '"' || ch === '“') open = ch
+      else out += ch
+    } else if ((open === '"' && ch === '"') || (open === '“' && ch === '”')) {
+      open = null
+    }
+  }
+  return out
+}
+
+export type GuardrailHit = { rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate'; detail: string }
+
+/** The first guardrail a candidate trips, or null. Order: A, B, C. */
+export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags): GuardrailHit | null {
+  for (const re of USER_PREDICATE_RES) {
+    const m = re.exec(line)
+    if (m) return { rule: 'user_predicate', detail: m[0] }
+  }
+  if (flags.serious_tokens.length) {
+    const bare = outsideQuotes(line, slot).toLowerCase()
+    for (const token of flags.serious_tokens) {
+      if (bare.includes(token)) return { rule: 'serious_fact', detail: token }
+    }
+  }
+  if (flags.self_critical) {
+    const m = SELF_CRITICAL_PREDICATE_RE.exec(line)
+    if (m) return { rule: 'self_critical_predicate', detail: m[0] }
+  }
+  return null
 }
 
 /* ───────────────────────── stage 1 · premises ───────────────────────── */
+
+/** What the premise cache is keyed on: the prompt version, and a hash of
+ *  the premise prompt's text — a changed premise pass under the same
+ *  version label must not serve observations the old one made. */
+export function premiseCacheKey(): string {
+  let h = 0x811c9dc5
+  for (let i = 0; i < PREMISE_PROMPT.length; i++) {
+    h ^= PREMISE_PROMPT.charCodeAt(i)
+    h = Math.imul(h, 0x01000193) >>> 0
+  }
+  return `${PROMPT_VERSION}+${h.toString(16)}`
+}
 
 /** Exactly four used, one per slot value — what stage 1 is asked for. */
 export function premisesAreDealt(premises: Premise[] | null | undefined): boolean {
@@ -508,40 +605,122 @@ export function fallbackCard(slot: SlotKey, voiceKey: string | null, avoid: stri
 }
 
 /* ───────────────────────── the whole ladder ─────────────────────────
-   candidates → hard rules → judge → (no survivors? one more candidate
-   pass) → floor. Pure of the database: the caller supplies premises,
-   voice and examples so the eval script can run the identical ladder. */
+   candidates → guardrails and hard rules on all ten → (fewer than three
+   survive? one more candidate pass, same premise) → judge → (no winner?
+   one regeneration on the spare) → floor. Pure of the database: the
+   caller supplies premises, voice and examples so the eval script can
+   run the identical ladder. `trace` is only for the logs. */
+
+export type Trace = { set_id?: string; position?: number }
+
+type Screened = {
+  records: CandidateRecord[]
+  survivors: { text: string; at: number }[]
+  /** rejections per guardrail on this pass */
+  guardrail: Record<GuardrailHit['rule'], number>
+}
+
+/** One candidate pass, screened. Every rejection is written on the
+ *  record and every guardrail rejection is logged as
+ *  `[joke-guardrail] { rule, set_id, position, index, slot, span|token }`. */
+async function screenedPass(
+  input: CandidateInput,
+  premise: string | null,
+  flags: SpillFlags,
+  avoid: Set<string>,
+  trace: Trace,
+): Promise<(Screened & { model: string }) | { error: string; model: string }> {
+  const pass = await runCandidatePass({ ...input, premise })
+  if (pass.error) return { error: pass.error, model: pass.model }
+  const records: CandidateRecord[] = pass.candidates.map((text) => ({ text }))
+  const survivors: { text: string; at: number }[] = []
+  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0 }
+  records.forEach((r, at) => {
+    const hit = guardrailFailure(r.text, input.slot, flags)
+    if (hit) {
+      r.rejected = `guardrail: ${hit.rule} (${hit.detail})`
+      guardrail[hit.rule] += 1
+      console.warn('[joke-guardrail]', {
+        rule: hit.rule,
+        set_id: trace.set_id ?? null,
+        position: trace.position ?? null,
+        index: at,
+        slot: input.slot,
+        ...(hit.rule === 'serious_fact' ? { token: hit.detail } : { span: hit.detail }),
+      })
+      return
+    }
+    const fail = hardRuleFailure(r.text, input.situation, input.slot) ?? (avoid.has(r.text.toLowerCase()) ? 'repeat of the last card' : null)
+    if (fail) r.rejected = fail
+    else survivors.push({ text: r.text, at })
+  })
+  if (isSpokenLine(input.slot)) {
+    for (const r of records) {
+      if (!r.rejected && !(/^["“]/.test(r.text) && /["”]$/.test(r.text))) {
+        console.warn('[joke-candidates] clapback returned without its quotation marks', { ...trace, slot: input.slot, text: r.text })
+      }
+    }
+  }
+  return { records, survivors, guardrail, model: pass.model }
+}
+
 export async function generateFromInputs(
-  input: CandidateInput & { avoid?: string[]; spare?: string | null },
+  input: CandidateInput & { avoid?: string[]; spare?: string | null; trace?: Trace },
 ): Promise<GeneratedCard> {
   const avoid = new Set((input.avoid ?? []).map((t) => t.toLowerCase()))
-  let writer: string | null = null
+  const trace = input.trace ?? {}
+  const flags = spillFlags(input.situation)
+  console.log('[joke-flip]', {
+    set_id: trace.set_id ?? null,
+    position: trace.position ?? null,
+    slot: input.slot,
+    self_critical: flags.self_critical,
+    serious_tokens: flags.serious_tokens,
+  })
 
-  for (let attempt = 0; attempt < 2; attempt++) {
-    // The second attempt is a regeneration: the dealt premise produced
-    // nothing the judge would pass, so the spare is dealt in its place.
-    // The spare is never shown to stage 2 or 3 otherwise.
-    const premise = attempt === 1 && input.spare ? input.spare : input.premise
-    if (attempt === 1) console.warn('[joke-candidates] regenerating', { slot: input.slot, spare: !!input.spare })
-    const pass = await runCandidatePass({ ...input, premise })
-    writer = pass.model
-    if (pass.error) {
-      console.error('[joke-candidates] gateway error', { slot: input.slot, attempt, error: pass.error })
-      // The gateway itself is down: a second attempt would only be a second
-      // timeout. Straight to the floor.
-      break
+  const base = (records: CandidateRecord[], writer: string | null, judge: string | null, premise: string | null) => ({
+    premise,
+    prompt_version: PROMPT_VERSION,
+    voice_key: input.voice.key,
+    writer_model: writer,
+    judge_model: judge,
+    candidates: records,
+  })
+
+  // One judged attempt on a premise: screen, top up once if thin, judge.
+  const attempt = async (premise: string | null, label: string): Promise<GeneratedCard | 'no_winner' | 'down'> => {
+    const first = await screenedPass(input, premise, flags, avoid, trace)
+    if ('error' in first) {
+      // The gateway itself is down: a second attempt is a second timeout.
+      console.error('[joke-candidates] gateway error', { slot: input.slot, attempt: label, error: first.error })
+      return 'down'
     }
-
-    const records: CandidateRecord[] = pass.candidates.map((text) => ({ text }))
-    const survivors: { text: string; at: number }[] = []
-    records.forEach((r, at) => {
-      const fail = hardRuleFailure(r.text, input.situation, input.slot) ?? (avoid.has(r.text.toLowerCase()) ? 'repeat of the last card' : null)
-      if (fail) r.rejected = fail
-      else survivors.push({ text: r.text, at })
-    })
+    let records = first.records
+    let survivors = first.survivors
+    let writer: string = first.model
+    if (survivors.length < 3) {
+      console.warn('[joke-candidates] fewer than three survive; one more pass on the same premise', {
+        ...trace, slot: input.slot, attempt: label, survivors: survivors.length, guardrail: first.guardrail,
+      })
+      const second = await screenedPass(input, premise, flags, avoid, trace)
+      if (!('error' in second)) {
+        const offset = records.length
+        const seen = new Set(records.map((r) => r.text))
+        const fresh = second.records.filter((r) => !seen.has(r.text))
+        const keep = new Set(fresh)
+        records = [...records, ...fresh]
+        survivors = [
+          ...survivors,
+          ...second.survivors
+            .filter((sv) => keep.has(second.records[sv.at]!))
+            .map((sv) => ({ text: sv.text, at: offset + fresh.indexOf(second.records[sv.at]!) })),
+        ]
+        writer = second.model
+      }
+    }
     if (survivors.length === 0) {
-      console.warn('[joke-candidates] no survivors', { slot: input.slot, attempt, rejected: records.map((r) => r.rejected) })
-      continue
+      console.warn('[joke-candidates] no survivors', { ...trace, slot: input.slot, attempt: label, rejected: records.map((r) => r.rejected) })
+      return 'no_winner'
     }
 
     const verdict = await runJudge({
@@ -550,56 +729,41 @@ export async function generateFromInputs(
       roastTarget: input.roastTarget,
       premise,
       otherPremises: input.otherPremises,
-      candidates: survivors.map((s) => s.text),
+      candidates: survivors.map((sv) => sv.text),
     })
-    for (const r of verdict.rejected) {
-      const rec = records[survivors[r.i]!.at]!
-      rec.rejected = `judge: ${r.rule}`
-    }
+    for (const r of verdict.rejected) records[survivors[r.i]!.at]!.rejected = `judge: ${r.rule}`
     verdict.ranking.forEach((i, rank) => {
       const rec = records[survivors[i]!.at]!
       if (rec.rank === undefined) rec.rank = rank
     })
 
-    const base = {
-      premise,
-      prompt_version: PROMPT_VERSION,
-      voice_key: input.voice.key,
-      writer_model: writer,
-      judge_model: verdict.model,
-      candidates: records,
-    }
-
     if (verdict.winner !== null) {
       const win = survivors[verdict.winner]!
       records[win.at]!.rank = 0
-      return {
-        ...base,
-        text: win.text,
-        used_fallback: false,
-        judge_score: attempt === 0 ? 0.9 : 0.8,
-        judge_why: verdict.why,
-      }
+      return { ...base(records, writer, verdict.model, premise), text: win.text, used_fallback: false, judge_score: label === 'dealt' ? 0.9 : 0.8, judge_why: verdict.why }
     }
-
     if (verdict.error) {
-      // The judge is down, not the candidates. The first line the hard rules
-      // let through is a real card — a judged one was only going to be
-      // better, not the difference between a card and none.
-      console.error('[joke-judge] gateway error', { slot: input.slot, error: verdict.error })
+      // The judge is down, not the candidates. The first line the rules let
+      // through is a real card; a judged one was only going to be better.
+      console.error('[joke-judge] gateway error', { ...trace, slot: input.slot, error: verdict.error })
       const first = survivors[0]!
       records[first.at]!.rank = 0
-      return {
-        ...base,
-        text: first.text,
-        used_fallback: false,
-        judge_score: 0.6,
-        judge_why: 'unjudged: ' + verdict.error,
-      }
+      return { ...base(records, writer, verdict.model, premise), text: first.text, used_fallback: false, judge_score: 0.6, judge_why: 'unjudged: ' + verdict.error }
     }
-    // The judge read them all and threw them all out. Once more, from the top.
+    return 'no_winner'
   }
 
+  const dealt = await attempt(input.premise, 'dealt')
+  if (dealt === 'down') return fallbackCard(input.slot, input.voice.key, input.avoid)
+  if (dealt !== 'no_winner') return dealt
+
+  // The dealt premise produced nothing the judge would pass: the spare is
+  // dealt in its place, once. It is never shown to stage 2 or 3 otherwise.
+  if (input.spare) {
+    console.warn('[joke-candidates] regenerating on the spare', { ...trace, slot: input.slot })
+    const spare = await attempt(input.spare, 'spare')
+    if (spare !== 'no_winner' && spare !== 'down') return spare
+  }
   return fallbackCard(input.slot, input.voice.key, input.avoid)
 }
 
@@ -680,14 +844,14 @@ export async function prepareSet(admin: Admin, set: SetRow): Promise<PreparedSet
   // carry the deal — an earlier 2.1 cache has the observations but not the
   // slots, and stage 2 needs the slots.
   let premises =
-    stored.premises_version === PROMPT_VERSION && premisesAreDealt(stored.premises) ? stored.premises! : null
+    stored.premises_version === premiseCacheKey() && premisesAreDealt(stored.premises) ? stored.premises! : null
   if (!premises) {
     premises = await runPremisePass(situation)
     // An empty pass is not cached: the gateway may have been down, and the
     // next card should get to try. A real answer is stored once.
     if (premises.length) {
       patch['premises'] = premises
-      patch['premises_version'] = PROMPT_VERSION
+      patch['premises_version'] = premiseCacheKey()
     }
   }
 
@@ -706,7 +870,7 @@ export async function prepareSet(admin: Admin, set: SetRow): Promise<PreparedSet
 export async function generateCard(
   admin: Admin,
   set: SetRow,
-  args: { slot: string; avoid?: string[] },
+  args: { slot: string; avoid?: string[]; position?: number },
 ): Promise<GeneratedCard> {
   const slot = (SLOT_KEYS as string[]).includes(args.slot) ? (args.slot as SlotKey) : 'the_roast'
   const situation = String(set.clean_text ?? '')
@@ -734,5 +898,6 @@ export async function generateCard(
     examples,
     roastTarget: prepared.roastTarget,
     avoid: args.avoid,
+    trace: { set_id: set.id, position: args.position },
   })
 }

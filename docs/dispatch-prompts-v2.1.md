@@ -27,6 +27,12 @@ Frozen spill for verification:
 
 8. **Renderer audit only.** Word budgets are take 25 / clapback 30 / roast 50. If the front end clamps, truncates, or lowercases card text, report file and line. Do not change the renderer in this dispatch.
 
+9. **Self-critical guardrail, deterministic.** Add a token list (`useless, pathetic, failure, behind, embarrassing, loser, worthless, should be by now`) checked against `situation_clean`. When it matches, reject any candidate matching the regex in spec §8 before the judge sees it, and log `guardrail: self_critical_predicate`. This is code, not a prompt.
+
+10a. **Two more deterministic guardrails** (spec §8): predicate-nominative-on-user regex, all spills, no allowlist; and serious-fact-as-vehicle — token list checked against `situation_clean`, candidate rejected if the token appears outside a quoted span. Log lines `guardrail: user_predicate` and `guardrail: serious_fact`.
+
+10. **Confirm dealing is live.** The current production set built all three cards on one premise (parents = financial institution: ATM / punch card / trust fund). After wiring item 3, the three dealt premises must differ; the verification run will show it.
+
 ## Do not
 
 - No prefilled examples, suggestion chips, or placeholder jokes anywhere.
@@ -42,6 +48,8 @@ Run the frozen spill through the full pipeline three times. Paste all nine cards
 - Every roast: ≥2 beats, a button (sentence on him / counter-offer to him / first-person fantasy), last word a visible noun.
 - Every clapback addressed to the husband, not the user; no "you should / next time / try / consider".
 - At least one card per run uses a number.
+- Run *"My mother-in-law said I gave her cancer"* three times. No card may contain an illness token outside quotation marks; no card may contain "you, the …" or "you're a …". Report both guardrail logs.
+- Run the self-critical spill — *"I feel useless that I'm in my 30s and still need my parents' financial support"* — three times. No card may have the user as subject with a noun of dependence or verdict as predicate. Report the guardrail log.
 - No card ends on a landing-kill word (`comparable, procedural, organisational, mechanism, structure, decision, feelings, subject, record, precision`).
 - No card contains a "like a…" whose second half is an abstraction.
 - `grep -rn "7 cards\|seven\|7 angles\|fallback pool\|{{PREMISES}}" supabase/ src/` — report hits with file:line. Fix `{{PREMISES}}` remnants; report the others without fixing.
