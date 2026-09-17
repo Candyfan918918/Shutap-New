@@ -152,7 +152,15 @@ export function maxCharsFor(slot: SlotKey): number {
    every card. */
 const ADVICE = /\b(you should|you could|you need to|you have to|you deserve|try to|try a|try telling|consider|i'?d recommend|i would recommend|next time|going forward|from now on)\b/i
 const REASSURANCE = /\b(you'?re not crazy|you are not crazy|you'?re not wrong|you are not wrong|it'?s okay to|it'?s ok to|you did nothing wrong|you'?re allowed to)\b/i
-const CLINICAL = /\b(boundar(y|ies)|toxic|gaslight\w*|narcissis\w*|therap\w*|trauma\w*|trigger(ed|ing)?|heal(ing|ed)?|self[- ]care|red flags?|emotional (labou?r|abuse)|manipulat\w*|abus(e|ive|er)|diagnos\w*|disorder|anxiety|depress\w*|codependen\w*|enabl(er|ing)|validat\w*|closure|safe space|inner child|love[- ]bomb\w*)\b/i
+/* Therapy vocabulary, and only outside a quoted span: the card is allowed to
+   quote the word the other party used, or the one the user typed. The
+   approved take for the "shit or get off the pot" spill is `you said
+   "depressed." she heard "toilet."` — the clinical word is the exhibit, not
+   the register. `diagnos*` is not here: a diagnosis is a fact, and a fact in
+   the spill is Guardrail B's, which blocks it outside quotes on the spills
+   that have one. The approved take for the cancer spill names the diagnosis
+   to hand it to the doctor ("the diagnosis came from a doctor"). */
+const CLINICAL = /\b(boundar(y|ies)|toxic|gaslight\w*|narcissis\w*|therap\w*|trauma\w*|trigger(ed|ing)?|heal(ing|ed)?|self[- ]care|red flags?|emotional (labou?r|abuse)|manipulat\w*|abus(e|ive|er)|disorder|anxiety|depress\w*|codependen\w*|enabl(er|ing)|validat\w*|closure|safe space|inner child|love[- ]bomb\w*)\b/i
 const BANNED: { rule: string; re: RegExp }[] = [
   { rule: 'welcome to X, population: you', re: /welcome to [^,.]{1,40},? population:? you/i },
   { rule: "congratulations, you've unlocked", re: /congratulations,? you'?ve unlocked/i },
@@ -207,7 +215,7 @@ export function hardRuleFailure(line: string, situation: string, slot: SlotKey =
   if (t.length > maxCharsFor(slot) || words > maxWordsFor(slot)) return 'over length'
   if (slot !== 'the_clapback' && ADVICE.test(t)) return 'advice'
   if (REASSURANCE.test(t)) return 'reassurance'
-  if (CLINICAL.test(t)) return 'clinical vocabulary'
+  if (CLINICAL.test(outsideQuotes(t, slot))) return 'clinical vocabulary'
   for (const b of BANNED) if (b.re.test(t)) return `banned construction: ${b.rule}`
   if (LANDING_KILL.has(landingWord(t))) return `abstract landing: ${landingWord(t)}`
   // The naming test, conservatively: a line whose EVERY content word was
@@ -362,14 +370,25 @@ export type GuardrailHit = {
 
 /** Guardrail D: a candidate that is a hall-of-fame line or a prompt
  *  exemplar with a tag added. Token-set Jaccard at or above 0.5, or the
- *  exemplar as a contiguous substring. */
+ *  exemplar as a contiguous substring that is also most of the candidate.
+ *
+ *  The substring half is gated on coverage because the brief quotes short
+ *  approved fragments as the register to hit, not as lines to retire: the
+ *  approved autoimmune take ends "not even the cells" and the approved
+ *  custody roast ends "we're asking for a hundred", both of them phrases the
+ *  brief holds up two paragraphs earlier. A bare `includes` banned every one
+ *  of them. What the guardrail is for is the copy — the exemplar reproduced
+ *  as the line, with or without a tag ("i wish i had that power. you'd have
+ *  a new car.") — and a copy is an exemplar that fills its candidate. */
+export const EXEMPLAR_COVERAGE = 0.5
+
 export function exemplarCopy(line: string, exemplars: ExemplarNorm[]): ExemplarNorm | null {
   const norm = normalizeForCopy(line)
   if (!norm) return null
   const tokens = new Set(norm.split(' ').filter(Boolean))
   for (const e of exemplars) {
     if (!e.norm) continue
-    if (norm.includes(e.norm)) return e
+    if (norm.includes(e.norm) && e.tokens.size >= tokens.size * EXEMPLAR_COVERAGE) return e
     if (jaccard(tokens, e.tokens) >= 0.5) return e
   }
   return null

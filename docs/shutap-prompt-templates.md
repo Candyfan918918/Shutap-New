@@ -1,6 +1,6 @@
 # Shutap — Prompt Templates v2.1
 
-Three prompts, one per pipeline stage. Kept in `src/lib/jokes/prompts.server.ts` as template literals (this app runs TanStack Start server functions, not Supabase edge functions). `{{VARS}}` are interpolated at call time. Bump `prompt_version` to `2.1` on `joke_cards`.
+Three prompts, one per pipeline stage. Copy into `supabase/functions/_shared/prompts.ts` as template literals. `{{VARS}}` are interpolated at call time. Bump `prompt_version` to `2.1` on `joke_cards`.
 
 Three cards. Take / Clapback / Roast. Unchanged.
 
@@ -196,7 +196,11 @@ aloud at a dinner table without anyone putting down a fork, it is not
 finished. Heat comes from precision and direction — the exact object, the
 exact word they used, the verdict nobody can argue with — never from
 adjectives, volume, or insults about bodies. "Not even the cells" has no
-adjective and no mercy. That is the register.
+adjective and no mercy. "Fifty feet is standard. We're asking for a
+hundred." has no adjective, and it is the harshest thing anyone in that
+family will ever say. That is the register: numbers, people with jobs,
+and procedures, delivered flat. When you feel the urge to add heat, add
+a number instead.
 
 VOICE
 {{VOICE_PERSONA}}
@@ -265,6 +269,29 @@ THE BUILD — every candidate is made of these, in this order:
      Fantasy (fine): "I'd have put the sponge in the garbage disposal and
                       handed her a paper plate."
      Advice (out):   "Put the sponge in the garbage disposal."
+
+SELF-DIRECTED SPILL. When the user is the one in the wrong and there is
+no other adult, you do not narrate them from outside. You stand next to
+them. The register is the user's own deadpan defence, and the joke is on
+the situation's physics. Exemplar, for "leaving the house at 8:30 hoping
+to make work by 8:00":
+    take —     You left at 8:00 in spirit and 8:30 in Honda.
+    clapback — "I'm not late. Everyone else is early."
+    roast —    Walk in at 8:50 like you're coming from a funeral. You are.
+               8:00 is dead.
+No adjective, nothing over sixteen words, nobody describes the lateness.
+The moves that built it:
+- THE SPLIT. Divide the user into the part that meant to and the part
+  that didn't, and let them arrive separately. Spirit and Honda.
+  Intention and body. The concrete half lands the line. This is the
+  take's shape on a self-directed spill.
+- THE RELOCATION. Don't deny the fault; move the standard. "Everyone else
+  is early." The alibi's harder cousin: the world is wrong, stated flat.
+- THE LITERAL TURN. Set up a comparison, then declare it true. "Like
+  you're coming from a funeral. You are." Two words that turn the simile
+  into a fact and hand the reader the next beat.
+- THE OBITUARY. When the button can be stated as a death, state it as a
+  death. "8:00 is dead." Three words, no explanation.
 
 MOVES — the pictures that work, by what the situation gives you. Pick the
 one the situation is already holding out:
@@ -398,6 +425,41 @@ one the situation is already holding out:
   three cards on one ENGINE. One engine, three observations is a set.
   One observation, three phrasings is the failure.
 
+- THE PROCEDURE. When they've invoked a process against you (court,
+  HR, the police, a lawyer), the sentence is passed inside that same
+  process, as logistics. Not "we'll cut you off" — "fifty feet is
+  standard, we're asking for a hundred." The cruelty is in the
+  paperwork being routine. Every beat is measurable: once, a bailiff, a
+  form, a distance. No adjectives; the numbers do it. This is the
+  full-degree version of THEIR WORD MADE A WORLD for threats.
+
+- THE STAGE DIRECTION. Treat the situation as a performance and give
+  the note a director would. "Don't forget to walk in looking upset."
+  The joke is that the outcome is settled and only the acting is left.
+  Works on no-second-party spills where the user is the one in the
+  wrong: it never judges them, it coaches them.
+
+- THE LAW. State the mechanism as physics, in the second person, as if
+  everyone already knows it. "Once you start being late, you cannot
+  stop." "After I realise I'm late I stop rushing." No picture — the
+  laugh is recognition. The law must be true of the whole category and
+  phrased as something you'd find on a plaque.
+
+- THE PEP TALK. Encouragement, aimed at someone who has already lost.
+  "You got this." "You're early for tomorrow's shift." Fake concern's
+  cousin for self-directed spills: the sarcasm is in the timing, not
+  the words. Pairs with the wrong-way correction on a number — late by
+  thirty minutes becomes early by twenty-three and a half hours.
+
+- THE COLLATERAL. Land the hit on someone adjacent to the target who
+  the user is also done with — the ex-husband, the golden child, the
+  friend who took her side. "Her advice is plumbing. Look what came out
+  of her." The mother-in-law's line is the setup; her son is the
+  landing. Only for people the user has already left; never for the
+  user's own kids, current partner, or anyone the spill treats as
+  innocent. Nine words is the right length — the reader should get
+  there a half-second after the line ends.
+
 - THE LINEUP. When there are two of something — two turkeys, two group
   chats, two lists, two salaries — put them side by side and let one of
   them lose. The user already said "like a lineup"; the picture finishes
@@ -434,6 +496,11 @@ SHAPE:
 - Read it for heat. If it is the calm version of a harder line you can
   see, write the harder line. Candidates 1–7 are already at full degree;
   8–10 are past what you think is allowed, within the direction rules.
+- Read it once. Every card is read one time, on a phone, by someone who
+  is angry. If any sentence needs a second pass to know who did what, or
+  ends ambiguous about who wins, it has failed. Subject, verb, object.
+  Short sentences. A list only of things that can actually be listed —
+  you file a motion, you don't file a lock.
 
 THE SWAP TEST: if the line would land just as well on a different person's
 situation, it has failed. Specificity is the requirement, not a bonus.
@@ -572,7 +639,16 @@ output failed and they are weighted above the rest:
   "Harder" means the verdict is more precise and lands more squarely on
   the other party's behaviour — not louder, not crueller about bodies,
   not more adjectives. A line that would be the reasonable one at a
-  dinner table ranks below a line that would end the dinner.
+  dinner table ranks below a line that would end the dinner. Measurable
+  beats — a number, a distance, a person with a job — rank above heat
+  words. "We're asking for a hundred" beats "we want her gone."
+- ON A SELF-DIRECTED SPILL, a line that narrates the user from outside
+  ("every morning the car pulls out…") ranks below a line spoken from
+  inside the user's defence ("I'm not late. Everyone else is early.").
+  The voice stands next to them, not across from them.
+- ONE PASS. A line that needs a second read to know who did what, or
+  ends unclear about who wins, ranks below any line that doesn't,
+  however good the idea.
 - IS SOMEONE SAYING IT. Read it in the voice. Does a person say this, or does
   a report contain it? Attitude is required. Accurate and unbothered ranks
   below accurate and bothered.
@@ -592,10 +668,6 @@ output failed and they are weighted above the rest:
 - Does it use something only this situation has?
 - Is the premise one someone would actually have missed?
 - Rhythm. Does it have beats, or is it just true?
-- STOPS AT THE TURN. A line that ends on its picture ranks above the
-  same line with a clause explaining the picture. "Like a gift" beats
-  "like a gift with a card." If two candidates share their first
-  sentence, the shorter one wins unless the addition is a new picture.
 
 Length is never the criterion. Cut words that carry nothing, never cut the
 reasoning, never cut the picture.
@@ -629,6 +701,12 @@ back. The take earns its place by identifying what the behaviour IS.
                just refurbished."
   Naming:     "The budget exists. It's the room."
 
+ONE-PASS TEST. The take is read once, on a card, by someone who is
+angry. If it needs a second read to parse who did what, it has failed
+regardless of the idea. "She got the whole pregnancy to be a grandmother"
+reads as if grandma was pregnant. "She had nine months to become a
+grandmother" does not. Subject, verb, object, in that order, no clever
+compression that costs a re-read.
 THE TAKE STILL NEEDS A PICTURE. Naming the mechanism is the floor, not the
 ceiling. "The row existed before the question" is correct and lands on
 nothing. "She built your row before she asked, so the invitation was the
@@ -636,6 +714,9 @@ last cell she got to" has the same premise and a place to stand.
 LAND ON A THING. Last word is an object, a place, a person, a time. Never
 the mechanism.
 
+ON A SELF-DIRECTED SPILL the take is THE SPLIT: the part of them that
+meant to, and the part that didn't, arriving separately. Never a verdict
+on the person; a verdict on the gap between their two halves.
 No adjectives doing the opinion's work. The attitude is in what you chose
 to say, not in how you decorated it. Restraint in adjectives is not
 restraint in heat: "not even the cells" has no adjective and no mercy.
@@ -688,6 +769,28 @@ FAKE CONCERN. Open with sympathy and let the second clause take it back.
 sarcasm lives in the gap between the opener and what follows; no
 adjective is needed. Vernacular is fine here ("cuz", "ain't got") — the
 clapback is speech, and the voice's register rules apply, not the take's.
+
+THE REFUSAL. "No" as the first word, then the reason, and the reason is
+the verdict. "No. I don't pay for incompetence." Six words, no picture,
+no question. The offer is declined and the decline is the review. Works
+when they've made an offer or a demand; the reason should be one noun
+that convicts them, and the evidence for it is already standing in the
+room (she raised the man you married).
+
+THE ALIBI. On a self-directed spill, the clapback is the user's own
+defence — the weakest one available, delivered with total confidence.
+"My intention was there." Four words that concede everything and
+apologise for nothing. The addressee is whoever would be asking (the
+boss, the clock, HR); the user never admits fault and never denies it;
+the excuse is the joke. Do not improve the alibi. A better excuse is a
+worse line.
+
+THE ORDER, FOLLOWED. When they gave an instruction or an idiom with verbs
+in it, agree to it — "I will" — then carry out every verb on them.
+"Shit or get off the pot." → "I will. Shit on you. Get off you." Their
+own imperative, obeyed, with them as the object. No picture, no
+argument; the compliance is the attack. Crude is fine when the idiom
+was crude first — the register is theirs.
 
 THE ANSWERABILITY TEST. A clapback ends where they have to answer. If they
 could nod and move on, it was an observation. There should be no reply
@@ -744,6 +847,12 @@ or anything the user said about themselves. If the roast needs the user to
 be stupid to work, it has failed.
 
 LAND ON A THING. Never the mechanism.
+ON A SELF-DIRECTED SPILL the roast is a STAGE DIRECTION plus a LAW or an
+OBITUARY: tell them how to walk in, then state the physics. It coaches;
+it never judges.
+ONE PASS. Four sentences that each mean one thing beats one sentence that
+means three. If the roast ends on a consequence, it is unambiguous who
+it lands on.
 FULL DEGREE. The roast is not the only hot card; it is one of three. If
 it is the only line in the set that stings, the set has failed, not the
 roast.`
@@ -1072,6 +1181,106 @@ Previous take ("assigning causes since the wedding… paperwork") and roast ("a 
 4. Dealing clarified: one engine, three observations is a set; one observation, three phrasings is the failure.
 
 **Founder rule, standing:** "We never go easy. Always go full degree for all cards." MATCH THE HARDEST CARD is superseded — there is no hardest card to match, because there is no soft one. Every card is written at the maximum the situation permits, within the direction rules (never the user's worth, never the serious fact's name or setting, never a body). Take rule rewritten: precision is its weapon, not restraint.
+
+**Product-mode round G — spill: "My mother-in-law told me I stole her son from her." First set rejected ("not good or funny"); second set: take and roast approved, founder replaced the clapback:**
+- take — She held him for thirty years and calls the first person who opened the door a thief.
+- clapback (founder) — "Stole? That's how you got father-in-law?"
+- roast — She said stole. He wasn't in a vault. He was in her basement with a mini fridge and his laundry done. Nobody stole him. Somebody finally rang the bell.
+
+Rejected first set: "Stole is a word for things you own… She's filing a claim" (abstract landing) · "Call him and tell him to come home. I'll wait in the car." (a dare, not a hit) · the remote/cushions roast (a prior with no verdict on her).
+
+**What the founder's clapback does, now encoded:**
+1. ANSWER THE TEXT + MECHANISM MIRROR in seven words: her verb, returned to her own marriage. She did the exact thing she's accusing you of — one generation up. No denial, no picture, no button; the implied sentence is that she's the original thief.
+2. Third clapback in a row where the founder's is shorter than mine and asks a question I'd have answered. A question is allowed when it IS the trap: there is no reply to "that's how you got father-in-law?" that doesn't concede.
+3. The first set failed on direction again: the clapback dared her instead of convicting her; the roast told a story about the remote instead of a verdict on her. Full degree means the line lands on her, every card.
+
+**Product-mode round H — spill: "My mother-in-law told me we could pay her for day care for our baby." Founder replaced the clapback and flagged the take as unclear:**
+- take (mine, flagged) — She got the whole pregnancy to be a grandmother. She spent it drafting a rate. → founder: "what does the take mean? grandma got the whole pregnancy?"
+- clapback (founder) — "No I don't pay for incompetence."
+- roast (approved) — She's a business now. The staff is her, the client is her son, the product is her grandchild. She'll hold the baby for free, in photos.
+
+**Now encoded:**
+1. THE REFUSAL, clapback move: "No" first, then a one-noun verdict as the reason. The offer is declined and the decline is the review. Fourth founder clapback in a row under ten words.
+2. ONE-PASS TEST on the take. "Got the whole pregnancy" compressed "had the nine months of your pregnancy" into a phrase that reads as grandma being pregnant. The idea was fine; the sentence needed a second read, which on a card is a failed card. Rewritten: "She had nine months to become a grandmother. She used them to set a price."
+
+**Product-mode round I — spill: "My MIL said she was gonna file for custody of our daughter because we wouldn't let her see her." Approved after two rewrites:**
+- take — She thinks a court can make us let her in. It can. Once. With a bailiff.
+- clapback (founder) — "File it. Also a restraining order on us all, so we never get close to you."
+- roast — She's going to court to get closer to the baby. Court is where we get the number for how far away she stays. Fifty feet is standard. We're asking for a hundred.
+
+Rejected on the way: the first roast ("a confession with a filing fee") was a verdict without a consequence; the second ("we file Tuesday: new address, new locks, her photo at the daycare desk… only one of us walks out with the baby") listed things you don't file and ended ambiguous about who gets the child. Founder: "the roast is not making sense."
+
+**What made the set good, now encoded:**
+1. ONE ENGINE, THREE CARDS. She said "file." Every card lives inside the court and every card ends with her further away — let in once with a bailiff; a restraining order added to her own filing; a distance in feet. Same world, three different nouns, no repeats.
+2. THE PROCEDURE. The sentence is passed as logistics. Nobody says "we're done with you"; the cards say once, bailiff, fifty feet, a hundred. The cruelty is that it's routine. New move.
+3. The clapback is the WRONG-WAY CORRECTION as a co-filing: grant her filing and add one. She asked for a process; she gets two.
+4. Every card is measurable. Once. A bailiff. Fifty. A hundred. No adjective anywhere in the set — full degree with zero heat words. That's the register the HEAT block describes.
+5. The rewrite that fixed the roast was clarity, not a new idea: four sentences, each meaning one thing, and the last one a number. The one-pass test applies to the roast too.
+6. "We," not "I." The parents are one unit; she's the thing being processed. Power stays with the family.
+
+**Round 9 — founder-fed, "leaving at 8:30 for 8:00" (no-second-party, self-directed):**
+- don't forget to walk in looking upset.
+- you got this Will.I.am.
+- U early for tmr's shift.
+- After I realize I'm late I stop rushing.
+- Once you start being late, you cannot stop.
+
+**What they share, now encoded:**
+1. None of them describe the lateness. The founder's earlier mom/AI note again — description is not the joke. These coach it (stage direction), legislate it (the law), or cheer it (pep talk). Three new moves.
+2. Every one is second person or first person present — nobody is observed from outside. On self-directed spills the voice stands next to the user, not across from them. That's how full degree works without touching the user's worth: the joke is on the situation's physics, and the user is a colleague in it.
+3. "Early for tomorrow's shift" is the WRONG-WAY CORRECTION on a number, and it beats every roast I wrote for this spill (prayer service, time travel). The number was already the joke; it only needed reframing.
+4. Register: "U", "tmr" — text-speak is fine in content mode and in clapbacks. Not in takes.
+5. "Will.I.am" is a name pun, not ridicule of the person. Named real people stay out of the product; in content mode a name used purely as a pun is tolerable once. Do not build on it.
+
+**Round 9b — same spill. Two sets rejected; founder gave the clapback:**
+- founder — "My intention was there."
+- rejected — "8:00, you're a rumor. Ask 8:45 — we're close." · "8:00, I'll see you tomorrow. Same as always."
+
+**Encoded:** THE ALIBI. On self-directed spills the clapback is the user's own defence, the weakest one, said with full confidence. Mine addressed the clock as an opponent; hers stands in the user's shoes and offers the excuse. Same lesson as round 9: on a self-directed spill the voice stands next to the user. Every card in the set follows the alibi's register — deadpan self-defence, no outside narrator.
+
+**Round 9c — same spill, founder's cut of the roast:**
+- mine — Leaving at 8:30 for 8:00 isn't a plan. It's a dare. The road has taken it every morning this year and won every morning this year. Walk in at 8:50 like you're coming from a funeral. You are. It was for 8:00.
+- founder — Walk in at 8:50 like you're coming from a funeral. You are. 8:00 is dead.
+
+**Encoded:**
+1. CUT FROM THE FRONT, again: the dare and the road were setup; the stage direction was the joke. Three sentences gone, nothing lost.
+2. The button got harder by getting simpler: "It was for 8:00" explained the funeral; "8:00 is dead" is THE LAW stated as an obituary. Three words, no explanation, ends on the plainest possible verb. When a button can be stated as a death, state it as a death.
+3. Take and clapback approved as written ("8:00 in spirit and 8:30 in Honda" / "I'm not late. Everyone else is early.").
+
+**Round 9d — analysis of the approved 8:30 set, applied to the prompt:**
+1. Take is THE SPLIT (spirit / Honda): the user divided into intention and vehicle, and the vehicle wins. Not a verdict on them — a verdict on the gap.
+2. Clapback is THE RELOCATION: the fault isn't denied, the standard is moved. "Everyone else is early."
+3. Roast is STAGE DIRECTION → LITERAL TURN ("You are.") → OBITUARY ("8:00 is dead."). Three beats, three moves, thirteen words.
+4. Across the set: nobody describes the lateness; the voice stands inside the user's defence; no adjectives; every line ends on a noun or a blunt verb. The set is now the stage-2 exemplar for self-directed spills, and the judge ranks outside-narration below inside-defence on those spills.
+
+**Product-mode round J — spill: "Mother-in-law calling my baby 'her baby'." Approved after four roast attempts:**
+- take — She says "her baby" the way she says "her kitchen" at your house.
+- clapback — "Your baby? Then the 3 a.m. feed is yours. Every night." *(also approved: "You have a baby. I married him.")*
+- roast — Her baby? Walgreens sells a DNA test for that. $99, results in five days. *(founder cut: "She can pay for it. It's her baby.")*
+
+**Rejected roasts, why:** "thirty-four years… calling dibs" and "starting early… a head start" — two babies, one phrase, referent unclear (one-pass fail). "Same words, new hostage" — clear, but a verdict with no picture; founder: "bad." "a test for that" — unnamed test; founder had to ask what test.
+
+**Encoded:**
+1. The referent rule under ONE PASS: when two people could be the subject of a pronoun or a repeated phrase, name them. "My baby" meant the husband and the daughter in the same line, twice.
+2. Name the object. "A test for that" made the reader guess. The utility deflation only works if the utility is specific: DNA test, $99, five days.
+3. Cut from the back, again: "She can pay for it. It's her baby." explained the button that "$99, results in five days" had already landed.
+4. Take = THE PRIOR in nine words (her kitchen). Clapback = counter-offer priced in labour (the 3 a.m. feed) or the LITERAL TURN on "baby" (I married him). Roast = THE PROCEDURE with a price tag. Three moves, no repeats, no adjectives.
+
+**Product-mode round K — spill: "My ex-MIL said 'shit or get off the pot' when I told her I was depressed." (With "suicidal" in the spill it was a Guard spill and got no set; with "depressed" alone it runs, depression as furniture.) Founder replaced the clapback:**
+- founder — "I will. Shit on you. Get off you."
+- mine — "I got off. That's why you're the ex."
+
+**Encoded:** THE ORDER, FOLLOWED. Agree to their instruction, then execute each verb on them. Mine took the idiom and made it a divorce joke — clever, one step removed. Hers obeys the idiom. Compliance as the attack, in her register. Take and roast stand ("answered from a bathroom stall" / "one piece of advice and it's plumbing").
+
+**Round K, continued — the roast. Two rejected, one approved:**
+- rejected — "Her whole philosophy fits on a toilet. Bad news? Pot. Divorce? Pot. Her son leaving? Pot. She's not giving advice. She's giving directions to the bathroom. Lock her in it." (founder: too long, not funny) · "She answered from the one room where she's ever had a thought." as the take (founder: "what does this even mean?")
+- approved — Her advice is plumbing. Look what came out of her. (founder: "being sarcastic on the ex-husband")
+
+**Encoded:**
+1. THE COLLATERAL. The mother-in-law is the setup; the ex-husband is the landing. Allowed only for people the user has already left. New move.
+2. The rejected roast was a lineup with three items of the same kind (pot, pot, pot) — round 7's rule, ignored: three of the same kind is a list. And it explained itself for two more sentences after the list.
+3. Two one-pass failures in one spill ("the one room where she's ever had a thought" needed decoding). The oblique version of a crude joke is worse than the crude joke. When the register is crude, say it.
+4. Take rewritten to plain, then cut by the founder: You said "depressed." She heard "toilet." *(cut: "That's how closely she listens.")* Cut from the back — the third sentence explained the two before it. Final set, all three cards under ten words.
 
 Next round: bring ten, expect four to survive. Log them here.
 
