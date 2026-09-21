@@ -187,6 +187,9 @@ export function voiceByKey(voices: JokeVoice[], key: string | null | undefined):
    survivors means none: none is better than a copy. */
 export const EXAMPLE_SIMILARITY_CUTOFF = 0.8
 
+/** How many missing hall-of-fame embeddings one card flip will pay for. */
+const CATCHUP_EMBEDDINGS_PER_CARD = 6
+
 const ACCUSATION_VERBS = ['gave', 'ruined', 'made', 'caused', 'destroyed', 'broke', 'wrecked', 'killed', 'cost', 'stole', 'took', 'ended', 'poisoned', 'infected']
 
 /** The accuser's verb in a spill, when the other party accused the user
