@@ -425,7 +425,8 @@ export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags)
   if (flags.serious_tokens.length) {
     const bare = outsideQuotes(line, slot).toLowerCase()
     for (const { token, source } of flags.serious_tokens) {
-      if (bare.includes(token)) return { rule: 'serious_fact', detail: token, source }
+      const hit = source === 'dynamic' ? matchesWholeWord(bare, token) : bare.includes(token)
+      if (hit) return { rule: 'serious_fact', detail: token, source }
     }
   }
   if (flags.self_critical) {
