@@ -31,6 +31,8 @@ export async function embedText(input: string): Promise<number[] | null> {
     return Array.isArray(vec) && vec.length === 1536 ? vec : null
   } catch {
     return null
+  } finally {
+    clearTimeout(timer)
   }
 }
 
