@@ -5,17 +5,30 @@
 // screenshot of the DOM — the SHUTAP mark is drawn here, on the server, so it
 // cannot be styled away in a browser before the file is written.
 //
-// Everything is laid out against a fixed 1080×1920 viewBox and the requested
-// pixel size is applied to the root element only, so 1080×1920 and 2160×3840
-// are the same document at two scales.
+// It is, however, the SAME composition as CardFace.tsx, measured in the same
+// units: CardFace sizes everything in cqw against the card's width, and this
+// document is laid out against a fixed 1080×1920 viewBox, so 1cqw = 10.8
+// viewBox units. Any visual change to the card face has to be made in both.
+//
+// The requested pixel size is applied to the root element only, so 1080×1920
+// and 2160×3840 are the same document at two scales.
 
 export const VB_W = 1080
 export const VB_H = 1920
 
+/** 1cqw of CardFace, in viewBox units. */
+const CQW = VB_W / 100
+
 // The safe area CardFace uses (13cqw 8.5cqw), in viewBox units: TikTok and
 // Reels lay their caption and chrome over a 9:16 card's edges.
-const SAFE_X = 92
-const SAFE_Y = 140
+const SAFE_X = 8.5 * CQW // 92
+const SAFE_Y = 13 * CQW // 140
+
+// The card's own palette — CARD_GROUND / CARD_INK / CARD_FAINT in ui.tsx.
+const INK = '#f7e8f0'
+const FAINT = '#9b8090'
+/** The wordmark's "ap" is the brand pink on every card, whatever the slot. */
+const BRAND_PINK = '#e7548a'
 
 export type CardArt = {
   /** the joke itself — the line that carries the card */
@@ -32,10 +45,27 @@ export type CardArt = {
   mark: boolean
 }
 
-// Georgia and Helvetica are the fallbacks that actually exist on the machine
-// doing the rasterising — a bare "Newsreader, serif" renders as Times.
+// The family names match the @font-face rules the client embeds into this
+// document before rasterising (see embedCardFonts in jokeClient.ts). Georgia
+// and Helvetica are the fallbacks that actually exist on a machine that has
+// none of them — a bare "Newsreader, serif" renders as Times.
 const VOICE = "Newsreader, Georgia, 'Iowan Old Style', 'Times New Roman', serif"
 const DISPLAY = "Sora, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+const BODY = "Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+
+/** The accent trio are light-surface inks. On the card's ground a small
+ *  uppercase label in the raw accent misses 4.5:1 — the clapback lands at
+ *  3.2:1 — so lift it toward white before painting. The one copy of this
+ *  rule; CardFace paints its label through the same function. */
+export function lift(hex: string, amount: number): string {
+  const m = /^#([0-9a-f]{6})$/i.exec(hex.trim())
+  if (!m) return hex
+  const n = parseInt(m[1]!, 16)
+  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) =>
+    Math.round(v + (255 - v) * amount),
+  )
+  return `rgb(${ch.join(',')})`
+}
 
 function esc(s: string): string {
   return s
@@ -44,6 +74,8 @@ function esc(s: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
 }
+
+const r1 = (n: number) => Math.round(n * 10) / 10
 
 /** Greedy wrap. `perLine` is a character budget, not a measurement — the
  *  callers below derive it from the font size so long lines shrink instead
@@ -67,76 +99,110 @@ function wrap(text: string, perLine: number, maxLines: number): string[] {
   return kept
 }
 
-/** Pick the largest joke size that still fits. A one-line take sits at the
- *  top of the ladder; a three-beat, fifty-word roast walks down it until its
- *  lines fit, and only the very last rung truncates. */
+/** The joke's size, by length — CardFace's jokeSize, in viewBox units. Steps,
+ *  not a formula, so two cards of similar length read at the same size, and
+ *  so the export sits at the size the card was just read at on screen. */
+function screenJokeSize(text: string): number {
+  const n = text.length
+  const cqw = n <= 110 ? 8 : n <= 170 ? 6.8 : n <= 240 ? 5.9 : n <= 320 ? 5.2 : 4.7
+  return cqw * CQW
+}
+
+/** The character budget's width estimate for Newsreader italic, in em. */
+const EM_PER_CHAR = 0.4
+
+/** Start at the on-screen size and only step down if the lines still do not
+ *  fit — the screen wraps by measurement and this wraps by a character
+ *  budget, so a card of long words can need one more rung. Only the very last
+ *  rung truncates. */
 function fitJoke(text: string): { size: number; lines: string[] } {
-  for (const size of [96, 86, 76, 68, 60, 52, 46, 40]) {
-    // Newsreader italic runs about .46em to the character.
-    const perLine = Math.floor((VB_W - 2 * SAFE_X) / (size * 0.46))
+  const ladder = [8, 6.8, 5.9, 5.2, 4.7, 4.2, 3.7].map((c) => c * CQW)
+  const start = screenJokeSize(text)
+  for (const size of ladder.filter((s) => s <= start + 0.01)) {
+    // Newsreader italic runs .33–.39em to the character across a line of
+    // prose; .40 is the budget, so a line of wide letters still fits.
+    const perLine = Math.floor((VB_W - 2 * SAFE_X) / (size * EM_PER_CHAR))
     // The small rungs have the whole middle of the card to themselves — the
     // header and footer are pinned — so a long roast steps down and runs
     // longer instead of being cut at "…" with half the face empty.
-    const maxLines = size >= 86 ? 4 : size >= 60 ? 5 : size >= 52 ? 8 : size >= 46 ? 11 : 13
+    const maxLines = size >= 80 ? 4 : size >= 60 ? 6 : size >= 52 ? 8 : size >= 46 ? 11 : 13
     const lines = wrap(text, perLine, maxLines + 1)
     if (lines.length <= maxLines) return { size, lines }
   }
-  const size = 40
-  return { size, lines: wrap(text, Math.floor((VB_W - 2 * SAFE_X) / (size * 0.46)), 13) }
+  const size = ladder[ladder.length - 1]!
+  return { size, lines: wrap(text, Math.floor((VB_W - 2 * SAFE_X) / (size * EM_PER_CHAR)), 13) }
 }
 
-/** The eyes, drawn rather than imported — two rounded bars and two pupils. */
-function eyes(x: number, y: number, h: number, accent: string): string {
-  const w = h * 0.48
-  const gap = h * 0.12
-  const r = w / 2
-  const pupilRx = w * 0.35
-  const pupilRy = h * 0.21
-  const cy = y + h * 0.54
+/** The eyes: the canonical brand mark from components/brand/EyeMark.tsx, at
+ *  the lockup's size — pink capsules, dark pupils, the heart glints. Never a
+ *  stand-in in the slot's colour: the eyes are the same pair on every card,
+ *  as they are on screen. */
+function eyeMark(x: number, y: number, width: number): string {
+  const s = width / 140
   return (
-    `<g>` +
-    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${accent}"/>` +
-    `<rect x="${x + w + gap}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${accent}"/>` +
-    `<ellipse cx="${x + w / 2}" cy="${cy}" rx="${pupilRx}" ry="${pupilRy}" fill="#120710"/>` +
-    `<ellipse cx="${x + w + gap + w / 2}" cy="${cy}" rx="${pupilRx}" ry="${pupilRy}" fill="#120710"/>` +
+    `<g transform="translate(${r1(x)} ${r1(y)}) scale(${s.toFixed(4)})">` +
+    `<rect x="16" y="6" width="56" height="84" rx="28" fill="url(#eye)"/>` +
+    `<rect x="84" y="6" width="56" height="84" rx="28" fill="url(#eye)"/>` +
+    `<ellipse cx="44" cy="62" rx="19" ry="24" fill="url(#pupil)"/>` +
+    `<ellipse cx="112" cy="62" rx="19" ry="24" fill="url(#pupil)"/>` +
+    `<path d="M44 22 C41 18 35 18 35 24 C35 30 44 36 44 36 C44 36 53 30 53 24 C53 18 47 18 44 22Z" fill="#ffffff" opacity=".95"/>` +
+    `<path d="M112 22 C109 18 103 18 103 24 C103 30 112 36 112 36 C112 36 121 30 121 24 C121 18 115 18 112 22Z" fill="#ffffff" opacity=".95"/>` +
     `</g>`
   )
 }
 
+/** The diagonal wash a free card carries: three rows of the name at 13cqw,
+ *  9cqw apart, centred and turned 22°, at CardFace's opacity. */
 function watermark(): string {
-  const rows = [640, 990, 1340]
-  const text = 'shutap · shutap · shutap'
+  const size = 13 * CQW
+  const gap = 9 * CQW
+  const total = 3 * size + 2 * gap
+  const top = (VB_H - total) / 2
+  const text = 'shutap · shutap'
   return (
-    `<g opacity="0.07" transform="rotate(-22 540 960)">` +
-    rows
-      .map(
-        (y) =>
-          `<text x="540" y="${y}" text-anchor="middle" font-family="${DISPLAY}" font-weight="800" font-size="150" letter-spacing="-6" fill="#ffffff">${text}</text>`,
-      )
+    `<g opacity="0.085" transform="rotate(-22 ${VB_W / 2} ${VB_H / 2})">` +
+    [0, 1, 2]
+      .map((i) => {
+        const baseline = top + i * (size + gap) + size * 0.78
+        return `<text x="${VB_W / 2}" y="${r1(baseline)}" text-anchor="middle" font-family="${DISPLAY}" font-weight="800" font-size="${r1(size)}" letter-spacing="${r1(-0.04 * size)}" fill="#ffffff">${text}</text>`
+      })
       .join('') +
     `</g>`
   )
 }
 
 export function renderCardSvg(art: CardArt): string {
-  const accent = /^#[0-9a-fA-F]{3,8}$/.test(art.accent) ? art.accent : '#e7548a'
+  const accent = /^#[0-9a-fA-F]{3,8}$/.test(art.accent) ? art.accent : BRAND_PINK
   const { size, lines } = fitJoke(art.text)
   const lead = size * 1.32
 
-  // Header pinned to the top of the safe area, footer to the bottom, and the
-  // situation + joke centred as one block in what's left — as CardFace does.
-  const eyesH = 92
-  const headerBottom = SAFE_Y + eyesH
-  const footerSize = 42
-  const footerY = VB_H - SAFE_Y // baseline; the caps sit just above it
-  const zoneTop = headerBottom + 60
-  const zoneBottom = footerY - footerSize - 60
+  // ── header: the lockup on the left, the slot label on the right ──
+  // CardFace: eyes 6.4cqw wide, a 2.4cqw gap, the wordmark at 7cqw, the label
+  // at 4.2cqw with .28em tracking; the row is as tall as the wordmark and
+  // everything sits on its centre line.
+  const eyesW = 6.4 * CQW
+  const eyesH = eyesW * (96 / 140)
+  const wordSize = 7 * CQW
+  const rowH = wordSize
+  const rowMid = SAFE_Y + rowH / 2
+  const headerBottom = SAFE_Y + rowH
+  const labelSize = 4.2 * CQW
 
-  const sitLines = art.situation ? wrap(art.situation.trim(), 42, 3) : []
-  const sitSize = 47
-  const sitLead = 68
+  // ── footer: one quiet line, pinned to the bottom of the safe area ──
+  const footerSize = 3.9 * CQW
+  const footerBottom = VB_H - SAFE_Y
+  const footerBaseline = footerBottom - footerSize * 0.24
+
+  // ── the middle: situation + joke, centred as one block in what's left ──
+  const zoneTop = headerBottom
+  const zoneBottom = footerBottom - footerSize
+
+  // 4.4cqw Inter at 1.45, capped at 26ch — about 29 characters of prose.
+  const sitLines = art.situation ? wrap(art.situation.trim(), 29, 4) : []
+  const sitSize = 4.4 * CQW
+  const sitLead = sitSize * 1.45
   const sitH = sitLines.length ? (sitLines.length - 1) * sitLead + sitSize : 0
-  const sitGap = sitLines.length ? 44 : 0
+  const sitGap = sitLines.length ? 4 * CQW : 0
   const jokeH = (lines.length - 1) * lead + size
   const blockTop = zoneTop + Math.max(0, (zoneBottom - zoneTop - (sitH + sitGap + jokeH)) / 2)
 
@@ -144,7 +210,7 @@ export function renderCardSvg(art: CardArt): string {
   const situation = sitLines
     .map(
       (l, i) =>
-        `<text x="${SAFE_X}" y="${blockTop + sitSize * 0.8 + i * sitLead}" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="${sitSize}" fill="#9b8090">${esc(l)}</text>`,
+        `<text x="${SAFE_X}" y="${r1(blockTop + sitSize * 0.8 + i * sitLead)}" font-family="${BODY}" font-size="${r1(sitSize)}" fill="${FAINT}">${esc(l)}</text>`,
     )
     .join('')
 
@@ -152,36 +218,60 @@ export function renderCardSvg(art: CardArt): string {
   const joke = lines
     .map(
       (l, i) =>
-        `<text x="${SAFE_X}" y="${jokeTop + size * 0.8 + i * lead}" font-family="${VOICE}" font-style="italic" font-size="${size}" letter-spacing="-1" fill="#f7e8f0">${esc(l)}</text>`,
+        `<text x="${SAFE_X}" y="${r1(jokeTop + size * 0.8 + i * lead)}" font-family="${VOICE}" font-style="italic" font-size="${r1(size)}" letter-spacing="${r1(-0.01 * size)}" fill="${INK}">${esc(l)}</text>`,
     )
     .join('')
 
+  // ── the ground ──
+  // CardFace: radial-gradient(135% 78% at 50% 0%, …) — an ellipse 1.35 card
+  // widths by .78 card heights, centred on the top edge. SVG gradients are
+  // circles, so the circle is stretched to the ellipse.
+  const bgRx = 1.35 * VB_W
+  const bgRy = 0.78 * VB_H
+  // The slot's glow. CardFace paints a box 150% wide and 44% tall, starting
+  // 14% down, with a circle of the accent at 30% fading out toward the box's
+  // corners — the box's edges cut the circle, which reads as nothing at deck
+  // size and as a hard band at 1080. So the same centre and the same width,
+  // as an ellipse squashed to the box, fading to nothing before any edge.
+  const glowW = 1.5 * VB_W
+  const glowH = 0.44 * VB_H
+  const glowCx = VB_W / 2
+  const glowCy = 0.14 * VB_H + glowH / 2
+  const glowR = Math.hypot(glowW / 2, glowH / 2)
+  const glowSquash = 0.62
+
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${art.width}" height="${art.height}" viewBox="0 0 ${VB_W} ${VB_H}" preserveAspectRatio="xMidYMid slice">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="0%" r="110%">
+    <radialGradient id="bg" gradientUnits="userSpaceOnUse" cx="${VB_W / 2}" cy="0" r="${r1(bgRx)}" gradientTransform="scale(1 ${(bgRy / bgRx).toFixed(4)})">
       <stop offset="0" stop-color="#3a1022"/><stop offset="0.6" stop-color="#1a0a12"/><stop offset="1" stop-color="#120710"/>
     </radialGradient>
-    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+    <radialGradient id="glow" gradientUnits="userSpaceOnUse" cx="${r1(glowCx)}" cy="${r1(glowCy / glowSquash)}" r="${r1(glowR)}" gradientTransform="scale(1 ${glowSquash})">
       <stop offset="0" stop-color="${accent}" stop-opacity="0.30"/><stop offset="0.66" stop-color="${accent}" stop-opacity="0"/>
     </radialGradient>
-    <pattern id="grain" width="24" height="24" patternUnits="userSpaceOnUse">
-      <circle cx="1.5" cy="1.5" r="1.5" fill="#ffffff" fill-opacity="0.06"/>
+    <pattern id="grain" width="12" height="12" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1.5" fill="#ffffff" fill-opacity="0.9"/>
     </pattern>
+    <radialGradient id="eye" cx="38%" cy="22%" r="82%">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="0.18" stop-color="#ffd0e8"/><stop offset="0.48" stop-color="#f060a0"/><stop offset="0.78" stop-color="#c0206a"/><stop offset="1" stop-color="#880040"/>
+    </radialGradient>
+    <radialGradient id="pupil" cx="50%" cy="42%" r="72%">
+      <stop offset="0" stop-color="#2a0d18"/><stop offset="1" stop-color="#060106"/>
+    </radialGradient>
   </defs>
 
   <rect width="${VB_W}" height="${VB_H}" fill="url(#bg)"/>
-  <ellipse cx="540" cy="${VB_H * 0.32}" rx="${VB_W * 0.78}" ry="${VB_H * 0.24}" fill="url(#glow)"/>
-  <rect width="${VB_W}" height="${VB_H}" fill="url(#grain)"/>
+  <rect width="${VB_W}" height="${VB_H}" fill="url(#glow)"/>
+  <rect width="${VB_W}" height="${VB_H}" fill="url(#grain)" opacity="0.06"/>
   ${art.mark ? watermark() : ''}
 
-  ${eyes(SAFE_X, SAFE_Y, eyesH, accent)}
-  <text x="${SAFE_X + 118}" y="${SAFE_Y + 86}" font-family="${DISPLAY}" font-weight="800" font-size="76" letter-spacing="-3" fill="#f7e8f0">shut<tspan fill="${accent}">ap</tspan></text>
-  <text x="${VB_W - SAFE_X}" y="${SAFE_Y + 76}" text-anchor="end" font-family="${DISPLAY}" font-weight="800" font-size="40" letter-spacing="9" fill="${accent}">${esc(art.label.toUpperCase())}</text>
+  ${eyeMark(SAFE_X, rowMid - eyesH / 2, eyesW)}
+  <text x="${r1(SAFE_X + eyesW + 2.4 * CQW)}" y="${r1(rowMid + wordSize * 0.29)}" font-family="${DISPLAY}" font-weight="800" font-size="${r1(wordSize)}" letter-spacing="${r1(-0.04 * wordSize)}" fill="${INK}">shut<tspan fill="${BRAND_PINK}">ap</tspan></text>
+  <text x="${VB_W - SAFE_X}" y="${r1(rowMid + labelSize * 0.36)}" text-anchor="end" font-family="${DISPLAY}" font-weight="800" font-size="${r1(labelSize)}" letter-spacing="${r1(0.28 * labelSize)}" fill="${lift(accent, 0.34)}">${esc(art.label.toUpperCase())}</text>
 
   ${situation}
   ${joke}
 
-  <text x="${SAFE_X}" y="${footerY}" font-family="${DISPLAY}" font-weight="800" font-size="${footerSize}" letter-spacing="1" fill="#9b8090">SHUTAP. Joke about it.</text>
+  <text x="${SAFE_X}" y="${r1(footerBaseline)}" font-family="${DISPLAY}" font-weight="800" font-size="${r1(footerSize)}" letter-spacing="${r1(0.02 * footerSize)}" fill="${FAINT}">SHUTAP. Joke about it.</text>
 </svg>`
 }
 

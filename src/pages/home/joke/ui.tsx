@@ -46,16 +46,9 @@ export const CARD_GRAIN: CSSProperties = {
 
 /** The accent trio are light-surface inks. On the card's ground a small
  *  uppercase label in the raw accent misses 4.5:1 — the clapback lands at
- *  3.2:1 — so lift it toward white before painting. */
-export function lift(hex: string, amount: number): string {
-  const m = /^#([0-9a-f]{6})$/i.exec(hex.trim())
-  if (!m) return hex
-  const n = parseInt(m[1]!, 16)
-  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) =>
-    Math.round(v + (255 - v) * amount),
-  )
-  return `rgb(${ch.join(',')})`
-}
+ *  3.2:1 — so lift it toward white before painting. One rule for the screen
+ *  and the saved picture, so it lives with the export renderer. */
+export { lift } from '@/lib/jokes/card-art'
 
 /** Eyes + wordmark, sized off the card's width so the lockup's proportions
  *  hold at any card size — deck thumbnail, full column, or export preview. */
