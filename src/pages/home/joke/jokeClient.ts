@@ -3,6 +3,12 @@
 // happens here is only rasterising, packaging and handing the file over.
 import { phCapture } from '@/lib/posthog'
 import type { JokeTier } from '@/lib/jokes/deck'
+// The card's three faces, as files: the same woff2 the page itself loads. An
+// SVG drawn into a canvas is a closed document — it cannot reach the page's
+// fonts or fetch its own — so these are inlined into it before it is drawn.
+import soraBlackWoff2 from '@fontsource/sora/files/sora-latin-800-normal.woff2?url'
+import newsreaderItalicWoff2 from '@fontsource/newsreader/files/newsreader-latin-400-italic.woff2?url'
+import interWoff2 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url'
 
 const ANON_KEY = 'shutap_anon_id'
 
@@ -82,9 +88,68 @@ export function roomCaption(card: { text: string; angleLabel?: string }, situati
 
 // ───────────────────────── rasterising ─────────────────────────
 
+const CARD_FONTS: { family: string; weight: number; style: string; url: string }[] = [
+  { family: 'Sora', weight: 800, style: 'normal', url: soraBlackWoff2 },
+  { family: 'Newsreader', weight: 400, style: 'italic', url: newsreaderItalicWoff2 },
+  { family: 'Inter', weight: 400, style: 'normal', url: interWoff2 },
+]
+
+let cardFontCss: Promise<string> | null = null
+
+async function toDataUrl(url: string): Promise<string> {
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`font ${res.status}`)
+  const blob = await res.blob()
+  return await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result))
+    reader.onerror = () => reject(new Error('font read failed'))
+    reader.readAsDataURL(blob)
+  })
+}
+
+/** The @font-face rules for the card's faces, each font inlined as a data
+ *  URL. Fetched once per page; about 120 KB of base64 for the three. */
+export function cardFontsCss(): Promise<string> {
+  if (!cardFontCss) {
+    cardFontCss = Promise.all(
+      CARD_FONTS.map(async (f) => {
+        const data = await toDataUrl(f.url)
+        return `@font-face{font-family:'${f.family}';font-weight:${f.weight};font-style:${f.style};src:url(${data}) format('woff2')}`
+      }),
+    )
+      .then((rules) => rules.join(''))
+      .catch((e) => {
+        cardFontCss = null // try again next time rather than remembering the failure
+        throw e
+      })
+  }
+  return cardFontCss
+}
+
+/** The server's SVG with the card's fonts written into it, so the picture is
+ *  set in Sora, Newsreader and Inter like the card on screen — not in
+ *  whatever serif and sans the saving machine happens to have. If the fonts
+ *  cannot be fetched the document is returned as is: a card in the fallback
+ *  faces beats no card. */
+export async function embedCardFonts(svg: string): Promise<string> {
+  let css: string
+  try {
+    css = await cardFontsCss()
+  } catch {
+    return svg
+  }
+  const style = `<style>${css}</style>`
+  const at = svg.indexOf('<defs>')
+  return at >= 0
+    ? svg.slice(0, at + '<defs>'.length) + style + svg.slice(at + '<defs>'.length)
+    : svg.replace(/<svg\b[^>]*>/, (m) => m + style)
+}
+
 /** Draw a server-authored SVG document into a PNG blob at its own size. */
 export async function svgToPng(svg: string, width: number, height: number): Promise<Blob> {
-  const blobUrl = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }))
+  const doc = await embedCardFonts(svg)
+  const blobUrl = URL.createObjectURL(new Blob([doc], { type: 'image/svg+xml' }))
   try {
     const img = new Image()
     await new Promise<void>((resolve, reject) => {
@@ -92,6 +157,9 @@ export async function svgToPng(svg: string, width: number, height: number): Prom
       img.onerror = () => reject(new Error('decode failed'))
       img.src = blobUrl
     })
+    // Safari can fire onload before the embedded fonts are usable and then
+    // draw the fallbacks; decode() waits for the whole document.
+    try { await img.decode() } catch { /* already decoded, or not supported */ }
     const canvas = document.createElement('canvas')
     canvas.width = width
     canvas.height = height
