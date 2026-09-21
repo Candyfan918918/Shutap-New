@@ -253,20 +253,24 @@ export async function loadExamples(
   }
   if (rows.length === 0) rows = SEED_HALL_OF_FAME.filter((h) => h.slot === args.slot)
 
-  // A row without an embedding gets one now, once, and keeps it.
+  // A row without an embedding gets one now, once, and keeps it — but a
+  // card flip pays for a handful at most, in parallel. The rest catch up on
+  // later flips, so no user ever waits on the whole library.
   if (admin && args.spillEmbedding) {
     const { embedText, toVectorLiteral } = await import('@/lib/agents/embeddings.server')
-    for (const r of rows) {
-      if (r.embedding || !r.id) continue
-      const vec = await embedText(r.situation_clean)
-      if (!vec) continue
-      r.embedding = vec
-      try {
-        await admin.from('joke_hall_of_fame').update({ embedding: toVectorLiteral(vec) } as never).eq('id', r.id)
-      } catch (err) {
-        console.error('[joke-hof] could not store an embedding', { id: r.id, err })
-      }
-    }
+    const pending = rows.filter((r) => !r.embedding && r.id).slice(0, CATCHUP_EMBEDDINGS_PER_CARD)
+    await Promise.all(
+      pending.map(async (r) => {
+        const vec = await embedText(r.situation_clean)
+        if (!vec) return
+        r.embedding = vec
+        try {
+          await admin.from('joke_hall_of_fame').update({ embedding: toVectorLiteral(vec) } as never).eq('id', r.id)
+        } catch (err) {
+          console.error('[joke-hof] could not store an embedding', { id: r.id, err })
+        }
+      }),
+    )
   }
 
   const verb = args.situation ? accusationVerb(args.situation) : null
