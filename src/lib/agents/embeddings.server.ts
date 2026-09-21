@@ -8,9 +8,13 @@ const EMBEDDING_MODEL = 'openai/text-embedding-3-small'
 export async function embedText(input: string): Promise<number[] | null> {
   const key = process.env.LOVABLE_API_KEY
   if (!key || !input || !input.trim()) return null
+  // A slow gateway must never hold a card flip open: bound every call.
+  const ctl = new AbortController()
+  const timer = setTimeout(() => ctl.abort(), 8000)
   try {
     const r = await fetch('https://ai.gateway.lovable.dev/v1/embeddings', {
       method: 'POST',
+      signal: ctl.signal,
       headers: {
         'content-type': 'application/json',
         'Lovable-API-Key': key,
@@ -27,6 +31,8 @@ export async function embedText(input: string): Promise<number[] | null> {
     return Array.isArray(vec) && vec.length === 1536 ? vec : null
   } catch {
     return null
+  } finally {
+    clearTimeout(timer)
   }
 }
 
