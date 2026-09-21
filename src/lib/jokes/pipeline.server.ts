@@ -317,15 +317,37 @@ export type SpillFlags = {
   exemplars: ExemplarNorm[]
 }
 
+/** Words too common to ban on their own: banning them throws away good
+ *  lines that never touch the serious fact ("off" kills "office"). */
+const SERIOUS_TOKEN_STOPWORDS = new Set([
+  'off', 'out', 'new', 'her', 'his', 'the', 'and', 'was', 'were', 'has', 'had',
+  'been', 'from', 'with', 'that', 'this', 'they', 'them', 'their', 'very',
+  'just', 'about', 'into', 'over', 'made', 'make', 'said', 'told', 'laid',
+  'lost', 'gone', 'went', 'took', 'more', 'some', 'have', 'else', 'than',
+])
+
 /** The tokens of a serious-fact phrase Guardrail B blocks: every word of
- *  four letters or more, plus the head noun (the last word). */
+ *  four letters or more that is not an everyday word. Dynamic tokens are
+ *  matched on word boundaries, so no head-noun fragment is needed. */
 export function dynamicSeriousTokens(seriousFact: string | null | undefined): string[] {
   if (!seriousFact) return []
   const words = seriousFact.toLowerCase().replace(/[^a-z'\s-]/g, ' ').split(/\s+/).filter(Boolean)
   const out = new Set<string>()
-  for (const w of words) if (w.length >= 4) out.add(w)
-  if (words.length) out.add(words[words.length - 1]!)
+  for (const w of words) if (w.length >= 4 && !SERIOUS_TOKEN_STOPWORDS.has(w)) out.add(w)
   return Array.from(out)
+}
+
+const WORD_BOUNDARY_CACHE = new Map<string, RegExp>()
+
+/** A dynamic token only counts as a hit on a whole word: "car" must not
+ *  fire on "career" or "scared". */
+function matchesWholeWord(text: string, token: string): boolean {
+  let re = WORD_BOUNDARY_CACHE.get(token)
+  if (!re) {
+    re = new RegExp(`(?:^|[^a-z])${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:[^a-z]|$)`, 'i')
+    WORD_BOUNDARY_CACHE.set(token, re)
+  }
+  return re.test(text)
 }
 
 /** What the spill itself says about which guardrails apply. */
