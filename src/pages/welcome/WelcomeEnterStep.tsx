@@ -72,7 +72,7 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
         else window.location.replace(url)
       }
       // The joke deck they left. The note says where they were headed: the
-      // landing page for the alias gate, the paywall for "get more jokes".
+      // landing page for the alias gate, the paywall for the mirror reading.
       // The landing page restores the deck on the card they had turned over
       // and claims it to the name they just picked. Not cleared here — the
       // landing page clears it after the claim.

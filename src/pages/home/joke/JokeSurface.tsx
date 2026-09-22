@@ -1237,7 +1237,7 @@ export function JokeSurface() {
               <ol style={{ margin: 0, padding: '12px 18px', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7, background: 'rgba(127,119,221,.06)', border: '1px solid rgba(11,8,15,.07)', borderRadius: 18, fontFamily: NEWS, fontStyle: 'italic', fontSize: 14.5, lineHeight: 1.5, color: '#443c42', textAlign: 'left' }}>
                 <li><span style={{ color: '#8e1c4c' }}>i.</span> type what happened — names get scrubbed before anything saves.</li>
                 <li><span style={{ color: '#8e1c4c' }}>ii.</span> i write you a set of three, face-down: a take, a clapback, a roast. you turn over one.</li>
-                <li><span style={{ color: '#8e1c4c' }}>iii.</span> one situation a day is free. a guest flips one card; an alias flips all three and keeps them. members get three situations a day, and the mirror reading.</li>
+                <li><span style={{ color: '#8e1c4c' }}>iii.</span> five situations a day, at every tier. a guest flips one card of each; an alias flips all three and keeps them. members get every card clean — no mark — and the mirror reading.</li>
                 <li style={{ fontFamily: SORA, fontStyle: 'normal', fontSize: 12.5 }}>
                   <a href="/how-it-works" target="_blank" rel="noreferrer" style={{ color: '#8e1c4c', textDecoration: 'underline', textUnderlineOffset: 3 }}>the full explanation →</a>
                 </li>
@@ -1527,7 +1527,7 @@ export function JokeSurface() {
                 <p style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#4a3040', marginTop: 6 }}>
                   {tier === 'paying'
                     ? `cross-read, districts, depth, trend and signal mix — now with 🃏 joke in the mix, across ${list.length} ${list.length === 1 ? 'card' : 'cards'}.`
-                    : `members get three situations a day, every set kept clean, and the mirror reading your whole set list at once — which behaviour keeps showing up, and how the jokes changed as you did.`}
+                    : `members get every set kept clean — no mark — and the mirror reading your whole set list at once — which behaviour keeps showing up, and how the jokes changed as you did.`}
                 </p>
               </div>
               <Button
@@ -1633,9 +1633,10 @@ export function JokeSurface() {
           raiseGate('limit', { type: 'flip' })
         }}
         onMore={() => {
-          // Straight to the paywall — what they ran out of is jokes, and the
-          // sheet has already said what a membership buys. A guest signs in
-          // on the paywall itself, not at the alias gate.
+          // Straight to the paywall. The sheet has already said what a
+          // membership buys — the clean card and the mirror, not more jokes;
+          // the deck is the same five at every tier. Only a free alias sees
+          // this; a guest is offered the alias instead.
           setLimit((l) => ({ ...l, open: false }))
           jokeTrack('checkout_from_limit', tier)
           startCheckout()

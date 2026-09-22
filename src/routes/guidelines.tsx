@@ -56,7 +56,7 @@ function GuidelinesPage() {
             don&rsquo;t aim a card at someone who can be identified.
           </li>
           <li>
-            one situation a day is the free deal (members get three). don&rsquo;t mint sessions or
+            five situations a day is the deal at every tier. don&rsquo;t mint sessions or
             accounts to get around it — the deck is a cost, not a score.
           </li>
           <li>nothing illegal — and absolutely nothing sexual involving minors.</li>
