@@ -58,9 +58,9 @@ export function UpgradeSheet({
       >
         <div>
           <h2 style={{ margin: 0, fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(34px,7vw,52px)', lineHeight: 1.04, letterSpacing: '-.04em', color: '#f7e8f0' }}>
-            three a day.
-            <br />
             every set kept clean.
+            <br />
+            no mark on any of it.
             <br />
             <span style={{ color: '#e7548a' }}>the mirror reading.</span>
           </h2>

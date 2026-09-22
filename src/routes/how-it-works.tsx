@@ -7,7 +7,7 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 const PATH = "/how-it-works";
 const TITLE = "How Shutap works — you type it, shutap writes the set";
 const DESCRIPTION =
-  "how a set gets written: you type what happened, identifying details are stripped, and shutap writes three joke cards at the situation — never at you. one situation a day is free — one card of it as a guest, all three with an alias; members get three a day.";
+  "how a set gets written: you type what happened, identifying details are stripped, and shutap writes three joke cards at the situation — never at you. five situations a day at every tier — one card of each as a guest, all three with an alias; members get the clean card and the mirror reading.";
 const CAPSULE =
   "every comedian you like does this on purpose: take the worst thing that happened and work it into a routine. you already have the material. shutap does the writing part.";
 const SECTIONS = [
@@ -24,16 +24,16 @@ const SECTIONS = [
     body: "The take (what actually happened here), the clapback (what you wish you'd said) and the roast (the joke). They land face down, in a shuffled order, so the label is the only thing you choose by. Tap one to flip it.",
   },
   {
-    heading: "one situation a day is free \u2014 as a guest, one flip of it",
-    body: "Guests get one situation a day and flip one of its three cards \u2014 and can share or save that card, at 1080\u00d71920 with a small shutap mark in the corner. The other two stay face down, labelled, right where they are: you can see what they are, and flipping them takes an alias. The deck resets every day in your own timezone. When the day is spent, the box tells you so before it sends anything.",
+    heading: "five situations a day, at every tier \u2014 as a guest, one flip of each",
+    body: "Everyone gets five situations a day, guests included. A guest flips one of each set's three cards \u2014 and can share or save that card, at 1080\u00d71920 with a small shutap mark in the corner. The other two stay face down, labelled, right where they are: you can see what they are, and flipping them takes an alias. Nothing a guest writes is stored. The deck resets every day in your own timezone. When the day is spent, the box tells you so before it sends anything.",
   },
   {
     heading: "an alias flips all three, and keeps them",
     body: "A fake name, thirty seconds, no password: an alias flips all three cards of your situation and keeps them in your set list and the Mirror's record. It is also what lets a card be posted as a room. Sharing and saving are free either way; free saves are 1080\u00d71920 with a small shutap mark in the corner.",
   },
   {
-    heading: "members get three a day, and the mirror reading",
-    body: "A membership buys room and a clean card: three situations a day instead of one, every set kept clean \u2014 no mark; every card is the same 1080\u00d71920 phone-screen picture at every tier \u2014 and the Mirror reading the patterns across everything you keep. It never buys advice, and it never buys relief.",
+    heading: "members get the clean card, and the mirror reading",
+    body: "A membership buys a clean card and the mirror: every set kept with no mark \u2014 every card is the same 1080\u00d71920 phone-screen picture at every tier, the paid difference is the absent mark \u2014 and the Mirror reading the patterns across everything you keep. It does not buy more situations; five a day is the deal for everyone. It never buys advice, and it never buys relief.",
   },
   {
     heading: "the joke goes at the situation",

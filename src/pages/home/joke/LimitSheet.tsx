@@ -2,15 +2,12 @@
  *
  * Goes up the moment someone presses enter on a spent day — before the spill
  * is sent anywhere, so no scrubber, classifier or writer runs for a set the
- * deal would only refuse. It says what the limit is, when it resets, and what
- * the next step buys: a guest is pointed at an alias (all three cards flipped
- * and kept), and everyone under paying at "get more jokes" — the members'
- * offer stated as what it is, three situations a day with the mirror reading
- * across them — which goes straight to checkout. What they ran out of is
- * jokes, so the pill says jokes; there is no upgrade screen between this
- * sheet and paying. A paying member is at the top of that ladder, so their
- * copy is a reset time and nothing else. */
-import { ALIAS_OFFER, LIMIT_OFFER, MEMBER_OFFER, type JokeTier, type JokeUsage, type LimitReason } from '@/lib/jokes/deck'
+ * deal would only refuse. It says what the limit is and when it resets. The
+ * deck is the same five situations at every tier, so nothing on this sheet
+ * sells more jokes: a guest is pointed at an alias (all three cards of each
+ * set flipped and kept), a free alias is offered the mirror as a quiet
+ * secondary, and a paying member gets a reset time and nothing else. */
+import { ALIAS_OFFER, DAILY_SETS, MEMBER_OFFER, type JokeTier, type JokeUsage, type LimitReason } from '@/lib/jokes/deck'
 import { Button, CompanionLine, Sheet, SORA, NEWS, INK, MUTED, FAINT, ACCENT } from './ui'
 
 export type LimitSheetReason = LimitReason | 'rate_limited'
@@ -35,18 +32,18 @@ function copy(tier: JokeTier, reason: LimitSheetReason, usage: JokeUsage | null)
       body: `not you, the network. give it a little while and the deck is back. the cards you already have stay right here.`,
     }
   }
-  const cap = usage?.sets_cap ?? (tier === 'paying' ? 3 : 1)
+  const cap = usage?.sets_cap ?? DAILY_SETS[tier]
   const sets = `${word(cap)} ${cap === 1 ? 'situation' : 'situations'}`
   if (tier === 'guest') {
     return {
       lead: `that's the deck for today — ${sets}.`,
-      body: `it resets ${reset}. ${ALIAS_OFFER.line} a fake name, thirty seconds. members get ${MEMBER_OFFER.line}`,
+      body: `it resets ${reset}. the cards you turned over stay right here. ${ALIAS_OFFER.line} a fake name, thirty seconds.`,
     }
   }
   if (tier === 'free') {
     return {
       lead: `that's the deck for today — ${sets}.`,
-      body: `it resets ${reset}. members get ${MEMBER_OFFER.line}`,
+      body: `it resets ${reset}, and your set list is right here in the meantime. members get ${MEMBER_OFFER.line}`,
     }
   }
   return {
@@ -71,8 +68,8 @@ export function LimitSheet({
   onClose: () => void
   /** guest → the alias gate; the other two of today's set unlock behind it */
   onAlias: () => void
-  /** "get more jokes" → checkout, directly. A guest is asked for an alias on
-   *  the way, and lands on checkout after it. */
+  /** free alias → checkout, directly. Membership buys the clean card and the
+   *  mirror, never more jokes, so this is a quiet secondary, not the pill. */
   onMore: () => void
 }) {
   const { lead, body } = copy(tier, reason, usage)
@@ -107,16 +104,13 @@ export function LimitSheet({
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {!throttled && tier === 'guest' ? (
-          <>
-            <Button onClick={onAlias} full>{ALIAS_OFFER.cta}</Button>
-            <Button variant="secondary" onClick={onMore} full>{LIMIT_OFFER.cta}</Button>
-          </>
+          <Button onClick={onAlias} full>{ALIAS_OFFER.cta}</Button>
         ) : null}
         {!throttled && tier === 'free' ? (
-          <Button onClick={onMore} full>{LIMIT_OFFER.cta}</Button>
+          <Button variant="secondary" onClick={onMore} full>{MEMBER_OFFER.cta}</Button>
         ) : null}
         <Button variant="ghost" size="sm" onClick={onClose} full>
-          {throttled ? 'okay' : tier === 'paying' ? 'okay — back tomorrow' : 'not now — keep reading'}
+          {throttled ? 'okay' : tier === 'paying' ? 'okay — back tomorrow' : 'okay — back tomorrow, keep reading'}
         </Button>
       </div>
 

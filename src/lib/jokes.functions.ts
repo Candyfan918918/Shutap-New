@@ -8,9 +8,10 @@
 //     behind the alias. SHARING AND SAVING ARE FREE AT EVERY TIER, guests
 //     included — a guest export renders at the free spec (1080×1920, marked)
 //     from the card their browser holds, since guest cards are never stored.
-//   · money buys the clean card and room: no mark, three situations a day,
-//     the mirror's patterns. Every export is the same phone-screen picture,
-//     1080×1920, at every tier. It never buys relief.
+//   · every tier gets the same five situations a day. Money buys the clean
+//     card and the mirror's patterns: no mark, nothing more. Every export is
+//     the same phone-screen picture, 1080×1920, at every tier. It never buys
+//     relief, and it never buys more jokes.
 //   · crisis overrides all of it — no cards, no gate, no paywall.
 //
 // Every rule that matters is enforced here, never in the browser:
@@ -67,10 +68,10 @@ type FlipRow = {
 }
 
 /* ── the daily generation budget ──
-   Situations a day, and the three cards each one costs. A guest and a free
-   alias get one a day; a guest turns over one of its cards, an alias all
-   three (see flipsAllowed). Members get three a day. The members' cap is
-   tunable with JOKE_DAILY_SETS / JOKE_DAILY_CARDS. */
+   Situations a day, and the three cards each one costs. Every tier — guest,
+   free alias, member — gets the same five a day; a guest turns over one of
+   each set's cards, anyone signed in all three (see flipsAllowed). The cap is
+   tunable for every tier with JOKE_DAILY_SETS / JOKE_DAILY_CARDS. */
 type Budget = { cards: number; sets: number }
 
 const DAILY: Record<JokeTier, Budget> = {
@@ -83,7 +84,6 @@ function budget(tier: JokeTier): Budget {
   const cards = Number(process.env['JOKE_DAILY_CARDS'] ?? '')
   const sets = Number(process.env['JOKE_DAILY_SETS'] ?? '')
   const base = DAILY[tier]
-  if (tier !== 'paying') return base
   return {
     cards: Number.isFinite(cards) && cards > 0 ? Math.floor(cards) : base.cards,
     sets: Number.isFinite(sets) && sets > 0 ? Math.floor(sets) : base.sets,

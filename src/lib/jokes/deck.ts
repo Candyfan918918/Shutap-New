@@ -151,8 +151,9 @@ export type JokeTier = 'guest' | 'free' | 'paying'
    enforces them (jokes.functions.ts reads DAILY_SETS; useDeck reads
    FLIPS_PER_SET); the copy below only describes them. */
 
-/** situations a day */
-export const DAILY_SETS: Record<JokeTier, number> = { guest: 1, free: 1, paying: 3 }
+/** situations a day — the same five at every tier. Money buys the clean
+ *  card and the mirror, never more jokes. */
+export const DAILY_SETS: Record<JokeTier, number> = { guest: 5, free: 5, paying: 5 }
 /** cards turned over per situation (of three). A guest turns over one; the
  *  other two stay face-down behind the alias — that is the sign-up wall, and
  *  it is a strong one because they can see the two labelled backs they
@@ -161,9 +162,7 @@ export const FLIPS_PER_SET: Record<JokeTier, number> = { guest: 1, free: 3, payi
 
 /** What a membership buys, stated as behaviour. */
 export const MEMBER_BENEFITS: { line: string; detail: string }[] = [
-  { line: 'three situations a day, not one', detail: 'the deck resets every day in your own timezone.' },
-  { line: 'exports with no shutap mark', detail: 'free cards carry a small mark in the corner; yours are clean.' },
-  
+  { line: 'every card with no shutap mark', detail: 'guest and free cards carry the mark; yours are clean, on screen and in every export.' },
   { line: 'the mirror reading — what your situations keep saying', detail: 'everything you keep goes into a private record it reads patterns back from.' },
 ]
 
@@ -171,7 +170,7 @@ export const MEMBER_BENEFITS: { line: string; detail: string }[] = [
 /** What never costs anything, at any tier. */
 export const ALWAYS_FREE = [
   'typing what happened, with identifying details scrubbed first',
-  'one situation a day — flip one card as a guest, all three with an alias',
+  'five situations a day, at every tier — flip one card as a guest, all three with an alias',
   'reading the cards you flipped, for as long as you like',
   'sharing or saving the card you flipped, with the shutap mark',
 ]
@@ -192,15 +191,7 @@ export const ALIAS_OFFER = {
 export const MEMBER_OFFER = {
   cta: 'open the mirror reading',
   /** what a membership buys, in one breath — cards first, then the mirror */
-  line: 'three situations a day, every set kept clean — no mark — and the mirror reading the patterns across all of it.',
-}
-
-/** The one place the member ask is worded differently: the day's deck is
- *  spent, so what they are reaching for is more jokes, not the mirror. Same
- *  offer line underneath; the pill names the thing they just ran out of, and
- *  it goes straight to checkout — no upgrade screen in between. */
-export const LIMIT_OFFER = {
-  cta: 'get more jokes',
+  line: 'every set kept clean — no mark — and the mirror reading the patterns across all of it.',
 }
 
 /* ─────────────────────── the daily budget, as the client sees it ───────────────────────
