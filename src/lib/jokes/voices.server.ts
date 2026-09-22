@@ -5,7 +5,7 @@
 // so the sets can be tuned without a deploy; the constants below are the
 // floor. Never block on an empty table: a flip proceeds with these rather
 // than failing.
-import type { SlotKey } from './deck'
+import { shuffleSlots, type SlotKey } from './deck'
 
 export type JokeVoice = {
   key: string
@@ -119,6 +119,83 @@ export const SEED_HALL_OF_FAME: HallOfFameEntry[] = [
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: S.nights, joke_text: "eleven nights isn't between places. that's a tenancy with a nicer name." },
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: S.chores, joke_text: 'he does half the chores the way a foreman does half the building.' },
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: S.fridge, joke_text: "she labelled her food so she'd know which half of the fridge was the buffet." },
+
+  // The founder's approved product-mode rows from the joke ledger
+  // (src/lib/jokes/jokenet.json), admitted by scripts/jokenet-sync.ts —
+  // the hard rules and guardrails A–E against each row's own situation.
+  // Regenerate with `bun run scripts/jokenet-sync.ts --ts`; the same rows
+  // are the hall-of-fame migration of 2026-09-22.
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "Opened a spreadsheet called 'Household Budget' and it's a log of everything I do that annoys my husband, with a severity scale. He made me coffee this morning like nothing.", joke_text: "The scale needed a 1 before it could give you a 4. He sat down and decided what a 1 was. Then he made the coffee." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "Opened a spreadsheet called 'Household Budget' and it's a log of everything I do that annoys my husband, with a severity scale. He made me coffee this morning like nothing.", joke_text: "\"Add a row for this morning. 'Made coffee, said nothing.' Severity — you tell me. You built the scale.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "Opened a spreadsheet called 'Household Budget' and it's a log of everything I do that annoys my husband, with a severity scale. He made me coffee this morning like nothing.", joke_text: "He didn't make you coffee. Compliance did. Every time he went quiet and went upstairs, that was a row — column D, severity 3, 9:42 p.m. The coffee is the opening entry on a new tab. He's watching how you take it. He needs a 5." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "Found out from an Instagram tag that my husband's been a sperm donor for a couple at his gym for 8 months. He asked if we could 'table it' till after his work trip.", joke_text: "\"Tabled. What's on the agenda after the trip — the eight months, or the ninth?\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "Found out from an Instagram tag that my husband's been a sperm donor for a couple at his gym for 8 months. He asked if we could 'table it' till after his work trip.", joke_text: "He didn't have a gym membership. He had a program. Eight months, one couple, a progress photo somebody else posted. Sure, table it. That item comes back on its own — around month nine, seven pounds, and it has his jaw." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I feel useless that I'm in my 30s and still need my parents' financial support.", joke_text: "Nothing changed at thirty except the number. The economy's the one still living at home." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "I feel useless that I'm in my 30s and still need my parents' financial support.", joke_text: "\"Call it a loan and I'll call you Sunday. That's the interest.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "I feel useless that I'm in my 30s and still need my parents' financial support.", joke_text: "Your parents aren't helping. They're investors. Fifteen years in, no exit, updates at Sunday dinner. Series A was college. Series B landed this morning. Memo: \"groceries.\"" },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My mother-in-law said I gave her cancer.", joke_text: "The diagnosis came from a doctor. She's been running a second opinion on you since the wedding." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "My mother-in-law said I gave her cancer.", joke_text: "\"I wish I had that power.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "My mother-in-law said I gave her cancer.", joke_text: "She said gave. Like a gift." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My mother-in-law said I gave her an autoimmune disease.", joke_text: "Her body turned on her. She turned on you. Nobody in that house takes the blame, not even the cells." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "My mother-in-law said I gave her an autoimmune disease.", joke_text: "\"You must be feeling better now cuz you ain't got nothing healthy in you to attack.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "My mother-in-law said I gave her an autoimmune disease.", joke_text: "Her own body filed a complaint against her. She forwarded it to you." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My mother-in-law told me I stole her son from her.", joke_text: "She married a man out of his mother's house and calls it a wedding. You did the same thing and it's a felony." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "My mother-in-law told me I stole her son from her.", joke_text: "\"Stole? That's how you got father-in-law?\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "My mother-in-law told me I stole her son from her.", joke_text: "She reported him stolen. Last seen leaving the basement, carrying his own laundry, voluntarily. The police have a form for that. It's a change of address." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My mother-in-law told me I stole her son from her.", joke_text: "She held him for thirty years and calls the first person who opened the door a thief." },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "My mother-in-law told me I stole her son from her.", joke_text: "She said stole. He wasn't in a vault. He was in her basement with a mini fridge and his laundry done. Nobody stole him. Somebody finally rang the bell." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My mother-in-law told me we could pay her for day care for our baby.", joke_text: "Other grandmothers ask to hold the baby. She asked for a rate." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "My mother-in-law told me we could pay her for day care for our baby.", joke_text: "\"No. I don't pay for incompetence.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "My mother-in-law told me we could pay her for day care for our baby.", joke_text: "She's a business now. The staff is her, the client is her son, the product is her grandchild. She'll hold the baby for free, in photos." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My MIL said she was gonna file for custody of our daughter because we wouldn't let her see her.", joke_text: "She thinks a court can make us let her in. It can. Once. With a bailiff." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "My MIL said she was gonna file for custody of our daughter because we wouldn't let her see her.", joke_text: "\"File it. Also a restraining order on us all, so we never get close to you.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "My MIL said she was gonna file for custody of our daughter because we wouldn't let her see her.", joke_text: "She's going to court to get closer to the baby. Court is where we get the number for how far away she stays. Fifty feet is standard. We're asking for a hundred." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My MIL said she was gonna file for custody of our daughter because we wouldn't let her see her.", joke_text: "Grandmothers who don't get enough visits bring cookies. She brought a lawyer." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "Me leaving my house at 8:30am hoping I make it to work by 8:00am.", joke_text: "You left at 8:00 in spirit and 8:30 in Honda." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "Me leaving my house at 8:30am hoping I make it to work by 8:00am.", joke_text: "\"I'm not late. Everyone else is early.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "Me leaving my house at 8:30am hoping I make it to work by 8:00am.", joke_text: "Walk in at 8:50 like you're coming from a funeral. You are. 8:00 is dead." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My mother-in-law calling my baby 'her baby'.", joke_text: "She says \"her baby\" the way she says \"her kitchen\" at your house." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "My mother-in-law calling my baby 'her baby'.", joke_text: "\"Your baby? Then the 3 a.m. feed is yours. Every night.\"" },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "My mother-in-law calling my baby 'her baby'.", joke_text: "\"You have a baby. I married him.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "My mother-in-law calling my baby 'her baby'.", joke_text: "Her baby? Walgreens sells a DNA test for that. $99, results in five days." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My ex-MIL said 'shit or get off the pot' when I told her I was depressed.", joke_text: "You said \"depressed.\" She heard \"toilet.\"" },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "My ex-MIL said 'shit or get off the pot' when I told her I was depressed.", joke_text: "\"I will. Shit on you. Get off you.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "My ex-MIL said 'shit or get off the pot' when I told her I was depressed.", joke_text: "Her advice is plumbing. Look what came out of her." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My MIL told me she has to get used to the fact that her son is going to be some other woman's husband.", joke_text: "That's not a mother talking. That's the first wife." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "My MIL told me she has to get used to the fact that her son is going to be some other woman's husband.", joke_text: "\"You will. Your mother-in-law did.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "My MIL told me she has to get used to the fact that her son is going to be some other woman's husband.", joke_text: "Everyone else came to the wedding with a gift. She came as the widow." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I get mad at everyone around me and can't explain why to myself or them.", joke_text: "The anger clocked in. The reason is in traffic." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "I get mad at everyone around me and can't explain why to myself or them.", joke_text: "\"If I knew why, I'd have picked someone who deserved it.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "I get mad at everyone around me and can't explain why to myself or them.", joke_text: "The reason's like keys. It's in the coat from March. You'll find it looking for something else." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "Why am I lactose intolerant?", joke_text: "You're not lactose intolerant. You're factory settings. The people who can drink milk are the mutants." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "Why am I lactose intolerant?", joke_text: "\"It's not you. It's lactose. Milk is made for a calf.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "Why am I lactose intolerant?", joke_text: "Eight thousand years ago some farmers took a dare and never stopped. You're descended from the people who said no." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "Why am I sad?", joke_text: "You can't afford syrup in your coffee." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "Why am I sad?", joke_text: "\"Rent.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "Why am I sad?", joke_text: "$2,400 a month for a view of a wall." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I sent a screenshot of my boss to my boss.", joke_text: "You didn't send the wrong screenshot. You sent the evidence to the violator." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "I sent a screenshot of my boss to my boss.", joke_text: "\"Now we've both seen it.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "I sent a screenshot of my boss to my boss.", joke_text: "Time to update your LinkedIn status to: open for job." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I sent a screenshot of my boss to my boss.", joke_text: "That's not a mistake. That's two weeks' notice as a JPEG." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "I sent a screenshot of my boss to my boss.", joke_text: "\"That was for your boss.\"" },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I paid for my boob job with my corporate business card (by accident).", joke_text: "Finance has a category for that. It's called \"Team Building.\"" },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "I paid for my boob job with my corporate business card (by accident).", joke_text: "\"Client-facing.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "I paid for my boob job with my corporate business card (by accident).", joke_text: "Every time you present now, the whole conference room stares at the ceiling." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I paid for my boob job with my corporate business card (by accident).", joke_text: "\"By accident\" is a word for coffee. This had a consult." },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "I paid for my boob job with my corporate business card (by accident).", joke_text: "Accidents don't come with a deposit, a consultation, and a follow-up appointment. That's not an accident. That's a project plan on the wrong card." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I accidentally revealed the baby's gender to the mom by rereading the cake order out loud.", joke_text: "Nine months of waiting, undone by a girl checking the order." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "I accidentally revealed the baby's gender to the mom by rereading the cake order out loud.", joke_text: "\"I say 'boy' to everyone.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "I accidentally revealed the baby's gender to the mom by rereading the cake order out loud.", joke_text: "Forty people are coming to find out what she found out at the bakery cashier." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I accidentally revealed the baby's gender to the mom by rereading the cake order out loud.", joke_text: "The reveal already happened. The party's just cake now." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I sent a 'you're hired, welcome to the team' email to all 12 people who interviewed for the one position.", joke_text: "You didn't fill a position. You founded a department." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "I sent a 'you're hired, welcome to the team' email to all 12 people who interviewed for the one position.", joke_text: "\"We're scaling.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "I sent a 'you're hired, welcome to the team' email to all 12 people who interviewed for the one position.", joke_text: "Quit tonight. Move states. Let the twelve sort out the desk." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I work in HR, accidentally terminated myself in the system.", joke_text: "You're the first person HR ever fired who deserved it." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "I work in HR, accidentally terminated myself in the system.", joke_text: "\"Testing the workflow.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "I work in HR, accidentally terminated myself in the system.", joke_text: "Your exit interview is with you, and you're not returning your own calls." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "Being a mom I feel overstimulated. Hamster wheel going and going.", joke_text: "You're a hamster with a mortgage." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "Being a mom I feel overstimulated. Hamster wheel going and going.", joke_text: "\"Someone stop the hamster spinning wheel.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "Being a mom I feel overstimulated. Hamster wheel going and going.", joke_text: "God closed the oven door, and opened the washer door." },
 ]
 
 /* ───────────────────────────── lookups ───────────────────────────── */
@@ -292,7 +369,7 @@ export async function loadExamples(
     }
     return true
   })
-  let examples = selectExamples(kept, args.voiceKey, args.archetype, limit)
+  let examples = selectExamples(kept, args.voiceKey, args.archetype, limit, args.trace?.set_id ?? args.situation ?? '')
   if (examples.length < 2) {
     if (examples.length) reasons.push('fewer than two survive; proceeding with none')
     examples = []
@@ -327,12 +404,16 @@ export function selectExamples(
   voiceKey: string,
   archetype: string,
   limit: number,
+  /** stable per set: the same spill sees the same five, a different spill a
+   *  different five, so a library of eighty is not always its first five */
+  seed = '',
 ): { situation: string; line: string }[] {
   const voiceMatches = (h: HallOfFameEntry) => h.voice_key === voiceKey || h.voice_key === null
+  const order = (xs: HallOfFameEntry[]) => (seed ? shuffleSlots(xs, seed) : xs)
   const tiers = [
-    rows.filter((h) => voiceMatches(h) && h.archetype === archetype),
-    rows.filter((h) => voiceMatches(h)),
-    rows,
+    order(rows.filter((h) => voiceMatches(h) && h.archetype === archetype)),
+    order(rows.filter((h) => voiceMatches(h))),
+    order(rows),
   ]
   const out: { situation: string; line: string }[] = []
   const seen = new Set<string>()

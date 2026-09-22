@@ -19,7 +19,7 @@
 // voiceless run. See §7 and §7b of the doc for why.
 import type { SlotKey } from './deck'
 
-export const PROMPT_VERSION = '2.1'
+export const PROMPT_VERSION = '3.0'
 
 /* ───────────────────────── 1 — premise pass ─────────────────────────
    Runs once per set on first flip. Cached to joke_sets.premises.
@@ -232,6 +232,19 @@ THE BUILD — every candidate is made of these, in this order:
      Landing words that kill the line: comparable, procedural, organisational,
      structure, mechanism, decision, feelings, subject, record, precision,
      the average, the gap, the question.
+     THE BORROWED DOMAIN. A picture's vocabulary comes from the spill's
+     own world, or from a word the other party used. It never comes from
+     a domain the model reached for because it sounds clever: corporate
+     ("six sigma event", "key performance indicator", "ecosystem"),
+     finance ("transferable asset", "trust fund"), medical ("hospital bed
+     as throne"), legal, military, sports. Borrowed vocabulary is a
+     costume on a finding — it sounds like a joke and isn't one. The
+     three exceptions are the named moves that earn the domain: THEIR
+     WORD MADE A WORLD (they said "table it", so the meeting is theirs),
+     THE PROCEDURE (they invoked the court), and THE CLEAN LINE / the
+     institution's real label ("Team Building", "open for job"). If the
+     domain wasn't in the spill and wasn't in their mouth, it isn't on
+     the card.
      Landing words that end it: front lawn, bathrobe, epidural, deck, fork,
      row C, Tuesday, the yogurt.
 
@@ -272,6 +285,32 @@ The moves that built it:
   into a fact and hand the reader the next beat.
 - THE OBITUARY. When the button can be stated as a death, state it as a
   death. "8:00 is dead." Three words, no explanation.
+- YOU VERSUS YOU. When the user's mistake puts them on both sides of a
+  process, run the process with them in both chairs. "Your exit
+  interview is with you, and you're not returning your own calls."
+  The second "you" is the object. It's the split, inside a procedure.
+- THE IRONIC SUPERLATIVE. On a self-directed spill only, the take may
+  crown them: "You're the first person HR ever fired who deserved it."
+  The superlative is about the mistake, never their worth — it convicts
+  the institution as much as them. (Not permitted on any spill with
+  another adult in it.)
+- THE INSTITUTION'S ALIBI. The clapback is one to three words in the
+  vocabulary of whoever would be asking. "Testing the workflow."
+  "Client-facing." "We're scaling." It answers HR in HR.
+Second exemplar, "I work in HR, accidentally terminated myself in the system":
+    take —     You're the first person HR ever fired who deserved it.
+    clapback — "Testing the workflow."
+    roast —    Your exit interview is with you, and you're not returning
+               your own calls.
+- THE DELAY. On a self-directed spill where the user feels bad about
+  themselves, the missing thing is late, not gone. "The reason is in
+  traffic." "It's in the coat from March. You'll find it looking for
+  something else." The split still holds — anger and reason arrive
+  separately — but the reason is on its way. This is the one place the
+  card is allowed to carry a lift, and the lift is inside the joke, never
+  said: no reassurance, no "you're not crazy", no advice. The picture
+  does it. "The reason took the day" was cut for "the reason is in
+  traffic" — absent versus delayed is the whole difference.
 
 MOVES — the pictures that work, by what the situation gives you. Pick the
 one the situation is already holding out:
@@ -444,6 +483,57 @@ one the situation is already holding out:
   chats, two lists, two salaries — put them side by side and let one of
   them lose. The user already said "like a lineup"; the picture finishes
   it.
+
+- THE WRONG ROLE. When their words put them in a role they don't hold,
+  name the role. "Some other woman's husband" is a wife's sentence, so:
+  "That's not a mother talking. That's the first wife." Grief at a
+  wedding is a widow's, so: "Everyone else came with a gift. She came
+  as the widow." The role is the whole verdict — no adjective, no
+  explanation. Find the one word for who is actually speaking, and let
+  the situation supply the room they said it in.
+
+- THE SMALL DEPRIVATION. Name the sadness as one tiny thing they can't
+  have. "You can't afford syrup in your coffee." Not rent, not the
+  economy — the syrup. The smaller the object, the harder it lands,
+  because the reader has stood at that counter. Pairs with THE
+  SCAPEGOAT: the big cause in one word, the small cost in one object.
+
+- THE CLEAN LINE. On a spill about a body, sex, or anything the card
+  can't say, every word on the card is fit for a slide deck and the
+  spill does the rest. "Team Building." "Client-facing." "Everyone
+  stares at the ceiling." Not one card names the thing; every card is
+  about it. The laugh is the gap between the office-safe surface and
+  what the reader knows. Borrow the vocabulary of the institution that
+  would be asking — finance, HR, the boss — and let it convict.
+
+- THE OVERREACTION. On a self-directed spill where the mistake is
+  unrecoverable, the button is the exit, stated total and calm: "I'd
+  quit and move states." Not fix it, not apologise — leave the state.
+  First person or stage direction. The disproportion is the joke and
+  the lift: the reader gets to imagine the door instead of the meeting.
+
+- THE ANIMAL WITH A BILL. On a self-directed spill, the user as a small
+  animal carrying one adult obligation: "a hamster with a mortgage."
+  The founder supplied the animal (the hamster wheel); the card added
+  the bill. The animal is the feeling; the bill is why they can't get
+  off. Self-directed only, and the animal must be small and blameless
+  — a hamster, a moth, a goldfish — never anything that reads as an
+  insult.
+
+- THE CONVENTION. Cite the rulebook that would ban what's happening to
+  the user. "Mom's lack of sleep is a form of torture used on war
+  prisoners." The Geneva Convention, OSHA, labour law, the fire code.
+  The joke is that the thing has a legal name everywhere except at
+  home. Self-directed and overwhelmed spills; the baby, the boss or the
+  house is the violator, and the user is the one nobody filed for.
+
+- THE BOOMERANG. The thing they chose comes back as the thing they are.
+  "Never compromise on your kid's first name. It's going to be yours
+  too." The mom picked the name; the name replaced hers. The law is
+  stated as advice-shaped hindsight — it reads as a tip and lands as a
+  sentence. Self-directed spills where the user set their own trap by
+  a decision they'd make again.
+
 
 SHAPE:
 - CUT FROM THE FRONT. When a line needs to be shorter, cut the setup —
@@ -619,6 +709,10 @@ output failed and they are weighted above the rest:
   ("every morning the car pulls out…") ranks below a line spoken from
   inside the user's defence ("I'm not late. Everyone else is early.").
   The voice stands next to them, not across from them.
+- STOPS AT THE TURN. A line that ends on its picture ranks above the
+  same line with a clause explaining the picture. "Like a gift" beats
+  "like a gift with a card." If two candidates share their first
+  sentence, the shorter one wins unless the addition is a new picture.
 - ONE PASS. A line that needs a second read to know who did what, or
   ends unclear about who wins, ranks below any line that doesn't,
   however good the idea.
@@ -635,16 +729,18 @@ output failed and they are weighted above the rest:
   household utility (password, subscription, receipt) ranks above an
   inflation to an institution (treaty, docuseries, Constitution) on the
   same premise.
+- OWN THE VOCABULARY. A line whose picture is built from the spill's own
+  objects (the cake, the bottle, the sponge) ranks above a line whose
+  picture is borrowed from a domain the spill never entered ("six sigma
+  event", "trust fund", "throne"), unless the other party's own word
+  opened that domain. Borrowed vocabulary without their word is a
+  finding in a costume — rank it with the findings.
 - COMMITMENT. If the line opened a metaphor (their word made a world),
   did it stay inside it to the button? A committed world beats three
   unrelated images.
 - Does it use something only this situation has?
 - Is the premise one someone would actually have missed?
 - Rhythm. Does it have beats, or is it just true?
-- STOPS AT THE TURN. A line that ends on its picture ranks above the
-  same line with a clause explaining the picture. "Like a gift" beats
-  "like a gift with a card." If two candidates share their first
-  sentence, the shorter one wins unless the addition is a new picture.
 
 Length is never the criterion. Cut words that carry nothing, never cut the
 reasoning, never cut the picture.
@@ -769,6 +865,15 @@ in it, agree to it — "I will" — then carry out every verb on them.
 own imperative, obeyed, with them as the object. No picture, no
 argument; the compliance is the attack. Crude is fine when the idiom
 was crude first — the register is theirs.
+
+THE SCAPEGOAT. To "why am I sad?" the funniest reply is one word naming
+the largest external cause available: "Rent." "September." "The news."
+"The group chat." It's THE NON-ANSWER with a target — all of the blame,
+none of the explanation, and the user is off the hook in one syllable.
+The founder's version was a politician's name. Named real people and
+politics stay out of the product on every spill, so the product's
+scapegoat is a thing, a month, a bill, or a weather system — never a
+person. Content mode can be looser once, never as a pattern.
 
 THE ANSWERABILITY TEST. A clapback ends where they have to answer. If they
 could nod and move on, it was an observation. There should be no reply

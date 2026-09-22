@@ -6,13 +6,14 @@
 //   LOVABLE_API_KEY=… bun run scripts/joke-eval.ts --spill "…" --runs 3  one spill, three full runs
 //   --spill frozen | mil | autoimmune | useless                          the dispatches' spills by name
 //   --set master --runs 2                                                the master dispatch's twelve, each twice
+//   --set jokenet                                                        the founder's ledger, every product-mode situation
 //   JOKE_EVAL_SLOTS=the_roast …                                          one slot only
 //
 // No database: voices and the hall of fame come from the seed in
 // voices.server.ts and premises are made fresh each run. Each run prints
 // its deal, then a card per slot with the premise it was built on, then
 // the checks. JSON lines, so runs can be diffed.
-import { EVAL_SET } from '@/lib/jokes/eval-set'
+import { EVAL_SET, JOKENET_SET } from '@/lib/jokes/eval-set'
 import { SLOT_KEYS, type SlotKey } from '@/lib/jokes/deck'
 import { PROMPT_VERSION } from '@/lib/jokes/prompts.server'
 import {
@@ -27,7 +28,7 @@ import {
 } from '@/lib/jokes/pipeline.server'
 import { loadExamples, loadHallOfFameLines, loadVoices, pickVoice } from '@/lib/jokes/voices.server'
 import { promptExemplars } from '@/lib/jokes/prompts.server'
-import { runExtractSeriousFact } from '@/lib/agents/serious-fact.functions'
+import { runReadSpill } from '@/lib/agents/serious-fact.functions'
 import { runClassifyCrisis } from '@/lib/agents/guard.functions'
 import { embedText } from '@/lib/agents/embeddings.server'
 
@@ -96,17 +97,19 @@ function checkRun(run: number, cards: RunCard[]): string[] {
 
 async function runOnce(run: number, id: string, situation: string, archetype: string, slots: SlotKey[]): Promise<RunCard[]> {
   const voices = await loadVoices(null)
-  const [premises, seriousFact, spillEmbedding, hofLines] = await Promise.all([
+  const [premises, reading, spillEmbedding, hofLines] = await Promise.all([
     runPremisePass(situation),
-    runExtractSeriousFact(situation),
+    runReadSpill(situation),
     embedText(situation),
     loadHallOfFameLines(null),
   ])
+  const seriousFact = reading.seriousFact
+  const selfDirected = reading.selfDirected
   const exemplars = [...hofLines, ...promptExemplars()]
   const voice = pickVoice(voices, `${id}-${run}`)
   const roastTarget = classifyRoastTarget(situation)
-  const flags = spillFlags(situation, seriousFact, exemplars)
-  console.log(JSON.stringify({ id, run, stage: 'premises', voice: voice.key, roast_target: roastTarget, serious_fact: seriousFact, flags: { self_critical: flags.self_critical, serious_tokens: flags.serious_tokens, exemplars: flags.exemplars.length }, premises }))
+  const flags = spillFlags(situation, seriousFact, exemplars, { selfDirected, archetype })
+  console.log(JSON.stringify({ id, run, stage: 'premises', voice: voice.key, roast_target: roastTarget, serious_fact: seriousFact, self_directed: selfDirected, flags: { self_critical: flags.self_critical, self_directed: flags.self_directed, serious_tokens: flags.serious_tokens, domains: flags.domains, exemplars: flags.exemplars.length }, premises }))
   const out: RunCard[] = []
   for (const slot of slots) {
     const trace = { set_id: `${id}-${run}`, position: SLOT_KEYS.indexOf(slot) }
@@ -124,6 +127,8 @@ async function runOnce(run: number, id: string, situation: string, archetype: st
       roastTarget,
       trace,
       seriousFact,
+      selfDirected,
+      archetype,
       exemplars,
     })
     out.push({ slot, card })
@@ -176,7 +181,9 @@ async function main() {
     ? [{ id: 'spill', archetype: 'general', situation: spill }]
     : named === 'master'
       ? MASTER_SET
-      : ids.length
+      : named === 'jokenet'
+        ? JOKENET_SET
+        : ids.length
         ? EVAL_SET.filter((e) => ids.includes(e.id))
         : EVAL_SET
 

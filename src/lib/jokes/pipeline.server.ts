@@ -211,7 +211,9 @@ export function hardRuleFailure(line: string, situation: string, slot: SlotKey =
   const t = line.trim()
   if (!t) return 'empty'
   const words = t.split(/\s+/).length
-  if (words < 2) return 'too short'
+  // A clapback may be one word — THE SCAPEGOAT ("Rent.") and THE
+  // INSTITUTION'S ALIBI ("Client-facing.") are approved product cards.
+  if (words < (slot === 'the_clapback' ? 1 : 2)) return 'too short'
   if (t.length > maxCharsFor(slot) || words > maxWordsFor(slot)) return 'over length'
   if (slot !== 'the_clapback' && ADVICE.test(t)) return 'advice'
   if (REASSURANCE.test(t)) return 'reassurance'
@@ -313,8 +315,184 @@ export const SELF_CRITICAL_PREDICATE_RE =
 export type SeriousToken = { token: string; source: 'static' | 'dynamic' }
 export type SpillFlags = {
   self_critical: boolean
+  /** the classifier found no other adult and the user is the actor: Guardrail
+   *  A narrows to the verdict-noun list (spec §8, round U) */
+  self_directed: boolean
   serious_tokens: SeriousToken[]
+  /** the domains the spill's own text or archetype opened (Guardrail E) */
+  domains: Domain[]
+  /** the spill's text, normalised, for the quoted-span exemption of E */
+  spill_norm: string
   exemplars: ExemplarNorm[]
+}
+
+/* ── Guardrail E · the borrowed domain (spec §2 LANDING, §7d round Y) ──
+   "it's a six sigma event. your reaction is the key performance
+   indicator" — with no picture, the model borrows a domain's vocabulary
+   and wears it. A picture's vocabulary comes from the spill's world or
+   the other party's word. Each lexicon has two tiers: `spill` are the
+   everyday words that mark the domain as the spill's own (a spill with
+   "boss" in it is at work; a card may talk shop); `card` are the jargon
+   tokens that, on a spill that never entered the domain, are the costume.
+   A candidate wearing a domain the spill did not open is rejected unless
+   it contains a quoted span from the spill — their word made a world.
+   Engine-5 vocabulary (auditor, committee, compliance) is deliberately
+   not jargon here: the premise pass is told to name the institution the
+   other party turned themselves into. */
+export type Domain = 'corporate' | 'finance' | 'legal' | 'medical' | 'military' | 'sports'
+/** A token matches as a whole word (phrases included); a token ending in
+ *  `~` is a stem and matches as a prefix ("diagnos~" takes diagnosis and
+ *  diagnosed). Whole-word by default so "race" never fires on "grace". */
+export const DOMAIN_LEXICONS: Record<Domain, { spill: string[]; card: string[] }> = {
+  corporate: {
+    spill: [
+      'work', 'job', 'boss', 'manager', 'office', 'hr', 'corporate', 'company', 'meeting', 'email', 'hired',
+      'hiring', 'interview', 'interviewed', 'coworker', 'co-worker', 'colleague', 'client', 'linkedin', 'salary',
+      'promotion', 'workflow', 'position', 'desk', 'shift', 'career', 'resign~', 'quit', 'terminated',
+      'employee', 'intern', 'deadline', 'zoom', 'slack', 'business', 'team', 'payroll', 'recruiter',
+    ],
+    card: [
+      'six sigma', 'key performance indicator', 'kpi', 'kpis', 'ecosystem', 'synergy', 'synergies',
+      'stakeholder', 'stakeholders', 'deliverable', 'deliverables', 'bandwidth', 'action item', 'org chart',
+      'roadmap', 'onboarding', 'offboarding', 'circle back', 'touch base', 'value add', 'core competenc~',
+      'best practice', 'best practices', 'scalab~', 'headcount', 'middle management', 'process improvement',
+      'quarterly report', 'quarterly review', 'okr', 'okrs', 'thought leader', 'low-hanging fruit',
+      'move the needle', 'paradigm', 'key stakeholder', 'brand alignment',
+    ],
+  },
+  finance: {
+    spill: [
+      'financial', 'finance', 'money', 'budget', 'rent', 'loan', 'mortgage', 'invoice', 'bill', 'bills', 'bank',
+      'paid', 'pay', 'paying', 'card', 'venmo', 'spreadsheet', 'tuition', 'debt', 'savings', 'tax', 'taxes',
+      'price', 'cost', 'afford', '$', 'dollar', 'dollars', 'cash', 'wallet', 'fee', 'owe', 'allowance',
+      'expensive', 'cheap', 'broke', 'paycheck', 'salary',
+    ],
+    card: [
+      'trust fund', 'transferable asset', 'liquid asset', 'asset', 'assets', 'portfolio', 'equity', 'dividend',
+      'dividends', 'liquidity', 'balance sheet', 'ledger', 'capital gains', 'return on investment', 'roi',
+      'depreciat~', 'amortis~', 'amortiz~', 'line item', 'shareholder', 'shareholders', 'hedge fund',
+      'compound interest', 'net worth', 'cash flow', 'fiscal', 'series a', 'series b', 'venture capital',
+      'valuation', 'ipo', 'escrow',
+    ],
+  },
+  legal: {
+    spill: [
+      'lawyer', 'attorney', 'court', 'custody', 'sue', 'sued', 'suing', 'lawsuit', 'police', 'restraining order',
+      'divorce', 'lease', 'contract', 'judge', 'legal', 'file for', 'filed', 'filing', 'arrest~', 'stole',
+      'stolen', 'steal', 'theft', 'thief', 'evict~', 'warrant', 'hoa', 'landlord', 'tenant', 'prenup',
+      'alimony', 'inherit~', 'trespass~', 'cops', 'crime', 'illegal',
+    ],
+    card: [
+      'subpoena', 'deposition', 'plaintiff', 'defendant', 'litigation', 'jurisdiction', 'felony',
+      'misdemeanor', 'misdemeanour', 'indictment', 'affidavit', 'pro bono', 'class action',
+      'statute of limitations', 'due process', 'perjury', 'cross-examin~', 'habeas', 'garnish~', 'bailiff',
+      'restraining order', 'court order', 'parole', 'probation', 'exhibit a', 'exhibit b', 'your honor',
+      'your honour', 'the prosecution', 'the defense rests', 'the defence rests', 'plea deal',
+    ],
+  },
+  medical: {
+    spill: [
+      'doctor', 'hospital', 'cancer', 'disease', 'sick', 'surgery', 'diagnos~', 'nurse', 'clinic', 'medical',
+      'pregnan~', 'autoimmune', 'illness', 'injur~', 'icu', 'pill', 'pills', 'prescription', 'allerg~',
+      'intolerant', 'symptom', 'symptoms', 'flare', 'chemo', 'chemotherapy', 'tumor', 'tumour', 'therapist',
+      'dentist', 'ambulance', 'stroke', 'condition', 'chronic', 'miscarr~', 'ivf', 'fertility', 'donor', 'blood',
+      'medication', 'meds', 'hospice',
+    ],
+    card: [
+      'hospital bed', 'hospital', 'oncolog~', 'chemo', 'chemotherapy', 'prognosis', 'clinical trial', 'icu',
+      'intensive care', 'surgeon', 'triage', 'malignant', 'benign', 'biopsy', 'flatline', 'life support',
+      'diagnos~', 'prescription', 'side effect', 'side effects', 'dosage', 'hospice', 'pathology',
+      'anesthesia', 'anaesthesia', 'code blue',
+    ],
+  },
+  military: {
+    spill: ['army', 'navy', 'marine', 'marines', 'military', 'soldier', 'veteran', 'deployed', 'deployment', 'enlist~', 'war'],
+    card: [
+      'battalion', 'platoon', 'sergeant', 'barracks', 'reconnaissance', 'recon mission', 'chain of command',
+      'collateral damage', 'friendly fire', 'boots on the ground', 'court-martial', 'court martial',
+      'rules of engagement', 'shock and awe', 'scorched earth', 'defcon', 'artillery', 'trench warfare',
+      'special ops', 'black ops', 'air strike', 'airstrike', 'grenade', 'the front line', 'front lines',
+      'battlefield', 'foxhole', 'hostage negotiat~',
+    ],
+  },
+  sports: {
+    spill: [
+      'game', 'coach', 'gym', 'football', 'soccer', 'basketball', 'baseball', 'golf', 'marathon', 'race',
+      'practice', 'league', 'match', 'tennis', 'hockey', 'workout', 'trainer', 'stadium', 'season ticket',
+      'fantasy', 'olympic', 'olympics', 'playoff', 'playoffs', 'super bowl', 'team',
+    ],
+    card: [
+      'touchdown', 'home run', 'hail mary', 'end zone', 'penalty box', 'offside', 'full-court press',
+      'slam dunk', 'hat trick', 'playoffs', 'free agent', 'benched', 'scoreboard', 'referee', 'red card',
+      'yellow card', 'sudden death', 'grand slam', 'strike three', 'batting average', 'power play',
+      'final whistle', 'own goal', 'mvp', 'draft pick', 'starting lineup', 'photo finish', 'first round pick',
+      'halftime', 'personal best', 'olympic',
+    ],
+  },
+}
+export const DOMAINS = Object.keys(DOMAIN_LEXICONS) as Domain[]
+
+/** Corporate and finance are one institution in these spills — "Finance
+ *  has a category for that. It's called 'Team Building.'" was approved on
+ *  a spill that said "corporate card" — so each opens the other. */
+const DOMAIN_KIN: Partial<Record<Domain, Domain[]>> = { corporate: ['finance'], finance: ['corporate'] }
+
+/** The domains an archetype opens on its own. classifyArchetype's own
+ *  labels are all family rooms; the jokenet taxonomy's are listed so a
+ *  set that arrives with one of those is read the same way. */
+export const ARCHETYPE_DOMAINS: Record<string, Domain[]> = {
+  work: ['corporate', 'finance'],
+  money: ['finance', 'corporate'],
+  'customer service': ['corporate'],
+  'health system': ['medical'],
+}
+
+function hasToken(text: string, token: string): boolean {
+  if (token.endsWith('~')) return text.includes(token.slice(0, -1))
+  return matchesWholeWord(text, token)
+}
+
+/** Which domains the spill's own text and archetype opened. */
+export function spillDomains(situation: string, archetype?: string | null): Domain[] {
+  const s = situation.toLowerCase()
+  const open = new Set<Domain>(ARCHETYPE_DOMAINS[String(archetype ?? '').toLowerCase()] ?? [])
+  for (const d of DOMAINS) {
+    const lex = DOMAIN_LEXICONS[d]
+    if (lex.spill.some((tk) => hasToken(s, tk)) || lex.card.some((tk) => hasToken(s, tk))) open.add(d)
+  }
+  for (const d of Array.from(open)) for (const kin of DOMAIN_KIN[d] ?? []) open.add(kin)
+  return DOMAINS.filter((d) => open.has(d))
+}
+
+/** The quoted spans of a line — a clapback's own wrapper unwrapped first —
+ *  normalised, so E can tell their word made a world from a costume. */
+export function quotedSpans(line: string, slot: SlotKey): string[] {
+  let t = line.trim()
+  if (isSpokenLine(slot) && t.length > 1 && /^["“]/.test(t) && /["”]$/.test(t)) t = t.slice(1, -1)
+  const out: string[] = []
+  for (const m of t.matchAll(/["“]([^"“”]{2,})["”]/g)) {
+    const n = normalizeForCopy(m[1]!)
+    if (n.length >= 3) out.push(n)
+  }
+  return out
+}
+
+export type BorrowedDomain = { domain: Domain; token: string }
+
+/** Guardrail E: the first domain the line wears that the spill never
+ *  opened, or null. A line that quotes the spill's own words is exempt:
+ *  their word made a world. */
+export function borrowedDomain(line: string, slot: SlotKey, flags: Pick<SpillFlags, 'domains' | 'spill_norm'>): BorrowedDomain | null {
+  const t = line.toLowerCase()
+  const open = new Set(flags.domains)
+  for (const d of DOMAINS) {
+    if (open.has(d)) continue
+    const token = DOMAIN_LEXICONS[d].card.find((tk) => hasToken(t, tk))
+    if (!token) continue
+    if (flags.spill_norm && quotedSpans(line, slot).some((q) => flags.spill_norm.includes(q))) return null
+    return { domain: d, token }
+  }
+  return null
 }
 
 /** Words too common to ban on their own: banning them throws away good
@@ -350,8 +528,20 @@ function matchesWholeWord(text: string, token: string): boolean {
   return re.test(text)
 }
 
+export type SpillShape = {
+  /** the classifier's answer: no other adult, the user is the actor */
+  selfDirected?: boolean | null
+  /** the set's archetype, for Guardrail E's domain check */
+  archetype?: string | null
+}
+
 /** What the spill itself says about which guardrails apply. */
-export function spillFlags(situation: string, seriousFact?: string | null, exemplars: Exemplar[] = []): SpillFlags {
+export function spillFlags(
+  situation: string,
+  seriousFact?: string | null,
+  exemplars: Exemplar[] = [],
+  shape: SpillShape = {},
+): SpillFlags {
   const s = situation.toLowerCase()
   const serious: SeriousToken[] = SERIOUS_FACT_TOKENS.filter((t) => s.includes(t)).map((token) => ({ token, source: 'static' as const }))
   const have = new Set(serious.map((t) => t.token))
@@ -360,7 +550,11 @@ export function spillFlags(situation: string, seriousFact?: string | null, exemp
   }
   return {
     self_critical: SELF_CRITICAL_TOKENS.some((t) => s.includes(t)),
+    // Fail-safe: no answer from the classifier keeps Guardrail A total.
+    self_directed: shape.selfDirected === true,
     serious_tokens: serious,
+    domains: spillDomains(situation, shape.archetype),
+    spill_norm: normalizeForCopy(situation),
     exemplars: exemplars.map(normExemplar),
   }
 }
@@ -385,10 +579,15 @@ export function outsideQuotes(line: string, slot: SlotKey): string {
 }
 
 export type GuardrailHit = {
-  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy'
+  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy' | 'borrowed_domain'
   detail: string
   source?: 'static' | 'dynamic'
+  /** E: the domain the line borrowed */
+  domain?: Domain
+  /** A on a self-directed spill: only the verdict-noun list applied */
+  narrowed?: 'self_directed'
 }
+export const GUARDRAIL_RULES: GuardrailHit['rule'][] = ['user_predicate', 'serious_fact', 'self_critical_predicate', 'exemplar_copy', 'borrowed_domain']
 
 /** Guardrail D: a candidate that is a hall-of-fame line or a prompt
  *  exemplar with a tag added. Token-set Jaccard at or above 0.5, or the
@@ -416,11 +615,20 @@ export function exemplarCopy(line: string, exemplars: ExemplarNorm[]): ExemplarN
   return null
 }
 
-/** The first guardrail a candidate trips, or null. Order: A, B, C, D. */
+/** The first guardrail a candidate trips, or null. Order: A, B, C, D, E. */
 export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags): GuardrailHit | null {
-  for (const re of USER_PREDICATE_RES) {
-    const m = re.exec(line)
-    if (m) return { rule: 'user_predicate', detail: m[0] }
+  if (flags.self_directed) {
+    // Spec §8: on a self-directed spill the user IS the subject and the
+    // alibi register uses predicate nominatives ("you're the first person
+    // HR ever fired who deserved it"), so A is limited to the verdict-noun
+    // list. On every other spill it stays total, no allowlist.
+    const m = SELF_CRITICAL_PREDICATE_RE.exec(line)
+    if (m) return { rule: 'user_predicate', detail: m[0], narrowed: 'self_directed' }
+  } else {
+    for (const re of USER_PREDICATE_RES) {
+      const m = re.exec(line)
+      if (m) return { rule: 'user_predicate', detail: m[0] }
+    }
   }
   if (flags.serious_tokens.length) {
     const bare = outsideQuotes(line, slot).toLowerCase()
@@ -435,6 +643,8 @@ export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags)
   }
   const copy = exemplarCopy(line, flags.exemplars)
   if (copy) return { rule: 'exemplar_copy', detail: copy.id }
+  const borrowed = borrowedDomain(line, slot, flags)
+  if (borrowed) return { rule: 'borrowed_domain', detail: borrowed.token, domain: borrowed.domain }
   return null
 }
 
@@ -742,7 +952,7 @@ async function screenedPass(
   if (pass.error) return { error: pass.error, model: pass.model }
   const records: CandidateRecord[] = pass.candidates.map((text) => ({ text }))
   const survivors: { text: string; at: number }[] = []
-  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0 }
+  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0, borrowed_domain: 0 }
   records.forEach((r, at) => {
     const hit = guardrailFailure(r.text, input.slot, flags)
     if (hit) {
@@ -758,7 +968,9 @@ async function screenedPass(
           ? { token: hit.detail, source: hit.source }
           : hit.rule === 'exemplar_copy'
             ? { hall_of_fame_id: hit.detail }
-            : { span: hit.detail }),
+            : hit.rule === 'borrowed_domain'
+              ? { domain: hit.domain, token: hit.detail }
+              : { span: hit.detail, ...(hit.narrowed ? { narrowed: hit.narrowed } : {}) }),
       })
       return
     }
@@ -785,18 +997,26 @@ export async function generateFromInputs(
     seriousFact?: string | null
     /** hall-of-fame lines and the prompt's own examples, for Guardrail D */
     exemplars?: Exemplar[]
+    /** the classifier's shape of the spill (self-directed) and the set's archetype */
+    selfDirected?: boolean | null
+    archetype?: string | null
   },
 ): Promise<GeneratedCard> {
   const avoid = new Set((input.avoid ?? []).map((t) => t.toLowerCase()))
   const trace = input.trace ?? {}
-  const flags = spillFlags(input.situation, input.seriousFact, input.exemplars ?? promptExemplars())
+  const flags = spillFlags(input.situation, input.seriousFact, input.exemplars ?? promptExemplars(), {
+    selfDirected: input.selfDirected,
+    archetype: input.archetype,
+  })
   console.log('[joke-flip]', {
     set_id: trace.set_id ?? null,
     position: trace.position ?? null,
     slot: input.slot,
     self_critical: flags.self_critical,
+    self_directed: flags.self_directed,
     serious_fact: input.seriousFact ?? null,
     serious_tokens: flags.serious_tokens,
+    domains: flags.domains,
     exemplars: flags.exemplars.length,
   })
 
@@ -910,6 +1130,7 @@ type StoredPrep = {
   voice_key: string | null
   roast_target: string | null
   serious_fact: string | null
+  self_directed: boolean | null
   embedding: number[] | null
 }
 
@@ -918,6 +1139,8 @@ export type PreparedSet = {
   voice: JokeVoice
   roastTarget: string
   seriousFact: string | null
+  /** the classifier's answer at set creation; null before the column exists */
+  selfDirected: boolean | null
   /** the spill's embedding, for few-shot exclusion; null when none could be made */
   embedding: number[] | null
 }
@@ -926,11 +1149,11 @@ export type PreparedSet = {
  *  is a bare set, not a failed deal: before the generator's migration has
  *  landed these columns do not exist, and the cards must still write. */
 async function readStoredPrep(admin: Admin, setId: string): Promise<StoredPrep> {
-  const bare: StoredPrep = { premises: null, premises_version: null, voice_key: null, roast_target: null, serious_fact: null, embedding: null }
+  const bare: StoredPrep = { premises: null, premises_version: null, voice_key: null, roast_target: null, serious_fact: null, self_directed: null, embedding: null }
   try {
     const { data, error } = await admin
       .from('joke_sets')
-      .select('premises, premises_version, voice_key, roast_target, serious_fact, embedding')
+      .select('premises, premises_version, voice_key, roast_target, serious_fact, self_directed, embedding')
       .eq('id', setId)
       .maybeSingle()
     if (error || !data) return bare
@@ -946,6 +1169,7 @@ async function readStoredPrep(admin: Admin, setId: string): Promise<StoredPrep> 
       voice_key: (data.voice_key as string | null) ?? null,
       roast_target: (data.roast_target as string | null) ?? null,
       serious_fact: (data.serious_fact as string | null) ?? null,
+      self_directed: typeof data.self_directed === 'boolean' ? data.self_directed : null,
       embedding,
     }
   } catch {
@@ -1006,7 +1230,7 @@ export async function prepareSet(admin: Admin, set: SetRow): Promise<PreparedSet
       console.error('[joke-set] could not store the prepared set', { set_id: set.id, err })
     }
   }
-  return { premises, voice, roastTarget, seriousFact: stored.serious_fact, embedding }
+  return { premises, voice, roastTarget, seriousFact: stored.serious_fact, selfDirected: stored.self_directed, embedding }
 }
 
 /** One card, end to end, for a set the caller has already loaded. */
@@ -1023,7 +1247,7 @@ export async function generateCard(
   } catch (err) {
     console.error('[joke-set] prepare failed; writing from the situation alone', { set_id: set.id, err })
     const voices = await loadVoices(null)
-    prepared = { premises: [], voice: pickVoice(voices, set.id), roastTarget: classifyRoastTarget(situation), seriousFact: null, embedding: null }
+    prepared = { premises: [], voice: pickVoice(voices, set.id), roastTarget: classifyRoastTarget(situation), seriousFact: null, selfDirected: null, embedding: null }
   }
   const trace = { set_id: set.id, position: args.position }
   const [selection, hofLines] = await Promise.all([
@@ -1052,6 +1276,8 @@ export async function generateCard(
     avoid: args.avoid,
     trace,
     seriousFact: prepared.seriousFact,
+    selfDirected: prepared.selfDirected,
+    archetype: set.archetype,
     exemplars,
   })
 }

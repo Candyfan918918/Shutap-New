@@ -38,6 +38,15 @@ export const SLOTS: { key: SlotKey; label: string; subtitle: string; brief: stri
 
 export const SLOT_KEYS: SlotKey[] = SLOTS.map((s) => s.key)
 
+/** A thin spill: fewer words than a premise pass can find four observations
+ *  in. The set still runs — a four-word spill has produced approved cards —
+ *  but the row is flagged and the surface nudges the writer to the scan,
+ *  which asks the questions the spill left out. */
+export const THIN_INPUT_WORDS = 8
+export function isThinInput(clean: string): boolean {
+  return clean.trim().split(/\s+/).filter(Boolean).length < THIN_INPUT_WORDS
+}
+
 /* ── legacy vocabulary ──
    Cards written before the deck settled on three slots carry one of these
    seven angles. Nothing generates them any more, but stored rows still read

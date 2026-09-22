@@ -690,6 +690,8 @@ export type Database = {
           premises_version: string | null
           roast_target: string | null
           serious_fact: string | null
+          self_directed: boolean | null
+          thin_input: boolean
           updated_at: string
           user_id: string | null
           voice_key: string | null
@@ -708,6 +710,8 @@ export type Database = {
           premises_version?: string | null
           roast_target?: string | null
           serious_fact?: string | null
+          self_directed?: boolean | null
+          thin_input?: boolean
           updated_at?: string
           user_id?: string | null
           voice_key?: string | null
@@ -726,6 +730,8 @@ export type Database = {
           premises_version?: string | null
           roast_target?: string | null
           serious_fact?: string | null
+          self_directed?: boolean | null
+          thin_input?: boolean
           updated_at?: string
           user_id?: string | null
           voice_key?: string | null

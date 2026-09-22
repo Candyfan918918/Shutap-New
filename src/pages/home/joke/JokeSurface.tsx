@@ -95,7 +95,7 @@ type Pending =
   /** the limit sheet sent a guest to get an alias; the members' offer follows */
   | { type: 'upgrade' }
 
-type SetState = { id: string; situation: string; archetype: string }
+type SetState = { id: string; situation: string; archetype: string; thin?: boolean }
 
 /** The folded set list, named so its header row can point at it. */
 const SET_LIST_ID = 'joke-set-list'
@@ -633,7 +633,7 @@ export function JokeSurface() {
       }
       setCrisis(false)
       setTier(res.tier)
-      setSet({ id: res.set_id, situation: res.clean_text, archetype: res.archetype })
+      setSet({ id: res.set_id, situation: res.clean_text, archetype: res.archetype, thin: res.thin_input })
       setCards([])
       setSaved(null)
       setPosted(null)
@@ -1250,6 +1250,17 @@ export function JokeSurface() {
           {set && set.archetype !== 'general' ? (
             <div style={{ fontFamily: SORA, fontSize: 13, color: MUTED }}>
               ✦ reading this as <strong style={{ color: '#8e1c4c', fontWeight: 600 }}>{ARCHETYPE_LABEL[set.archetype] ?? set.archetype}</strong>
+            </div>
+          ) : null}
+
+          {/* The thin-input nudge. A short spill still gets its three cards —
+              nothing here is gated — but the cards had little to hold, and
+              the scan asks the questions the spill left out. */}
+          {set?.thin ? (
+            <div style={{ fontFamily: SORA, fontSize: 13, color: MUTED }}>
+              ✦ thin one. the cards had little to hold on to —{' '}
+              <a href="#scan" style={{ color: '#8e1c4c', textDecoration: 'underline', textUnderlineOffset: 3 }}>scan it</a>
+              {' '}and the story gets sharper. what they said, word for word, is the part that lands.
             </div>
           ) : null}
         </div>

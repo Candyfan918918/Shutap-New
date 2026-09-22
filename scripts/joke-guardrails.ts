@@ -25,9 +25,17 @@ import {
 } from '@/lib/jokes/pipeline.server'
 import { promptExemplars } from '@/lib/jokes/prompts.server'
 import { accusationVerb, SEED_HALL_OF_FAME } from '@/lib/jokes/voices.server'
+import ledger from '@/lib/jokes/jokenet.json'
 import type { SlotKey } from '@/lib/jokes/deck'
 
-const HOF = SEED_HALL_OF_FAME.map((h, i) => ({ id: `seed:${i}`, text: h.joke_text }))
+// The founder's approved lines are in the hall of fame now, so against the
+// full seed every one of them is — correctly — an exemplar copy. The
+// direction checks below ask a different question (does A, B, E or a hard
+// rule refuse an approved line?), so they run against the seed the ledger
+// did not write; the D section asserts the copies.
+const LEDGER = new Set((ledger as { joke: string }[]).map((r) => r.joke.trim().toLowerCase()))
+const HOF = SEED_HALL_OF_FAME.filter((h) => !LEDGER.has(h.joke_text.trim().toLowerCase())).map((h, i) => ({ id: `seed:${i}`, text: h.joke_text }))
+const FULL_HOF = SEED_HALL_OF_FAME.map((h, i) => ({ id: `seed:${i}`, text: h.joke_text }))
 const EXEMPLARS = [...HOF, ...promptExemplars()]
 
 let pass = 0
@@ -181,6 +189,11 @@ check("the brief's COLLATERAL roast, verbatim",
   rule('her advice is plumbing. look what came out of her.', 'the_roast', POT, null), 'exemplar_copy')
 check('a hall-of-fame line, verbatim',
   rule("the budget exists. it's the room.", 'the_take', 'My manager said there is no budget for training.', null), 'exemplar_copy')
+const fullFlags = spillFlags(CUSTODY, null, FULL_HOF)
+check('an admitted ledger line is spent once it is in the hall of fame (the custody take, verbatim)',
+  guardrailFailure('she thinks a court can make us let her in. it can. once. with a bailiff.', 'the_take', fullFlags)?.rule ?? 'pass', 'exemplar_copy')
+check('…and with a tag added',
+  guardrailFailure('she thinks a court can make us let her in. it can. once. with a bailiff, and a form.', 'the_take', fullFlags)?.rule ?? 'pass', 'exemplar_copy')
 check('a short brief phrase used as ONE beat of a longer line is NOT a copy',
   rule('her own body filed a complaint against her. she forwarded it to you.', 'the_roast', AUTO, 'autoimmune disease'), 'pass')
 
@@ -203,6 +216,64 @@ check('autoimmune spill verb', String(accusationVerb(AUTO)), 'gave')
 check('stole-her-son spill verb', String(accusationVerb('My mother-in-law told me I stole her son from her.')), 'stole')
 check('frozen spill has no accusation verb', String(accusationVerb(FROZEN)), 'null')
 check('custody spill has no accusation verb', String(accusationVerb(CUSTODY)), 'null')
+
+/* ── Guardrail E · the borrowed domain ────────────────────────────────── */
+const SURPRISE = 'The surprise I get is never the surprise for me as a mom or a wife.'
+console.log('\n[E] borrowed domain — the costume is out, the spill\'s own world and their word are in')
+check('the live surprise card "it\'s a six sigma event…" is rejected',
+  verdict("it's a six sigma event. your reaction is the key performance indicator.", 'the_take', SURPRISE, null),
+  "guardrail:borrowed_domain(six sigma)")
+check('the approved surprise take survives',
+  verdict('even your surprise party needs you to bake the cake.', 'the_take', SURPRISE, null), 'pass')
+check('the approved surprise roast survives',
+  verdict('every surprise in that house is a chore wearing a bow.', 'the_roast', SURPRISE, null), 'pass')
+check('a finance costume on the cancer spill is rejected (a stored production candidate)',
+  verdict('she made it a debt, not a sympathy card. a ledger, two entries deep.', 'the_roast', CANCER, 'cancer'),
+  'guardrail:borrowed_domain(ledger)')
+check('THEIR WORD MADE A WORLD — a quoted span from the spill opens the domain',
+  verdict('"table it." fine. next item on the agenda: the stakeholders. minutes to follow.', 'the_roast',
+    "Found out my husband's been a sperm donor for a couple at his gym. He asked if we could \"table it\" till after his trip.", null),
+  'pass')
+check('the same corporate token without their word is out',
+  verdict('fine. next item on the agenda: the stakeholders. minutes to follow.', 'the_roast',
+    "Found out my husband's been a sperm donor for a couple at his gym. He asked if we could hold off till after his trip.", null),
+  'guardrail:borrowed_domain(stakeholders)')
+check('THE CLEAN LINE on a spill that said "corporate card" survives (Team Building)',
+  verdict('finance has a category for that. it\'s called "team building."', 'the_take',
+    'I paid for my boob job with my corporate business card (by accident).', null), 'pass')
+check('THE PROCEDURE on a spill that invoked the court survives (bailiff)',
+  verdict('she thinks a court can make us let her in. it can. once. with a bailiff.', 'the_take', CUSTODY, null), 'pass')
+check('the same bailiff on a spill with no court is out',
+  verdict('she thinks she can make us let her in. she can. once. with a bailiff.', 'the_take', 'My mother-in-law calling my baby "her baby".', null),
+  'guardrail:borrowed_domain(bailiff)')
+check('the investors roast on the financial-support spill survives (finance is the spill\'s own world)',
+  verdict("your parents aren't helping. they're investors. series a was college.", 'the_roast', USELESS, null), 'pass')
+check('engine-5 vocabulary is not a costume (compliance did)',
+  verdict("he didn't make you coffee. compliance did. every quiet evening was a row.", 'the_roast', FROZEN, null), 'pass')
+
+/* ── Guardrail A on a self-directed spill ─────────────────────────────── */
+console.log('\n[A·self-directed] the verdict-noun list only; total everywhere else')
+const HR = 'I work in HR, accidentally terminated myself in the system.'
+const sd = (line: string, slot: SlotKey, situation: string, selfDirected: boolean) => {
+  const g = guardrailFailure(line, slot, spillFlags(situation, null, EXEMPLARS, { selfDirected }))
+  return g ? `guardrail:${g.rule}(${g.detail})${g.narrowed ? '[narrowed]' : ''}` : 'pass'
+}
+check('the approved HR take survives when the reader marks the spill self-directed',
+  sd("you're the first person hr ever fired who deserved it.", 'the_take', HR, true), 'pass')
+check('the same line is out when the reader does not (fail-safe: A stays total)',
+  sd("you're the first person hr ever fired who deserved it.", 'the_take', HR, false), "guardrail:user_predicate(you're the first)")
+check('a verdict noun is still out on a self-directed spill',
+  sd("you're a failure with a badge.", 'the_take', HR, true), "guardrail:user_predicate(you're a failure)[narrowed]")
+check('THE ANIMAL WITH A BILL, fresh, survives on its self-directed spill (the brief\'s own hamster is a spent exemplar)',
+  sd("you're a goldfish with a car payment.", 'the_take', 'Being a mom I feel overstimulated. Hamster wheel going and going.', true), 'pass')
+check('the trust-fund line stays out: the parents are in the spill, so A is total',
+  sd('you, a 30-year-old walking, talking trust fund.', 'the_roast', USELESS, false), 'guardrail:user_predicate(you, a 30)')
+
+/* ── the one-word clapback ────────────────────────────────────────────── */
+console.log('\n[clapback] THE SCAPEGOAT and THE INSTITUTION\'S ALIBI are one word')
+check('"Rent." passes', verdict('"rent."', 'the_clapback', 'Why am I sad?', null), 'pass')
+check('"Client-facing." passes', verdict('"client-facing."', 'the_clapback', 'I paid for my boob job with my corporate business card (by accident).', null), 'pass')
+check('a one-word take is still too short', verdict('rent.', 'the_take', 'Why am I sad?', null), 'hardrule:too short')
 
 console.log(`\n${pass} passed, ${fail} failed`)
 if (fail) {

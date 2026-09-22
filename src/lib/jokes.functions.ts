@@ -33,7 +33,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { runScrub } from './agents/scrubber.functions'
 import { runClassifyCrisis } from './agents/guard.functions'
-import { runExtractSeriousFact } from './agents/serious-fact.functions'
+import { runReadSpill } from './agents/serious-fact.functions'
 import { classifyArchetype, dealSlots } from './jokes/deck.server'
 import { generateCard, prepareSet, type GeneratedCard, type SetRow } from './jokes/pipeline.server'
 import { resolveJokeIdentity, resolveDay, resolveDayInfo, ipFlipLimit, ipSubjectKey } from './jokes/session.server'
@@ -43,6 +43,7 @@ import {
   angleLabel,
   angleAccent,
   exportSpec,
+  isThinInput,
   usageBlock,
   type JokeCard,
   type JokeTier,
@@ -212,6 +213,8 @@ export type JokeEntryResult =
       angles: string[]
       notice: string
       tier: JokeTier
+      /** fewer words than a premise pass can work with; the surface nudges to the scan */
+      thin_input: boolean
     }
 
 export const submitJokeEntry = createServerFn({ method: 'POST' })
@@ -241,7 +244,8 @@ export const submitJokeEntry = createServerFn({ method: 'POST' })
     // crisis overrides everything. no cards, no gate, no paywall, no signup.
     // The serious-fact extractor runs beside the Guard, never inside it: a
     // different system with a different purpose, and the Guard is unchanged.
-    const [crisis, seriousFact] = await Promise.all([runClassifyCrisis(clean), runExtractSeriousFact(clean)])
+    const [crisis, reading] = await Promise.all([runClassifyCrisis(clean), runReadSpill(clean)])
+    const seriousFact = reading.seriousFact
     if (crisis.crisis) {
       await supabaseAdmin.from('crisis_events').insert({
         alias_id: id.userId,
@@ -254,6 +258,7 @@ export const submitJokeEntry = createServerFn({ method: 'POST' })
 
     const archetype = classifyArchetype(clean)
     const angles = dealSlots()
+    const thinInput = isThinInput(clean)
 
     const { data: row, error } = await supabaseAdmin
       .from('joke_sets')
@@ -264,13 +269,17 @@ export const submitJokeEntry = createServerFn({ method: 'POST' })
         archetype,
         angles,
         serious_fact: seriousFact,
+        self_directed: reading.selfDirected,
+        thin_input: thinInput,
         is_seed: false,
         corpus_eligible: false,
       } as never)
       .select('id')
       .single()
     if (error || !row) throw new Error(error?.message ?? 'could not open that set')
-    console.log('[joke-set] opened', { set_id: row.id, archetype, serious_fact: seriousFact })
+    console.log('[joke-set] opened', {
+      set_id: row.id, archetype, serious_fact: seriousFact, self_directed: reading.selfDirected, thin_input: thinInput,
+    })
 
     return {
       crisis: false,
@@ -281,6 +290,7 @@ export const submitJokeEntry = createServerFn({ method: 'POST' })
       angles,
       notice: scrubbed.notice ?? '',
       tier: id.tier,
+      thin_input: thinInput,
     }
   })
 
