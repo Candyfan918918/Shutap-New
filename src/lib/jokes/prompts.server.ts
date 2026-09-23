@@ -19,7 +19,7 @@
 // voiceless run. See §7 and §7b of the doc for why.
 import type { SlotKey } from './deck'
 
-export const PROMPT_VERSION = '3.4'
+export const PROMPT_VERSION = '3.5'
 
 /* ───────────────────────── 1 — premise pass ─────────────────────────
    Runs once per set on first flip. Cached to joke_sets.premises.
@@ -721,10 +721,11 @@ output failed and they are weighted above the rest:
 - ON A SELF-DIRECTED EMOTIONAL SPILL, a line that assigns the user the
   fault ("you built the wheel, then you chose the animal") is out — not
   ranked down, out. The voice stands next to them.
-- INSIDE THE USER'S METAPHOR. When the situation is a metaphor, a line
-  built only from the metaphor's parts (treadmill, nameplate,
-  specialist) with no noun from the user's literal life ranks with the
-  findings. A line that adds one real noun to their image ranks above
+- INSIDE THE USER'S METAPHOR (take and roast; the clapback is the
+  user's own voice and may stay inside their image). When the situation
+  is a metaphor, a line built only from the metaphor's parts (treadmill,
+  nameplate, specialist) with no noun from the user's literal life ranks
+  with the findings. A line that adds one real noun to their image ranks above
   it.
 - ON A SELF-DIRECTED SPILL, a line that narrates the user from outside
   ("every morning the car pulls out…") ranks below a line spoken from
