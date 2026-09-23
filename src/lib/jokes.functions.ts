@@ -115,6 +115,7 @@ function usageOf(tier: JokeTier, counter: FlipRow, resetsAt: string): JokeUsage 
 
 /** Has the coarse per-network layer already been spent today? Read-only. */
 async function networkSpent(admin: any, day: string): Promise<boolean> {
+  if (!Number.isFinite(ipFlipLimit())) return false
   const ipKey = ipSubjectKey()
   if (!ipKey) return false
   const row = await readCounter(admin, ipKey, day)
