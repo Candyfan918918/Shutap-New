@@ -146,6 +146,7 @@ async function charge(
 
 /** The coarse per-network layer, independent of the tier rules. */
 async function chargeNetwork(admin: any, day: string, cost: number): Promise<'ok' | 'limited'> {
+  if (!Number.isFinite(ipFlipLimit())) return 'ok'
   const ipKey = ipSubjectKey()
   if (!ipKey) return 'ok'
   const row = await readCounter(admin, ipKey, day)
