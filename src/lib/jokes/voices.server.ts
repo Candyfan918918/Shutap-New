@@ -387,16 +387,43 @@ export async function loadExamples(
 
 /** Every active hall-of-fame line, all slots, for the exemplar-copy
  *  guardrail. The seed stands in when the table is empty or unreachable. */
-export async function loadHallOfFameLines(admin: Admin | null): Promise<{ id: string; text: string }[]> {
+export type HallOfFameLine = { id: string; text: string; embedding?: number[] | null }
+
+/** Every active hall-of-fame line, all slots, for the exemplar-copy
+ *  guardrail, with the line's own embedding (text_embedding) for the
+ *  paraphrase half of D. A row without one gets it now, a handful per
+ *  flip, and keeps it. The seed stands in when the table is empty or
+ *  unreachable. */
+export async function loadHallOfFameLines(admin: Admin | null): Promise<HallOfFameLine[]> {
   if (admin) {
     try {
-      const { data } = await admin.from('joke_hall_of_fame').select('id, joke_text').eq('is_active', true).limit(1000)
-      if (Array.isArray(data) && data.length) return data.map((r: any) => ({ id: `hof:${r.id}`, text: String(r.joke_text) }))
+      const { data } = await admin.from('joke_hall_of_fame').select('id, joke_text, text_embedding').eq('is_active', true).limit(1000)
+      if (Array.isArray(data) && data.length) {
+        const rows: HallOfFameLine[] = data.map((r: any) => ({ id: `hof:${r.id}`, text: String(r.joke_text), embedding: parseVector(r.text_embedding) }))
+        const pending = rows.filter((r) => !r.embedding).slice(0, CATCHUP_EMBEDDINGS_PER_CARD)
+        if (pending.length) {
+          const { embedTexts, toVectorLiteral } = await import('@/lib/agents/embeddings.server')
+          const vecs = await embedTexts(pending.map((r) => r.text))
+          await Promise.all(
+            pending.map(async (r, i) => {
+              const vec = vecs[i]
+              if (!vec) return
+              r.embedding = vec
+              try {
+                await admin.from('joke_hall_of_fame').update({ text_embedding: toVectorLiteral(vec) } as never).eq('id', r.id.slice('hof:'.length))
+              } catch (err) {
+                console.error('[joke-hof] could not store a text embedding', { id: r.id, err })
+              }
+            }),
+          )
+        }
+        return rows
+      }
     } catch (err) {
       console.error('[joke-hof] lines load failed; using seed', err)
     }
   }
-  return SEED_HALL_OF_FAME.map((h, i) => ({ id: `seed:${i}`, text: h.joke_text }))
+  return SEED_HALL_OF_FAME.map((h, i) => ({ id: `seed:${i}`, text: h.joke_text, embedding: null }))
 }
 
 export function selectExamples(

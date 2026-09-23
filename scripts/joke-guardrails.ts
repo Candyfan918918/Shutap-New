@@ -24,6 +24,10 @@ import {
   lengthFailure,
   literalNounFailure,
   blameFailure,
+  pronounAntecedentFailure,
+  fallbackCard,
+  exemplarCopyByEmbedding,
+  EXEMPLAR_EMBED_THRESHOLD,
   outsideQuotes,
 } from '@/lib/jokes/pipeline.server'
 import { promptExemplars } from '@/lib/jokes/prompts.server'
@@ -319,6 +323,44 @@ check('H is off when the spill has another adult', blameFailure('you built the w
 check('G and H are in guardrailFailure, after F', guardrailFailure('you built the wheel, then you chose the animal.', 'the_roast', hamsterFlags)?.rule ?? 'pass', 'literal_noun')
 check('the seeded ledger clapback "Someone stop the hamster spinning wheel." under G on its own spill',
   literalNounFailure('"someone stop the hamster spinning wheel."', spillFlags('Being a mom I feel overstimulated. Hamster wheel going and going.', null, EXEMPLARS, { selfDirected: true, emotional: true, metaphorSpan: 'Hamster wheel going and going' }))?.rule ?? 'pass', 'literal_noun')
+
+/* ── the 3.3 hamster set: the wrapper quotes, Guardrail I, the floor ──── */
+const HAM2 = 'I feel like a hamster in spinning wheel as a stay at home mom'
+const ham2 = spillFlags(HAM2, null, EXEMPLARS, { selfDirected: true, emotional: true, metaphorSpan: 'a hamster in spinning wheel', archetype: 'general' })
+console.log('\n[quotes] a clapback\'s own wrapper is not a quoted span')
+check('"that was a choice, and you made it." → H rejects', blameFailure('"that was a choice, and you made it."', 'the_clapback', ham2)?.rule ?? 'pass', 'blame')
+check('the same line, curly wrapper → H rejects', blameFailure('“that was a choice, and you made it.”', 'the_clapback', ham2)?.rule ?? 'pass', 'blame')
+check('a serious token inside a clapback wrapper is still seen by B',
+  guardrailFailure('"cancer is not a gift."', 'the_clapback', spillFlags(CANCER, 'cancer', EXEMPLARS))?.rule ?? 'pass', 'serious_fact')
+console.log('\n[I] a pronoun without an antecedent on a self-directed set')
+check('the live take "she did the thing…" fails I', pronounAntecedentFailure('she did the thing, on purpose, with her whole chest, and then filed it as normal.', ham2)?.rule ?? 'pass', 'pronoun_antecedent')
+check('"The baby skipped a nap. He\'s fine." passes', pronounAntecedentFailure("the baby skipped a nap. he's fine.", ham2)?.rule ?? 'pass', 'pass')
+check('"God closed the oven door" passes (no pronoun)', pronounAntecedentFailure('god closed the oven door, and opened the washer door.', ham2)?.rule ?? 'pass', 'pass')
+check('a pronoun before the person-noun fails', pronounAntecedentFailure("he's fine. the baby skipped a nap.", ham2)?.rule ?? 'pass', 'pronoun_antecedent')
+check('a capitalised role from the situation counts as a person-noun',
+  pronounAntecedentFailure('hr fired you. she processed it herself.', spillFlags('I work in HR, accidentally terminated myself in the system.', null, EXEMPLARS, { selfDirected: true }))?.rule ?? 'pass', 'pass')
+check('I is off when the spill has another adult', pronounAntecedentFailure('she said gave. like a gift.', spillFlags(CANCER, 'cancer', EXEMPLARS, { selfDirected: false }))?.rule ?? 'pass', 'pass')
+check('I sits in guardrailFailure', guardrailFailure('she filed it as normal. the laundry is still there.', 'the_take', ham2)?.rule ?? 'pass', 'pronoun_antecedent')
+console.log('\n[floor] the authored pool goes through the guardrails')
+const floorTake = fallbackCard('the_take', null, [], { situation: HAM2, flags: ham2 })
+check('the floor take on this spill is not "she did the thing…"', floorTake.text.startsWith('she did the thing') ? 'pool line served' : 'screened', 'screened')
+check('the floor take fails nothing worse than G (the pool cannot know the day\'s nouns)', guardrailFailure(floorTake.text, 'the_take', ham2)?.rule ?? 'pass', 'literal_noun')
+const floorClap = fallbackCard('the_clapback', null, [], { situation: HAM2, flags: ham2 })
+check('the floor clapback is not "that was a choice, and you made it."', floorClap.text.includes('you made it') ? 'pool line served' : 'screened', 'screened')
+check('the floor clapback fails nothing worse than G', guardrailFailure(floorClap.text, 'the_clapback', ham2)?.rule ?? 'pass', 'literal_noun')
+check('the floor on a spill with no metaphor passes A–I outright',
+  guardrailFailure(fallbackCard('the_take', null, [], { situation: LATE, flags: spillFlags(LATE, null, EXEMPLARS, { selfDirected: true }) }).text, 'the_take', spillFlags(LATE, null, EXEMPLARS, { selfDirected: true }))?.rule ?? 'pass', 'pass')
+console.log('\n[D·embedding] the paraphrase half')
+check('the same vector is a copy at the threshold', exemplarCopyByEmbedding([1, 0, 0], [{ id: 'x', norm: 'x', tokens: new Set(), embedding: [1, 0, 0] }] as never)?.id ?? 'pass', 'x')
+check('an orthogonal vector is not', exemplarCopyByEmbedding([1, 0, 0], [{ id: 'x', norm: 'x', tokens: new Set(), embedding: [0, 1, 0] }] as never)?.id ?? 'pass', 'pass')
+if (process.env['LOVABLE_API_KEY']) {
+  const { embedTexts, cosineSimilarity } = await import('@/lib/agents/embeddings.server')
+  const [a, b, c] = await embedTexts(['the hamster has the mortgage. not the feed, not the bedding. the mortgage.', "You're a hamster with a mortgage.", 'God closed the oven door, and opened the washer door.'])
+  if (a && b && c) {
+    check(`"the hamster has the mortgage…" vs "You're a hamster with a mortgage." rejects (${cosineSimilarity(a, b).toFixed(3)})`, String(cosineSimilarity(a, b) >= EXEMPLAR_EMBED_THRESHOLD), 'true')
+    check(`"God closed the oven door…" vs the same passes (${cosineSimilarity(c, b).toFixed(3)})`, String(cosineSimilarity(c, b) >= EXEMPLAR_EMBED_THRESHOLD), 'false')
+  } else console.log('  skip embedding cases: the gateway returned no vectors')
+} else console.log('  skip the two live embedding cases: LOVABLE_API_KEY is not set (scripts/joke-hof-similarity.ts runs them with the threshold sweep)')
 
 console.log(`\n${pass} passed, ${fail} failed`)
 if (fail) {

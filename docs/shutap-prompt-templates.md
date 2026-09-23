@@ -766,6 +766,9 @@ output failed and they are weighted above the rest:
 - ONE PASS. A line that needs a second read to know who did what, or
   ends unclear about who wins, ranks below any line that doesn't,
   however good the idea.
+- NO INVENTED PEOPLE. On a situation with no other adult, a line that
+  introduces "she", "he" or "they" without naming who is out. The
+  reader typed the situation; nobody else is in it.
 - IS SOMEONE SAYING IT. Read it in the voice. Does a person say this, or does
   a report contain it? Attitude is required. Accurate and unbothered ranks
   below accurate and bothered.

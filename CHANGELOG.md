@@ -4,6 +4,26 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.4 — 2026-09-23
+
+Three guardrail bugs from the hamster set (3.3 was never cut; the number
+is skipped so the dispatch and the stamp agree). The set's take and
+clapback were the authored floor: both candidate passes failed and the
+pool, written for in-law spills, served "she did the thing…" and "that
+was a choice, and you made it" past every guardrail. The floor now goes
+through the guardrails and hard rules like a candidate; the first pool
+line that passes is dealt, and a spill no pool line fits is logged.
+The clapback's own quotation marks were already unwrapped before every
+outside-quotes check (B, CLINICAL, H); no stored clapback candidate was
+missed. Guardrail I (`pronoun_antecedent`): on a self-directed set a
+third-person singular pronoun before any person-noun (PERSON_NOUNS plus
+the situation's capitalised roles) is out. Guardrail D gains a
+paraphrase half: candidates that passed the text guardrails are embedded
+in one batch and rejected at cosine ≥ EXEMPLAR_EMBED_THRESHOLD (0.86,
+untuned until a keyed run of scripts/joke-hof-similarity.ts) to any
+hall-of-fame line's `text_embedding`, filled lazily. Judge: NO INVENTED
+PEOPLE under ONE PASS, verbatim. Migration for `text_embedding`.
+
 ## 3.2 — 2026-09-23
 
 The user's metaphor, and blame. Founder rejected the live v3 set for "I

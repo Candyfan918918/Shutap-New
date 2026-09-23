@@ -42,7 +42,7 @@ import {
   type JokeVoice,
 } from './voices.server'
 import { promptExemplars, type PromptExemplar } from './prompts.server'
-import { embedText, toVectorLiteral } from '@/lib/agents/embeddings.server'
+import { embedText, toVectorLiteral, cosineSimilarity } from '@/lib/agents/embeddings.server'
 
 /* ───────────────────────────── models ─────────────────────────────
    The writer and the judge must be different families — same-model judging
@@ -292,15 +292,33 @@ export const SERIOUS_FACT_TOKENS = [
 
 /** Guardrail D's comparison set: a hall-of-fame line or one of the prompt's
  *  own example lines, normalised for comparison. */
-export type Exemplar = { id: string; text: string }
-type ExemplarNorm = { id: string; norm: string; tokens: Set<string> }
+export type Exemplar = { id: string; text: string; embedding?: number[] | null }
+type ExemplarNorm = { id: string; norm: string; tokens: Set<string>; embedding: number[] | null }
 
 export function normalizeForCopy(t: string): string {
   return t.toLowerCase().replace(/[^a-z0-9\s']/g, ' ').replace(/\s+/g, ' ').trim()
 }
 function normExemplar(e: Exemplar): ExemplarNorm {
   const norm = normalizeForCopy(e.text)
-  return { id: e.id, norm, tokens: new Set(norm.split(' ').filter(Boolean)) }
+  return { id: e.id, norm, tokens: new Set(norm.split(' ').filter(Boolean)), embedding: e.embedding ?? null }
+}
+
+/** Guardrail D's paraphrase half: a candidate whose embedding sits within
+ *  EXEMPLAR_EMBED_THRESHOLD of a hall-of-fame line's is the line rewritten
+ *  ("the hamster has the mortgage. not the feed, not the bedding. the
+ *  mortgage." against "You're a hamster with a mortgage."). The threshold
+ *  is tuned on the seeded rows against each other by
+ *  scripts/joke-hof-similarity.ts, which needs a key. */
+export const EXEMPLAR_EMBED_THRESHOLD = 0.86
+export type EmbeddingCopy = { id: string; similarity: number }
+export function exemplarCopyByEmbedding(vec: number[], exemplars: ExemplarNorm[], threshold = EXEMPLAR_EMBED_THRESHOLD): EmbeddingCopy | null {
+  let best: EmbeddingCopy | null = null
+  for (const e of exemplars) {
+    if (!e.embedding) continue
+    const s = cosineSimilarity(vec, e.embedding)
+    if (s >= threshold && (!best || s > best.similarity)) best = { id: e.id, similarity: s }
+  }
+  return best
 }
 export function jaccard(a: Set<string>, b: Set<string>): number {
   let inter = 0
@@ -334,6 +352,8 @@ export type SpillFlags = {
    *  the spill's own content words outside the metaphor, plus the noun
    *  lists its archetype opens */
   literal_nouns: string[]
+  /** the people a pronoun may refer to on a self-directed spill (Guardrail I) */
+  person_nouns: string[]
   /** the classifier found no other adult and the user is the actor: Guardrail
    *  A narrows to the verdict-noun list (spec §8, round U) */
   self_directed: boolean
@@ -686,6 +706,7 @@ export function spillFlags(
     metaphor_span: shape.metaphorSpan?.trim() || null,
     emotional: shape.emotional === true,
     literal_nouns: literalNouns(situation, shape.metaphorSpan, shape.archetype),
+    person_nouns: Array.from(new Set([...PERSON_NOUNS, ...capitalisedRoles(situation)])),
     serious_tokens: serious,
     domains: spillDomains(situation, shape.archetype),
     spill_norm: normalizeForCopy(situation),
@@ -713,8 +734,11 @@ export function outsideQuotes(line: string, slot: SlotKey): string {
 }
 
 export type GuardrailHit = {
-  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy' | 'borrowed_domain' | 'length' | 'literal_noun' | 'blame'
+  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy' | 'borrowed_domain' | 'length' | 'literal_noun' | 'blame' | 'pronoun_antecedent'
   detail: string
+  /** D: how the copy was found */
+  method?: 'text' | 'embedding'
+  similarity?: number
   /** F: the words counted and the slot's ceiling */
   count?: number
   ceiling?: number
@@ -724,7 +748,52 @@ export type GuardrailHit = {
   /** A on a self-directed spill: only the verdict-noun list applied */
   narrowed?: 'self_directed'
 }
-export const GUARDRAIL_RULES: GuardrailHit['rule'][] = ['user_predicate', 'serious_fact', 'self_critical_predicate', 'exemplar_copy', 'borrowed_domain', 'length', 'literal_noun', 'blame']
+export const GUARDRAIL_RULES: GuardrailHit['rule'][] = ['user_predicate', 'serious_fact', 'self_critical_predicate', 'exemplar_copy', 'borrowed_domain', 'length', 'literal_noun', 'blame', 'pronoun_antecedent']
+
+/* ── Guardrail I · a pronoun without an antecedent ──
+   "she did the thing, on purpose, with her whole chest" served on a spill
+   with nobody else in it. On a self-directed set a third-person singular
+   pronoun that arrives before any person-noun in the line is a person the
+   reader never typed. Person-nouns: the people entries of the archetype
+   noun lists plus any capitalised role in the situation. */
+export const PERSON_NOUNS = [
+  'mom', 'mum', 'mother', 'mama', 'kid', 'kids', 'baby', 'husband', 'wife', 'toddler', 'boss', 'coworker',
+  'co-worker', 'colleague', 'father', 'dad', 'friend', 'son', 'daughter', 'sister', 'brother', 'grandma',
+  'grandmother', 'grandpa', 'grandfather', 'mother-in-law', 'father-in-law', 'nurse', 'doctor', 'neighbor',
+  'neighbour', 'teacher', 'partner', 'boyfriend', 'girlfriend', 'ex', 'manager', 'roommate', 'flatmate',
+  'stranger', 'mover', 'movers', 'lawyer', 'judge', 'bailiff', 'cashier', 'barista', 'driver', 'landlord',
+  'client', 'customer', 'recruiter', 'intern', 'employee', 'parent', 'parents', 'child', 'children', 'infant',
+  'newborn', 'god', 'sitter', 'babysitter', 'nanny', 'pediatrician', 'hr',
+]
+const PRONOUN_RE = /\b(she|he|her|him|his|hers)\b/i
+export function capitalisedRoles(situation: string): string[] {
+  const out: string[] = []
+  const words = situation.split(/\s+/)
+  words.forEach((w, i) => {
+    const bare = w.replace(/[^A-Za-z'-]/g, '')
+    if (!bare || bare.length < 2) return
+    if (i === 0 || /^[A-Z][a-z]/.test(bare) === false && !/^[A-Z]{2,}$/.test(bare)) return
+    if (/^[A-Z][a-z]+$/.test(bare) || /^[A-Z]{2,}$/.test(bare)) out.push(bare.toLowerCase())
+  })
+  return Array.from(new Set(out.filter((w) => w !== 'i')))
+}
+export function pronounAntecedentFailure(line: string, flags: Pick<SpillFlags, 'self_directed' | 'person_nouns'>): GuardrailHit | null {
+  if (!flags.self_directed) return null
+  const t = line.toLowerCase()
+  const pm = PRONOUN_RE.exec(t)
+  if (!pm) return null
+  let firstPerson = -1
+  for (const n of flags.person_nouns) {
+    const re = new RegExp(`(?:^|[^a-z])${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:[^a-z]|$)`, 'i')
+    const m = re.exec(t)
+    if (m) {
+      const at = m.index + (m[0].length - m[0].trimStart().length)
+      if (firstPerson < 0 || at < firstPerson) firstPerson = at
+    }
+  }
+  if (firstPerson >= 0 && firstPerson < pm.index) return null
+  return { rule: 'pronoun_antecedent', detail: pm[0] }
+}
 
 /* ── Guardrail F · length ──
    Measured over the 72 approved ledger cards: take median 11.5 words,
@@ -769,7 +838,7 @@ export function exemplarCopy(line: string, exemplars: ExemplarNorm[]): ExemplarN
   return null
 }
 
-/** The first guardrail a candidate trips, or null. Order: A, B, C, D, E, F, G, H. */
+/** The first guardrail a candidate trips, or null. Order: A, B, C, D, E, F, G, H, I. D's embedding half runs in screenedPass, after these. */
 export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags): GuardrailHit | null {
   if (flags.self_directed) {
     // Spec §8: on a self-directed spill the user IS the subject and the
@@ -796,7 +865,7 @@ export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags)
     if (m) return { rule: 'self_critical_predicate', detail: m[0] }
   }
   const copy = exemplarCopy(line, flags.exemplars)
-  if (copy) return { rule: 'exemplar_copy', detail: copy.id }
+  if (copy) return { rule: 'exemplar_copy', detail: copy.id, method: 'text' }
   const borrowed = borrowedDomain(line, slot, flags)
   if (borrowed) return { rule: 'borrowed_domain', detail: borrowed.token, domain: borrowed.domain }
   const long = lengthFailure(line, slot)
@@ -805,6 +874,8 @@ export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags)
   if (noun) return noun
   const blame = blameFailure(line, slot, flags)
   if (blame) return blame
+  const pronoun = pronounAntecedentFailure(line, flags)
+  if (pronoun) return pronoun
   return null
 }
 
@@ -1065,11 +1136,46 @@ function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]!
 }
 
-export function fallbackCard(slot: SlotKey, voiceKey: string | null, avoid: string[] = []): GeneratedCard {
+/** The floor. The pool is archetype-agnostic and was written for in-law
+ *  spills, so on any other spill a pool line can say what no candidate is
+ *  allowed to: "she did the thing…" on a set with nobody else in it, "that
+ *  was a choice, and you made it" on an emotional self-directed one. Every
+ *  pool line now goes through the same guardrails and hard rules as a
+ *  candidate; the first that passes is dealt. If none passes the card is
+ *  still never blank — a line is dealt and the miss is logged loudly. */
+export function fallbackCard(
+  slot: SlotKey,
+  voiceKey: string | null,
+  avoid: string[] = [],
+  screen?: { situation: string; flags: SpillFlags; trace?: Trace },
+): GeneratedCard {
   const pool = FALLBACKS[slot] ?? FALLBACKS['deadpan_understatement']!
   const fresh = pool.filter((t) => !avoid.includes(t))
+  let candidates = fresh.length ? fresh : pool
+  if (screen) {
+    // Three tiers: a line that passes everything; a line whose only miss
+    // is Guardrail G (an authored line cannot know the day's nouns on a
+    // metaphor spill, and G is the one guardrail about that); a line that
+    // says something a candidate could not (A, H, I, D, E…). The lowest
+    // tier with a line in it is dealt from; the third tier is logged.
+    const why = (line: string) => guardrailFailure(line, slot, screen.flags)?.rule ?? hardRuleFailure(line, screen.situation, slot, { ignoreLength: true }) ?? null
+    // G sits before H and I in guardrailFailure, so "only G" is checked
+    // with G switched off: a line that also blames or invents a person is
+    // in the third tier whatever it tripped first.
+    const withoutG: SpillFlags = { ...screen.flags, metaphor_span: null }
+    const whyWithoutG = (line: string) => guardrailFailure(line, slot, withoutG)?.rule ?? hardRuleFailure(line, screen.situation, slot, { ignoreLength: true }) ?? null
+    const tier = (line: string) => { const w = why(line); return w === null ? 0 : w === 'literal_noun' && whyWithoutG(line) === null ? 1 : 2 }
+    const best = Math.min(...candidates.map(tier))
+    if (best === 2) {
+      console.error('[joke-fallback] no pool line passes the guardrails for this spill; dealing one anyway', {
+        ...(screen.trace ?? {}), slot, rejected: candidates.map((line) => ({ text: line, why: why(line) })),
+      })
+    } else {
+      candidates = candidates.filter((line) => tier(line) === best)
+    }
+  }
   return {
-    text: pick(fresh.length ? fresh : pool),
+    text: pick(candidates),
     premise: null,
     used_fallback: true,
     judge_score: null,
@@ -1112,9 +1218,11 @@ async function screenedPass(
   if (pass.error) return { error: pass.error, model: pass.model }
   const records: CandidateRecord[] = pass.candidates.map((text) => ({ text }))
   const survivors: { text: string; at: number }[] = []
-  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0, borrowed_domain: 0, length: 0, literal_noun: 0, blame: 0 }
+  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0, borrowed_domain: 0, length: 0, literal_noun: 0, blame: 0, pronoun_antecedent: 0 }
+  const textPassed: number[] = []
   records.forEach((r, at) => {
     const hit = guardrailFailure(r.text, input.slot, flags)
+    if (!hit) textPassed.push(at)
     if (hit) {
       r.rejected = `guardrail: ${hit.rule} (${hit.detail}${hit.source ? `, ${hit.source}` : ''})`
       guardrail[hit.rule] += 1
@@ -1136,10 +1244,40 @@ async function screenedPass(
       })
       return
     }
+  })
+  // Guardrail D, the paraphrase half: one embedding call for every line the
+  // text guardrails passed, compared against the hall-of-fame lines that
+  // carry an embedding. Fail-soft: no vectors, no rejection.
+  const embedded = new Set<number>()
+  if (textPassed.length && flags.exemplars.some((e) => e.embedding)) {
+    try {
+      const { embedTexts } = await import('@/lib/agents/embeddings.server')
+      const vecs = await embedTexts(textPassed.map((at) => records[at]!.text))
+      textPassed.forEach((at, i) => {
+        const vec = vecs[i]
+        if (!vec) return
+        const copy = exemplarCopyByEmbedding(vec, flags.exemplars)
+        if (!copy) return
+        embedded.add(at)
+        const r = records[at]!
+        r.rejected = `guardrail: exemplar_copy (${copy.id}, embedding ${copy.similarity.toFixed(3)})`
+        guardrail.exemplar_copy += 1
+        console.warn('[joke-guardrail]', {
+          rule: 'exemplar_copy', method: 'embedding', similarity: Number(copy.similarity.toFixed(3)),
+          set_id: trace.set_id ?? null, position: trace.position ?? null, index: at, slot: input.slot, hall_of_fame_id: copy.id,
+        })
+      })
+    } catch (err) {
+      console.error('[joke-guardrail] embedding check failed; text half only', { ...trace, slot: input.slot, err })
+    }
+  }
+  for (const at of textPassed) {
+    if (embedded.has(at)) continue
+    const r = records[at]!
     const fail = hardRuleFailure(r.text, input.situation, input.slot) ?? (avoid.has(r.text.toLowerCase()) ? 'repeat of the last card' : null)
     if (fail) r.rejected = fail
     else survivors.push({ text: r.text, at })
-  })
+  }
   if (isSpokenLine(input.slot)) {
     for (const r of records) {
       if (!r.rejected && !(/^["“]/.test(r.text) && /["”]$/.test(r.text))) {
@@ -1266,7 +1404,7 @@ export async function generateFromInputs(
   }
 
   const dealt = await attempt(input.premise, 'dealt')
-  if (dealt === 'down') return fallbackCard(input.slot, input.voice.key, input.avoid)
+  if (dealt === 'down') return fallbackCard(input.slot, input.voice.key, input.avoid, { situation: input.situation, flags, trace })
   if (dealt !== 'no_winner') return dealt
 
   // The dealt premise produced nothing the judge would pass: the spare is
@@ -1276,7 +1414,7 @@ export async function generateFromInputs(
     const spare = await attempt(input.spare, 'spare')
     if (spare !== 'no_winner' && spare !== 'down') return spare
   }
-  return fallbackCard(input.slot, input.voice.key, input.avoid)
+  return fallbackCard(input.slot, input.voice.key, input.avoid, { situation: input.situation, flags, trace })
 }
 
 /* ───────────────────────── with the database ─────────────────────────

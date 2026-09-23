@@ -33,7 +33,8 @@ const SERIOUS_FACT: Record<string, string> = {
   'My mother-in-law said I gave her cancer.': 'cancer',
   'My mother-in-law said I gave her an autoimmune disease.': 'autoimmune disease',
 }
-/** No other adult, the user is the actor (spec §8). */
+/** No other adult, the user is the actor (spec §8). The gender reveal is
+ *  not here: the mom is in it, and the reader answers false. */
 const SELF_DIRECTED = new Set<string>([
   'Me leaving my house at 8:30am hoping I make it to work by 8:00am.',
   'I get mad at everyone around me and can\'t explain why to myself or them.',
@@ -41,7 +42,6 @@ const SELF_DIRECTED = new Set<string>([
   'Why am I sad?',
   'I sent a screenshot of my boss to my boss.',
   'I paid for my boob job with my corporate business card (by accident).',
-  'I accidentally revealed the baby\'s gender to the mom by rereading the cake order out loud.',
   'I sent a \'you\'re hired, welcome to the team\' email to all 12 people who interviewed for the one position.',
   'I work in HR, accidentally terminated myself in the system.',
   'Being a mom I feel overstimulated. Hamster wheel going and going.',
