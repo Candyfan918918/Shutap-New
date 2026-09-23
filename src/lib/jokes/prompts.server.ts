@@ -19,7 +19,7 @@
 // voiceless run. See §7 and §7b of the doc for why.
 import type { SlotKey } from './deck'
 
-export const PROMPT_VERSION = '3.0'
+export const PROMPT_VERSION = '3.1'
 
 /* ───────────────────────── 1 — premise pass ─────────────────────────
    Runs once per set on first flip. Cached to joke_sets.premises.
@@ -566,6 +566,10 @@ SHAPE:
 - Read it for heat. If it is the calm version of a harder line you can
   see, write the harder line. Candidates 1–7 are already at full degree;
   8–10 are past what you think is allowed, within the direction rules.
+- LENGTH. Targets: take ten words, clapback six, roast fifteen. These
+  are what approved cards actually measure. A ceiling is not a budget
+  to spend; a line that fills it has usually explained itself. Write
+  the line, then delete the sentence that says what it meant.
 - Read it once. Every card is read one time, on a phone, by someone who
   is angry. If any sentence needs a second pass to know who did what, or
   ends ambiguous about who wins, it has failed. Subject, verb, object.
@@ -709,6 +713,9 @@ output failed and they are weighted above the rest:
   ("every morning the car pulls out…") ranks below a line spoken from
   inside the user's defence ("I'm not late. Everyone else is early.").
   The voice stands next to them, not across from them.
+- LENGTH. At equal quality the shorter line wins, always. Over target
+  (take 10 / clapback 6 / roast 15) ranks down; over ceiling (16 / 10 /
+  25) is rejected before you see it.
 - STOPS AT THE TURN. A line that ends on its picture ranks above the
   same line with a clause explaining the picture. "Like a gift" beats
   "like a gift with a card." If two candidates share their first
@@ -763,7 +770,8 @@ export const SLOT_NAMES: Record<SlotKey, string> = {
 }
 
 export const SLOT_RULES: Record<SlotKey, string> = {
-  the_take: `The verdict. One sentence, two at most. Up to 25 words.
+  the_take: `The verdict. One sentence, two at most. Target ten words; hard
+ceiling sixteen. Approved takes run six to twelve.
 Name what actually happened, in words the situation did not provide — and
 say it as hard as the roast would. The take is not the measured card; it
 is the verdict, and verdicts are the cruelest sentence in any courtroom.
@@ -800,7 +808,9 @@ The verdict is on the behaviour, never on the person reading it. The take
 does not take the roast's glancing hit at the user — that is the roast's.`,
 
   the_clapback: `The line they wish they'd said. First person, to their face.
-Up to 30 words. Two beats, sometimes three.
+Target six words; hard ceiling ten. One beat, sometimes two. Approved
+clapbacks run one to nine words ("Rent." "Client-facing." "I wish I had
+that power.").
 ALWAYS RENDERED IN QUOTATION MARKS. The clapback is spoken; the card
 shows it as speech. Return the line with the opening and closing double
 quotes included — the renderer does not add them.
@@ -893,8 +903,9 @@ something. Full degree: the line they would still be thinking about in
 the car.`,
 
   the_roast: `The joke. Ridicule aimed at {{TARGET}}.
-Up to three beats, up to 50 words — a ceiling, not a target. Approved
-roasts have run six words. STOP AT THE TURN: end at the first beat a next
+Target fifteen words; hard ceiling twenty-five. Two beats, sometimes
+three. Approved roasts run six to twenty ("She said gave. Like a gift."
+"$2,400 a month for a view of a wall."). STOP AT THE TURN: end at the first beat a next
 beat wouldn't improve. The reader typed the spill and is standing in it;
 if the button is obvious from the turn, the button is theirs. "She said
 gave. Like a gift." is a complete roast. The card, the drawer, and
@@ -941,13 +952,16 @@ it is the only line in the set that stings, the set has failed, not the
 roast.`,
 }
 
-/** The word budget each slot rule states, as a number the hard rules can
- *  hold a candidate to. */
-export const SLOT_WORDS: Record<SlotKey, number> = {
-  the_take: 25,
-  the_clapback: 30,
-  the_roast: 50,
+/** The hard ceilings the slot rules state (take sixteen, clapback ten,
+ *  roast twenty-five). Guardrail F rejects a candidate over its ceiling
+ *  before the judge sees it; the targets (10 / 6 / 15) are the prompt's. */
+export const SLOT_CEILINGS: Record<SlotKey, number> = {
+  the_take: 16,
+  the_clapback: 10,
+  the_roast: 25,
 }
+/** The word budget the hard rules hold a candidate to — the ceilings. */
+export const SLOT_WORDS: Record<SlotKey, number> = SLOT_CEILINGS
 
 /* ───────────────────────────── 4b — house voice ─────────────────────────────
    Interpolated as {{VOICE_PERSONA}} (and the rest) when no voice is

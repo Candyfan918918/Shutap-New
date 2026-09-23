@@ -21,7 +21,7 @@
 import rows from '@/lib/jokes/jokenet.json'
 import { classifyArchetype } from '@/lib/jokes/deck.server'
 import type { SlotKey } from '@/lib/jokes/deck'
-import { guardrailFailure, hardRuleFailure, spillFlags } from '@/lib/jokes/pipeline.server'
+import { guardrailFailure, hardRuleFailure, lengthFailure, spillFlags } from '@/lib/jokes/pipeline.server'
 import { SEED_HALL_OF_FAME } from '@/lib/jokes/voices.server'
 
 type Row = { id: string; situation: string; joke: string; rating: string; slot: string; archetype: string; notes: string; source: string }
@@ -68,8 +68,10 @@ function admit(r: Row): { ok: true } | { ok: false; why: string } {
     archetype: classifyArchetype(r.situation),
   })
   const g = guardrailFailure(line, slot, flags)
-  if (g) return { ok: false, why: `guardrail: ${g.rule} (${g.detail}${g.domain ? `, ${g.domain}` : ''})` }
-  const h = hardRuleFailure(line, r.situation, slot)
+  // Guardrail F applies to new candidates only: an approved row over its
+  // ceiling stays seeded, and is listed in the report as over.
+  if (g && g.rule !== 'length') return { ok: false, why: `guardrail: ${g.rule} (${g.detail}${g.domain ? `, ${g.domain}` : ''})` }
+  const h = hardRuleFailure(line, r.situation, slot, { ignoreLength: true })
   if (h) return { ok: false, why: `hard rule: ${h}` }
   return { ok: true }
 }
@@ -107,5 +109,8 @@ if (mode === '--sql') {
 } else {
   console.log(`${candidates.length} approved product-mode rows · ${admitted.length} admitted · ${refused.length} refused`)
   for (const r of admitted) console.log(`  ok   #${r.id} ${r.slot.padEnd(8)} ${r.joke.trim()}`)
+  const over = admitted.map((r) => ({ r, hit: lengthFailure(r.joke.trim(), SLOT[r.slot]!) })).filter((x) => x.hit)
+  console.log(`\n${over.length} admitted rows over their slot ceiling (Guardrail F; seeded anyway, F is for new candidates):`)
+  for (const { r, hit } of over) console.log(`  over #${r.id} ${r.slot.padEnd(8)} ${hit!.detail}  ${r.joke.trim()}`)
   for (const { row, why } of refused) console.log(`  OUT  #${row.id} ${row.slot.padEnd(8)} ${row.joke.trim()}\n         ${why}`)
 }

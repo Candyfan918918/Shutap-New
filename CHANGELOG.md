@@ -4,6 +4,18 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.1 — 2026-09-23
+
+Length. Founder: live v3.0 cards are too long; over the 72 approved
+ledger cards the medians are take 11.5 / clapback 6 / roast 15 words and
+the slot rules said up to 25 / 30 / 50. Verbatim from the spec: the slot
+rules' first lines now give targets 10 / 6 / 15 and hard ceilings
+16 / 10 / 25; a LENGTH bullet in stage 2 SHAPE; a LENGTH criterion in the
+judge. Guardrail F (`length`): a candidate over its slot ceiling
+(whitespace words, quotation marks stripped; `SLOT_CEILINGS`) is rejected
+before the judge, logged `{count, ceiling}`. Runs after E. Seeded
+hall-of-fame rows over a ceiling stay seeded; F is for new candidates.
+
 ## 3.0 — 2026-09-22
 
 Spec: `docs/shutap-prompt-templates.md` (the founder's v2.1 file, as edited

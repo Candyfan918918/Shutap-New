@@ -585,6 +585,10 @@ SHAPE:
 - Read it for heat. If it is the calm version of a harder line you can
   see, write the harder line. Candidates 1–7 are already at full degree;
   8–10 are past what you think is allowed, within the direction rules.
+- LENGTH. Targets: take ten words, clapback six, roast fifteen. These
+  are what approved cards actually measure. A ceiling is not a budget
+  to spend; a line that fills it has usually explained itself. Write
+  the line, then delete the sentence that says what it meant.
 - Read it once. Every card is read one time, on a phone, by someone who
   is angry. If any sentence needs a second pass to know who did what, or
   ends ambiguous about who wins, it has failed. Subject, verb, object.
@@ -735,6 +739,9 @@ output failed and they are weighted above the rest:
   ("every morning the car pulls out…") ranks below a line spoken from
   inside the user's defence ("I'm not late. Everyone else is early.").
   The voice stands next to them, not across from them.
+- LENGTH. At equal quality the shorter line wins, always. Over target
+  (take 10 / clapback 6 / roast 15) ranks down; over ceiling (16 / 10 /
+  25) is rejected before you see it.
 - STOPS AT THE TURN. A line that ends on its picture ranks above the
   same line with a clause explaining the picture. "Like a gift" beats
   "like a gift with a card." If two candidates share their first
@@ -788,7 +795,8 @@ Constants. Interpolated as `{{SLOT_RULE}}` into both stage 2 and stage 3.
 
 ```ts
 export const SLOT_RULES = {
-  take: `The verdict. One sentence, two at most. Up to 25 words.
+  take: `The verdict. One sentence, two at most. Target ten words; hard
+ceiling sixteen. Approved takes run six to twelve.
 Name what actually happened, in words the situation did not provide — and
 say it as hard as the roast would. The take is not the measured card; it
 is the verdict, and verdicts are the cruelest sentence in any courtroom.
@@ -825,7 +833,9 @@ The verdict is on the behaviour, never on the person reading it. The take
 does not take the roast's glancing hit at the user — that is the roast's.`,
 
   clapback: `The line they wish they'd said. First person, to their face.
-Up to 30 words. Two beats, sometimes three.
+Target six words; hard ceiling ten. One beat, sometimes two. Approved
+clapbacks run one to nine words ("Rent." "Client-facing." "I wish I had
+that power.").
 ALWAYS RENDERED IN QUOTATION MARKS. The clapback is spoken; the card
 shows it as speech. Return the line with the opening and closing double
 quotes included — the renderer does not add them.
@@ -918,8 +928,9 @@ something. Full degree: the line they would still be thinking about in
 the car.`,
 
   roast: `The joke. Ridicule aimed at {{TARGET}}.
-Up to three beats, up to 50 words — a ceiling, not a target. Approved
-roasts have run six words. STOP AT THE TURN: end at the first beat a next
+Target fifteen words; hard ceiling twenty-five. Two beats, sometimes
+three. Approved roasts run six to twenty ("She said gave. Like a gift."
+"$2,400 a month for a view of a wall."). STOP AT THE TURN: end at the first beat a next
 beat wouldn't improve. The reader typed the spill and is standing in it;
 if the button is obvious from the turn, the button is theirs. "She said
 gave. Like a gift." is a complete roast. The card, the drawer, and
@@ -1515,6 +1526,8 @@ Founder's final set:
 - first set (mine): "mad at 1:30 / the baby's just the one with a face" · "Sleep is free right now. Take it. It gets invoiced later." · "The nap comes. Never at 1:30. Always at 4:50, in the car, eleven minutes from home."
 
 **Encoded:** THE CONVENTION — the rulebook that would ban it. Set rebuilt around the founder's picture.
+
+**Length correction, 2026-09-23.** Founder: "the cards' lines are too long now." Measured over 72 approved cards: take median 11.5 words (p90 22), clapback median 6 (p90 16), roast median 15 (p90 32). The slot rules said "up to 25 / 30 / 50" and the model spent the budget. Ceilings rewritten to targets 10 / 6 / 15 with hard ceilings 16 / 10 / 25 enforced in code (Guardrail F), and the judge ranks shorter at equal quality.
 
 **Product-mode round Y — spill: "The surprise I get is never the surprise for me as a mom or wife." Live product card: "it's a six sigma event. your reaction is the key performance indicator." Founder rejected three of my sets before approving:**
 - take — Even your surprise party needs you to bake the cake.

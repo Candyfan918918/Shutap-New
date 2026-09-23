@@ -25,6 +25,7 @@ import {
   PROMPT_VERSION,
   SLOT_NAMES,
   SLOT_RULES,
+  SLOT_CEILINGS,
   SLOT_WORDS,
   fill,
   formatCandidates,
@@ -207,14 +208,22 @@ function contentWords(text: string): Set<string> {
 }
 
 /** The reason a line fails a hard rule, or null when it passes. */
-export function hardRuleFailure(line: string, situation: string, slot: SlotKey = 'the_roast'): string | null {
+export function hardRuleFailure(
+  line: string,
+  situation: string,
+  slot: SlotKey = 'the_roast',
+  opts: { ignoreLength?: boolean } = {},
+): string | null {
   const t = line.trim()
   if (!t) return 'empty'
   const words = t.split(/\s+/).length
   // A clapback may be one word — THE SCAPEGOAT ("Rent.") and THE
   // INSTITUTION'S ALIBI ("Client-facing.") are approved product cards.
   if (words < (slot === 'the_clapback' ? 1 : 2)) return 'too short'
-  if (t.length > maxCharsFor(slot) || words > maxWordsFor(slot)) return 'over length'
+  // Length is Guardrail F's; this is the older backstop at a fifth over.
+  // The hall-of-fame admission skips it: an approved row over its ceiling
+  // stays seeded, and F is for new candidates.
+  if (!opts.ignoreLength && (t.length > maxCharsFor(slot) || words > maxWordsFor(slot))) return 'over length'
   if (slot !== 'the_clapback' && ADVICE.test(t)) return 'advice'
   if (REASSURANCE.test(t)) return 'reassurance'
   if (CLINICAL.test(outsideQuotes(t, slot))) return 'clinical vocabulary'
@@ -579,15 +588,35 @@ export function outsideQuotes(line: string, slot: SlotKey): string {
 }
 
 export type GuardrailHit = {
-  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy' | 'borrowed_domain'
+  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy' | 'borrowed_domain' | 'length'
   detail: string
+  /** F: the words counted and the slot's ceiling */
+  count?: number
+  ceiling?: number
   source?: 'static' | 'dynamic'
   /** E: the domain the line borrowed */
   domain?: Domain
   /** A on a self-directed spill: only the verdict-noun list applied */
   narrowed?: 'self_directed'
 }
-export const GUARDRAIL_RULES: GuardrailHit['rule'][] = ['user_predicate', 'serious_fact', 'self_critical_predicate', 'exemplar_copy', 'borrowed_domain']
+export const GUARDRAIL_RULES: GuardrailHit['rule'][] = ['user_predicate', 'serious_fact', 'self_critical_predicate', 'exemplar_copy', 'borrowed_domain', 'length']
+
+/* ── Guardrail F · length ──
+   Measured over the 72 approved ledger cards: take median 11.5 words,
+   clapback 6, roast 15. The slot rules said "up to 25 / 30 / 50" and the
+   model spent the budget. The rules now give targets and hard ceilings
+   (SLOT_CEILINGS); a candidate over its ceiling is out before the judge.
+   Words are whitespace tokens with the quotation marks stripped, so a
+   clapback's own quotes never count. Applies to new candidates only: a
+   seeded hall-of-fame row over a ceiling stays seeded. */
+export function cardWordCount(line: string): number {
+  return line.replace(/["“”]/g, ' ').trim().split(/\s+/).filter(Boolean).length
+}
+export function lengthFailure(line: string, slot: SlotKey): GuardrailHit | null {
+  const count = cardWordCount(line)
+  const ceiling = SLOT_CEILINGS[slot]
+  return count > ceiling ? { rule: 'length', detail: `${count} > ${ceiling}`, count, ceiling } : null
+}
 
 /** Guardrail D: a candidate that is a hall-of-fame line or a prompt
  *  exemplar with a tag added. Token-set Jaccard at or above 0.5, or the
@@ -615,7 +644,7 @@ export function exemplarCopy(line: string, exemplars: ExemplarNorm[]): ExemplarN
   return null
 }
 
-/** The first guardrail a candidate trips, or null. Order: A, B, C, D, E. */
+/** The first guardrail a candidate trips, or null. Order: A, B, C, D, E, F. */
 export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags): GuardrailHit | null {
   if (flags.self_directed) {
     // Spec §8: on a self-directed spill the user IS the subject and the
@@ -645,6 +674,8 @@ export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags)
   if (copy) return { rule: 'exemplar_copy', detail: copy.id }
   const borrowed = borrowedDomain(line, slot, flags)
   if (borrowed) return { rule: 'borrowed_domain', detail: borrowed.token, domain: borrowed.domain }
+  const long = lengthFailure(line, slot)
+  if (long) return long
   return null
 }
 
@@ -952,7 +983,7 @@ async function screenedPass(
   if (pass.error) return { error: pass.error, model: pass.model }
   const records: CandidateRecord[] = pass.candidates.map((text) => ({ text }))
   const survivors: { text: string; at: number }[] = []
-  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0, borrowed_domain: 0 }
+  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0, borrowed_domain: 0, length: 0 }
   records.forEach((r, at) => {
     const hit = guardrailFailure(r.text, input.slot, flags)
     if (hit) {
@@ -970,7 +1001,9 @@ async function screenedPass(
             ? { hall_of_fame_id: hit.detail }
             : hit.rule === 'borrowed_domain'
               ? { domain: hit.domain, token: hit.detail }
-              : { span: hit.detail, ...(hit.narrowed ? { narrowed: hit.narrowed } : {}) }),
+              : hit.rule === 'length'
+                ? { count: hit.count, ceiling: hit.ceiling }
+                : { span: hit.detail, ...(hit.narrowed ? { narrowed: hit.narrowed } : {}) }),
       })
       return
     }

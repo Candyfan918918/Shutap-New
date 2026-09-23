@@ -21,6 +21,7 @@ import {
   spillFlags,
   guardrailFailure,
   hardRuleFailure,
+  lengthFailure,
   outsideQuotes,
 } from '@/lib/jokes/pipeline.server'
 import { promptExemplars } from '@/lib/jokes/prompts.server'
@@ -49,13 +50,18 @@ function check(label: string, got: string, want: string) {
   console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${label}${ok ? '' : `  [got ${got}]`}`)
 }
 
+/** The direction verdict: A–E and the hard rules, with length set aside.
+ *  Guardrail F is for new candidates; the approved lines these checks ask
+ *  about include seeded rows over their ceiling, and F has its own section. */
 function verdict(line: string, slot: SlotKey, situation: string, seriousFact: string | null): string {
   const flags = spillFlags(situation, seriousFact, EXEMPLARS)
   const g = guardrailFailure(line, slot, flags)
-  if (g) return `guardrail:${g.rule}(${g.detail}${g.source ? ',' + g.source : ''})`
-  const h = hardRuleFailure(line, situation, slot)
+  if (g && g.rule !== 'length') return `guardrail:${g.rule}(${g.detail}${g.source ? ',' + g.source : ''})`
+  const h = hardRuleFailure(line, situation, slot, { ignoreLength: true })
   return h ? `hardrule:${h}` : 'pass'
 }
+const lengthOf = (line: string, slot: SlotKey) => { const f = lengthFailure(line, slot); return f ? `length(${f.detail})` : 'pass' }
+const words = (n: number, quoted = false) => { const w = Array.from({ length: n }, (_, i) => (i === n - 1 ? 'fork.' : `w${i}`)).join(' '); return quoted ? `"${w}"` : w }
 
 /** The rule alone, for the copy checks — the exemplar id is not stable. */
 function rule(line: string, slot: SlotKey, situation: string, seriousFact: string | null): string {
@@ -274,6 +280,21 @@ console.log('\n[clapback] THE SCAPEGOAT and THE INSTITUTION\'S ALIBI are one wor
 check('"Rent." passes', verdict('"rent."', 'the_clapback', 'Why am I sad?', null), 'pass')
 check('"Client-facing." passes', verdict('"client-facing."', 'the_clapback', 'I paid for my boob job with my corporate business card (by accident).', null), 'pass')
 check('a one-word take is still too short', verdict('rent.', 'the_take', 'Why am I sad?', null), 'hardrule:too short')
+
+/* ── Guardrail F · length ─────────────────────────────────────────────── */
+console.log('\n[F] length — over the slot ceiling is out before the judge; quotes do not count')
+check('a 17-word take is out', lengthOf(words(17), 'the_take'), 'length(17 > 16)')
+check('a 16-word take passes the ceiling', lengthOf(words(16), 'the_take'), 'pass')
+check('an 11-word clapback is out', lengthOf(words(11, true), 'the_clapback'), 'length(11 > 10)')
+check('the quotation marks are not words (10 inside quotes passes)', lengthOf(words(10, true), 'the_clapback'), 'pass')
+check('a 26-word roast is out', lengthOf(words(26), 'the_roast'), 'length(26 > 25)')
+check('a 25-word roast passes', lengthOf(words(25), 'the_roast'), 'pass')
+check('F is in guardrailFailure, after E', guardrailFailure(words(17), 'the_take', frozenFlags)?.rule ?? 'pass', 'length')
+check('the approved custody roast (32 words) would be out as a NEW candidate', lengthOf("she's going to court to get closer to the baby. court is where we get the number for how far away she stays. fifty feet is standard. we're asking for a hundred.", 'the_roast'), 'length(32 > 25)')
+check('the approved custody take (14) passes', lengthOf('she thinks a court can make us let her in. it can. once. with a bailiff.', 'the_take'), 'pass')
+const overSeed = SEED_HALL_OF_FAME.filter((h) => lengthFailure(h.joke_text, h.slot))
+console.log(`  seed hall-of-fame rows over their ceiling (left seeded): ${overSeed.length}`)
+for (const h of overSeed) console.log(`    ${h.slot.padEnd(12)} ${lengthFailure(h.joke_text, h.slot)!.detail.padEnd(8)} ${h.joke_text}`)
 
 console.log(`\n${pass} passed, ${fail} failed`)
 if (fail) {
