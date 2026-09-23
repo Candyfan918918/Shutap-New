@@ -4,6 +4,13 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.5 — 2026-09-23
+
+Spec v3 (ledger through round Z). Judge: INSIDE THE USER'S METAPHOR is
+scoped to take and roast, verbatim; guardrail G (`literal_noun`) no longer
+runs on the clapback. Open: v3 omits the judge's NO INVENTED PEOPLE bullet;
+kept pending founder confirmation (guardrail I unchanged).
+
 ## 3.4 — 2026-09-23
 
 Three guardrail bugs from the hamster set (3.3 was never cut; the number

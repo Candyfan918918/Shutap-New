@@ -1,4 +1,4 @@
-# Shutap — Prompt Templates v2.1
+# Shutap — Prompt Templates v3 (ledger through round Z, 2026-09-23)
 
 Three prompts, one per pipeline stage. Copy into `supabase/functions/_shared/prompts.ts` as template literals. `{{VARS}}` are interpolated at call time. Bump `prompt_version` to `2.1` on `joke_cards`.
 
@@ -747,10 +747,11 @@ output failed and they are weighted above the rest:
 - ON A SELF-DIRECTED EMOTIONAL SPILL, a line that assigns the user the
   fault ("you built the wheel, then you chose the animal") is out — not
   ranked down, out. The voice stands next to them.
-- INSIDE THE USER'S METAPHOR. When the situation is a metaphor, a line
-  built only from the metaphor's parts (treadmill, nameplate,
-  specialist) with no noun from the user's literal life ranks with the
-  findings. A line that adds one real noun to their image ranks above
+- INSIDE THE USER'S METAPHOR (take and roast; the clapback is the
+  user's own voice and may stay inside their image). When the situation
+  is a metaphor, a line built only from the metaphor's parts (treadmill,
+  nameplate, specialist) with no noun from the user's literal life ranks
+  with the findings. A line that adds one real noun to their image ranks above
   it.
 - ON A SELF-DIRECTED SPILL, a line that narrates the user from outside
   ("every morning the car pulls out…") ranks below a line spoken from
@@ -766,9 +767,6 @@ output failed and they are weighted above the rest:
 - ONE PASS. A line that needs a second read to know who did what, or
   ends unclear about who wins, ranks below any line that doesn't,
   however good the idea.
-- NO INVENTED PEOPLE. On a situation with no other adult, a line that
-  introduces "she", "he" or "they" without naming who is out. The
-  reader typed the situation; nobody else is in it.
 - IS SOMEONE SAYING IT. Read it in the voice. Does a person say this, or does
   a report contain it? Attitude is required. Accurate and unbothered ranks
   below accurate and bothered.

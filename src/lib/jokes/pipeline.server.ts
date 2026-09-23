@@ -870,7 +870,9 @@ export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags)
   if (borrowed) return { rule: 'borrowed_domain', detail: borrowed.token, domain: borrowed.domain }
   const long = lengthFailure(line, slot)
   if (long) return long
-  const noun = literalNounFailure(line, flags)
+  // v3: G is take and roast only; the clapback is the user's own voice and
+  // may stay inside their image.
+  const noun = slot === 'the_clapback' ? null : literalNounFailure(line, flags)
   if (noun) return noun
   const blame = blameFailure(line, slot, flags)
   if (blame) return blame
