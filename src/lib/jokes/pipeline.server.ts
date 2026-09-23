@@ -324,6 +324,16 @@ export const SELF_CRITICAL_PREDICATE_RE =
 export type SeriousToken = { token: string; source: 'static' | 'dynamic' }
 export type SpillFlags = {
   self_critical: boolean
+  /** the phrase where the user describes themselves as something they are
+   *  not ("a hamster in a non-stop spinning wheel"); Guardrail G applies */
+  metaphor_span: string | null
+  /** the user reports a feeling about themselves; with self_directed,
+   *  Guardrail H applies */
+  emotional: boolean
+  /** the literal nouns a card may hold on to when the spill is a metaphor:
+   *  the spill's own content words outside the metaphor, plus the noun
+   *  lists its archetype opens */
+  literal_nouns: string[]
   /** the classifier found no other adult and the user is the actor: Guardrail
    *  A narrows to the verdict-noun list (spec §8, round U) */
   self_directed: boolean
@@ -540,8 +550,120 @@ function matchesWholeWord(text: string, token: string): boolean {
 export type SpillShape = {
   /** the classifier's answer: no other adult, the user is the actor */
   selfDirected?: boolean | null
-  /** the set's archetype, for Guardrail E's domain check */
+  /** the set's archetype, for Guardrail E's domain check and G's noun lists */
   archetype?: string | null
+  /** the reader's metaphor span, or null */
+  metaphorSpan?: string | null
+  /** the reader's answer: the user reports a feeling about themselves */
+  emotional?: boolean | null
+}
+
+/* ── Guardrail G · the literal noun (spec §1 THE USER SPOKE IN A METAPHOR,
+   §7d round Z) ──
+   "the hamster is a specialist. the wheel is a treadmill with a
+   nameplate." Every card lived inside the user's metaphor and touched
+   nothing from her day. When the reader finds a metaphor span, a
+   candidate must hold at least one concrete noun from the spill outside
+   that span, or from the noun lists its archetype opens. The lists are
+   seeded from the ledger's approved cards and grow the way the other
+   lists do. */
+export const ARCHETYPE_NOUNS: Record<string, string[]> = {
+  stay_at_home_mom: [
+    'kids', 'kid', 'nap', 'naps', 'dishes', 'laundry', 'school run', '4 p.m.', '4pm', 'the car', 'car', 'the oven',
+    'oven', 'the washer', 'washer', 'dryer', 'bedtime', 'mortgage', 'rent', 'toddler', 'baby', 'bottle', 'stroller',
+    'snack', 'snacks', 'crayons', 'pickup', 'drop-off', 'carpool', 'van', 'phones', 'phone', 'sippy cup', 'daycare',
+    'preschool', 'playground', 'lunchbox', 'lunch', 'dinner', 'bath', 'pajamas', 'pyjamas', 'the couch', 'couch',
+    'the driveway', 'driveway', 'grocery', 'groceries', 'target', 'costco', 'the sink', 'sink', 'the dishwasher',
+    'dishwasher', 'load', 'third load', 'the door', 'a sentence', 'water', 'juice', 'cheerios', 'the wheel',
+  ],
+  work: [
+    'badge', 'desk', 'linkedin', 'email', 'screenshot', 'conference room', 'ceiling', 'position', 'department',
+    'exit interview', 'calls', 'finance', 'category', 'monday', 'parking lot', 'boss', 'hr', 'meeting', 'inbox',
+    'slack', 'calendar', 'laptop', 'badge', 'timesheet', 'invoice', 'payroll', 'workflow', 'team', 'office',
+    'coffee', 'break room', 'the printer', 'printer', 'headset', 'zoom', 'shift', 'schedule', 'clock',
+  ],
+  family: [
+    'kitchen', 'wedding', 'basement', 'laundry', 'mini fridge', 'bailiff', 'court', 'cookies', 'lawyer', 'photos',
+    'rate', 'doctor', 'gift', 'widow', 'baby', 'feed', '3 a.m.', 'dna test', 'walgreens', 'toilet', 'plumbing',
+    'christmas', 'thanksgiving', 'sunday dinner', 'sunday', 'loan', 'groceries', 'coffee', 'spreadsheet', 'row',
+    'column', 'tab', 'severity', 'gym', 'agenda', 'trip', 'the bell', 'door', 'cake', 'casserole', 'the drawer',
+    'drawer', 'the fridge', 'fridge', 'group chat', 'the car', 'car', 'house', 'the couch', 'couch', 'phone',
+  ],
+  self: [
+    'coffee', 'syrup', 'rent', 'wall', 'milk', 'calf', 'farmers', 'keys', 'coat', 'traffic', 'honda', 'funeral',
+    '8:00', 'cake', 'bakery', 'order', 'boy', 'party', 'desk', 'linkedin', 'badge', 'the car', 'car', 'window',
+    'alarm', 'the clock', 'clock', 'shift', 'parking lot', 'bed', 'the couch', 'couch', 'phone', 'brunch', 'latte',
+  ],
+}
+/** Which noun lists a spill opens: by its own words, and by the matcher's
+ *  archetype. A spill with none open falls back to `self`. */
+export const ARCHETYPE_NOUN_MARKERS: Record<string, RegExp> = {
+  stay_at_home_mom: /\b(mom|mum|mother|mama|kids?|baby|toddler|newborn|infant|stay[- ]at[- ]home|nap|naps|sahm|daughter|son|school run|bedtime)\b/i,
+  work: /\b(boss|work|job|hr|office|email|desk|manager|coworker|co-worker|colleague|meeting|company|corporate|hired|interview|position|linkedin|shift|client)\b/i,
+  family: /\b(mother-in-law|mil|in-law|in-laws|husband|wife|wedding|grandma|grandmother|father-in-law|sister|brother|parents|dad|family|ex-mil|marriage|married)\b/i,
+}
+const ARCHETYPE_NOUN_LISTS: Record<string, string[]> = {
+  grandbaby_countdown_clock: ['family', 'stay_at_home_mom'],
+  uninvited_visitor: ['family'],
+  backhanded_grandma: ['family'],
+  silent_treatment_strategist: ['family'],
+  favoritism_broadcaster: ['family'],
+  boundary_bulldozer: ['family'],
+}
+const LITERAL_NOUN_STOPWORDS = new Set([
+  'feel', 'feels', 'feeling', 'like', 'being', 'going', 'just', 'really', 'every', 'always', 'never', 'when',
+  'then', 'that', 'this', 'with', 'from', 'have', 'been', 'they', 'them', 'into', 'over', 'about', 'because',
+  'still', 'while', 'there', 'their', 'what', 'where', 'which', 'will', 'would', 'could', 'should', 'some',
+  'more', 'than', 'very', 'also', 'even', 'only', 'much', 'many', 'stop', 'non-stop', 'nonstop', 'constantly',
+  'literally', 'anymore', 'again', 'myself', 'yourself', 'himself', 'herself', 'everyone', 'everything',
+  'nothing', 'something', 'someone', 'nobody', 'somebody', 'anything', 'around', 'other', 'another', 'without',
+  'through', 'though', 'since', 'until', 'these', 'those', 'does', 'doing', 'done', 'make', 'made', 'makes',
+  'thing', 'things', 'time', 'times', 'people', 'person', 'want', 'wants', 'wanted', 'need', 'needs', 'know',
+  'think', 'told', 'said', 'says', 'asked', 'wish', 'hate', 'love', 'tired', 'exhausted', 'overstimulated',
+  'overwhelmed', 'useless', 'pathetic', 'stuck', 'trapped', 'behind', 'life', 'whole', 'entire', 'kind', 'sort',
+])
+
+export function literalNouns(situation: string, metaphorSpan: string | null | undefined, archetype?: string | null): string[] {
+  if (!metaphorSpan) return []
+  const span = contentWords(metaphorSpan)
+  const out = new Set<string>()
+  for (const w of contentWords(situation)) if (!span.has(w) && !LITERAL_NOUN_STOPWORDS.has(w)) out.add(w)
+  const lists = new Set<string>(ARCHETYPE_NOUN_LISTS[String(archetype ?? '')] ?? [])
+  for (const [key, re] of Object.entries(ARCHETYPE_NOUN_MARKERS)) if (re.test(situation)) lists.add(key)
+  if (lists.size === 0) lists.add('self')
+  const spanNorm = normalizeForCopy(metaphorSpan)
+  for (const key of lists) {
+    for (const noun of ARCHETYPE_NOUNS[key] ?? []) {
+      const n = normalizeForCopy(noun)
+      // a noun that is part of the metaphor phrase is the metaphor, not the day
+      if (n && !matchesWholeWord(spanNorm, n.replace(/^the /, ''))) out.add(noun)
+    }
+  }
+  return Array.from(out)
+}
+
+/** Guardrail G: on a metaphor spill, the first literal noun the line holds,
+ *  or the rejection. */
+export function literalNounFailure(line: string, flags: Pick<SpillFlags, 'metaphor_span' | 'literal_nouns'>): GuardrailHit | null {
+  if (!flags.metaphor_span) return null
+  const t = normalizeForCopy(line)
+  for (const noun of flags.literal_nouns) {
+    const n = normalizeForCopy(noun).replace(/^the /, '')
+    if (n && matchesWholeWord(t, n)) return null
+  }
+  return { rule: 'literal_noun', detail: `no noun from the day (metaphor: ${flags.metaphor_span})` }
+}
+
+/* ── Guardrail H · blame (spec judge, ON A SELF-DIRECTED EMOTIONAL SPILL) ──
+   "you built the wheel, then you chose the animal." On a spill where the
+   user is the actor and reports a feeling about themselves, a line that
+   assigns them the fault is out. Inside quotes it may stand: the card may
+   quote what someone said. */
+export const BLAME_RE = /\byou (chose|built|made|let|did this|picked|caused|wanted)\b/i
+export function blameFailure(line: string, slot: SlotKey, flags: Pick<SpillFlags, 'self_directed' | 'emotional'>): GuardrailHit | null {
+  if (!(flags.self_directed && flags.emotional)) return null
+  const m = BLAME_RE.exec(outsideQuotes(line, slot))
+  return m ? { rule: 'blame', detail: m[0] } : null
 }
 
 /** What the spill itself says about which guardrails apply. */
@@ -561,6 +683,9 @@ export function spillFlags(
     self_critical: SELF_CRITICAL_TOKENS.some((t) => s.includes(t)),
     // Fail-safe: no answer from the classifier keeps Guardrail A total.
     self_directed: shape.selfDirected === true,
+    metaphor_span: shape.metaphorSpan?.trim() || null,
+    emotional: shape.emotional === true,
+    literal_nouns: literalNouns(situation, shape.metaphorSpan, shape.archetype),
     serious_tokens: serious,
     domains: spillDomains(situation, shape.archetype),
     spill_norm: normalizeForCopy(situation),
@@ -588,7 +713,7 @@ export function outsideQuotes(line: string, slot: SlotKey): string {
 }
 
 export type GuardrailHit = {
-  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy' | 'borrowed_domain' | 'length'
+  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy' | 'borrowed_domain' | 'length' | 'literal_noun' | 'blame'
   detail: string
   /** F: the words counted and the slot's ceiling */
   count?: number
@@ -599,7 +724,7 @@ export type GuardrailHit = {
   /** A on a self-directed spill: only the verdict-noun list applied */
   narrowed?: 'self_directed'
 }
-export const GUARDRAIL_RULES: GuardrailHit['rule'][] = ['user_predicate', 'serious_fact', 'self_critical_predicate', 'exemplar_copy', 'borrowed_domain', 'length']
+export const GUARDRAIL_RULES: GuardrailHit['rule'][] = ['user_predicate', 'serious_fact', 'self_critical_predicate', 'exemplar_copy', 'borrowed_domain', 'length', 'literal_noun', 'blame']
 
 /* ── Guardrail F · length ──
    Measured over the 72 approved ledger cards: take median 11.5 words,
@@ -644,7 +769,7 @@ export function exemplarCopy(line: string, exemplars: ExemplarNorm[]): ExemplarN
   return null
 }
 
-/** The first guardrail a candidate trips, or null. Order: A, B, C, D, E, F. */
+/** The first guardrail a candidate trips, or null. Order: A, B, C, D, E, F, G, H. */
 export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags): GuardrailHit | null {
   if (flags.self_directed) {
     // Spec §8: on a self-directed spill the user IS the subject and the
@@ -676,6 +801,10 @@ export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags)
   if (borrowed) return { rule: 'borrowed_domain', detail: borrowed.token, domain: borrowed.domain }
   const long = lengthFailure(line, slot)
   if (long) return long
+  const noun = literalNounFailure(line, flags)
+  if (noun) return noun
+  const blame = blameFailure(line, slot, flags)
+  if (blame) return blame
   return null
 }
 
@@ -983,7 +1112,7 @@ async function screenedPass(
   if (pass.error) return { error: pass.error, model: pass.model }
   const records: CandidateRecord[] = pass.candidates.map((text) => ({ text }))
   const survivors: { text: string; at: number }[] = []
-  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0, borrowed_domain: 0, length: 0 }
+  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0, borrowed_domain: 0, length: 0, literal_noun: 0, blame: 0 }
   records.forEach((r, at) => {
     const hit = guardrailFailure(r.text, input.slot, flags)
     if (hit) {
@@ -1033,6 +1162,9 @@ export async function generateFromInputs(
     /** the classifier's shape of the spill (self-directed) and the set's archetype */
     selfDirected?: boolean | null
     archetype?: string | null
+    /** the reader's metaphor span and emotional flag (Guardrails G and H) */
+    metaphorSpan?: string | null
+    emotional?: boolean | null
   },
 ): Promise<GeneratedCard> {
   const avoid = new Set((input.avoid ?? []).map((t) => t.toLowerCase()))
@@ -1040,6 +1172,8 @@ export async function generateFromInputs(
   const flags = spillFlags(input.situation, input.seriousFact, input.exemplars ?? promptExemplars(), {
     selfDirected: input.selfDirected,
     archetype: input.archetype,
+    metaphorSpan: input.metaphorSpan,
+    emotional: input.emotional,
   })
   console.log('[joke-flip]', {
     set_id: trace.set_id ?? null,
@@ -1047,6 +1181,9 @@ export async function generateFromInputs(
     slot: input.slot,
     self_critical: flags.self_critical,
     self_directed: flags.self_directed,
+    emotional: flags.emotional,
+    metaphor_span: flags.metaphor_span,
+    literal_nouns: flags.literal_nouns.length,
     serious_fact: input.seriousFact ?? null,
     serious_tokens: flags.serious_tokens,
     domains: flags.domains,
@@ -1164,6 +1301,8 @@ type StoredPrep = {
   roast_target: string | null
   serious_fact: string | null
   self_directed: boolean | null
+  metaphor_span: string | null
+  emotional: boolean | null
   embedding: number[] | null
 }
 
@@ -1174,6 +1313,8 @@ export type PreparedSet = {
   seriousFact: string | null
   /** the classifier's answer at set creation; null before the column exists */
   selfDirected: boolean | null
+  metaphorSpan: string | null
+  emotional: boolean | null
   /** the spill's embedding, for few-shot exclusion; null when none could be made */
   embedding: number[] | null
 }
@@ -1182,11 +1323,11 @@ export type PreparedSet = {
  *  is a bare set, not a failed deal: before the generator's migration has
  *  landed these columns do not exist, and the cards must still write. */
 async function readStoredPrep(admin: Admin, setId: string): Promise<StoredPrep> {
-  const bare: StoredPrep = { premises: null, premises_version: null, voice_key: null, roast_target: null, serious_fact: null, self_directed: null, embedding: null }
+  const bare: StoredPrep = { premises: null, premises_version: null, voice_key: null, roast_target: null, serious_fact: null, self_directed: null, metaphor_span: null, emotional: null, embedding: null }
   try {
     const { data, error } = await admin
       .from('joke_sets')
-      .select('premises, premises_version, voice_key, roast_target, serious_fact, self_directed, embedding')
+      .select('premises, premises_version, voice_key, roast_target, serious_fact, self_directed, metaphor_span, emotional, embedding')
       .eq('id', setId)
       .maybeSingle()
     if (error || !data) return bare
@@ -1203,6 +1344,8 @@ async function readStoredPrep(admin: Admin, setId: string): Promise<StoredPrep> 
       roast_target: (data.roast_target as string | null) ?? null,
       serious_fact: (data.serious_fact as string | null) ?? null,
       self_directed: typeof data.self_directed === 'boolean' ? data.self_directed : null,
+      metaphor_span: (data.metaphor_span as string | null) ?? null,
+      emotional: typeof data.emotional === 'boolean' ? data.emotional : null,
       embedding,
     }
   } catch {
@@ -1263,7 +1406,7 @@ export async function prepareSet(admin: Admin, set: SetRow): Promise<PreparedSet
       console.error('[joke-set] could not store the prepared set', { set_id: set.id, err })
     }
   }
-  return { premises, voice, roastTarget, seriousFact: stored.serious_fact, selfDirected: stored.self_directed, embedding }
+  return { premises, voice, roastTarget, seriousFact: stored.serious_fact, selfDirected: stored.self_directed, metaphorSpan: stored.metaphor_span, emotional: stored.emotional, embedding }
 }
 
 /** One card, end to end, for a set the caller has already loaded. */
@@ -1280,7 +1423,7 @@ export async function generateCard(
   } catch (err) {
     console.error('[joke-set] prepare failed; writing from the situation alone', { set_id: set.id, err })
     const voices = await loadVoices(null)
-    prepared = { premises: [], voice: pickVoice(voices, set.id), roastTarget: classifyRoastTarget(situation), seriousFact: null, selfDirected: null, embedding: null }
+    prepared = { premises: [], voice: pickVoice(voices, set.id), roastTarget: classifyRoastTarget(situation), seriousFact: null, selfDirected: null, metaphorSpan: null, emotional: null, embedding: null }
   }
   const trace = { set_id: set.id, position: args.position }
   const [selection, hofLines] = await Promise.all([
@@ -1311,6 +1454,8 @@ export async function generateCard(
     seriousFact: prepared.seriousFact,
     selfDirected: prepared.selfDirected,
     archetype: set.archetype,
+    metaphorSpan: prepared.metaphorSpan,
+    emotional: prepared.emotional,
     exemplars,
   })
 }

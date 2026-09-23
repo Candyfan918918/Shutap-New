@@ -22,6 +22,8 @@ import {
   guardrailFailure,
   hardRuleFailure,
   lengthFailure,
+  literalNounFailure,
+  blameFailure,
   outsideQuotes,
 } from '@/lib/jokes/pipeline.server'
 import { promptExemplars } from '@/lib/jokes/prompts.server'
@@ -295,6 +297,28 @@ check('the approved custody take (14) passes', lengthOf('she thinks a court can 
 const overSeed = SEED_HALL_OF_FAME.filter((h) => lengthFailure(h.joke_text, h.slot))
 console.log(`  seed hall-of-fame rows over their ceiling (left seeded): ${overSeed.length}`)
 for (const h of overSeed) console.log(`    ${h.slot.padEnd(12)} ${lengthFailure(h.joke_text, h.slot)!.detail.padEnd(8)} ${h.joke_text}`)
+
+/* ── Guardrails G and H · the user's metaphor, and blame ─────────────── */
+const HAMSTER = 'I feel like a hamster in a non-stop spinning wheel as a stay at home mom'
+const hamsterFlags = spillFlags(HAMSTER, null, EXEMPLARS, { selfDirected: true, emotional: true, metaphorSpan: 'a hamster in a non-stop spinning wheel', archetype: 'general' })
+const gh = (line: string, slot: SlotKey) => {
+  const G = literalNounFailure(line, hamsterFlags); const H = blameFailure(line, slot, hamsterFlags)
+  return `${G ? 'G' : '-'}${H ? 'H' : '-'}`
+}
+console.log('\n[G·H] the user spoke in a metaphor — a noun from the day, and no blame')
+check('"You\'re a hamster with a mortgage." passes G (mortgage is on the stay-at-home-mom list)', gh("you're a hamster with a mortgage.", 'the_take'), '--')
+check('"the wheel is a treadmill with a nameplate" fails G', gh('the hamster is a specialist. the wheel is a treadmill with a nameplate.', 'the_roast'), 'G-')
+check('"you chose the animal" fails H', gh('you built the wheel, then you chose the animal.', 'the_roast'), 'GH')
+check('"God closed the oven door, and opened the washer door." passes both', gh('god closed the oven door, and opened the washer door.', 'the_roast'), '--')
+check('the live clapback "my contract doesn\'t include breaks." fails G', gh('"my contract doesn\'t include breaks."', 'the_clapback'), 'G-')
+check('a noun from the spill outside the metaphor passes G (home)', gh('the wheel stops at 9:40. home does not.', 'the_take'), '--')
+check('blame inside a quote may stand', gh('"you chose this," she said, and handed you the laundry.', 'the_roast'), '--')
+check('G is off when the reader found no metaphor', literalNounFailure('the wheel is a treadmill with a nameplate.', spillFlags(HAMSTER, null, EXEMPLARS, { selfDirected: true, emotional: true, archetype: 'general' }))?.rule ?? 'pass', 'pass')
+check('H is off when the spill is not emotional', blameFailure('you built the wheel.', 'the_roast', spillFlags(HAMSTER, null, EXEMPLARS, { selfDirected: true, emotional: false }))?.rule ?? 'pass', 'pass')
+check('H is off when the spill has another adult', blameFailure('you built the wheel.', 'the_roast', spillFlags(HAMSTER, null, EXEMPLARS, { selfDirected: false, emotional: true }))?.rule ?? 'pass', 'pass')
+check('G and H are in guardrailFailure, after F', guardrailFailure('you built the wheel, then you chose the animal.', 'the_roast', hamsterFlags)?.rule ?? 'pass', 'literal_noun')
+check('the seeded ledger clapback "Someone stop the hamster spinning wheel." under G on its own spill',
+  literalNounFailure('"someone stop the hamster spinning wheel."', spillFlags('Being a mom I feel overstimulated. Hamster wheel going and going.', null, EXEMPLARS, { selfDirected: true, emotional: true, metaphorSpan: 'Hamster wheel going and going' }))?.rule ?? 'pass', 'literal_noun')
 
 console.log(`\n${pass} passed, ${fail} failed`)
 if (fail) {

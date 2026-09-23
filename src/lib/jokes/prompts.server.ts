@@ -19,7 +19,7 @@
 // voiceless run. See §7 and §7b of the doc for why.
 import type { SlotKey } from './deck'
 
-export const PROMPT_VERSION = '3.1'
+export const PROMPT_VERSION = '3.2'
 
 /* ───────────────────────── 1 — premise pass ─────────────────────────
    Runs once per set on first flip. Cached to joke_sets.premises.
@@ -134,6 +134,15 @@ Rules:
   transfer, a power the user would have to possess), who else was
   skipped to arrive at the user (the doctor, the biology, her own
   history). The content of the accusation is never the premise.
+- THE USER SPOKE IN A METAPHOR. "I feel like a hamster in a wheel."
+  The metaphor is theirs and it is the vehicle, not the mechanism.
+  Observe the LITERAL DAY underneath it — what the wheel is made of:
+  the 4 p.m. hour, the third load, nobody finishing a sentence, the
+  nap that didn't happen. Never observe the metaphor's own parts
+  (the cage, the treadmill, the pellets). An observation with no noun
+  from their actual life is decoration. The card may reuse their
+  image once, and only to bolt a real noun onto it: "a hamster with a
+  mortgage." "God closed the oven door, and opened the washer door."
 - NO SECOND PARTY. Some situations have no other adult in them — the user
   describing their own week, a toddler, a broken object, an accumulation of
   small tasks. Do NOT fall back to observing the user. Aim everything at the
@@ -709,6 +718,14 @@ output failed and they are weighted above the rest:
   dinner table ranks below a line that would end the dinner. Measurable
   beats — a number, a distance, a person with a job — rank above heat
   words. "We're asking for a hundred" beats "we want her gone."
+- ON A SELF-DIRECTED EMOTIONAL SPILL, a line that assigns the user the
+  fault ("you built the wheel, then you chose the animal") is out — not
+  ranked down, out. The voice stands next to them.
+- INSIDE THE USER'S METAPHOR. When the situation is a metaphor, a line
+  built only from the metaphor's parts (treadmill, nameplate,
+  specialist) with no noun from the user's literal life ranks with the
+  findings. A line that adds one real noun to their image ranks above
+  it.
 - ON A SELF-DIRECTED SPILL, a line that narrates the user from outside
   ("every morning the car pulls out…") ranks below a line spoken from
   inside the user's defence ("I'm not late. Everyone else is early.").

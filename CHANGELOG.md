@@ -4,6 +4,22 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.2 — 2026-09-23
+
+The user's metaphor, and blame. Founder rejected the live v3 set for "I
+feel like a hamster in a non-stop spinning wheel as a stay-at-home mom":
+every card lived inside the metaphor and the roast blamed her. Verbatim
+from the spec: THE USER SPOKE IN A METAPHOR in stage 1; two judge
+criteria (blame on a self-directed emotional spill is out; INSIDE THE
+USER'S METAPHOR ranks with the findings); round Z in the ledger.
+The spill reader now also answers `metaphor_span` and `emotional`, stored
+on `joke_sets`. Guardrail G (`literal_noun`): on a metaphor spill a
+candidate must hold a concrete noun from the spill outside the metaphor
+or from the noun lists its archetype opens (`ARCHETYPE_NOUNS`, seeded
+from the ledger's approved cards). Guardrail H (`blame`): on a
+self-directed emotional spill, `you (chose|built|made|let|did this|
+picked|caused|wanted)` outside quotes is out. Order A–H.
+
 ## 3.1 — 2026-09-23
 
 Length. Founder: live v3.0 cards are too long; over the 72 approved

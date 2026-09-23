@@ -105,11 +105,13 @@ async function runOnce(run: number, id: string, situation: string, archetype: st
   ])
   const seriousFact = reading.seriousFact
   const selfDirected = reading.selfDirected
+  const metaphorSpan = reading.metaphorSpan
+  const emotional = reading.emotional
   const exemplars = [...hofLines, ...promptExemplars()]
   const voice = pickVoice(voices, `${id}-${run}`)
   const roastTarget = classifyRoastTarget(situation)
-  const flags = spillFlags(situation, seriousFact, exemplars, { selfDirected, archetype })
-  console.log(JSON.stringify({ id, run, stage: 'premises', voice: voice.key, roast_target: roastTarget, serious_fact: seriousFact, self_directed: selfDirected, flags: { self_critical: flags.self_critical, self_directed: flags.self_directed, serious_tokens: flags.serious_tokens, domains: flags.domains, exemplars: flags.exemplars.length }, premises }))
+  const flags = spillFlags(situation, seriousFact, exemplars, { selfDirected, archetype, metaphorSpan, emotional })
+  console.log(JSON.stringify({ id, run, stage: 'premises', voice: voice.key, roast_target: roastTarget, serious_fact: seriousFact, self_directed: selfDirected, metaphor_span: metaphorSpan, emotional, flags: { self_critical: flags.self_critical, self_directed: flags.self_directed, serious_tokens: flags.serious_tokens, domains: flags.domains, literal_nouns: flags.literal_nouns, exemplars: flags.exemplars.length }, premises }))
   const out: RunCard[] = []
   for (const slot of slots) {
     const trace = { set_id: `${id}-${run}`, position: SLOT_KEYS.indexOf(slot) }
@@ -129,6 +131,8 @@ async function runOnce(run: number, id: string, situation: string, archetype: st
       seriousFact,
       selfDirected,
       archetype,
+      metaphorSpan,
+      emotional,
       exemplars,
     })
     out.push({ slot, card })

@@ -270,6 +270,8 @@ export const submitJokeEntry = createServerFn({ method: 'POST' })
         angles,
         serious_fact: seriousFact,
         self_directed: reading.selfDirected,
+        metaphor_span: reading.metaphorSpan,
+        emotional: reading.emotional,
         thin_input: thinInput,
         is_seed: false,
         corpus_eligible: false,
@@ -278,7 +280,8 @@ export const submitJokeEntry = createServerFn({ method: 'POST' })
       .single()
     if (error || !row) throw new Error(error?.message ?? 'could not open that set')
     console.log('[joke-set] opened', {
-      set_id: row.id, archetype, serious_fact: seriousFact, self_directed: reading.selfDirected, thin_input: thinInput,
+      set_id: row.id, archetype, serious_fact: seriousFact, self_directed: reading.selfDirected,
+      metaphor_span: reading.metaphorSpan, emotional: reading.emotional, thin_input: thinInput,
     })
 
     return {

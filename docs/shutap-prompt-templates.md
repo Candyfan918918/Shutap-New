@@ -147,6 +147,15 @@ Rules:
   transfer, a power the user would have to possess), who else was
   skipped to arrive at the user (the doctor, the biology, her own
   history). The content of the accusation is never the premise.
+- THE USER SPOKE IN A METAPHOR. "I feel like a hamster in a wheel."
+  The metaphor is theirs and it is the vehicle, not the mechanism.
+  Observe the LITERAL DAY underneath it — what the wheel is made of:
+  the 4 p.m. hour, the third load, nobody finishing a sentence, the
+  nap that didn't happen. Never observe the metaphor's own parts
+  (the cage, the treadmill, the pellets). An observation with no noun
+  from their actual life is decoration. The card may reuse their
+  image once, and only to bolt a real noun onto it: "a hamster with a
+  mortgage." "God closed the oven door, and opened the washer door."
 - NO SECOND PARTY. Some situations have no other adult in them — the user
   describing their own week, a toddler, a broken object, an accumulation of
   small tasks. Do NOT fall back to observing the user. Aim everything at the
@@ -735,6 +744,14 @@ output failed and they are weighted above the rest:
   dinner table ranks below a line that would end the dinner. Measurable
   beats — a number, a distance, a person with a job — rank above heat
   words. "We're asking for a hundred" beats "we want her gone."
+- ON A SELF-DIRECTED EMOTIONAL SPILL, a line that assigns the user the
+  fault ("you built the wheel, then you chose the animal") is out — not
+  ranked down, out. The voice stands next to them.
+- INSIDE THE USER'S METAPHOR. When the situation is a metaphor, a line
+  built only from the metaphor's parts (treadmill, nameplate,
+  specialist) with no noun from the user's literal life ranks with the
+  findings. A line that adds one real noun to their image ranks above
+  it.
 - ON A SELF-DIRECTED SPILL, a line that narrates the user from outside
   ("every morning the car pulls out…") ranks below a line spoken from
   inside the user's defence ("I'm not late. Everyone else is early.").
@@ -1526,6 +1543,8 @@ Founder's final set:
 - first set (mine): "mad at 1:30 / the baby's just the one with a face" · "Sleep is free right now. Take it. It gets invoiced later." · "The nap comes. Never at 1:30. Always at 4:50, in the car, eleven minutes from home."
 
 **Encoded:** THE CONVENTION — the rulebook that would ban it. Set rebuilt around the founder's picture.
+
+**Product-mode round Z — live v3 set for "I feel like a hamster in a non-stop spinning wheel as a stay-at-home mom": "my contract doesn't include breaks." · "the hamster is a specialist. the wheel is a treadmill with a nameplate." · "you built the wheel, then you chose the animal." Founder: not relevant, not funny.** Every card stayed inside the metaphor; none contained a noun from her day; the roast blamed her. Approved set (round V) had the mortgage, the oven and the washer. Encoded: THE USER SPOKE IN A METAPHOR (stage 1), two judge rules, and Guardrail G (a candidate must contain a concrete noun from the situation or its archetype that is not part of the metaphor phrase). Also: blame on a self-directed emotional spill is a hard out.
 
 **Length correction, 2026-09-23.** Founder: "the cards' lines are too long now." Measured over 72 approved cards: take median 11.5 words (p90 22), clapback median 6 (p90 16), roast median 15 (p90 32). The slot rules said "up to 25 / 30 / 50" and the model spent the budget. Ceilings rewritten to targets 10 / 6 / 15 with hard ceilings 16 / 10 / 25 enforced in code (Guardrail F), and the judge ranks shorter at equal quality.
 

@@ -21,7 +21,7 @@
 import rows from '@/lib/jokes/jokenet.json'
 import { classifyArchetype } from '@/lib/jokes/deck.server'
 import type { SlotKey } from '@/lib/jokes/deck'
-import { guardrailFailure, hardRuleFailure, lengthFailure, spillFlags } from '@/lib/jokes/pipeline.server'
+import { guardrailFailure, hardRuleFailure, lengthFailure, literalNounFailure, spillFlags } from '@/lib/jokes/pipeline.server'
 import { SEED_HALL_OF_FAME } from '@/lib/jokes/voices.server'
 
 type Row = { id: string; situation: string; joke: string; rating: string; slot: string; archetype: string; notes: string; source: string }
@@ -48,6 +48,18 @@ const SELF_DIRECTED = new Set<string>([
   'I get angry with my baby when he won\'t nap. Then I feel bad for being angry at my baby.',
 ])
 
+/** The reader's metaphor span and emotional flag, pinned for the ledger's
+ *  situations that carry one (Guardrails G and H). */
+const METAPHOR_SPAN: Record<string, string> = {
+  'Being a mom I feel overstimulated. Hamster wheel going and going.': 'Hamster wheel going and going',
+}
+const EMOTIONAL = new Set<string>([
+  'Being a mom I feel overstimulated. Hamster wheel going and going.',
+  'I get mad at everyone around me and can\'t explain why to myself or them.',
+  'Why am I sad?',
+  'I get angry with my baby when he won\'t nap. Then I feel bad for being angry at my baby.',
+  'I feel useless that I\'m in my 30s and still need my parents\' financial support.',
+])
 const SLOT: Record<string, SlotKey> = { take: 'the_take', clapback: 'the_clapback', roast: 'the_roast' }
 const isProduct = (r: Row) => !/\(content/.test(r.situation) && !/^Marriage humor|^Founder-fed/.test(r.situation)
 const status = (r: Row) => (r.notes ?? '').split('|')[0]!.replace(/^status:\s*/, '').trim()
@@ -66,11 +78,17 @@ function admit(r: Row): { ok: true } | { ok: false; why: string } {
   const flags = spillFlags(r.situation, SERIOUS_FACT[r.situation] ?? null, hof, {
     selfDirected: SELF_DIRECTED.has(r.situation),
     archetype: classifyArchetype(r.situation),
+    metaphorSpan: METAPHOR_SPAN[r.situation] ?? null,
+    emotional: EMOTIONAL.has(r.situation),
   })
   const g = guardrailFailure(line, slot, flags)
   // Guardrail F applies to new candidates only: an approved row over its
   // ceiling stays seeded, and is listed in the report as over.
-  if (g && g.rule !== 'length') return { ok: false, why: `guardrail: ${g.rule} (${g.detail}${g.domain ? `, ${g.domain}` : ''})` }
+  // Guardrail G is reported, not gating, for the same reason: the founder's
+  // approved row on the hamster spill ("Someone stop the hamster spinning
+  // wheel.") holds no noun from the day and stays seeded; G is for new
+  // candidates. The report lists it.
+  if (g && g.rule !== 'length' && g.rule !== 'literal_noun') return { ok: false, why: `guardrail: ${g.rule} (${g.detail}${g.domain ? `, ${g.domain}` : ''})` }
   const h = hardRuleFailure(line, r.situation, slot, { ignoreLength: true })
   if (h) return { ok: false, why: `hard rule: ${h}` }
   return { ok: true }
@@ -109,6 +127,9 @@ if (mode === '--sql') {
 } else {
   console.log(`${candidates.length} approved product-mode rows · ${admitted.length} admitted · ${refused.length} refused`)
   for (const r of admitted) console.log(`  ok   #${r.id} ${r.slot.padEnd(8)} ${r.joke.trim()}`)
+  const noNoun = admitted.filter((r) => METAPHOR_SPAN[r.situation] && literalNounFailure(r.joke.trim(), spillFlags(r.situation, null, [], { metaphorSpan: METAPHOR_SPAN[r.situation], archetype: classifyArchetype(r.situation) })))
+  console.log(`\n${noNoun.length} admitted rows with no literal noun on a metaphor spill (Guardrail G; seeded anyway, G is for new candidates):`)
+  for (const r of noNoun) console.log(`  G    #${r.id} ${r.slot.padEnd(8)} ${r.joke.trim()}`)
   const over = admitted.map((r) => ({ r, hit: lengthFailure(r.joke.trim(), SLOT[r.slot]!) })).filter((x) => x.hit)
   console.log(`\n${over.length} admitted rows over their slot ceiling (Guardrail F; seeded anyway, F is for new candidates):`)
   for (const { r, hit } of over) console.log(`  over #${r.id} ${r.slot.padEnd(8)} ${hit!.detail}  ${r.joke.trim()}`)

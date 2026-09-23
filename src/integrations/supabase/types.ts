@@ -691,6 +691,8 @@ export type Database = {
           roast_target: string | null
           serious_fact: string | null
           self_directed: boolean | null
+          metaphor_span: string | null
+          emotional: boolean | null
           thin_input: boolean
           updated_at: string
           user_id: string | null
@@ -711,6 +713,8 @@ export type Database = {
           roast_target?: string | null
           serious_fact?: string | null
           self_directed?: boolean | null
+          metaphor_span?: string | null
+          emotional?: boolean | null
           thin_input?: boolean
           updated_at?: string
           user_id?: string | null
@@ -731,6 +735,8 @@ export type Database = {
           roast_target?: string | null
           serious_fact?: string | null
           self_directed?: boolean | null
+          metaphor_span?: string | null
+          emotional?: boolean | null
           thin_input?: boolean
           updated_at?: string
           user_id?: string | null
