@@ -627,6 +627,7 @@ export type Database = {
           situation_clean: string
           slot: string
           source: string
+          text_embedding: string | null
           updated_at: string
           voice_key: string | null
         }
@@ -641,6 +642,7 @@ export type Database = {
           situation_clean: string
           slot: string
           source?: string
+          text_embedding?: string | null
           updated_at?: string
           voice_key?: string | null
         }
@@ -655,6 +657,7 @@ export type Database = {
           situation_clean?: string
           slot?: string
           source?: string
+          text_embedding?: string | null
           updated_at?: string
           voice_key?: string | null
         }
@@ -684,15 +687,15 @@ export type Database = {
           corpus_eligible: boolean
           created_at: string
           embedding: string | null
+          emotional: boolean | null
           id: string
           is_seed: boolean
+          metaphor_span: string | null
           premises: Json | null
           premises_version: string | null
           roast_target: string | null
-          serious_fact: string | null
           self_directed: boolean | null
-          metaphor_span: string | null
-          emotional: boolean | null
+          serious_fact: string | null
           thin_input: boolean
           updated_at: string
           user_id: string | null
@@ -706,15 +709,15 @@ export type Database = {
           corpus_eligible?: boolean
           created_at?: string
           embedding?: string | null
+          emotional?: boolean | null
           id?: string
           is_seed?: boolean
+          metaphor_span?: string | null
           premises?: Json | null
           premises_version?: string | null
           roast_target?: string | null
-          serious_fact?: string | null
           self_directed?: boolean | null
-          metaphor_span?: string | null
-          emotional?: boolean | null
+          serious_fact?: string | null
           thin_input?: boolean
           updated_at?: string
           user_id?: string | null
@@ -728,15 +731,15 @@ export type Database = {
           corpus_eligible?: boolean
           created_at?: string
           embedding?: string | null
+          emotional?: boolean | null
           id?: string
           is_seed?: boolean
+          metaphor_span?: string | null
           premises?: Json | null
           premises_version?: string | null
           roast_target?: string | null
-          serious_fact?: string | null
           self_directed?: boolean | null
-          metaphor_span?: string | null
-          emotional?: boolean | null
+          serious_fact?: string | null
           thin_input?: boolean
           updated_at?: string
           user_id?: string | null
