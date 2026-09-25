@@ -10,7 +10,7 @@
 // client screenshot of the DOM. Returned as SVG so the Worker needs no native
 // rasteriser — the client download path draws this exact document to a canvas.
 import { createFileRoute } from '@tanstack/react-router'
-import { angleLabel, angleAccent, EXPORT } from '@/lib/jokes/deck'
+import { angleLabel, angleSubtitle, EXPORT } from '@/lib/jokes/deck'
 import { renderCardSvg } from '@/lib/jokes/card-art'
 
 export const Route = createFileRoute('/api/public/joke-card')({
@@ -24,22 +24,15 @@ export const Route = createFileRoute('/api/public/joke-card')({
         const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
         const { data } = await supabaseAdmin
           .from('joke_cards')
-          .select('card_text, angle, set_id')
+          .select('card_text, angle')
           .eq('id', id)
           .maybeSingle()
         if (!data) return new Response('not found', { status: 404 })
 
-        const { data: set } = await supabaseAdmin
-          .from('joke_sets')
-          .select('clean_text')
-          .eq('id', data.set_id)
-          .maybeSingle()
-
         const svg = renderCardSvg({
           text: String(data.card_text),
           label: angleLabel(data.angle as string),
-          accent: angleAccent(data.angle as string),
-          situation: (set?.clean_text as string) ?? '',
+          subtitle: angleSubtitle(data.angle as string),
           width: EXPORT.free.width,
           height: EXPORT.free.height,
           mark: true,

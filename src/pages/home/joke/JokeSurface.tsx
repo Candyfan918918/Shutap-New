@@ -1359,7 +1359,6 @@ export function JokeSurface() {
                           <div aria-live="polite">
                             <CardFace
                               card={dealt}
-                              situation={set.situation}
                               mark={tier !== 'paying'}
                               loading={false}
                             />
@@ -1368,8 +1367,8 @@ export function JokeSurface() {
                           <CardBack
                             label={slot.label}
                             subtitle={slot.subtitle}
-                            situation={set.situation}
                             holding={phaseOf === 'hold'}
+                            spent={deck.isSpent(slot.key)}
                           />
                         )}
                       </FlipCard>

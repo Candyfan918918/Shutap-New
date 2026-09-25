@@ -3,12 +3,13 @@
 // happens here is only rasterising, packaging and handing the file over.
 import { phCapture } from '@/lib/posthog'
 import type { JokeTier } from '@/lib/jokes/deck'
-// The card's three faces, as files: the same woff2 the page itself loads. An
-// SVG drawn into a canvas is a closed document — it cannot reach the page's
-// fonts or fetch its own — so these are inlined into it before it is drawn.
+// The card's faces, as files: the same woff2 the page itself loads. An SVG
+// drawn into a canvas is a closed document — it cannot reach the page's fonts
+// or fetch its own — so these are inlined into it before it is drawn.
+import soraSemiWoff2 from '@fontsource/sora/files/sora-latin-600-normal.woff2?url'
+import soraBoldWoff2 from '@fontsource/sora/files/sora-latin-700-normal.woff2?url'
 import soraBlackWoff2 from '@fontsource/sora/files/sora-latin-800-normal.woff2?url'
 import newsreaderItalicWoff2 from '@fontsource/newsreader/files/newsreader-latin-400-italic.woff2?url'
-import interWoff2 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url'
 
 const ANON_KEY = 'shutap_anon_id'
 
@@ -89,9 +90,12 @@ export function roomCaption(card: { text: string; angleLabel?: string }, situati
 // ───────────────────────── rasterising ─────────────────────────
 
 const CARD_FONTS: { family: string; weight: number; style: string; url: string }[] = [
+  // 600 the headline's slot label, 700 the joke, wordmark and foot, 800 the
+  // stack's label and the watermark.
+  { family: 'Sora', weight: 600, style: 'normal', url: soraSemiWoff2 },
+  { family: 'Sora', weight: 700, style: 'normal', url: soraBoldWoff2 },
   { family: 'Sora', weight: 800, style: 'normal', url: soraBlackWoff2 },
   { family: 'Newsreader', weight: 400, style: 'italic', url: newsreaderItalicWoff2 },
-  { family: 'Inter', weight: 400, style: 'normal', url: interWoff2 },
 ]
 
 let cardFontCss: Promise<string> | null = null
@@ -109,7 +113,7 @@ async function toDataUrl(url: string): Promise<string> {
 }
 
 /** The @font-face rules for the card's faces, each font inlined as a data
- *  URL. Fetched once per page; about 120 KB of base64 for the three. */
+ *  URL. Fetched once per page; about 160 KB of base64 for the four. */
 export function cardFontsCss(): Promise<string> {
   if (!cardFontCss) {
     cardFontCss = Promise.all(
@@ -128,7 +132,7 @@ export function cardFontsCss(): Promise<string> {
 }
 
 /** The server's SVG with the card's fonts written into it, so the picture is
- *  set in Sora, Newsreader and Inter like the card on screen — not in
+ *  set in Sora and Newsreader like the card on screen — not in
  *  whatever serif and sans the saving machine happens to have. If the fonts
  *  cannot be fetched the document is returned as is: a card in the fallback
  *  faces beats no card. */

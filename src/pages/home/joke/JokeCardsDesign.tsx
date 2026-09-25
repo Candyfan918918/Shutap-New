@@ -26,12 +26,50 @@ import { Button, INK, INTER, MUTED, NEWS, PROSE, SORA } from './ui'
 
 const SITUATION = '“he said 50/50, then laminated a chart with only my name on it.”'
 
-const JOKES: Record<SlotKey, string> = {
-  the_take: "he didn't make a chore chart. he made an org chart. and babe — you're the whole org.",
-  the_clapback: 'obsessed with the chart. i\'ve added a column — it\'s called “him.”',
-  the_roast:
-    "a 50/50 split where one person holds both halves isn't math. it's a hostage situation with a laminator.",
+type Face = Pick<JokeCard, 'text' | 'layout' | 'lit' | 'setup' | 'punchline'>
+
+/** The live set: two headlines and a stack, the way the writer deals them. */
+const FACES: Record<SlotKey, Face> = {
+  the_take: {
+    text: "he didn't make a chore chart. he made an org chart. and babe — you're the whole org.",
+    layout: 'headline',
+    lit: "you're the whole org.",
+  },
+  the_clapback: {
+    text: 'obsessed with the chart. i\'ve added a column — it\'s called “him.”',
+    layout: 'headline',
+    lit: '“him.”',
+  },
+  the_roast: {
+    text: "a 50/50 split where one person holds both halves isn't math. it's a hostage situation. laminated.",
+    layout: 'stack',
+    setup: "a 50/50 split where one person holds both halves isn't math.",
+    punchline: 'hostage situation. laminated.',
+  },
 }
+
+/** The roast as a headline, for the headline specimens. */
+const ROAST_HEADLINE: Face = {
+  text: "a 50/50 split where one person holds both halves isn't math. it's a hostage situation with a laminator.",
+  layout: 'headline',
+  lit: 'a hostage situation with a laminator.',
+}
+
+/** Stack specimens: two, three and four words — the last one steps down. */
+const STACKS: { words: string; face: Face }[] = [
+  {
+    words: 'two words · 20cqw',
+    face: { text: 'he asked why i\'m “so quiet lately.” saving breath.', layout: 'stack', setup: 'he asked why i\'m “so quiet lately.”', punchline: 'saving breath.' },
+  },
+  {
+    words: 'three words · 20cqw',
+    face: { text: 'the landlord says the heat is “working as designed.” so was titanic.', layout: 'stack', setup: 'the landlord says the heat is “working as designed.”', punchline: 'so was titanic.' },
+  },
+  {
+    words: 'four words · 60 ÷ 4 = 15cqw',
+    face: { text: 'the ex texted “hope you\'re well.” i was. past tense.', layout: 'stack', setup: 'the ex texted “hope you\'re well.”', punchline: 'i was. past tense.' },
+  },
+]
 
 const NOTES: Record<SlotKey, string> = {
   the_take: 'names the situation back to you. the one people flip when they want to feel sane.',
@@ -39,17 +77,17 @@ const NOTES: Record<SlotKey, string> = {
   the_roast: 'aimed at the setup, never the person. the subtitle is deliberately the plainest of the three.',
 }
 
-function authored(slot: SlotKey, position: number): JokeCard {
+function authored(slot: SlotKey, position: number, face: Face = FACES[slot]): JokeCard {
   const s = SLOTS.find((x) => x.key === slot)!
   return {
     id: `design-${slot}`,
     position,
     angle: slot,
     angleLabel: s.label,
-    text: JOKES[slot],
     used_fallback: false,
     judge_score: null,
     saved: false,
+    ...face,
   }
 }
 
@@ -63,6 +101,8 @@ const EARLIER: SetGroup = {
       angle: 'the_clapback',
       angleLabel: 'the clapback',
       text: 'congratulations to you both, and to the news you just broke on my behalf.',
+      layout: 'headline',
+      lit: 'the news you just broke on my behalf.',
       used_fallback: false,
       judge_score: null,
       saved: false,
@@ -86,6 +126,10 @@ const RULES = [
   {
     title: 'reachable without sight',
     body: 'cards are buttons with “flip the roast — the joke”. the revealed line lives in a live region, spent cards point at the paywall via aria-describedby, and prefers-reduced-motion swaps instantly.',
+  },
+  {
+    title: 'one plum',
+    body: 'off-white, ink and white surfaces do the work. plum survives as one lit phrase on a headline and the outline pill on a back — nowhere else. the slogan and shutap.com never move.',
   },
 ]
 
@@ -167,6 +211,30 @@ function Panel({ children, style }: { children: ReactNode; style?: CSSProperties
     </div>
   )
 }
+
+function Section({ eyebrow, lede, children }: { eyebrow: string; lede?: ReactNode; children: ReactNode }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
+        <SectionEyebrow>{eyebrow}</SectionEyebrow>
+        {lede ? <Lede>{lede}</Lede> : null}
+      </div>
+      {children}
+    </div>
+  )
+}
+
+/** A specimen: a card at a fixed column width, a caption under it. */
+function Specimen({ children, caption }: { children: ReactNode; caption: ReactNode }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 11, minWidth: 0 }}>
+      {children}
+      <Note>{caption}</Note>
+    </div>
+  )
+}
+
+const SPECIMENS: CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 18, alignItems: 'start' }
 
 /* ─────────────────────────── the page ─────────────────────────── */
 
@@ -279,10 +347,10 @@ export function JokeCardsDesign() {
                 >
                   {revealed ? (
                     <div aria-live="polite">
-                      <CardFace card={card} situation={SITUATION} mark={tier !== 'paying'} loading={false} />
+                      <CardFace card={card} mark={tier !== 'paying'} loading={false} />
                     </div>
                   ) : (
-                    <CardBack label={slot.label} subtitle={slot.subtitle} situation={SITUATION} holding={phase === 'hold'} />
+                    <CardBack label={slot.label} subtitle={slot.subtitle} holding={phase === 'hold'} spent={deck.isSpent(slot.key)} />
                   )}
                 </FlipCard>
                 {revealed ? (
@@ -327,38 +395,69 @@ export function JokeCardsDesign() {
         </div>
 
         {/* 1 · the backs */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
-            <SectionEyebrow>1 · the backs</SectionEyebrow>
-            <Lede>label plus permanent subtitle. identical treatment, no per-slot glyph, no per-slot accent — or the choice is biased.</Lede>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 18 }}>
+        <Section eyebrow="1 · the backs" lede="off-white, identical across slots — label, permanent subtitle, one plum outline pill. no per-slot glyph, no per-slot accent, no hint of which face is underneath — or the choice is biased.">
+          <div style={SPECIMENS}>
             {SLOTS.map((s) => (
-              <div key={s.key} style={{ display: 'flex', flexDirection: 'column', gap: 11 }}>
-                <CardBack label={s.label} subtitle={s.subtitle} situation={SITUATION} interactive={false} />
-                <Note>{NOTES[s.key]}</Note>
-              </div>
+              <Specimen key={s.key} caption={NOTES[s.key]}>
+                <CardBack label={s.label} subtitle={s.subtitle} interactive={false} />
+              </Specimen>
             ))}
+          </div>
+          <div style={SPECIMENS}>
+            <Specimen caption="idle. the pill is the instruction; hover lifts 3px and nothing else.">
+              <CardBack label="the take" subtitle="what actually happened here" interactive={false} />
+            </Specimen>
+            <Specimen caption="holding. turned over before the writer finished — it waits on its edge, pulsing, and says so in words.">
+              <CardBack label="the clapback" subtitle="what you wish you'd said" holding interactive={false} />
+            </Specimen>
+            <Specimen caption="spent. a guest's other two: same card, the pill changes its line. a tap points at the block below the deck.">
+              <CardBack label="the roast" subtitle="the joke" spent interactive={false} />
+            </Specimen>
           </div>
           <Note style={{ fontSize: 13.5, color: PROSE, maxWidth: '70ch' }}>
             position is shuffled per set — the label carries identity, so first-flip preference data stays free of a positional confound.
           </Note>
-        </div>
+        </Section>
 
-        {/* 2 · revealed */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
-            <SectionEyebrow>2 · revealed</SectionEyebrow>
-            <Lede>wordmark, the quoted situation, the joke in the voice, and the shutap.com CTA — so a screenshot carries the whole frame.</Lede>
+        {/* 2 · the headline face */}
+        <Section eyebrow="2 · the headline face" lede="off-white. the slot's subtitle, then the joke big in Sora with one phrase lit in plum — the turn the judge marked. never truncated: long jokes step down 11.5 → 9.6 → 8.2 → 7cqw and on.">
+          <div style={SPECIMENS}>
+            <Specimen caption="the take · 84 characters, 9.6cqw.">
+              <CardFace card={authored('the_take', 0)} mark={false} />
+            </Specimen>
+            <Specimen caption="the clapback · the lit phrase can carry its own quotes.">
+              <CardFace card={authored('the_clapback', 1)} mark={false} />
+            </Specimen>
+            <Specimen caption="the roast · ~100 characters. the lit phrase can run across a line break.">
+              <CardFace card={authored('the_roast', 2, ROAST_HEADLINE)} mark={false} />
+            </Specimen>
           </div>
+        </Section>
+
+        {/* 3 · the stack face */}
+        <Section eyebrow="3 · the stack face" lede="ink, grain, the eyes. the setup in the voice, then the punchline one word a line, ramping white → mauve → dusk. two to four words; more than three share 60cqw between them.">
+          <div style={SPECIMENS}>
+            {STACKS.map((s, i) => (
+              <Specimen key={s.words} caption={s.words}>
+                <CardFace card={authored('the_roast', i, s.face)} mark={false} />
+              </Specimen>
+            ))}
+          </div>
+        </Section>
+
+        {/* 4 · the mark */}
+        <Section eyebrow="4 · the mark" lede="a guest's and a free card carry the name, three rows at -22°, in each surface's own ink. part of the picture, never a corner badge.">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(290px,1fr))', gap: 24 }}>
             <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-              <div style={{ width: 216, flex: 'none' }}>
-                <CardFace card={authored('the_clapback', 0)} situation="“50/50, one name on the rows.”" mark loading={false} />
+              <div style={{ width: 200, flex: 'none' }}>
+                <CardFace card={authored('the_clapback', 0)} mark />
+              </div>
+              <div style={{ width: 200, flex: 'none' }}>
+                <CardFace card={authored('the_roast', 1)} mark />
               </div>
               <div style={{ flex: '1 1 180px', minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 9 }}>
-                <Badge tone="neutral">guest</Badge>
-                <Note>the card carries the mark: a tiled diagonal wash across the art. quiet enough to read the joke through, loud enough that a screenshot is obviously a guest&apos;s.</Note>
+                <Badge tone="neutral">guest · free</Badge>
+                <Note>quiet enough to read the joke through, loud enough that a screenshot is obviously marked. 5% ink on off-white, 8.5% white on ink.</Note>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   <StillPill strong>
                     <span style={{ fontFamily: INTER, fontWeight: 400, fontSize: 13 }}>◎</span>post as a room
@@ -366,35 +465,24 @@ export function JokeCardsDesign() {
                   <StillPill>share</StillPill>
                   <StillPill>download</StillPill>
                 </div>
-                <Note>all three are present, never disabled. tapping any of them opens the alias sheet — a guest who wants a room should meet the gate holding the thing they asked for, not a row with the ask missing from it.</Note>
+                <Note>all three are present, never disabled. for a guest, tapping any of them opens the alias sheet — a guest who wants a room should meet the gate holding the thing they asked for, not a row with the ask missing from it.</Note>
               </div>
             </div>
             <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-              <div style={{ width: 216, flex: 'none' }}>
-                <CardFace card={authored('the_clapback', 0)} situation="“50/50, one name on the rows.”" mark={false} loading={false} />
+              <div style={{ width: 200, flex: 'none' }}>
+                <CardFace card={authored('the_clapback', 0)} mark={false} />
               </div>
               <div style={{ flex: '1 1 180px', minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 9 }}>
-                <Badge tone="brand">signed in</Badge>
-                <Note>no mark, 1080×1920. the in-card CTA stays either way — it&apos;s the card&apos;s job, not a tier perk.</Note>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  <StillPill strong>
-                    <span style={{ fontFamily: INTER, fontWeight: 400, fontSize: 13 }}>◎</span>post as a room
-                  </StillPill>
-                  <StillPill>share</StillPill>
-                  <StillPill>download</StillPill>
-                </div>
+                <Badge tone="brand">member</Badge>
+                <Note>no mark, 1080×1920. the slogan and shutap.com stay either way — they&apos;re the card&apos;s job, not a tier perk.</Note>
                 <Note>post as a room is the only action that touches other people, so it leads the row and carries a word instead of a glyph.</Note>
               </div>
             </div>
           </div>
-        </div>
+        </Section>
 
-        {/* 3 · spent */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
-            <SectionEyebrow>3 · spent</SectionEyebrow>
-            <Lede>a guest&apos;s two unflipped cards do not change. they are the sign-up wall — and a strong one, because the two labelled backs they cannot turn are right there. one honest ask in one place beats locks scattered across the surface.</Lede>
-          </div>
+        {/* 5 · spent */}
+        <Section eyebrow="5 · spent" lede="a guest's two unflipped cards do not change. they are the sign-up wall — and a strong one, because the two labelled backs they cannot turn are right there. one honest ask in one place beats locks scattered across the surface.">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 24, alignItems: 'start' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div style={{ display: 'flex', gap: 12 }}>
@@ -402,7 +490,7 @@ export function JokeCardsDesign() {
                   const s = SLOTS.find((x) => x.key === k)!
                   return (
                     <div key={k} style={{ flex: 1, minWidth: 0 }}>
-                      <CardBack label={s.label} subtitle={s.subtitle} situation="still face-down" interactive={false} />
+                      <CardBack label={s.label} subtitle={s.subtitle} spent interactive={false} />
                     </div>
                   )
                 })}
@@ -432,11 +520,10 @@ export function JokeCardsDesign() {
               </Note>
             </div>
           </div>
-        </div>
+        </Section>
 
-        {/* 4 · the rules underneath */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-          <SectionEyebrow>4 · the rules underneath</SectionEyebrow>
+        {/* 6 · the rules underneath */}
+        <Section eyebrow="6 · the rules underneath">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 18 }}>
             {RULES.map((r) => (
               <Panel key={r.title}>
@@ -445,7 +532,7 @@ export function JokeCardsDesign() {
               </Panel>
             ))}
           </div>
-        </div>
+        </Section>
       </div>
 
       {/* the alias sheet, as a picture of one */}

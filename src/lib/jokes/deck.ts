@@ -151,6 +151,37 @@ export type JokeCard = {
    *  it was written for, never as a loose line. */
   set_id?: string | null
   situation?: string
+  /** Which face the card turns over to. The writer sets it per card; a card
+   *  without one — every row written before the two faces — is a headline. */
+  layout?: CardLayout
+  /** headline: the phrase inside `text` lit in plum — the turn the judge
+   *  marked. Ignored unless it appears in `text` verbatim. */
+  lit?: string
+  /** stack: the setup, in the voice, above the punchline. */
+  setup?: string
+  /** stack: two to four words, set one to a line. */
+  punchline?: string
+}
+
+export type CardLayout = 'headline' | 'stack'
+
+/** What a card's face actually draws, with the fallbacks settled once so the
+ *  screen and the export can never disagree. A stack without a punchline has
+ *  nothing to stack, so it turns over as a headline; a `lit` that isn't in the
+ *  text lights nothing. */
+export type ResolvedFace =
+  | { layout: 'headline'; text: string; lit: string }
+  | { layout: 'stack'; setup: string; punchline: string }
+
+export function resolveFace(
+  card: Pick<JokeCard, 'text' | 'layout' | 'lit' | 'setup' | 'punchline'>,
+): ResolvedFace {
+  const punchline = card.punchline?.trim() ?? ''
+  if (card.layout === 'stack' && punchline) {
+    return { layout: 'stack', setup: card.setup?.trim() ?? '', punchline }
+  }
+  const lit = card.lit && card.text.includes(card.lit) ? card.lit : ''
+  return { layout: 'headline', text: card.text, lit }
 }
 
 export type JokeTier = 'guest' | 'free' | 'paying'
