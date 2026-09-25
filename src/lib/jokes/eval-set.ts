@@ -54,4 +54,5 @@ export const JOKENET_SET: { id: string; archetype: string; situation: string }[]
   { id: 'j160', archetype: 'general', situation: "He left when I told him I was pregnant." },
   { id: 'j163', archetype: 'grandbaby_countdown_clock', situation: "I get angry with my baby when he won't nap. Then I feel bad for being angry at my baby." },
   { id: 'j170', archetype: 'grandbaby_countdown_clock', situation: "My mother-in-law wants to take my 2-week-old baby out to meet her friends at the country club." },
+  { id: 'j249', archetype: 'general', situation: "I filled up my tank today and it cost me $120." },
 ]

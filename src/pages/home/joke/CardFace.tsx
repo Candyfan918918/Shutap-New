@@ -95,7 +95,7 @@ export function CardFace({
             {situation}
           </div>
         ) : null}
-        <div style={{ font: `italic 400 ${jokeSize(card.text)}cqw/1.32 Newsreader,serif`, letterSpacing: '-.01em', color: CARD_INK, textWrap: 'pretty', opacity: loading ? 0.35 : 1, transition: 'opacity .25s' }}>
+        <div style={{ font: `italic 400 ${jokeSize(card.text)}cqw/1.32 Newsreader,serif`, letterSpacing: '-.01em', color: CARD_INK, textWrap: 'pretty', whiteSpace: 'pre-line', opacity: loading ? 0.35 : 1, transition: 'opacity .25s' }}>
           {loading ? 'shuffling…' : card.text}
         </div>
       </div>

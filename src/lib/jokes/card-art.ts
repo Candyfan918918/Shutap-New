@@ -81,18 +81,22 @@ const r1 = (n: number) => Math.round(n * 10) / 10
  *  callers below derive it from the font size so long lines shrink instead
  *  of overflowing the card. */
 function wrap(text: string, perLine: number, maxLines: number): string[] {
-  const words = text.split(/\s+/).filter(Boolean)
   const lines: string[] = []
-  let line = ''
-  for (const w of words) {
-    if (line && (line + ' ' + w).length > perLine) {
-      lines.push(line)
-      line = w
-    } else {
-      line = line ? line + ' ' + w : w
+  // A newline in the text is a hard break: the clapback's stage direction
+  // sits on its own line above the quote.
+  for (const para of text.split(/\r?\n/)) {
+    const words = para.split(/\s+/).filter(Boolean)
+    let line = ''
+    for (const w of words) {
+      if (line && (line + ' ' + w).length > perLine) {
+        lines.push(line)
+        line = w
+      } else {
+        line = line ? line + ' ' + w : w
+      }
     }
+    if (line) lines.push(line)
   }
-  if (line) lines.push(line)
   if (lines.length <= maxLines) return lines
   const kept = lines.slice(0, maxLines)
   kept[maxLines - 1] = kept[maxLines - 1]!.replace(/[.,;:]?$/, '…')

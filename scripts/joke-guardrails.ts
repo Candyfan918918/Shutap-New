@@ -25,6 +25,10 @@ import {
   literalNounFailure,
   blameFailure,
   pronounAntecedentFailure,
+  spillFigureFailure,
+  spokenLine,
+  cleanLine,
+  cardWordCount,
   fallbackCard,
   exemplarCopyByEmbedding,
   EXEMPLAR_EMBED_THRESHOLD,
@@ -361,6 +365,34 @@ if (process.env['LOVABLE_API_KEY']) {
     check(`"God closed the oven door…" vs the same passes (${cosineSimilarity(c, b).toFixed(3)})`, String(cosineSimilarity(c, b) >= EXEMPLAR_EMBED_THRESHOLD), 'false')
   } else console.log('  skip embedding cases: the gateway returned no vectors')
 } else console.log('  skip the two live embedding cases: LOVABLE_API_KEY is not set (scripts/joke-hof-similarity.ts runs them with the threshold sweep)')
+
+/* ── Guardrail J · the spill's figure; the clapback stage direction ─────── */
+const TANK = 'I filled up my tank today and it cost me $120.'
+const tank = spillFlags(TANK, null, EXEMPLARS, { selfDirected: true, emotional: false })
+console.log('\n[J] the spill\'s figure never ships back')
+check('the spill\'s figures are read', tank.figures.join(','), '$120')
+check('"$120 for a tank" is out', spillFigureFailure('$120 for a tank. the car ate first.', tank)?.rule ?? 'pass', 'spill_figure')
+check('"120 dollars" is out too (the figure without its sign)', spillFigureFailure('120 dollars of gas and a receipt.', tank)?.rule ?? 'pass', 'spill_figure')
+check('fake precision passes ($121.40)', spillFigureFailure('$121.40, and the pump asked if you wanted a car wash.', tank)?.rule ?? 'pass', 'pass')
+check('"1200" is not "120"', spillFigureFailure('1200 miles of this.', tank)?.rule ?? 'pass', 'pass')
+check('the approved take passes (no figure)', spillFigureFailure('your car ate better today than you will all week.', tank)?.rule ?? 'pass', 'pass')
+check('the approved roast passes', spillFigureFailure('you work monday to pay for the gas that gets you to work tuesday.', tank)?.rule ?? 'pass', 'pass')
+check('clock times are not figures: the 8:30 spill has none', spillFlags(LATE, null, EXEMPLARS).figures.join(','), '')
+check('the approved 8:30 take passes J', spillFigureFailure('you left at 8:00 in spirit and 8:30 in honda.', spillFlags(LATE, null, EXEMPLARS))?.rule ?? 'pass', 'pass')
+check('"12 people" spill: "12" back is out', spillFigureFailure('12 people, one desk.', spillFlags("I sent a 'you're hired' email to all 12 people who interviewed for the one position.", null, EXEMPLARS))?.rule ?? 'pass', 'spill_figure')
+check('…but "twelve" as a word passes', spillFigureFailure('let the twelve sort out the desk.', spillFlags("I sent a 'you're hired' email to all 12 people who interviewed for the one position.", null, EXEMPLARS))?.rule ?? 'pass', 'pass')
+check('J sits in guardrailFailure', guardrailFailure('$120 and a receipt.', 'the_take', tank)?.rule ?? 'pass', 'spill_figure')
+console.log('\n[stage direction] Pump screen: "Receipt?" / "No. I know what I did."')
+const CONFESSION = 'Pump screen: "Receipt?"\n"No. I know what I did."'
+check('the spoken line is the last line', spokenLine(CONFESSION, 'the_clapback'), '"No. I know what I did."')
+check('cleanLine keeps the direction on its own line', cleanLine(CONFESSION, 'the_clapback'), 'pump screen: "receipt?"\n"no. i know what i did."')
+check('the direction\'s quote is a span; the spoken wrapper is speech', outsideQuotes(CONFESSION, 'the_clapback'), 'Pump screen:  No. I know what I did.')
+check('the confession passes A–J on the tank spill (it is itself a spent exemplar, so D is set aside here)',
+  guardrailFailure(cleanLine(CONFESSION, 'the_clapback'), 'the_clapback', spillFlags(TANK, null, [], { selfDirected: true }))?.rule ?? 'pass', 'pass')
+check('…and a fresh confession-shaped line passes with D on',
+  guardrailFailure(cleanLine('Pump screen: "Car wash?"\n"No. It knows."', 'the_clapback'), 'the_clapback', tank)?.rule ?? 'pass', 'pass')
+check('nine words, under the clapback ceiling', String(cardWordCount(CONFESSION)), '9')
+check('a one-line clapback is unchanged by the parts reader', cleanLine('"Rent."', 'the_clapback'), '"rent."')
 
 console.log(`\n${pass} passed, ${fail} failed`)
 if (fail) {

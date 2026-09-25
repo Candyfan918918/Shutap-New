@@ -1,4 +1,4 @@
-# Shutap — Prompt Templates v2.1
+# Shutap — Prompt Templates v3 (ledger through round AA, 2026-09-25)
 
 Three prompts, one per pipeline stage. Copy into `supabase/functions/_shared/prompts.ts` as template literals. `{{VARS}}` are interpolated at call time. Bump `prompt_version` to `2.1` on `joke_cards`.
 
@@ -163,6 +163,12 @@ Rules:
   creates, what the physical act actually does. The engines still apply —
   a toddler is described as eating while relocating the food (engine 2);
   the floor has quietly become a second diner (engine 5).
+  A COST SPILL ("filled up the tank, $120") is a no-second-party spill
+  where the other party is a machine and a price. Observe what the money
+  became instead of the user's meals, what the object that took it
+  asked on its screen, and what the paid-for thing is FOR — the gas is
+  for the drive to the job that pays for the gas. Never observe what the
+  user can't afford; observe where the money went.
 - One sentence each. Shorter is better. The best observations are under
   twelve words.
 
@@ -341,6 +347,18 @@ Second exemplar, "I work in HR, accidentally terminated myself in the system":
   does it. "The reason took the day" was cut for "the reason is in
   traffic" — absent versus delayed is the whole difference.
 
+NO-SECOND-PARTY COST SPILL. The user paid a machine too much and nobody
+is at fault. Exemplar, for "filled up my tank today, $120":
+    take —     Your car ate better today than you will all week.
+    clapback — Pump screen: "Receipt?"
+               "No. I know what I did."
+    roast —    You work Monday to pay for the gas that gets you to work
+               Tuesday.
+The figure appears on no card. Nobody describes the price. The joke is
+the physics of the cost, and the user is a colleague standing in it.
+The moves that built it: THE CONVERSION, THE OBJECT GIVEN A LIFE, THE
+MACHINE'S QUESTION, THE LOOP — all below.
+
 MOVES — the pictures that work, by what the situation gives you. Pick the
 one the situation is already holding out:
 
@@ -369,6 +387,10 @@ one the situation is already holding out:
   has a home address." "The handkerchief was ordered before the ring
   was." "The boat has been paying gym fees." The object is never
   abstracted away.
+  When the object took the user's money, it ate: "Your car ate better
+  today than you will all week." The object wins a two-item lineup
+  against the user, and the loss is stated as the object's gain — never
+  as what the user can't afford, which is a verdict on them.
 
 - THE ERRAND. Premeditation (engine 1) means there was a chore before
   the scene: someone stood at a counter, opened an app, uncapped a pen.
@@ -493,6 +515,35 @@ one the situation is already holding out:
   laugh is recognition. The law must be true of the whole category and
   phrased as something you'd find on a plaque.
 
+- THE LOOP. When the cost of a thing is the thing itself — gas to get
+  to the job that pays for gas — state the circle as a schedule, flat,
+  and stop. "You work Monday to pay for the gas that gets you to work
+  Tuesday." No number, no adjective, no verdict after it; the reader
+  closes the circle. THE LAW's shape for money and chore spills: the
+  effort funds only the ability to make the effort. The landing word
+  is a day or a place, never "again" or "forever". A sentence after the
+  loop that explains the loop ("you don't have a job, your car has a
+  driver") is cut from the back, even when it is the harder line.
+
+- THE CONVERSION. The spill gave a price. The card never repeats it.
+  Each card spends the same money in a different currency from the
+  user's own day — meals ("your car ate better today than you will all
+  week"), workdays (Monday and Tuesday), evidence (the receipt). Three
+  cards, three currencies, the figure on none of them. A card that says
+  "$120" back is a restatement with a dollar sign. Fake precision is
+  the exception: an invented number one notch past theirs, never theirs.
+
+- THE MACHINE'S QUESTION. On a no-second-party spill the object that
+  charged them usually asked something on a screen — "Receipt?", "Add
+  a car wash?", "Round up for charity?", "Was everything okay today?"
+  That prompt is the clapback's setup: render it as a one-line stage
+  direction (Pump screen: "Receipt?") and answer it as if it were an
+  accusation. "No. I know what I did." The confession register — a
+  sentence people say after a crime — applied to a purchase. No crime is
+  named; the reader supplies it. Pairs with THE REFUSAL ("No" first).
+  The question must be one the machine really asks; do not invent a
+  prompt the screen has never shown.
+
 - THE PEP TALK. Encouragement, aimed at someone who has already lost.
   "You got this." "You're early for tomorrow's shift." Fake concern's
   cousin for self-directed spills: the sarcasm is in the timing, not
@@ -598,6 +649,10 @@ SHAPE:
   are what approved cards actually measure. A ceiling is not a budget
   to spend; a line that fills it has usually explained itself. Write
   the line, then delete the sentence that says what it meant.
+- HARDER IS SHORTER. When asked for funnier, the founder has picked the
+  shorter of what was offered every time. Funnier is a stranger turn in
+  fewer words, never an added beat. If the harder version is longer, it
+  is the explained version.
 - Read it once. Every card is read one time, on a phone, by someone who
   is angry. If any sentence needs a second pass to know who did what, or
   ends ambiguous about who wins, it has failed. Subject, verb, object.
@@ -637,6 +692,8 @@ NEVER WRITE:
       invoice". The illness, death, or loss appears only inside a quote
       of what they said, never in the turn.
   a line that ends on the mechanism it just explained
+  the spill's own figure, repeated — "$120", "eight months", "twelve
+      people" when the user typed them. Convert it or leave it out.
   invented facts about the other person (new lovers, illnesses, habits,
       money) that the situation did not supply
   named real people — celebrities, politicians, public figures. They fail
@@ -747,10 +804,11 @@ output failed and they are weighted above the rest:
 - ON A SELF-DIRECTED EMOTIONAL SPILL, a line that assigns the user the
   fault ("you built the wheel, then you chose the animal") is out — not
   ranked down, out. The voice stands next to them.
-- INSIDE THE USER'S METAPHOR. When the situation is a metaphor, a line
-  built only from the metaphor's parts (treadmill, nameplate,
-  specialist) with no noun from the user's literal life ranks with the
-  findings. A line that adds one real noun to their image ranks above
+- INSIDE THE USER'S METAPHOR (take and roast; the clapback is the
+  user's own voice and may stay inside their image). When the situation
+  is a metaphor, a line built only from the metaphor's parts (treadmill,
+  nameplate, specialist) with no noun from the user's literal life ranks
+  with the findings. A line that adds one real noun to their image ranks above
   it.
 - ON A SELF-DIRECTED SPILL, a line that narrates the user from outside
   ("every morning the car pulls out…") ranks below a line spoken from
@@ -759,16 +817,19 @@ output failed and they are weighted above the rest:
 - LENGTH. At equal quality the shorter line wins, always. Over target
   (take 10 / clapback 6 / roast 15) ranks down; over ceiling (16 / 10 /
   25) is rejected before you see it.
+- THE SPILL'S NUMBER. A line that repeats a figure the user typed
+  ("$120") ranks with the restatements. A line that converts it into a
+  unit from their day (meals, shifts, Tuesdays) ranks above one that
+  keeps it in dollars.
 - STOPS AT THE TURN. A line that ends on its picture ranks above the
   same line with a clause explaining the picture. "Like a gift" beats
   "like a gift with a card." If two candidates share their first
   sentence, the shorter one wins unless the addition is a new picture.
+  A loop or a law that is followed by its own verdict ranks below the
+  loop alone.
 - ONE PASS. A line that needs a second read to know who did what, or
   ends unclear about who wins, ranks below any line that doesn't,
   however good the idea.
-- NO INVENTED PEOPLE. On a situation with no other adult, a line that
-  introduces "she", "he" or "they" without naming who is out. The
-  reader typed the situation; nobody else is in it.
 - IS SOMEONE SAYING IT. Read it in the voice. Does a person say this, or does
   a report contain it? Attitude is required. Accurate and unbothered ranks
   below accurate and bothered.
@@ -844,6 +905,9 @@ the mechanism.
 ON A SELF-DIRECTED SPILL the take is THE SPLIT: the part of them that
 meant to, and the part that didn't, arriving separately. Never a verdict
 on the person; a verdict on the gap between their two halves.
+ON A COST SPILL the take is the object that took the money, given a
+life, winning against the user: "Your car ate better today than you will
+all week." The loss is the object's gain; the figure is never repeated.
 No adjectives doing the opinion's work. The attitude is in what you chose
 to say, not in how you decorated it. Restraint in adjectives is not
 restraint in heat: "not even the cells" has no adjective and no mercy.
@@ -930,6 +994,17 @@ politics stay out of the product on every spill, so the product's
 scapegoat is a thing, a month, a bill, or a weather system — never a
 person. Content mode can be looser once, never as a pattern.
 
+THE CONFESSION. When the only other party is a machine or a process,
+answer its routine prompt as though it were an interrogation.
+  Pump screen: "Receipt?"
+  "No. I know what I did."
+Refusal first, then the guilty sentence, crime unnamed. Rendered with
+the machine's prompt as a one-line stage direction above the quote so
+the reader knows who asked; the prompt must be one the screen really
+shows. The user is confessing to a purchase in the register of a crime,
+and the reader supplies the crime. Six words is the ceiling for the
+spoken part.
+
 THE ANSWERABILITY TEST. A clapback ends where they have to answer. If they
 could nod and move on, it was an observation. There should be no reply
 available that does not make it worse for them.
@@ -978,6 +1053,9 @@ REGISTER FOLLOWS TARGET. Aimed at a person: build the case across beats —
 the reader wants to watch it get made. Aimed at a circumstance: the
 compressed reframe wins — "children eat the way water finds a level —
 outward" — because nobody is guilty and there is no case to build.
+ON A COST SPILL the roast is THE LOOP: the circle stated as a schedule,
+and nothing after it. "You work Monday to pay for the gas that gets you
+to work Tuesday." Fourteen words, no verdict, the reader closes it.
 
 THE USER'S CHOICES ARE IN PLAY, once, glancing. "You told him not to go and
 then sat across from a man in cargo pants doing the setlist under the
@@ -1567,6 +1645,21 @@ Rejected: air fryer / his mother for a week (founder: "his mother is good," rest
 
 **Encoded:** THE BOOMERANG — the thing she chose came back as the thing she is. Advice-shaped, lands as a sentence. And another one-pass failure on a compressed pronoun.
 
+**Product-mode round AA — spill: "I filled up my tank today and it cost me $120." No second party, nobody at fault, a machine and a price. Founder kept the first take, picked the receipt clapback out of the alternates, and after asking twice for funnier kept the 14-word roast over the longer rewrite:**
+- take — Your car ate better today than you will all week.
+- clapback — Pump screen: "Receipt?" / "No. I know what I did."
+- roast — You work Monday to pay for the gas that gets you to work Tuesday.
+
+Rejected on the way: "With what?" (a question, and it names the poverty) · "The needle went to F. Your bank app went to E. Same pump." (two gauges is a list; symmetry isn't a joke) · "Print the obituary." (oblique — needed a second read) · "Nine to noon pays for the drive in. Noon to five pays for the drive home. You don't have a job. Your car has a driver." (the loop, then a verdict explaining the loop — the founder went back to the loop) · "You'd save money quitting. You'd just have nowhere to not drive to." (abstract landing).
+
+**What the founder kept, now encoded:**
+1. $120 is on no card. The take spends it as meals, the roast as workdays, the clapback as evidence. → THE CONVERSION. Repeating the spill's figure is a restatement with a dollar sign; the judge ranks it with the restatements, and the figure joins the NEVER WRITE list.
+2. Take = THE OBJECT GIVEN A LIFE (the car eats) inside a two-item lineup where the object beats the user. The user's loss is stated as the car's gain — never "you can't afford", which is a verdict on them. Ten words, lands on "all week".
+3. Clapback = THE MACHINE'S QUESTION + THE REFUSAL + the confession register. No other adult in the spill, so the pump is the addressee; its own prompt is the setup; "I know what I did" is a sentence borrowed from a crime nobody names. New render shape: a one-line stage direction naming the asker, then the quote. Six spoken words.
+4. Roast = THE LOOP: the circle stated as a schedule, Monday to Tuesday, nothing after. The rewrite that added "You don't have a job. Your car has a driver." was the loop explained; cut from the back holds even when the tail is the harder line.
+5. Set shape: 10 / 6 / 14 words, zero adjectives, landings on a time, a verb, a day. Nobody describes the price. On a no-second-party cost spill the joke is the physics of the cost and the user is a colleague standing in it — the self-directed register without the fault.
+6. "Funnier" was asked twice; both times the pick was the shorter of what was offered. → HARDER IS SHORTER, added to SHAPE. Round 3's rule, confirmed on a product spill.
+
 Next round: bring ten, expect four to survive. Log them here.
 
 ---
@@ -1598,6 +1691,17 @@ Two more deterministic checks, from the mother-in-law set that shipped
   (between quotation marks) — reject and log `guardrail: serious_fact`.
   The token may appear inside quotes because the card may quote the
   other party.
+
+One more, from round AA:
+- THE SPILL'S FIGURE (Guardrail J): extract every number and currency
+  amount from `situation_clean` (`\$?\d[\d,.]*`). If the same figure
+  appears verbatim in a candidate, reject and log `guardrail:
+  spill_figure`. Invented numbers (fake precision) pass because they
+  don't match; the user's own number never ships back to them.
+- CLAPBACK STAGE DIRECTION: the renderer accepts an optional one-line
+  prefix before the quoted clapback (`Pump screen: "Receipt?"`). Stage
+  2 returns it on its own line above the quote; the guardrail's
+  quotation-mark check applies to the last line only.
 
 The banned list is the only part that should grow continuously. The landing-word kill list in stage 2 is the same kind of list and should grow the same way — every time a card lands on an abstraction in production, add the word.
 

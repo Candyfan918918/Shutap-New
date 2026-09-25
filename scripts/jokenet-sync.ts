@@ -21,7 +21,7 @@
 import rows from '@/lib/jokes/jokenet.json'
 import { classifyArchetype } from '@/lib/jokes/deck.server'
 import type { SlotKey } from '@/lib/jokes/deck'
-import { guardrailFailure, hardRuleFailure, lengthFailure, literalNounFailure, spillFlags } from '@/lib/jokes/pipeline.server'
+import { guardrailFailure, hardRuleFailure, lengthFailure, literalNounFailure, spillFlags, spokenLine } from '@/lib/jokes/pipeline.server'
 import { SEED_HALL_OF_FAME } from '@/lib/jokes/voices.server'
 
 type Row = { id: string; situation: string; joke: string; rating: string; slot: string; archetype: string; notes: string; source: string }
@@ -46,6 +46,7 @@ const SELF_DIRECTED = new Set<string>([
   'I work in HR, accidentally terminated myself in the system.',
   'Being a mom I feel overstimulated. Hamster wheel going and going.',
   'I get angry with my baby when he won\'t nap. Then I feel bad for being angry at my baby.',
+  'I filled up my tank today and it cost me $120.',
 ])
 
 /** The reader's metaphor span and emotional flag, pinned for the ledger's
@@ -69,7 +70,8 @@ function admit(r: Row): { ok: true } | { ok: false; why: string } {
   const slot = SLOT[r.slot]
   if (!slot) return { ok: false, why: `slot ${r.slot} is not a card slot` }
   const line = r.joke.trim()
-  if (slot === 'the_clapback' && !(/^["“]/.test(line) && /["”]$/.test(line))) return { ok: false, why: 'clapback without its quotation marks' }
+  const spoken = slot === 'the_clapback' ? spokenLine(line, slot) : line
+  if (slot === 'the_clapback' && !(/^["“]/.test(spoken) && /["”]$/.test(spoken))) return { ok: false, why: 'clapback without its quotation marks' }
   // Guardrail D against the hall of fame the ledger did not write: the
   // admitted rows are themselves in the seed, and a row is not a copy of
   // itself.
