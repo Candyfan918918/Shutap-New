@@ -4,10 +4,11 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
-## 3.5 — 2026-09-25
+## 3.6 — 2026-09-25
 
-The v3 spec (ledger through round AA, the $120 tank). Prompt text
-verbatim, and this time every template and slot rule is checked
+The v3 spec (ledger through round AA, the $120 tank), merged over the
+Lovable agent's 3.5 of the 23rd (G scoped to take and roast, the
+network flip limit switchable off). Prompt text verbatim, and this time every template and slot rule is checked
 character for character against the spec's code blocks by the patch
 that applied them; two older ordering drifts in the candidate prompt
 (THE LINEUP's place, the NEVER WRITE order) were found and fixed by
@@ -26,6 +27,12 @@ The clapback may carry a one-line stage direction above the quote; the
 quotation-mark checks read the last line, the renderers honour the line
 break. Round AA's three cards join the ledger, the seed and the hall of
 fame.
+## 3.5 — 2026-09-23
+
+Spec v3 (ledger through round Z). Judge: INSIDE THE USER'S METAPHOR is
+scoped to take and roast, verbatim; guardrail G (`literal_noun`) no longer
+runs on the clapback. Open: v3 omits the judge's NO INVENTED PEOPLE bullet;
+kept pending founder confirmation (guardrail I unchanged).
 
 ## 3.4 — 2026-09-23
 

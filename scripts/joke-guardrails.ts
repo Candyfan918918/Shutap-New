@@ -318,15 +318,16 @@ check('"You\'re a hamster with a mortgage." passes G (mortgage is on the stay-at
 check('"the wheel is a treadmill with a nameplate" fails G', gh('the hamster is a specialist. the wheel is a treadmill with a nameplate.', 'the_roast'), 'G-')
 check('"you chose the animal" fails H', gh('you built the wheel, then you chose the animal.', 'the_roast'), 'GH')
 check('"God closed the oven door, and opened the washer door." passes both', gh('god closed the oven door, and opened the washer door.', 'the_roast'), '--')
-check('the live clapback "my contract doesn\'t include breaks." fails G', gh('"my contract doesn\'t include breaks."', 'the_clapback'), 'G-')
+check('the live clapback "my contract doesn\'t include breaks." is G-out as a line but G is not run on the clapback (v3: the clapback may stay inside their image)',
+  guardrailFailure('"my contract doesn\'t include breaks."', 'the_clapback', hamsterFlags)?.rule ?? 'pass', 'pass')
 check('a noun from the spill outside the metaphor passes G (home)', gh('the wheel stops at 9:40. home does not.', 'the_take'), '--')
 check('blame inside a quote may stand', gh('"you chose this," she said, and handed you the laundry.', 'the_roast'), '--')
 check('G is off when the reader found no metaphor', literalNounFailure('the wheel is a treadmill with a nameplate.', spillFlags(HAMSTER, null, EXEMPLARS, { selfDirected: true, emotional: true, archetype: 'general' }))?.rule ?? 'pass', 'pass')
 check('H is off when the spill is not emotional', blameFailure('you built the wheel.', 'the_roast', spillFlags(HAMSTER, null, EXEMPLARS, { selfDirected: true, emotional: false }))?.rule ?? 'pass', 'pass')
 check('H is off when the spill has another adult', blameFailure('you built the wheel.', 'the_roast', spillFlags(HAMSTER, null, EXEMPLARS, { selfDirected: false, emotional: true }))?.rule ?? 'pass', 'pass')
 check('G and H are in guardrailFailure, after F', guardrailFailure('you built the wheel, then you chose the animal.', 'the_roast', hamsterFlags)?.rule ?? 'pass', 'literal_noun')
-check('the seeded ledger clapback "Someone stop the hamster spinning wheel." under G on its own spill',
-  literalNounFailure('"someone stop the hamster spinning wheel."', spillFlags('Being a mom I feel overstimulated. Hamster wheel going and going.', null, EXEMPLARS, { selfDirected: true, emotional: true, metaphorSpan: 'Hamster wheel going and going' }))?.rule ?? 'pass', 'literal_noun')
+check('the seeded ledger clapback "Someone stop the hamster spinning wheel." passes: G does not run on the clapback',
+  guardrailFailure('"someone stop the hamster spinning wheel."', 'the_clapback', spillFlags('Being a mom I feel overstimulated. Hamster wheel going and going.', null, EXEMPLARS, { selfDirected: true, emotional: true, metaphorSpan: 'Hamster wheel going and going' }))?.rule ?? 'pass', 'pass')
 
 /* ── the 3.3 hamster set: the wrapper quotes, Guardrail I, the floor ──── */
 const HAM2 = 'I feel like a hamster in spinning wheel as a stay at home mom'
@@ -351,7 +352,7 @@ check('the floor take on this spill is not "she did the thing…"', floorTake.te
 check('the floor take fails nothing worse than G (the pool cannot know the day\'s nouns)', guardrailFailure(floorTake.text, 'the_take', ham2)?.rule ?? 'pass', 'literal_noun')
 const floorClap = fallbackCard('the_clapback', null, [], { situation: HAM2, flags: ham2 })
 check('the floor clapback is not "that was a choice, and you made it."', floorClap.text.includes('you made it') ? 'pool line served' : 'screened', 'screened')
-check('the floor clapback fails nothing worse than G', guardrailFailure(floorClap.text, 'the_clapback', ham2)?.rule ?? 'pass', 'literal_noun')
+check('the floor clapback passes outright (G does not run on the clapback)', guardrailFailure(floorClap.text, 'the_clapback', ham2)?.rule ?? 'pass', 'pass')
 check('the floor on a spill with no metaphor passes A–I outright',
   guardrailFailure(fallbackCard('the_take', null, [], { situation: LATE, flags: spillFlags(LATE, null, EXEMPLARS, { selfDirected: true }) }).text, 'the_take', spillFlags(LATE, null, EXEMPLARS, { selfDirected: true }))?.rule ?? 'pass', 'pass')
 console.log('\n[D·embedding] the paraphrase half')

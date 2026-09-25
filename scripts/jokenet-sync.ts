@@ -129,7 +129,7 @@ if (mode === '--sql') {
 } else {
   console.log(`${candidates.length} approved product-mode rows · ${admitted.length} admitted · ${refused.length} refused`)
   for (const r of admitted) console.log(`  ok   #${r.id} ${r.slot.padEnd(8)} ${r.joke.trim()}`)
-  const noNoun = admitted.filter((r) => METAPHOR_SPAN[r.situation] && literalNounFailure(r.joke.trim(), spillFlags(r.situation, null, [], { metaphorSpan: METAPHOR_SPAN[r.situation], archetype: classifyArchetype(r.situation) })))
+  const noNoun = admitted.filter((r) => r.slot !== 'clapback' && METAPHOR_SPAN[r.situation] && literalNounFailure(r.joke.trim(), spillFlags(r.situation, null, [], { metaphorSpan: METAPHOR_SPAN[r.situation], archetype: classifyArchetype(r.situation) })))
   console.log(`\n${noNoun.length} admitted rows with no literal noun on a metaphor spill (Guardrail G; seeded anyway, G is for new candidates):`)
   for (const r of noNoun) console.log(`  G    #${r.id} ${r.slot.padEnd(8)} ${r.joke.trim()}`)
   const over = admitted.map((r) => ({ r, hit: lengthFailure(r.joke.trim(), SLOT[r.slot]!) })).filter((x) => x.hit)

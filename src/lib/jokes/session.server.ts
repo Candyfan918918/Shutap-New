@@ -195,7 +195,10 @@ function dayIn(tz: string): string {
  * JOKE_IP_FLIPS_PER_DAY.
  */
 export function ipFlipLimit(): number {
-  const raw = Number(process.env['JOKE_IP_FLIPS_PER_DAY'] ?? '20')
+  const set = (process.env['JOKE_IP_FLIPS_PER_DAY'] ?? '').trim().toLowerCase()
+  // 0 / off / false / none turns the network layer off entirely.
+  if (set === '0' || set === 'off' || set === 'false' || set === 'none') return Number.POSITIVE_INFINITY
+  const raw = Number(set || '20')
   return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 20
 }
 
