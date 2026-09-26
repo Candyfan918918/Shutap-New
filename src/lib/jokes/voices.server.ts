@@ -120,7 +120,21 @@ export const SEED_HALL_OF_FAME: HallOfFameEntry[] = [
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: S.chores, joke_text: 'he does half the chores the way a foreman does half the building.' },
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: S.fridge, joke_text: "she labelled her food so she'd know which half of the fridge was the buffet." },
 
+
+  // Founder-ranked winners, 2026-09-26: cold precision, one physical noun,
+  // the disguise ripped off in one move, a financial/administrative verdict.
+  { slot: 'the_take', voice_key: null, archetype: 'uninvited_visitor', situation_clean: 'My mother-in-law came over and wiped down every surface in my kitchen while telling me it was fine, she just likes things clean.', joke_text: 'She audited a kitchen with a Lysol permit.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My ex texted me at 1am saying he misses me after six months of nothing.', joke_text: 'He ran out of people who answer after eleven.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "My coworker sent me her whole project to 'take a look at' the night before it was due.", joke_text: "She didn't ask for feedback. She asked for an organ donor." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My sister told my parents about my breakup before I had the chance to, then asked why I was upset.', joke_text: "\"What's your hourly rate for emotional sabotage, or is this pro bono?\"" },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My coworker made the title slide of our deck and presented the whole thing as her work.', joke_text: "\"I love the font. Who's writing the other forty slides?\"" },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "My friend bailed on my birthday because she was 'too overwhelmed,' but posted a selfie from another bar an hour later.", joke_text: '"Glad you found a less overwhelming bar. Put my friendship on your tab."' },
+  { slot: 'the_roast', voice_key: null, archetype: 'uninvited_visitor', situation_clean: 'My mother-in-law keeps showing up unannounced and checking the fridge.', joke_text: "She doesn't do drop-ins. She conducts surprise health inspections with family privileges." },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My ex keeps calling me at midnight to talk about everything he did wrong.', joke_text: 'He treats midnight like an open-mic night for his regrets.' },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My coworker takes credit for the team deck and calls herself the strategist.', joke_text: 'A senior strategist whose primary deliverable is panic.' },
+
   // The founder's approved product-mode rows from the joke ledger
+
   // (src/lib/jokes/jokenet.json), admitted by scripts/jokenet-sync.ts —
   // the hard rules and guardrails A–E against each row's own situation.
   // Regenerate with `bun run scripts/jokenet-sync.ts --ts`; the same rows

@@ -4,6 +4,13 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.7 — 2026-09-26
+
+Nine founder-ranked winners (3 take, 3 clapback, 3 roast) added to the
+seed hall of fame as few-shot examples: cold precision, one physical noun,
+the disguise ripped off in one move. Prompt text unchanged; the copy
+guardrail already stops candidates reproducing these lines.
+
 ## 3.6 — 2026-09-25
 
 The v3 spec (ledger through round AA, the $120 tank), merged over the
