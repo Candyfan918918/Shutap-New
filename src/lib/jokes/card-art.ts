@@ -131,16 +131,21 @@ const r1 = (n: number) => Math.round(n * 10) / 10
  *  inside a word ("“the writing thing”" carries its quotes), and it can
  *  break across lines, so the wrap works on these rather than on strings. */
 type Run = { text: string; lit: boolean }
-type Word = Run[]
+/** `br`: a newline came before this word — a hard break, which is how the
+ *  clapback's stage direction sits on its own line above the quote. */
+type Word = Run[] & { br?: boolean }
 
 function toWords(text: string, lit: string): Word[] {
   const start = lit ? text.indexOf(lit) : -1
   const end = start + lit.length
   const out: Word[] = []
+  let prev = 0
   for (const m of text.matchAll(/\S+/g)) {
     const a = m.index!
     const b = a + m[0].length
-    const runs: Run[] = []
+    const runs: Word = []
+    if (out.length && text.slice(prev, a).includes('\n')) runs.br = true
+    prev = b
     const cut = (x: number, y: number, on: boolean) => {
       if (y > x) runs.push({ text: text.slice(x, y), lit: on })
     }
@@ -169,7 +174,7 @@ function wrapWords(words: Word[], perLine: number): Word[][] {
   let len = 0
   for (const w of words) {
     const n = wordLen(w)
-    if (line.length && len + 1 + n > perLine) {
+    if (line.length && (w.br || len + 1 + n > perLine)) {
       lines.push(line)
       line = [w]
       len = n

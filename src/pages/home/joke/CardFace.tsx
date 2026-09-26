@@ -3,7 +3,9 @@
  * Two faces. The headline is off-white: the joke set big in Sora, one phrase
  * lit in plum. The stack is ink: the setup in the voice, then the punchline
  * one word to a line. Which one a card turns over to is the writer's call
- * (`card.layout`); resolveFace settles the fallbacks.
+ * (`card.layout`); resolveFace settles the fallbacks. A newline in the text
+ * is a hard break: the clapback's stage direction sits on its own line above
+ * the quote.
  *
  * This is the same composition the export renders, at the same 9:16 — so what
  * someone saves is what they were just looking at, the mark included. Sizes
@@ -94,7 +96,7 @@ export function CardFace({
             {subtitle ? (
               <span style={{ font: 'italic 400 5cqw/1.2 Newsreader,serif', color: LIGHT_MUTED }}>{subtitle}</span>
             ) : null}
-            <p style={{ margin: 0, font: `700 ${headlineSize(face.text)}cqw/1.04 Sora,sans-serif`, letterSpacing: '-.045em', color: LIGHT_INK_STRONG, textWrap: 'pretty' }}>
+            <p style={{ margin: 0, font: `700 ${headlineSize(face.text)}cqw/1.04 Sora,sans-serif`, letterSpacing: '-.045em', color: LIGHT_INK_STRONG, textWrap: 'pretty', whiteSpace: 'pre-line' }}>
               {loading ? 'shuffling…' : <HeadlineText text={face.text} lit={face.lit} />}
             </p>
           </>
@@ -137,7 +139,7 @@ function StackText({ setup, punchline }: { setup: string; punchline: string }) {
   return (
     <>
       {setup ? (
-        <span style={{ font: 'italic 400 5.6cqw/1.3 Newsreader,serif', color: DARK_TEXT_2, marginBottom: '5cqw', textWrap: 'pretty' }}>
+        <span style={{ font: 'italic 400 5.6cqw/1.3 Newsreader,serif', color: DARK_TEXT_2, marginBottom: '5cqw', textWrap: 'pretty', whiteSpace: 'pre-line' }}>
           {setup}
         </span>
       ) : null}

@@ -25,6 +25,10 @@ import {
   literalNounFailure,
   blameFailure,
   pronounAntecedentFailure,
+  spillFigureFailure,
+  spokenLine,
+  cleanLine,
+  cardWordCount,
   fallbackCard,
   exemplarCopyByEmbedding,
   EXEMPLAR_EMBED_THRESHOLD,
@@ -314,15 +318,16 @@ check('"You\'re a hamster with a mortgage." passes G (mortgage is on the stay-at
 check('"the wheel is a treadmill with a nameplate" fails G', gh('the hamster is a specialist. the wheel is a treadmill with a nameplate.', 'the_roast'), 'G-')
 check('"you chose the animal" fails H', gh('you built the wheel, then you chose the animal.', 'the_roast'), 'GH')
 check('"God closed the oven door, and opened the washer door." passes both', gh('god closed the oven door, and opened the washer door.', 'the_roast'), '--')
-check('the live clapback "my contract doesn\'t include breaks." fails G', gh('"my contract doesn\'t include breaks."', 'the_clapback'), 'G-')
+check('the live clapback "my contract doesn\'t include breaks." is G-out as a line but G is not run on the clapback (v3: the clapback may stay inside their image)',
+  guardrailFailure('"my contract doesn\'t include breaks."', 'the_clapback', hamsterFlags)?.rule ?? 'pass', 'pass')
 check('a noun from the spill outside the metaphor passes G (home)', gh('the wheel stops at 9:40. home does not.', 'the_take'), '--')
 check('blame inside a quote may stand', gh('"you chose this," she said, and handed you the laundry.', 'the_roast'), '--')
 check('G is off when the reader found no metaphor', literalNounFailure('the wheel is a treadmill with a nameplate.', spillFlags(HAMSTER, null, EXEMPLARS, { selfDirected: true, emotional: true, archetype: 'general' }))?.rule ?? 'pass', 'pass')
 check('H is off when the spill is not emotional', blameFailure('you built the wheel.', 'the_roast', spillFlags(HAMSTER, null, EXEMPLARS, { selfDirected: true, emotional: false }))?.rule ?? 'pass', 'pass')
 check('H is off when the spill has another adult', blameFailure('you built the wheel.', 'the_roast', spillFlags(HAMSTER, null, EXEMPLARS, { selfDirected: false, emotional: true }))?.rule ?? 'pass', 'pass')
 check('G and H are in guardrailFailure, after F', guardrailFailure('you built the wheel, then you chose the animal.', 'the_roast', hamsterFlags)?.rule ?? 'pass', 'literal_noun')
-check('the seeded ledger clapback "Someone stop the hamster spinning wheel." under G on its own spill',
-  literalNounFailure('"someone stop the hamster spinning wheel."', spillFlags('Being a mom I feel overstimulated. Hamster wheel going and going.', null, EXEMPLARS, { selfDirected: true, emotional: true, metaphorSpan: 'Hamster wheel going and going' }))?.rule ?? 'pass', 'literal_noun')
+check('the seeded ledger clapback "Someone stop the hamster spinning wheel." passes: G does not run on the clapback',
+  guardrailFailure('"someone stop the hamster spinning wheel."', 'the_clapback', spillFlags('Being a mom I feel overstimulated. Hamster wheel going and going.', null, EXEMPLARS, { selfDirected: true, emotional: true, metaphorSpan: 'Hamster wheel going and going' }))?.rule ?? 'pass', 'pass')
 
 /* ── the 3.3 hamster set: the wrapper quotes, Guardrail I, the floor ──── */
 const HAM2 = 'I feel like a hamster in spinning wheel as a stay at home mom'
@@ -347,7 +352,7 @@ check('the floor take on this spill is not "she did the thing…"', floorTake.te
 check('the floor take fails nothing worse than G (the pool cannot know the day\'s nouns)', guardrailFailure(floorTake.text, 'the_take', ham2)?.rule ?? 'pass', 'literal_noun')
 const floorClap = fallbackCard('the_clapback', null, [], { situation: HAM2, flags: ham2 })
 check('the floor clapback is not "that was a choice, and you made it."', floorClap.text.includes('you made it') ? 'pool line served' : 'screened', 'screened')
-check('the floor clapback fails nothing worse than G', guardrailFailure(floorClap.text, 'the_clapback', ham2)?.rule ?? 'pass', 'literal_noun')
+check('the floor clapback passes outright (G does not run on the clapback)', guardrailFailure(floorClap.text, 'the_clapback', ham2)?.rule ?? 'pass', 'pass')
 check('the floor on a spill with no metaphor passes A–I outright',
   guardrailFailure(fallbackCard('the_take', null, [], { situation: LATE, flags: spillFlags(LATE, null, EXEMPLARS, { selfDirected: true }) }).text, 'the_take', spillFlags(LATE, null, EXEMPLARS, { selfDirected: true }))?.rule ?? 'pass', 'pass')
 console.log('\n[D·embedding] the paraphrase half')
@@ -361,6 +366,34 @@ if (process.env['LOVABLE_API_KEY']) {
     check(`"God closed the oven door…" vs the same passes (${cosineSimilarity(c, b).toFixed(3)})`, String(cosineSimilarity(c, b) >= EXEMPLAR_EMBED_THRESHOLD), 'false')
   } else console.log('  skip embedding cases: the gateway returned no vectors')
 } else console.log('  skip the two live embedding cases: LOVABLE_API_KEY is not set (scripts/joke-hof-similarity.ts runs them with the threshold sweep)')
+
+/* ── Guardrail J · the spill's figure; the clapback stage direction ─────── */
+const TANK = 'I filled up my tank today and it cost me $120.'
+const tank = spillFlags(TANK, null, EXEMPLARS, { selfDirected: true, emotional: false })
+console.log('\n[J] the spill\'s figure never ships back')
+check('the spill\'s figures are read', tank.figures.join(','), '$120')
+check('"$120 for a tank" is out', spillFigureFailure('$120 for a tank. the car ate first.', tank)?.rule ?? 'pass', 'spill_figure')
+check('"120 dollars" is out too (the figure without its sign)', spillFigureFailure('120 dollars of gas and a receipt.', tank)?.rule ?? 'pass', 'spill_figure')
+check('fake precision passes ($121.40)', spillFigureFailure('$121.40, and the pump asked if you wanted a car wash.', tank)?.rule ?? 'pass', 'pass')
+check('"1200" is not "120"', spillFigureFailure('1200 miles of this.', tank)?.rule ?? 'pass', 'pass')
+check('the approved take passes (no figure)', spillFigureFailure('your car ate better today than you will all week.', tank)?.rule ?? 'pass', 'pass')
+check('the approved roast passes', spillFigureFailure('you work monday to pay for the gas that gets you to work tuesday.', tank)?.rule ?? 'pass', 'pass')
+check('clock times are not figures: the 8:30 spill has none', spillFlags(LATE, null, EXEMPLARS).figures.join(','), '')
+check('the approved 8:30 take passes J', spillFigureFailure('you left at 8:00 in spirit and 8:30 in honda.', spillFlags(LATE, null, EXEMPLARS))?.rule ?? 'pass', 'pass')
+check('"12 people" spill: "12" back is out', spillFigureFailure('12 people, one desk.', spillFlags("I sent a 'you're hired' email to all 12 people who interviewed for the one position.", null, EXEMPLARS))?.rule ?? 'pass', 'spill_figure')
+check('…but "twelve" as a word passes', spillFigureFailure('let the twelve sort out the desk.', spillFlags("I sent a 'you're hired' email to all 12 people who interviewed for the one position.", null, EXEMPLARS))?.rule ?? 'pass', 'pass')
+check('J sits in guardrailFailure', guardrailFailure('$120 and a receipt.', 'the_take', tank)?.rule ?? 'pass', 'spill_figure')
+console.log('\n[stage direction] Pump screen: "Receipt?" / "No. I know what I did."')
+const CONFESSION = 'Pump screen: "Receipt?"\n"No. I know what I did."'
+check('the spoken line is the last line', spokenLine(CONFESSION, 'the_clapback'), '"No. I know what I did."')
+check('cleanLine keeps the direction on its own line', cleanLine(CONFESSION, 'the_clapback'), 'pump screen: "receipt?"\n"no. i know what i did."')
+check('the direction\'s quote is a span; the spoken wrapper is speech', outsideQuotes(CONFESSION, 'the_clapback'), 'Pump screen:  No. I know what I did.')
+check('the confession passes A–J on the tank spill (it is itself a spent exemplar, so D is set aside here)',
+  guardrailFailure(cleanLine(CONFESSION, 'the_clapback'), 'the_clapback', spillFlags(TANK, null, [], { selfDirected: true }))?.rule ?? 'pass', 'pass')
+check('…and a fresh confession-shaped line passes with D on',
+  guardrailFailure(cleanLine('Pump screen: "Car wash?"\n"No. It knows."', 'the_clapback'), 'the_clapback', tank)?.rule ?? 'pass', 'pass')
+check('nine words, under the clapback ceiling', String(cardWordCount(CONFESSION)), '9')
+check('a one-line clapback is unchanged by the parts reader', cleanLine('"Rent."', 'the_clapback'), '"rent."')
 
 console.log(`\n${pass} passed, ${fail} failed`)
 if (fail) {

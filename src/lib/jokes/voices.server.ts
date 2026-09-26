@@ -196,6 +196,9 @@ export const SEED_HALL_OF_FAME: HallOfFameEntry[] = [
   { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "Being a mom I feel overstimulated. Hamster wheel going and going.", joke_text: "You're a hamster with a mortgage." },
   { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "Being a mom I feel overstimulated. Hamster wheel going and going.", joke_text: "\"Someone stop the hamster spinning wheel.\"" },
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "Being a mom I feel overstimulated. Hamster wheel going and going.", joke_text: "God closed the oven door, and opened the washer door." },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: "I filled up my tank today and it cost me $120.", joke_text: "Your car ate better today than you will all week." },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: "I filled up my tank today and it cost me $120.", joke_text: "Pump screen: \"Receipt?\"\n\"No. I know what I did.\"" },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: "I filled up my tank today and it cost me $120.", joke_text: "You work Monday to pay for the gas that gets you to work Tuesday." },
 ]
 
 /* ───────────────────────────── lookups ───────────────────────────── */

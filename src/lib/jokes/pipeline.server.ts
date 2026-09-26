@@ -254,16 +254,35 @@ function isSpokenLine(slot: SlotKey): boolean {
  *  marks are the model's — the prompt asks for them and nothing here adds
  *  or removes them. A take or roast the model wrapped whole in quotes is
  *  unwrapped; quotes inside a line are left alone. */
+/** A clapback may carry a one-line stage direction naming who asked, above
+ *  the quote (spec §8, round AA):  Pump screen: "Receipt?"  /  "No. I
+ *  know what I did."  The spoken line is the last line; the direction is
+ *  short and unquoted as a whole. Anything else collapses to one line. */
+export function clapbackParts(raw: string): { direction: string | null; spoken: string } {
+  const lines = String(raw ?? '').split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
+  if (lines.length >= 2) {
+    const spoken = lines[lines.length - 1]!
+    const direction = lines.slice(0, -1).join(' ')
+    if (isWhollyQuoted(spoken) && !isWhollyQuoted(direction) && direction.split(/\s+/).length <= 8) return { direction, spoken }
+  }
+  return { direction: null, spoken: lines.join(' ') }
+}
+/** The last line of a card — for the clapback, the spoken part. */
+export function spokenLine(text: string, slot: SlotKey): string {
+  return isSpokenLine(slot) ? clapbackParts(text).spoken : text
+}
+
 export function cleanLine(raw: string, slot: SlotKey): string {
-  let t = String(raw ?? '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/^\d+[.)]\s*/, '')
-    .replace(/[“”]/g, '"')
-    .replace(/[‘’]/g, "'")
-    .trim()
+  const tidy = (s: string) => s.replace(/\s+/g, ' ').trim().replace(/^\d+[.)]\s*/, '').replace(/[“”]/g, '"').replace(/[‘’]/g, "'").trim()
+  if (isSpokenLine(slot)) {
+    const parts = clapbackParts(raw)
+    const spoken = tidy(parts.spoken)
+    if (!spoken) return ''
+    return parts.direction ? `${tidy(parts.direction)}\n${spoken}`.toLowerCase() : spoken.toLowerCase()
+  }
+  let t = tidy(String(raw ?? ''))
   if (!t) return ''
-  if (!isSpokenLine(slot) && isWhollyQuoted(t)) t = t.slice(1, -1).trim()
+  if (isWhollyQuoted(t)) t = t.slice(1, -1).trim()
   return t.toLowerCase()
 }
 
@@ -354,6 +373,9 @@ export type SpillFlags = {
   literal_nouns: string[]
   /** the people a pronoun may refer to on a self-directed spill (Guardrail I) */
   person_nouns: string[]
+  /** the figures the user typed — "$120", "12", "2,400" — that no card
+   *  may hand back (Guardrail J); clock times are not figures */
+  figures: string[]
   /** the classifier found no other adult and the user is the actor: Guardrail
    *  A narrows to the verdict-noun list (spec §8, round U) */
   self_directed: boolean
@@ -507,7 +529,11 @@ export function spillDomains(situation: string, archetype?: string | null): Doma
  *  normalised, so E can tell their word made a world from a costume. */
 export function quotedSpans(line: string, slot: SlotKey): string[] {
   let t = line.trim()
-  if (isSpokenLine(slot) && t.length > 1 && /^["“]/.test(t) && /["”]$/.test(t)) t = t.slice(1, -1)
+  if (isSpokenLine(slot)) {
+    const parts = clapbackParts(t)
+    const spoken = parts.spoken.length > 1 && /^["“]/.test(parts.spoken) && /["”]$/.test(parts.spoken) ? parts.spoken.slice(1, -1) : parts.spoken
+    t = parts.direction ? `${parts.direction} ${spoken}` : spoken
+  }
   const out: string[] = []
   for (const m of t.matchAll(/["“]([^"“”]{2,})["”]/g)) {
     const n = normalizeForCopy(m[1]!)
@@ -707,6 +733,7 @@ export function spillFlags(
     emotional: shape.emotional === true,
     literal_nouns: literalNouns(situation, shape.metaphorSpan, shape.archetype),
     person_nouns: Array.from(new Set([...PERSON_NOUNS, ...capitalisedRoles(situation)])),
+    figures: spillFigures(situation),
     serious_tokens: serious,
     domains: spillDomains(situation, shape.archetype),
     spill_norm: normalizeForCopy(situation),
@@ -719,7 +746,13 @@ export function spillFlags(
  *  span (the whole card is speech) and is unwrapped first. */
 export function outsideQuotes(line: string, slot: SlotKey): string {
   let t = line.trim()
-  if (isSpokenLine(slot) && t.length > 1 && /^["“]/.test(t) && /["”]$/.test(t)) t = t.slice(1, -1)
+  if (isSpokenLine(slot)) {
+    // the spoken line's own wrapper is speech, not a span; a stage
+    // direction above it keeps its quotes as spans (the machine's words)
+    const parts = clapbackParts(t)
+    const spoken = parts.spoken.length > 1 && /^["“]/.test(parts.spoken) && /["”]$/.test(parts.spoken) ? parts.spoken.slice(1, -1) : parts.spoken
+    t = parts.direction ? `${parts.direction} ${spoken}` : spoken
+  }
   let out = ''
   let open: '"' | '“' | null = null
   for (const ch of t) {
@@ -734,7 +767,7 @@ export function outsideQuotes(line: string, slot: SlotKey): string {
 }
 
 export type GuardrailHit = {
-  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy' | 'borrowed_domain' | 'length' | 'literal_noun' | 'blame' | 'pronoun_antecedent'
+  rule: 'user_predicate' | 'serious_fact' | 'self_critical_predicate' | 'exemplar_copy' | 'borrowed_domain' | 'length' | 'literal_noun' | 'blame' | 'pronoun_antecedent' | 'spill_figure'
   detail: string
   /** D: how the copy was found */
   method?: 'text' | 'embedding'
@@ -748,7 +781,39 @@ export type GuardrailHit = {
   /** A on a self-directed spill: only the verdict-noun list applied */
   narrowed?: 'self_directed'
 }
-export const GUARDRAIL_RULES: GuardrailHit['rule'][] = ['user_predicate', 'serious_fact', 'self_critical_predicate', 'exemplar_copy', 'borrowed_domain', 'length', 'literal_noun', 'blame', 'pronoun_antecedent']
+export const GUARDRAIL_RULES: GuardrailHit['rule'][] = ['user_predicate', 'serious_fact', 'self_critical_predicate', 'exemplar_copy', 'borrowed_domain', 'length', 'literal_noun', 'blame', 'pronoun_antecedent', 'spill_figure']
+
+/* ── Guardrail J · the spill's figure (spec §8, round AA) ──
+   "$120 is on no card." Every number and currency amount the user typed
+   is a figure; a candidate that hands one back verbatim is a restatement
+   with a dollar sign. Fake precision passes because it does not match.
+   One reading of the spec's regex is narrowed: a clock time (8:30, 4:50)
+   is a schedule, not a price — the approved "8:00 in spirit and 8:30 in
+   Honda" repeats the spill's times — so times are not figures. */
+const FIGURE_RE = /\$?\d[\d,.]*/g
+const TIME_RE = /(?<!\d)\d{1,2}:\d{2}(?!\d)/g
+export function spillFigures(situation: string): string[] {
+  const s = situation.replace(TIME_RE, ' ')
+  const out = new Set<string>()
+  for (const m of s.match(FIGURE_RE) ?? []) {
+    const f = m.replace(/[.,]+$/, '')
+    if (/\d/.test(f)) out.add(f)
+  }
+  return Array.from(out)
+}
+export function spillFigureFailure(line: string, flags: Pick<SpillFlags, 'figures'>): GuardrailHit | null {
+  if (!flags.figures.length) return null
+  const t = line.replace(TIME_RE, ' ')
+  for (const f of flags.figures) {
+    // "$120" is also "120 dollars"; a figure is whole: "12" is not inside
+    // "120", and "$120" is not "$1200"
+    for (const form of Array.from(new Set([f, f.replace(/^\$/, '')]))) {
+      const esc = form.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      if (new RegExp(`(?:^|[^\\d$])${esc}(?![\\d,.]*\\d)`, 'i').test(t)) return { rule: 'spill_figure', detail: f }
+    }
+  }
+  return null
+}
 
 /* ── Guardrail I · a pronoun without an antecedent ──
    "she did the thing, on purpose, with her whole chest" served on a spill
@@ -838,7 +903,7 @@ export function exemplarCopy(line: string, exemplars: ExemplarNorm[]): ExemplarN
   return null
 }
 
-/** The first guardrail a candidate trips, or null. Order: A, B, C, D, E, F, G, H, I. D's embedding half runs in screenedPass, after these. */
+/** The first guardrail a candidate trips, or null. Order: A, B, C, D, E, F, G, H, I, J. D's embedding half runs in screenedPass, after these. */
 export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags): GuardrailHit | null {
   if (flags.self_directed) {
     // Spec §8: on a self-directed spill the user IS the subject and the
@@ -878,6 +943,8 @@ export function guardrailFailure(line: string, slot: SlotKey, flags: SpillFlags)
   if (blame) return blame
   const pronoun = pronounAntecedentFailure(line, flags)
   if (pronoun) return pronoun
+  const figure = spillFigureFailure(line, flags)
+  if (figure) return figure
   return null
 }
 
@@ -1220,7 +1287,7 @@ async function screenedPass(
   if (pass.error) return { error: pass.error, model: pass.model }
   const records: CandidateRecord[] = pass.candidates.map((text) => ({ text }))
   const survivors: { text: string; at: number }[] = []
-  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0, borrowed_domain: 0, length: 0, literal_noun: 0, blame: 0, pronoun_antecedent: 0 }
+  const guardrail: Screened['guardrail'] = { user_predicate: 0, serious_fact: 0, self_critical_predicate: 0, exemplar_copy: 0, borrowed_domain: 0, length: 0, literal_noun: 0, blame: 0, pronoun_antecedent: 0, spill_figure: 0 }
   const textPassed: number[] = []
   records.forEach((r, at) => {
     const hit = guardrailFailure(r.text, input.slot, flags)
@@ -1282,7 +1349,8 @@ async function screenedPass(
   }
   if (isSpokenLine(input.slot)) {
     for (const r of records) {
-      if (!r.rejected && !(/^["“]/.test(r.text) && /["”]$/.test(r.text))) {
+      const spoken = spokenLine(r.text, input.slot)
+      if (!r.rejected && !(/^["“]/.test(spoken) && /["”]$/.test(spoken))) {
         console.warn('[joke-candidates] clapback returned without its quotation marks', { ...trace, slot: input.slot, text: r.text })
       }
     }

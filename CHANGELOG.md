@@ -4,6 +4,29 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.6 — 2026-09-25
+
+The v3 spec (ledger through round AA, the $120 tank), merged over the
+Lovable agent's 3.5 of the 23rd (G scoped to take and roast, the
+network flip limit switchable off). Prompt text verbatim, and this time every template and slot rule is checked
+character for character against the spec's code blocks by the patch
+that applied them; two older ordering drifts in the candidate prompt
+(THE LINEUP's place, the NEVER WRITE order) were found and fixed by
+taking the block wholesale. New: A COST SPILL in stage 1; the
+no-second-party cost exemplar, THE LOOP, THE CONVERSION, THE MACHINE'S
+QUESTION and HARDER IS SHORTER in stage 2; the spill's figure on the
+NEVER WRITE list; the judge's THE SPILL'S NUMBER, the loop-then-verdict
+rule, and the metaphor criterion narrowed to take and roast; NO INVENTED
+PEOPLE removed from the judge (it is not in the spec; Guardrail I stays);
+ON A COST SPILL in the take and roast rules; THE CONFESSION in the
+clapback rule.
+Guardrail J (`spill_figure`): every number and currency amount the user
+typed, whole, is rejected when a candidate repeats it; clock times are
+not figures (the approved 8:30 take repeats the spill's times).
+The clapback may carry a one-line stage direction above the quote; the
+quotation-mark checks read the last line, the renderers honour the line
+break. Round AA's three cards join the ledger, the seed and the hall of
+fame.
 ## 3.5 — 2026-09-23
 
 Spec v3 (ledger through round Z). Judge: INSIDE THE USER'S METAPHOR is
