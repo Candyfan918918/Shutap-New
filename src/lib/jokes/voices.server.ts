@@ -133,6 +133,14 @@ export const SEED_HALL_OF_FAME: HallOfFameEntry[] = [
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My ex keeps calling me at midnight to talk about everything he did wrong.', joke_text: 'He treats midnight like an open-mic night for his regrets.' },
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My coworker takes credit for the team deck and calls herself the strategist.', joke_text: 'A senior strategist whose primary deliverable is panic.' },
 
+  // Founder-ranked winners, 2026-09-26 (round two): the manager set.
+  // Institutional deadpan for a bodily problem; the clapback is eight
+  // polite words that end the meeting.
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My manager has terrible breath and leans over my desk to give feedback.', joke_text: 'Every one-on-one meeting comes with an unannounced air quality advisory.' },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My manager has terrible breath and leans over my desk to give feedback.', joke_text: '"I can hear your feedback much better over Slack."' },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My manager has terrible breath and hovers over my shoulder in meetings.', joke_text: 'An executive director whose presence can clear a glass conference room faster than a fire drill.' },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My manager has terrible breath and hovers over my shoulder in meetings.', joke_text: 'A people leader whose primary leadership tactic is chemical intimidation.' },
+
   // The founder's approved product-mode rows from the joke ledger
 
   // (src/lib/jokes/jokenet.json), admitted by scripts/jokenet-sync.ts —
