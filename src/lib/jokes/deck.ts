@@ -166,9 +166,13 @@ export type JokeCard = {
 export type CardLayout = 'headline' | 'stack'
 
 /** What a card's face actually draws, with the fallbacks settled once so the
- *  screen and the export can never disagree. A stack without a punchline has
- *  nothing to stack, so it turns over as a headline; a `lit` that isn't in the
- *  text lights nothing. */
+ *  screen and the export can never disagree.
+ *
+ *  The writer's own fields win when it sets them. A card without them — which
+ *  today is every card — is read from its text: a short closing sentence
+ *  after a setup turns over as a stack, and anything else is a headline with
+ *  its turn lit (see deriveLit). A `lit` that isn't in the text lights
+ *  nothing. */
 export type ResolvedFace =
   | { layout: 'headline'; text: string; lit: string }
   | { layout: 'stack'; setup: string; punchline: string }
@@ -180,8 +184,66 @@ export function resolveFace(
   if (card.layout === 'stack' && punchline) {
     return { layout: 'stack', setup: card.setup?.trim() ?? '', punchline }
   }
-  const lit = card.lit && card.text.includes(card.lit) ? card.lit : ''
-  return { layout: 'headline', text: card.text, lit }
+  if (!card.layout) {
+    const stack = deriveStack(card.text)
+    if (stack) return { layout: 'stack', ...stack }
+  }
+  const lit = card.lit ?? deriveLit(card.text)
+  return { layout: 'headline', text: card.text, lit: lit && card.text.includes(lit) ? lit : '' }
+}
+
+/** The text as sentences, each keeping its closing punctuation and quotes. */
+function sentences(text: string): string[] {
+  return (text.match(/[^.!?…]+(?:[.!?…]+["”’)]*|$)/g) ?? []).map((s) => s.trim()).filter(Boolean)
+}
+
+const words = (s: string) => s.split(/\s+/).filter(Boolean)
+
+/** A stack wants a setup and a two-to-four-word closing sentence — "i was.
+ *  past tense." A card with a stage direction on its own line stays a
+ *  headline: the line break is the clapback's, not the stack's. */
+function deriveStack(text: string): { setup: string; punchline: string } | null {
+  const t = text.trim()
+  if (/\n/.test(t)) return null
+  const parts = sentences(t)
+  if (parts.length < 2) return null
+  // Walk back from the end: the punchline is the closing run of short
+  // sentences ("i was. past tense." is two), as long as it stays 2–4 words.
+  let k = parts.length
+  let n = 0
+  while (k > 1) {
+    const w = words(parts[k - 1]!).length
+    if (n + w > 4) break
+    n += w
+    k--
+  }
+  if (n < 2) return null
+  const setup = parts.slice(0, k).join(' ')
+  if (words(setup).length < 3) return null
+  return { setup, punchline: parts.slice(k).join(' ') }
+}
+
+/** The turn to light in plum, read from the text: the closing sentence, else
+ *  a quoted phrase that isn't the whole card, else the clause after the last
+ *  comma or dash. Empty when none of those is a real part of the joke. */
+export function deriveLit(text: string): string {
+  const t = text.trim()
+  const parts = sentences(t)
+  const last = parts[parts.length - 1] ?? ''
+  if (parts.length >= 2 && last.length < t.length * 0.7) return balanced(last)
+  const quoted = t.match(/“[^”]{2,}”|"[^"]{2,}"/)
+  if (quoted && quoted[0].length < t.length * 0.7) return quoted[0]
+  const clause = t.match(/(?:,|—|–|;)\s*([^,—–;]{8,})$/)
+  if (clause && clause[1]!.length < t.length * 0.6) return balanced(clause[1]!.trim())
+  return ''
+}
+
+/** Drop a closing quote whose opening one fell outside the phrase, so a lit
+ *  tail of a quoted line doesn't end on a dangling mark. */
+function balanced(s: string): string {
+  if (s.endsWith('”') && !s.includes('“')) return s.slice(0, -1)
+  if (s.endsWith('"') && (s.match(/"/g) ?? []).length % 2 === 1) return s.slice(0, -1)
+  return s
 }
 
 export type JokeTier = 'guest' | 'free' | 'paying'
