@@ -19,7 +19,7 @@
 // voiceless run. See §7 and §7b of the doc for why.
 import type { SlotKey } from './deck'
 
-export const PROMPT_VERSION = '3.6'
+export const PROMPT_VERSION = '3.7'
 
 /* ───────────────────────── 1 — premise pass ─────────────────────────
    Runs once per set on first flip. Cached to joke_sets.premises.
