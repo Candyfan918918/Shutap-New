@@ -1,10 +1,7 @@
 /* A card, face-down.
  *
- * Designed like the face and painted from the same constants — same ground,
- * same aura, same grain, same eyes-and-wordmark lockup in the same corner — so
- * turning one over reads as one object rotating, not as two different cards.
- *
- * What it shows is the slot label and its subtitle, and nothing else. The
+ * Off-white, the wordmark in the corner, the slot label and its subtitle in
+ * the middle, and one plum outline pill that says what to do with it. The
  * subtitle is permanent rather than a tooltip: a guest is making their single
  * most important choice on their first visit and cannot be asked to discover
  * what "the take" means.
@@ -12,32 +9,35 @@
  * All three backs are identical apart from that text — same surface, same
  * weight, no per-slot glyph, no per-slot accent. If the roast back looked
  * louder than the take back the choice would be biased, and the first-flip
- * distribution this deck exists to measure would be worthless. */
+ * distribution this deck exists to measure would be worthless. That holds
+ * even though the faces differ: which face a card turns over to is never
+ * signalled on its back. */
 import { useState } from 'react'
 import {
-  CARD_EDGE,
-  CARD_FAINT,
-  CARD_GRAIN,
-  CARD_GROUND,
-  CARD_INK,
-  CARD_INK_2,
-  CARD_SHADOW,
-  CARD_SHADOW_HOVER,
+  CARD_BACK_EDGE,
+  CARD_LIGHT,
+  CARD_LIGHT_SHADOW,
+  CARD_LIGHT_SHADOW_HOVER,
   CardLockup,
+  LIGHT_INK,
+  LIGHT_INK_STRONG,
+  LIGHT_MUTED,
+  LIT,
 } from './ui'
 
 export function CardBack({
   label,
   subtitle,
-  situation,
   /** Mid-flip, waiting on the writer: a quiet hold, never a spinner. */
   holding = false,
+  /** A guest's used-up card: still face-down, still theirs, won't turn. */
+  spent = false,
   interactive = true,
 }: {
   label: string
   subtitle: string
-  situation?: string
   holding?: boolean
+  spent?: boolean
   interactive?: boolean
 }) {
   const [hover, setHover] = useState(false)
@@ -49,10 +49,10 @@ export function CardBack({
         style={{
           position: 'relative', width: '100%', aspectRatio: '9/16',
           borderRadius: '7cqw', overflow: 'hidden',
-          background: CARD_GROUND, border: CARD_EDGE,
-          boxShadow: hover ? CARD_SHADOW_HOVER : CARD_SHADOW,
-          display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-          padding: '7cqw 6.5cqw', color: CARD_INK,
+          background: CARD_LIGHT, border: CARD_BACK_EDGE,
+          boxShadow: hover ? CARD_LIGHT_SHADOW_HOVER : CARD_LIGHT_SHADOW,
+          display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'stretch',
+          padding: '7cqw 6.5cqw', color: LIGHT_INK,
           // A lift on hover, and nothing else. No rotation, no glow — a back
           // that reacts more than that starts advertising itself.
           transform: hover ? 'translateY(-3px)' : 'none',
@@ -60,53 +60,40 @@ export function CardBack({
           animation: holding ? 'shutapHold .9s ease-in-out infinite' : 'none',
         }}
       >
-        <div
-          className="shutap-card-aura"
-          style={{
-            position: 'absolute', width: '150%', height: '58%', left: '-25%', top: '6%',
-            background: 'radial-gradient(circle,rgba(231,84,138,.3),transparent 66%)',
-            filter: 'blur(10px)', pointerEvents: 'none',
-          }}
-        />
-        <div style={CARD_GRAIN} />
+        <CardLockup ink={LIGHT_INK} />
 
-        <CardLockup />
-
-        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '2.6cqw' }}>
-          <span style={{ font: '800 9.6cqw/1.08 Sora,sans-serif', letterSpacing: '-.035em', color: CARD_INK }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2.4cqw', textAlign: 'center' }}>
+          <span style={{ font: '700 10cqw/1.1 Sora,sans-serif', letterSpacing: '-.04em', color: LIGHT_INK_STRONG }}>
             {label}
           </span>
-          <span style={{ font: 'italic 400 5cqw/1.35 Newsreader,serif', color: CARD_INK_2, textWrap: 'pretty' }}>
+          <span style={{ font: 'italic 400 5.4cqw/1.3 Newsreader,serif', color: LIGHT_MUTED, textWrap: 'pretty' }}>
             {subtitle}
           </span>
           {holding ? (
             // Said in words as well as shown, so a held card is never mistaken
             // for a broken one: it is being written, and it will turn.
-            <span aria-live="polite" style={{ font: '500 4.2cqw/1.4 Inter,sans-serif', color: CARD_INK_2, letterSpacing: '.02em', marginTop: '1.5cqw' }}>
+            <span aria-live="polite" style={{ font: 'italic 400 4.4cqw/1.4 Newsreader,serif', color: LIGHT_MUTED, marginTop: '1.5cqw' }}>
               writing this one…
             </span>
           ) : null}
         </div>
 
-        <span style={{ position: 'relative', font: '400 4.2cqw/1.45 Inter,sans-serif', color: CARD_FAINT, textWrap: 'pretty' }}>
-          {situation}
+        <span
+          style={{
+            display: 'inline-flex', alignSelf: 'center', alignItems: 'center',
+            height: '9cqw', padding: '0 4.5cqw', borderRadius: 999,
+            border: `1.5px solid ${LIT}`, font: '700 3.8cqw/1 Sora,sans-serif', color: LIT, whiteSpace: 'nowrap',
+          }}
+        >
+          {spent ? 'face down. still yours.' : 'tap to flip →'}
         </span>
       </div>
     </div>
   )
 }
 
-/* The aura breathes and the hold pulses; both stop for reduced motion. Kept
-   with the deck rather than in global.css — nothing else on the site draws a
-   card back. */
+/* The hold's pulse. Kept with the deck rather than in global.css — nothing
+   else on the site draws a card back. */
 export function CardBackStyles() {
-  return (
-    <style>{`
-      .shutap-card-aura{animation:breathe 6.5s ease-in-out infinite}
-      @keyframes shutapHold{0%,100%{opacity:.55}50%{opacity:1}}
-      @media (prefers-reduced-motion: reduce){
-        .shutap-card-aura{animation:none;opacity:.7}
-      }
-    `}</style>
-  )
+  return <style>{`@keyframes shutapHold{0%,100%{opacity:.55}50%{opacity:1}}`}</style>
 }

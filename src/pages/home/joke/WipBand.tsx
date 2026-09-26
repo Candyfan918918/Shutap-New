@@ -21,15 +21,15 @@
 import { useMemo } from 'react'
 import { SLOTS, type SlotKey } from '@/lib/jokes/deck'
 import {
-  CARD_EDGE,
-  CARD_GROUND,
+  CARD_BACK_EDGE,
+  CARD_LIGHT,
   Eyes,
   FAINT,
+  LIT,
   MUTED,
   NEWS,
   PROSE,
   SORA,
-  lift,
 } from './ui'
 
 /* ── the companion's copy, rotating every 3s ──
@@ -117,8 +117,6 @@ export function WipBand({
       : elapsed > 22
         ? LATE
         : DEALING
-
-  const accentOf = (key: SlotKey) => SLOTS.find((s) => s.key === key)?.accent ?? '#e7548a'
 
   return (
     <section style={{ background: '#fff', padding: '0 clamp(16px,4vw,28px) clamp(28px,5vh,56px)' }}>
@@ -225,9 +223,9 @@ export function WipBand({
                   className={done ? undefined : 'shutap-wip-anim'}
                   style={{
                     position: 'relative', width: '100%', maxWidth: 62, aspectRatio: '9/16',
-                    borderRadius: 9, overflow: 'hidden', background: CARD_GROUND,
-                    border: done ? '.5px solid rgba(231,84,138,.85)' : CARD_EDGE,
-                    boxShadow: '0 14px 26px -16px rgba(80,10,45,.7)',
+                    borderRadius: 9, overflow: 'hidden', background: CARD_LIGHT,
+                    border: done ? `1px solid ${LIT}` : CARD_BACK_EDGE,
+                    boxShadow: '0 12px 22px -16px rgba(80,10,45,.35)',
                     display: 'grid', placeItems: 'center',
                     animation: done
                       ? 'shutapWipPop .5s cubic-bezier(.2,.8,.2,1) both'
@@ -239,7 +237,7 @@ export function WipBand({
                     style={{
                       position: 'absolute', inset: 0,
                       backgroundImage:
-                        'linear-gradient(105deg,transparent 32%,rgba(255,255,255,.24),transparent 68%)',
+                        'linear-gradient(105deg,transparent 32%,rgba(11,8,15,.07),transparent 68%)',
                       backgroundSize: '240% 100%',
                       animation: done
                         ? 'none'
@@ -250,7 +248,7 @@ export function WipBand({
                     style={{
                       position: 'relative', fontFamily: SORA, fontWeight: 800, fontSize: 14,
                       letterSpacing: '.08em',
-                      color: done ? lift(accentOf(slot.key), 0.34) : 'rgba(247,232,240,.5)',
+                      color: done ? LIT : 'rgba(11,8,15,.35)',
                     }}
                   >
                     {done ? '✓' : active ? '···' : ''}

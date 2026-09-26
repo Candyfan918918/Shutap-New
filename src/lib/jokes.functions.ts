@@ -41,7 +41,7 @@ import { LEGAL_VERSION } from './seo/legal'
 import {
   DAILY_SETS,
   angleLabel,
-  angleAccent,
+  angleSubtitle,
   exportSpec,
   isThinInput,
   usageBlock,
@@ -845,8 +845,7 @@ export const exportJokeCards = createServerFn({ method: 'POST' })
               svg: renderCardSvg({
                 text: c.text,
                 label,
-                accent: angleAccent(c.angle),
-                situation: (set.clean_text as string) ?? '',
+                subtitle: angleSubtitle(c.angle),
                 width: gspec.width,
                 height: gspec.height,
                 mark: gspec.mark,
@@ -877,15 +876,6 @@ export const exportJokeCards = createServerFn({ method: 'POST' })
         : await mine().eq('id', cardId!)
     if (!rows || rows.length === 0) throw new Error('no card there')
 
-    const setIds = Array.from(new Set(rows.map((r: any) => r.set_id as string)))
-    const { data: sets } = await supabaseAdmin
-      .from('joke_sets')
-      .select('id, clean_text')
-      .in('id', setIds)
-    const situations = new Map<string, string>(
-      (sets ?? []).map((s: any) => [s.id as string, (s.clean_text as string) ?? '']),
-    )
-
     return {
       tier,
       width: spec.width,
@@ -901,8 +891,7 @@ export const exportJokeCards = createServerFn({ method: 'POST' })
           svg: renderCardSvg({
             text: String(r.card_text),
             label,
-            accent: angleAccent(r.angle as string),
-            situation: situations.get(r.set_id as string) ?? '',
+            subtitle: angleSubtitle(r.angle as string),
             width: spec.width,
             height: spec.height,
             mark: spec.mark,

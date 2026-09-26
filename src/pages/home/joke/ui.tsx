@@ -21,20 +21,38 @@ export const VIOLET = '#7F77DD'
 export const DARK = '#100c14'
 
 /* ─────────────────────── the card's own world ───────────────────────
-   Both sides of a card are painted from these, so a flip reads as one object
-   turning over rather than as two different cards. Sizes inside a card are
-   container-query units against the card's own width — that is what keeps the
-   deck, the export preview and a phone-width column all in proportion. */
+   Two faces and one back: an off-white headline face, an ink stack face, and
+   an off-white back identical across slots. The palette is defined once, in
+   card-art.ts, because the export has to paint the same card. Sizes inside a
+   card are container-query units against the card's own width — that is what
+   keeps the deck, the export preview and a phone-width column in proportion. */
 
-export const CARD_GROUND = 'radial-gradient(135% 78% at 50% 0%,#3a1022,#1a0a12 60%,#120710)'
-export const CARD_EDGE = '.5px solid rgba(255,255,255,.16)'
-export const CARD_SHADOW = '0 22px 50px -24px rgba(0,0,0,.7)'
-export const CARD_SHADOW_HOVER = '0 30px 60px -26px rgba(0,0,0,.78)'
-export const CARD_INK = '#f7e8f0'
-export const CARD_INK_2 = 'rgba(247,232,240,.72)'
-export const CARD_FAINT = '#9b8090'
+export {
+  CARD_LIGHT,
+  CARD_LIGHT_EDGE,
+  CARD_BACK_EDGE,
+  CARD_LIGHT_SHADOW,
+  CARD_DARK,
+  CARD_DARK_EDGE,
+  CARD_DARK_SHADOW,
+  LIGHT_INK,
+  LIGHT_INK_STRONG,
+  LIGHT_MUTED,
+  LIGHT_EYEBROW,
+  LIGHT_RULE,
+  LIT,
+  DARK_TEXT,
+  DARK_TEXT_2,
+  DARK_TEXT_3,
+  DARK_RULE,
+  WATERMARK_DARK,
+  WATERMARK_LIGHT,
+} from '@/lib/jokes/card-art'
 
-/** The dot grain both sides carry. Absolute, so it sits under the type. */
+/** The back's hover: the 3px lift reads as a lift because the shadow grows. */
+export const CARD_LIGHT_SHADOW_HOVER = '0 22px 40px -24px rgba(80,10,45,.38)'
+
+/** The dot grain the stack face carries. Absolute, so it sits under the type. */
 export const CARD_GRAIN: CSSProperties = {
   position: 'absolute',
   inset: 0,
@@ -44,19 +62,28 @@ export const CARD_GRAIN: CSSProperties = {
   pointerEvents: 'none',
 }
 
-/** The accent trio are light-surface inks. On the card's ground a small
- *  uppercase label in the raw accent misses 4.5:1 — the clapback lands at
- *  3.2:1 — so lift it toward white before painting. One rule for the screen
- *  and the saved picture, so it lives with the export renderer. */
-export { lift } from '@/lib/jokes/card-art'
-
-/** Eyes + wordmark, sized off the card's width so the lockup's proportions
- *  hold at any card size — deck thumbnail, full column, or export preview. */
-export function CardLockup() {
+/** The wordmark, sized off the card's width so it holds at any card size —
+ *  deck thumbnail, full column, or export preview. The eyes ride along only
+ *  on the ink stack face; the off-white surfaces carry the word alone. */
+export function CardLockup({ ink, eyes = false }: { ink: string; eyes?: boolean }) {
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '2.4cqw' }}>
-      <EyeMark style={{ width: '6.4cqw', height: '4.39cqw' }} />
-      <ShutapWordmark ink={CARD_INK} style={{ fontSize: '7cqw', letterSpacing: '-.04em' }} />
+      {eyes ? <EyeMark style={{ width: '9cqw', height: '6.17cqw' }} /> : null}
+      <ShutapWordmark ink={ink} style={{ fontSize: '6cqw', fontWeight: 700, letterSpacing: '-.04em' }} />
+    </div>
+  )
+}
+
+/** The guest/free mark: three rows of the name, turned 22°, in the
+ *  surface's own watermark ink. Part of the image, never a corner badge. */
+export function CardWatermark({ color }: { color: string }) {
+  return (
+    <div aria-hidden style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '9cqw', transform: 'rotate(-22deg)', pointerEvents: 'none' }}>
+      {[0, 1, 2].map((i) => (
+        <div key={i} style={{ font: '800 13cqw/1 Sora,sans-serif', letterSpacing: '-.04em', whiteSpace: 'nowrap', color, textAlign: 'center' }}>
+          shutap · shutap
+        </div>
+      ))}
     </div>
   )
 }
