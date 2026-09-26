@@ -4,6 +4,15 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.8 — 2026-09-26
+
+Four founder-ranked winners from the manager set added to the seed hall of
+fame (1 take, 1 clapback, 2 roasts): institutional deadpan for a bodily
+problem ("unannounced air quality advisory"), an eight-word polite clapback
+("much better over Slack"), roasts as job-title verdicts. Prompt text
+unchanged; the copy guardrail already stops candidates reproducing these
+lines.
+
 ## 3.7 — 2026-09-26
 
 Nine founder-ranked winners (3 take, 3 clapback, 3 roast) added to the
