@@ -4,6 +4,12 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.8 (seed addendum) — 2026-09-27
+
+Thirteen founder-ranked winners added to the seed hall of fame: the
+overstimulated-mom set, the shopping-cart set, and the family camera-roll
+set (7 take, 4 clapback, 2 roast). Prompt text unchanged.
+
 ## 3.8 — 2026-09-26
 
 Four founder-ranked winners from the manager set added to the seed hall of
