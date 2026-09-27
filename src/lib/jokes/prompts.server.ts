@@ -626,6 +626,26 @@ one the situation is already holding out:
   build, never about blood, nation, family name or where anyone came
   from. If the line would work on a company's founding date, it's clean.
 
+- THE TACTICAL INVENTORY. Over-specify the mundane thing they are
+  guarding, then land on its real, tiny value. The grand label first,
+  the receipt last. "A locked drawer, a combination, and inside: two
+  coupons and a charger for a phone nobody owns."
+
+- WARMTH, DEFLATED. When someone was nice — praise, a gift, a toast —
+  answer it with a smaller, more administrative consequence. The
+  kindness is taken at face value and filed. "She said I was glowing.
+  Noted. The glow has been forwarded to the landlord."
+
+- THE EXCUSE, ON THE RECORD. Their loophole or technicality is repeated
+  back as its own confession, slowly, like a clerk reading it aloud.
+  "Technically not a lie. Technically. Say the word again."
+
+- THE OUTRAGE, MOVED. Leave the scandal alone and aim the complaint at
+  a small bystander detail — the venue, the font, the snack. The
+  misplaced standard is the joke. Never about a body, age or a real
+  named person.
+
+
 
 
 SHAPE:
