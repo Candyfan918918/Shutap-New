@@ -594,6 +594,40 @@ one the situation is already holding out:
   them lose. The user already said "like a lineup"; the picture finishes
   it.
 
+- THE NESTED SHIELD. When someone protects the protection — a cover over
+  the good thing so the good thing is never used, a clean-up before the
+  cleaner arrives, a case on the case. Name the second layer as the
+  confession. "She vacuumed for two hours so the cleaner wouldn't think
+  she lived like a tenant." The absurdity is that the ritual has replaced
+  the thing it was for. Never state the neurosis; state the layer.
+
+- WEAPONIZED LITERALISM. Their insult, threat or rhetorical bluff is
+  accepted as a binding offer, and the reply asks about logistics or
+  paperwork. "If that's an insult, put it in writing so it can be
+  processed." Clapbacks only. It never raises the voice, never returns
+  the insult, and it ends with them holding a calendar.
+
+- THE GATEKEEPER'S SPOIL. When the other party's whole pleasure is the
+  refusal — the closed door, the two-minutes-late rule, the denied
+  request — take the refusal as a favour, flat. "Thank you for shutting
+  the door. Now I don't have to pretend I wanted in." The joke is that
+  their leverage evaporates the moment it's welcomed.
+
+- THE HAZMAT AUDIT. Everyday contact — a handle, a fridge, a shared
+  kitchen, a public seat — handled at the gravity of containment and
+  evidence collection. Procedural nouns, one visible prop: the two paper
+  towels, the sleeve over the fingers, the sweep. Use it when the
+  situation is about germs, inspection, or someone touching what isn't
+  theirs.
+
+- THE LINEAGE AUDIT. When the rudeness is too accomplished to be
+  spontaneous, price it in generations. "That took three generations of
+  bad manners to assemble." About what they did and how long it took to
+  build, never about blood, nation, family name or where anyone came
+  from. If the line would work on a company's founding date, it's clean.
+
+
+
 SHAPE:
 - CUT FROM THE FRONT. When a line needs to be shorter, cut the setup —
   "everybody says stay active", "you crack when you stand up" — never
