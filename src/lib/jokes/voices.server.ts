@@ -170,6 +170,13 @@ export const SEED_HALL_OF_FAME: HallOfFameEntry[] = [
   { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My date spent the whole dinner correcting the waiter and then asked to split the bill.', joke_text: "That wasn't a bad night. That took three generations of bad manners to assemble." },
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My date spent the whole dinner correcting the waiter and then asked to split the bill.', joke_text: 'A man whose confidence required forty years of trial and error and still shipped without a manual.' },
 
+  // Technique set 2, 2026-09-27: the tactical inventory, warmth deflated,
+  // the excuse on the record, the outrage moved. Original lines only.
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My roommate put a padlock on his kitchen cabinet.', joke_text: 'A padlock, a key on a lanyard, and behind it: half a sleeve of crackers and soy sauce packets.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My boss praised me in front of everyone and then gave me three more projects.', joke_text: 'The compliment was the cover letter. The projects were the invoice.' },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My husband said he technically never lied, he just did not mention it.', joke_text: '"Technically. Say it slower so I can write it down."' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My friend cheated on her boyfriend at my birthday party.', joke_text: "Fine, the cheating. But at my party? I rented that room by the hour." },
+
 
 
   // The founder's approved product-mode rows from the joke ledger

@@ -4,6 +4,13 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.10 — 2026-09-27
+
+Four named moves abstracted from the two stand-up reference spreadsheets
+(techniques only, no lines or names): THE TACTICAL INVENTORY, WARMTH,
+DEFLATED, THE EXCUSE ON THE RECORD, THE OUTRAGE MOVED. Four original
+exemplars added to the seed hall of fame.
+
 ## 3.9 — 2026-09-27
 
 Five named moves added to the candidate stage, abstracted from a stand-up
