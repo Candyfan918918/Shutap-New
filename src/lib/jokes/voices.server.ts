@@ -141,6 +141,21 @@ export const SEED_HALL_OF_FAME: HallOfFameEntry[] = [
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My manager has terrible breath and hovers over my shoulder in meetings.', joke_text: 'An executive director whose presence can clear a glass conference room faster than a fire drill.' },
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My manager has terrible breath and hovers over my shoulder in meetings.', joke_text: 'A people leader whose primary leadership tactic is chemical intimidation.' },
 
+  // Founder-ranked winners, 2026-09-27: parenting and the family camera roll.
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'I feel overstimulated as a mom.', joke_text: 'OSHA has a decibel limit. Your kitchen is over it before breakfast.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'I feel overstimulated as a mom.', joke_text: 'She didn\'t lose her patience. She reached the municipal noise ceiling on four plastic instruments playing in different keys.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'I feel overstimulated as a mom of two.', joke_text: 'You didn\'t start a family. You signed an open-ended maintenance contract with two tiny terrorists who communicate exclusively in sticky surfaces.' },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'I feel overstimulated as a mom.', joke_text: '"Mommy\'s in the bathroom. Mommy is closed."' },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'I feel overstimulated as a mom.', joke_text: 'Your next vacation is a root canal. Forty minutes, nobody talks, they bring a blanket.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My toddler licked the shopping cart.', joke_text: 'That handle has survived three pandemics and twelve years of flu seasons. Your child just took a census with his tongue.' },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My toddler licked the shopping cart.', joke_text: '"He won\'t eat organic chicken, but he\'ll happily ingest forty people\'s hand sanitizer."' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My husband never takes pictures of me with the kids, but I have hundreds of him with them.', joke_text: 'You didn\'t marry a partner. You signed on as unpaid director of photography for his fatherhood documentary.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My husband never takes pictures of me with the kids, but I have hundreds of him with them.', joke_text: 'The kids will make a slideshow one day. You\'re in it once, as a reflection in the oven door.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My husband never takes pictures of me with the kids, but I have hundreds of him with them.', joke_text: 'Your camera roll is a family. His is a parking spot.' },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My husband never takes pictures of me with the kids, but I have hundreds of him with them.', joke_text: '"Take one photo where I\'m not asleep or holding a laundry basket so my obituary doesn\'t use my driver\'s license."' },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My husband never takes pictures of me with the kids, but I have hundreds of him with them.', joke_text: '"Phone up. Camera\'s on the back. Point it here."' },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My husband never takes pictures of me with the kids, but I have hundreds of him with them.', joke_text: 'A man whose phone contains eighty-four photos of a suspicious dashboard engine light and zero evidence of his wife.' },
+
   // The founder's approved product-mode rows from the joke ledger
 
   // (src/lib/jokes/jokenet.json), admitted by scripts/jokenet-sync.ts —
