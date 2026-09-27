@@ -4,6 +4,18 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.9 — 2026-09-27
+
+Five named moves added to the candidate stage, abstracted from a stand-up
+technique breakdown supplied by the founder: THE NESTED SHIELD (protecting
+the protection), WEAPONIZED LITERALISM (their bluff accepted as a binding
+offer, clapback only), THE GATEKEEPER'S SPOIL (the refusal welcomed flat),
+THE HAZMAT AUDIT (everyday contact at containment gravity), THE LINEAGE
+AUDIT (rudeness priced in generations, about the behaviour's build time
+only — never blood, nation or origin). Eleven matching exemplars added to
+the seed hall of fame. No line, name or bit from any comedian's material
+was used; techniques only, per the standing copyright rule.
+
 ## 3.8 (seed addendum) — 2026-09-27
 
 Thirteen founder-ranked winners added to the seed hall of fame: the

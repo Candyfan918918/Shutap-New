@@ -156,6 +156,22 @@ export const SEED_HALL_OF_FAME: HallOfFameEntry[] = [
   { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My husband never takes pictures of me with the kids, but I have hundreds of him with them.', joke_text: '"Phone up. Camera\'s on the back. Point it here."' },
   { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My husband never takes pictures of me with the kids, but I have hundreds of him with them.', joke_text: 'A man whose phone contains eighty-four photos of a suspicious dashboard engine light and zero evidence of his wife.' },
 
+  // Technique set, 2026-09-27: the nested shield, weaponized literalism,
+  // the gatekeeper's spoil, the hazmat audit, the lineage audit. Written
+  // from technique only — no line, name or bit from any comedian's set.
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My mom deep-cleans the whole house for two hours before the cleaning lady arrives.', joke_text: "She spent two hours on the baseboards so the cleaner wouldn't think she lived like a tenant." },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My mom keeps the good sofa under a plastic cover and nobody is allowed to sit on it.', joke_text: 'A woman who bought a cover for the cover and has never once sat down in her own living room.' },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'A driver screamed an insult at me on the freeway for merging.', joke_text: '"If that was an offer, send the date and time. I\'ll bring my mother."' },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My coworker told me in a meeting that I would regret pushing back on him.', joke_text: '"Put the threat in writing so accounts payable can process it."' },
+  { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My manager loves telling people they are two minutes late and shutting the door on them.', joke_text: '"Thank you for closing it. Now I don\'t have to pretend I wanted in."' },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My manager loves telling people they are two minutes late and shutting the door on them.', joke_text: 'A supervisor whose entire bonus is paid out in the joy of a closing door.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My toddler licked the shopping cart.', joke_text: 'You went in for milk. He went in with two paper towels short of a containment team.' },
+  { slot: 'the_roast', voice_key: null, archetype: 'uninvited_visitor', situation_clean: 'My mother-in-law opens my fridge and inspects every container when she visits.', joke_text: 'She walks through a kitchen like an uncertified toxicologist with clean fingernails.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My date spent the whole dinner correcting the waiter and then asked to split the bill.', joke_text: "That wasn't a bad night. That took three generations of bad manners to assemble." },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My date spent the whole dinner correcting the waiter and then asked to split the bill.', joke_text: 'A man whose confidence required forty years of trial and error and still shipped without a manual.' },
+
+
+
   // The founder's approved product-mode rows from the joke ledger
 
   // (src/lib/jokes/jokenet.json), admitted by scripts/jokenet-sync.ts —
