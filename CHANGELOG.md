@@ -4,6 +4,14 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.11 — 2026-09-28
+
+Four moves abstracted from the uploaded 100-situation reference
+(techniques only, no lines, no cultural tropes): THE SHOWROOM, THE
+LONG-RANGE SENSOR, HOSPITALITY AS CUSTODY, THE CROSS-EXAMINATION. Added a
+rule that no move may be built on nationality, ethnicity, religion or
+accent. PROMPT_VERSION set to 3.11 (the constant had stayed at 3.9).
+
 ## 3.10 — 2026-09-27
 
 Four named moves abstracted from the two stand-up reference spreadsheets

@@ -19,7 +19,7 @@
 // voiceless run. See §7 and §7b of the doc for why.
 import type { SlotKey } from './deck'
 
-export const PROMPT_VERSION = '3.9'
+export const PROMPT_VERSION = '3.11'
 
 /* ───────────────────────── 1 — premise pass ─────────────────────────
    Runs once per set on first flip. Cached to joke_sets.premises.
@@ -439,6 +439,35 @@ one the situation is already holding out:
   escalation. It reads as wisdom for exactly one beat. In the product
   this is a roast button, never a clapback — it is addressed to the
   category, not the user.
+
+- THE SHOWROOM. The good version exists and is kept for nobody; the
+  user gets the substitute. Name both, the preserved one first, the
+  one she is handed second, and let the gap do the verdict. "The good
+  towels are for guests who never come. You get the one from the gym."
+  The substitute must be specific and worse: a takeout lid, a
+  conference lanyard, a spare phone charger that only works at an
+  angle.
+
+- THE LONG-RANGE SENSOR. They detect a tiny violation from an absurd
+  distance or delay. "You moved the thermostat one degree. He felt it
+  from the parking lot." Give the distance or time as a precise number
+  and never explain how. The smaller the violation, the bigger the
+  range.
+
+- HOSPITALITY AS CUSTODY. Their generosity is described as detention.
+  Third plate is a sentence; the guest room is holding; leaving needs
+  a release form. No adjectives about how nice they are — the kindness
+  is only ever described in the language of the thing that keeps you
+  there.
+
+- THE CROSS-EXAMINATION. A small ordinary question is answered as if
+  it were an interrogation, in their voice: "Where were you." "Who is
+  she." "Why do you need a key." Three short questions, each smaller
+  than the last, ending on the most harmless one. The procedure is the
+  joke.
+
+Never build any of these on nationality, ethnicity, religion or accent.
+The household, office or date is the category; the origin never is.
 
 - THE REPLAY. Repeat the one absurd detail as fragments, as if reading
   it back for the record. "You said 'oof' sitting down. Sitting. Down."
