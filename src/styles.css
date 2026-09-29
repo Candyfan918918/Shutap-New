@@ -1,0 +1,7 @@
+
+/* Header menus: keep every link and the profile pill on one line, on every page */
+header a, header button, header [role="button"], header [role="button"] span, header button span, header a span { white-space: nowrap; }
+header nav, header [data-gh-nav], header [data-home-nav] { flex-wrap: nowrap; }
+@media (max-width: 640px) {
+  header [role="button"] > span:last-child, header .shutap-auth-pill, header a[href="/profile"] > span:last-child { max-width: 96px; overflow: hidden; text-overflow: ellipsis; }
+}
