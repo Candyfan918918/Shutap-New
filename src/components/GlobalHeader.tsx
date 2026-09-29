@@ -156,6 +156,7 @@ export function GlobalHeader() {
           color: active ? inkActive : inkMuted,
           textDecoration: 'none',
           padding: '6px 12px',
+          whiteSpace: 'nowrap',
         }}
       >
         {label}
@@ -321,6 +322,7 @@ export function GlobalHeader() {
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 join →
