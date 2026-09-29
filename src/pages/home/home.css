@@ -79,7 +79,7 @@ html.home-scroll-snap {
   .home-immersive .chgrid.rev{grid-template-columns:1fr;gap:30px;padding:clamp(56px,7vh,90px) 20px}
   .home-immersive .chgrid [data-democard]{order:1}
 }
-@media (max-width:600px){.home-immersive [data-navlink]{display:none}}
+@media (max-width:600px){.home-immersive [data-navlink]{padding:6px 3px !important;font-size:12.5px !important}.home-immersive [data-hdr] > div{padding:14px 14px !important}}
 @media (pointer:coarse){.home-immersive [data-cur],.home-immersive [data-curdot]{display:none!important}}
 @keyframes eblink{0%,34%,40%,78%,84%,100%{transform:scaleY(1)}37%,81%{transform:scaleY(.08)}}
 @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
