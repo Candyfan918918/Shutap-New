@@ -85,12 +85,6 @@ export function Header({ onToast }: { onToast?: (m: string) => void }) {
           >
             rooms
           </Link>
-          <Link
-            to="/halls"
-            style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: pathname.startsWith('/halls') ? '#0b080f' : '#443c42', textDecoration: 'none', padding: '6px 12px' }}
-          >
-            halls
-          </Link>
 
           <div ref={areaRef} style={{ position: 'relative' }}>
             {alias ? (
@@ -153,17 +147,6 @@ export function Header({ onToast }: { onToast?: (m: string) => void }) {
                     <Link to="/profile#settings" className="menu-item" style={menuItem} onClick={() => setMenuOpen(false)}>
                       settings
                     </Link>
-                    <div
-                      className="menu-item"
-                      role="button"
-                      style={{ ...menuItem, color: '#c1216b', cursor: 'pointer' }}
-                      onClick={() => {
-                        setMenuOpen(false)
-                        navigate('/#spill')
-                      }}
-                    >
-                      spill it →
-                    </div>
                     <Link to="/mirror" className="menu-item" style={{ ...menuItem, color: '#7F77DD' }} onClick={() => setMenuOpen(false)}>
                       the mirror ✦
                     </Link>
