@@ -156,6 +156,7 @@ export function GlobalHeader() {
           color: active ? inkActive : inkMuted,
           textDecoration: 'none',
           padding: '6px 12px',
+          whiteSpace: 'nowrap',
         }}
       >
         {label}
@@ -210,14 +211,14 @@ export function GlobalHeader() {
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 6px !important;font-size:13px !important}}`}</style>
+          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}`}</style>
           <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {[
               { href: '/#joke', label: 'joke cards' },
               { href: '/#spill', label: 'spill' },
               { href: '/#scan', label: 'scan' },
             ].map((l) => (
-              <a key={l.label} href={l.href} style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: inkMuted, textDecoration: 'none', padding: '6px 12px' }}>
+              <a key={l.label} href={l.href} style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: inkMuted, textDecoration: 'none', padding: '6px 12px', whiteSpace: 'nowrap' }}>
                 {l.label}
               </a>
             ))}
@@ -259,7 +260,7 @@ export function GlobalHeader() {
                   >
                     {alias.emoji || '🐣'}
                   </span>
-                  <span style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13, color: inkStrong }}>
+                  <span style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13, color: inkStrong, whiteSpace: 'nowrap', maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {alias.name || ''}
                   </span>
                 </div>
@@ -321,6 +322,8 @@ export function GlobalHeader() {
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
               >
                 join →
