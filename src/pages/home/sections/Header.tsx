@@ -133,22 +133,18 @@ export function HomeHeader() {
                 {' '}
                 <nav style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   {' '}
-                  {/* Primary hierarchy links, crawlable from the homepage so the
-                      pillars sit one hop from the root. Hidden under 1080px so
-                      the immersive mobile header keeps its original shape. */}
-                  <style>{`@media (max-width: 1080px){[data-home-nav-wide]{display:none !important}}`}</style>
-                  <span data-home-nav-wide="" style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+                  <style>{`@media (max-width: 640px){[data-home-nav] a{padding:6px 6px !important;font-size:13px !important}}`}</style>
+                  <span data-home-nav="" style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
                     {[
-                      { href: '/relationships', label: 'relationships' },
-                      { href: '/marriage', label: 'marriage' },
-                      { href: '/family', label: 'family' },
-                      { href: '/career', label: 'career' },
-                      { href: '/how-it-works', label: 'how it works' },
+                      { href: '/#joke', label: 'joke cards' },
+                      { href: '#spill', label: 'spill', cta: 'spill' },
+                      { href: '#scan', label: 'scan', cta: 'scan' },
+                      { href: '/stream', label: 'rooms' },
                     ].map((l) => (
                       <a
-                        key={l.href}
+                        key={l.label}
                         href={l.href}
-                        data-link={l.href}
+                        data-cta={l.cta}
                         data-hover=""
                         data-navlink=""
                         style={{ fontFamily: '\'Newsreader\',serif', fontStyle: 'italic', fontSize: '15px', color: '#443c42', padding: '8px 10px', transition: 'color .4s' }}
@@ -157,14 +153,6 @@ export function HomeHeader() {
                       </a>
                     ))}
                   </span>
-                  {' '}
-                  <a href="/stream" data-link="/stream" data-hover="" data-navlink="" style={{ fontFamily: '\'Newsreader\',serif', fontStyle: 'italic', fontSize: '15px', color: '#443c42', padding: '8px 14px', transition: 'color .4s' }}>
-                    rooms
-                  </a>
-                  {' '}
-                  <a href="/halls" data-link="/halls" data-hover="" data-navlink="" style={{ fontFamily: '\'Newsreader\',serif', fontStyle: 'italic', fontSize: '15px', color: '#443c42', padding: '8px 14px', transition: 'color .4s' }}>
-                    halls
-                  </a>
                   {' '}
                   <HomeHeaderCta />
                   {' '}

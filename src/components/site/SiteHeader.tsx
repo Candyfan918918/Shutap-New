@@ -119,8 +119,10 @@ export function SiteHeader() {
           <ShutapWordmark size={17} ink="#0b080f" accent="#a52a5f" letterSpacing="-.04em" />
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }} ref={areaRef}>
+          {navLink('/#joke', 'joke cards')}
+          {navLink('/#spill', 'spill')}
+          {navLink('/#scan', 'scan')}
           {navLink('/stream', 'rooms')}
-          {navLink('/halls', 'halls')}
           {!mounted ? (
             <span style={{ width: 78, height: 34 }} aria-hidden />
           ) : alias ? (
@@ -181,7 +183,6 @@ export function SiteHeader() {
                 >
                   <a href="/profile" role="menuitem" className="shutap-menu-item" style={menuItem}>your profile</a>
                   <a href="/profile#settings" role="menuitem" className="shutap-menu-item" style={menuItem}>settings</a>
-                  <a href="/#spill" role="menuitem" className="shutap-menu-item" style={{ ...menuItem, color: '#c1216b' }}>spill it →</a>
                   <a href="/mirror" role="menuitem" className="shutap-menu-item" style={{ ...menuItem, color: '#7F77DD' }}>the mirror ✦</a>
                   {alias.admin && <a href="/admin" role="menuitem" className="shutap-menu-item" style={menuItem}>admin dashboard</a>}
                   <div style={{ height: '.5px', background: 'rgba(11,8,15,.08)', margin: '6px 0' }} />

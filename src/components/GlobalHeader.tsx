@@ -210,20 +210,19 @@ export function GlobalHeader() {
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {/* Wide-screen nav: exposes the four pillars + how-it-works so the
-              site hierarchy is crawlable from every page (helps Google build
-              a sitelinks-worthy structure). Collapsed under 1000px so the
-              mobile bar keeps its two primary links. */}
-          <style>{`@media (max-width: 1000px){[data-gh-nav-wide]{display:none !important}}`}</style>
-          <span data-gh-nav-wide="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {navLink('/relationships', 'relationships')}
-            {navLink('/marriage', 'marriage')}
-            {navLink('/family', 'family')}
-            {navLink('/career', 'career')}
-            {navLink('/how-it-works', 'how it works')}
+          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 6px !important;font-size:13px !important}}`}</style>
+          <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            {[
+              { href: '/#joke', label: 'joke cards' },
+              { href: '/#spill', label: 'spill' },
+              { href: '/#scan', label: 'scan' },
+            ].map((l) => (
+              <a key={l.label} href={l.href} style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: inkMuted, textDecoration: 'none', padding: '6px 12px' }}>
+                {l.label}
+              </a>
+            ))}
+            {navLink('/stream', 'rooms')}
           </span>
-          {navLink('/stream', 'rooms')}
-          {navLink('/halls', 'halls')}
 
           <div ref={areaRef} style={{ position: 'relative' }}>
             {alias ? (
@@ -282,13 +281,6 @@ export function GlobalHeader() {
                     }}
                   >
                     <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>your profile</Link>
-                    <div
-                      role="button"
-                      style={{ ...menuItem, color: dark ? '#f7b8d4' : '#c1216b' }}
-                      onClick={() => { setMenuOpen(false); navigate({ to: '/', hash: 'spill' }) }}
-                    >
-                      spill it →
-                    </div>
                     <Link to="/mirror" style={{ ...menuItem, color: dark ? '#e6c37a' : '#7F77DD' }} onClick={() => setMenuOpen(false)}>
                       the mirror ✦
                     </Link>
