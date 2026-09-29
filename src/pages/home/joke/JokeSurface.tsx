@@ -1170,7 +1170,7 @@ export function JokeSurface() {
                 void onSubmit()
               }}
               enterKeyHint="send"
-              placeholder="whatever it is. the comment, the meeting, the text at 11pm, the thing they did again."
+              placeholder="get 3 joke cards and share them"
               disabled={phase !== 'idle'}
               style={{ width: '100%', resize: 'vertical', minHeight: 116, border: 'none', outline: 'none', background: 'transparent', fontFamily: NEWS, fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#2b2429', opacity: phase === 'idle' ? 1 : 0.6 }}
             />
