@@ -195,7 +195,7 @@ export function GlobalHeader() {
         style={{
           maxWidth: 1100,
           margin: '0 auto',
-          padding: '11px 22px',
+          padding: 'clamp(10px,2vw,11px) clamp(12px,3vw,22px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -204,14 +204,14 @@ export function GlobalHeader() {
       >
         <Link
           to="/"
-          style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}
+          style={{ display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', color: 'inherit', flexShrink: 0 }}
         >
           <EyeMark size={32} />
           <ShutapWordmark size={19} ink={inkStrong} letterSpacing="-.04em" />
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}`}</style>
+          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}@media (max-width: 420px){[data-gh-pill]{padding:7px 12px !important}}`}</style>
           <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {[
               { href: '/#joke', label: 'joke cards' },
@@ -310,6 +310,7 @@ export function GlobalHeader() {
               <button
                 type="button"
                 onClick={join}
+                data-gh-pill=""
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',

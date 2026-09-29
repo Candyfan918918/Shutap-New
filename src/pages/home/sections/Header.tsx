@@ -87,7 +87,7 @@ function HomeHeaderCta() {
         color: '#fff',
         background: '#0b080f',
         borderRadius: '999px',
-        padding: '11px 22px',
+        padding: '10px 16px',
         transition: 'background .3s',
       }}
     >
