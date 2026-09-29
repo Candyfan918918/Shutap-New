@@ -211,7 +211,7 @@ export function GlobalHeader() {
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 6px !important;font-size:13px !important}}`}</style>
+          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}`}</style>
           <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {[
               { href: '/#joke', label: 'joke cards' },
@@ -323,6 +323,7 @@ export function GlobalHeader() {
                   fontSize: 13,
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
               >
                 join →
