@@ -1152,29 +1152,8 @@ export function JokeSurface() {
             pseudonymous · no advice · different perspectives
           </Eyebrow>
           <h1 style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'clamp(38px,8.4vw,86px)', lineHeight: 1.02, letterSpacing: '-.05em', textAlign: 'center', margin: 0 }}>
-            <span style={{ position: 'relative', display: 'inline-block' }}>
-              shut<span style={{ color: '#e7548a' }}>ap</span>.
-              <span
-                aria-hidden
-                style={{
-                  position: 'absolute', top: '-.16em', right: '.06em',
-                  width: '.3em', height: '.3em', borderRadius: '50%',
-                  border: '1px solid rgba(231,84,138,.55)',
-                  display: 'grid', placeItems: 'center',
-                }}
-              >
-                <span style={{ width: '.055em', height: '.055em', borderRadius: '50%', background: ACCENT }} />
-              </span>
-            </span>
-            <br />
             <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, letterSpacing: '-.02em', color: '#8e1c4c' }}>joke about it.</span>
           </h1>
-          <p style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 'clamp(17px,2vw,22px)', lineHeight: 1.45, color: '#443c42', textAlign: 'center', maxWidth: '34ch', margin: 0 }}>
-            life&apos;s a bitch. so make fun of it.
-          </p>
-          <p style={{ fontFamily: SORA, fontSize: 13.5, color: FAINT, textAlign: 'center', margin: 0 }}>
-            type the thing that&apos;s living in your head. shutap writes the set.
-          </p>
 
 
 
