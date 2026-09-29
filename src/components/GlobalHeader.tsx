@@ -217,7 +217,7 @@ export function GlobalHeader() {
               { href: '/#spill', label: 'spill' },
               { href: '/#scan', label: 'scan' },
             ].map((l) => (
-              <a key={l.label} href={l.href} style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: inkMuted, textDecoration: 'none', padding: '6px 12px' }}>
+              <a key={l.label} href={l.href} style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: inkMuted, textDecoration: 'none', padding: '6px 12px', whiteSpace: 'nowrap' }}>
                 {l.label}
               </a>
             ))}
@@ -259,7 +259,7 @@ export function GlobalHeader() {
                   >
                     {alias.emoji || '🐣'}
                   </span>
-                  <span style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13, color: inkStrong }}>
+                  <span style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13, color: inkStrong, whiteSpace: 'nowrap', maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {alias.name || ''}
                   </span>
                 </div>

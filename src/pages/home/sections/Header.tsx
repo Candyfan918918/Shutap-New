@@ -66,7 +66,7 @@ function HomeHeaderCta() {
         >
           {alias?.emoji || '🐣'}
         </span>
-        <span style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13, color: '#0b080f' }}>
+        <span style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13, color: '#0b080f', whiteSpace: 'nowrap', maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis' }}>
           {alias?.name || 'you'}
         </span>
       </Link>
@@ -147,7 +147,7 @@ export function HomeHeader() {
                         data-cta={l.cta}
                         data-hover=""
                         data-navlink=""
-                        style={{ fontFamily: '\'Newsreader\',serif', fontStyle: 'italic', fontSize: '15px', color: '#443c42', padding: '8px 10px', transition: 'color .4s' }}
+                        style={{ fontFamily: '\'Newsreader\',serif', fontStyle: 'italic', fontSize: '15px', color: '#443c42', padding: '8px 10px', transition: 'color .4s', whiteSpace: 'nowrap' }}
                       >
                         {l.label}
                       </a>
