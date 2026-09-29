@@ -1172,7 +1172,11 @@ export function JokeSurface() {
               enterKeyHint="send"
               placeholder="get 3 joke cards and share them"
               disabled={phase !== 'idle'}
-              style={{ width: '100%', resize: 'vertical', minHeight: 116, border: 'none', outline: 'none', background: 'transparent', fontFamily: NEWS, fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#2b2429', opacity: phase === 'idle' ? 1 : 0.6 }}
+              className="joke-input"
+              style={{ width: '100%', resize: 'vertical', minHeight: 116, border: 'none', outline: 'none', background: 'transparent', fontFamily: NEWS, fontStyle: 'italic', fontSize: 22, lineHeight: 1.5, color: '#000', WebkitTextFillColor: '#000', caretColor: '#000', opacity: phase === 'idle' ? 1 : 0.6 }}
+            />
+            <style>{`.joke-input::placeholder{color:#6b5f66;-webkit-text-fill-color:#6b5f66;opacity:1}`}</style>
+            <span hidden
             />
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
               <span style={{ fontFamily: SORA, fontSize: 12, color: FAINT }}>
