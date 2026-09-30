@@ -12,6 +12,7 @@
  * distribution this deck exists to measure would be worthless. That holds
  * even though the faces differ: which face a card turns over to is never
  * signalled on its back. */
+import { useCqRef } from './cq'
 import { useState } from 'react'
 import {
   CARD_BACK_EDGE,
@@ -42,17 +43,17 @@ export function CardBack({
 }) {
   const [hover, setHover] = useState(false)
   return (
-    <div style={{ containerType: 'inline-size', width: '100%' }}>
+    <div ref={useCqRef()} style={{ containerType: 'inline-size', width: '100%' }}>
       <div
         onMouseEnter={interactive ? () => setHover(true) : undefined}
         onMouseLeave={interactive ? () => setHover(false) : undefined}
         style={{
           position: 'relative', width: '100%', aspectRatio: '9/16',
-          borderRadius: '7cqw', overflow: 'hidden',
+          borderRadius: 'calc(7 * var(--cq, 1cqw))', overflow: 'hidden',
           background: CARD_LIGHT, border: CARD_BACK_EDGE,
           boxShadow: hover ? CARD_LIGHT_SHADOW_HOVER : CARD_LIGHT_SHADOW,
           display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'stretch',
-          padding: '7cqw 6.5cqw', color: LIGHT_INK,
+          padding: 'calc(7 * var(--cq, 1cqw)) calc(6.5 * var(--cq, 1cqw))', color: LIGHT_INK,
           // A lift on hover, and nothing else. No rotation, no glow — a back
           // that reacts more than that starts advertising itself.
           transform: hover ? 'translateY(-3px)' : 'none',
@@ -62,17 +63,17 @@ export function CardBack({
       >
         <CardLockup ink={LIGHT_INK} />
 
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2.4cqw', textAlign: 'center' }}>
-          <span style={{ font: '700 10cqw/1.1 Sora,sans-serif', letterSpacing: '-.04em', color: LIGHT_INK_STRONG }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'calc(2.4 * var(--cq, 1cqw))', textAlign: 'center' }}>
+          <span style={{ font: '700 calc(10 * var(--cq, 1cqw))/1.1 Sora,sans-serif', letterSpacing: '-.04em', color: LIGHT_INK_STRONG }}>
             {label}
           </span>
-          <span style={{ font: 'italic 400 5.4cqw/1.3 Newsreader,serif', color: LIGHT_MUTED, textWrap: 'pretty' }}>
+          <span style={{ font: 'italic 400 calc(5.4 * var(--cq, 1cqw))/1.3 Newsreader,serif', color: LIGHT_MUTED, textWrap: 'pretty' }}>
             {subtitle}
           </span>
           {holding ? (
             // Said in words as well as shown, so a held card is never mistaken
             // for a broken one: it is being written, and it will turn.
-            <span aria-live="polite" style={{ font: 'italic 400 4.4cqw/1.4 Newsreader,serif', color: LIGHT_MUTED, marginTop: '1.5cqw' }}>
+            <span aria-live="polite" style={{ font: 'italic 400 calc(4.4 * var(--cq, 1cqw))/1.4 Newsreader,serif', color: LIGHT_MUTED, marginTop: 'calc(1.5 * var(--cq, 1cqw))' }}>
               writing this one…
             </span>
           ) : null}
@@ -81,8 +82,8 @@ export function CardBack({
         <span
           style={{
             display: 'inline-flex', alignSelf: 'center', alignItems: 'center',
-            height: '9cqw', padding: '0 4.5cqw', borderRadius: 999,
-            border: `1.5px solid ${LIT}`, font: '700 3.8cqw/1 Sora,sans-serif', color: LIT, whiteSpace: 'nowrap',
+            height: 'calc(9 * var(--cq, 1cqw))', padding: '0 calc(4.5 * var(--cq, 1cqw))', borderRadius: 999,
+            border: `1.5px solid ${LIT}`, font: '700 calc(3.8 * var(--cq, 1cqw))/1 Sora,sans-serif', color: LIT, whiteSpace: 'nowrap',
           }}
         >
           {spent ? 'face down. still yours.' : 'tap to flip →'}
