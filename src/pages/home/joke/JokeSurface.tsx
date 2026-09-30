@@ -77,7 +77,7 @@ import { CardShareSheet } from './CardShareSheet'
 import { UpgradeSheet } from './UpgradeSheet'
 import { LimitSheet, type LimitSheetReason } from './LimitSheet'
 import { WipBand } from './WipBand'
-import { Button, CompanionLine, Eyebrow, Sheet, SORA, NEWS, INK, MUTED, FAINT, ACCENT } from './ui'
+import { Button, CompanionLine, Sheet, SORA, NEWS, INK, MUTED, FAINT, ACCENT } from './ui'
 
 /** What the reader asked for when the alias gate went up, resumed afterwards.
  *  The card rides along by position: the gate can be answered minutes later,
