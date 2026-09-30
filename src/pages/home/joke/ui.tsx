@@ -67,9 +67,9 @@ export const CARD_GRAIN: CSSProperties = {
  *  on the ink stack face; the off-white surfaces carry the word alone. */
 export function CardLockup({ ink, eyes = false }: { ink: string; eyes?: boolean }) {
   return (
-    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '2.4cqw' }}>
-      {eyes ? <EyeMark style={{ width: '9cqw', height: '6.17cqw' }} /> : null}
-      <ShutapWordmark ink={ink} style={{ fontSize: '6cqw', fontWeight: 700, letterSpacing: '-.04em' }} />
+    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 'calc(2.4 * var(--cq, 1cqw))' }}>
+      {eyes ? <EyeMark style={{ width: 'calc(9 * var(--cq, 1cqw))', height: 'calc(6.17 * var(--cq, 1cqw))' }} /> : null}
+      <ShutapWordmark ink={ink} style={{ fontSize: 'calc(6 * var(--cq, 1cqw))', fontWeight: 700, letterSpacing: '-.04em' }} />
     </div>
   )
 }
@@ -78,9 +78,9 @@ export function CardLockup({ ink, eyes = false }: { ink: string; eyes?: boolean 
  *  surface's own watermark ink. Part of the image, never a corner badge. */
 export function CardWatermark({ color }: { color: string }) {
   return (
-    <div aria-hidden style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '9cqw', transform: 'rotate(-22deg)', pointerEvents: 'none' }}>
+    <div aria-hidden style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 'calc(9 * var(--cq, 1cqw))', transform: 'rotate(-22deg)', pointerEvents: 'none' }}>
       {[0, 1, 2].map((i) => (
-        <div key={i} style={{ font: '800 13cqw/1 Sora,sans-serif', letterSpacing: '-.04em', whiteSpace: 'nowrap', color, textAlign: 'center' }}>
+        <div key={i} style={{ font: '800 calc(13 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '-.04em', whiteSpace: 'nowrap', color, textAlign: 'center' }}>
           shutap · shutap
         </div>
       ))}

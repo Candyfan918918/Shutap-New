@@ -11,6 +11,7 @@
  * someone saves is what they were just looking at, the mark included. Sizes
  * are container-query units against the card's own width, which is what keeps
  * the deck, the export preview and a phone-width column all in proportion. */
+import { useCqRef } from './cq'
 import type { JokeCard } from '@/lib/jokes/deck'
 import { angleSubtitle, resolveFace } from '@/lib/jokes/deck'
 import { STACK_RAMP, headlineSize, stackSize, stackWords } from '@/lib/jokes/card-art'
@@ -54,11 +55,11 @@ export function CardFace({
     // The container is the wrapper, not the card: cqw resolves against the
     // nearest ANCESTOR container's content box, so a card that is its own
     // container sizes its radius and padding off the viewport instead.
-    <div style={{ containerType: 'inline-size', width: '100%' }}>
+    <div ref={useCqRef()} style={{ containerType: 'inline-size', width: '100%' }}>
     <div
       style={{
         position: 'relative', width: '100%', aspectRatio: '9/16',
-        borderRadius: '7cqw', overflow: 'hidden',
+        borderRadius: 'calc(7 * var(--cq, 1cqw))', overflow: 'hidden',
         background: dark ? CARD_DARK : CARD_LIGHT,
         border: dark ? CARD_DARK_EDGE : CARD_LIGHT_EDGE,
         boxShadow: dark ? CARD_DARK_SHADOW : CARD_LIGHT_SHADOW,
@@ -66,19 +67,19 @@ export function CardFace({
         // A safe area, not a margin: at 9:16 the card is posted to TikTok and
         // Reels, whose caption and chrome sit over the edges. The export in
         // card-art.ts keeps the same insets in viewBox units.
-        padding: '13cqw 8.5cqw', color: dark ? DARK_TEXT : LIGHT_INK,
+        padding: 'calc(13 * var(--cq, 1cqw)) calc(8.5 * var(--cq, 1cqw))', color: dark ? DARK_TEXT : LIGHT_INK,
       }}
     >
       {dark ? <div style={CARD_GRAIN} /> : null}
       {mark ? <CardWatermark color={dark ? WATERMARK_DARK : WATERMARK_LIGHT} /> : null}
 
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '3cqw', minWidth: 0 }}>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'calc(3 * var(--cq, 1cqw))', minWidth: 0 }}>
         <CardLockup ink={dark ? DARK_TEXT : LIGHT_INK} eyes={dark} />
         <span
           style={
             dark
-              ? { font: '800 3.6cqw/1 Sora,sans-serif', letterSpacing: '.28em', textTransform: 'uppercase', color: DARK_TEXT_2 }
-              : { font: '600 3.4cqw/1 Sora,sans-serif', letterSpacing: '.2em', textTransform: 'uppercase', color: LIGHT_EYEBROW }
+              ? { font: '800 calc(3.6 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '.28em', textTransform: 'uppercase', color: DARK_TEXT_2 }
+              : { font: '600 calc(3.4 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '.2em', textTransform: 'uppercase', color: LIGHT_EYEBROW }
           }
         >
           {card.angleLabel}
@@ -88,15 +89,15 @@ export function CardFace({
       <div
         style={{
           position: 'relative', flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center',
-          gap: dark ? 0 : '5cqw', opacity: loading ? 0.35 : 1, transition: 'opacity .25s',
+          gap: dark ? 0 : 'calc(5 * var(--cq, 1cqw))', opacity: loading ? 0.35 : 1, transition: 'opacity .25s',
         }}
       >
         {face.layout === 'headline' ? (
           <>
             {subtitle ? (
-              <span style={{ font: 'italic 400 5cqw/1.2 Newsreader,serif', color: LIGHT_MUTED }}>{subtitle}</span>
+              <span style={{ font: 'italic 400 calc(5 * var(--cq, 1cqw))/1.2 Newsreader,serif', color: LIGHT_MUTED }}>{subtitle}</span>
             ) : null}
-            <p style={{ margin: 0, font: `700 ${headlineSize(face.text)}cqw/1.04 Sora,sans-serif`, letterSpacing: '-.045em', color: LIGHT_INK_STRONG, textWrap: 'pretty', whiteSpace: 'pre-line' }}>
+            <p style={{ margin: 0, font: `700 calc(${headlineSize(face.text)} * var(--cq, 1cqw))/1.04 Sora,sans-serif`, letterSpacing: '-.045em', color: LIGHT_INK_STRONG, textWrap: 'pretty', whiteSpace: 'pre-line' }}>
               {loading ? 'shuffling…' : <HeadlineText text={face.text} lit={face.lit} />}
             </p>
           </>
@@ -109,12 +110,12 @@ export function CardFace({
           travels without the app still says where it came from. */}
       <div
         style={{
-          position: 'relative', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '3cqw',
-          paddingTop: '4cqw', borderTop: dark ? `.5px solid ${DARK_RULE}` : `1px solid ${LIGHT_RULE}`,
+          position: 'relative', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'calc(3 * var(--cq, 1cqw))',
+          paddingTop: 'calc(4 * var(--cq, 1cqw))', borderTop: dark ? `.5px solid ${DARK_RULE}` : `1px solid ${LIGHT_RULE}`,
         }}
       >
-        <span style={{ font: '700 3.8cqw/1 Sora,sans-serif', letterSpacing: '-.02em' }}>SHUTAP. Joke about it.</span>
-        <span style={{ font: 'italic 400 4.4cqw/1 Newsreader,serif', color: dark ? DARK_TEXT_3 : LIGHT_MUTED }}>shutap.com</span>
+        <span style={{ font: '700 calc(3.8 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '-.02em' }}>SHUTAP. Joke about it.</span>
+        <span style={{ font: 'italic 400 calc(4.4 * var(--cq, 1cqw))/1 Newsreader,serif', color: dark ? DARK_TEXT_3 : LIGHT_MUTED }}>shutap.com</span>
       </div>
     </div>
     </div>
@@ -139,14 +140,14 @@ function StackText({ setup, punchline }: { setup: string; punchline: string }) {
   return (
     <>
       {setup ? (
-        <span style={{ font: 'italic 400 5.6cqw/1.3 Newsreader,serif', color: DARK_TEXT_2, marginBottom: '5cqw', textWrap: 'pretty', whiteSpace: 'pre-line' }}>
+        <span style={{ font: 'italic 400 calc(5.6 * var(--cq, 1cqw))/1.3 Newsreader,serif', color: DARK_TEXT_2, marginBottom: 'calc(5 * var(--cq, 1cqw))', textWrap: 'pretty', whiteSpace: 'pre-line' }}>
           {setup}
         </span>
       ) : null}
       {words.map((w, k) => (
         <span
           key={k}
-          style={{ font: `700 ${size}cqw/.92 Sora,sans-serif`, letterSpacing: '-.06em', color: STACK_RAMP[Math.min(k, STACK_RAMP.length - 1)] }}
+          style={{ font: `700 calc(${size} * var(--cq, 1cqw))/.92 Sora,sans-serif`, letterSpacing: '-.06em', color: STACK_RAMP[Math.min(k, STACK_RAMP.length - 1)] }}
         >
           {w}
         </span>
