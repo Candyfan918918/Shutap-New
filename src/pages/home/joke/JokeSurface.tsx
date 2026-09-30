@@ -1230,11 +1230,6 @@ export function JokeSurface() {
 
           {hint ? <div style={{ fontFamily: SORA, fontSize: 12.5, color: '#8a7a84' }}>{hint}</div> : null}
 
-          {set && set.archetype !== 'general' ? (
-            <div style={{ fontFamily: SORA, fontSize: 13, color: MUTED }}>
-              ✦ reading this as <strong style={{ color: '#8e1c4c', fontWeight: 600 }}>{ARCHETYPE_LABEL[set.archetype] ?? set.archetype}</strong>
-            </div>
-          ) : null}
 
           {/* The thin-input nudge. A short spill still gets its three cards —
               nothing here is gated — but the cards had little to hold, and
