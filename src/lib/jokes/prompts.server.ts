@@ -19,7 +19,7 @@
 // voiceless run. See §7 and §7b of the doc for why.
 import type { SlotKey } from './deck'
 
-export const PROMPT_VERSION = '3.11'
+export const PROMPT_VERSION = '3.12'
 
 /* ───────────────────────── 1 — premise pass ─────────────────────────
    Runs once per set on first flip. Cached to joke_sets.premises.
@@ -465,6 +465,30 @@ one the situation is already holding out:
   she." "Why do you need a key." Three short questions, each smaller
   than the last, ending on the most harmless one. The procedure is the
   joke.
+
+- THE PLAY-BY-PLAY. The disaster is narrated flat, as if a commentator
+  were calling it from a booth: present tense, no emotion, one physical
+  detail per clause. "He reaches for the wallet. The wallet is on the
+  counter. The counter is at home." The voice never panics; the facts
+  do the panicking. Best for the user's own mess — the narrator is
+  never cruel to her, only accurate.
+
+- THE NOISE COMPLAINT. Introduce the object by the sound it makes, and
+  let the sound be the whole diagnosis. "The fridge started making the
+  noise the car used to make." No repair talk, no adjectives — one
+  appliance borrowing another appliance's death rattle. The reader
+  supplies the bill.
+
+- THE FAMILIAR AUTHORITY. The institution is addressed like a relative
+  who has overstepped — the bank, the app, the agency spoken to in the
+  second person, by its first name, about its habits. "The bank texted
+  at 2 a.m. like we were dating." The power imbalance stays; only the
+  intimacy is wrong.
+
+- THE LOAN THAT EXPIRED. A borrowed thing has quietly become theirs,
+  and the word "borrow" is the casualty. State the item, the date it
+  left, and the new tense: "He borrowed the ladder in 2019. The ladder
+  has a family now." The joke is the calendar, not the accusation.
 
 Never build any of these on nationality, ethnicity, religion or accent.
 The household, office or date is the category; the origin never is.
