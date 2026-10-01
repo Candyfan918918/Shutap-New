@@ -4,6 +4,16 @@
 keyed on the version plus a hash of the premise prompt, so a bump re-reads
 every set on its next flip.
 
+## 3.12 — 2026-10-01
+
+Four moves abstracted from two uploaded Chris Tucker reference
+spreadsheets (techniques only, no lines, no names): THE PLAY-BY-PLAY
+(the disaster narrated flat, like a commentator), THE NOISE COMPLAINT
+(the object introduced by its sound), THE FAMILIAR AUTHORITY (the
+institution addressed like an overstepping relative), THE LOAN THAT
+EXPIRED (the borrowed thing quietly became theirs). Four original
+exemplars added to the seed hall of fame.
+
 ## 3.11 — 2026-09-28
 
 Four moves abstracted from the uploaded 100-situation reference

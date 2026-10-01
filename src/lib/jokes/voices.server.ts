@@ -177,6 +177,14 @@ export const SEED_HALL_OF_FAME: HallOfFameEntry[] = [
   { slot: 'the_clapback', voice_key: null, archetype: null, situation_clean: 'My husband said he technically never lied, he just did not mention it.', joke_text: '"Technically. Say it slower so I can write it down."' },
   { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'My friend cheated on her boyfriend at my birthday party.', joke_text: "Fine, the cheating. But at my party? I rented that room by the hour." },
 
+  // Technique set 3, 2026-10-01: the play-by-play, the noise complaint,
+  // the familiar authority, the loan that expired. Abstracted from two
+  // reference spreadsheets — techniques only, no lines or names.
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'I locked my keys in the car with the engine running.', joke_text: 'She checks the door. The door is locked. She checks the other doors. They are also locked. The engine hums. The engine has nowhere to be.' },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My car started making a horrible noise and the mechanic quoted me $1,800.', joke_text: 'The car is making the noise the washing machine made right before it became a shelf.' },
+  { slot: 'the_take', voice_key: null, archetype: null, situation_clean: 'The bank called me at 2am about a suspicious $9 purchase.', joke_text: 'The bank watched me spend four hundred on a couch in silence, but nine dollars at midnight got a wellness check.' },
+  { slot: 'the_roast', voice_key: null, archetype: null, situation_clean: 'My neighbor borrowed my ladder two years ago and never gave it back.', joke_text: 'He borrowed the ladder in 2024. The ladder has a family now. It appears in his Christmas photos.' },
+
 
 
   // The founder's approved product-mode rows from the joke ledger
