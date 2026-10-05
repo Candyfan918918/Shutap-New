@@ -101,13 +101,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "you have the story. shutap writes the jokes. pseudonymous.",
+          "Paste what happened and get a set of jokes for TikTok, Reels or the stage. Built for content creators, comedians and anyone who wants to say it funnier.",
       },
       ...ogImageMeta(),
       { name: "twitter:title", content: "SHUTAP. Say it funnier." },
       {
         name: "twitter:description",
-        content: "life's a bitch. so make fun of it.",
+        content: "Paste what happened and get a set of jokes for TikTok, Reels or the stage. Built for content creators, comedians and anyone who wants to say it funnier.",
       },
     ],
     links: [

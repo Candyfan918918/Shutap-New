@@ -10,7 +10,7 @@ const HOME_TITLE = "Shutap — Joke Generator for Creators & Comedians"
 const HOME_DESCRIPTION =
   "Paste what happened and get a set of jokes for TikTok, Reels or the stage. Built for content creators, comedians and anyone who wants to say it funnier."
 const HOME_OG_DESCRIPTION =
-  "you have the story. shutap writes the jokes. pseudonymous."
+  "Paste what happened and get a set of jokes for TikTok, Reels or the stage. Built for content creators, comedians and anyone who wants to say it funnier."
 
 const HOME_URL = `${SITE_URL}/`
 
@@ -35,7 +35,7 @@ export const Route = createFileRoute('/')({
       { property: "og:url", content: HOME_URL },
       ...ogImageMeta(),
       { name: "twitter:title", content: "SHUTAP. Say it funnier." },
-      { name: "twitter:description", content: "life's a bitch. so make fun of it." },
+      { name: "twitter:description", content: "Paste what happened and get a set of jokes for TikTok, Reels or the stage. Built for content creators, comedians and anyone who wants to say it funnier." },
     ],
     links: [
       { rel: "canonical", href: HOME_URL },
