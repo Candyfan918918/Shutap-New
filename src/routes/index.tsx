@@ -6,9 +6,9 @@ import { SITE_URL } from '@/lib/site'
 import { countOpenRooms } from '@/lib/rooms-count.functions'
 import { listNewestRooms } from '@/lib/newest-rooms.functions'
 
-const HOME_TITLE = "Shutap — say it funnier. your life, as a comedy set."
+const HOME_TITLE = "Shutap — Joke Generator for Creators & Comedians"
 const HOME_DESCRIPTION =
-  "paste what happened — work, school, family, the group chat. shutap writes it into a set, every angle on the same mess. say it funnier. pseudonymous."
+  "Paste what happened and get a set of jokes for TikTok, Reels or the stage. Built for content creators, comedians and anyone who wants to say it funnier."
 const HOME_OG_DESCRIPTION =
   "you have the story. shutap writes the jokes. pseudonymous."
 

@@ -87,11 +87,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Shutap — say it funnier. your life, as a comedy set." },
+      { title: "Shutap — Joke Generator for Creators & Comedians" },
       {
         name: "description",
         content:
-          "paste what happened — work, school, family, the group chat. shutap writes it into a set, every angle on the same mess. say it funnier. pseudonymous.",
+          "Paste what happened and get a set of jokes for TikTok, Reels or the stage. Built for content creators, comedians and anyone who wants to say it funnier.",
       },
       { name: "author", content: "Shutap" },
       { property: "og:site_name", content: "Shutap" },
@@ -135,7 +135,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           url: "https://shutap.com",
           image: "https://shutap.com/og/shutap-og.png",
           description:
-            "Shutap turns a personal story — a family comment that landed wrong, a partner who took someone else's side, a manager who made it weird, a friend who keeps doing the thing — into a set of joke cards, each taking a different comedic angle on the same situation, the way a comedian works one bad night into a routine. Pseudonymous. Identifying details are stripped before storage. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
+            "Shutap is a joke generator for content creators and comedians. Paste what happened — at work, at school, at the gym, in the group chat — and Shutap writes it into a set of jokes, each taking a different angle on the same situation, ready for TikTok, Reels or the stage. Pseudonymous. Identifying details are stripped before storage. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
           offers: {
             "@type": "Offer",
             price: "0",
