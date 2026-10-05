@@ -133,7 +133,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           applicationCategory: "EntertainmentApplication",
           operatingSystem: "Web",
           url: "https://shutap.com",
-          image: "https://shutap.com/og/shutap-og.png",
+          image: "https://shutap.com/og/shutap-og-v2.png",
           description:
             "Shutap is a joke generator for content creators and comedians. Paste what happened — at work, at school, at the gym, in the group chat — and Shutap writes it into a set of jokes, each taking a different angle on the same situation, ready for TikTok, Reels or the stage. Pseudonymous. Identifying details are stripped before storage. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
           offers: {
