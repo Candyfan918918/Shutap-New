@@ -297,7 +297,7 @@ export function renderCardSvg(art: CardArt): string {
   const ruleY = VB_H - SAFE_Y - urlSize - 4 * CQW
   const foot =
     `<rect x="${SAFE_X}" y="${r1(ruleY)}" width="${INNER_W}" height="${dark ? 1.5 : 2}" fill="${dark ? DARK_RULE : LIGHT_RULE}"/>` +
-    `<text x="${SAFE_X}" y="${r1(footBaseline)}" font-family="${DISPLAY}" font-weight="700" font-size="${r1(sloganSize)}" letter-spacing="${r1(-0.02 * sloganSize)}" fill="${dark ? DARK_TEXT : LIGHT_INK}">SHUTAP. Joke about it.</text>` +
+    `<text x="${SAFE_X}" y="${r1(footBaseline)}" font-family="${DISPLAY}" font-weight="700" font-size="${r1(sloganSize)}" letter-spacing="${r1(-0.02 * sloganSize)}" fill="${dark ? DARK_TEXT : LIGHT_INK}">SHUTAP. Say it funnier.</text>` +
     `<text x="${VB_W - SAFE_X}" y="${r1(footBaseline)}" text-anchor="end" font-family="${VOICE}" font-style="italic" font-size="${r1(urlSize)}" fill="${dark ? DARK_TEXT_3 : LIGHT_MUTED}">shutap.com</text>`
 
   // ── the middle: centred as one block between header and rule ──

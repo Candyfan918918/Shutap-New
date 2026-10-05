@@ -4,13 +4,13 @@
 
 export const BRAND = {
   name: "Shutap",
-  tagline: "SHUTAP. Joke about it.",
+  tagline: "SHUTAP. Say it funnier.",
   // The entity sentence (locked) — goes in every machine-read surface.
   entitySentence:
     "life's a bitch, so make fun of it. type what happened, draw three angles, flip one and see what it does with it. pseudonymous — your real name never shows.",
   // Short variant for title tags.
   entitySentenceShort:
-    "Shutap — joke about it. type what happened, draw three angles, flip one.",
+    "Shutap — say it funnier. type what happened, draw three angles, flip one.",
 } as const;
 
 export const PILLARS = [

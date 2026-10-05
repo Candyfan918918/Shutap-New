@@ -1147,7 +1147,7 @@ export function JokeSurface() {
         <div style={{ position: 'absolute', inset: '-40% -20% auto', height: '80vh', background: 'radial-gradient(ellipse at 50% 35%,rgba(127,119,221,.13),transparent 64%)', pointerEvents: 'none' }} />
         <div style={{ maxWidth: 880, margin: '0 auto', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(13px,2.2vh,20px)' }}>
           <h1 style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'clamp(38px,8.4vw,86px)', lineHeight: 1.02, letterSpacing: '-.05em', textAlign: 'center', margin: 0 }}>
-            <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, letterSpacing: '-.02em', color: '#8e1c4c' }}>joke about it.</span>
+            <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, letterSpacing: '-.02em', color: '#8e1c4c' }}>say it funnier.</span>
           </h1>
 
 
@@ -1165,7 +1165,7 @@ export function JokeSurface() {
                 void onSubmit()
               }}
               enterKeyHint="send"
-              placeholder="get 3 joke cards and share them"
+              placeholder="paste what happened, or the bit you're stuck on"
               disabled={phase !== 'idle'}
               className="joke-input"
               style={{ width: '100%', resize: 'vertical', minHeight: 116, border: 'none', outline: 'none', background: 'transparent', fontFamily: NEWS, fontStyle: 'italic', fontSize: 22, lineHeight: 1.5, color: '#000', WebkitTextFillColor: '#000', caretColor: '#000', opacity: phase === 'idle' ? 1 : 0.6 }}

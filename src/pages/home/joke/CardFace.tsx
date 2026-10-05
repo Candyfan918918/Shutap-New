@@ -114,7 +114,7 @@ export function CardFace({
           paddingTop: 'calc(4 * var(--cq, 1cqw))', borderTop: dark ? `.5px solid ${DARK_RULE}` : `1px solid ${LIGHT_RULE}`,
         }}
       >
-        <span style={{ font: '700 calc(3.8 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '-.02em' }}>SHUTAP. Joke about it.</span>
+        <span style={{ font: '700 calc(3.8 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '-.02em' }}>SHUTAP. Say it funnier.</span>
         <span style={{ font: 'italic 400 calc(4.4 * var(--cq, 1cqw))/1 Newsreader,serif', color: dark ? DARK_TEXT_3 : LIGHT_MUTED }}>shutap.com</span>
       </div>
     </div>

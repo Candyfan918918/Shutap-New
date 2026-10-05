@@ -25,7 +25,7 @@ export function Preloader() {
               <div style={{ fontFamily: '\'Newsreader\',serif', fontStyle: 'italic', fontSize: 'clamp(18px,2.4vw,24px)', color: '#fdfbf9' }}>
                 SHUTAP.
                 <em style={{ color: '#a52a5f' }}>
-                  Joke about it.
+                  Say it funnier.
                 </em>
               </div>
             </div>

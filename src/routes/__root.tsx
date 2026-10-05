@@ -87,24 +87,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Shutap — joke about it. your life, as a comedy set." },
+      { title: "Shutap — say it funnier. your life, as a comedy set." },
       {
         name: "description",
         content:
-          "type whatever just happened to you — family, work, exes, strangers. shutap writes it into a set of joke cards, every angle on the same mess. pseudonymous.",
+          "paste what happened — work, school, family, the group chat. shutap writes it into a set, every angle on the same mess. say it funnier. pseudonymous.",
       },
       { name: "author", content: "Shutap" },
       { property: "og:site_name", content: "Shutap" },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://shutap.com" },
-      { property: "og:title", content: "SHUTAP. Joke about it." },
+      { property: "og:title", content: "SHUTAP. Say it funnier." },
       {
         property: "og:description",
         content:
-          "type the thing that's living in your head. shutap turns it into a set. pseudonymous.",
+          "you have the story. shutap writes the jokes. pseudonymous.",
       },
       ...ogImageMeta(),
-      { name: "twitter:title", content: "SHUTAP. Joke about it." },
+      { name: "twitter:title", content: "SHUTAP. Say it funnier." },
       {
         name: "twitter:description",
         content: "life's a bitch. so make fun of it.",
@@ -129,7 +129,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@type": "WebApplication",
           "@id": "https://shutap.com/#app",
           name: "Shutap",
-          alternateName: "SHUTAP. Joke about it.",
+          alternateName: "SHUTAP. Say it funnier.",
           applicationCategory: "EntertainmentApplication",
           operatingSystem: "Web",
           url: "https://shutap.com",

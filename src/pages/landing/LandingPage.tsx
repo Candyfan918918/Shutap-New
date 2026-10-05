@@ -441,7 +441,7 @@ export function LandingNativePage() {
 
         {/* FOOTER */}
         <footer style={{ padding: '28px 22px 90px', color: '#6f666c', fontSize: 12, textAlign: 'center', fontFamily: NEWSREADER, fontStyle: 'italic', lineHeight: 1.6 }}>
-          <div>shutap — joke about it.</div>
+          <div>shutap — say it funnier.</div>
           <div style={{ marginTop: 3 }}>18+ · pseudonymous · your real name never shows · jokes at the situation, never at you 🤍</div>
           <div style={{ marginTop: 14, display: 'flex', flexWrap: 'wrap', gap: '7px 16px', justifyContent: 'center', fontStyle: 'normal' }}>
             <a href="/relationships" style={{ fontFamily: "'Sora',sans-serif", fontSize: 12, color: '#443c42', textDecoration: 'none' }}>relationships</a>

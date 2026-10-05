@@ -74,7 +74,7 @@ export function shareCaption(
 ): string {
   const scene = sceneLine(situation)
   const label = card.angleLabel ? `${card.angleLabel}: ` : ''
-  return (scene ? `the situation: “${scene}”\n` : '') + `${label}“${card.text.trim()}”\njoke about it → ${link}`
+  return (scene ? `the situation: “${scene}”\n` : '') + `${label}“${card.text.trim()}”\nsay it funnier → ${link}`
 }
 
 /** What a card posts as a room: the situation, then the card under it — the

@@ -15,7 +15,7 @@ export function Finale() {
         <div style={{ borderTop: '.5px solid rgba(11,8,15,.1)', paddingTop: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', flexWrap: 'wrap' }}>
             <span style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: '16px', letterSpacing: '-.04em', color: '#0b080f' }}>
-              shut<span style={{ color: '#a52a5f' }}>ap</span> <span style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontWeight: 400, fontSize: '13px', color: '#6f666c', letterSpacing: 0 }}>— joke about it.</span>
+              shut<span style={{ color: '#a52a5f' }}>ap</span> <span style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontWeight: 400, fontSize: '13px', color: '#6f666c', letterSpacing: 0 }}>— say it funnier.</span>
             </span>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 18px', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: '14px' }}>
               <a href="/stream" data-link="/stream" data-hover="">rooms</a>

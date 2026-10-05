@@ -28,7 +28,7 @@ export function HomeFooter() {
   return (
     <footer style={{ background: '#ffffff', borderTop: '.5px solid rgba(11,8,15,.06)', padding: '54px 22px 46px', color: '#443c42', fontFamily: "'Sora',system-ui,sans-serif" }}>
       <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18, textAlign: 'center' }}>
-        <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, color: '#383136' }}>shutap — joke about it.</div>
+        <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, color: '#383136' }}>shutap — say it funnier.</div>
         <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center', fontFamily: SORA, fontWeight: 600, fontSize: 12, letterSpacing: '.16em', textTransform: 'uppercase' }}>
           <Link to="/stream" style={{ color: '#443c42', textDecoration: 'none' }}>rooms</Link>
           <Link to="/halls" style={{ color: '#443c42', textDecoration: 'none' }}>halls</Link>
