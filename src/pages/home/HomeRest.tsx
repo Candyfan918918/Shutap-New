@@ -58,7 +58,7 @@ export function HomeRest() {
 
       <section className="fd-col" style={{ paddingTop: 40, gap: 0 }}>
         <h2 className="fd-h1" style={{ fontSize: 22, marginBottom: 10 }}>
-          FAQ
+          AI joke generator FAQ
         </h2>
         {HOME_FAQ.map((f) => (
           <details key={f.q} style={{ borderTop: '1px solid rgba(0,0,0,.09)', padding: '14px 0' }}>
@@ -69,6 +69,9 @@ export function HomeRest() {
             <p style={{ margin: '8px 0 0', fontSize: 15, lineHeight: 1.5, color: '#555' }}>{f.a}</p>
           </details>
         ))}
+        <Link to="/faq" className="fd-link fd-muted" style={{ marginTop: 12 }}>
+          all questions →
+        </Link>
       </section>
       <Footer />
     </div>
