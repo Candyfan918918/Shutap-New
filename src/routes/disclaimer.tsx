@@ -59,7 +59,7 @@ function DisclaimerPage() {
           fontFamily: 'Newsreader,serif',
           fontStyle: 'italic',
           fontSize: 15.5,
-          color: '#3a2630',
+          color: '#2b2730',
           lineHeight: 1.55,
         }}
       >

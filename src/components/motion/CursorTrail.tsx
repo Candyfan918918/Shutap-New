@@ -68,7 +68,7 @@ export function CursorTrail() {
         inner.style.height = '60px'
         inner.style.marginLeft = '-30px'
         inner.style.marginTop = '-30px'
-        inner.style.background = 'rgba(231,84,138,.12)'
+        inner.style.background = 'rgba(23,19,26,.12)'
       } else {
         inner.style.width = '36px'
         inner.style.height = '36px'
@@ -112,7 +112,7 @@ export function CursorTrail() {
             marginLeft: -18,
             marginTop: -18,
             borderRadius: '50%',
-            border: '1.5px solid #c1216b',
+            border: '1.5px solid #17131a',
             background: 'transparent',
             transition: 'width .25s ease, height .25s ease, margin .25s ease, background .25s ease',
           }}
@@ -139,7 +139,7 @@ export function CursorTrail() {
             marginLeft: -3,
             marginTop: -3,
             borderRadius: '50%',
-            background: '#c1216b',
+            background: '#17131a',
           }}
         />
       </div>

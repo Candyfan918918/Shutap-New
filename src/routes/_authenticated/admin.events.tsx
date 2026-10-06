@@ -44,7 +44,7 @@ function AdminEventsPage() {
         <input value={name} onChange={(e) => setName(e.target.value)} placeholder="event name (e.g. spill_created)" style={inp} />
         <input value={userId} onChange={(e) => setUserId(e.target.value)} placeholder="user id (uuid)" style={inp} />
       </div>
-      {err && <div style={{ color: '#c1216b', marginBottom: 12 }}>{err}</div>}
+      {err && <div style={{ color: '#17131a', marginBottom: 12 }}>{err}</div>}
       {!rows ? (
         <div style={{ color: '#443c42' }}>loading…</div>
       ) : rows.length === 0 ? (

@@ -63,7 +63,7 @@ export function ContentPage({
             borderRadius: 18,
             padding: "24px 26px",
             margin: "0 0 48px",
-            boxShadow: "0 12px 30px -24px rgba(80,10,45,.3)",
+            boxShadow: "0 12px 30px -24px rgba(20,16,22,.3)",
           }}
         >
           {capsule}
@@ -102,7 +102,7 @@ export function ContentPage({
               fontSize: 15,
             }}
           >
-            <span style={{ color: "#6e5f67" }}>more:</span>
+            <span style={{ color: "#656565" }}>more:</span>
             {others.map((o) => (
               <a
                 key={o.href}
@@ -124,10 +124,10 @@ export function ContentPage({
           <a
             href="/"
             style={{
-              color: "#c1216b",
+              color: "#17131a",
               textDecoration: "none",
               fontWeight: 600,
-              borderBottom: "1px solid rgba(193,33,107,.35)",
+              borderBottom: "1px solid rgba(23,19,26,.35)",
               paddingBottom: 2,
             }}
           >

@@ -44,7 +44,7 @@ export function Chapter01Interview({ onCtaSpill }: { onCtaSpill: () => void }) {
   const reduce = usePrefersReducedMotion()
   const [timeline] = useState(buildTimeline)
   const [shown, setShown] = useState<number>(reduce ? timeline.length : 0)
-  const card = useReactiveCard({ glow: 'rgba(231,84,138,.55)' })
+  const card = useReactiveCard({ glow: 'rgba(23,19,26,.55)' })
   const magneticCta = useMagnetic<HTMLButtonElement>()
 
 
@@ -104,11 +104,11 @@ export function Chapter01Interview({ onCtaSpill }: { onCtaSpill: () => void }) {
         className="home-grid-2"
       >
         <div>
-          <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 12, letterSpacing: '.24em', textTransform: 'uppercase', color: '#a52a5f', marginBottom: 22 }}>
+          <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 12, letterSpacing: '.24em', textTransform: 'uppercase', color: '#2b2630', marginBottom: 22 }}>
             chapter 01 — spill it
           </div>
           <h2 style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(30px,3.8vw,54px)', lineHeight: 1.08, letterSpacing: '-.04em', margin: '0 0 24px', color: '#0b080f' }}>
-            say the thing you can't say <em style={{ fontFamily: NEWS, fontStyle: 'italic', color: '#c1216b', fontWeight: 400 }}>anywhere else.</em>
+            say the thing you can't say <em style={{ fontFamily: NEWS, fontStyle: 'italic', color: '#17131a', fontWeight: 400 }}>anywhere else.</em>
           </h2>
           <p style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 'clamp(16px,1.4vw,20px)', lineHeight: 1.6, color: '#383136', maxWidth: '44ch', margin: '0 0 32px' }}>
             tell your story — it opens a room the world can sit in. people who've lived your exact thing show up, relate, and tell you what actually happened next.
@@ -145,7 +145,7 @@ export function Chapter01Interview({ onCtaSpill }: { onCtaSpill: () => void }) {
               borderRadius: 24,
               padding: 24,
               color: '#fdfbf9',
-              boxShadow: '0 40px 90px -40px rgba(60,10,30,.65)',
+              boxShadow: '0 40px 90px -40px rgba(20,16,22,.65)',
               border: '1px solid rgba(255,255,255,.1)',
               position: 'relative',
             }}
@@ -174,13 +174,13 @@ export function Chapter01Interview({ onCtaSpill }: { onCtaSpill: () => void }) {
                 }
                 if (s.kind === 'companion') {
                   return (
-                    <div key={i} className="home-bubble-in" style={{ alignSelf: 'flex-start', maxWidth: '88%', background: 'rgba(255,255,255,.07)', color: '#e9dce4', borderRadius: '16px 16px 16px 5px', padding: '10px 14px', fontFamily: NEWS, fontStyle: 'italic', fontSize: 14.5, lineHeight: 1.5 }}>
+                    <div key={i} className="home-bubble-in" style={{ alignSelf: 'flex-start', maxWidth: '88%', background: 'rgba(255,255,255,.07)', color: '#e1e1e1', borderRadius: '16px 16px 16px 5px', padding: '10px 14px', fontFamily: NEWS, fontStyle: 'italic', fontSize: 14.5, lineHeight: 1.5 }}>
                       {s.text}
                     </div>
                   )
                 }
                 return (
-                  <div key={i} className="home-bubble-in" style={{ alignSelf: 'flex-end', maxWidth: '88%', background: '#a52a5f', color: '#fff', borderRadius: '16px 16px 5px 16px', padding: '10px 14px', fontFamily: NEWS, fontStyle: 'italic', fontSize: 14.5, lineHeight: 1.5 }}>
+                  <div key={i} className="home-bubble-in" style={{ alignSelf: 'flex-end', maxWidth: '88%', background: '#2b2630', color: '#fff', borderRadius: '16px 16px 5px 16px', padding: '10px 14px', fontFamily: NEWS, fontStyle: 'italic', fontSize: 14.5, lineHeight: 1.5 }}>
                     {s.text}
                   </div>
                 )

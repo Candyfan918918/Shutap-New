@@ -90,11 +90,11 @@ function LivedIntelligencePage() {
             lineHeight: 1.55,
             color: "#100c14",
             background: "#ffffff",
-            border: "1px solid rgba(26,12,20,.10)",
+            border: "1px solid rgba(18,18,18,.10)",
             borderRadius: 18,
             padding: "24px 26px",
             margin: "0 0 48px",
-            boxShadow: "0 12px 30px -24px rgba(80,10,45,.3)",
+            boxShadow: "0 12px 30px -24px rgba(20,16,22,.3)",
           }}
         >
           Lived Intelligence is the practical knowledge that comes from living
@@ -142,10 +142,10 @@ function LivedIntelligencePage() {
           <a
             href="/"
             style={{
-              color: "#cf3b7c",
+              color: "#3a3438",
               textDecoration: "none",
               fontWeight: 600,
-              borderBottom: "1px solid rgba(207,59,124,.35)",
+              borderBottom: "1px solid rgba(60,55,60,.35)",
               paddingBottom: 2,
             }}
           >

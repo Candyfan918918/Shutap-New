@@ -11,7 +11,7 @@ import { ALWAYS_FREE, MEMBER_BENEFITS, MEMBER_OFFER, type JokeTier } from '@/lib
 import { EyeMark, ShutapWordmark } from '@/components/brand/EyeMark'
 import { Button, SORA, NEWS, INTER } from './ui'
 
-const LINK: React.CSSProperties = { color: '#e7a3c2', textDecoration: 'underline', textUnderlineOffset: 3 }
+const LINK: React.CSSProperties = { color: '#bcbcbc', textDecoration: 'underline', textUnderlineOffset: 3 }
 
 export function UpgradeSheet({
   open,
@@ -30,7 +30,7 @@ export function UpgradeSheet({
   return (
     <div
       style={{
-        position: 'fixed', inset: 0, zIndex: 95, background: 'linear-gradient(160deg,#2e0d1a,#100c14 60%,#0a0710)',
+        position: 'fixed', inset: 0, zIndex: 95, background: '#111111',
         display: 'flex', flexDirection: 'column', overflowY: 'auto',
         animation: 'shutapUpIn .34s cubic-bezier(.2,.8,.2,1)',
       }}
@@ -38,12 +38,12 @@ export function UpgradeSheet({
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px clamp(18px,5vw,36px)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <EyeMark style={{ width: 32, height: 22 }} />
-          <ShutapWordmark ink="#f7e8f0" style={{ fontSize: 26, letterSpacing: '-.04em' }} />
+          <ShutapWordmark ink="#efedeb" style={{ fontSize: 26, letterSpacing: '-.04em' }} />
         </div>
         <button
           type="button"
           onClick={onClose}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: SORA, fontSize: 13.5, color: '#9e7a8c', padding: 8 }}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: SORA, fontSize: 13.5, color: '#8a8488', padding: 8 }}
         >
           close
         </button>
@@ -57,14 +57,10 @@ export function UpgradeSheet({
         }}
       >
         <div>
-          <h2 style={{ margin: 0, fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(34px,7vw,52px)', lineHeight: 1.04, letterSpacing: '-.04em', color: '#f7e8f0' }}>
-            every set kept clean.
-            <br />
-            no mark on any of it.
-            <br />
-            <span style={{ color: '#e7548a' }}>the mirror reading.</span>
+          <h2 style={{ margin: 0, fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(34px,7vw,52px)', lineHeight: 1.04, letterSpacing: '-.04em', color: '#ffffff' }}>
+            Go clean.
           </h2>
-          <p style={{ margin: '14px 0 0', fontFamily: NEWS, fontStyle: 'italic', fontSize: 19, lineHeight: 1.5, color: '#c4a0b2', maxWidth: '36ch' }}>
+          <p style={{ margin: '12px 0 0', fontFamily: SORA, fontSize: 17, lineHeight: 1.5, color: '#bdbdbd', maxWidth: '36ch' }}>
             {MEMBER_OFFER.line}
           </p>
         </div>
@@ -75,8 +71,8 @@ export function UpgradeSheet({
             <li key={b.line} style={{ display: 'flex', gap: 11, alignItems: 'flex-start' }}>
               <span aria-hidden style={{ color: '#5DCAA5', fontSize: 15, lineHeight: 1.4 }}>✓</span>
               <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <span style={{ fontFamily: SORA, fontSize: 15, color: '#f0dbe6', lineHeight: 1.4 }}>{b.line}</span>
-                <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: '#b08ea0', lineHeight: 1.45 }}>{b.detail}</span>
+                <span style={{ fontFamily: SORA, fontSize: 15, color: '#ebe8ea', lineHeight: 1.4 }}>{b.line}</span>
+                <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: '#a39ea1', lineHeight: 1.45 }}>{b.detail}</span>
               </span>
             </li>
           ))}
@@ -84,32 +80,29 @@ export function UpgradeSheet({
 
         {/* what stays free, so nobody buys what they already have */}
         <div style={{ background: 'rgba(255,255,255,.05)', border: '.5px solid rgba(255,255,255,.12)', borderRadius: 16, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#9e7a8c' }}>
+          <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#8a8488' }}>
             always free
           </div>
           {ALWAYS_FREE.map((line) => (
-            <div key={line} style={{ fontFamily: INTER, fontSize: 13.5, lineHeight: 1.5, color: '#d9bfcc' }}>· {line}</div>
+            <div key={line} style={{ fontFamily: INTER, fontSize: 13.5, lineHeight: 1.5, color: '#d0cccf' }}>· {line}</div>
           ))}
-          <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, color: '#9e7a8c', marginTop: 4 }}>
-            new here?{' '}
-            <a href="/how-it-works" target="_blank" rel="noreferrer" style={LINK}>how the cards work →</a>
-          </div>
+
         </div>
 
-        <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 15, color: '#f7e8f0' }}>
-          {price} · billed today, no trial · cancel whenever
+        <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 15, color: '#efedeb' }}>
+          {price} · cancel anytime
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <Button onClick={onCheckout} full>
-            {tier === 'guest' ? `get my alias, then ${MEMBER_OFFER.cta}` : MEMBER_OFFER.cta}
+            {tier === 'guest' ? `sign in, then ${MEMBER_OFFER.cta}` : MEMBER_OFFER.cta}
           </Button>
-          <Button variant="ghost" size="sm" onClick={onClose} full style={{ color: '#9e7a8c' }}>
-            not now — keep the free cards
+          <Button variant="ghost" size="sm" onClick={onClose} full style={{ color: '#8a8488' }}>
+            not now
           </Button>
         </div>
 
-        <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, lineHeight: 1.55, color: '#9e7a8c', textAlign: 'center' }}>
+        <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, lineHeight: 1.55, color: '#8a8488', textAlign: 'center' }}>
           renews each period until you cancel; cancel anytime and keep access to the end of the period. payments already made are not refunded.
           the cards are ai-written jokes, not advice — a membership buys the clean card and room, never relief.{' '}
           <a href="/terms#plans" target="_blank" rel="noreferrer" style={LINK}>plans &amp; limits</a> ·{' '}

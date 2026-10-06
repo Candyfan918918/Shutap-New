@@ -323,22 +323,22 @@ export function ProfilePage() {
         {/* identity hero */}
         {alias && (
           <div style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg,#100c14,#100c14)', borderRadius: 22, padding: '22px 22px 18px', marginBottom: 18 }}>
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 18% 0%, rgba(255,126,179,.22), transparent 60%)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 18% 0%, rgba(214,208,212,.22), transparent 60%)', pointerEvents: 'none' }} />
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-              <span style={{ width: 68, height: 68, borderRadius: '50%', background: 'linear-gradient(135deg,#ff7eb3,#890041)', display: 'grid', placeItems: 'center', fontSize: 30, color: '#fff', boxShadow: '0 8px 22px -8px rgba(0,0,0,.5)' }}>{alias.emoji}</span>
+              <span style={{ width: 68, height: 68, borderRadius: '50%', background: 'linear-gradient(135deg,#d6d0d4,#2b2630)', display: 'grid', placeItems: 'center', fontSize: 30, color: '#fff', boxShadow: '0 8px 22px -8px rgba(0,0,0,.5)' }}>{alias.emoji}</span>
               <div style={{ flex: 1, minWidth: 180 }}>
                 <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 22, letterSpacing: '-.02em', color: '#fdfbf9' }}>{alias.display_name}</div>
-                <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13.5, color: '#c4a0b2', marginTop: 2 }}>{maskedEmail || 'anonymous'}</div>
+                <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13.5, color: '#bdb8bb', marginTop: 2 }}>{maskedEmail || 'anonymous'}</div>
               </div>
-              <button disabled={aliasBusy} onClick={() => setEditAlias((v) => !v)} style={btn('#ff7eb3')}>{editAlias ? 'close' : 'edit alias'}</button>
-              <button disabled={aliasBusy} onClick={onReroll} style={btn('#ff7eb3')}>re-roll</button>
+              <button disabled={aliasBusy} onClick={() => setEditAlias((v) => !v)} style={btn('#d6d0d4')}>{editAlias ? 'close' : 'edit alias'}</button>
+              <button disabled={aliasBusy} onClick={onReroll} style={btn('#d6d0d4')}>re-roll</button>
             </div>
 
             {editAlias && (
               <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 10, marginTop: 14 }}>
                 {(['emotion', 'nation', 'creature'] as const).map((k) => (
                   <label key={k} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: '#c4a0b2' }}>{k}</span>
+                    <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: '#bdb8bb' }}>{k}</span>
                     <input
                       defaultValue={alias[k]}
                       onBlur={(e) => {
@@ -350,7 +350,7 @@ export function ProfilePage() {
                   </label>
                 ))}
                 <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: '#c4a0b2' }}>emoji</span>
+                  <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: '#bdb8bb' }}>emoji</span>
                   <input
                     defaultValue={alias.emoji}
                     onBlur={(e) => {
@@ -376,7 +376,7 @@ export function ProfilePage() {
               ].map((s) => (
                 <div key={s.label}>
                   <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 21, color: '#fff', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums' }}>{s.n}</div>
-                  <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: '#a99fa8', marginTop: 2 }}>{s.label}</div>
+                  <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: '#a4a4a4', marginTop: 2 }}>{s.label}</div>
                 </div>
               ))}
             </div>
@@ -395,12 +395,12 @@ export function ProfilePage() {
                   padding: '10px 2px',
                   border: 'none',
                   background: 'transparent',
-                  color: active ? '#c1216b' : '#6f666c',
+                  color: active ? '#17131a' : '#6f666c',
                   fontFamily: 'Sora,sans-serif',
                   fontWeight: 600,
                   fontSize: 13.5,
                   cursor: 'pointer',
-                  borderBottom: '2px solid ' + (active ? '#c1216b' : 'transparent'),
+                  borderBottom: '2px solid ' + (active ? '#17131a' : 'transparent'),
                   marginBottom: -1,
                 }}
               >
@@ -432,7 +432,7 @@ export function ProfilePage() {
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '50px 0', fontFamily: 'Newsreader,serif', fontStyle: 'italic', color: '#6f666c' }}>
             nothing here yet.{' '}
-            <span style={{ color: '#c1216b', cursor: 'pointer' }} onClick={() => navigate('/')}>start a spill →</span>
+            <span style={{ color: '#17131a', cursor: 'pointer' }} onClick={() => navigate('/')}>start a spill →</span>
           </div>
         ) : (
           <div style={{ display: 'grid', gap: 10 }}>
@@ -457,9 +457,9 @@ export function ProfilePage() {
                   actions={
                     <>
                       {s.is_public && s.room_id && (
-                        <button onClick={() => navigate('/room?id=' + s.room_id)} style={btn('#c1216b')}>open room →</button>
+                        <button onClick={() => navigate('/room?id=' + s.room_id)} style={btn('#17131a')}>open room →</button>
                       )}
-                      <button disabled={busy === s.id} onClick={() => togglePrivacy(s)} style={btn('#890041')}>
+                      <button disabled={busy === s.id} onClick={() => togglePrivacy(s)} style={btn('#2b2630')}>
                         {s.is_public ? 'make private' : 'post to stream'}
                       </button>
                       <button disabled={busy === s.id} onClick={() => onDelete(s)} style={btn('#b3261e')}>delete</button>
@@ -513,7 +513,7 @@ export function ProfilePage() {
                 <button
                   disabled={deleteBusy}
                   onClick={() => { setShowDelete(false); setDeleteConfirm('') }}
-                  style={btn('#890041')}
+                  style={btn('#2b2630')}
                 >cancel</button>
               </div>
             </div>
@@ -547,7 +547,7 @@ function ListItem({ emoji, title, subline, scan, actions }: {
       onMouseLeave={() => setHover(false)}
       style={{
         background: '#fff',
-        border: '.5px solid ' + (hover ? '#a52a5f' : 'rgba(11,8,15,.08)'),
+        border: '.5px solid ' + (hover ? '#2b2630' : 'rgba(11,8,15,.08)'),
         borderRadius: 16,
         padding: '14px 16px',
         display: 'flex',
@@ -565,7 +565,7 @@ function ListItem({ emoji, title, subline, scan, actions }: {
         {scan && (
           <div style={{ textAlign: 'right', marginRight: 6 }}>
             <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 9, letterSpacing: '.14em', textTransform: 'uppercase', color: '#6f666c' }}>intensity</div>
-            <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 18, color: '#c1216b', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums' }}>{scan.n}</div>
+            <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 18, color: '#17131a', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums' }}>{scan.n}</div>
           </div>
         )}
         <span style={{ fontFamily: 'Sora,sans-serif', fontSize: 20, color: '#6f666c' }} aria-hidden>›</span>
@@ -579,7 +579,7 @@ const wineLink: React.CSSProperties = {
   background: 'transparent',
   border: 'none',
   padding: 0,
-  color: '#890041',
+  color: '#2b2630',
   fontFamily: "'Newsreader',serif",
   fontStyle: 'italic',
   fontSize: 14,
@@ -629,7 +629,7 @@ function BillingCard({
           you're on the free tier.
         </div>
         <div>
-          <button onClick={() => navigate('/subscribe?plan=annual')} style={btn('#c1216b')}>open the mirror reading →</button>
+          <button onClick={() => navigate('/subscribe?plan=annual')} style={btn('#17131a')}>open the mirror reading →</button>
         </div>
       </div>
     )
@@ -646,7 +646,7 @@ function BillingCard({
   const statusColor =
     billing.status === 'past_due' ? '#b3261e'
     : billing.cancelAtPeriodEnd || billing.status === 'canceled' ? '#6f666c'
-    : '#c1216b'
+    : '#17131a'
   return (
     <div style={{ background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
@@ -729,7 +729,7 @@ function CardsTab({
       ) : guest ? (
         <div style={{ textAlign: 'center', padding: '44px 0 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
           <Eyes size={30} />
-          <p style={{ margin: 0, maxWidth: '38ch', fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#2e1a26', textWrap: 'pretty' }}>
+          <p style={{ margin: 0, maxWidth: '38ch', fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#2a2529', textWrap: 'pretty' }}>
             you read the whole set and kept none of it — a guest deck writes nothing down. reading
             stays free; an alias is only needed to keep one.
           </p>
@@ -739,8 +739,8 @@ function CardsTab({
             style={{
               height: 44, padding: '0 22px', border: 'none', borderRadius: 999, cursor: 'pointer',
               fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 14.5, letterSpacing: '-.01em',
-              color: '#fff', background: 'linear-gradient(155deg,#e7548a,#c1216b 55%,#890041)',
-              boxShadow: '0 14px 30px -18px rgba(137,0,65,.75)',
+              color: '#fff', background: 'linear-gradient(155deg,#8f898d,#17131a 55%,#2b2630)',
+              boxShadow: '0 14px 30px -18px rgba(23,19,26,.75)',
             }}
           >
             pick an alias · free
@@ -749,7 +749,7 @@ function CardsTab({
       ) : total === 0 ? (
         <div style={{ textAlign: 'center', padding: '50px 0', fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 15, color: '#6f666c' }}>
           nothing kept yet.{' '}
-          <span style={{ color: '#c1216b', cursor: 'pointer' }} onClick={() => navigate('/')}>write a set →</span>
+          <span style={{ color: '#17131a', cursor: 'pointer' }} onClick={() => navigate('/')}>write a set →</span>
         </div>
       ) : (
         <>
@@ -801,14 +801,14 @@ function MirrorMemory({
 
   return (
     <div style={{ position: 'relative', overflow: 'hidden', background: '#100c14', borderRadius: 22, padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 14 }}>
-      <div style={{ position: 'absolute', width: '56%', height: '130%', right: '-14%', top: '-30%', background: 'radial-gradient(circle,rgba(231,84,138,.28),transparent 64%)', filter: 'blur(14px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', width: '56%', height: '130%', right: '-14%', top: '-30%', background: 'radial-gradient(circle,rgba(23,19,26,.28),transparent 64%)', filter: 'blur(14px)', pointerEvents: 'none' }} />
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 9 }}>
         <Eyes size={18} />
-        <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 11, letterSpacing: '.22em', textTransform: 'uppercase', color: '#9e7a8c' }}>
+        <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 11, letterSpacing: '.22em', textTransform: 'uppercase', color: '#8a8488' }}>
           mirror memory · 🃏 joke
         </span>
       </div>
-      <p style={{ margin: 0, position: 'relative', fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#f7e8f0', textWrap: 'pretty', maxWidth: '46ch' }}>
+      <p style={{ margin: 0, position: 'relative', fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#efedeb', textWrap: 'pretty', maxWidth: '46ch' }}>
         {paying
           ? 'every card you keep feeds the mirror as its own 🃏 joke signal — five situations a day is enough to see which behaviour keeps coming back, and how your jokes changed as you did.'
           : 'every card you keep enters the mirror as a 🃏 joke signal — all three of each situation. members get the patterns read back, and every card clean — no mark.'}
@@ -819,7 +819,7 @@ function MirrorMemory({
             <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 21, color: '#fff', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums', filter: s.blur }}>
               {s.n}
             </div>
-            <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: '#a99fa8', marginTop: 2, whiteSpace: 'nowrap' }}>
+            <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: '#a4a4a4', marginTop: 2, whiteSpace: 'nowrap' }}>
               {s.label}
             </div>
           </div>
@@ -829,7 +829,7 @@ function MirrorMemory({
         <button
           type="button"
           onClick={() => navigate('/mirror')}
-          style={{ padding: '6px 12px', borderRadius: 999, border: '.5px solid #ff7eb340', background: '#ff7eb310', color: '#ff7eb3', fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '.02em', cursor: 'pointer' }}
+          style={{ padding: '6px 12px', borderRadius: 999, border: '.5px solid #ff7eb340', background: '#ff7eb310', color: '#d6d0d4', fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '.02em', cursor: 'pointer' }}
         >
           open the mirror reading →
         </button>

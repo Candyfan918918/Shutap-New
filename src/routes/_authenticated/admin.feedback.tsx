@@ -41,7 +41,7 @@ function AdminFeedbackPage() {
               onClick={() => setDays(d as 7 | 14 | 30)}
               style={{
                 padding: '6px 14px', borderRadius: 999, border: 0,
-                background: days === d ? '#c1216b' : 'transparent',
+                background: days === d ? '#17131a' : 'transparent',
                 color: days === d ? '#fff' : '#443c42',
                 fontFamily: "'Sora',sans-serif", fontSize: 11, fontWeight: 700,
                 letterSpacing: '.08em', textTransform: 'uppercase', cursor: 'pointer',
@@ -51,7 +51,7 @@ function AdminFeedbackPage() {
         </div>
       }
     >
-      {err && <div style={{ color: '#c1216b', marginBottom: 12 }}>{err}</div>}
+      {err && <div style={{ color: '#17131a', marginBottom: 12 }}>{err}</div>}
       {!data ? (
         <div style={{ color: '#443c42' }}>loading…</div>
       ) : (
@@ -69,7 +69,7 @@ function AdminFeedbackPage() {
               <RankTable rows={data.loved} accent="#5b8a5e" />
             </Panel>
             <Panel title="friction · top 12">
-              <RankTable rows={data.friction} accent="#c1216b" />
+              <RankTable rows={data.friction} accent="#17131a" />
             </Panel>
             <Panel title="events by type">
               <RankTable rows={data.byType} />
@@ -128,7 +128,7 @@ function RankTable({ rows, accent }: { rows: Array<{ key: string; n: number }>; 
               <td style={{ padding: '8px 10px', color: '#100c14', width: '55%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 200 }}>{r.key}</td>
               <td style={{ padding: '8px 10px' }}>
                 <div style={{ background: '#fdfbf9', borderRadius: 999, height: 8, overflow: 'hidden' }}>
-                  <div style={{ background: accent ?? '#c1216b', height: '100%', width: `${pct}%` }} />
+                  <div style={{ background: accent ?? '#17131a', height: '100%', width: `${pct}%` }} />
                 </div>
               </td>
               <td style={{ padding: '8px 10px', textAlign: 'right', fontVariantNumeric: 'tabular-nums', width: 40 }}>{r.n}</td>

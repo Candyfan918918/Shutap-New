@@ -58,7 +58,7 @@ function CheckinCard() {
           <button
             key={c.value}
             onClick={() => submit(c.value)}
-            className="px-4 py-2 rounded-full bg-[#c1216b]/10 hover:bg-[#c1216b]/20 text-[#6d1239] text-sm transition"
+            className="px-4 py-2 rounded-full bg-[#17131a]/10 hover:bg-[#17131a]/20 text-[#000000] text-sm transition"
           >
             {c.label}
           </button>
@@ -69,7 +69,7 @@ function CheckinCard() {
         onChange={(e) => setNote(e.target.value)}
         placeholder="anything else? (optional)"
         rows={2}
-        className="w-full p-2 text-sm rounded-lg border border-[#a52a5f]/30 bg-white/60"
+        className="w-full p-2 text-sm rounded-lg border border-[#2b2630]/30 bg-white/60"
       />
       <button onClick={() => snooze({ data: { id: ck.id } }).then(() => navigate({ to: '/' }))}
         className="mt-4 text-xs opacity-60 hover:opacity-100">

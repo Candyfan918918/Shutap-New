@@ -85,10 +85,10 @@ export function CardShareSheet({
           </div>
           <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14.5, lineHeight: 1.45, color: MUTED }}>
             {!ready
-              ? 'getting the picture ready…'
+              ? 'getting it ready…'
               : mobile
-                ? 'one tap puts the picture and the caption straight into the app.'
-                : 'on a computer, X, Instagram and TikTok cannot take a picture from a website — so the picture is saved and the caption copied for you to attach. on your phone it goes straight in.'}
+                ? 'picture and caption go straight in.'
+                : 'picture saves, caption copies. attach both.'}
           </div>
         </div>
       </div>

@@ -39,7 +39,7 @@ function hashKey(input: { pillar?: string | null; title?: string | null; body?: 
 
 // Ordered identically to the iframe's REACTIONS (getter in Landing.dc.html line 427).
 const REACTIONS: Array<{ k: keyof LandingRoom['reactions']; color: string }> = [
-  { k: 'heard',  color: '#a52a5f' },
+  { k: 'heard',  color: '#2b2630' },
   { k: 'same',   color: '#c87c4a' },
   { k: 'strong', color: '#5B8A5E' },
   { k: 'time',   color: '#7F77DD' },
@@ -252,8 +252,8 @@ export function LandingNativePage() {
       <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden>
         <defs>
           <linearGradient id="eyeG" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#a52a5f" />
-            <stop offset="100%" stopColor="#6d1239" />
+            <stop offset="0%" stopColor="#2b2630" />
+            <stop offset="100%" stopColor="#000000" />
           </linearGradient>
           <linearGradient id="pupG" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#100c14" />
@@ -269,28 +269,28 @@ export function LandingNativePage() {
       <main>
         {/* HERO */}
         <section style={{ position: 'relative', overflow: 'hidden', padding: '64px 0 36px' }}>
-          <div style={{ position: 'absolute', inset: '-20% 0 auto 10%', height: '70vh', background: 'radial-gradient(ellipse at center,rgba(231,84,138,.13),transparent 62%)', pointerEvents: 'none', animation: 'drift 22s ease-in-out infinite' }} />
+          <div style={{ position: 'absolute', inset: '-20% 0 auto 10%', height: '70vh', background: 'radial-gradient(ellipse at center,rgba(23,19,26,.13),transparent 62%)', pointerEvents: 'none', animation: 'drift 22s ease-in-out infinite' }} />
           <div style={{ maxWidth: 740, margin: '0 auto', padding: '0 22px', position: 'relative' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 600, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#a52a5f', marginBottom: 22 }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', animation: 'shimmer 3s ease-in-out infinite', display: 'block' }} />
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 600, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#2b2630', marginBottom: 22 }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b2630', animation: 'shimmer 3s ease-in-out infinite', display: 'block' }} />
               <span>rooms open now</span>
             </div>
             <Words as="h1" style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontWeight: 400, fontSize: 'clamp(30px,6vw,50px)', lineHeight: 1.15, letterSpacing: '-.015em', margin: '0 0 20px', color: '#0b080f', maxWidth: '14ch' }}>
-              finally, somewhere to <em style={{ fontStyle: 'normal', background: 'linear-gradient(92deg,#a52a5f,#890041 70%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>not shut up.</em>
+              finally, somewhere to <em style={{ fontStyle: 'normal', background: 'linear-gradient(92deg,#2b2630,#2b2630 70%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>not shut up.</em>
             </Words>
             <p style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 18, lineHeight: 1.6, color: '#383136', maxWidth: '46ch', margin: '0 0 30px' }}>
               let it all out — and you're not the only one who's been through this. spill it; someone in here has lived your exact thing.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, maxWidth: 480 }}>
-                <button type="button" onClick={openSpill} onPointerEnter={preloadWelcome} onFocus={preloadWelcome} disabled={pendingCta === 'spill'} aria-busy={pendingCta === 'spill'} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 8, background: 'linear-gradient(155deg,#ff7eb3,#a52a5f 55%,#c1216b)', color: '#fff', padding: '18px 18px 16px', borderRadius: 18, cursor: pendingCta === 'spill' ? 'progress' : 'pointer', transition: '.18s', border: 'none', boxShadow: '0 12px 28px -12px rgba(193,33,107,.55)', opacity: pendingCta === 'spill' ? 0.75 : 1 }}>
+                <button type="button" onClick={openSpill} onPointerEnter={preloadWelcome} onFocus={preloadWelcome} disabled={pendingCta === 'spill'} aria-busy={pendingCta === 'spill'} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 8, background: 'linear-gradient(155deg,#d6d0d4,#2b2630 55%,#17131a)', color: '#fff', padding: '18px 18px 16px', borderRadius: 18, cursor: pendingCta === 'spill' ? 'progress' : 'pointer', transition: '.18s', border: 'none', boxShadow: '0 12px 28px -12px rgba(23,19,26,.55)', opacity: pendingCta === 'spill' ? 0.75 : 1 }}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round" style={{ width: 22, height: 22 }}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
                   <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 16, letterSpacing: '-.01em' }}>{pendingCta === 'spill' ? 'opening…' : 'spill it'}</div>
                   <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: 'rgba(255,255,255,.85)', lineHeight: 1.4 }}>tell your story — opens a room the world can sit in.</div>
                 </button>
-                <button type="button" onClick={openScan} onPointerEnter={preloadWelcome} onFocus={preloadWelcome} disabled={pendingCta === 'scan'} aria-busy={pendingCta === 'scan'} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 8, background: '#fff', color: '#0b080f', padding: '18px 18px 16px', borderRadius: 18, cursor: pendingCta === 'scan' ? 'progress' : 'pointer', transition: '.18s', border: '1.5px solid rgba(231,84,138,.28)', opacity: pendingCta === 'scan' ? 0.75 : 1 }}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#a52a5f" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round" style={{ width: 22, height: 22 }}><path d="M12 3a9 9 0 1 0 9 9" /><path d="M12 12l5-5" /><circle cx={12} cy={12} r={1.6} fill="#a52a5f" stroke="none" /></svg>
-                  <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 16, letterSpacing: '-.01em', color: '#c1216b' }}>{pendingCta === 'scan' ? 'opening…' : 'scan it'}</div>
+                <button type="button" onClick={openScan} onPointerEnter={preloadWelcome} onFocus={preloadWelcome} disabled={pendingCta === 'scan'} aria-busy={pendingCta === 'scan'} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 8, background: '#fff', color: '#0b080f', padding: '18px 18px 16px', borderRadius: 18, cursor: pendingCta === 'scan' ? 'progress' : 'pointer', transition: '.18s', border: '1.5px solid rgba(23,19,26,.28)', opacity: pendingCta === 'scan' ? 0.75 : 1 }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#2b2630" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round" style={{ width: 22, height: 22 }}><path d="M12 3a9 9 0 1 0 9 9" /><path d="M12 12l5-5" /><circle cx={12} cy={12} r={1.6} fill="#2b2630" stroke="none" /></svg>
+                  <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 16, letterSpacing: '-.01em', color: '#17131a' }}>{pendingCta === 'scan' ? 'opening…' : 'scan it'}</div>
                   <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#443c42', lineHeight: 1.4 }}>60-second read — get a private intensity score.</div>
                 </button>
               </div>
@@ -304,7 +304,7 @@ export function LandingNativePage() {
                 role="button"
                 tabIndex={0}
                 onClick={() => navigate('/welcome')}
-                style={{ cursor: 'pointer', color: '#c1216b', borderBottom: '1px solid rgba(193,33,107,.3)' }}
+                style={{ cursor: 'pointer', color: '#17131a', borderBottom: '1px solid rgba(23,19,26,.3)' }}
               >
                 get your alias →
               </span>
@@ -316,8 +316,8 @@ export function LandingNativePage() {
         <section style={{ padding: '12px 0 32px' }}>
           <div style={{ maxWidth: 740, margin: '0 auto', padding: '0 22px' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: '#a52a5f' }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', animation: 'pulse 3s infinite', display: 'block' }} />
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: '#2b2630' }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b2630', animation: 'pulse 3s infinite', display: 'block' }} />
                 a room right now
               </div>
               <a href="/stream" className="prose-link" style={{ fontSize: 13 }}>see all rooms →</a>
@@ -336,7 +336,7 @@ export function LandingNativePage() {
                 >
                   <div style={{ padding: '24px 26px 20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18, flexWrap: 'wrap' }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(231,84,138,.18)', color: '#f7b8d4', border: '.5px solid rgba(231,84,138,.28)', borderRadius: 999, padding: '4px 11px', fontFamily: SORA, fontWeight: 600, fontSize: 10.5, letterSpacing: '.06em' }}>{label}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(23,19,26,.18)', color: '#e2dde0', border: '.5px solid rgba(23,19,26,.28)', borderRadius: 999, padding: '4px 11px', fontFamily: SORA, fontWeight: 600, fontSize: 10.5, letterSpacing: '.06em' }}>{label}</span>
                       <span style={{ fontSize: 12, color: '#6f666c', fontFamily: NEWSREADER, fontStyle: 'italic' }}>{featured.hours} ago</span>
                       <span style={{ marginLeft: 'auto', fontSize: 12, color: '#6f666c', fontFamily: NEWSREADER, fontStyle: 'italic', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                         <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#5DCAA5', animation: 'breathe 2.8s ease-in-out infinite', display: 'block' }} />
@@ -347,8 +347,8 @@ export function LandingNativePage() {
                       {featured.title}
                     </h2>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
-                      <span style={{ width: 26, height: 26, borderRadius: '50%', background: 'rgba(231,84,138,.2)', display: 'grid', placeItems: 'center', fontSize: 15, flex: 'none' }}>{featured.emoji}</span>
-                      <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13.5, color: '#c4a0b2' }}>{featured.alias}</span>
+                      <span style={{ width: 26, height: 26, borderRadius: '50%', background: 'rgba(23,19,26,.2)', display: 'grid', placeItems: 'center', fontSize: 15, flex: 'none' }}>{featured.emoji}</span>
+                      <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13.5, color: '#bdb8bb' }}>{featured.alias}</span>
                     </div>
                     <div style={{ marginBottom: 14 }}>
                       <div style={{ fontFamily: SORA, fontWeight: 600, fontSize: 9.5, letterSpacing: '.14em', textTransform: 'uppercase', color: '#6f666c', marginBottom: 7 }}>how the room is holding this</div>
@@ -364,10 +364,10 @@ export function LandingNativePage() {
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
-                      <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13.5, color: '#c4a0b2' }}>
-                        <b style={{ color: '#f7b8d4', fontStyle: 'normal' }}>{featured.relates}</b> said 'omg same'
+                      <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13.5, color: '#bdb8bb' }}>
+                        <b style={{ color: '#e2dde0', fontStyle: 'normal' }}>{featured.relates}</b> said 'omg same'
                       </span>
-                      <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#a52a5f' }}>enter the room →</span>
+                      <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#2b2630' }}>enter the room →</span>
                     </div>
                   </div>
                 </div>
@@ -380,8 +380,8 @@ export function LandingNativePage() {
         <section style={{ padding: '8px 0 32px' }}>
           <div style={{ maxWidth: 740, margin: '0 auto', padding: '0 22px' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, marginBottom: 16 }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: '#a52a5f' }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', boxShadow: '0 0 0 3px rgba(231,84,138,.18)', display: 'block' }} />
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: '#2b2630' }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b2630', boxShadow: '0 0 0 3px rgba(23,19,26,.18)', display: 'block' }} />
                 rooms open
               </div>
               <a href="/stream" className="prose-link" style={{ fontSize: 13 }}>all rooms →</a>
@@ -401,8 +401,8 @@ export function LandingNativePage() {
         <section style={{ padding: '8px 0 36px' }}>
           <div style={{ maxWidth: 740, margin: '0 auto', padding: '0 22px' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, marginBottom: 16 }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: '#a52a5f' }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', boxShadow: '0 0 0 3px rgba(231,84,138,.18)', display: 'block' }} />
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: '#2b2630' }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b2630', boxShadow: '0 0 0 3px rgba(23,19,26,.18)', display: 'block' }} />
                 hall of fame
               </div>
               <a href="/halls" className="prose-link" style={{ fontSize: 13 }}>all halls →</a>
@@ -410,7 +410,7 @@ export function LandingNativePage() {
             <div style={{ display: 'flex', gap: 11, overflowX: 'auto', paddingBottom: 4, scrollbarWidth: 'none' }}>
               {HOF_CARDS.map(c => (
                 <a key={c.href} href={c.href} className="hof-card" style={{ display: 'block', textDecoration: 'none', flex: 'none', width: 230, background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 16, padding: 16, transition: 'transform .18s, border-color .18s' }}>
-                  <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: '#a52a5f', marginBottom: 10 }}>{c.label}</div>
+                  <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: '#2b2630', marginBottom: 10 }}>{c.label}</div>
                   <p style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14.5, lineHeight: 1.4, color: '#0b080f', margin: '0 0 10px' }}>{c.quote}</p>
                   <div style={{ fontSize: 11.5, color: '#6f666c', fontFamily: NEWSREADER, fontStyle: 'italic' }}>{c.credit}</div>
                 </a>
@@ -424,7 +424,7 @@ export function LandingNativePage() {
         <section style={{ padding: '32px 0 24px' }}>
 
           <div style={{ maxWidth: 740, margin: '0 auto', padding: '0 22px' }}>
-            <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#a52a5f', marginBottom: 14 }}>what is shutap</div>
+            <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#2b2630', marginBottom: 14 }}>what is shutap</div>
             <p style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 17, lineHeight: 1.65, color: '#100c14', margin: '0 0 10px', maxWidth: '52ch' }}>
               a pseudonymous place to vent about relationships, marriage, family, and work — and see what actually happened next for people who lived your exact thing.
             </p>
@@ -457,7 +457,7 @@ export function LandingNativePage() {
             <a href="mailto:hello@shutap.com" style={{ fontFamily: "'Sora',sans-serif", fontSize: 12, color: '#443c42', textDecoration: 'none' }}>contact</a>
           </div>
 
-          <div style={{ marginTop: 9, fontSize: 11.5, color: '#b09aa6', maxWidth: '42ch', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.5 }}>
+          <div style={{ marginTop: 9, fontSize: 11.5, color: '#a3a3a3', maxWidth: '42ch', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.5 }}>
             shutap writes jokes, not prescriptions. not therapy, not advice, not a diagnosis. in an emergency, call or text 988 (US).
           </div>
           <div style={{ marginTop: 12, fontFamily: SORA, fontStyle: 'normal', fontWeight: 700, fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', color: '#443c42' }}>you already have the material.</div>
@@ -493,16 +493,16 @@ export function LandingNativePage() {
               {frame.rows.map(([icon, text], i) => (
                 <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                   <span style={{ fontSize: 20, lineHeight: '24px', flex: 'none' }}>{icon}</span>
-                  <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 15, lineHeight: 1.5, color: '#f3c6da' }}>{text}</div>
+                  <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 15, lineHeight: 1.5, color: '#e4dfe2' }}>{text}</div>
                 </div>
               ))}
             </div>
             <div style={{ display: 'flex', gap: 7, justifyContent: 'center', margin: '4px 0 18px' }}>
               {ONBOARDING_FRAMES.map((_, i) => (
-                <span key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: i === onbIdx ? '#a52a5f' : 'rgba(255,255,255,.18)' }} />
+                <span key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: i === onbIdx ? '#2b2630' : 'rgba(255,255,255,.18)' }} />
               ))}
             </div>
-            <div onClick={advanceOnb} role="button" style={{ background: '#a52a5f', color: '#fff', borderRadius: 14, padding: 14, fontFamily: SORA, fontWeight: 700, fontSize: 14.5, cursor: 'pointer' }}>
+            <div onClick={advanceOnb} role="button" style={{ background: '#2b2630', color: '#fff', borderRadius: 14, padding: 14, fontFamily: SORA, fontWeight: 700, fontSize: 14.5, cursor: 'pointer' }}>
               {onbIdx >= ONBOARDING_FRAMES.length - 1 ? "let's go →" : 'next →'}
             </div>
           </div>
@@ -519,7 +519,7 @@ function FaqRow({ q, a, last }: { q: string; a: string; last?: boolean }) {
   return (
     <details style={{ borderTop: '.5px solid rgba(11,8,15,.08)', borderBottom: last ? '.5px solid rgba(11,8,15,.08)' : undefined, padding: '15px 0' }}>
       <summary style={{ fontFamily: SORA, fontWeight: 600, fontSize: 14, cursor: 'pointer', color: '#0b080f', display: 'flex', justifyContent: 'space-between', alignItems: 'center', listStyle: 'none' }}>
-        {q}<span style={{ color: '#a52a5f', fontSize: 20, fontWeight: 300 }}>+</span>
+        {q}<span style={{ color: '#2b2630', fontSize: 20, fontWeight: 300 }}>+</span>
       </summary>
       <p style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 15, color: '#443c42', lineHeight: 1.6, margin: '10px 0 0', maxWidth: '52ch' }}>{a}</p>
     </details>
@@ -529,9 +529,9 @@ function FaqRow({ q, a, last }: { q: string; a: string; last?: boolean }) {
 /* Pixel-parity port of DCLogic.roomTile() from Landing.dc.html (lines 721–745). */
 function RoomTile({ room: r, navigate }: { room: LandingRoom; navigate: (to: string) => void }) {
   const heardTint = {
-    bg: r.support === 'heard' ? 'rgba(231,84,138,.08)' : 'rgba(91,138,94,.10)',
-    fg: r.support === 'heard' ? '#c1216b' : '#3a6b3c',
-    br: r.support === 'heard' ? 'rgba(193,33,107,.18)' : 'rgba(91,138,94,.22)',
+    bg: r.support === 'heard' ? 'rgba(23,19,26,.08)' : 'rgba(91,138,94,.10)',
+    fg: r.support === 'heard' ? '#17131a' : '#3a6b3c',
+    br: r.support === 'heard' ? 'rgba(23,19,26,.18)' : 'rgba(91,138,94,.22)',
   }
   const label = r.support === 'heard' ? 'looking to be heard' : 'open to advice'
   return (
@@ -554,7 +554,7 @@ function RoomTile({ room: r, navigate }: { room: LandingRoom; navigate: (to: str
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#6f666c' }}>
-          <span><b style={{ color: '#c1216b', fontStyle: 'normal' }}>{r.relates}</b> said 'omg same'</span>
+          <span><b style={{ color: '#17131a', fontStyle: 'normal' }}>{r.relates}</b> said 'omg same'</span>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#5DCAA5', animation: 'breathe 2.8s ease-in-out infinite', display: 'block' }} />
             {r.sitting} in

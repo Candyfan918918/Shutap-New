@@ -46,7 +46,7 @@ function Pill({
         marginRight: strong ? 'auto' : undefined,
         background: !strong && hover ? 'rgba(11,8,15,.04)' : 'transparent',
         border: strong ? '1.5px solid rgba(11,8,15,.16)' : '1px solid rgba(11,8,15,.08)',
-        borderColor: strong && hover ? '#e7548a' : undefined,
+        borderColor: strong && hover ? '#8f898d' : undefined,
         color: strong || hover ? INK : MUTED,
         fontFamily: SORA, fontWeight: 800, fontSize: 12, lineHeight: 1,
         transition: 'color .2s, background .2s, border-color .2s',
@@ -75,9 +75,9 @@ export function CardActions({
 }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-      <Pill strong onClick={onPost} ariaLabel={posted ? `open the room ${label} is in` : `post ${label} as a room`}>
+      <Pill strong onClick={onPost} ariaLabel={posted ? `view the post for ${label}` : `post ${label}`}>
         <span aria-hidden style={{ fontFamily: 'Inter,sans-serif', fontWeight: 400, fontSize: 13 }}>◎</span>
-        {posted ? 'open its room' : 'post as a room'}
+        {posted ? 'view post' : 'post'}
       </Pill>
       <Pill onClick={onShare} ariaLabel={`share ${label}`}>share</Pill>
       <Pill onClick={onDownload} ariaLabel={`download ${label}`}>download</Pill>

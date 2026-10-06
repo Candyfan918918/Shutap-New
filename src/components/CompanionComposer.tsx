@@ -142,10 +142,10 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
           <div style={{ flex: 1, fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14, color: '#fdfbf9', lineHeight: 1.5 }}>
             i'm the companion. tell me what's going on — i can find you a room, help you spill, scan how you're doing, or just answer.
           </div>
-          <div onClick={onClose} role="button" style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#9b8090', cursor: 'pointer', flex: 'none' }}>close</div>
+          <div onClick={onClose} role="button" style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#8f898d', cursor: 'pointer', flex: 'none' }}>close</div>
         </div>
         {due && due.beat && (
-          <div style={{ marginBottom: 14, background: 'rgba(231,84,138,.08)', border: '.5px solid rgba(231,84,138,.28)', borderRadius: 16, padding: '14px 15px' }}>
+          <div style={{ marginBottom: 14, background: 'rgba(23,19,26,.08)', border: '.5px solid rgba(23,19,26,.28)', borderRadius: 16, padding: '14px 15px' }}>
             <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14.5, color: '#fdfbf9', lineHeight: 1.5, marginBottom: 12 }}>
               {due.beat.title}
             </div>
@@ -156,9 +156,9 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
                   type="button"
                   onClick={() => onChip(c.value)}
                   disabled={checkinBusy}
-                  style={{ fontFamily: SORA, fontWeight: 600, fontSize: 12.5, padding: '7px 13px', borderRadius: 999, border: '1px solid rgba(231,84,138,.35)', background: 'rgba(231,84,138,.14)', color: '#fdfbf9', cursor: checkinBusy ? 'wait' : 'pointer', opacity: checkinBusy ? 0.6 : 1, transition: 'background .15s' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(231,84,138,.28)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(231,84,138,.14)' }}
+                  style={{ fontFamily: SORA, fontWeight: 600, fontSize: 12.5, padding: '7px 13px', borderRadius: 999, border: '1px solid rgba(23,19,26,.35)', background: 'rgba(23,19,26,.14)', color: '#fdfbf9', cursor: checkinBusy ? 'wait' : 'pointer', opacity: checkinBusy ? 0.6 : 1, transition: 'background .15s' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(23,19,26,.28)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(23,19,26,.14)' }}
                 >
                   {c.label}
                 </button>
@@ -168,7 +168,7 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
               <div
                 role="button"
                 onClick={() => setNoteOpen(true)}
-                style={{ display: 'inline-block', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#caaebb', cursor: 'pointer', marginRight: 14 }}
+                style={{ display: 'inline-block', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#c4bfc2', cursor: 'pointer', marginRight: 14 }}
               >
                 add a note — optional
               </div>
@@ -184,14 +184,14 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
             <div
               role="button"
               onClick={onSnooze}
-              style={{ display: 'inline-block', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#9b8090', cursor: 'pointer' }}
+              style={{ display: 'inline-block', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#8f898d', cursor: 'pointer' }}
             >
               not now
             </div>
           </div>
         )}
         {checkinAck && !due && (
-          <div style={{ marginBottom: 14, fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13.5, color: '#f7b8d4', lineHeight: 1.5 }}>
+          <div style={{ marginBottom: 14, fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13.5, color: '#e2dde0', lineHeight: 1.5 }}>
             {checkinAck}
           </div>
         )}
@@ -203,21 +203,21 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
             onKeyDown={(e) => { if (e.key === 'Enter') send() }}
             style={{ flex: 1, background: 'none', border: 'none', outline: 'none', color: '#fdfbf9', fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 15 }}
           />
-          <div onClick={send} role="button" style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13.5, color: '#a52a5f', cursor: busy ? 'wait' : 'pointer', flex: 'none', opacity: busy ? 0.6 : 1 }}>send →</div>
+          <div onClick={send} role="button" style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13.5, color: '#2b2630', cursor: busy ? 'wait' : 'pointer', flex: 'none', opacity: busy ? 0.6 : 1 }}>send →</div>
         </div>
-        <div onClick={() => { onClose(); navigate('/mirror') }} role="button" style={{ marginTop: 13, display: 'flex', alignItems: 'center', gap: 11, background: 'rgba(231,84,138,.10)', border: '.5px solid rgba(231,84,138,.28)', borderRadius: 14, padding: '13px 15px', cursor: 'pointer' }}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="#f7b8d4" strokeWidth={1.6} style={{ width: 20, height: 20, flex: 'none' }}>
+        <div onClick={() => { onClose(); navigate('/mirror') }} role="button" style={{ marginTop: 13, display: 'flex', alignItems: 'center', gap: 11, background: 'rgba(23,19,26,.10)', border: '.5px solid rgba(23,19,26,.28)', borderRadius: 14, padding: '13px 15px', cursor: 'pointer' }}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#e2dde0" strokeWidth={1.6} style={{ width: 20, height: 20, flex: 'none' }}>
             <rect x="5" y="3" width="14" height="18" rx="7" />
             <path d="M9 8.5c1 1.2 5 1.2 6 0" />
           </svg>
           <div style={{ flex: 1 }}>
             <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 13, color: '#fdfbf9' }}>the mirror</div>
-            <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#caaebb', marginTop: 1 }}>what i've noticed about you, over time</div>
+            <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#c4bfc2', marginTop: 1 }}>what i've noticed about you, over time</div>
           </div>
-          <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#f7b8d4', flex: 'none' }}>open →</span>
+          <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#e2dde0', flex: 'none' }}>open →</span>
         </div>
         {reply && (
-          <div style={{ marginTop: 14, fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14.5, color: '#c4a0b2', lineHeight: 1.55 }}>{reply}</div>
+          <div style={{ marginTop: 14, fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14.5, color: '#bdb8bb', lineHeight: 1.55 }}>{reply}</div>
         )}
         {rooms.length > 0 && (
           <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -231,9 +231,9 @@ export function CompanionComposer({ open, onClose, onSpill, onScan }: {
                 <span style={{ fontSize: 20, flex: 'none' }}>{r.emoji}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontFamily: SORA, fontWeight: 600, fontSize: 13, color: '#fdfbf9', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.title}</div>
-                  <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12, color: '#9b8090', marginTop: 1 }}>{r.alias}</div>
+                  <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12, color: '#8f898d', marginTop: 1 }}>{r.alias}</div>
                 </div>
-                <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#f7b8d4', flex: 'none' }}>open →</span>
+                <span style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 12.5, color: '#e2dde0', flex: 'none' }}>open →</span>
               </div>
             ))}
           </div>

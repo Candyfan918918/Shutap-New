@@ -12,11 +12,11 @@ export const NEWS = "'Newsreader',Georgia,serif"
 export const INTER = "'Inter',system-ui,sans-serif"
 
 export const INK = '#0b080f'
-export const PROSE = '#2e1a26'
-export const MUTED = '#6b4a5c'
-export const FAINT = '#9e7a8c'
-export const ACCENT = '#c1216b'
-export const ACCENT_SOFT = '#e7548a'
+export const PROSE = '#2a2529'
+export const MUTED = '#5f595d'
+export const FAINT = '#8a8488'
+export const ACCENT = '#17131a'
+export const ACCENT_SOFT = '#8f898d'
 export const VIOLET = '#7F77DD'
 export const DARK = '#100c14'
 
@@ -50,7 +50,7 @@ export {
 } from '@/lib/jokes/card-art'
 
 /** The back's hover: the 3px lift reads as a lift because the shadow grows. */
-export const CARD_LIGHT_SHADOW_HOVER = '0 22px 40px -24px rgba(80,10,45,.38)'
+export const CARD_LIGHT_SHADOW_HOVER = '0 22px 40px -24px rgba(20,16,22,.38)'
 
 /** The dot grain the stack face carries. Absolute, so it sits under the type. */
 export const CARD_GRAIN: CSSProperties = {
@@ -110,10 +110,10 @@ export function Button({
   const height = size === 'sm' ? 36 : 44
   const palette: Record<string, CSSProperties> = {
     primary: {
-      background: 'linear-gradient(155deg,#e7548a,#c1216b 55%,#890041)',
+      background: 'linear-gradient(155deg,#8f898d,#17131a 55%,#2b2630)',
       color: '#fff',
       border: 'none',
-      boxShadow: '0 14px 30px -18px rgba(137,0,65,.75)',
+      boxShadow: '0 14px 30px -18px rgba(23,19,26,.75)',
     },
     secondary: {
       background: '#fff',
@@ -252,7 +252,7 @@ export function Sheet({
           overscrollBehavior: 'contain',
           WebkitOverflowScrolling: 'touch',
           boxSizing: 'border-box',
-          background: dark ? 'linear-gradient(160deg,#241019,#100c14)' : '#fff',
+          background: dark ? 'linear-gradient(160deg,#171717,#100c14)' : '#fff',
           border: dark ? '.5px solid rgba(255,255,255,.12)' : 'none',
           borderRadius: '24px 24px 0 0',
           padding: '22px 20px calc(26px + env(safe-area-inset-bottom, 0px))',
@@ -309,7 +309,7 @@ export function CompanionLine({
           fontStyle: 'italic',
           fontSize: 17,
           lineHeight: 1.5,
-          color: tone === 'dark' ? '#f7e8f0' : PROSE,
+          color: tone === 'dark' ? '#efedeb' : PROSE,
           textWrap: 'pretty',
         }}
       >

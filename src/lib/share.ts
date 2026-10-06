@@ -151,14 +151,14 @@ function esc(s: string | undefined | null): string {
 function artifact(opts: ShareOpts): string {
   const kind = opts.kind || 'generic'
   // Only allow hex color for accent to prevent CSS injection.
-  const rawAccent = opts.accent || '#a52a5f'
-  const accent = /^#[0-9a-fA-F]{3,8}$/.test(rawAccent) ? rawAccent : '#a52a5f'
+  const rawAccent = opts.accent || '#2b2630'
+  const accent = /^#[0-9a-fA-F]{3,8}$/.test(rawAccent) ? rawAccent : '#2b2630'
   const headline = esc(opts.headline)
   const sub = esc(opts.sub)
   const big = esc(opts.big)
   const badge = esc(opts.badge) || '🏛'
   const loopLabel = esc(opts.loopLabel)
-  let bg = 'linear-gradient(165deg,#2a0d18,#100c14)'
+  let bg = 'linear-gradient(165deg,#121014,#100c14)'
   let inner = ''
   if (kind === 'scan') {
     bg = 'radial-gradient(120% 90% at 50% 0%, #100c14, #100c14)'
@@ -176,7 +176,7 @@ function artifact(opts: ShareOpts): string {
       headline +
       '</div>' +
       (sub
-        ? '<div style="margin-top:12px;font-family:Newsreader,serif;font-style:italic;font-size:15px;color:#c9a3b6">' +
+        ? '<div style="margin-top:12px;font-family:Newsreader,serif;font-style:italic;font-size:15px;color:#c4bfc2">' +
           sub +
           '</div>'
         : '')
@@ -199,7 +199,7 @@ function artifact(opts: ShareOpts): string {
       headline +
       '</div>' +
       (sub
-        ? '<div style="margin-top:8px;font-family:Newsreader,serif;font-style:italic;font-size:14px;color:#c9a3b6">' +
+        ? '<div style="margin-top:8px;font-family:Newsreader,serif;font-style:italic;font-size:14px;color:#c4bfc2">' +
           sub +
           '</div>'
         : '')
@@ -294,7 +294,7 @@ function doPlatform(p: string, caption: string, url: string) {
 function platRow(cap: HTMLTextAreaElement, getUrl: () => string, onPosted: (p: string) => void) {
   const has = !!navigator.share
   const btns: [string, string, string][] = []
-  if (has) btns.push(['native', 'share', '#a52a5f'])
+  if (has) btns.push(['native', 'share', '#2b2630'])
   btns.push(
     ['sms', 'Messages', '#34C759'],
     ['x', 'X', '#0b080f'],
@@ -347,7 +347,7 @@ function showSheet(id: string, opts: ShareOpts) {
     'position:absolute;inset:0;background:rgba(10,5,12,.55);backdrop-filter:blur(5px);opacity:0;transition:opacity .25s'
   const sheet = document.createElement('div')
   sheet.style.cssText =
-    'position:relative;width:100%;max-width:520px;background:linear-gradient(180deg,#241019,#15090f);border:.5px solid rgba(255,255,255,.14);border-radius:24px 24px 0 0;padding:20px 20px 26px;transform:translateY(100%);transition:transform .34s cubic-bezier(.2,.8,.2,1);max-height:92vh;overflow-y:auto'
+    'position:relative;width:100%;max-width:520px;background:linear-gradient(180deg,#171717,#0e0e0e);border:.5px solid rgba(255,255,255,.14);border-radius:24px 24px 0 0;padding:20px 20px 26px;transform:translateY(100%);transition:transform .34s cubic-bezier(.2,.8,.2,1);max-height:92vh;overflow-y:auto'
   const head =
     '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:15px">' +
     EYE +
@@ -359,7 +359,7 @@ function showSheet(id: string, opts: ShareOpts) {
   const capWrap = document.createElement('div')
   capWrap.style.cssText = 'margin-top:14px'
   capWrap.innerHTML =
-    '<div style="font-family:Sora,sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#9b8090;margin-bottom:6px">your caption · edit freely</div>'
+    '<div style="font-family:Sora,sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8f898d;margin-bottom:6px">your caption · edit freely</div>'
   const cap = document.createElement('textarea')
   cap.rows = 2
   cap.value = opts.caption || ''
@@ -390,12 +390,12 @@ function showSheet(id: string, opts: ShareOpts) {
   const foot = document.createElement('div')
   foot.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px'
   foot.innerHTML =
-    '<span style="font-family:Newsreader,serif;font-style:italic;font-size:12px;color:#9b8090">' +
+    '<span style="font-family:Newsreader,serif;font-style:italic;font-size:12px;color:#8f898d">' +
     (opts.privacy || 'only this card leaves — never your words or name.') +
     '</span>'
   const no = document.createElement('span')
   no.textContent = 'not now'
-  no.style.cssText = 'font-family:Newsreader,serif;font-style:italic;font-size:13.5px;color:#9b8090;cursor:pointer;flex:none'
+  no.style.cssText = 'font-family:Newsreader,serif;font-style:italic;font-size:13.5px;color:#8f898d;cursor:pointer;flex:none'
   const close = () => {
     back.style.opacity = '0'
     sheet.style.transform = 'translateY(100%)'

@@ -150,7 +150,7 @@ export function Hero({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCount?
 
   return (
     <section data-screen-label="Hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden', padding: 'clamp(76px,10vh,110px) clamp(18px,4vw,30px) 0', scrollSnapAlign: 'start' }}>
-      <div style={{ position: 'absolute', inset: '-30% -10% auto', height: '90vh', background: 'radial-gradient(ellipse at 50% 40%,rgba(231,84,138,.13),transparent 60%)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', inset: '-30% -10% auto', height: '90vh', background: 'radial-gradient(ellipse at 50% 40%,rgba(23,19,26,.13),transparent 60%)', pointerEvents: 'none' }} />
       <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
         <div data-heroinner="" style={{ maxWidth: '1560px', margin: '0 auto', width: '100%', position: 'relative', willChange: 'transform,opacity' }}>
 
@@ -161,15 +161,15 @@ export function Hero({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCount?
               happening in a room right now
             </div>
             <div style={{ width: 'min(520px,100%)', minHeight: 104, display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ alignSelf: 'flex-start', maxWidth: '88%', background: '#fff', border: '1px solid rgba(11,8,15,.08)', borderRadius: '16px 16px 16px 5px', padding: '10px 15px', boxShadow: '0 10px 26px -18px rgba(60,10,30,.35)', opacity: lxQ ? 1 : 0, transform: lxQ ? 'none' : 'translateY(6px)', transition: 'opacity .4s, transform .4s' }}>
+              <div style={{ alignSelf: 'flex-start', maxWidth: '88%', background: '#fff', border: '1px solid rgba(11,8,15,.08)', borderRadius: '16px 16px 16px 5px', padding: '10px 15px', boxShadow: '0 10px 26px -18px rgba(20,16,22,.35)', opacity: lxQ ? 1 : 0, transform: lxQ ? 'none' : 'translateY(6px)', transition: 'opacity .4s, transform .4s' }}>
                 <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, lineHeight: 1.5, color: '#100c14', minHeight: 22, display: 'block', textAlign: 'left' }}>
                   {lxQ}
                   {!lxAVisible && lxQ ? (
-                    <span aria-hidden="true" style={{ display: 'inline-block', width: 2, height: '0.95em', marginLeft: 2, background: '#c1216b', verticalAlign: '-2px', animation: 'blinkdot 1s steps(2) infinite' }} />
+                    <span aria-hidden="true" style={{ display: 'inline-block', width: 2, height: '0.95em', marginLeft: 2, background: '#17131a', verticalAlign: '-2px', animation: 'blinkdot 1s steps(2) infinite' }} />
                   ) : null}
                 </span>
               </div>
-              <div style={{ alignSelf: 'flex-end', maxWidth: '88%', background: 'linear-gradient(155deg,#ff7eb3,#a52a5f 60%,#c1216b)', borderRadius: '16px 16px 5px 16px', padding: '10px 15px', opacity: lxAVisible ? 1 : 0, transform: lxAVisible ? 'none' : 'translateY(6px)', transition: 'opacity .5s, transform .5s', boxShadow: '0 12px 26px -16px rgba(193,33,107,.5)' }}>
+              <div style={{ alignSelf: 'flex-end', maxWidth: '88%', background: 'linear-gradient(155deg,#d6d0d4,#2b2630 60%,#17131a)', borderRadius: '16px 16px 5px 16px', padding: '10px 15px', opacity: lxAVisible ? 1 : 0, transform: lxAVisible ? 'none' : 'translateY(6px)', transition: 'opacity .5s, transform .5s', boxShadow: '0 12px 26px -16px rgba(23,19,26,.5)' }}>
                 <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, lineHeight: 1.5, color: '#fff', display: 'block', textAlign: 'left' }}>{lxA}</span>
               </div>
             </div>
@@ -187,7 +187,7 @@ export function Hero({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCount?
               <span style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'top' }}><span data-wr="" style={{ display: 'inline-block' }}>to</span></span>
             </span>
             <span style={{ display: 'block', overflow: 'hidden' }}>
-              <span data-wr="" style={{ display: 'inline-block', fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, letterSpacing: '-.02em', background: 'linear-gradient(92deg,#a52a5f,#890041 70%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', padding: '0 .06em .08em' }}>not shut up.</span>
+              <span data-wr="" style={{ display: 'inline-block', fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, letterSpacing: '-.02em', background: 'linear-gradient(92deg,#2b2630,#2b2630 70%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', padding: '0 .06em .08em' }}>not shut up.</span>
             </span>
           </h1>
 
@@ -198,7 +198,7 @@ export function Hero({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCount?
 
             {/* Spill pill + scan button */}
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#fff', border: '1.5px solid rgba(231,84,138,.4)', borderRadius: 999, padding: '6px 6px 6px 24px', boxShadow: '0 16px 36px -18px rgba(193,33,107,.45)', width: 'min(560px,100%)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#fff', border: '1.5px solid rgba(23,19,26,.4)', borderRadius: 999, padding: '6px 6px 6px 24px', boxShadow: '0 16px 36px -18px rgba(23,19,26,.45)', width: 'min(560px,100%)' }}>
                 <input
                   ref={inputRef}
                   type="text"
@@ -214,12 +214,12 @@ export function Hero({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCount?
                   data-hover=""
                   data-mag=""
                   onClick={onSpillClick}
-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 700, fontSize: 15, color: '#fff', background: 'linear-gradient(155deg,#ff7eb3,#a52a5f 55%,#c1216b)', borderRadius: 999, padding: '12px 24px', cursor: 'pointer' }}
+                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 700, fontSize: 15, color: '#fff', background: 'linear-gradient(155deg,#d6d0d4,#2b2630 55%,#17131a)', borderRadius: 999, padding: '12px 24px', cursor: 'pointer' }}
                 >spill it <span style={{ fontWeight: 400 }}>→</span></a>
               </div>
-              <a href="#scan" data-cta="scan" data-hover="" data-mag="" style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, fontFamily: SORA, fontWeight: 700, fontSize: 15, color: '#c1216b', background: 'rgba(255,255,255,.7)', border: '1.5px solid rgba(231,84,138,.35)', borderRadius: 999, padding: '15px 26px', transition: 'border-color .3s' }}>or scan how heavy it is</a>
+              <a href="#scan" data-cta="scan" data-hover="" data-mag="" style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, fontFamily: SORA, fontWeight: 700, fontSize: 15, color: '#17131a', background: 'rgba(255,255,255,.7)', border: '1.5px solid rgba(23,19,26,.35)', borderRadius: 999, padding: '15px 26px', transition: 'border-color .3s' }}>or scan how heavy it is</a>
             </div>
-            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: '#c1216b', minHeight: 20, opacity: hint ? 1 : 0, transition: 'opacity .3s' }}>{hint || '\u00A0'}</div>
+            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: '#17131a', minHeight: 20, opacity: hint ? 1 : 0, transition: 'opacity .3s' }}>{hint || '\u00A0'}</div>
 
             {/* Jump chips */}
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -229,15 +229,15 @@ export function Hero({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCount?
             </div>
 
             {showLive ? (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 600, fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: '#a52a5f' }}>
-                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#a52a5f', animation: 'breathe 2.8s ease-in-out infinite', display: 'block' }} />
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontWeight: 600, fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: '#2b2630' }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#2b2630', animation: 'breathe 2.8s ease-in-out infinite', display: 'block' }} />
                 <span data-livecount="">{openRoomsCount}</span>&nbsp;rooms open now
               </div>
             ) : null}
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: SORA, fontWeight: 600, fontSize: 10.5, letterSpacing: '.14em', textTransform: 'uppercase', color: '#6f666c' }}>
-              <span>pseudonymous</span><span style={{ color: '#a52a5f' }}>·</span>
-              <span>no algorithm</span><span style={{ color: '#a52a5f' }}>·</span>
+              <span>pseudonymous</span><span style={{ color: '#2b2630' }}>·</span>
+              <span>no algorithm</span><span style={{ color: '#2b2630' }}>·</span>
               <span>free to read</span>
             </div>
           </div>
@@ -254,7 +254,7 @@ export function Hero({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCount?
                     href={t.href || '/stream'}
                     data-hover=""
                     draggable={false}
-                    style={{ width: 280, flex: 'none', display: 'flex', flexDirection: 'column', gap: 8, background: '#fff', border: '1px solid rgba(11,8,15,.08)', borderRadius: 18, padding: '15px 17px', textAlign: 'left', boxShadow: '0 18px 40px -28px rgba(60,10,30,.35)', transition: 'transform .3s, border-color .3s', color: 'inherit', textDecoration: 'none' }}
+                    style={{ width: 280, flex: 'none', display: 'flex', flexDirection: 'column', gap: 8, background: '#fff', border: '1px solid rgba(11,8,15,.08)', borderRadius: 18, padding: '15px 17px', textAlign: 'left', boxShadow: '0 18px 40px -28px rgba(20,16,22,.35)', transition: 'transform .3s, border-color .3s', color: 'inherit', textDecoration: 'none' }}
                   >
                     <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{ width: 24, height: 24, borderRadius: '50%', background: '#fdfbf9', display: 'grid', placeItems: 'center', fontSize: 13, flex: 'none' }}>{t.emoji}</span>
@@ -276,7 +276,7 @@ export function Hero({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCount?
       </div>
       <div className="home-hero-scrollcue" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, color: '#443c42', paddingBottom: 'clamp(26px,4vh,40px)', marginTop: 'clamp(40px,6vh,80px)' }}>
         <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13 }}>scroll</span>
-        <span style={{ display: 'block', width: 1.5, height: 34, background: 'linear-gradient(#a52a5f,transparent)', animation: 'scrollHint 1.8s ease-in-out infinite' }} />
+        <span style={{ display: 'block', width: 1.5, height: 34, background: 'linear-gradient(#2b2630,transparent)', animation: 'scrollHint 1.8s ease-in-out infinite' }} />
       </div>
     </section>
   )

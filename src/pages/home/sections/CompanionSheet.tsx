@@ -28,7 +28,7 @@ export function CompanionSheet() {
           <div data-comp="log" style={{ maxHeight: '38vh', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }} />
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '10px', background: 'rgba(255,255,255,.05)', border: '.5px solid rgba(255,255,255,.14)', borderRadius: '16px', padding: '10px 12px' }}>
             <textarea data-comp="input" rows={1} placeholder="tell me what's going on…" style={{ flex: 1, background: 'none', border: 'none', outline: 'none', resize: 'none', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: '15.5px', color: '#f3eefc', lineHeight: 1.5, minHeight: '24px', maxHeight: '110px' }} />
-            <div data-comp-action="send" role="button" style={{ fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: '13px', color: '#100c14', background: '#a52a5f', borderRadius: '999px', padding: '8px 16px', cursor: 'pointer', flex: 'none' }}>send</div>
+            <div data-comp-action="send" role="button" style={{ fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: '13px', color: '#100c14', background: '#2b2630', borderRadius: '999px', padding: '8px 16px', cursor: 'pointer', flex: 'none' }}>send</div>
           </div>
           <a href="/mirror" data-link="/mirror" style={{ marginTop: '13px', display: 'flex', alignItems: 'center', gap: '11px', background: 'rgba(233,192,106,.08)', border: '.5px solid rgba(233,192,106,.3)', borderRadius: '14px', padding: '12px 14px', textDecoration: 'none' }}>
             <span style={{ fontSize: '17px' }}>✦</span>

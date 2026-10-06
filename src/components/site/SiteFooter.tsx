@@ -62,9 +62,9 @@ export function SiteFooter() {
         </div>
       </div>
       <style>{`
-        .shutap-footer-link:hover { color: #6d1239; }
+        .shutap-footer-link:hover { color: #000000; }
         .shutap-footer-link:focus-visible {
-          outline: 2px solid #a52a5f;
+          outline: 2px solid #2b2630;
           outline-offset: 2px;
           border-radius: 6px;
         }

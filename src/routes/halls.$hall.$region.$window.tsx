@@ -106,7 +106,7 @@ export const Route = createFileRoute("/halls/$hall/$region/$window")({
         <Link
           to="/halls/$hall/$region/$window"
           params={{ hall: "most-related", region: "global", window: "30d" }}
-          style={{ color: '#c1216b', borderBottom: '1px solid rgba(193,33,107,.3)', textDecoration: 'none' }}
+          style={{ color: '#17131a', borderBottom: '1px solid rgba(23,19,26,.3)', textDecoration: 'none' }}
         >
           most relatable · global · 30d
         </Link>
@@ -119,7 +119,7 @@ export const Route = createFileRoute("/halls/$hall/$region/$window")({
       <h1 style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 30, margin: '0 0 12px', color: '#0b080f' }}>couldn't load this hall.</h1>
       <button
         onClick={reset}
-        style={{ marginTop: 8, background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', color: '#890041', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15 }}
+        style={{ marginTop: 8, background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', color: '#2b2630', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15 }}
       >try again →</button>
     </SeoPage>
   ),
@@ -152,8 +152,8 @@ function HallPage() {
             ]}
           />
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#a52a5f' }} />
-            <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#a52a5f' }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2b2630' }} />
+            <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#2b2630' }}>
               hall · {region} · {window}
             </span>
           </div>
@@ -186,7 +186,7 @@ function HallPage() {
                   animation: `hall-fadeup .5s ease ${i * 60}ms both`,
                 }}
               >
-                <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 14, color: i === 0 ? '#c1216b' : '#6f666c', fontVariantNumeric: 'tabular-nums', minWidth: 26 }}>#{i + 1}</span>
+                <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 14, color: i === 0 ? '#17131a' : '#6f666c', fontVariantNumeric: 'tabular-nums', minWidth: 26 }}>#{i + 1}</span>
                 <a
                   href={e.href}
                   style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15.5, color: '#0b080f', textDecoration: 'none', lineHeight: 1.35 }}

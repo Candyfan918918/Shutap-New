@@ -34,7 +34,7 @@ function bg(k: ChannelKey): string {
   if (k === 'whatsapp') return '#25D366'
   if (k === 'sms') return 'linear-gradient(160deg,#5BC8FF,#34C759)'
   if (k === 'copy') return 'linear-gradient(135deg,#b88cff,#7A7AE5)'
-  return 'linear-gradient(135deg,#ffb1d8,#a52a5f)'
+  return 'linear-gradient(135deg,#ddd8db,#2b2630)'
 }
 
 export type ShareChannelKey = ChannelKey | 'share'
@@ -60,7 +60,7 @@ function pillBg(k: ShareChannelKey, surface: Surface = 'dark'): string {
   if (k === 'copy' || k === 'download') {
     return surface === 'light' ? '#fff' : 'rgba(255,255,255,.06)'
   }
-  if (k === 'share') return 'linear-gradient(135deg,#ff7ab0,#a52a5f)'
+  if (k === 'share') return 'linear-gradient(135deg,#ff7ab0,#2b2630)'
   if (k === 'sms') return '#25D366'
   if (k === 'whatsapp') return '#25D366'
   if (k === 'x') return '#0b080f'
@@ -173,19 +173,19 @@ export function ActionPill({
   const isAccent = tone === 'accent'
   const isLight = surface === 'light'
   const bg = isPrimary
-    ? 'linear-gradient(135deg,#ffb1d8,#a52a5f)'
+    ? 'linear-gradient(135deg,#ddd8db,#2b2630)'
     : isLight
       ? (isAccent ? '#ffffff' : '#fff')
       : 'rgba(255,255,255,.06)'
   const color = isPrimary
     ? '#1a0814'
     : isAccent
-      ? '#c1216b'
+      ? '#17131a'
       : isLight ? '#383136' : '#fdfbf9'
   const border = isPrimary
     ? 'none'
     : isLight
-      ? `1.5px solid ${isAccent ? '#c1216b' : 'rgba(11,8,15,.12)'}`
+      ? `1.5px solid ${isAccent ? '#17131a' : 'rgba(11,8,15,.12)'}`
       : '.5px solid rgba(255,255,255,.16)'
   return (
     <button
@@ -206,7 +206,7 @@ export function ActionPill({
         borderRadius: 999,
         padding: '10px 18px',
         cursor: 'pointer',
-        boxShadow: isPrimary ? '0 6px 18px rgba(231,84,138,.35)' : 'none',
+        boxShadow: isPrimary ? '0 6px 18px rgba(23,19,26,.35)' : 'none',
         transition: '.18s',
         whiteSpace: 'nowrap',
       }}

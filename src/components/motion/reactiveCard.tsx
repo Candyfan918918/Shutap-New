@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
  * (touch) and when `prefers-reduced-motion: reduce`.
  *
  * Usage:
- *   const { ref, decor } = useReactiveCard({ glow: 'rgba(231,84,138,.55)' })
+ *   const { ref, decor } = useReactiveCard({ glow: 'rgba(23,19,26,.55)' })
  *   <div ref={ref} style={{ position:'relative', ...cardStyle }}>
  *     {children}
  *     {decor}
@@ -20,7 +20,7 @@ export function useReactiveCard(opts: {
   /** Optional predicate; when returns true, ignore all pointer input. */
   isDisabled?: () => boolean
 } = {}): { ref: React.RefObject<HTMLDivElement | null>; decor: ReactNode } {
-  const { glow = 'rgba(231,84,138,.55)', isDisabled } = opts
+  const { glow = 'rgba(23,19,26,.55)', isDisabled } = opts
   const ref = useRef<HTMLDivElement | null>(null)
   const glareRef = useRef<HTMLDivElement | null>(null)
   const sheenRef = useRef<HTMLDivElement | null>(null)

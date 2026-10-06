@@ -16,7 +16,7 @@ export type Room = {
 };
 
 export const REACTIONS: { k: keyof Reactions; emoji: string; label: string; color: string }[] = [
-  { k: "heard", emoji: "🤍", label: "i hear you", color: "#a52a5f" },
+  { k: "heard", emoji: "🤍", label: "i hear you", color: "#2b2630" },
   { k: "same", emoji: "🫂", label: "omg same", color: "#c87c4a" },
   { k: "strong", emoji: "💪", label: "you've got this", color: "#5B8A5E" },
   { k: "time", emoji: "🌿", label: "it gets easier", color: "#7F77DD" },

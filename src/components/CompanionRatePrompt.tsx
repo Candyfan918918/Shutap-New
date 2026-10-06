@@ -72,8 +72,8 @@ export function CompanionRatePrompt({
     }}>
       <div style={{
         pointerEvents: 'auto',
-        background: '#fff8fb', border: '1px solid rgba(193,33,107,.18)',
-        boxShadow: '0 12px 32px rgba(46,10,26,.18)', borderRadius: 18,
+        background: '#fff8fb', border: '1px solid rgba(23,19,26,.18)',
+        boxShadow: '0 12px 32px rgba(20,16,22,.18)', borderRadius: 18,
         padding: '14px 16px', maxWidth: 380, width: '100%',
         fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
         animation: 'shutapSlide .28s ease-out',
@@ -82,14 +82,14 @@ export function CompanionRatePrompt({
         <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
           <div aria-hidden style={{ fontSize: 22, lineHeight: 1 }}>👁️‍🗨️</div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: '"Newsreader", Georgia, serif', fontStyle: 'italic', color: '#2e0a1a', fontSize: 16, lineHeight: 1.35 }}>
+            <div style={{ fontFamily: '"Newsreader", Georgia, serif', fontStyle: 'italic', color: '#121014', fontSize: 16, lineHeight: 1.35 }}>
               {prompt}
             </div>
             {!rated ? (
               <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-                <button onClick={() => choose('love')} style={btn('#c1216b', '#fff')}>🤍 this helped</button>
-                <button onClick={() => choose('friction')} style={btn('#fff', '#c1216b', true)}>🥀 not for me</button>
-                <button onClick={close} aria-label="dismiss" style={{ ...btn('transparent', '#9a6a7a'), marginLeft: 'auto', padding: '6px 8px' }}>✕</button>
+                <button onClick={() => choose('love')} style={btn('#17131a', '#fff')}>🤍 this helped</button>
+                <button onClick={() => choose('friction')} style={btn('#fff', '#17131a', true)}>🥀 not for me</button>
+                <button onClick={close} aria-label="dismiss" style={{ ...btn('transparent', '#7a7a7a'), marginLeft: 'auto', padding: '6px 8px' }}>✕</button>
               </div>
             ) : (
               <div style={{ marginTop: 10 }}>
@@ -99,13 +99,13 @@ export function CompanionRatePrompt({
                   placeholder="optional — one line, if you want"
                   maxLength={200}
                   style={{
-                    width: '100%', border: '1px solid rgba(193,33,107,.18)',
+                    width: '100%', border: '1px solid rgba(23,19,26,.18)',
                     borderRadius: 10, padding: '8px 10px', fontSize: 13, background: '#fff',
                   }}
                 />
                 <div style={{ display: 'flex', gap: 8, marginTop: 8, justifyContent: 'flex-end' }}>
-                  <button onClick={close} style={btn('transparent', '#9a6a7a')}>skip</button>
-                  <button onClick={send} style={btn('#c1216b', '#fff')}>send</button>
+                  <button onClick={close} style={btn('transparent', '#7a7a7a')}>skip</button>
+                  <button onClick={send} style={btn('#17131a', '#fff')}>send</button>
                 </div>
               </div>
             )}
@@ -120,7 +120,7 @@ function btn(bg: string, color: string, outlined = false): React.CSSProperties {
   return {
     background: bg,
     color,
-    border: outlined ? '1px solid #c1216b' : 'none',
+    border: outlined ? '1px solid #17131a' : 'none',
     borderRadius: 999,
     padding: '8px 14px',
     fontSize: 13,

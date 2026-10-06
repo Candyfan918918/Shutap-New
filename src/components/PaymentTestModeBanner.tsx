@@ -20,11 +20,11 @@ const wrap: React.CSSProperties = {
   fontSize: 12,
   textTransform: 'lowercase',
   letterSpacing: '.02em',
-  borderBottom: '1px solid rgba(247,184,212,.14)',
+  borderBottom: '1px solid rgba(226,221,224,.14)',
   textAlign: 'center',
   lineHeight: 1.2,
 };
-const linkStyle: React.CSSProperties = { color: '#f7b8d4', textDecoration: 'underline', marginLeft: 6 };
+const linkStyle: React.CSSProperties = { color: '#e2dde0', textDecoration: 'underline', marginLeft: 6 };
 const spacer: React.CSSProperties = { height: BANNER_H, flex: 'none' };
 
 export function PaymentTestModeBanner() {

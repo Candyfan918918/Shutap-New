@@ -94,13 +94,13 @@ const STATS = [
 
 const BAND_STYLE: Record<Band, { bg: string; color: string; label: string }> = {
   held:    { bg: 'rgba(11,8,15,.06)',                                                   color: '#443c42', label: 'Held' },
-  honored: { bg: 'rgba(231,84,138,.10)',                                                color: '#c1216b', label: 'Honored' },
-  legend:  { bg: 'linear-gradient(92deg,rgba(231,84,138,.2),rgba(193,33,107,.15))',     color: '#890041', label: 'Legend' },
+  honored: { bg: 'rgba(23,19,26,.10)',                                                color: '#17131a', label: 'Honored' },
+  legend:  { bg: 'linear-gradient(92deg,rgba(23,19,26,.2),rgba(23,19,26,.15))',     color: '#2b2630', label: 'Legend' },
 }
 
 function resonanceColor(band: Band): string {
-  if (band === 'legend') return '#a52a5f'
-  if (band === 'honored') return '#c1216b'
+  if (band === 'legend') return '#2b2630'
+  if (band === 'honored') return '#17131a'
   return '#6f666c'
 }
 
@@ -125,8 +125,8 @@ export function HallOfFamePageNative() {
     <div style={{ background: '#ffffff', minHeight: '100vh', color: '#0b080f', fontFamily: "'Sora',system-ui,sans-serif" }}>
       <main style={{ maxWidth: 740, margin: '0 auto', padding: '32px 22px 80px' }}>
         {/* eyebrow */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#a52a5f', marginBottom: 14 }}>
-          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#a52a5f', display: 'block' }} />
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#2b2630', marginBottom: 14 }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2b2630', display: 'block' }} />
           Hall of Fame
         </div>
 
@@ -141,7 +141,7 @@ export function HallOfFamePageNative() {
         <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', marginBottom: 28, padding: '20px 22px', background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 18 }}>
           {STATS.map((s) => (
             <div key={s.label}>
-              <b style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 24, color: s.accent ? '#c1216b' : '#0b080f', display: 'block', letterSpacing: '-.02em' }}>{s.n}</b>
+              <b style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 24, color: s.accent ? '#17131a' : '#0b080f', display: 'block', letterSpacing: '-.02em' }}>{s.n}</b>
               <span style={{ fontSize: 12, color: '#6f666c' }}>{s.label}</span>
             </div>
           ))}
@@ -201,7 +201,7 @@ export function HallOfFamePageNative() {
               onClick={onShare}
               style={{
                 background: 'transparent', border: 'none', padding: 0, cursor: 'pointer',
-                color: '#c1216b', borderBottom: '1px solid rgba(193,33,107,.3)',
+                color: '#17131a', borderBottom: '1px solid rgba(23,19,26,.3)',
                 fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 13,
               }}
             >🔗 share this hall</button>
@@ -212,14 +212,14 @@ export function HallOfFamePageNative() {
             const top = i === 0
             const isLegend = r.band === 'legend'
             const rowBg = isLegend
-              ? 'linear-gradient(180deg,#ffeef5,#fff)'
+              ? 'linear-gradient(180deg,#f4f4f4,#fff)'
               : top
                 ? 'linear-gradient(180deg,#ffffff,#fff)'
                 : '#fff'
             const rowBorder = isLegend
-              ? '.5px solid rgba(193,33,107,.4)'
+              ? '.5px solid rgba(23,19,26,.4)'
               : top
-                ? '.5px solid rgba(231,84,138,.28)'
+                ? '.5px solid rgba(23,19,26,.28)'
                 : '.5px solid rgba(11,8,15,.08)'
             return (
               <Link
@@ -233,7 +233,7 @@ export function HallOfFamePageNative() {
                   animation: `hall-fadeup .35s ease ${i * 0.06}s both`,
                 }}
               >
-                <div style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 14, color: top ? '#a52a5f' : '#6f666c', width: 28, flex: 'none' }}>#{r.rank}</div>
+                <div style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 14, color: top ? '#2b2630' : '#6f666c', width: 28, flex: 'none' }}>#{r.rank}</div>
                 <span style={{ width: 32, height: 32, borderRadius: '50%', background: '#fdfbf9', display: 'grid', placeItems: 'center', fontSize: 18, flex: 'none' }}>{r.emoji}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.3, color: '#0b080f', margin: '0 0 6px' }}>{r.title}</p>
@@ -241,7 +241,7 @@ export function HallOfFamePageNative() {
                     <span style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 12, color: '#6f666c' }}>{r.alias}</span>
                     <span style={{ fontSize: 11, color: '#6f666c' }}>·</span>
                     <span style={{ fontSize: 12, color: '#6f666c', fontFamily: "'Newsreader',serif", fontStyle: 'italic' }}>
-                      <b style={{ color: '#c1216b', fontStyle: 'normal' }}>{r.same.toLocaleString()}</b> said 'omg same'
+                      <b style={{ color: '#17131a', fontStyle: 'normal' }}>{r.same.toLocaleString()}</b> said 'omg same'
                     </span>
                     <span style={{ fontSize: 11, color: '#6f666c' }}>·</span>
                     <span style={{ fontSize: 11.5, color: '#6f666c', fontFamily: "'Newsreader',serif", fontStyle: 'italic' }}>rested {r.restedDaysAgo}d ago</span>

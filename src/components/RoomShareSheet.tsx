@@ -122,10 +122,10 @@ export function RoomShareSheet({
         <div style={{
           display: 'flex', alignItems: 'flex-start', gap: 8,
           fontFamily: "'Newsreader',serif", fontStyle: 'italic',
-          fontSize: 13, lineHeight: 1.45, color: '#b89bac',
+          fontSize: 13, lineHeight: 1.45, color: '#a6a6a6',
           padding: '0 4px',
         }}>
-          <span aria-hidden style={{ color: '#a52a5f', fontSize: 11, letterSpacing: '-.1em', flex: '0 0 auto', lineHeight: 1.6 }}>✦✦</span>
+          <span aria-hidden style={{ color: '#2b2630', fontSize: 11, letterSpacing: '-.1em', flex: '0 0 auto', lineHeight: 1.6 }}>✦✦</span>
           <span>sharing this room — de-identified. only the headline and a link travel, never the full story.</span>
         </div>
 
@@ -134,19 +134,19 @@ export function RoomShareSheet({
           position: 'relative',
           borderRadius: 18,
           padding: '22px 20px',
-          background: 'radial-gradient(120% 90% at 50% 0%, #2a0d18, #100c14)',
+          background: 'radial-gradient(120% 90% at 50% 0%, #121014, #100c14)',
           border: '.5px solid rgba(255,255,255,.12)',
           display: 'flex', alignItems: 'center', gap: 14,
         }}>
           <div style={{
             width: 48, height: 48, borderRadius: '50%',
-            background: 'linear-gradient(135deg,#a52a5f,#890041)',
+            background: 'linear-gradient(135deg,#2b2630,#2b2630)',
             display: 'grid', placeItems: 'center', fontSize: 24, flex: 'none',
           }}>{room.emoji || '🩷'}</div>
           <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{
               fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 10.5,
-              letterSpacing: '.22em', textTransform: 'uppercase', color: '#a52a5f',
+              letterSpacing: '.22em', textTransform: 'uppercase', color: '#2b2630',
               marginBottom: 4,
             }}>a room on shutap</div>
             <div style={{
@@ -162,7 +162,7 @@ export function RoomShareSheet({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <div style={{
             fontFamily: 'Sora,sans-serif', fontSize: 9.5, fontWeight: 700,
-            letterSpacing: '.28em', color: '#7d6a76', textTransform: 'uppercase',
+            letterSpacing: '.28em', color: '#727272', textTransform: 'uppercase',
           }}>your caption · edit freely</div>
           <textarea
             value={caption}
@@ -208,7 +208,7 @@ export function RoomShareSheet({
         }}>
           <span style={{
             fontFamily: "'Newsreader',serif", fontStyle: 'italic',
-            fontSize: 12, color: '#9b7d8c',
+            fontSize: 12, color: '#888888',
           }}>only the headline + link leave — never the full story.</span>
           <button
             type="button"
@@ -224,7 +224,7 @@ export function RoomShareSheet({
         {toastMsg && (
           <div style={{
             position: 'fixed', left: '50%', bottom: 28, transform: 'translateX(-50%)',
-            background: 'rgba(20,10,22,.96)', color: '#fdfbf9',
+            background: 'rgba(15,15,15,.96)', color: '#fdfbf9',
             padding: '10px 16px', borderRadius: 999,
             border: '.5px solid rgba(255,255,255,.16)',
             fontFamily: 'Sora,sans-serif', fontSize: 12, zIndex: 240,

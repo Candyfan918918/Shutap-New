@@ -31,11 +31,11 @@ function deriveBand(score: number): Band {
   if (score < 200) return { key: 'settling', word: 'settling', color: '#6f666c' }
   if (score < 400) return { key: 'sitting', word: 'sitting with it', color: '#7F77DD' }
   if (score < 600) return { key: 'weighing', word: 'weighing', color: '#c87c4a' }
-  if (score < 800) return { key: 'heavy', word: 'heavy & loud', color: '#a52a5f' }
-  return { key: 'consuming', word: 'consuming', color: '#c1216b' }
+  if (score < 800) return { key: 'heavy', word: 'heavy & loud', color: '#2b2630' }
+  return { key: 'consuming', word: 'consuming', color: '#17131a' }
 }
 
-const SPECTRUM = 'linear-gradient(90deg,#6f666c,#7F77DD,#c87c4a,#a52a5f,#c1216b)'
+const SPECTRUM = 'linear-gradient(90deg,#6f666c,#7F77DD,#c87c4a,#2b2630,#17131a)'
 
 function prefersReducedMotion(): boolean {
   if (typeof window === 'undefined' || !window.matchMedia) return false
@@ -221,10 +221,10 @@ export function ScanShareCard({
         <defs>
           <radialGradient id="scEyeG" cx="40%" cy="18%" r="75%">
             <stop offset="0%" stopColor="#fff" />
-            <stop offset="18%" stopColor="#ffd0e8" />
-            <stop offset="48%" stopColor="#a52a5f" />
-            <stop offset="78%" stopColor="#c1216b" />
-            <stop offset="100%" stopColor="#890041" />
+            <stop offset="18%" stopColor="#ece8ea" />
+            <stop offset="48%" stopColor="#2b2630" />
+            <stop offset="78%" stopColor="#17131a" />
+            <stop offset="100%" stopColor="#2b2630" />
           </radialGradient>
           <radialGradient id="scPupG" cx="50%" cy="55%" r="58%">
             <stop offset="0%" stopColor="#100c14" />
@@ -253,7 +253,7 @@ export function ScanShareCard({
             aspectRatio: '9 / 16',
             borderRadius: 26,
             overflow: 'hidden',
-            background: 'radial-gradient(135% 78% at 50% 0%,#3a1022,#100c14 60%,#120710)',
+            background: 'radial-gradient(135% 78% at 50% 0%,#1f1f1f,#100c14 60%,#0c0c0c)',
             border: '.5px solid rgba(255,255,255,.16)',
             boxShadow: '0 36px 80px -26px rgba(0,0,0,.78)',
             display: 'flex',
@@ -334,7 +334,7 @@ export function ScanShareCard({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <CompanionEye size={22} />
-              <ShutapWordmark size={15} ink="#fdfbf9" accent="#a52a5f" />
+              <ShutapWordmark size={15} ink="#fdfbf9" accent="#e7548a" />
             </div>
             <span
               style={{
@@ -456,7 +456,7 @@ export function ScanShareCard({
                   fontFamily: 'Newsreader,serif',
                   fontStyle: 'italic',
                   fontSize: 14.5,
-                  color: '#d6b6c6',
+                  color: '#c2c2c2',
                   lineHeight: 1.5,
                   maxWidth: '26ch',
                   marginLeft: 'auto',
@@ -501,7 +501,7 @@ export function ScanShareCard({
                 fontFamily: 'Newsreader,serif',
                 fontStyle: 'italic',
                 fontSize: 13,
-                color: '#9b8090',
+                color: '#8f898d',
               }}
             >
               what's your number? · shutap.com

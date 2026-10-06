@@ -82,9 +82,9 @@ export function CommentsThread({ roomId }: { roomId: string }) {
             marginBottom: 12,
             padding: '10px 14px',
             borderRadius: 12,
-            background: '#fff0f3',
-            border: '.5px solid rgba(193,33,107,.35)',
-            color: '#c1216b',
+            background: '#f4f4f4',
+            border: '.5px solid rgba(23,19,26,.35)',
+            color: '#17131a',
             fontFamily: 'Sora, sans-serif',
             fontSize: 13,
           }}
@@ -112,7 +112,7 @@ export function CommentsThread({ roomId }: { roomId: string }) {
               key={c.id}
               style={{
                 background: isCompanion ? '#ffffff' : '#fff',
-                border: isCompanion ? '.5px solid rgba(231,84,138,.35)' : '.5px solid rgba(11,8,15,.08)',
+                border: isCompanion ? '.5px solid rgba(23,19,26,.35)' : '.5px solid rgba(11,8,15,.08)',
                 borderRadius: 14,
                 padding: '12px 14px',
               }}
@@ -137,8 +137,8 @@ export function CommentsThread({ roomId }: { roomId: string }) {
                         marginLeft: 8,
                         padding: '2px 7px',
                         borderRadius: 999,
-                        background: 'rgba(231,84,138,.14)',
-                        color: '#c1216b',
+                        background: 'rgba(23,19,26,.14)',
+                        color: '#17131a',
                         fontSize: 10,
                         letterSpacing: '.06em',
                         textTransform: 'uppercase',
@@ -156,7 +156,7 @@ export function CommentsThread({ roomId }: { roomId: string }) {
                         setEditingId(c.id)
                         setEditDraft(c.clean_text)
                       }}
-                      style={{ background: 'none', border: 0, color: '#c1216b', cursor: 'pointer', fontSize: 12 }}
+                      style={{ background: 'none', border: 0, color: '#17131a', cursor: 'pointer', fontSize: 12 }}
                     >
                       edit
                     </button>
@@ -189,7 +189,7 @@ export function CommentsThread({ roomId }: { roomId: string }) {
                     <button
                       disabled={save.isPending || editDraft.trim().length < 1}
                       onClick={() => save.mutate({ id: c.id, text: editDraft.trim() })}
-                      style={{ background: '#a52a5f', color: '#fff', border: 0, borderRadius: 999, padding: '6px 14px', fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}
+                      style={{ background: '#2b2630', color: '#fff', border: 0, borderRadius: 999, padding: '6px 14px', fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}
                     >
                       save
                     </button>

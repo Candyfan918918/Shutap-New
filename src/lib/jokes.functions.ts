@@ -1214,6 +1214,7 @@ export const postJokeCardToRoom = createServerFn({ method: 'POST' })
         /** what the room says — the whole scene, edited or not. Absent, the
          *  server composes it: the situation, then the card. */
         caption: z.string().max(4400).optional(),
+        topic: z.enum(['office', 'work', 'family', 'school', 'live', 'social']).optional(),
         ...Ctx,
       })
       .parse(d),
@@ -1253,8 +1254,12 @@ export const postJokeCardToRoom = createServerFn({ method: 'POST' })
     const composed = (scene ? `${scene}\n\n` : '') + `🃏 ${angleLabel(card.angle as string)}: “${cardText}”`
     const typed = data.caption?.trim()
     const body = typed && typed !== composed ? (await runScrub(typed)).clean_text : composed
+    if (body !== composed) {
+      const guard = await runClassifyCrisis(body)
+      if (guard.crisis) throw new Error('crisis')
+    }
 
-    const title = cardText.slice(0, 90)
+    const title = cardText.slice(0, 600)
     const { data: situation, error: sitErr } = await supabaseAdmin
       .from('situations')
       .insert({
@@ -1284,6 +1289,8 @@ export const postJokeCardToRoom = createServerFn({ method: 'POST' })
         support: 'heard',
         hall: 'relatable',
         source: 'joke',
+        topic: data.topic ?? 'social',
+        card_id: card.id,
       } as never)
       .select('id')
       .single()

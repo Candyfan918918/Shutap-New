@@ -90,7 +90,7 @@ function AdminUsersPage() {
           show guests
         </label>
       </div>
-      {err && <div style={{ color: '#c1216b', marginBottom: 12 }}>{err}</div>}
+      {err && <div style={{ color: '#17131a', marginBottom: 12 }}>{err}</div>}
       {!rows ? (
         <div style={{ color: '#443c42' }}>loading…</div>
       ) : rows.length === 0 ? (

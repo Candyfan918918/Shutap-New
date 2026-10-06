@@ -29,11 +29,11 @@ export function AdminShell({ variant = 'light', title, subtitle, right, children
   const dark = variant === 'dark'
 
   const bg = dark ? '#0f0916' : '#ffffff'
-  const ink = dark ? '#e8dfea' : '#0b080f'
+  const ink = dark ? '#e6e3e4' : '#0b080f'
   const dim = dark ? '#6f666c' : '#443c42'
   const chipBg = dark ? 'rgba(255,255,255,.06)' : '#fff'
   const chipBorder = dark ? 'rgba(255,255,255,.10)' : 'rgba(11,8,15,.12)'
-  const activeBg = dark ? '#a52a5f' : '#0b080f'
+  const activeBg = dark ? '#2b2630' : '#0b080f'
   const activeInk = '#fff'
 
   return (

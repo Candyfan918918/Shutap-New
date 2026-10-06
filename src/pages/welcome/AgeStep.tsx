@@ -58,11 +58,11 @@ export function AgeStep({ ageBlocked, onBlocked, onConfirm }: AgeStepProps) {
           </select>
         </div>
         {msg && (
-          <div style={{ marginTop: 12, fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: msg.kind === 'err' ? ACCENT : '#f7b8d4' }}>{msg.text}</div>
+          <div style={{ marginTop: 12, fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: msg.kind === 'err' ? ACCENT : '#e2dde0' }}>{msg.text}</div>
         )}
       </div>
       {ageBlocked ? (
-        <div data-testid="age-blocked" style={{ padding: '14px 16px', borderRadius: 12, background: 'rgba(231,84,138,.08)', border: '1px solid rgba(231,84,138,.35)', color: '#f7b8d4', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, lineHeight: 1.5 }}>
+        <div data-testid="age-blocked" style={{ padding: '14px 16px', borderRadius: 12, background: 'rgba(23,19,26,.08)', border: '1px solid rgba(23,19,26,.35)', color: '#e2dde0', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, lineHeight: 1.5 }}>
           shutap is 18 and over. this session is closed to account content. clear your browser session to try another day.
         </div>
       ) : (

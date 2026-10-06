@@ -57,7 +57,7 @@ function HomeHeaderCta() {
             width: 26,
             height: 26,
             borderRadius: '50%',
-            background: 'linear-gradient(135deg,#a52a5f,#890041)',
+            background: 'linear-gradient(135deg,#2b2630,#2b2630)',
             display: 'grid',
             placeItems: 'center',
             fontSize: 14,
@@ -124,7 +124,7 @@ export function HomeHeader() {
                   {' '}
                   <span data-brandword="" style={{ fontFamily: '\'Sora\',sans-serif', fontWeight: '800', fontSize: '20px', letterSpacing: '-.04em', color: '#0b080f', transition: 'color .4s' }}>
                     shut
-                    <span style={{ color: '#a52a5f' }}>
+                    <span style={{ color: '#2b2630' }}>
                       ap
                     </span>
                   </span>

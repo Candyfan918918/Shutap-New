@@ -87,7 +87,7 @@ export function DocLayout({
                     fontFamily: 'Sora,sans-serif',
                     fontSize: 13.5,
                     fontWeight: isActive ? 600 : 500,
-                    color: isActive ? '#6d1239' : '#443c42',
+                    color: isActive ? '#000000' : '#443c42',
                     background: isActive ? '#fff' : 'transparent',
                     boxShadow: isActive ? '0 1px 2px rgba(11,8,15,.05)' : 'none',
                     textDecoration: 'none',
@@ -163,19 +163,19 @@ export function DocLayout({
           font-family: 'Sora', sans-serif;
           font-size: 14.5px;
           line-height: 1.7;
-          color: #3a2630;
+          color: #2b2730;
           margin: 0 0 10px;
         }
         .shutap-doc-body b { color: #100c14; }
         .shutap-doc-body ul { padding-left: 20px; margin: 0 0 10px; }
-        .shutap-doc-body a { color: #c1216b; text-decoration: none; border-bottom: 1px solid rgba(193,33,107,.25); }
-        .shutap-doc-body a:hover { color: #6d1239; }
+        .shutap-doc-body a { color: #17131a; text-decoration: none; border-bottom: 1px solid rgba(23,19,26,.25); }
+        .shutap-doc-body a:hover { color: #000000; }
         .shutap-doc-link:hover:not(.is-active) {
-          background: rgba(231,84,138,.06);
-          color: #6d1239;
+          background: rgba(23,19,26,.06);
+          color: #000000;
         }
         .shutap-doc-link:focus-visible {
-          outline: 2px solid #a52a5f;
+          outline: 2px solid #2b2630;
           outline-offset: 2px;
           border-radius: 999px;
         }

@@ -88,7 +88,7 @@ export function RoomPage() {
             style={{
               padding: '11px 22px',
               borderRadius: 999,
-              border: '1.5px solid #c1216b',
+              border: '1.5px solid #17131a',
               background: '#fff',
               cursor: 'pointer',
               fontFamily: 'Sora,sans-serif',
@@ -96,7 +96,7 @@ export function RoomPage() {
               fontSize: 12,
               letterSpacing: '.08em',
               textTransform: 'uppercase',
-              color: '#c1216b',
+              color: '#17131a',
             }}
           >
             see open rooms →

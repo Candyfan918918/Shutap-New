@@ -41,7 +41,7 @@ const BAND_COLOR: Record<string, string> = {
   sitting: '#7F77DD',
   weighing: '#c1a02b',
   heavy: '#c87c4a',
-  consuming: '#c1216b',
+  consuming: '#17131a',
 }
 const BAND_LABEL: Record<string, string> = {
   settling: 'settling',
@@ -364,20 +364,20 @@ export function RoomDetail({
           <div
             style={{
               position: 'relative',
-              background: 'linear-gradient(165deg,#100c14,#140a10 65%)',
+              background: 'linear-gradient(165deg,#100c14,#0e0e0e 65%)',
               borderRadius: 26,
               padding: '34px 30px 30px',
               marginBottom: 30,
               overflow: 'hidden',
-              boxShadow: '0 40px 90px -40px rgba(60,10,30,.65)',
+              boxShadow: '0 40px 90px -40px rgba(20,16,22,.65)',
             }}
           >
-            <div style={{ position: 'absolute', width: 340, height: 340, left: '70%', top: 0, background: 'radial-gradient(circle,rgba(231,84,138,.24),transparent 64%)', transform: 'translate(-50%,-50%)', pointerEvents: 'none' }} />
-            <div style={{ position: 'absolute', right: '-2%', bottom: '-46%', fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 'clamp(200px,34vw,380px)', lineHeight: 1, color: 'rgba(231,84,138,.09)', pointerEvents: 'none', userSelect: 'none' }}>”</div>
-            <div style={{ position: 'absolute', top: 0, left: '12%', right: '12%', height: 1.5, background: 'linear-gradient(90deg,transparent,#a52a5f,#f7b8d4,transparent)', opacity: 0.5, pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', width: 340, height: 340, left: '70%', top: 0, background: 'radial-gradient(circle,rgba(23,19,26,.24),transparent 64%)', transform: 'translate(-50%,-50%)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', right: '-2%', bottom: '-46%', fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 'clamp(200px,34vw,380px)', lineHeight: 1, color: 'rgba(23,19,26,.09)', pointerEvents: 'none', userSelect: 'none' }}>”</div>
+            <div style={{ position: 'absolute', top: 0, left: '12%', right: '12%', height: 1.5, background: 'linear-gradient(90deg,transparent,#2b2630,#e2dde0,transparent)', opacity: 0.5, pointerEvents: 'none' }} />
             <div style={{ position: 'relative' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap', marginBottom: 18 }}>
-                <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '.24em', textTransform: 'uppercase', color: '#f7b8d4' }}>the room is holding —</span>
+                <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '.24em', textTransform: 'uppercase', color: '#e2dde0' }}>the room is holding —</span>
                 <span
                   style={{
                     display: 'inline-flex',
@@ -388,9 +388,9 @@ export function RoomDetail({
                     fontWeight: 600,
                     fontSize: 10.5,
                     letterSpacing: '.05em',
-                    background: room.support === 'heard' ? 'rgba(231,84,138,.14)' : 'rgba(91,138,94,.18)',
-                    color: room.support === 'heard' ? '#f7b8d4' : '#a9d4ac',
-                    border: '.5px solid ' + (room.support === 'heard' ? 'rgba(247,184,212,.28)' : 'rgba(169,212,172,.30)'),
+                    background: room.support === 'heard' ? 'rgba(23,19,26,.14)' : 'rgba(91,138,94,.18)',
+                    color: room.support === 'heard' ? '#e2dde0' : '#a9d4ac',
+                    border: '.5px solid ' + (room.support === 'heard' ? 'rgba(226,221,224,.28)' : 'rgba(169,212,172,.30)'),
                   }}
                 >
                   {room.support === 'heard' ? 'looking to be heard' : 'open to advice'}
@@ -411,9 +411,9 @@ export function RoomDetail({
                 {room.title}
               </h1>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(231,84,138,.2)', display: 'grid', placeItems: 'center', fontSize: 19, flex: 'none' }}>{room.emoji}</span>
+                <span style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(23,19,26,.2)', display: 'grid', placeItems: 'center', fontSize: 19, flex: 'none' }}>{room.emoji}</span>
                 <div>
-                  <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 14.5, color: '#f7b8d4' }}>{room.alias}</div>
+                  <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 14.5, color: '#e2dde0' }}>{room.alias}</div>
                   <div style={{ fontSize: 11.5, color: '#6f666c', fontFamily: 'Newsreader,serif', fontStyle: 'italic' }}>teller · this is their account of it</div>
                 </div>
               </div>
@@ -441,7 +441,7 @@ export function RoomDetail({
         >
           <span style={{ display: 'inline-flex', flex: 'none' }}><EyeMark size={22} /></span>
           <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 9.5, letterSpacing: '.14em', textTransform: 'uppercase', color: '#f7b8d4', marginBottom: 6 }}>
+            <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 9.5, letterSpacing: '.14em', textTransform: 'uppercase', color: '#e2dde0', marginBottom: 6 }}>
               companion
             </div>
             <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 15, lineHeight: 1.55, color: '#fdfbf9' }}>{room.reflection}</div>
@@ -464,8 +464,8 @@ export function RoomDetail({
                   width: 28,
                   height: 28,
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg,rgba(231,84,138,.15),rgba(193,33,107,.25))',
-                  border: '.5px solid rgba(231,84,138,.2)',
+                  background: 'linear-gradient(135deg,rgba(23,19,26,.15),rgba(23,19,26,.25))',
+                  border: '.5px solid rgba(23,19,26,.2)',
                   display: 'grid',
                   placeItems: 'center',
                   fontSize: 15,
@@ -586,7 +586,7 @@ export function RoomDetail({
               }}
             >
               🫂 omg same{' '}
-              <b style={{ fontFamily: 'Sora', fontWeight: 700, color: '#c1216b' }}>{room.relates}</b>
+              <b style={{ fontFamily: 'Sora', fontWeight: 700, color: '#17131a' }}>{room.relates}</b>
             </ActionPill>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
@@ -616,15 +616,15 @@ export function RoomDetail({
               <EyeMark size={26} />
             </span>
             <div>
-              <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 9.5, letterSpacing: '.14em', textTransform: 'uppercase', color: '#c1216b', marginBottom: 5 }}>
+              <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 9.5, letterSpacing: '.14em', textTransform: 'uppercase', color: '#17131a', marginBottom: 5 }}>
                 companion
               </div>
               <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.5, color: '#0b080f' }}>
                 {guide === null ? (
                   <span style={{ display: 'inline-flex', gap: 4 }}>
-                    <i style={{ width: 5, height: 5, borderRadius: '50%', background: '#a52a5f', display: 'block', animation: 'blinkdot 1.2s infinite' }} />
-                    <i style={{ width: 5, height: 5, borderRadius: '50%', background: '#a52a5f', display: 'block', animation: 'blinkdot 1.2s .2s infinite' }} />
-                    <i style={{ width: 5, height: 5, borderRadius: '50%', background: '#a52a5f', display: 'block', animation: 'blinkdot 1.2s .4s infinite' }} />
+                    <i style={{ width: 5, height: 5, borderRadius: '50%', background: '#2b2630', display: 'block', animation: 'blinkdot 1.2s infinite' }} />
+                    <i style={{ width: 5, height: 5, borderRadius: '50%', background: '#2b2630', display: 'block', animation: 'blinkdot 1.2s .2s infinite' }} />
+                    <i style={{ width: 5, height: 5, borderRadius: '50%', background: '#2b2630', display: 'block', animation: 'blinkdot 1.2s .4s infinite' }} />
                   </span>
                 ) : (
                   guide
@@ -651,14 +651,14 @@ export function RoomDetail({
                   onMouseOut={(e) => ((e.currentTarget as HTMLButtonElement).style.background = '#fff')}
                   style={{
                     background: '#fff',
-                    border: '1px solid rgba(231,84,138,.3)',
+                    border: '1px solid rgba(23,19,26,.3)',
                     borderRadius: 999,
                     padding: '7px 13px',
                     cursor: 'pointer',
                     fontFamily: 'Newsreader,serif',
                     fontStyle: 'italic',
                     fontSize: 12.5,
-                    color: '#c1216b',
+                    color: '#17131a',
                     transition: '.15s',
                   }}
                 >
@@ -724,7 +724,7 @@ function CommentField({
         alignItems: 'flex-end',
         gap: 9,
         background: '#fff',
-        border: '1px solid ' + (focused ? '#a52a5f' : 'rgba(11,8,15,.10)'),
+        border: '1px solid ' + (focused ? '#2b2630' : 'rgba(11,8,15,.10)'),
         borderRadius: 14,
         padding: '13px 15px',
         transition: 'border-color .18s',
@@ -771,7 +771,7 @@ function CommentField({
           fontWeight: 700,
           fontSize: 12,
           color: '#fff',
-          background: '#a52a5f',
+          background: '#2b2630',
           borderRadius: 999,
           padding: '7px 14px',
           cursor: 'pointer',

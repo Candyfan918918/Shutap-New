@@ -116,10 +116,9 @@ function SituationHubPage() {
         </section>
 
         <section className="space-y-3 rounded-lg border border-border p-5">
-          <h2 className="text-base font-semibold">spill yours — pseudonymously</h2>
+          <h2 className="text-base font-semibold">turn yours into a joke</h2>
           <p className="text-sm text-muted-foreground">
-            someone in here has lived your exact version of this. find them, or be the
-            one a stranger finds tomorrow.
+            paste what happened. get jokes. post the best one.
           </p>
           <Link
             to="/"

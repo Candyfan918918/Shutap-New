@@ -33,16 +33,16 @@ function DeckBenefits() {
       className="wstep"
       style={{
         marginBottom: 18, padding: '16px 18px', borderRadius: 16, textAlign: 'left',
-        background: 'rgba(231,84,138,.08)', border: '1px solid rgba(231,84,138,.28)',
+        background: 'rgba(23,19,26,.08)', border: '1px solid rgba(23,19,26,.28)',
       }}
     >
-      <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.35, color: '#f7b8d4', marginBottom: 10 }}>
+      <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.35, color: '#e2dde0', marginBottom: 10 }}>
         your card is waiting. an alias flips the other two.
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
         {lines.map((line) => (
           <div key={line} style={{ display: 'flex', gap: 9, alignItems: 'flex-start' }}>
-            <span aria-hidden style={{ color: '#e7548a', fontSize: 13, lineHeight: 1.5 }}>✓</span>
+            <span aria-hidden style={{ color: '#8f898d', fontSize: 13, lineHeight: 1.5 }}>✓</span>
             <span style={{ fontFamily: "'Sora',sans-serif", fontSize: 13, lineHeight: 1.5, color: TEXT }}>{line}</span>
           </div>
         ))}

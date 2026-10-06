@@ -35,7 +35,7 @@ export async function notifyRoomCreated(args: {
     ${scanLine}
     <p style="margin:0 0 14px;font-family:Newsreader,serif;font-size:15px;color:#0b080f;white-space:pre-wrap">${esc(first)}${args.clean_text.length > 220 ? '…' : ''}</p>
     <p style="margin:0">
-      <a href="${SITE}/room?id=${encodeURIComponent(args.roomId)}" style="color:#c1216b;text-decoration:none;font-weight:600;margin-right:14px">open room →</a>
+      <a href="${SITE}/room?id=${encodeURIComponent(args.roomId)}" style="color:#17131a;text-decoration:none;font-weight:600;margin-right:14px">open room →</a>
       <a href="${SITE}/admin" style="color:#443c42;text-decoration:none">admin →</a>
     </p>
   </div>

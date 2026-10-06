@@ -57,7 +57,7 @@ function UnsubscribeRoute() {
           borderRadius: 22,
           padding: '40px 34px',
           textAlign: 'center',
-          boxShadow: '0 22px 44px -28px rgba(60,10,30,.42)',
+          boxShadow: '0 22px 44px -28px rgba(20,16,22,.42)',
           animation: 'shutap-fadeup .5s ease both',
         }}
       >
@@ -126,7 +126,7 @@ function UnsubscribeRoute() {
               search={{ token }}
               style={{
                 display: 'inline-block',
-                background: '#a52a5f',
+                background: '#2b2630',
                 color: '#ffffff',
                 padding: '13px 26px',
                 borderRadius: 999,
@@ -135,7 +135,7 @@ function UnsubscribeRoute() {
                 fontSize: 13.5,
                 fontWeight: 600,
                 letterSpacing: '-.005em',
-                boxShadow: '0 18px 40px -14px rgba(80,10,45,.55)',
+                boxShadow: '0 18px 40px -14px rgba(20,16,22,.55)',
                 transition: 'transform .18s, box-shadow .18s',
               }}
             >

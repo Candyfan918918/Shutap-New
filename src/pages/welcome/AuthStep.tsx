@@ -106,10 +106,10 @@ export function AuthStep() {
       <div style={{ textAlign: 'center' }}>
         <EyeMark />
         <div style={{ marginTop: 20, fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 26, letterSpacing: '-.04em', marginBottom: 10 }}>
-          shut<span style={{ color: ACCENT }}>ap</span>
+          shut<span style={{ color: '#e7548a' }}>ap</span>
         </div>
-        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.45, color: SOFT, marginBottom: 4 }}>before the room hears you,</Words>
-        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.45, color: TEXT }}>you need a name.</Words>
+        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.45, color: SOFT, marginBottom: 4 }}>Sign in.</Words>
+        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.45, color: TEXT }}>Post, follow, keep your jokes.</Words>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <button className="oauth-btn" style={oauthBtn} disabled={busy} onClick={() => doOAuth('google')}>
@@ -188,7 +188,7 @@ export function AuthStep() {
         )}
       </div>
       <div style={{ textAlign: 'center', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 12.5, color: MUTED }}>
-        18+ only · your real name is never attached to anything here
+        18+ · your real name never shows
       </div>
       <div style={{ textAlign: 'center', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 12.5, color: MUTED, marginTop: 6 }}>
         by continuing you agree to our <a href="/terms" style={{ color: MUTED, textDecoration: 'underline' }}>terms</a> and <a href="/privacy" style={{ color: MUTED, textDecoration: 'underline' }}>privacy policy</a>

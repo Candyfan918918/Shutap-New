@@ -20,7 +20,7 @@ export function MirrorTeaser({ onOpen }: { onOpen: () => void }) {
         alignItems: 'center',
         gap: 12,
         background: 'linear-gradient(160deg,#100c14,#100c14)',
-        border: '.5px solid rgba(231,84,138,.32)',
+        border: '.5px solid rgba(23,19,26,.32)',
         borderRadius: 16,
         padding: '13px 15px',
         cursor: 'pointer',
@@ -37,7 +37,7 @@ export function MirrorTeaser({ onOpen }: { onOpen: () => void }) {
           your patterns &amp; your arc — drawn from everything you&rsquo;ve poured in.
         </div>
       </div>
-      <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 12.5, color: '#f7b8d4', flex: 'none' }}>open →</span>
+      <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 12.5, color: '#e2dde0', flex: 'none' }}>open →</span>
     </button>
   )
 }

@@ -33,7 +33,7 @@ export function RoomsStrip({ newestRooms = [] }: { newestRooms?: NewestRoom[] } 
     <section data-screen-label="Rooms strip" style={{ position: 'relative', background: '#ffffff', padding: 'clamp(80px,11vh,130px) 0 clamp(56px,8vh,90px)', overflow: 'hidden' }}>
       <div style={{ maxWidth: '1360px', margin: '0 auto', padding: '0 30px 26px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '14px', flexWrap: 'wrap' }}>
         <h2 data-rv="swipe-l" data-words="" style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 'clamp(28px,3.6vw,54px)', letterSpacing: '-.04em', margin: 0, color: '#0b080f' }}>
-          rooms open <em style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontWeight: 400, color: '#c1216b' }}>right now.</em>
+          rooms open <em style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontWeight: 400, color: '#17131a' }}>right now.</em>
         </h2>
         <a href="/stream" data-link="/stream" data-hover="" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: '16px' }}>all rooms →</a>
       </div>
@@ -46,7 +46,7 @@ export function RoomsStrip({ newestRooms = [] }: { newestRooms?: NewestRoom[] } 
             data-hover=""
             data-reactive=""
             draggable={false}
-            style={{ flex: 'none', width: '340px', background: '#fff', border: '1px solid rgba(11,8,15,.08)', borderRadius: '22px', padding: '24px', color: 'inherit', textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '14px', transition: 'transform .25s,box-shadow .25s', boxShadow: '0 6px 18px -12px rgba(60,10,30,.25)' }}
+            style={{ flex: 'none', width: '340px', background: '#fff', border: '1px solid rgba(11,8,15,.08)', borderRadius: '22px', padding: '24px', color: 'inherit', textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '14px', transition: 'transform .25s,box-shadow .25s', boxShadow: '0 6px 18px -12px rgba(20,16,22,.25)' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
               <span style={{ width: '30px', height: '30px', borderRadius: '50%', background: '#fdfbf9', display: 'grid', placeItems: 'center', fontSize: '16px', flex: 'none' }}>{r.emoji}</span>
@@ -60,7 +60,7 @@ export function RoomsStrip({ newestRooms = [] }: { newestRooms?: NewestRoom[] } 
                 {r.sitting} sitting in
               </span>
               <span>🫂 {r.relates} relate</span>
-              <span style={{ marginLeft: 'auto', color: '#c1216b', fontFamily: "'Sora',sans-serif", fontWeight: 700, fontStyle: 'normal', fontSize: '12.5px' }}>enter →</span>
+              <span style={{ marginLeft: 'auto', color: '#17131a', fontFamily: "'Sora',sans-serif", fontWeight: 700, fontStyle: 'normal', fontSize: '12.5px' }}>enter →</span>
             </div>
           </a>
         ))}

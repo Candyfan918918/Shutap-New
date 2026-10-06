@@ -32,7 +32,7 @@ export const DEMO_MIRROR_CAST: DemoPattern[] = [
     signals: 140,
     trend: 'steady',
     trendLabel: '→ steady',
-    trendColor: '#c4a0b2',
+    trendColor: '#bdb8bb',
     punch: '"140 rooms you earned and you still sit like the bouncer is en route."',
     sources: { spill: 42, scan: 21, comments: 28, likes: 19, follows: 6, browse: 24 },
     weekly: [18, 22, 20, 21, 19, 20, 20],
@@ -43,7 +43,7 @@ export const DEMO_MIRROR_CAST: DemoPattern[] = [
     district: 'personal',
     districtLabel: 'Personal',
     districtSymbol: '✸',
-    districtColor: '#a52a5f',
+    districtColor: '#2b2630',
     rarity: 'IV',
     depth: 5,
     signals: 192,
@@ -60,7 +60,7 @@ export const DEMO_MIRROR_CAST: DemoPattern[] = [
     district: 'relationship',
     districtLabel: 'Relationship',
     districtSymbol: '♥',
-    districtColor: '#c1216b',
+    districtColor: '#17131a',
     rarity: 'III',
     depth: 3,
     signals: 54,
@@ -81,9 +81,9 @@ export const DEMO_DISTRICTS: Array<{
   color: string
   patterns: Array<{ depth: number; ruined?: boolean }>
 }> = [
-  { key: 'personal', label: 'personal', symbol: '✸', color: '#a52a5f', patterns: [{ depth: 5 }, { depth: 3 }, { depth: 2 }, { depth: 4, ruined: true }] },
+  { key: 'personal', label: 'personal', symbol: '✸', color: '#2b2630', patterns: [{ depth: 5 }, { depth: 3 }, { depth: 2 }, { depth: 4, ruined: true }] },
   { key: 'career', label: 'career', symbol: '▲', color: '#7F77DD', patterns: [{ depth: 5 }, { depth: 4 }, { depth: 2 }, { depth: 1 }] },
-  { key: 'relationship', label: 'relationship', symbol: '♥', color: '#c1216b', patterns: [{ depth: 3 }, { depth: 4 }, { depth: 2, ruined: true }] },
+  { key: 'relationship', label: 'relationship', symbol: '♥', color: '#17131a', patterns: [{ depth: 3 }, { depth: 4 }, { depth: 2, ruined: true }] },
   { key: 'family', label: 'family', symbol: '⌂', color: '#c87c4a', patterns: [{ depth: 3 }, { depth: 2 }, { depth: 4 }] },
   { key: 'social', label: 'social', symbol: '✦', color: '#5B8A5E', patterns: [{ depth: 2 }, { depth: 3 }, { depth: 3, ruined: true }] },
 ]

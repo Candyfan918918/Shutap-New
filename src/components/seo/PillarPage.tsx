@@ -61,11 +61,11 @@ export function PillarPage({
             lineHeight: 1.55,
             color: "#100c14",
             background: "#ffffff",
-            border: "1px solid rgba(26,12,20,.10)",
+            border: "1px solid rgba(18,18,18,.10)",
             borderRadius: 18,
             padding: "24px 26px",
             margin: "0 0 40px",
-            boxShadow: "0 12px 30px -24px rgba(80,10,45,.3)",
+            boxShadow: "0 12px 30px -24px rgba(20,16,22,.3)",
           }}
         >
           {capsule}
@@ -78,7 +78,7 @@ export function PillarPage({
             fontFamily: "'Newsreader', Georgia, serif",
             fontStyle: "italic",
             fontSize: 18,
-            color: "#6e5f67",
+            color: "#656565",
             margin: "0 0 48px",
           }}
         >
@@ -111,13 +111,13 @@ export function PillarPage({
             flexWrap: "wrap",
             gap: 18,
             padding: "20px 0",
-            borderTop: "1px solid rgba(26,12,20,.10)",
-            borderBottom: "1px solid rgba(26,12,20,.10)",
+            borderTop: "1px solid rgba(18,18,18,.10)",
+            borderBottom: "1px solid rgba(18,18,18,.10)",
             marginBottom: 40,
             fontSize: 15,
           }}
         >
-          <span style={{ color: "#6e5f67" }}>other rooms:</span>
+          <span style={{ color: "#656565" }}>other rooms:</span>
           {others.map((o) => (
             <a
               key={o.href}
@@ -125,7 +125,7 @@ export function PillarPage({
               style={{
                 color: "#100c14",
                 textDecoration: "none",
-                borderBottom: "1px solid rgba(26,12,20,.25)",
+                borderBottom: "1px solid rgba(18,18,18,.25)",
                 paddingBottom: 1,
               }}
             >
@@ -138,10 +138,10 @@ export function PillarPage({
           <a
             href="/"
             style={{
-              color: "#cf3b7c",
+              color: "#3a3438",
               textDecoration: "none",
               fontWeight: 600,
-              borderBottom: "1px solid rgba(207,59,124,.35)",
+              borderBottom: "1px solid rgba(60,55,60,.35)",
               paddingBottom: 2,
             }}
           >

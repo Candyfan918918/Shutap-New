@@ -50,7 +50,7 @@ function AiDisclosurePage() {
           style={{ width: 34, height: 34, flex: 'none' }}
           aria-hidden
         >
-          <circle cx="28" cy="28" r="27" fill="rgba(231,84,138,.14)" />
+          <circle cx="28" cy="28" r="27" fill="rgba(23,19,26,.14)" />
           <rect x="15.25" y="16" width="11.5" height="24" rx="5.75" fill="url(#eyeGAI)" />
           <rect x="29.25" y="16" width="11.5" height="24" rx="5.75" fill="url(#eyeGAI)" />
           <ellipse cx="21" cy="30" rx="4" ry="5" fill="url(#pupGAI)" />
@@ -85,7 +85,7 @@ function AiDisclosurePage() {
             fontStyle: 'italic',
             fontSize: 16,
             lineHeight: 1.55,
-            color: '#f3c6da',
+            color: '#e4dfe2',
           }}
         >
           your cards are written by ai — not a human, and not a therapist.

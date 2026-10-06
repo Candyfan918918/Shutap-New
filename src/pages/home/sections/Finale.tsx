@@ -8,14 +8,14 @@ export function Finale() {
         <div data-rv="zoom" style={{ padding: '60px 0 70px' }}>
           <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 'clamp(17px,1.6vw,22px)', color: '#443c42', marginBottom: '18px' }}>ready when you are.</div>
           <h2 data-words="" style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 'clamp(44px,8vw,110px)', lineHeight: 1, letterSpacing: '-.05em', margin: '0 0 44px', color: '#0b080f' }}>
-            say it <em style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontWeight: 400, background: 'linear-gradient(92deg,#a52a5f,#890041 70%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>here.</em>
+            say it <em style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontWeight: 400, background: 'linear-gradient(92deg,#2b2630,#2b2630 70%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>here.</em>
           </h2>
-          <a href="/welcome" data-link="/welcome" data-hover="" data-mag="" style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: '18px', color: '#fff', background: 'linear-gradient(155deg,#ff7eb3,#a52a5f 55%,#c1216b)', borderRadius: '999px', padding: '22px 46px', boxShadow: '0 20px 44px -16px rgba(193,33,107,.6)' }}>join shutap →</a>
+          <a href="/welcome" data-link="/welcome" data-hover="" data-mag="" style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: '18px', color: '#fff', background: 'linear-gradient(155deg,#d6d0d4,#2b2630 55%,#17131a)', borderRadius: '999px', padding: '22px 46px', boxShadow: '0 20px 44px -16px rgba(23,19,26,.6)' }}>join shutap →</a>
         </div>
         <div style={{ borderTop: '.5px solid rgba(11,8,15,.1)', paddingTop: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', flexWrap: 'wrap' }}>
             <span style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: '16px', letterSpacing: '-.04em', color: '#0b080f' }}>
-              shut<span style={{ color: '#a52a5f' }}>ap</span> <span style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontWeight: 400, fontSize: '13px', color: '#6f666c', letterSpacing: 0 }}>— say it funnier.</span>
+              shut<span style={{ color: '#2b2630' }}>ap</span> <span style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontWeight: 400, fontSize: '13px', color: '#6f666c', letterSpacing: 0 }}>— say it funnier.</span>
             </span>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 18px', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: '14px' }}>
               <a href="/stream" data-link="/stream" data-hover="">rooms</a>

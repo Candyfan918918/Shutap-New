@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AiDisclosureRouteImport } from './routes/ai-disclosure'
 import { Route as CareerRouteImport } from './routes/career'
@@ -50,6 +51,8 @@ import { Route as DesignJokeCardsRouteImport } from './routes/design.joke-cards'
 import { Route as EmailPreferencesRouteImport } from './routes/email.preferences'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email.unsubscribe'
 import { Route as IsItNormalSlugRouteImport } from './routes/is-it-normal.$slug'
+import { Route as RoomsIndexRouteImport } from './routes/rooms.index'
+import { Route as RoomsIdRouteImport } from './routes/rooms.$id'
 import { Route as SitemapsCoreDotxmlRouteImport } from './routes/sitemaps/core[.]xml'
 import { Route as SitemapsOutcomesDotxmlRouteImport } from './routes/sitemaps/outcomes[.]xml'
 import { Route as SitemapsProfilesDotxmlRouteImport } from './routes/sitemaps/profiles[.]xml'
@@ -94,6 +97,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ActivityRoute = ActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -283,6 +291,16 @@ const IsItNormalSlugRoute = IsItNormalSlugRouteImport.update({
   path: '/is-it-normal/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoomsIndexRoute = RoomsIndexRouteImport.update({
+  id: '/rooms/',
+  path: '/rooms/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoomsIdRoute = RoomsIdRouteImport.update({
+  id: '/rooms/$id',
+  path: '/rooms/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapsCoreDotxmlRoute = SitemapsCoreDotxmlRouteImport.update({
   id: '/sitemaps/core.xml',
   path: '/sitemaps/core.xml',
@@ -429,6 +447,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/activity': typeof ActivityRoute
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
   '/career': typeof CareerRoute
@@ -466,6 +485,7 @@ export interface FileRoutesByFullPath {
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
+  '/rooms/$id': typeof RoomsIdRoute
   '/sitemaps/core.xml': typeof SitemapsCoreDotxmlRoute
   '/sitemaps/outcomes.xml': typeof SitemapsOutcomesDotxmlRoute
   '/sitemaps/profiles.xml': typeof SitemapsProfilesDotxmlRoute
@@ -474,6 +494,7 @@ export interface FileRoutesByFullPath {
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
+  '/rooms/': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -497,6 +518,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/activity': typeof ActivityRoute
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
   '/career': typeof CareerRoute
@@ -534,6 +556,7 @@ export interface FileRoutesByTo {
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
+  '/rooms/$id': typeof RoomsIdRoute
   '/sitemaps/core.xml': typeof SitemapsCoreDotxmlRoute
   '/sitemaps/outcomes.xml': typeof SitemapsOutcomesDotxmlRoute
   '/sitemaps/profiles.xml': typeof SitemapsProfilesDotxmlRoute
@@ -542,6 +565,7 @@ export interface FileRoutesByTo {
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
+  '/rooms': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -567,6 +591,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/activity': typeof ActivityRoute
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
   '/career': typeof CareerRoute
@@ -604,6 +629,7 @@ export interface FileRoutesById {
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
+  '/rooms/$id': typeof RoomsIdRoute
   '/sitemaps/core.xml': typeof SitemapsCoreDotxmlRoute
   '/sitemaps/outcomes.xml': typeof SitemapsOutcomesDotxmlRoute
   '/sitemaps/profiles.xml': typeof SitemapsProfilesDotxmlRoute
@@ -612,6 +638,7 @@ export interface FileRoutesById {
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
+  '/rooms/': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -637,6 +664,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$'
     | '/about'
+    | '/activity'
     | '/admin'
     | '/ai-disclosure'
     | '/career'
@@ -674,6 +702,7 @@ export interface FileRouteTypes {
     | '/email/preferences'
     | '/email/unsubscribe'
     | '/is-it-normal/$slug'
+    | '/rooms/$id'
     | '/sitemaps/core.xml'
     | '/sitemaps/outcomes.xml'
     | '/sitemaps/profiles.xml'
@@ -682,6 +711,7 @@ export interface FileRouteTypes {
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
+    | '/rooms/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/analytics'
@@ -705,6 +735,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$'
     | '/about'
+    | '/activity'
     | '/admin'
     | '/ai-disclosure'
     | '/career'
@@ -742,6 +773,7 @@ export interface FileRouteTypes {
     | '/email/preferences'
     | '/email/unsubscribe'
     | '/is-it-normal/$slug'
+    | '/rooms/$id'
     | '/sitemaps/core.xml'
     | '/sitemaps/outcomes.xml'
     | '/sitemaps/profiles.xml'
@@ -750,6 +782,7 @@ export interface FileRouteTypes {
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
+    | '/rooms'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/analytics'
@@ -774,6 +807,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/$'
     | '/about'
+    | '/activity'
     | '/admin'
     | '/ai-disclosure'
     | '/career'
@@ -811,6 +845,7 @@ export interface FileRouteTypes {
     | '/email/preferences'
     | '/email/unsubscribe'
     | '/is-it-normal/$slug'
+    | '/rooms/$id'
     | '/sitemaps/core.xml'
     | '/sitemaps/outcomes.xml'
     | '/sitemaps/profiles.xml'
@@ -819,6 +854,7 @@ export interface FileRouteTypes {
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
+    | '/rooms/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/analytics'
@@ -844,6 +880,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
+  ActivityRoute: typeof ActivityRoute
   AdminRoute: typeof AdminRoute
   AiDisclosureRoute: typeof AiDisclosureRoute
   CareerRoute: typeof CareerRoute
@@ -880,6 +917,7 @@ export interface RootRouteChildren {
   EmailPreferencesRoute: typeof EmailPreferencesRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   IsItNormalSlugRoute: typeof IsItNormalSlugRoute
+  RoomsIdRoute: typeof RoomsIdRoute
   SitemapsCoreDotxmlRoute: typeof SitemapsCoreDotxmlRoute
   SitemapsOutcomesDotxmlRoute: typeof SitemapsOutcomesDotxmlRoute
   SitemapsProfilesDotxmlRoute: typeof SitemapsProfilesDotxmlRoute
@@ -887,6 +925,7 @@ export interface RootRouteChildren {
   UPseudonymRoute: typeof UPseudonymRoute
   VentTopicRoute: typeof VentTopicRoute
   WhatHappensSlugRoute: typeof WhatHappensSlugRoute
+  RoomsIndexRoute: typeof RoomsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiFeedbackEventsRoute: typeof ApiFeedbackEventsRoute
@@ -927,6 +966,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/activity': {
+      id: '/activity'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof ActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -1188,6 +1234,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IsItNormalSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rooms/': {
+      id: '/rooms/'
+      path: '/rooms'
+      fullPath: '/rooms/'
+      preLoaderRoute: typeof RoomsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rooms/$id': {
+      id: '/rooms/$id'
+      path: '/rooms/$id'
+      fullPath: '/rooms/$id'
+      preLoaderRoute: typeof RoomsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemaps/core.xml': {
       id: '/sitemaps/core.xml'
       path: '/sitemaps/core.xml'
@@ -1425,6 +1485,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
+  ActivityRoute: ActivityRoute,
   AdminRoute: AdminRoute,
   AiDisclosureRoute: AiDisclosureRoute,
   CareerRoute: CareerRoute,
@@ -1462,6 +1523,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailPreferencesRoute: EmailPreferencesRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   IsItNormalSlugRoute: IsItNormalSlugRoute,
+  RoomsIdRoute: RoomsIdRoute,
   SitemapsCoreDotxmlRoute: SitemapsCoreDotxmlRoute,
   SitemapsOutcomesDotxmlRoute: SitemapsOutcomesDotxmlRoute,
   SitemapsProfilesDotxmlRoute: SitemapsProfilesDotxmlRoute,
@@ -1469,6 +1531,7 @@ const rootRouteChildren: RootRouteChildren = {
   UPseudonymRoute: UPseudonymRoute,
   VentTopicRoute: VentTopicRoute,
   WhatHappensSlugRoute: WhatHappensSlugRoute,
+  RoomsIndexRoute: RoomsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiFeedbackEventsRoute: ApiFeedbackEventsRoute,

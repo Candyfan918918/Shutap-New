@@ -65,7 +65,7 @@ export function AliasCeremony({
 
       <div
         style={{
-          background: 'rgba(231,84,138,.06)',
+          background: 'rgba(23,19,26,.06)',
           border: '1px solid rgba(11,8,15,.07)',
           borderRadius: 20,
           padding: '24px 20px',
@@ -111,16 +111,13 @@ export function AliasCeremony({
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <Tick checked={ok18} onChange={setOk18}>i&apos;m 18 or older</Tick>
         <Tick checked={okGuidelines} onChange={setOkGuidelines}>
-          i&apos;ve read the guidelines — no verdicts, no real names
+          no real names, no targeting real people
         </Tick>
       </div>
 
       <Button onClick={() => void confirm()} disabled={!ready || busy} full>
-        {busy ? 'one moment…' : 'this is me — flip all three'}
+        {busy ? 'one moment…' : "that's me"}
       </Button>
-      <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, color: FAINT, textAlign: 'center' }}>
-        lands you back on your cards, save and share live.
-      </div>
       <style>{`@keyframes shutapAliasIn{from{transform:scale(.86);opacity:0}to{transform:none;opacity:1}}`}</style>
     </Sheet>
   )
@@ -141,7 +138,7 @@ function Tick({
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        style={{ marginTop: 2, width: 18, height: 18, accentColor: '#8e1c4c', flex: 'none' }}
+        style={{ marginTop: 2, width: 18, height: 18, accentColor: '#17131a', flex: 'none' }}
       />
       <span>{children}</span>
     </label>

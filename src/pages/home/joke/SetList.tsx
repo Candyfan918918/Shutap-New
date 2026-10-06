@@ -104,12 +104,12 @@ export function SetList({
                           onClick={() => onOpenRoom(card.room_id as string)}
                           style={{ marginRight: 'auto', padding: 0, border: 'none', background: 'none', cursor: 'pointer' }}
                         >
-                          <Eyebrow style={{ fontSize: 10, letterSpacing: '.14em', color: '#8e1c4c' }}>
+                          <Eyebrow style={{ fontSize: 10, letterSpacing: '.14em', color: '#17131a' }}>
                             ◎ in a room →
                           </Eyebrow>
                         </button>
                       ) : (
-                        <Eyebrow style={{ fontSize: 10, letterSpacing: '.14em', color: '#8e1c4c', marginRight: 'auto' }}>
+                        <Eyebrow style={{ fontSize: 10, letterSpacing: '.14em', color: '#17131a', marginRight: 'auto' }}>
                           ◎ in a room
                         </Eyebrow>
                       )

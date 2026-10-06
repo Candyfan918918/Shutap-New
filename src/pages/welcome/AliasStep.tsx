@@ -79,7 +79,7 @@ export function AliasStep({ birth, initial, onComplete }: AliasStepProps) {
       <div style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 20, padding: '28px 24px', textAlign: 'center' }}>
         <div key={alias.display_name + 'emoji'} style={{ fontSize: 44, marginBottom: 16, animation: 'wslotIn .35s ease' }}>{emoji}</div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, flexWrap: 'wrap', minHeight: 52 }}>
-          <span key={alias.emotion} style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 22, color: '#f7b8d4', animation: 'wslotIn .35s ease' }}>{alias.emotion}</span>
+          <span key={alias.emotion} style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 22, color: '#e2dde0', animation: 'wslotIn .35s ease' }}>{alias.emotion}</span>
           <span style={{ color: ACCENT, fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 18 }}>·</span>
           <span key={alias.nation} style={{ fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 22, color: TEXT, animation: 'wslotIn .35s ease' }}>{alias.nation}</span>
           <span style={{ color: ACCENT, fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 18 }}>·</span>
@@ -87,7 +87,7 @@ export function AliasStep({ birth, initial, onComplete }: AliasStepProps) {
         </div>
       </div>
       {msg && (
-        <div style={{ textAlign: 'center', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: msg.kind === 'err' ? ACCENT : '#f7b8d4' }}>{msg.text}</div>
+        <div style={{ textAlign: 'center', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: msg.kind === 'err' ? ACCENT : '#e2dde0' }}>{msg.text}</div>
       )}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <button style={ghostBtn} onClick={spin} disabled={busy}>spin again</button>

@@ -18,14 +18,14 @@ export const SLOTS: { key: SlotKey; label: string; subtitle: string; brief: stri
     label: 'the take',
     subtitle: 'what actually happened here',
     brief: 'name what actually happened, drily, the way a friend would say it back to her',
-    accent: '#e7548a',
+    accent: '#8f898d',
   },
   {
     key: 'the_clapback',
     label: 'the clapback',
     subtitle: "what you wish you'd said",
     brief: 'the line she wishes she had said in the moment — one sentence, in quotes',
-    accent: '#c1216b',
+    accent: '#17131a',
   },
   {
     key: 'the_roast',
@@ -68,13 +68,13 @@ export const ANGLE_LABEL: Record<string, string> = {
 
 const ACCENTS: Record<string, string> = {
   ...Object.fromEntries(SLOTS.map((s) => [s.key, s.accent])),
-  target_the_behavior: '#e7548a',
+  target_the_behavior: '#8f898d',
   target_the_guilt_trip: '#c87c4a',
-  target_the_double_standard: '#c1216b',
+  target_the_double_standard: '#17131a',
   target_the_timing: '#c87c4a',
   absurdist_escalation: '#7F77DD',
   deadpan_understatement: '#7F77DD',
-  the_comeback: '#c1216b',
+  the_comeback: '#17131a',
 }
 
 export function angleLabel(angle: string): string {
@@ -123,7 +123,7 @@ export function shuffleSlots<T>(items: readonly T[], seed: string): T[] {
 }
 
 export function angleAccent(angle: string): string {
-  return ACCENTS[angle] ?? '#e7548a'
+  return ACCENTS[angle] ?? '#8f898d'
 }
 
 export const ARCHETYPE_LABEL: Record<string, string> = {
@@ -264,17 +264,16 @@ export const FLIPS_PER_SET: Record<JokeTier, number> = { guest: 1, free: 3, payi
 
 /** What a membership buys, stated as behaviour. */
 export const MEMBER_BENEFITS: { line: string; detail: string }[] = [
-  { line: 'every card with no shutap mark', detail: 'guest and free cards carry the mark; yours are clean, on screen and in every export.' },
-  { line: 'the mirror reading — what your situations keep saying', detail: 'everything you keep goes into a private record it reads patterns back from.' },
+  { line: 'No watermark', detail: 'on every download.' },
+  { line: 'The Mirror', detail: 'what keeps coming up in your jokes.' },
 ]
 
 
 /** What never costs anything, at any tier. */
 export const ALWAYS_FREE = [
-  'typing what happened, with identifying details scrubbed first',
-  'five situations a day, at every tier — flip one card as a guest, all three with an alias',
-  'reading the cards you flipped, for as long as you like',
-  'sharing or saving the card you flipped, with the shutap mark',
+  'writing jokes',
+  'posting, following, commenting',
+  'downloads with a small watermark',
 ]
 
 /* ─────────────────────────── the two asks ───────────────────────────
@@ -285,15 +284,13 @@ export const ALWAYS_FREE = [
    pixels named alongside it, so the offer is never only the mirror. */
 
 export const ALIAS_OFFER = {
-  cta: 'flip all three — free',
-  /** "an alias flips all three, and keeps them." */
-  line: 'an alias flips all three, and keeps them.',
+  cta: 'sign in free',
+  line: 'Sign in free to see all three and keep them.',
 }
 
 export const MEMBER_OFFER = {
-  cta: 'open the mirror reading',
-  /** what a membership buys, in one breath — cards first, then the mirror */
-  line: 'every set kept clean — no mark — and the mirror reading the patterns across all of it.',
+  cta: 'remove the watermark',
+  line: 'No watermark on downloads, plus the Mirror.',
 }
 
 /* ─────────────────────── the daily budget, as the client sees it ───────────────────────

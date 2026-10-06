@@ -146,7 +146,7 @@ const TIERS: { id: JokeTier; label: string }[] = [
 /** The design system's "trust label": Sora caps in the soft pink. */
 function TrustLabel({ children }: { children: ReactNode }) {
   return (
-    <span style={{ fontFamily: SORA, fontWeight: 800, fontSize: 10, lineHeight: 1, letterSpacing: '.16em', textTransform: 'uppercase', color: '#e7548a' }}>
+    <span style={{ fontFamily: SORA, fontWeight: 800, fontSize: 10, lineHeight: 1, letterSpacing: '.16em', textTransform: 'uppercase', color: '#8f898d' }}>
       {children}
     </span>
   )
@@ -154,7 +154,7 @@ function TrustLabel({ children }: { children: ReactNode }) {
 
 function SectionEyebrow({ children }: { children: ReactNode }) {
   return (
-    <span style={{ fontFamily: SORA, fontWeight: 800, fontSize: 11, lineHeight: 1, letterSpacing: '.2em', textTransform: 'uppercase', color: '#c1216b' }}>
+    <span style={{ fontFamily: SORA, fontWeight: 800, fontSize: 11, lineHeight: 1, letterSpacing: '.2em', textTransform: 'uppercase', color: '#17131a' }}>
       {children}
     </span>
   )
@@ -177,8 +177,8 @@ function Badge({ tone, children }: { tone: 'neutral' | 'brand'; children: ReactN
     <span
       style={{
         display: 'inline-flex', alignItems: 'center', padding: '4px 11px',
-        background: tone === 'brand' ? 'rgba(231,84,138,.10)' : '#f7f6f4',
-        color: tone === 'brand' ? '#c1216b' : PROSE,
+        background: tone === 'brand' ? 'rgba(23,19,26,.10)' : '#f7f6f4',
+        color: tone === 'brand' ? '#17131a' : PROSE,
         fontFamily: INTER, fontWeight: 700, fontSize: 11, lineHeight: 1, letterSpacing: '.02em',
         borderRadius: 999, whiteSpace: 'nowrap',
       }}
@@ -307,7 +307,7 @@ export function JokeCardsDesign() {
                     aria-pressed={on}
                     style={{
                       border: 'none', cursor: 'pointer', height: 30, padding: '0 14px', borderRadius: 999,
-                      background: on ? 'linear-gradient(92deg,#e7548a 0%,#890041 70%)' : 'transparent',
+                      background: on ? 'linear-gradient(92deg,#8f898d 0%,#2b2630 70%)' : 'transparent',
                       color: on ? '#fff' : MUTED, fontFamily: SORA, fontWeight: 800, fontSize: 11.5, lineHeight: 1,
                     }}
                   >
@@ -495,11 +495,11 @@ export function JokeCardsDesign() {
                   )
                 })}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap', background: '#f7f6f4', border: '.5px solid #e7548a', borderRadius: 22, padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap', background: '#f7f6f4', border: '.5px solid #8f898d', borderRadius: 22, padding: '16px 18px' }}>
                 <span style={{ flex: '1 1 200px', minWidth: 0, fontFamily: INTER, fontSize: 14, lineHeight: 1.5, color: INK }}>
                   you flipped one. the other two are written and waiting — an alias flips all three, and keeps them.
                 </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap', height: 38, padding: '0 16px', borderRadius: 999, background: 'linear-gradient(92deg,#e7548a 0%,#890041 70%)', color: '#fff', fontFamily: SORA, fontWeight: 800, fontSize: 12, lineHeight: 1 }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap', height: 38, padding: '0 16px', borderRadius: 999, background: 'linear-gradient(92deg,#8f898d 0%,#2b2630 70%)', color: '#fff', fontFamily: SORA, fontWeight: 800, fontSize: 12, lineHeight: 1 }}>
                   flip all three — free
                 </span>
               </div>
@@ -545,7 +545,7 @@ export function JokeCardsDesign() {
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
-            style={{ width: '100%', maxWidth: 440, background: '#fff', borderRadius: '22px 22px 0 0', padding: '24px 22px 28px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12, boxShadow: '0 -24px 70px -30px rgba(80,10,45,.60)' }}
+            style={{ width: '100%', maxWidth: 440, background: '#fff', borderRadius: '22px 22px 0 0', padding: '24px 22px 28px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12, boxShadow: '0 -24px 70px -30px rgba(20,16,22,.60)' }}
           >
             <div style={{ width: 38, height: 4, borderRadius: 999, background: 'rgba(11,8,15,.14)', alignSelf: 'center' }} />
             <EyeMark size={30} />
@@ -565,7 +565,7 @@ export function JokeCardsDesign() {
       ) : null}
 
       {toast ? (
-        <div style={{ position: 'fixed', left: '50%', bottom: 26, transform: 'translateX(-50%)', background: INK, color: '#fff', borderRadius: 999, padding: '11px 20px', fontFamily: INTER, fontWeight: 700, fontSize: 13, lineHeight: 1, zIndex: 50, boxShadow: '0 18px 40px -14px rgba(80,10,45,.55)' }}>
+        <div style={{ position: 'fixed', left: '50%', bottom: 26, transform: 'translateX(-50%)', background: INK, color: '#fff', borderRadius: 999, padding: '11px 20px', fontFamily: INTER, fontWeight: 700, fontSize: 13, lineHeight: 1, zIndex: 50, boxShadow: '0 18px 40px -14px rgba(20,16,22,.55)' }}>
           {toast}
         </div>
       ) : null}

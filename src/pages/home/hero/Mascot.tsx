@@ -56,7 +56,7 @@ export function HeroMascot({ size }: { size: number }) {
         height: (size * 96) / 140,
         perspective: 650,
         display: 'inline-block',
-        filter: 'drop-shadow(0 22px 32px rgba(136, 0, 64, .28))',
+        filter: 'drop-shadow(0 22px 32px rgba(23,19,26, .28))',
       }}
     >
       <div

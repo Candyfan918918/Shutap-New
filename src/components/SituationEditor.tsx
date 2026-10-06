@@ -110,7 +110,7 @@ export function SituationEditor({ situation, onClose, onSaved }: Props) {
           <div style={notice}>spill asks: {needsInfo}</div>
         )}
 
-        {error && <div style={{ ...notice, background: '#fde7ec', color: '#c1216b' }}>{error}</div>}
+        {error && <div style={{ ...notice, background: '#eeeeee', color: '#17131a' }}>{error}</div>}
 
         <div style={actions}>
           <button style={primary} onClick={handleSave} disabled={busy !== null}>
@@ -146,11 +146,11 @@ const sheet: React.CSSProperties = {
   boxShadow: '0 -8px 30px rgba(11,8,15,0.18)',
 }
 const head: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }
-const kicker: React.CSSProperties = { fontSize: 12, color: '#c1216b', textTransform: 'lowercase', letterSpacing: '.04em' }
+const kicker: React.CSSProperties = { fontSize: 12, color: '#17131a', textTransform: 'lowercase', letterSpacing: '.04em' }
 const closeBtn: React.CSSProperties = { border: 'none', background: 'transparent', fontSize: 28, color: '#0b080f', cursor: 'pointer', lineHeight: 1 }
-const lbl: React.CSSProperties = { display: 'block', fontSize: 11, color: '#7a4458', marginTop: 12, marginBottom: 4, textTransform: 'lowercase', letterSpacing: '.05em' }
+const lbl: React.CSSProperties = { display: 'block', fontSize: 11, color: '#575757', marginTop: 12, marginBottom: 4, textTransform: 'lowercase', letterSpacing: '.05em' }
 const input: React.CSSProperties = {
-  width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid #f3cad7',
+  width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid #e4dfe2',
   background: '#fff', fontSize: 15, color: '#0b080f', outline: 'none',
 }
 const textarea: React.CSSProperties = {
@@ -160,14 +160,14 @@ const aiRow: React.CSSProperties = { display: 'flex', gap: 8, marginTop: 14, ali
 const notice: React.CSSProperties = { marginTop: 10, padding: '8px 12px', background: '#fff', borderRadius: 8, fontSize: 13, color: '#0b080f' }
 const actions: React.CSSProperties = { display: 'flex', gap: 8, marginTop: 18, flexWrap: 'wrap' }
 const primary: React.CSSProperties = {
-  flex: '1 1 auto', padding: '12px 16px', borderRadius: 999, background: '#a52a5f', color: '#fff',
+  flex: '1 1 auto', padding: '12px 16px', borderRadius: 999, background: '#2b2630', color: '#fff',
   border: 'none', fontWeight: 600, cursor: 'pointer', fontSize: 14,
 }
 const ghost: React.CSSProperties = {
-  padding: '12px 16px', borderRadius: 999, background: 'transparent', color: '#c1216b',
-  border: '1px solid #f3cad7', fontWeight: 500, cursor: 'pointer', fontSize: 14,
+  padding: '12px 16px', borderRadius: 999, background: 'transparent', color: '#17131a',
+  border: '1px solid #e4dfe2', fontWeight: 500, cursor: 'pointer', fontSize: 14,
 }
 const danger: React.CSSProperties = {
-  padding: '12px 16px', borderRadius: 999, background: 'transparent', color: '#7a4458',
-  border: '1px solid #e9d2db', fontWeight: 500, cursor: 'pointer', fontSize: 14,
+  padding: '12px 16px', borderRadius: 999, background: 'transparent', color: '#575757',
+  border: '1px solid #dadada', fontWeight: 500, cursor: 'pointer', fontSize: 14,
 }

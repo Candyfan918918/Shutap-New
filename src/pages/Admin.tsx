@@ -16,7 +16,7 @@ const CARD: React.CSSProperties = {
   border: '.5px solid rgba(255,255,255,.08)',
   borderRadius: 14,
   padding: '18px 20px',
-  color: '#e8dfea',
+  color: '#e6e3e4',
 }
 
 type RoomListItem = {
@@ -51,7 +51,7 @@ function RoomRow({ r }: { r: RoomListItem }) {
         padding: '12px 16px',
         borderBottom: '.5px solid rgba(255,255,255,.06)',
         textDecoration: 'none',
-        color: '#e8dfea',
+        color: '#e6e3e4',
         alignItems: 'center',
       }}
     >
@@ -61,7 +61,7 @@ function RoomRow({ r }: { r: RoomListItem }) {
           {r.pillar || '—'} · {fmtAge(r.age_hours)} ago
         </div>
       </div>
-      <span style={{ fontVariantNumeric: 'tabular-nums', color: '#f7b8d4', textAlign: 'right', fontSize: 13 }}>
+      <span style={{ fontVariantNumeric: 'tabular-nums', color: '#e2dde0', textAlign: 'right', fontSize: 13 }}>
         {r.initial_scan ?? '—'}{r.scan_band ? ` · ${r.scan_band}` : ''}
       </span>
       <span style={{ fontVariantNumeric: 'tabular-nums', textAlign: 'right', fontSize: 13 }}>{r.human_relates}</span>
@@ -107,7 +107,7 @@ function RoomTable({ title, rows, empty }: { title: string; rows: RoomListItem[]
 function Kpi({ label, value, sub, accent }: { label: string; value: string; sub?: string; accent?: string }) {
   return (
     <div style={CARD}>
-      <div style={{ fontFamily: 'Sora,sans-serif', fontSize: 26, fontWeight: 800, lineHeight: 1.1, letterSpacing: '-.02em', color: accent ?? '#e8dfea' }}>{value}</div>
+      <div style={{ fontFamily: 'Sora,sans-serif', fontSize: 26, fontWeight: 800, lineHeight: 1.1, letterSpacing: '-.02em', color: accent ?? '#e6e3e4' }}>{value}</div>
       <div style={{ fontSize: 11, color: '#6f666c', marginTop: 6, letterSpacing: '.04em', textTransform: 'uppercase', fontFamily: 'Sora,sans-serif', fontWeight: 700 }}>{label}</div>
       {sub && <div style={{ fontSize: 11, color: '#6fcf97', marginTop: 6 }}>{sub}</div>}
     </div>
@@ -142,7 +142,7 @@ export function AdminPage() {
           <Kpi label="spills · 24h" value={String(k?.spills_24h ?? '—')} sub={k ? `${k.spills_7d} · 7d` : undefined} />
           <Kpi label="scans · 24h" value={String(k?.scans_24h ?? '—')} sub={k ? `${k.scans_7d} · 7d` : undefined} />
           <Kpi label="replies · 24h" value={String(k?.comments_24h ?? '—')} sub={k ? `${k.comments_7d} · 7d` : undefined} />
-          <Kpi label="crisis · 7d" value={String(k?.crisis_flags_7d ?? '—')} accent={(k?.crisis_flags_7d ?? 0) > 0 ? '#f7b8d4' : undefined} />
+          <Kpi label="crisis · 7d" value={String(k?.crisis_flags_7d ?? '—')} accent={(k?.crisis_flags_7d ?? 0) > 0 ? '#e2dde0' : undefined} />
           <Kpi label="mirror · active" value={String(k?.mirror_subs_active ?? '—')} sub={k ? `${k.mirror_subs_trialing} trialing` : undefined} />
         </div>
       </div>
@@ -154,7 +154,7 @@ export function AdminPage() {
           <Kpi label="public rooms" value={String(s?.total_public_rooms ?? '—')} />
           <Kpi label="response coverage" value={s ? `${s.response_coverage_pct}%` : '—'} />
           <Kpi label="24h coverage" value={s ? `${s.coverage_24h_pct}%` : '—'} sub={s ? `${s.new_rooms_24h} new` : undefined} />
-          <Kpi label="cold rooms (>72h)" value={String(s?.cold_rooms_over_72h ?? '—')} accent={(s?.cold_rooms_over_72h ?? 0) > 0 ? '#f7b8d4' : undefined} />
+          <Kpi label="cold rooms (>72h)" value={String(s?.cold_rooms_over_72h ?? '—')} accent={(s?.cold_rooms_over_72h ?? 0) > 0 ? '#e2dde0' : undefined} />
           <Kpi label="median TTFR" value={s?.median_ttfr_hours != null ? `${s.median_ttfr_hours}h` : '—'} />
         </div>
       </div>
@@ -165,9 +165,9 @@ export function AdminPage() {
           <SectionLabel>retention scheduler · 24h</SectionLabel>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12 }}>
             <Kpi label="sent" value={String(h.sent_24h)} />
-            <Kpi label="failed" value={String(h.failed_24h)} accent={h.failed_24h > 0 ? '#f7b8d4' : undefined} />
+            <Kpi label="failed" value={String(h.failed_24h)} accent={h.failed_24h > 0 ? '#e2dde0' : undefined} />
             <Kpi label="retrying" value={String(h.retrying)} />
-            <Kpi label="overdue" value={String(h.scheduled_overdue)} sub={h.oldest_overdue_minutes != null ? `oldest ${h.oldest_overdue_minutes}m` : undefined} accent={h.scheduled_overdue > 10 ? '#f7b8d4' : undefined} />
+            <Kpi label="overdue" value={String(h.scheduled_overdue)} sub={h.oldest_overdue_minutes != null ? `oldest ${h.oldest_overdue_minutes}m` : undefined} accent={h.scheduled_overdue > 10 ? '#e2dde0' : undefined} />
           </div>
         </div>
       )}
@@ -184,7 +184,7 @@ export function AdminPage() {
                 padding: '6px 14px',
                 borderRadius: 999,
                 border: 0,
-                background: tab === t ? '#a52a5f' : 'transparent',
+                background: tab === t ? '#2b2630' : 'transparent',
                 color: tab === t ? '#fff' : '#c9bcd0',
                 fontFamily: 'Sora,sans-serif',
                 fontWeight: 700,

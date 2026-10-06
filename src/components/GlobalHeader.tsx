@@ -9,6 +9,8 @@ import { Link, useRouterState, useNavigate } from '@tanstack/react-router'
 import { rememberReturnTo, signOut as doSignOut } from '@/lib/auth'
 import { useCurrentAlias, useIsAdmin } from '@/hooks/use-current-alias'
 import { EyeMark, ShutapWordmark } from './EyeMark'
+import { aliasSlug } from '@/lib/feed-shared'
+import { myAlias } from '@/lib/feed.functions'
 
 type Variant = 'light' | 'dark'
 
@@ -84,6 +86,15 @@ export function GlobalHeader() {
   // The immersive homepage ("/") ships with its own header inside the
   // reference markup; suppress the global one so we don't stack two bars.
   const isHome = pathname === '/'
+  const [unread, setUnread] = useState(0)
+  useEffect(() => {
+    if (!alias) { setUnread(0); return }
+    let live = true
+    myAlias().then((r) => { if (live) setUnread(r.unread) }).catch(() => {})
+    const clear = () => setUnread(0)
+    window.addEventListener('shutap:activity-read', clear)
+    return () => { live = false; window.removeEventListener('shutap:activity-read', clear) }
+  }, [alias?.name, pathname])
 
 
   useEffect(() => {
@@ -130,19 +141,17 @@ export function GlobalHeader() {
     navigate({ to: '/' })
   }
 
-  const inkStrong = dark ? '#fdfbf9' : '#0b080f'
-  const inkMuted = dark ? '#c4a0b2' : '#443c42'
-  const inkActive = dark ? '#fdfbf9' : '#0b080f'
-  // Opaque on purpose — a translucent bar + backdrop-filter re-samples the
-  // animated gradient on /welcome every frame and produces visible banding.
-  const barBg = dark ? '#100c14' : '#ffffff'
-  const barBorder = dark ? '.5px solid rgba(255,255,255,.08)' : '.5px solid rgba(11,8,15,.07)'
-  const pillBg = dark ? 'rgba(255,255,255,.04)' : '#fff'
-  const pillBorder = dark ? '.5px solid rgba(255,255,255,.10)' : '.5px solid rgba(11,8,15,.12)'
-  const menuBg = dark ? '#1a0d18' : '#fff'
-  const menuBorder = dark ? '.5px solid rgba(255,255,255,.10)' : '.5px solid rgba(11,8,15,.10)'
-  const menuDivider = dark ? 'rgba(255,255,255,.08)' : 'rgba(11,8,15,.08)'
-  const menuInk = dark ? '#fdfbf9' : '#383136'
+  const inkStrong = dark ? '#ffffff' : '#111111'
+  const inkMuted = dark ? '#b5b5b5' : '#6b6b6b'
+  const inkActive = dark ? '#ffffff' : '#111111'
+  const barBg = dark ? '#111111' : '#ffffff'
+  const barBorder = dark ? '1px solid rgba(255,255,255,.08)' : '1px solid rgba(0,0,0,.08)'
+  const pillBorder = dark ? '1px solid rgba(255,255,255,.14)' : '1px solid rgba(0,0,0,.14)'
+  const menuBg = dark ? '#1b1b1b' : '#fff'
+  const menuBorder = dark ? '1px solid rgba(255,255,255,.10)' : '1px solid rgba(0,0,0,.10)'
+  const menuDivider = dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.08)'
+  const menuInk = dark ? '#ffffff' : '#111111'
+  const slug = alias?.name ? aliasSlug(alias.name) : null
 
   const navLink = (to: string, label: string) => {
     const active = to === '/' ? pathname === '/' : pathname.startsWith(to)
@@ -150,12 +159,12 @@ export function GlobalHeader() {
       <Link
         to={to}
         style={{
-          fontFamily: "'Newsreader',serif",
-          fontStyle: 'italic',
+          fontFamily: "'Sora',system-ui,sans-serif",
+          fontWeight: 600,
           fontSize: 14,
           color: active ? inkActive : inkMuted,
           textDecoration: 'none',
-          padding: '6px 12px',
+          padding: '6px 10px',
           whiteSpace: 'nowrap',
         }}
       >
@@ -168,15 +177,13 @@ export function GlobalHeader() {
     display: 'block',
     padding: '9px 11px',
     borderRadius: 10,
-    fontFamily: "'Newsreader',serif",
-    fontStyle: 'italic',
+    fontFamily: "'Sora',system-ui,sans-serif",
     fontSize: 14,
     color: menuInk,
     textDecoration: 'none',
     cursor: 'pointer',
   }
 
-  if (isHome) return null
   return (
     <header
       ref={headerRef}
@@ -213,17 +220,15 @@ export function GlobalHeader() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}@media (max-width: 420px){[data-gh-pill]{padding:7px 12px !important}}`}</style>
           <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {[
-              { href: '/#joke', label: 'joke cards' },
-              { href: '/#spill', label: 'spill' },
-              { href: '/#scan', label: 'scan' },
-            ].map((l) => (
-              <a key={l.label} href={l.href} style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: inkMuted, textDecoration: 'none', padding: '6px 12px', whiteSpace: 'nowrap' }}>
-                {l.label}
-              </a>
-            ))}
-            {navLink('/stream', 'rooms')}
+            {navLink('/', 'write')}
+            {navLink('/rooms', 'rooms')}
           </span>
+          {alias ? (
+            <Link to="/activity" aria-label={unread ? `activity, ${unread} new` : 'activity'} style={{ position: 'relative', display: 'grid', placeItems: 'center', width: 36, height: 36, borderRadius: 999, color: pathname.startsWith('/activity') ? inkActive : inkMuted }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z" strokeLinejoin="round" /><path d="M10 20.5a2 2 0 0 0 4 0" /></svg>
+              {unread ? <span style={{ position: 'absolute', top: 6, right: 7, width: 8, height: 8, borderRadius: 99, background: inkActive, border: `2px solid ${barBg}` }} /> : null}
+            </Link>
+          ) : null}
 
           <div ref={areaRef} style={{ position: 'relative' }}>
             {alias ? (
@@ -238,10 +243,9 @@ export function GlobalHeader() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 7,
-                    background: pillBg,
                     border: pillBorder,
                     borderRadius: 999,
-                    padding: '5px 12px 5px 5px',
+                    padding: '4px',
                     cursor: 'pointer',
                     transition: '.18s',
                   }}
@@ -251,7 +255,7 @@ export function GlobalHeader() {
                       width: 26,
                       height: 26,
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg,#a52a5f,#890041)',
+                      background: dark ? '#2a2a2a' : '#f2f2f1',
                       display: 'grid',
                       placeItems: 'center',
                       fontSize: 14,
@@ -259,9 +263,6 @@ export function GlobalHeader() {
                     }}
                   >
                     {alias.emoji || '🐣'}
-                  </span>
-                  <span style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13, color: inkStrong, whiteSpace: 'nowrap', maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {alias.name || ''}
                   </span>
                 </div>
                 {menuOpen && (
@@ -274,26 +275,25 @@ export function GlobalHeader() {
                       background: menuBg,
                       border: menuBorder,
                       borderRadius: 16,
-                      boxShadow: dark
-                        ? '0 24px 50px -16px rgba(0,0,0,.6)'
-                        : '0 24px 50px -24px rgba(60,10,30,.35)',
+                      boxShadow: '0 20px 40px -20px rgba(0,0,0,.35)',
                       padding: 7,
                       zIndex: 70,
                     }}
                   >
-                    <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>your profile</Link>
-                    <Link to="/mirror" style={{ ...menuItem, color: dark ? '#e6c37a' : '#7F77DD' }} onClick={() => setMenuOpen(false)}>
-                      the mirror ✦
-                    </Link>
+                    <div style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: 12.5 }}>{alias.name}</div>
+                    {slug ? <Link to="/u/$pseudonym" params={{ pseudonym: slug }} style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link> : null}
+                    <Link to="/rooms" search={{ tab: 'saved' }} style={menuItem} onClick={() => setMenuOpen(false)}>saved</Link>
+                    <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>set list</Link>
+                    <Link to="/mirror" style={menuItem} onClick={() => setMenuOpen(false)}>the mirror</Link>
                     {admin && (
                       <Link to="/admin" style={menuItem} onClick={() => setMenuOpen(false)}>
-                        admin dashboard
+                        admin
                       </Link>
                     )}
                     <div style={{ height: '.5px', background: menuDivider, margin: '6px 0' }} />
                     <div
                       role="button"
-                      style={{ ...menuItem, color: dark ? '#c4a0b2' : '#6f666c' }}
+                      style={{ ...menuItem, color: inkMuted }}
                       onClick={signOut}
                     >
                       sign out
@@ -314,8 +314,8 @@ export function GlobalHeader() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  background: '#a52a5f',
-                  color: '#fff',
+                  background: inkActive,
+                  color: barBg,
                   border: 0,
                   borderRadius: 999,
                   padding: '9px 18px',
@@ -327,7 +327,7 @@ export function GlobalHeader() {
                   flexShrink: 0,
                 }}
               >
-                join →
+                sign in
               </button>
             )}
           </div>

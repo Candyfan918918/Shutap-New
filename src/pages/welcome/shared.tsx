@@ -2,9 +2,9 @@ import { EyeMark as BrandEyeMark } from '@/components/brand/EyeMark'
 
 export const BG = '#100c14'
 export const TEXT = '#fdfbf9'
-export const SOFT = '#c4a0b2'
+export const SOFT = '#bdb8bb'
 export const MUTED = '#6f666c'
-export const ACCENT = '#a52a5f'
+export const ACCENT = '#2b2630'
 
 export const CREATURES = [
   { n: 'Owl', e: '🦉' }, { n: 'Fox', e: '🦊' }, { n: 'Bear', e: '🐻' }, { n: 'Lion', e: '🦁' },
@@ -35,8 +35,8 @@ export const primaryBtn: React.CSSProperties = {
   fontWeight: 700, fontSize: 15, cursor: 'pointer',
 }
 export const ghostBtn: React.CSSProperties = {
-  width: '100%', padding: '15px 20px', background: 'rgba(231,84,138,.12)',
-  border: '1.5px solid rgba(231,84,138,.35)', borderRadius: 14, color: '#f7b8d4',
+  width: '100%', padding: '15px 20px', background: 'rgba(23,19,26,.12)',
+  border: '1.5px solid rgba(23,19,26,.35)', borderRadius: 14, color: '#e2dde0',
   fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: 15, cursor: 'pointer',
 }
 export const wheelSelect: React.CSSProperties = {
@@ -44,8 +44,8 @@ export const wheelSelect: React.CSSProperties = {
   WebkitAppearance: 'none',
   MozAppearance: 'none',
   background:
-    'linear-gradient(180deg, rgba(247,232,240,0.06) 0%, rgba(247,232,240,0.18) 45%, rgba(231,84,138,0.28) 50%, rgba(247,232,240,0.18) 55%, rgba(247,232,240,0.06) 100%)',
-  border: '1px solid rgba(231,84,138,.30)',
+    'linear-gradient(180deg, rgba(239,237,235,0.06) 0%, rgba(239,237,235,0.18) 45%, rgba(23,19,26,0.28) 50%, rgba(239,237,235,0.18) 55%, rgba(239,237,235,0.06) 100%)',
+  border: '1px solid rgba(23,19,26,.30)',
   borderRadius: 14,
   color: TEXT,
   fontFamily: "'Sora', system-ui, sans-serif",
@@ -60,7 +60,7 @@ export const wheelSelect: React.CSSProperties = {
   textAlignLast: 'center',
   cursor: 'pointer',
   boxShadow:
-    'inset 0 1px 0 rgba(255,255,255,.06), 0 0 0 1px rgba(231,84,138,.10), 0 6px 16px -10px rgba(231,84,138,.35)',
+    'inset 0 1px 0 rgba(255,255,255,.06), 0 0 0 1px rgba(23,19,26,.10), 0 6px 16px -10px rgba(23,19,26,.35)',
 }
 
 export type Msg = { kind: 'err' | 'ok'; text: string } | null

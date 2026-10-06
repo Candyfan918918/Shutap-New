@@ -16,7 +16,7 @@ export function Chapter02Scan({ onCtaScan }: { onCtaScan: () => void }) {
   const [phase, setPhase] = useState<0 | 1 | 2 | 3>(reduce ? 3 : 0)
   const [dialProgress, setDialProgress] = useState(reduce ? 1 : 0)
   const [counter, setCounter] = useState(reduce ? 740 : 0)
-  const card = useReactiveCard({ glow: 'rgba(231,84,138,.55)' })
+  const card = useReactiveCard({ glow: 'rgba(23,19,26,.55)' })
   const magneticCta = useMagnetic<HTMLButtonElement>()
 
   useEffect(() => {
@@ -101,8 +101,8 @@ export function Chapter02Scan({ onCtaScan }: { onCtaScan: () => void }) {
             ref={card.ref}
             style={{
               width: 'min(330px,88vw)',
-              background: 'linear-gradient(170deg,#241226,#160b16 70%)',
-              border: '1px solid rgba(231,84,138,.35)',
+              background: 'linear-gradient(170deg,#1b1b1b,#101010 70%)',
+              border: '1px solid rgba(23,19,26,.35)',
               borderRadius: 24,
               padding: '24px 22px 20px',
               boxShadow: '0 40px 90px -40px rgba(0,0,0,.7)',
@@ -110,7 +110,7 @@ export function Chapter02Scan({ onCtaScan }: { onCtaScan: () => void }) {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(231,84,138,.16)', color: '#f7b8d4', border: '.5px solid rgba(231,84,138,.3)', borderRadius: 999, padding: '4px 12px', fontFamily: SORA, fontWeight: 600, fontSize: 10.5, letterSpacing: '.08em', textTransform: 'uppercase' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(23,19,26,.16)', color: '#e2dde0', border: '.5px solid rgba(23,19,26,.3)', borderRadius: 999, padding: '4px 12px', fontFamily: SORA, fontWeight: 600, fontSize: 10.5, letterSpacing: '.08em', textTransform: 'uppercase' }}>
                 relationships
               </span>
               <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 12.5, color: '#6f666c' }}>
@@ -145,7 +145,7 @@ export function Chapter02Scan({ onCtaScan }: { onCtaScan: () => void }) {
               {phase === 3 && <ScanDial value={counter} progress={dialProgress} />}
             </div>
 
-            <div style={{ marginTop: 10, opacity: .6, textAlign: 'center', fontFamily: SORA, fontWeight: 800, fontSize: 8.5, letterSpacing: '.28em', color: '#c4a0b2' }}>
+            <div style={{ marginTop: 10, opacity: .6, textAlign: 'center', fontFamily: SORA, fontWeight: 800, fontSize: 8.5, letterSpacing: '.28em', color: '#bdb8bb' }}>
               SHUTAP · THE SCAN
             </div>
             {card.decor}
@@ -186,7 +186,7 @@ function ScanQuestion({ n, question, options, highlight }: { n: number; question
                 fontSize: 14.5,
                 padding: '11px 14px',
                 border: '1px solid ' + (active ? '#aaa3e8' : 'rgba(255,255,255,.14)'),
-                background: active ? 'rgba(127,119,221,.25)' : 'rgba(255,255,255,.05)',
+                background: active ? 'rgba(90,90,95,.25)' : 'rgba(255,255,255,.05)',
                 borderRadius: 14,
                 color: active ? '#fff' : '#e9e4f6',
                 transform: active ? 'scale(1.03)' : 'scale(1)',
@@ -217,15 +217,15 @@ function ScanDial({ value, progress }: { value: number; progress: number }) {
             cy={100}
             r={r}
             fill="none"
-            stroke="#a52a5f"
+            stroke="#2b2630"
             strokeWidth={10}
             strokeLinecap="round"
             strokeDasharray={`${dash} ${c - dash}`}
-            style={{ filter: 'drop-shadow(0 0 8px rgba(231,84,138,.6))', transition: 'stroke-dasharray .1s linear' }}
+            style={{ filter: 'drop-shadow(0 0 8px rgba(23,19,26,.6))', transition: 'stroke-dasharray .1s linear' }}
           />
         </svg>
         <div style={{ position: 'absolute', textAlign: 'center' }}>
-          <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 52, letterSpacing: '-.04em', color: '#a52a5f', lineHeight: .9, fontVariantNumeric: 'tabular-nums' }}>
+          <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 52, letterSpacing: '-.04em', color: '#2b2630', lineHeight: .9, fontVariantNumeric: 'tabular-nums' }}>
             {value}
           </div>
           <div style={{ fontFamily: SORA, fontWeight: 600, fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#6f666c', marginTop: 5 }}>
@@ -235,12 +235,12 @@ function ScanDial({ value, progress }: { value: number; progress: number }) {
       </div>
       <div style={{ textAlign: 'center', marginBottom: 14 }}>
         <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 20, color: '#fdfbf9', lineHeight: 1.15 }}>Carrying It Loud</div>
-        <div style={{ marginTop: 6, fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, lineHeight: 1.5, color: '#c4a0b2' }}>
+        <div style={{ marginTop: 6, fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, lineHeight: 1.5, color: '#bdb8bb' }}>
           the part that hurts is how unseen it makes you feel — and you keep showing up anyway.
         </div>
       </div>
-      <div style={{ height: 5, borderRadius: 3, background: 'linear-gradient(90deg,#6f666c,#7F77DD,#c87c4a,#a52a5f,#c1216b)', position: 'relative' }}>
-        <span style={{ position: 'absolute', left: `${100 * progress}%`, top: '50%', width: 13, height: 13, borderRadius: '50%', background: '#fff', border: '3px solid #a52a5f', transform: 'translate(-50%,-50%)' }} />
+      <div style={{ height: 5, borderRadius: 3, background: 'linear-gradient(90deg,#6f666c,#7F77DD,#c87c4a,#2b2630,#17131a)', position: 'relative' }}>
+        <span style={{ position: 'absolute', left: `${100 * progress}%`, top: '50%', width: 13, height: 13, borderRadius: '50%', background: '#fff', border: '3px solid #2b2630', transform: 'translate(-50%,-50%)' }} />
       </div>
     </div>
   )

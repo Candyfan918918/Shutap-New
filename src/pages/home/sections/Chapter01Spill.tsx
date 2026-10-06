@@ -107,7 +107,7 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
         border: '1px solid rgba(255,255,255,.09)',
         borderRadius: '28px',
         padding: '22px 22px 20px',
-        boxShadow: '0 40px 90px -40px rgba(60,10,30,.65)',
+        boxShadow: '0 40px 90px -40px rgba(20,16,22,.65)',
         willChange: 'transform',
       }}
     >
@@ -121,7 +121,7 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
                 height: '3px',
                 flex: 1,
                 borderRadius: '2px',
-                background: i < s.dots ? '#a52a5f' : 'rgba(255,255,255,.12)',
+                background: i < s.dots ? '#2b2630' : 'rgba(255,255,255,.12)',
                 transition: 'background .07s',
               }}
             />
@@ -160,7 +160,7 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
                 fontSize: '10px',
                 letterSpacing: '.16em',
                 textTransform: 'uppercase',
-                color: '#a52a5f',
+                color: '#2b2630',
               }}
             >
               spill
@@ -176,7 +176,7 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
               gap: '14px',
             }}
           >
-            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '15.5px', color: '#c4a0b2' }}>
+            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '15.5px', color: '#bdb8bb' }}>
               {cur.reaction}
             </div>
             <div
@@ -186,7 +186,7 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
                 fontWeight: 500,
                 fontSize: 'clamp(23px,5.4vw,32px)',
                 lineHeight: 1.22,
-                color: '#f7b8d4',
+                color: '#e2dde0',
               }}
             >
               {cur.question}
@@ -216,7 +216,7 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
             >
               {typedText}
             </span>
-            <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '14px', color: '#a52a5f', flex: 'none' }}>
+            <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '14px', color: '#2b2630', flex: 'none' }}>
               send →
             </span>
           </div>
@@ -242,12 +242,12 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
               fontSize: '10px',
               letterSpacing: '.16em',
               textTransform: 'uppercase',
-              color: '#a52a5f',
+              color: '#2b2630',
             }}
           >
             preview · in your words
           </div>
-          <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '14px', color: '#c4a0b2', lineHeight: 1.5 }}>
+          <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '14px', color: '#bdb8bb', lineHeight: 1.5 }}>
             here's your story — cleaned up a little, but still yours. type right over anything to fix it, or tell me
             what to change below — then pick where it lives.
           </div>
@@ -270,7 +270,7 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
             <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '20px', color: '#fdfbf9', lineHeight: 1.3 }}>
               the sister i'd protect from anyone was scared of me.
             </div>
-            <div style={{ fontFamily: NEWS, fontSize: '15px', color: '#e7dce4', lineHeight: 1.6 }}>
+            <div style={{ fontFamily: NEWS, fontSize: '15px', color: '#e6e3e4', lineHeight: 1.6 }}>
               she told me tuesday, out of nowhere — she's been scared of me since we were kids. i went quiet, and i
               still haven't said it to anyone who knows us.
             </div>
@@ -282,8 +282,8 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
                     fontFamily: SORA,
                     fontWeight: 600,
                     fontSize: '10.5px',
-                    color: '#a52a5f',
-                    background: 'rgba(231,84,138,.13)',
+                    color: '#2b2630',
+                    background: 'rgba(23,19,26,.13)',
                     borderRadius: '999px',
                     padding: '3px 10px',
                   }}
@@ -309,10 +309,10 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
               gap: '10px',
             }}
           >
-            <span style={{ flex: 1, fontFamily: NEWS, fontStyle: 'italic', fontSize: '13px', color: '#7e6675' }}>
+            <span style={{ flex: 1, fontFamily: NEWS, fontStyle: 'italic', fontSize: '13px', color: '#707070' }}>
               or tell me: "make it shorter", "add the part about the rent"…
             </span>
-            <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '13px', color: '#a52a5f', flex: 'none' }}>
+            <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '13px', color: '#2b2630', flex: 'none' }}>
               edit →
             </span>
           </div>
@@ -342,7 +342,7 @@ function SpillCard({ alias, pillar }: { alias?: string; pillar?: string }) {
                 private draft. only you.
               </div>
             </div>
-            <div style={{ background: '#a52a5f', borderRadius: '14px', padding: '14px' }}>
+            <div style={{ background: '#2b2630', borderRadius: '14px', padding: '14px' }}>
               <div
                 style={{
                   fontFamily: SORA,
@@ -390,7 +390,7 @@ export function Chapter01Spill({ alias, pillar }: { alias?: string; pillar?: str
               fontSize: '12px',
               letterSpacing: '.24em',
               textTransform: 'uppercase',
-              color: '#a52a5f',
+              color: '#2b2630',
               marginBottom: '22px',
             }}
           >
@@ -409,7 +409,7 @@ export function Chapter01Spill({ alias, pillar }: { alias?: string; pillar?: str
             }}
           >
             say the thing you can't say{' '}
-            <em style={{ fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, color: '#c1216b' }}>
+            <em style={{ fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, color: '#17131a' }}>
               anywhere else.
             </em>
           </h2>

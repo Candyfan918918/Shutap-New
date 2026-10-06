@@ -25,7 +25,7 @@ function Bar({ value, max }: { value: number; max: number }) {
   const pct = max > 0 ? Math.max(2, Math.round((value / max) * 100)) : 0
   return (
     <div style={{ background: '#fdfbf9', borderRadius: 999, height: 8, width: 140, overflow: 'hidden' }}>
-      <div style={{ background: '#c1216b', height: '100%', width: `${pct}%` }} />
+      <div style={{ background: '#17131a', height: '100%', width: `${pct}%` }} />
     </div>
   )
 }
@@ -74,7 +74,7 @@ export function AdminAnalyticsPage() {
       title="analytics"
       subtitle={data ? `as of ${fmt(data.generated_at)}` : undefined}
     >
-      {err && <div style={{ color: '#c1216b', marginBottom: 12 }}>{err}</div>}
+      {err && <div style={{ color: '#17131a', marginBottom: 12 }}>{err}</div>}
       {!data || !visits ? (
         <div style={{ color: '#443c42' }}>loading…</div>
       ) : (
@@ -150,7 +150,7 @@ export function AdminAnalyticsPage() {
                     onClick={() => setAudience(k)}
                     style={{
                       padding: '6px 14px', borderRadius: 999, border: 0,
-                      background: audience === k ? '#c1216b' : 'transparent',
+                      background: audience === k ? '#17131a' : 'transparent',
                       color: audience === k ? '#fff' : '#443c42',
                       fontFamily: "'Sora',sans-serif", fontSize: 11, fontWeight: 700,
                       letterSpacing: '.08em', textTransform: 'uppercase', cursor: 'pointer',
@@ -225,7 +225,7 @@ function GrowthBlockCard({ title, block }: { title: string; block: GrowthBlock }
             <div
               key={p.date}
               title={`${p.date}: ${p.n}`}
-              style={{ flex: 1, background: p.n > 0 ? '#c1216b' : '#fdfbf9', height: h, borderRadius: 2, minWidth: 2 }}
+              style={{ flex: 1, background: p.n > 0 ? '#17131a' : '#fdfbf9', height: h, borderRadius: 2, minWidth: 2 }}
             />
           )
         })}
@@ -237,7 +237,7 @@ function GrowthBlockCard({ title, block }: { title: string; block: GrowthBlock }
 
 function DeltaChip({ label, d }: { label: string; d: { curr: number; prev: number; delta_pct: number | null } }) {
   const positive = d.delta_pct != null && d.delta_pct >= 0
-  const color = d.delta_pct == null ? '#6f666c' : positive ? '#5b8a5e' : '#c1216b'
+  const color = d.delta_pct == null ? '#6f666c' : positive ? '#5b8a5e' : '#17131a'
   const arrow = d.delta_pct == null ? '—' : positive ? '▲' : '▼'
   return (
     <div style={{ background: '#ffffff', borderRadius: 10, padding: '10px 12px' }}>
@@ -256,7 +256,7 @@ function ChannelBar({ channels }: { channels: Record<string, number> }) {
   const total = entries.reduce((s, [, v]) => s + v, 0)
   if (total === 0) return <div style={empty}>no visits captured yet</div>
   const colors: Record<string, string> = {
-    direct: '#7f77dd', search: '#5b8a5e', social: '#c87c4a', referral: '#c1216b', utm: '#0b080f',
+    direct: '#7f77dd', search: '#5b8a5e', social: '#c87c4a', referral: '#17131a', utm: '#0b080f',
   }
   return (
     <div>

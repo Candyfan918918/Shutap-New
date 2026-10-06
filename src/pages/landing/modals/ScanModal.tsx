@@ -89,7 +89,7 @@ const dbBand: Record<ScanBandKey, 'quiet' | 'real' | 'hot' | 'heavy' | 'serious'
   within: 'quiet', uncommon: 'real', outside: 'hot', well_outside: 'heavy', far_outside: 'serious',
 }
 const scoreColor = (score: number): string =>
-  score < 200 ? '#6f666c' : score < 400 ? '#7F77DD' : score < 600 ? '#c87c4a' : score < 800 ? '#a52a5f' : '#c1216b'
+  score < 200 ? '#6f666c' : score < 400 ? '#7F77DD' : score < 600 ? '#c87c4a' : score < 800 ? '#2b2630' : '#17131a'
 
 function pillarFromQA(qa: QA[]): string {
   const t = qa.map(x => x.answer + ' ' + x.prompt).join(' ').toLowerCase()
@@ -288,7 +288,7 @@ function ScanHeader({ pct, onClose, minimal = false }: { pct: number; onClose: (
             height: '100%', width: pct + '%',
             background: 'linear-gradient(90deg,#5B8A5E,#7F77DD)',
             borderRadius: 3,
-            boxShadow: '0 0 10px rgba(127,119,221,.7)',
+            boxShadow: '0 0 10px rgba(90,90,95,.7)',
             transition: 'width .8s cubic-bezier(.16,1,.3,1)',
           }} />
         </div>
@@ -328,8 +328,8 @@ function ChoiceW({ card, onPick }: { card: CardChoice; onPick: (v: string) => vo
             style={{
               cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12,
               padding: '17px 19px',
-              border: '1px solid ' + (on ? '#7F77DD' : 'rgba(127,119,221,.22)'),
-              background: on ? '#7F77DD' : 'rgba(127,119,221,.06)',
+              border: '1px solid ' + (on ? '#7F77DD' : 'rgba(90,90,95,.22)'),
+              background: on ? '#7F77DD' : 'rgba(90,90,95,.06)',
               borderRadius: 16,
               fontFamily: SORA, fontWeight: 600, fontSize: 16.5,
               color: on ? '#fff' : '#ece6f5',
@@ -342,15 +342,15 @@ function ChoiceW({ card, onPick }: { card: CardChoice; onPick: (v: string) => vo
               if (picked) return
               const s = e.currentTarget.style
               s.borderColor = '#7F77DD'
-              s.background = 'rgba(127,119,221,.16)'
+              s.background = 'rgba(90,90,95,.16)'
               s.transform = 'translateX(6px)'
-              s.boxShadow = '0 0 22px -8px rgba(127,119,221,.7)'
+              s.boxShadow = '0 0 22px -8px rgba(90,90,95,.7)'
             }}
             onMouseOut={e => {
               if (picked) return
               const s = e.currentTarget.style
-              s.borderColor = 'rgba(127,119,221,.22)'
-              s.background = 'rgba(127,119,221,.06)'
+              s.borderColor = 'rgba(90,90,95,.22)'
+              s.background = 'rgba(90,90,95,.06)'
               s.transform = 'none'
               s.boxShadow = 'none'
             }}
@@ -386,8 +386,8 @@ function MultiW({ card, onDone }: { card: CardMulti; onDone: (v: string) => void
           return (
             <div key={i} role="button" onClick={() => toggle(o)} style={{
               cursor: 'pointer', padding: '11px 15px',
-              border: '1px solid ' + (on ? '#7F77DD' : 'rgba(127,119,221,.25)'),
-              background: on ? '#7F77DD' : 'rgba(127,119,221,.06)',
+              border: '1px solid ' + (on ? '#7F77DD' : 'rgba(90,90,95,.25)'),
+              background: on ? '#7F77DD' : 'rgba(90,90,95,.06)',
               borderRadius: 999, fontFamily: SORA, fontWeight: 600, fontSize: 14,
               color: on ? '#fff' : '#ece6f5', transition: '.12s',
             }}>{o}</div>
@@ -395,7 +395,7 @@ function MultiW({ card, onDone }: { card: CardMulti; onDone: (v: string) => void
         })}
       </div>
       {warn && (
-        <div style={{ marginTop: 10, fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#f7b8d4' }}>{warn}</div>
+        <div style={{ marginTop: 10, fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13, color: '#e2dde0' }}>{warn}</div>
       )}
       <NextBtn enabled={sel.size > 0} onClick={() => onDone([...sel].join(', '))} />
     </>
@@ -404,7 +404,7 @@ function MultiW({ card, onDone }: { card: CardMulti; onDone: (v: string) => void
 
 function RateW({ card, onDone }: { card: CardRate; onDone: (v: string) => void }) {
   const [val, setVal] = useState(5)
-  const col = val >= 8 ? '#a52a5f' : val >= 5 ? '#9a93e8' : '#7F77DD'
+  const col = val >= 8 ? '#2b2630' : val >= 5 ? '#9a93e8' : '#7F77DD'
   const scale = 1 + val * 0.035
   return (
     <div style={{ marginTop: 14 }}>
@@ -445,7 +445,7 @@ function SpectrumW({ card, onDone }: { card: CardSpectrum; onDone: (v: string) =
       <div
         ref={trackRef}
         onPointerDown={e => { dragRef.current = true; setFromX(e.clientX); e.preventDefault() }}
-        style={{ position: 'relative', height: 10, borderRadius: 5, background: 'linear-gradient(90deg,rgba(127,119,221,.3),rgba(231,84,138,.45))', cursor: 'pointer' }}
+        style={{ position: 'relative', height: 10, borderRadius: 5, background: 'linear-gradient(90deg,rgba(90,90,95,.3),rgba(23,19,26,.45))', cursor: 'pointer' }}
       >
         <div style={{ position: 'absolute', top: '50%', left: pos + '%', transform: 'translate(-50%,-50%)', width: 30, height: 30, borderRadius: '50%', background: '#fff', boxShadow: '0 4px 14px rgba(0,0,0,.45)', border: '3px solid #7F77DD', cursor: 'grab' }} />
       </div>
@@ -482,7 +482,7 @@ function RankW({ card, onDone }: { card: CardRank; onDone: (v: string) => void }
               dragIdx.current = null
               setOrder(next)
             }}
-            style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', border: '1px solid rgba(127,119,221,.22)', background: 'rgba(127,119,221,.07)', borderRadius: 12, fontFamily: SORA, fontWeight: 600, fontSize: 14.5, color: '#ece6f5', cursor: 'grab' }}>
+            style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', border: '1px solid rgba(90,90,95,.22)', background: 'rgba(90,90,95,.07)', borderRadius: 12, fontFamily: SORA, fontWeight: 600, fontSize: 14.5, color: '#ece6f5', cursor: 'grab' }}>
             <span style={{ fontFamily: SORA, fontWeight: 800, color: '#7F77DD', flex: 'none' }}>{i + 1}</span>
             <span style={{ flex: 1 }}>{it}</span>
             <span style={{ color: '#6f6790', flex: 'none', letterSpacing: '-2px' }}>::</span>
@@ -500,7 +500,7 @@ function TextW({ card, onDone }: { card: CardText; onDone: (v: string) => void }
   useEffect(() => { setTimeout(() => ref.current?.focus(), 150) }, [])
   const go = () => { const t = v.trim(); if (!t) return; onDone(scrubPII(t)) }
   return (
-    <div style={{ marginTop: 8, display: 'flex', alignItems: 'flex-end', gap: 10, background: 'rgba(127,119,221,.08)', border: '1px solid rgba(127,119,221,.25)', borderRadius: 15, padding: '13px 15px' }}>
+    <div style={{ marginTop: 8, display: 'flex', alignItems: 'flex-end', gap: 10, background: 'rgba(90,90,95,.08)', border: '1px solid rgba(90,90,95,.25)', borderRadius: 15, padding: '13px 15px' }}>
       <textarea
         ref={ref}
         rows={2}
@@ -755,9 +755,9 @@ export function ScanModal({ open, onClose }: { open: boolean; onClose: () => voi
       {phase === 'loading' && (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 24px', textAlign: 'center', gap: 22 }}>
           <div style={{ position: 'relative', padding: 18 }}>
-            <div style={{ position: 'absolute', inset: 0, borderRadius: 22, border: '1px solid rgba(127,119,221,.35)', boxShadow: '0 0 26px -8px rgba(127,119,221,.6)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', inset: 0, borderRadius: 22, border: '1px solid rgba(90,90,95,.35)', boxShadow: '0 0 26px -8px rgba(90,90,95,.6)', pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', inset: 0, borderRadius: 22, overflow: 'hidden', pointerEvents: 'none' }}>
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(180deg, rgba(127,119,221,0), rgba(127,119,221,.25), rgba(127,119,221,0))', animation: 'scanbeam 1.4s ease-in-out infinite' }} />
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(180deg, rgba(90,90,95,0), rgba(90,90,95,.25), rgba(90,90,95,0))', animation: 'scanbeam 1.4s ease-in-out infinite' }} />
             </div>
             <CompanionSVG size={38} />
           </div>
@@ -797,26 +797,26 @@ export function ScanModal({ open, onClose }: { open: boolean; onClose: () => voi
               <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 10.5, letterSpacing: '.08em', textTransform: 'uppercase', color: col, background: col + '22', border: '.5px solid ' + col + '55', borderRadius: 999, padding: '4px 12px' }}>{result.pillar}</span>
             )}
             {result.factors.map((f, i) => (
-              <span key={i} style={{ fontFamily: SORA, fontWeight: 600, fontSize: 10.5, color: '#b9a9e6', background: 'rgba(127,119,221,.14)', borderRadius: 999, padding: '4px 11px' }}>{f}</span>
+              <span key={i} style={{ fontFamily: SORA, fontWeight: 600, fontSize: 10.5, color: '#b9a9e6', background: 'rgba(90,90,95,.14)', borderRadius: 999, padding: '4px 11px' }}>{f}</span>
             ))}
           </div>
           <div style={{ background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 16, padding: 20 }}>
             <CompanionSVG size={28} />
             <div style={{ marginTop: 12, fontFamily: SORA, fontWeight: 800, fontSize: 20, color: '#fdfbf9', marginBottom: 8 }}>{result.label}</div>
-            <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 15.5, color: '#c4a0b2', lineHeight: 1.55 }}>{result.sub}</div>
+            <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 15.5, color: '#bdb8bb', lineHeight: 1.55 }}>{result.sub}</div>
           </div>
           <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14.5, color: '#6f666c', textAlign: 'center' }}>this is your read. keep it just for you, or let a room hold your number too.</div>
-          <div role="button" onClick={() => navigate('/mirror')} style={{ cursor: 'pointer', background: 'rgba(231,84,138,.08)', border: '.5px solid rgba(231,84,138,.22)', borderRadius: 14, padding: '14px 16px', display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div role="button" onClick={() => navigate('/mirror')} style={{ cursor: 'pointer', background: 'rgba(23,19,26,.08)', border: '.5px solid rgba(23,19,26,.22)', borderRadius: 14, padding: '14px 16px', display: 'flex', gap: 12, alignItems: 'center' }}>
             <CompanionSVG size={24} />
             <div style={{ flex: 1 }}>
               <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14.5, color: '#fdfbf9', lineHeight: 1.45 }}>this is one moment. i am holding the whole pattern — every scan adds to the picture of you.</div>
-              <div style={{ marginTop: 6, fontFamily: SORA, fontWeight: 700, fontSize: 12.5, color: '#f7b8d4' }}>see your mirror →</div>
+              <div style={{ marginTop: 6, fontFamily: SORA, fontWeight: 700, fontSize: 12.5, color: '#e2dde0' }}>see your mirror →</div>
             </div>
           </div>
           {saveNote && (
             <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 13.5, color: '#a8d4a9', textAlign: 'center' }}>{saveNote}</div>
           )}
-          <div role="button" onClick={() => setShareOpen(true)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: 14, background: 'linear-gradient(120deg,#ff7eb3,#c1216b)', borderRadius: 14, cursor: 'pointer' }}>
+          <div role="button" onClick={() => setShareOpen(true)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: 14, background: 'linear-gradient(120deg,#d6d0d4,#17131a)', borderRadius: 14, cursor: 'pointer' }}>
             <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 14, color: '#fff' }}>share your score</span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 11 }}>
@@ -824,8 +824,8 @@ export function ScanModal({ open, onClose }: { open: boolean; onClose: () => voi
               <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 10.5, letterSpacing: '.12em', textTransform: 'uppercase', color: '#6f666c', marginBottom: 7 }}>keep private</div>
               <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14, color: '#fdfbf9', lineHeight: 1.4 }}>yours alone. saved to your journal.</div>
             </div>
-            <div role="button" onClick={() => void runCompose()} style={{ padding: 18, background: 'rgba(231,84,138,.10)', border: '1.5px solid rgba(231,84,138,.35)', borderRadius: 14, cursor: 'pointer' }}>
-              <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 10.5, letterSpacing: '.12em', textTransform: 'uppercase', color: '#f7b8d4', marginBottom: 7 }}>post to a room</div>
+            <div role="button" onClick={() => void runCompose()} style={{ padding: 18, background: 'rgba(23,19,26,.10)', border: '1.5px solid rgba(23,19,26,.35)', borderRadius: 14, cursor: 'pointer' }}>
+              <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 10.5, letterSpacing: '.12em', textTransform: 'uppercase', color: '#e2dde0', marginBottom: 7 }}>post to a room</div>
               <div style={{ fontFamily: NEWSREADER, fontStyle: 'italic', fontSize: 14, color: '#fdfbf9', lineHeight: 1.4 }}>i'll write it up in your words — you check it first.</div>
             </div>
           </div>
@@ -846,10 +846,10 @@ export function ScanModal({ open, onClose }: { open: boolean; onClose: () => voi
 
       {phase === 'preview' && composed && result && (
         <div style={{ flex: 1, overflowY: 'auto', padding: '20px 22px 36px', maxWidth: 560, width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 18 }}>
-          <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#f7b8d4' }}>preview your post</div>
+          <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#e2dde0' }}>preview your post</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
             <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 10.5, letterSpacing: '.08em', textTransform: 'uppercase', color: col, background: col + '22', border: '.5px solid ' + col + '55', borderRadius: 999, padding: '4px 12px' }}>{result.score} · {bandPhrase[band]}</span>
-            <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 10.5, letterSpacing: '.08em', textTransform: 'uppercase', color: '#b9a9e6', background: 'rgba(127,119,221,.14)', borderRadius: 999, padding: '4px 12px' }}>{result.label}</span>
+            <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 10.5, letterSpacing: '.08em', textTransform: 'uppercase', color: '#b9a9e6', background: 'rgba(90,90,95,.14)', borderRadius: 999, padding: '4px 12px' }}>{result.label}</span>
           </div>
           <div style={{ background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 16, padding: 20 }}>
             <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 20, color: '#fdfbf9', marginBottom: 12, lineHeight: 1.25 }}>{composed.title}</div>
@@ -863,7 +863,7 @@ export function ScanModal({ open, onClose }: { open: boolean; onClose: () => voi
             <div role="button" onClick={() => { setComposed(null); setPhase('result') }} style={{ padding: 16, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 14, cursor: 'pointer', textAlign: 'center' }}>
               <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 13, color: '#fdfbf9' }}>back</div>
             </div>
-            <div role="button" onClick={() => void doPersist(true)} style={{ padding: 16, background: 'linear-gradient(120deg,#ff7eb3,#c1216b)', borderRadius: 14, cursor: 'pointer', textAlign: 'center' }}>
+            <div role="button" onClick={() => void doPersist(true)} style={{ padding: 16, background: 'linear-gradient(120deg,#d6d0d4,#17131a)', borderRadius: 14, cursor: 'pointer', textAlign: 'center' }}>
               <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 13, color: '#fff' }}>post it →</div>
             </div>
           </div>

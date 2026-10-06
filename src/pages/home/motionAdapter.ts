@@ -40,7 +40,7 @@ function applyMagnetic(el: HTMLElement, strength = 0.22): () => void {
   }
 }
 
-function applyReactiveCard(card: HTMLElement, glow = 'rgba(231,84,138,.55)'): () => void {
+function applyReactiveCard(card: HTMLElement, glow = 'rgba(23,19,26,.55)'): () => void {
   // Inject decor (glare + sheen) inside the card.
   const cs = getComputedStyle(card)
   if (cs.position === 'static') card.style.position = 'relative'
@@ -146,7 +146,7 @@ export function mountHomeMotion(root: HTMLElement): () => void {
       disposers.push(applyMagnetic(el, 0.22))
     })
     // Reactive card physics on rooms-strip tiles.
-    tiles.forEach((t) => disposers.push(applyReactiveCard(t, 'rgba(231,84,138,.45)')))
+    tiles.forEach((t) => disposers.push(applyReactiveCard(t, 'rgba(23,19,26,.45)')))
   }
 
   return () => disposers.forEach((d) => d())

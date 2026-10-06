@@ -19,7 +19,7 @@ const NEWSREADER = "'Newsreader', Georgia, serif"
 
 type Channel = 'Text' | 'X' | 'Instagram' | 'TikTok' | 'WhatsApp' | 'copy'
 
-const I = '#f3d9e4' // calm cream-blush glyph, on-brand
+const I = '#e2e2e2' // calm cream-blush glyph, on-brand
 
 const CHANNELS: Array<{ key: Channel; label: string; svg: React.ReactNode }> = [
   {
@@ -109,13 +109,13 @@ export function ShareChannels({ caption, url, onToast }: { caption: string; url:
               height: 52,
               borderRadius: 16,
               background: 'rgba(255,255,255,.05)',
-              border: '.5px solid rgba(255,236,244,.13)',
+              border: '.5px solid rgba(246,245,244,.13)',
               display: 'grid',
               placeItems: 'center',
               transition: '.16s',
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(231,84,138,.16)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(231,84,138,.4)' }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,.05)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,236,244,.13)' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(23,19,26,.16)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(23,19,26,.4)' }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,.05)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(246,245,244,.13)' }}
           >
             <svg viewBox="0 0 24 24" style={{ width: 23, height: 23 }}>{c.svg}</svg>
           </span>

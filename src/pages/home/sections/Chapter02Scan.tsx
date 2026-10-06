@@ -11,8 +11,8 @@ function bandColor(v: number) {
   if (v < 200) return '#6f666c'
   if (v < 400) return '#7F77DD'
   if (v < 600) return '#c87c4a'
-  if (v < 800) return '#a52a5f'
-  return '#c1216b'
+  if (v < 800) return '#2b2630'
+  return '#17131a'
 }
 
 function usePrefersReducedMotion() {
@@ -111,10 +111,10 @@ function ScanCard() {
       style={{
         width: 'min(420px,100%)',
         background: 'linear-gradient(170deg,#1a1226,#100c14 72%)',
-        border: '1px solid rgba(127,119,221,.28)',
+        border: '1px solid rgba(90,90,95,.28)',
         borderRadius: '26px',
         padding: '26px 26px 22px',
-        boxShadow: '0 40px 100px -40px rgba(127,119,221,.55), 0 20px 60px -20px rgba(0,0,0,.7)',
+        boxShadow: '0 40px 100px -40px rgba(90,90,95,.55), 0 20px 60px -20px rgba(0,0,0,.7)',
       }}
     >
       {/* header */}
@@ -146,7 +146,7 @@ function ScanCard() {
               height: '100%',
               borderRadius: '3px',
               background: 'linear-gradient(90deg,#5B8A5E,#7F77DD)',
-              boxShadow: '0 0 12px rgba(127,119,221,.55)',
+              boxShadow: '0 0 12px rgba(90,90,95,.55)',
               transition: 'width .16s cubic-bezier(.16,1,.3,1)',
             }}
           />
@@ -168,8 +168,8 @@ function ScanCard() {
                 <div
                   key={opt}
                   style={{
-                    border: `1px solid ${isPicked ? '#7F77DD' : 'rgba(127,119,221,.22)'}`,
-                    background: isPicked ? '#7F77DD' : 'rgba(127,119,221,.06)',
+                    border: `1px solid ${isPicked ? '#7F77DD' : 'rgba(90,90,95,.22)'}`,
+                    background: isPicked ? '#7F77DD' : 'rgba(90,90,95,.06)',
                     borderRadius: '16px',
                     padding: '15px 18px',
                     fontFamily: SORA,
@@ -177,7 +177,7 @@ function ScanCard() {
                     fontSize: '15.5px',
                     color: isPicked ? '#fff' : '#ece6f5',
                     transform: isPicked ? 'translateX(6px)' : 'translateX(0)',
-                    boxShadow: isPicked ? '0 10px 30px -10px rgba(127,119,221,.6)' : 'none',
+                    boxShadow: isPicked ? '0 10px 30px -10px rgba(90,90,95,.6)' : 'none',
                     transition: 'background .3s, border-color .3s, transform .3s, color .3s, box-shadow .3s',
                   }}
                 >
@@ -197,7 +197,7 @@ function ScanCard() {
                 position: 'relative',
                 height: '10px',
                 borderRadius: '999px',
-                background: 'linear-gradient(90deg,rgba(127,119,221,.4),rgba(231,84,138,.5))',
+                background: 'linear-gradient(90deg,rgba(90,90,95,.4),rgba(23,19,26,.5))',
               }}
             >
               <span
@@ -218,7 +218,7 @@ function ScanCard() {
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '18px' }}>
               <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '13px', color: '#6f666c' }}>a low hum</span>
-              <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '13px', color: '#a52a5f' }}>deafening</span>
+              <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '13px', color: '#2b2630' }}>deafening</span>
             </div>
           </div>
         </Phase>
@@ -241,13 +241,13 @@ function ScanCard() {
                 width: '160px',
                 height: '160px',
                 borderRadius: '24px',
-                border: '1px solid rgba(127,119,221,.35)',
-                boxShadow: '0 0 40px -8px rgba(127,119,221,.55)',
+                border: '1px solid rgba(90,90,95,.35)',
+                boxShadow: '0 0 40px -8px rgba(90,90,95,.55)',
                 overflow: 'hidden',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'rgba(127,119,221,.05)',
+                background: 'rgba(90,90,95,.05)',
               }}
             >
               <svg viewBox="0 0 56 56" fill="none" style={{ width: '40px', height: '40px', position: 'relative', zIndex: 2 }}>
@@ -262,7 +262,7 @@ function ScanCard() {
                   left: 0,
                   right: 0,
                   height: '40%',
-                  background: 'linear-gradient(180deg, transparent, rgba(127,119,221,.25), transparent)',
+                  background: 'linear-gradient(180deg, transparent, rgba(90,90,95,.25), transparent)',
                   animation: 'scanbeam 1.1s ease-in-out infinite',
                 }}
               />
@@ -325,9 +325,9 @@ function ScanCard() {
                   fontFamily: SORA,
                   fontWeight: 600,
                   fontSize: '10.5px',
-                  color: '#a52a5f',
-                  background: 'rgba(231,84,138,.13)',
-                  border: '.5px solid rgba(231,84,138,.3)',
+                  color: '#2b2630',
+                  background: 'rgba(23,19,26,.13)',
+                  border: '.5px solid rgba(23,19,26,.3)',
                   borderRadius: '999px',
                   padding: '4px 11px',
                 }}
@@ -342,7 +342,7 @@ function ScanCard() {
                     fontWeight: 600,
                     fontSize: '10.5px',
                     color: '#b9a9e6',
-                    background: 'rgba(127,119,221,.14)',
+                    background: 'rgba(90,90,95,.14)',
                     borderRadius: '999px',
                     padding: '4px 11px',
                   }}
@@ -374,7 +374,7 @@ function ScanCard() {
               <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: '20px', color: '#fdfbf9' }}>
                 Carrying It Loud
               </div>
-              <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '15px', color: '#c4a0b2', lineHeight: 1.5 }}>
+              <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '15px', color: '#bdb8bb', lineHeight: 1.5 }}>
                 the part that hurts is how unseen it makes you feel — and you keep showing up anyway.
               </div>
             </div>
@@ -394,8 +394,8 @@ function ScanCard() {
 
             <div
               style={{
-                background: 'rgba(231,84,138,.08)',
-                border: '1px solid rgba(231,84,138,.25)',
+                background: 'rgba(23,19,26,.08)',
+                border: '1px solid rgba(23,19,26,.25)',
                 borderRadius: '14px',
                 padding: '12px 14px',
                 display: 'flex',
@@ -415,7 +415,7 @@ function ScanCard() {
                   fontFamily: NEWS,
                   fontStyle: 'italic',
                   fontSize: '13px',
-                  color: '#f7d0e0',
+                  color: '#dedede',
                   lineHeight: 1.45,
                 }}
               >
@@ -426,7 +426,7 @@ function ScanCard() {
                   fontFamily: SORA,
                   fontWeight: 700,
                   fontSize: '12.5px',
-                  color: '#f7b8d4',
+                  color: '#e2dde0',
                   flex: 'none',
                 }}
               >
@@ -442,7 +442,7 @@ function ScanCard() {
                 justifyContent: 'center',
                 gap: '8px',
                 width: '100%',
-                background: 'linear-gradient(120deg,#ff7eb3,#c1216b)',
+                background: 'linear-gradient(120deg,#d6d0d4,#17131a)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '14px',
@@ -452,7 +452,7 @@ function ScanCard() {
                 fontSize: '13.5px',
                 letterSpacing: '.04em',
                 cursor: 'default',
-                boxShadow: '0 20px 40px -18px rgba(193,33,107,.65)',
+                boxShadow: '0 20px 40px -18px rgba(23,19,26,.65)',
               }}
             >
               <span>+</span> share your score
@@ -486,8 +486,8 @@ function ScanCard() {
               </div>
               <div
                 style={{
-                  background: 'rgba(231,84,138,.10)',
-                  border: '1px solid #a52a5f',
+                  background: 'rgba(23,19,26,.10)',
+                  border: '1px solid #2b2630',
                   borderRadius: '12px',
                   padding: '11px 12px',
                   textAlign: 'center',
@@ -500,12 +500,12 @@ function ScanCard() {
                     fontSize: '10.5px',
                     letterSpacing: '.14em',
                     textTransform: 'uppercase',
-                    color: '#f7b8d4',
+                    color: '#e2dde0',
                   }}
                 >
                   post to a room
                 </div>
-                <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '11.5px', color: '#c4a0b2', marginTop: '3px' }}>
+                <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: '11.5px', color: '#bdb8bb', marginTop: '3px' }}>
                   let a room hold your number too.
                 </div>
               </div>
@@ -521,7 +521,7 @@ function ScanCard() {
             fontWeight: 800,
             fontSize: '8.5px',
             letterSpacing: '.28em',
-            color: '#c4a0b2',
+            color: '#bdb8bb',
           }}
         >
           SHUTAP · THE SCAN

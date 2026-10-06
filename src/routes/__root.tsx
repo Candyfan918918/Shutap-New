@@ -19,7 +19,6 @@ import newsreaderItalicWoff2 from "@fontsource/newsreader/files/newsreader-latin
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { GlobalHeader } from "@/components/GlobalHeader";
 
-import { CompanionBubble } from "@/components/CompanionBubble";
 import { useNavigate } from "@/compat/router";
 
 function NotFoundComponent() {
@@ -254,18 +253,6 @@ function RootComponent() {
       <GlobalHeader />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
-      <CompanionBubble onOpen={() => {
-        if (window.location.pathname === '/') {
-          const trigger = document.querySelector('[data-comp-action="open"]') as HTMLElement | null
-          if (trigger) {
-            trigger.dispatchEvent(new MouseEvent('click', { bubbles: true }))
-          } else {
-            window.location.hash = 'ask'
-          }
-        } else {
-          navigate('/#ask')
-        }
-      }} />
 
     </QueryClientProvider>
   );

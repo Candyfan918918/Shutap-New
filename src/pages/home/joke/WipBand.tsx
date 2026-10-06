@@ -127,7 +127,7 @@ export function WipBand({
           maxWidth: 620, margin: '0 auto', position: 'relative', overflow: 'hidden',
           background: '#fff', border: '1px solid rgba(11,8,15,.08)', borderRadius: 22,
           padding: 'clamp(18px,2.6vw,24px)',
-          boxShadow: '0 26px 60px -40px rgba(80,10,45,.45)',
+          boxShadow: '0 26px 60px -40px rgba(20,16,22,.45)',
           display: 'flex', flexDirection: 'column', gap: 15,
           animation: 'shutapWipRise .4s cubic-bezier(.2,.8,.2,1) both',
         }}
@@ -136,7 +136,7 @@ export function WipBand({
           className="shutap-wip-anim"
           style={{
             position: 'absolute', width: '130%', height: '80%', left: '-15%', top: '-34%',
-            background: 'radial-gradient(circle,rgba(231,84,138,.18),transparent 64%)',
+            background: 'radial-gradient(circle,rgba(23,19,26,.18),transparent 64%)',
             filter: 'blur(8px)', pointerEvents: 'none',
             animation: 'shutapWipBreathe 6.5s ease-in-out infinite',
           }}
@@ -189,7 +189,7 @@ export function WipBand({
           <div
             style={{
               height: '100%', borderRadius: 999,
-              background: 'linear-gradient(90deg,#e7548a,#c1216b)',
+              background: 'linear-gradient(90deg,#8f898d,#17131a)',
               width: phase === 'reading'
                 ? '8%'
                 : `${Math.max(14, Math.round((writtenN / SLOTS.length) * 100))}%`,
@@ -225,7 +225,7 @@ export function WipBand({
                     position: 'relative', width: '100%', maxWidth: 62, aspectRatio: '9/16',
                     borderRadius: 9, overflow: 'hidden', background: CARD_LIGHT,
                     border: done ? `1px solid ${LIT}` : CARD_BACK_EDGE,
-                    boxShadow: '0 12px 22px -16px rgba(80,10,45,.35)',
+                    boxShadow: '0 12px 22px -16px rgba(20,16,22,.35)',
                     display: 'grid', placeItems: 'center',
                     animation: done
                       ? 'shutapWipPop .5s cubic-bezier(.2,.8,.2,1) both'
@@ -265,7 +265,7 @@ export function WipBand({
                 <span
                   style={{
                     fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, lineHeight: 1.35,
-                    color: done ? '#8e1c4c' : active ? MUTED : FAINT,
+                    color: done ? '#17131a' : active ? MUTED : FAINT,
                   }}
                 >
                   {done ? 'written' : active ? 'writing…' : phase === 'reading' ? 'shuffling' : 'face down'}
@@ -285,7 +285,7 @@ export function WipBand({
           <span style={{ fontFamily: SORA, fontSize: 12, color: FAINT }}>
             {clock(elapsed)} · {writtenN} of {SLOTS.length} written
           </span>
-          <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, color: '#8a7a84' }}>
+          <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, color: '#8a8689' }}>
             {FOOT[Math.floor(elapsed / 5) % FOOT.length]}
           </span>
         </div>

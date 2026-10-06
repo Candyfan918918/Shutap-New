@@ -4,7 +4,7 @@ import { SHUTAP_SEED } from './seed'
 /* The 5 supportive reactions (k / emoji / label / color), verbatim from the
    Stream prototype's REACTIONS getter. */
 export const REACTIONS: Reaction[] = [
-  { k: 'heard', emoji: '🤍', label: 'i hear you', color: '#a52a5f' },
+  { k: 'heard', emoji: '🤍', label: 'i hear you', color: '#2b2630' },
   { k: 'same', emoji: '🫂', label: 'omg same', color: '#c87c4a' },
   { k: 'strong', emoji: '💪', label: "you've got this", color: '#5B8A5E' },
   { k: 'time', emoji: '🌿', label: 'it gets easier', color: '#7F77DD' },

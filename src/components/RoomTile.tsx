@@ -16,7 +16,7 @@ const BAND_COLOR: Record<string, string> = {
   sitting: '#7F77DD',
   weighing: '#c1a02b',
   heavy: '#c87c4a',
-  consuming: '#c1216b',
+  consuming: '#17131a',
 }
 const BAND_LABEL: Record<string, string> = {
   settling: 'settling',
@@ -51,7 +51,7 @@ export function RoomTile({ room, onOpen }: { room: RoomTileData; onOpen: (r: Roo
               SCAN
             </span>
           ) : (
-            <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 9.5, letterSpacing: '.14em', color: room.support === 'heard' ? '#c1216b' : '#3a6b3c', background: room.support === 'heard' ? 'rgba(231,84,138,.08)' : 'rgba(91,138,94,.10)', padding: '3px 8px', borderRadius: 999, textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 9.5, letterSpacing: '.14em', color: room.support === 'heard' ? '#17131a' : '#3a6b3c', background: room.support === 'heard' ? 'rgba(23,19,26,.08)' : 'rgba(91,138,94,.10)', padding: '3px 8px', borderRadius: 999, textTransform: 'uppercase' }}>
               {room.support === 'heard' ? 'heard' : 'advice'}
             </span>
           )}
@@ -100,7 +100,7 @@ export function RoomTile({ room, onOpen }: { room: RoomTileData; onOpen: (r: Roo
             </>
           ) : (
             <>
-              🫂 <b style={{ fontFamily: 'Sora', fontStyle: 'normal', fontWeight: 600, color: '#c1216b' }}>{room.relates}</b> relate
+              🫂 <b style={{ fontFamily: 'Sora', fontStyle: 'normal', fontWeight: 600, color: '#17131a' }}>{room.relates}</b> relate
             </>
           )}
         </span>

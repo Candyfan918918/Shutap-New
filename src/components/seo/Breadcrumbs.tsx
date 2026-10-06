@@ -42,7 +42,7 @@ export function Breadcrumbs({ trail }: { trail: Crumb[] }) {
               ) : (
                 <Link
                   to={c.path as unknown as "/"}
-                  style={{ color: "#6f666c", textDecoration: "none", borderBottom: "1px solid rgba(158,122,140,.35)" }}
+                  style={{ color: "#6f666c", textDecoration: "none", borderBottom: "1px solid rgba(138,132,136,.35)" }}
                 >
                   {c.name}
                 </Link>

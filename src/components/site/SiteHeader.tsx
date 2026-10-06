@@ -41,7 +41,7 @@ export function SiteHeader() {
           fontFamily: 'Newsreader,serif',
           fontStyle: 'italic',
           fontSize: 14,
-          color: active ? '#6d1239' : '#443c42',
+          color: active ? '#000000' : '#443c42',
           textDecoration: 'none',
           padding: '6px 12px',
           borderRadius: 999,
@@ -94,7 +94,7 @@ export function SiteHeader() {
         position: 'sticky',
         top: 0,
         zIndex: 40,
-        background: 'rgba(253,240,245,.88)',
+        background: 'rgba(246,245,244,.88)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         borderBottom: '.5px solid rgba(11,8,15,.07)',
@@ -116,13 +116,11 @@ export function SiteHeader() {
           style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}
         >
           <EyeMark w={30} />
-          <ShutapWordmark size={17} ink="#0b080f" accent="#a52a5f" letterSpacing="-.04em" />
+          <ShutapWordmark size={17} ink="#0b080f" accent="#e7548a" letterSpacing="-.04em" />
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }} ref={areaRef}>
-          {navLink('/#joke', 'joke cards')}
-          {navLink('/#spill', 'spill')}
-          {navLink('/#scan', 'scan')}
-          {navLink('/stream', 'rooms')}
+          {navLink('/', 'write')}
+          {navLink('/rooms', 'rooms')}
           {!mounted ? (
             <span style={{ width: 78, height: 34 }} aria-hidden />
           ) : alias ? (
@@ -176,7 +174,7 @@ export function SiteHeader() {
                     background: '#fff',
                     border: '.5px solid rgba(11,8,15,.10)',
                     borderRadius: 16,
-                    boxShadow: '0 24px 50px -24px rgba(60,10,30,.35)',
+                    boxShadow: '0 24px 50px -24px rgba(20,16,22,.35)',
                     padding: 7,
                     zIndex: 70,
                   }}
@@ -206,7 +204,7 @@ export function SiteHeader() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                background: '#a52a5f',
+                background: '#2b2630',
                 color: '#fff',
                 borderRadius: 999,
                 padding: '9px 18px',
@@ -224,22 +222,22 @@ export function SiteHeader() {
       </div>
       <style>{`
         .shutap-nav-link:hover:not(.is-active) {
-          background: rgba(231,84,138,.08);
-          color: #6d1239;
+          background: rgba(23,19,26,.08);
+          color: #000000;
         }
         .shutap-nav-link:focus-visible,
         .shutap-auth-pill:focus-visible {
-          outline: 2px solid #a52a5f;
+          outline: 2px solid #2b2630;
           outline-offset: 2px;
           border-radius: 999px;
         }
         .shutap-menu-item:focus-visible {
-          outline: 2px solid #a52a5f;
+          outline: 2px solid #2b2630;
           outline-offset: 2px;
           border-radius: 10px;
         }
         .shutap-menu-item:hover {
-          background: rgba(231,84,138,.06);
+          background: rgba(23,19,26,.06);
         }
       `}</style>
     </header>

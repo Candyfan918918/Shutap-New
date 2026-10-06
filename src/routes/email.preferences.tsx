@@ -179,7 +179,7 @@ function PreferencesRoute() {
             border: '1px solid rgba(11,8,15,.08)',
             borderRadius: 22,
             padding: '28px 26px',
-            boxShadow: '0 22px 44px -28px rgba(60,10,30,.32)',
+            boxShadow: '0 22px 44px -28px rgba(20,16,22,.32)',
           }}
         >
           {state === 'pending' ? (
@@ -190,7 +190,7 @@ function PreferencesRoute() {
                 style={{
                   lineHeight: 1.65,
                   margin: '0 0 20px',
-                  color: '#3a2630',
+                  color: '#2b2730',
                   fontSize: 14.5,
                 }}
               >
@@ -201,7 +201,7 @@ function PreferencesRoute() {
                 href="/auth?next=/email/preferences"
                 style={{
                   display: 'inline-block',
-                  background: '#a52a5f',
+                  background: '#2b2630',
                   color: '#ffffff',
                   padding: '12px 24px',
                   borderRadius: 999,
@@ -209,7 +209,7 @@ function PreferencesRoute() {
                   fontFamily: 'Sora, sans-serif',
                   fontSize: 13.5,
                   fontWeight: 600,
-                  boxShadow: '0 18px 40px -14px rgba(80,10,45,.55)',
+                  boxShadow: '0 18px 40px -14px rgba(20,16,22,.55)',
                 }}
               >
                 sign in
@@ -221,13 +221,13 @@ function PreferencesRoute() {
                 <div
                   style={{
                     background: '#ffffff',
-                    border: '1px solid rgba(231,84,138,.28)',
+                    border: '1px solid rgba(23,19,26,.28)',
                     borderRadius: 14,
                     padding: '12px 14px',
                     fontFamily: 'Newsreader, serif',
                     fontStyle: 'italic',
                     fontSize: 13.5,
-                    color: '#6d1239',
+                    color: '#000000',
                     marginBottom: 18,
                     lineHeight: 1.55,
                   }}
@@ -263,7 +263,7 @@ function PreferencesRoute() {
                         disabled={saving}
                         style={{
                           marginTop: 3,
-                          accentColor: '#a52a5f',
+                          accentColor: '#2b2630',
                           width: 16,
                           height: 16,
                         }}
@@ -303,7 +303,7 @@ function PreferencesRoute() {
                   fontSize: 12.5,
                   fontFamily: 'Newsreader, serif',
                   fontStyle: 'italic',
-                  color: saved ? '#c1216b' : '#6f666c',
+                  color: saved ? '#17131a' : '#6f666c',
                   transition: 'color .2s',
                 }}
               >
@@ -331,8 +331,8 @@ function PreferencesRoute() {
           to { opacity: 1; transform: none; }
         }
         .shutap-pref-row:hover {
-          border-color: rgba(231,84,138,.35) !important;
-          background: #fbe6ef !important;
+          border-color: rgba(23,19,26,.35) !important;
+          background: #eeeeee !important;
         }
       `}</style>
     </main>

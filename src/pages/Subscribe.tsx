@@ -26,12 +26,12 @@ const ANNUAL_SAVINGS_PCT = Math.round((1 - PLAN_TO_PRICE.annual.amount / MONTHLY
 
 // Light homepage theme tokens.
 const INK = '#100c14'
-const MUTED = '#8a6577'
-const SOFT_MUTED = '#a98a99'
-const ACCENT = '#a52a5f'
-const DEEP_ACCENT = '#c1216b'
+const MUTED = '#737373'
+const SOFT_MUTED = '#969696'
+const ACCENT = '#2b2630'
+const DEEP_ACCENT = '#17131a'
 const PAGE_BG = '#ffffff'
-const HAIRLINE = 'rgba(27,15,22,.12)'
+const HAIRLINE = 'rgba(20,20,20,.12)'
 
 const fadeUpKeyframes = `
 @keyframes shutapSubFadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -67,7 +67,7 @@ function TopBar({ onBack }: { onBack: () => void }) {
       >
         ← back
       </button>
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, border: '.5px solid rgba(27,15,22,.18)', borderRadius: 999, padding: '5px 11px', background: 'rgba(255,255,255,.5)' }}>
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, border: '.5px solid rgba(20,20,20,.18)', borderRadius: 999, padding: '5px 11px', background: 'rgba(255,255,255,.5)' }}>
         <LockGlyph size={11} />
         <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 9.5, fontWeight: 600, letterSpacing: '.09em', textTransform: 'uppercase', color: MUTED }}>
           secure · stripe
@@ -85,14 +85,14 @@ function planCardStyle(selected: boolean, featured = false): CSSProperties {
   const border = selected
     ? `2px solid ${featured ? DEEP_ACCENT : ACCENT}`
     : featured
-      ? '1.5px solid rgba(193,33,107,.42)'
+      ? '1.5px solid rgba(23,19,26,.42)'
       : `1px solid ${HAIRLINE}`
   return {
     border,
-    background: featured ? 'linear-gradient(135deg,#fff3f8 0%,#ffffff 62%)' : '#ffffff',
+    background: featured ? 'linear-gradient(135deg,#f7f7f7 0%,#ffffff 62%)' : '#ffffff',
     boxShadow: selected
-      ? featured ? '0 18px 44px rgba(193,33,107,.22)' : '0 12px 36px rgba(231,84,138,.20)'
-      : featured ? '0 10px 30px rgba(193,33,107,.12)' : '0 4px 16px rgba(27,15,22,.05)',
+      ? featured ? '0 18px 44px rgba(23,19,26,.22)' : '0 12px 36px rgba(23,19,26,.20)'
+      : featured ? '0 10px 30px rgba(23,19,26,.12)' : '0 4px 16px rgba(20,20,20,.05)',
     borderRadius: 18,
     padding: featured ? '22px 22px' : '16px 20px',
     cursor: 'pointer',
@@ -218,7 +218,7 @@ export function SubscribePage() {
       <style>{fadeUpKeyframes}</style>
 
       {/* ambient glow */}
-      <div style={{ position: 'absolute', top: -180, left: '50%', transform: 'translateX(-50%)', width: 640, height: 420, background: 'radial-gradient(closest-side, rgba(231,84,138,.14), rgba(231,84,138,0))', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: -180, left: '50%', transform: 'translateX(-50%)', width: 640, height: 420, background: 'radial-gradient(closest-side, rgba(23,19,26,.14), rgba(23,19,26,0))', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', maxWidth: 500, margin: '0 auto', padding: '26px 20px 72px', display: 'flex', flexDirection: 'column' }}>
         <TopBar onBack={() => navigate(-1)} />
@@ -226,15 +226,15 @@ export function SubscribePage() {
         {/* header */}
         <div style={fadeUp()}>
           <img src={eyeMascot} alt="" style={{ width: 38, height: 38, marginBottom: 14, display: 'block' }} />
-          <h1 style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontWeight: 400, fontSize: 31, lineHeight: 1.25, margin: '0 0 10px', color: INK }}>
-            open the mirror reading.
+          <h1 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: 30, lineHeight: 1.15, letterSpacing: '-.04em', margin: '0 0 10px', color: INK }}>
+            Shutap+
           </h1>
           <p style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.55, color: MUTED, margin: '0 0 22px', maxWidth: '38ch' }}>
-            every scan adds a brushstroke. the mirror holds the whole portrait.
+            No watermark. Plus the Mirror.
           </p>
           {cameFromDeck ? (
             <p style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 14, lineHeight: 1.5, color: MUTED, margin: '-10px 0 22px', maxWidth: '38ch' }}>
-              your card is safe — it&apos;s waiting on the landing page, and the other two flip the moment you&apos;re back.
+              Your jokes are saved. They'll be there when you're back.
             </p>
           ) : null}
         </div>
@@ -242,11 +242,9 @@ export function SubscribePage() {
         {/* what opens */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 28, ...fadeUp(0.06) }}>
           {[
-            'every card of every set kept — clean',
-            'no shutap mark, on screen or in any export',
-            'patterns across your cards and scans — named',
-            'your arc over time, with proof',
-            "what others who've been here came through",
+            'no watermark on downloads',
+            'the Mirror: what keeps coming up in your jokes',
+            'same five stories a day as everyone'
           ].map((line) => (
             <div key={line} style={{ display: 'flex', alignItems: 'baseline', gap: 11 }}>
               <span style={{ width: 6, height: 6, borderRadius: 999, background: ACCENT, flex: 'none', transform: 'translateY(-2px)' }} />
@@ -257,7 +255,7 @@ export function SubscribePage() {
 
         {alreadySubbed ? (
           /* already subscribed */
-          <div style={{ background: '#ffffff', border: '1px solid rgba(27,15,22,.10)', borderRadius: 18, padding: 22, display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0 10px 32px rgba(193,33,107,.08)', ...fadeUp(0.1) }}>
+          <div style={{ background: '#ffffff', border: '1px solid rgba(20,20,20,.10)', borderRadius: 18, padding: 22, display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0 10px 32px rgba(23,19,26,.08)', ...fadeUp(0.1) }}>
             <div style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 19, lineHeight: 1.4, color: INK }}>
               you're already subscribed.
             </div>
@@ -274,7 +272,7 @@ export function SubscribePage() {
               </button>
               <button
                 onClick={() => navigate('/mirror')}
-                style={{ background: 'transparent', color: MUTED, border: '1px solid rgba(27,15,22,.18)', borderRadius: 999, padding: '11px 20px', fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 12.5, cursor: 'pointer' }}
+                style={{ background: 'transparent', color: MUTED, border: '1px solid rgba(20,20,20,.18)', borderRadius: 999, padding: '11px 20px', fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 12.5, cursor: 'pointer' }}
               >
                 go to mirror →
               </button>
@@ -296,10 +294,10 @@ export function SubscribePage() {
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6 }}>
                   <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: 30, lineHeight: 1, color: INK }}>{usd(PLAN_TO_PRICE.annual.amount)}</span>
                   <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 400, fontSize: 14, color: MUTED }}>/year</span>
-                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 14, color: '#c4a3b2', textDecoration: 'line-through' }}>{usd(MONTHLY_TIMES_TWELVE)}</span>
+                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 14, color: '#afafaf', textDecoration: 'line-through' }}>{usd(MONTHLY_TIMES_TWELVE)}</span>
                 </div>
                 <div style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 13.5, color: MUTED }}>
-                  works out to {usd(ANNUAL_PER_MONTH)}/mo — about half the monthly price
+                  {usd(ANNUAL_PER_MONTH)}/mo
                 </div>
               </div>
 
@@ -313,7 +311,7 @@ export function SubscribePage() {
                   <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 400, fontSize: 14, color: MUTED }}>/month</span>
                 </div>
                 <div style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 13.5, color: MUTED }}>
-                  flexible — cancel anytime
+                  cancel anytime
                 </div>
               </div>
             </div>
@@ -321,13 +319,12 @@ export function SubscribePage() {
             {/* billing, plainly */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 28, ...fadeUp(0.14) }}>
               {[
-                `${usd(plan.amount)} charged today, then every ${plan.interval} — no free trial`,
-                'we email a receipt for every charge — no surprises',
-                'cancel anytime from your profile; access runs to the end of the period',
+                `${usd(plan.amount)} today, then every ${plan.interval}. no trial.`,
+                'cancel anytime. access runs to the end of the period.',
               ].map((line) => (
                 <div key={line} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   <CheckGlyph />
-                  <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 12.5, fontWeight: 600, color: '#5f4450' }}>{line}</span>
+                  <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 12.5, fontWeight: 600, color: '#4e4e4e' }}>{line}</span>
                 </div>
               ))}
             </div>
@@ -339,7 +336,7 @@ export function SubscribePage() {
                 <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: MUTED }}>
                   secure checkout
                 </span>
-                <span style={{ height: 1, flex: 1, background: 'rgba(27,15,22,.10)' }} />
+                <span style={{ height: 1, flex: 1, background: 'rgba(20,20,20,.10)' }} />
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                   <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 10.5, color: SOFT_MUTED }}>powered by</span>
                   <img src={stripeWordmark} alt="Stripe" style={{ height: 15, display: 'block' }} />
@@ -347,25 +344,25 @@ export function SubscribePage() {
               </div>
 
               {err ? (
-                <div style={{ background: 'rgba(231,84,138,.08)', border: '1px solid rgba(231,84,138,.35)', borderRadius: 12, padding: 14, color: DEEP_ACCENT, fontSize: 13.5 }}>
+                <div style={{ background: 'rgba(23,19,26,.08)', border: '1px solid rgba(23,19,26,.35)', borderRadius: 12, padding: 14, color: DEEP_ACCENT, fontSize: 13.5 }}>
                   {err}
                 </div>
               ) : !authed ? (
                 /* the sign-in, in the slot checkout takes once they have one —
                    the same google / apple / email step as /welcome, so a
                    guest never has to leave the paywall to pay for it */
-                <div style={{ background: '#100c14', borderRadius: 16, padding: '22px 20px 18px', boxShadow: '0 14px 44px rgba(193,33,107,.16)' }}>
+                <div style={{ background: '#100c14', borderRadius: 16, padding: '22px 20px 18px', boxShadow: '0 14px 44px rgba(23,19,26,.16)' }}>
                   <style>{`.oauth-btn:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.25)}`}</style>
-                  <div style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 17, lineHeight: 1.4, color: '#f7e8f0', marginBottom: 4 }}>
-                    sign in to pay — a fake name comes with it.
+                  <div style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 17, lineHeight: 1.4, color: '#efedeb', marginBottom: 4 }}>
+                    sign in to pay
                   </div>
-                  <div style={{ fontFamily: 'Sora, sans-serif', fontSize: 12.5, lineHeight: 1.55, color: '#c4a0b2', marginBottom: 16 }}>
-                    thirty seconds, no real name. the membership lands on the alias you pick, and so does every card you keep.
+                  <div style={{ fontFamily: 'Sora, sans-serif', fontSize: 12.5, lineHeight: 1.55, color: '#bdb8bb', marginBottom: 16 }}>
+
                   </div>
                   <AuthStep />
                 </div>
               ) : (
-                <div style={{ background: '#ffffff', border: '1px solid rgba(27,15,22,.08)', borderRadius: 16, padding: '20px 18px', boxShadow: '0 14px 44px rgba(193,33,107,.10)' }}>
+                <div style={{ background: '#ffffff', border: '1px solid rgba(20,20,20,.08)', borderRadius: 16, padding: '20px 18px', boxShadow: '0 14px 44px rgba(23,19,26,.10)' }}>
                   <EmbeddedCheckoutProvider key={plan.id} stripe={getStripe()} options={{ fetchClientSecret }}>
                     <EmbeddedCheckout />
                   </EmbeddedCheckoutProvider>
@@ -375,19 +372,18 @@ export function SubscribePage() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, marginTop: 12 }}>
                 <LockGlyph color={SOFT_MUTED} size={11} />
                 <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 11, color: SOFT_MUTED }}>
-                  encrypted — your card details go to stripe, never to shutap's servers
+                  payments by Stripe. we never see your card.
                 </span>
               </div>
             </div>
 
             {/* fine print */}
             <div style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 12.5, lineHeight: 1.6, color: SOFT_MUTED, marginTop: 22, ...fadeUp(0.22) }}>
-              founders' pricing — locked in while you stay subscribed. cancel anytime from your profile; it takes effect at the end of the period, and you go back to the free deal: the same five situations a day, with the shutap mark on the cards. typing a situation, the scan and reading the cards you turned over stay free, always. a membership buys room and the clean card, never advice or relief. by subscribing you agree to the{' '}
+              By subscribing you agree to the{' '}
               <a href="/terms" style={{ color: MUTED, textDecoration: 'underline' }}>terms</a>,{' '}
               <a href="/privacy" style={{ color: MUTED, textDecoration: 'underline' }}>privacy policy</a>,{' '}
               <a href="/disclaimer" style={{ color: MUTED, textDecoration: 'underline' }}>disclaimer</a> and{' '}
-              <a href="/terms#refunds" style={{ color: MUTED, textDecoration: 'underline' }}>refund policy</a>. new here?{' '}
-              <a href="/how-it-works" style={{ color: MUTED, textDecoration: 'underline' }}>how the cards work</a>.
+              <a href="/terms#refunds" style={{ color: MUTED, textDecoration: 'underline' }}>refund policy</a>.
             </div>
           </div>
         )}
@@ -484,14 +480,14 @@ export function SubscribeReturnPage() {
       <style>{fadeUpKeyframes}</style>
 
       {/* ambient glow */}
-      <div style={{ position: 'absolute', top: -180, left: '50%', transform: 'translateX(-50%)', width: 640, height: 420, background: 'radial-gradient(closest-side, rgba(231,84,138,.14), rgba(231,84,138,0))', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: -180, left: '50%', transform: 'translateX(-50%)', width: 640, height: 420, background: 'radial-gradient(closest-side, rgba(23,19,26,.14), rgba(23,19,26,0))', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', maxWidth: 500, margin: '0 auto', padding: '26px 20px 72px', display: 'flex', flexDirection: 'column' }}>
         <TopBar onBack={() => navigate('/profile')} />
 
         <div style={fadeUp()}>
           {state === 'ok' && (
-            <span style={{ width: 46, height: 46, borderRadius: 999, background: 'rgba(231,84,138,.14)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+            <span style={{ width: 46, height: 46, borderRadius: 999, background: 'rgba(23,19,26,.14)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
               <svg width="18" height="15" viewBox="0 0 11 10" fill="none">
                 <path d="M1.5 5l3 3 5-6.5" stroke={DEEP_ACCENT} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -507,22 +503,22 @@ export function SubscribeReturnPage() {
 
         {state === 'ok' && (
           <div style={fadeUp(0.06)}>
-            <div style={{ background: '#ffffff', border: '1px solid rgba(27,15,22,.10)', borderRadius: 18, padding: '6px 20px', boxShadow: '0 10px 32px rgba(193,33,107,.08)', marginBottom: 20 }}>
+            <div style={{ background: '#ffffff', border: '1px solid rgba(20,20,20,.10)', borderRadius: 18, padding: '6px 20px', boxShadow: '0 10px 32px rgba(23,19,26,.08)', marginBottom: 20 }}>
               {planLine && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 14, padding: '14px 0', borderBottom: '1px solid rgba(27,15,22,.07)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 14, padding: '14px 0', borderBottom: '1px solid rgba(20,20,20,.07)' }}>
                   <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 12, fontWeight: 600, color: MUTED }}>plan</span>
                   <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 13.5, fontWeight: 700, color: INK }}>{planLine}</span>
                 </div>
               )}
               {periodEndDate && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 14, padding: '14px 0', borderBottom: '1px solid rgba(27,15,22,.07)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 14, padding: '14px 0', borderBottom: '1px solid rgba(20,20,20,.07)' }}>
                   <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 12, fontWeight: 600, color: MUTED }}>{trialing ? 'trial ends' : 'renews'}</span>
                   <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 13.5, fontWeight: 700, color: INK }}>{periodEndDate}</span>
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 14, padding: '14px 0' }}>
                 <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 12, fontWeight: 600, color: MUTED }}>reminder</span>
-                <span style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 13.5, color: '#5f4450' }}>we'll email you before it ends</span>
+                <span style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 13.5, color: '#4e4e4e' }}>we'll email you before it ends</span>
               </div>
             </div>
 
@@ -536,7 +532,7 @@ export function SubscribeReturnPage() {
               <button
                 onClick={openPortal}
                 disabled={portalBusy}
-                style={{ background: 'transparent', color: MUTED, border: '1px solid rgba(27,15,22,.18)', borderRadius: 999, padding: '12px 22px', fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
+                style={{ background: 'transparent', color: MUTED, border: '1px solid rgba(20,20,20,.18)', borderRadius: 999, padding: '12px 22px', fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
               >
                 {portalBusy ? 'opening…' : 'manage billing'}
               </button>
@@ -553,13 +549,13 @@ export function SubscribeReturnPage() {
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', ...fadeUp(0.06) }}>
             <button
               onClick={() => navigate('/subscribe')}
-              style={{ background: 'transparent', color: MUTED, border: '1px solid rgba(27,15,22,.18)', borderRadius: 999, padding: '12px 22px', fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
+              style={{ background: 'transparent', color: MUTED, border: '1px solid rgba(20,20,20,.18)', borderRadius: 999, padding: '12px 22px', fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
             >
               try checkout again →
             </button>
             <button
               onClick={() => navigate('/profile')}
-              style={{ background: 'transparent', color: MUTED, border: '1px solid rgba(27,15,22,.18)', borderRadius: 999, padding: '12px 22px', fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
+              style={{ background: 'transparent', color: MUTED, border: '1px solid rgba(20,20,20,.18)', borderRadius: 999, padding: '12px 22px', fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
             >
               go to profile
             </button>

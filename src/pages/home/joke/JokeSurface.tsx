@@ -17,6 +17,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { supabase } from '@/integrations/supabase/client'
+import { TOPICS, type Topic } from '@/lib/feed-shared'
 import {
   submitJokeEntry,
   openJokeDeal,
@@ -203,6 +204,7 @@ export function JokeSurface() {
   const [postOpen, setPostOpen] = useState(false)
   const [postCaption, setPostCaption] = useState('')
   const [posting, setPosting] = useState(false)
+  const [postTopic, setPostTopic] = useState<Topic>('social')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState<string | null>(null)
   const [upgradeOpen, setUpgradeOpen] = useState(false)
@@ -405,7 +407,7 @@ export function JokeSurface() {
     else if (p.type === 'post') void doPost(at(p.position))
     else if (p.type === 'checkout') void navigate({ to: '/subscribe', search: { plan: 'annual' } as never })
     else if (p.type === 'upgrade') { jokeTrack('upgrade_shown', tier, { after: 'limit' }); setUpgradeOpen(true) }
-    else if (p.type === 'flip') say('the other two are yours now — flip them.')
+    else if (p.type === 'flip') say('tap the other two')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resumeAt])
 
@@ -597,7 +599,7 @@ export function JokeSurface() {
    *  There is no second button between the spill and the deck. */
   async function onSubmit() {
     const raw = text.trim()
-    if (raw.length < 12) { say('give me a few more words and i will find the funny in it.'); return }
+    if (raw.length < 12) { say('a few more words'); return }
     if (phase !== 'idle') return
     // A spent day is answered here, on enter, from the counter the server
     // last handed over — the spill never leaves the composer, and no model
@@ -640,7 +642,7 @@ export function JokeSurface() {
       // No second scroll here: the send already scrolled to the band, and the
       // deck mounts directly under it. Two smooth scrolls in flight read as a flash.
     } catch {
-      say('that did not go through. try again?')
+      say('didn\'t go through. try again.')
     } finally {
       setBusy(false)
       if (!opened) setPhase('idle')
@@ -729,7 +731,7 @@ export function JokeSurface() {
       }
       if (landed.length === 0) {
         setDealFailed(true)
-        say('the deck jammed on that one. one more go?')
+        say('that didn\'t work. try again.')
         return
       }
       // Some of the three made it. The deck keeps them; the rest are released
@@ -742,7 +744,7 @@ export function JokeSurface() {
       if (res.tier !== 'guest') void refresh()
     } catch {
       setDealFailed(true)
-      say('the deck jammed on that one. one more go?')
+      say('that didn\'t work. try again.')
     } finally {
       setPhase('idle')
     }
@@ -887,7 +889,7 @@ export function JokeSurface() {
       setSaved(`${res.width}×${res.height}`)
       jokeTrack('card_downloaded', res.tier, { slot: target.angle, mark: res.mark })
     } catch {
-      say('the image did not render. try once more?')
+      say('image failed. try again.')
     } finally {
       setSaving(false)
     }
@@ -909,7 +911,7 @@ export function JokeSurface() {
       setSaved(`saved ${blobs.length} images · ${res.width}×${res.height}`)
       jokeTrack('save_set_completed', res.tier, { n: blobs.length })
     } catch {
-      say('the set did not render. try once more?')
+      say('image failed. try again.')
     } finally {
       setSaving(false)
     }
@@ -944,7 +946,7 @@ export function JokeSurface() {
       setPrepared({ res, items: blobs.map((b) => ({ ...b, file: pngFile(b) })) })
     } catch (e) {
       jokeTrack('share_failed', tier, { channel: 'prepare', reason: e instanceof Error ? e.message : 'unknown' })
-      say('the picture did not render. try once more?')
+      say('image failed. try again.')
     } finally {
       setSaving(false)
     }
@@ -1049,7 +1051,7 @@ export function JokeSurface() {
    *  spot — the same deep link a published spill and a published scan use. */
   function openRoom(roomId: string) {
     setPostOpen(false)
-    void navigate({ to: '/stream', hash: `room-${roomId}` })
+    void navigate({ to: '/rooms/$id', params: { id: roomId } })
   }
 
   async function confirmPost() {
@@ -1058,7 +1060,7 @@ export function JokeSurface() {
     const cardId = target.id
     setPosting(true)
     try {
-      const res = await postCard({ data: { card_id: cardId, caption: postCaption.trim() || undefined, ...ctx() } })
+      const res = await postCard({ data: { card_id: cardId, caption: postCaption.trim() || undefined, topic: postTopic, ...ctx() } })
       const roomId = res.room_id
       const who = res.alias ?? alias?.display_name ?? 'you'
       const body = postCaption.trim() || roomCaption(target, sceneOf(target))
@@ -1083,10 +1085,10 @@ export function JokeSurface() {
       setFocus((f) => (f && f.id === cardId ? { ...f, room_id: roomId } : f))
       setPosted({ cardId, roomId, alias: who })
       jokeTrack('card_posted_to_room', tier, { slot: target.angle })
-      say(res.already ? 'it was already a room — it still is.' : "it's a room now. no one owes you a reply.")
+      say(res.already ? 'already posted' : 'posted')
       void refresh()
     } catch {
-      say('could not open the room. try again?')
+      say('could not post. try again.')
     } finally {
       setPosting(false)
     }
@@ -1137,22 +1139,24 @@ export function JokeSurface() {
   const hint = text.trim().length === 0
     ? ''
     : text.trim().length < 30
-      ? 'keep going — the specifics are what make it funny.'
-      : 'that will do it.'
+      ? 'add details. that\'s where the funny is.'
+      : ''
 
   return (
     <>
       {/* ══ 1 · hero + the composer ══ */}
-      <section id="joke" style={{ position: 'relative', overflow: 'hidden', background: '#fff', padding: 'clamp(92px,12vh,132px) clamp(16px,4vw,28px) clamp(24px,4vh,44px)' }}>
-        <div style={{ position: 'absolute', inset: '-40% -20% auto', height: '80vh', background: 'radial-gradient(ellipse at 50% 35%,rgba(127,119,221,.13),transparent 64%)', pointerEvents: 'none' }} />
+      <section id="joke" style={{ position: 'relative', overflow: 'hidden', background: '#fff', padding: 'clamp(36px,7vh,72px) clamp(16px,4vw,28px) clamp(24px,4vh,44px)' }}>
         <div style={{ maxWidth: 880, margin: '0 auto', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(13px,2.2vh,20px)' }}>
-          <h1 style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'clamp(38px,8.4vw,86px)', lineHeight: 1.02, letterSpacing: '-.05em', textAlign: 'center', margin: 0 }}>
-            <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, letterSpacing: '-.02em', color: '#8e1c4c' }}>say it funnier.</span>
+          <h1 style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(36px,7vw,72px)', lineHeight: 1.02, letterSpacing: '-.05em', textAlign: 'center', margin: 0, color: '#111' }}>
+            Say it funnier.
           </h1>
+          <p style={{ margin: 0, fontFamily: SORA, fontSize: 'clamp(15px,1.6vw,17px)', color: '#6b6b6b', textAlign: 'center' }}>
+            Paste what happened. Get jokes. Post the best one.
+          </p>
 
 
 
-          <div style={{ width: '100%', position: 'relative', background: '#fff', border: '2px solid rgba(231,84,138,.55)', borderRadius: 26, padding: 'clamp(16px,2.4vw,22px)', boxShadow: '0 28px 60px -38px rgba(35,26,32,.28)', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ width: '100%', position: 'relative', background: '#fff', border: '1.5px solid rgba(0,0,0,.16)', borderRadius: 22, padding: 'clamp(14px,2.2vw,20px)', boxShadow: '0 20px 50px -36px rgba(0,0,0,.35)', display: 'flex', flexDirection: 'column', gap: 10 }}>
             <textarea
               rows={4}
               value={text}
@@ -1165,28 +1169,28 @@ export function JokeSurface() {
                 void onSubmit()
               }}
               enterKeyHint="send"
-              placeholder="paste what happened, or the bit you're stuck on"
+              placeholder="what happened?"
               disabled={phase !== 'idle'}
               className="joke-input"
-              style={{ width: '100%', resize: 'vertical', minHeight: 116, border: 'none', outline: 'none', background: 'transparent', fontFamily: NEWS, fontStyle: 'italic', fontSize: 22, lineHeight: 1.5, color: '#000', WebkitTextFillColor: '#000', caretColor: '#000', opacity: phase === 'idle' ? 1 : 0.6 }}
+              style={{ width: '100%', resize: 'vertical', minHeight: 116, border: 'none', outline: 'none', background: 'transparent', fontFamily: SORA, fontSize: 18, lineHeight: 1.5, color: '#000', WebkitTextFillColor: '#000', caretColor: '#000', opacity: phase === 'idle' ? 1 : 0.6 }}
             />
-            <style>{`.joke-input::placeholder{color:#6b5f66;-webkit-text-fill-color:#6b5f66;opacity:1}`}</style>
+            <style>{`.joke-input::placeholder{color:#9a9a9a;-webkit-text-fill-color:#9a9a9a;opacity:1}`}</style>
             <span hidden
             />
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
               <span style={{ fontFamily: SORA, fontSize: 12, color: FAINT }}>
-                enter sends · shift + enter for a new line
+                enter to send
               </span>
               <Button onClick={() => void onSubmit()} disabled={phase !== 'idle'}>
-                {phase === 'reading' ? 'reading it…' : phase === 'dealing' ? 'writing your set…' : 'write my set'}
+                {phase === 'reading' ? 'reading…' : phase === 'dealing' ? 'writing…' : 'write jokes'}
               </Button>
             </div>
           </div>
 
           {/* footnote row + hover-expand explainer */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontSize: 12.5, color: '#8a7a84' }}>
-              <span>{signedIn ? 'names scrubbed before anything saves' : 'no account · names scrubbed'}</span>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: SORA, fontSize: 12.5, color: '#9a9a9a' }}>
+              <span>{signedIn ? 'names removed' : 'no account needed · names removed'}</span>
               <span aria-hidden>·</span>
               <span onMouseEnter={() => setHowOpen(true)} onMouseLeave={() => setHowOpen(false)} style={{ display: 'inline-flex' }}>
                 <button
@@ -1212,18 +1216,15 @@ export function JokeSurface() {
                 transition: 'max-height .38s cubic-bezier(.2,.8,.2,1), opacity .28s, transform .28s',
               }}
             >
-              <ol style={{ margin: 0, padding: '12px 18px', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7, background: 'rgba(127,119,221,.06)', border: '1px solid rgba(11,8,15,.07)', borderRadius: 18, fontFamily: NEWS, fontStyle: 'italic', fontSize: 14.5, lineHeight: 1.5, color: '#443c42', textAlign: 'left' }}>
-                <li><span style={{ color: '#8e1c4c' }}>i.</span> type what happened — names get scrubbed before anything saves.</li>
-                <li><span style={{ color: '#8e1c4c' }}>ii.</span> i write you a set of three, face-down: a take, a clapback, a roast. you turn over one.</li>
-                <li><span style={{ color: '#8e1c4c' }}>iii.</span> five situations a day, at every tier. a guest flips one card of each; an alias flips all three and keeps them. members get every card clean — no mark — and the mirror reading.</li>
-                <li style={{ fontFamily: SORA, fontStyle: 'normal', fontSize: 12.5 }}>
-                  <a href="/how-it-works" target="_blank" rel="noreferrer" style={{ color: '#8e1c4c', textDecoration: 'underline', textUnderlineOffset: 3 }}>the full explanation →</a>
-                </li>
+              <ol style={{ margin: 0, padding: '12px 18px', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7, background: '#f5f5f4', border: '1px solid rgba(0,0,0,.07)', borderRadius: 16, fontFamily: SORA, fontSize: 14, lineHeight: 1.5, color: '#333', textAlign: 'left' }}>
+                <li>1. Paste what happened.</li>
+                <li>2. Get three jokes: the take, the clapback, the roast.</li>
+                <li>3. Post the best one to a room, or download it.</li>
               </ol>
             </div>
           </div>
 
-          {hint ? <div style={{ fontFamily: SORA, fontSize: 12.5, color: '#8a7a84' }}>{hint}</div> : null}
+          {hint ? <div style={{ fontFamily: SORA, fontSize: 12.5, color: '#8a8689' }}>{hint}</div> : null}
 
 
           {/* The thin-input nudge. A short spill still gets its three cards —
@@ -1231,9 +1232,7 @@ export function JokeSurface() {
               the scan asks the questions the spill left out. */}
           {set?.thin ? (
             <div style={{ fontFamily: SORA, fontSize: 13, color: MUTED }}>
-              ✦ thin one. the cards had little to hold on to —{' '}
-              <a href="#scan" style={{ color: '#8e1c4c', textDecoration: 'underline', textUnderlineOffset: 3 }}>scan it</a>
-              {' '}and the story gets sharper. what they said, word for word, is the part that lands.
+              Short one. Add what they actually said and try again.
             </div>
           ) : null}
         </div>
@@ -1269,15 +1268,17 @@ export function JokeSurface() {
       {/* ══ 3 · crisis — support register only, and nothing else ══ */}
       {crisis ? (
         <section style={{ background: '#fff', padding: '0 clamp(16px,4vw,28px) clamp(40px,7vh,80px)' }}>
-          <div style={{ maxWidth: 640, margin: '0 auto', background: '#fff', border: '1px solid rgba(137,0,65,.35)', borderRadius: 22, padding: '26px 24px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 19, color: '#890041' }}>no jokes for this one.</div>
-            <p style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 17, lineHeight: 1.6, color: '#383136' }}>
-              what you just wrote is heavier than a card can hold, and i&apos;m not going to make a punchline out of it. talking to a person helps more than i can right now.
+          <div style={{ maxWidth: 640, margin: '0 auto', background: '#fff', border: '1.5px solid #111', borderRadius: 22, padding: '26px 24px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 19, color: '#111' }}>No jokes for this one.</div>
+            <p style={{ fontFamily: SORA, fontSize: 16, lineHeight: 1.55, color: '#333', margin: 0 }}>
+              This sounds heavy. Talk to a person now — free, any hour.
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              <a href="#support" style={{ textDecoration: 'none' }}><Button variant="secondary" size="sm">support lines →</Button></a>
-              <a href="#spill" style={{ textDecoration: 'none' }}><Button variant="ghost" size="sm">say the long version instead</Button></a>
-            </div>
+            <ul style={{ margin: 0, paddingLeft: 18, fontFamily: SORA, fontSize: 15, lineHeight: 1.7, color: '#111' }}>
+              <li>US: call or text 988</li>
+              <li>UK &amp; Ireland: Samaritans 116 123</li>
+              <li>US: text HOME to 741741</li>
+              <li>Elsewhere: findahelpline.com</li>
+            </ul>
           </div>
         </section>
       ) : null}
@@ -1297,10 +1298,10 @@ export function JokeSurface() {
             {dealFailed && phase === 'idle' && cards.length === 0 && set ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
                 <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15.5, color: MUTED, textAlign: 'center' }}>
-                  that one jammed on the way out. your words are still here.
+                  That didn't work. Your text is still here.
                 </div>
                 <Button variant="secondary" size="sm" onClick={() => void dealCards(set.id)}>
-                  ↻ try the cards again
+                  try again
                 </Button>
               </div>
             ) : null}
@@ -1370,7 +1371,7 @@ export function JokeSurface() {
             {deck.revealedSlots.length > 0 && tier === 'guest' ? (
               <PaywallBlock
                 pulsing={deck.pulsing}
-                line={`you flipped one. the other two are written and waiting — ${ALIAS_OFFER.line}`}
+                line="Two more jokes are ready. Sign in free to see them." 
                 cta={ALIAS_OFFER.cta}
                 onCta={() => raiseGate('flip', { type: 'flip' })}
               />
@@ -1378,11 +1379,7 @@ export function JokeSurface() {
 
             {deck.revealedSlots.length > 0 ? (
               <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: FAINT }}>
-                {tier === 'guest'
-                  ? 'reading, sharing and saving are free, forever — with the little shutap mark. an alias flips the other two.'
-                  : tier === 'paying'
-                    ? 'clean · no mark on any of them.'
-                    : `saves at ${spec.width}×${spec.height}, with the little shutap mark.`}
+                {tier === 'paying' ? 'no watermark' : 'downloads carry a small watermark'}
               </div>
             ) : null}
 
@@ -1394,56 +1391,44 @@ export function JokeSurface() {
                     </div>
                     {tier === 'guest' ? (
                       <>
-                        <CompanionLine>
-                          it&apos;s yours. an alias keeps it in a set list and flips the other two.
-                        </CompanionLine>
+                        <CompanionLine>Sign in to keep it and see the other two.</CompanionLine>
                         <Button onClick={() => raiseGate('keep', { type: 'flip' })} full>
                           {ALIAS_OFFER.cta}
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => setSaved(null)} full>this one&apos;s fine</Button>
+                        <Button variant="ghost" size="sm" onClick={() => setSaved(null)} full>not now</Button>
                       </>
                     ) : tier === 'paying' ? (
                       <>
-                        <CompanionLine>
-                          no mark, nothing of mine on it. post the roast in your room too? the owl who&apos;s been sitting in will lose it.
-                        </CompanionLine>
+                        <CompanionLine>Post it too?</CompanionLine>
                         {focusRoomId ? (
                           <>
-                            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, color: MUTED }}>
-                              ◎ it&apos;s a room now — {posted?.alias ?? alias?.display_name ?? 'you'} is on it. no one owes you a reply.
-                            </div>
-                            <Button variant="secondary" onClick={() => openRoom(focusRoomId)} full>open the room →</Button>
+                            <Button variant="secondary" onClick={() => openRoom(focusRoomId)} full>see your post →</Button>
                             <Button variant="ghost" size="sm" onClick={() => setSaved(null)} full>done</Button>
                           </>
                         ) : (
                           <>
-                            <Button variant="secondary" onClick={() => void doPost(focus)} full>post it in my room</Button>
+                            <Button variant="secondary" onClick={() => void doPost(focus)} full>post</Button>
                             <Button variant="ghost" size="sm" onClick={() => setSaved(null)} full>done</Button>
-                            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, color: FAINT, textAlign: 'center' }}>
-                              keeping it private is the default. it&apos;s just yours.
-                            </div>
                           </>
                         )}
                       </>
                     ) : (
                       <>
-                        <CompanionLine>
-                          it&apos;s yours. members get {MEMBER_OFFER.line}
-                        </CompanionLine>
+                        <CompanionLine>Want it without the watermark?</CompanionLine>
                         <Button onClick={() => { jokeTrack('upgrade_shown', tier, { after: 'save' }); setUpgradeOpen(true) }} full>
                           {MEMBER_OFFER.cta}
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => setSaved(null)} full>this one&apos;s fine</Button>
+                        <Button variant="ghost" size="sm" onClick={() => setSaved(null)} full>not now</Button>
                       </>
                     )}
               </div>
             ) : null}
 
             {refusal ? (
-              <div style={{ background: '#fff', border: '1px dashed rgba(142,28,76,.32)', borderRadius: 18, padding: '16px 20px' }}>
+              <div style={{ background: '#fff', border: '1px dashed rgba(23,19,26,.32)', borderRadius: 18, padding: '16px 20px' }}>
                 <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 15, color: INK }}>{refusal}</div>
                 <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14.5, color: MUTED, marginTop: 4 }}>
-                  the cards you already have stay right here, and stay free.
+                  Your jokes stay here.
                 </div>
               </div>
             ) : null}
@@ -1469,13 +1454,13 @@ export function JokeSurface() {
               }}
             >
               <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'clamp(20px,2.6vw,26px)', letterSpacing: '-.03em', color: INK }}>
-                your set list
+                Your set list
               </span>
-              <span style={{ fontFamily: SORA, fontSize: 13, color: '#8a7a84' }}>
-                🃏 {list.length} kept · {days <= 1 ? 'day one' : `${days} days of it`}
+              <span style={{ fontFamily: SORA, fontSize: 13, color: '#8a8689' }}>
+                {list.length} kept
               </span>
               <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: SORA, fontWeight: 800, fontSize: 12, color: ACCENT }}>
-                {listOpen ? 'fold it away' : 'read them'}
+                {listOpen ? 'hide' : 'show'}
                 <span
                   aria-hidden
                   style={{ display: 'inline-block', transform: listOpen ? 'rotate(180deg)' : 'none', transition: 'transform .2s' }}
@@ -1502,12 +1487,12 @@ export function JokeSurface() {
               ) : null}
             </div>
 
-            <div style={{ marginTop: 6, background: 'radial-gradient(120% 120% at 10% 0%,rgba(127,119,221,.06),#fff 65%)', border: '1px solid rgba(11,8,15,.08)', borderRadius: 22, padding: 'clamp(20px,3vw,30px)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 18 }}>
+            <div style={{ marginTop: 6, background: 'radial-gradient(120% 120% at 10% 0%,rgba(90,90,95,.06),#fff 65%)', border: '1px solid rgba(11,8,15,.08)', borderRadius: 22, padding: 'clamp(20px,3vw,30px)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 18 }}>
               <div style={{ maxWidth: '52ch' }}>
                 <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'clamp(20px,2.6vw,26px)', letterSpacing: '-.03em', color: INK }}>
                   {tier === 'paying' ? 'the mirror is reading all of it.' : 'there is a pattern across these you cannot see yet.'}
                 </div>
-                <p style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#4a3040', marginTop: 6 }}>
+                <p style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#3a3638', marginTop: 6 }}>
                   {tier === 'paying'
                     ? `cross-read, districts, depth, trend and signal mix — now with 🃏 joke in the mix, across ${list.length} ${list.length === 1 ? 'card' : 'cards'}.`
                     : `members get every set kept clean — no mark — and the mirror reading your whole set list at once — which behaviour keeps showing up, and how the jokes changed as you did.`}
@@ -1559,25 +1544,32 @@ export function JokeSurface() {
         {focusRoomId ? (
           <>
             <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 20, letterSpacing: '-.03em', color: INK }}>
-              it&apos;s a room now
-            </div>
-            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.45, color: MUTED }}>
-              {posted?.alias ?? alias?.display_name ?? 'you'} is on it. no one owes you a reply — go and sit in it, or leave it open and come back to the cards.
+              Posted.
             </div>
             <Button onClick={() => openRoom(focusRoomId)} full>
-              open the room →
+              see your post →
             </Button>
             <Button variant="ghost" size="sm" onClick={() => setPostOpen(false)} full>
-              stay with the cards
+              back to jokes
             </Button>
           </>
         ) : (
           <>
             <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 20, letterSpacing: '-.03em', color: INK }}>
-              post it as a room
+              Post to rooms
             </div>
-            <div style={{ fontFamily: SORA, fontSize: 12.5, color: FAINT }}>
-              the room opens with the whole scene — what happened, then the card. names are already scrubbed; edit the rest if you like.
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {TOPICS.map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  aria-pressed={postTopic === t}
+                  onClick={() => setPostTopic(t)}
+                  style={{ height: 32, padding: '0 13px', borderRadius: 999, border: postTopic === t ? '1px solid #111' : '1px solid rgba(0,0,0,.16)', background: postTopic === t ? '#111' : '#fff', color: postTopic === t ? '#fff' : '#333', fontFamily: SORA, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
+                >
+                  {t}
+                </button>
+              ))}
             </div>
             <textarea
               rows={6}
@@ -1586,18 +1578,18 @@ export function JokeSurface() {
               onChange={(e) => setPostCaption(e.target.value)}
               style={{
                 width: '100%', resize: 'vertical', borderRadius: 14, padding: '12px 14px',
-                border: '1px solid rgba(11,8,15,.14)', background: '#fff', color: INK,
-                fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, lineHeight: 1.45, outline: 'none',
+                border: '1px solid rgba(0,0,0,.16)', background: '#fff', color: INK,
+                fontFamily: SORA, fontSize: 15, lineHeight: 1.45, outline: 'none',
               }}
             />
             <Button onClick={() => void confirmPost()} disabled={posting || !postCaption.trim()} full>
-              {posting ? 'opening the room…' : '◎ post it'}
+              {posting ? 'posting…' : 'post'}
             </Button>
             <Button variant="ghost" size="sm" onClick={() => setPostOpen(false)} full>
-              not now
+              cancel
             </Button>
-            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, color: FAINT, textAlign: 'center' }}>
-              it goes out under your alias, never your name. no one owes you a reply.
+            <div style={{ fontFamily: SORA, fontSize: 12.5, color: FAINT, textAlign: 'center' }}>
+              Posts under your pseudonym. Joke about the situation, not a real person.
             </div>
           </>
         )}
@@ -1635,7 +1627,7 @@ export function JokeSurface() {
       />
 
       {toast ? (
-        <div style={{ position: 'fixed', left: '50%', bottom: 24, transform: 'translateX(-50%)', zIndex: 99, background: '#1b0f16', color: '#fff', fontFamily: SORA, fontSize: 13, padding: '11px 18px', borderRadius: 999, maxWidth: 'calc(100vw - 32px)', textAlign: 'center' }}>
+        <div style={{ position: 'fixed', left: '50%', bottom: 24, transform: 'translateX(-50%)', zIndex: 99, background: '#111', color: '#fff', fontFamily: SORA, fontSize: 13, padding: '11px 18px', borderRadius: 999, maxWidth: 'calc(100vw - 32px)', textAlign: 'center' }}>
           {toast}
         </div>
       ) : null}
@@ -1646,6 +1638,6 @@ export function JokeSurface() {
 /** Refusals are cost guards, not paywalls: they never point at checkout.
  *  The daily budget is not one of these any more — it gets the limit sheet. */
 function refusalCopy(reason: 'rate_limited' | 'not_found'): string {
-  if (reason === 'rate_limited') return "easy — you've been flipping fast. back in a minute."
-  return 'i lost track of that set. say it again and i will start over.'
+  if (reason === 'rate_limited') return 'Too fast. Try again in a minute.'
+  return 'Lost that set. Paste it again.'
 }

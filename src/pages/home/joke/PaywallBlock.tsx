@@ -46,7 +46,7 @@ export function PaywallBlock({
       <style>{`
         @keyframes shutapPaywallPulse{
           0%,100%{border-color:rgba(11,8,15,.08)}
-          40%{border-color:#e7548a}
+          40%{border-color:#8f898d}
         }
         @media (prefers-reduced-motion: reduce){
           #${PAYWALL_ID}{animation:none!important}

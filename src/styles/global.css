@@ -80,9 +80,9 @@ body {
   40% { opacity: 1; }
 }
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(231, 84, 138, 0.38); }
-  70% { box-shadow: 0 0 0 10px rgba(231, 84, 138, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(231, 84, 138, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(23,19,26, 0.38); }
+  70% { box-shadow: 0 0 0 10px rgba(23,19,26, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(23,19,26, 0); }
 }
 @keyframes slideUp {
   from { transform: translateY(100%); }
@@ -101,12 +101,12 @@ body {
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.18s, box-shadow 0.2s, border-color 0.18s;
-  box-shadow: 0 12px 30px -24px rgba(80, 10, 45, 0.3);
+  box-shadow: 0 12px 30px -24px rgba(20,16,22, 0.3);
 }
 .rtile:hover {
   transform: translateY(-3px);
-  box-shadow: 0 20px 40px -26px rgba(80, 10, 45, 0.4);
-  border-color: #a52a5f;
+  box-shadow: 0 20px 40px -26px rgba(20,16,22, 0.4);
+  border-color: #2b2630;
 }
 .rtile.rested {
   opacity: 0.72;
@@ -131,7 +131,7 @@ body {
   white-space: nowrap;
 }
 .react-btn:hover {
-  border-color: #a52a5f;
+  border-color: #2b2630;
   background: #ffffff;
   transform: translateY(-1px);
 }
@@ -139,14 +139,14 @@ body {
   background: #fdfbf9;
 }
 .prose-link {
-  color: #8e1c4c;
-  border-bottom: 1px solid rgba(142, 28, 76, 0.28);
+  color: #17131a;
+  border-bottom: 1px solid rgba(23,19,26, 0.28);
   text-decoration: none;
   cursor: pointer;
   transition: 0.18s;
 }
 .prose-link:hover {
-  color: #6d1239;
+  color: #000000;
 }
 details > summary::-webkit-details-marker,
 details > summary::marker {
@@ -154,9 +154,9 @@ details > summary::marker {
 }
 
 @keyframes companion-halo {
-  0%   { box-shadow: 0 12px 30px -8px rgba(60,10,30,.35), 0 0 0 0 rgba(231,84,138,.35); }
-  70%  { box-shadow: 0 12px 30px -8px rgba(60,10,30,.35), 0 0 0 18px rgba(231,84,138,0); }
-  100% { box-shadow: 0 12px 30px -8px rgba(60,10,30,.35), 0 0 0 0 rgba(231,84,138,0); }
+  0%   { box-shadow: 0 12px 30px -8px rgba(20,16,22,.35), 0 0 0 0 rgba(23,19,26,.35); }
+  70%  { box-shadow: 0 12px 30px -8px rgba(20,16,22,.35), 0 0 0 18px rgba(23,19,26,0); }
+  100% { box-shadow: 0 12px 30px -8px rgba(20,16,22,.35), 0 0 0 0 rgba(23,19,26,0); }
 }
 .companion-halo { animation: companion-halo 4s ease-out infinite; }
 @media (prefers-reduced-motion: reduce) { .companion-halo { animation: none; } }
@@ -169,7 +169,7 @@ details > summary::marker {
   .hall-row { animation: none !important; opacity: 1 !important; transform: none !important; }
 }
 .hall-row:hover { transform: translateY(-2px); }
-.hall-tab:hover { border-color: #a52a5f !important; }
+.hall-tab:hover { border-color: #2b2630 !important; }
 
 
 @keyframes mq { from { transform: translateX(0); } to { transform: translateX(-50%); } }

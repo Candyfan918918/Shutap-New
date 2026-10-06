@@ -32,25 +32,25 @@ html.home-scroll-snap {
 .home-immersive summary { text-decoration: none !important; }
 
 /* Homepage link color (design system pink). */
-.home-immersive a { color: #c1216b; }
-.home-immersive a:hover { color: #6d1239; }
+.home-immersive a { color: #17131a; }
+.home-immersive a:hover { color: #000000; }
 
 /* Selection color. */
-.home-immersive ::selection { background: #a52a5f; color: #fff; }
+.home-immersive ::selection { background: #2b2630; color: #fff; }
 
 
 /* ── Restored hover states (design's style-hover attrs were never compiled) ── */
 /* header "join →" pill */
 .home-immersive [data-hdr] a[data-link="/welcome"]:hover {
-  background: #c1216b !important;
+  background: #17131a !important;
 }
 /* hero secondary "spill it" outline button (scoped to Hero only) */
 .home-immersive [data-screen-label="Hero"] a[data-cta="spill"]:hover {
-  border-color: #a52a5f !important;
+  border-color: #2b2630 !important;
 }
 /* chapter 01 "open a room →" (dark pill inside .chsec) */
 .home-immersive .chsec a[data-cta="spill"]:hover {
-  background: #c1216b !important;
+  background: #17131a !important;
 }
 /* chapter 02 "scan it →" (white pill inside .chsec) */
 .home-immersive .chsec a[data-cta="scan"]:hover {
@@ -58,7 +58,7 @@ html.home-scroll-snap {
 }
 /* chapter 03 "open the mirror reading ✦" (gold pill inside .chsec) */
 .home-immersive .chsec a[data-link="/welcome"][data-mag]:hover {
-  background: #f7b8d4 !important;
+  background: #e2dde0 !important;
 }
 /* rooms-strip tile hover */
 .home-immersive [data-strip] > a {
@@ -66,7 +66,7 @@ html.home-scroll-snap {
 }
 .home-immersive [data-strip] > a:hover {
   transform: translateY(-6px) !important;
-  box-shadow: 0 26px 44px -24px rgba(193,33,107,.35) !important;
+  box-shadow: 0 26px 44px -24px rgba(23,19,26,.35) !important;
 }
 
 /* Reference-parity homepage CSS (from the design file's <style> block). */

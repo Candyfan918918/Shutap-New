@@ -100,7 +100,7 @@ function ContactPage() {
                 style={{
                   fontFamily: 'Sora,sans-serif',
                   fontSize: 13,
-                  color: '#c1216b',
+                  color: '#17131a',
                   flex: 'none',
                   whiteSpace: 'nowrap',
                 }}
@@ -118,7 +118,7 @@ function ContactPage() {
         in an emergency, don&rsquo;t email us — we can&rsquo;t respond in real time. use the{' '}
         <a
           href="/safety"
-          style={{ color: '#6d1239', textDecoration: 'none', fontWeight: 600 }}
+          style={{ color: '#000000', textDecoration: 'none', fontWeight: 600 }}
         >
           crisis lines →
         </a>

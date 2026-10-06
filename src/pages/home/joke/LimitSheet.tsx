@@ -28,27 +28,27 @@ function copy(tier: JokeTier, reason: LimitSheetReason, usage: JokeUsage | null)
   const reset = resetLabel(usage)
   if (reason === 'rate_limited') {
     return {
-      lead: 'easy — a lot of jokes have come off this connection.',
-      body: `not you, the network. give it a little while and the deck is back. the cards you already have stay right here.`,
+      lead: 'Too many from this network.',
+      body: 'Try again in a bit.',
     }
   }
   const cap = usage?.sets_cap ?? DAILY_SETS[tier]
   const sets = `${word(cap)} ${cap === 1 ? 'situation' : 'situations'}`
   if (tier === 'guest') {
     return {
-      lead: `that's the deck for today — ${sets}.`,
-      body: `it resets ${reset}. the cards you turned over stay right here. ${ALIAS_OFFER.line} a fake name, thirty seconds.`,
+      lead: `That's ${sets} for today.`,
+      body: `Resets ${reset}. ${ALIAS_OFFER.line}`,
     }
   }
   if (tier === 'free') {
     return {
-      lead: `that's the deck for today — ${sets}.`,
-      body: `it resets ${reset}, and your set list is right here in the meantime. members get ${MEMBER_OFFER.line}`,
+      lead: `That's ${sets} for today.`,
+      body: `Resets ${reset}.`,
     }
   }
   return {
-    lead: `that's the whole deck for today — ${sets}.`,
-    body: `i wrote every card of it. the deck resets ${reset}, and your set list is right here in the meantime.`,
+    lead: `That's ${sets} for today.`,
+    body: `Resets ${reset}.`,
   }
 }
 
@@ -110,16 +110,12 @@ export function LimitSheet({
           <Button variant="secondary" onClick={onMore} full>{MEMBER_OFFER.cta}</Button>
         ) : null}
         <Button variant="ghost" size="sm" onClick={onClose} full>
-          {throttled ? 'okay' : tier === 'paying' ? 'okay — back tomorrow' : 'okay — back tomorrow, keep reading'}
+          ok
         </Button>
       </div>
 
       <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, lineHeight: 1.55, color: FAINT, textAlign: 'center' }}>
-        {throttled
-          ? 'nothing was written, nothing was charged.'
-          : 'reading the cards you already have stays free either way.'}
-        {' '}
-        <a href="/how-it-works" target="_blank" rel="noreferrer" style={{ color: MUTED, textDecoration: 'underline', textUnderlineOffset: 3 }}>how the limits work →</a>
+        <a href="/how-it-works" target="_blank" rel="noreferrer" style={{ color: MUTED, textDecoration: 'underline', textUnderlineOffset: 3 }}>limits</a>
       </div>
     </Sheet>
   )

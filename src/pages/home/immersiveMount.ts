@@ -104,7 +104,7 @@ export function mountImmersive(root: HTMLElement, hooks: ImmersiveHooks): () => 
       const lunge = Math.pow(Math.max(0, Math.sin(eT * 0.30)), 8) * 0.06
       const spin = Math.abs(vRX) + Math.abs(vRY)
       eyes.style.transform = 'perspective(650px) rotateX(' + sRX.toFixed(2) + 'deg) rotateY(' + sRY.toFixed(2) + 'deg) translateZ(' + ((spin * 14) + lunge * 130).toFixed(1) + 'px) scale(' + (breathe + lunge).toFixed(3) + ')'
-      eyes.style.filter = 'drop-shadow(0 ' + (18 + lunge * 70).toFixed(0) + 'px ' + (34 + lunge * 60).toFixed(0) + 'px rgba(193,33,107,' + (0.30 + lunge * 0.35).toFixed(2) + '))'
+      eyes.style.filter = 'drop-shadow(0 ' + (18 + lunge * 70).toFixed(0) + 'px ' + (34 + lunge * 60).toFixed(0) + 'px rgba(23,19,26,' + (0.30 + lunge * 0.35).toFixed(2) + '))'
     }
     if (motion !== 'calm') {
       demoCards.forEach((c) => {
@@ -227,7 +227,7 @@ export function mountImmersive(root: HTMLElement, hooks: ImmersiveHooks): () => 
     const scVis = vis(phs[0].closest('section'))
     const picks = qa('[data-scpick]')
     const show = (i: number) => phs.forEach((p, j) => { p.style.opacity = j === i ? '1' : '0' })
-    const pick = (c?: HTMLElement) => { if (c) { c.style.background = 'rgba(127,119,221,.25)'; c.style.borderColor = '#aaa3e8'; c.style.transform = 'scale(1.03)' } }
+    const pick = (c?: HTMLElement) => { if (c) { c.style.background = 'rgba(90,90,95,.25)'; c.style.borderColor = '#aaa3e8'; c.style.transform = 'scale(1.03)' } }
     const runScan = () => {
       if (!scVis.v) { sched(runScan, 1000); return }
       picks.forEach((c) => { c.style.background = 'rgba(255,255,255,.05)'; c.style.borderColor = 'rgba(255,255,255,.14)'; c.style.transform = 'none' })
@@ -344,13 +344,13 @@ export function mountImmersive(root: HTMLElement, hooks: ImmersiveHooks): () => 
   const onScroll = () => {
     const dark = isDarkBehind()
     if (brand) brand.style.color = dark ? '#fdfbf9' : '#0b080f'
-    navlinks.forEach((a) => { a.style.color = dark ? '#f7b8d4' : '#443c42' })
+    navlinks.forEach((a) => { a.style.color = dark ? '#e2dde0' : '#443c42' })
     if (hdr) {
       // No backdrop-filter on purpose: a blurred fixed bar over the root
       // scroller flashes white and ghosts a second header on Windows/Chrome
       // during smooth scrolls. Near-opaque tint instead (same call as GlobalHeader).
       if (window.scrollY > 24) {
-        hdr.style.background = dark ? 'rgba(16,12,20,.94)' : 'rgba(253,240,245,.96)'
+        hdr.style.background = dark ? 'rgba(16,12,20,.94)' : 'rgba(246,245,244,.96)'
         hdr.style.boxShadow = dark ? '0 1px 0 rgba(255,255,255,.08)' : '0 1px 0 rgba(11,8,15,.07)'
       } else {
         hdr.style.background = 'transparent'
@@ -411,7 +411,7 @@ export function mountImmersive(root: HTMLElement, hooks: ImmersiveHooks): () => 
   const compBubble = (text: string, mine: boolean) => {
     if (!cLog) return null
     const d = document.createElement('div')
-    d.style.cssText = 'max-width:86%;padding:10px 14px;border-radius:16px;font-family:Newsreader,serif;font-style:italic;font-size:15px;line-height:1.55;' + (mine ? 'align-self:flex-end;background:#a52a5f;color:#fff;border-bottom-right-radius:5px' : 'align-self:flex-start;background:rgba(255,255,255,.07);color:#e9e4f6;border-bottom-left-radius:5px')
+    d.style.cssText = 'max-width:86%;padding:10px 14px;border-radius:16px;font-family:Newsreader,serif;font-style:italic;font-size:15px;line-height:1.55;' + (mine ? 'align-self:flex-end;background:#2b2630;color:#fff;border-bottom-right-radius:5px' : 'align-self:flex-start;background:rgba(255,255,255,.07);color:#e9e4f6;border-bottom-left-radius:5px')
     d.textContent = text; cLog.appendChild(d); cLog.scrollTop = cLog.scrollHeight; return d
   }
   const openComp = () => {

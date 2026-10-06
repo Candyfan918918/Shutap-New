@@ -135,7 +135,7 @@ function LegalHub() {
                 style={{
                   fontFamily: "Sora,sans-serif",
                   fontSize: 13,
-                  color: "#c1216b",
+                  color: "#17131a",
                   whiteSpace: "nowrap",
                 }}
               >

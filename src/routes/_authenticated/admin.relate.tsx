@@ -54,7 +54,7 @@ function AdminRelatePage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 16 }}>
           <Stat label="7-day SLA hit-rate" value={`${summary.sla_pct}%`} sub={`${summary.within_sla} / ${summary.total_public_spills} spills`} />
           <Stat label="median first-response" value={summary.median_minutes_to_first_response != null ? `${summary.median_minutes_to_first_response} min` : '—'} sub="last 7 days" />
-          <Stat label="open in queue" value={String(rows.length)} sub={`${past} past SLA`} accent={past > 0 ? '#c1216b' : undefined} />
+          <Stat label="open in queue" value={String(rows.length)} sub={`${past} past SLA`} accent={past > 0 ? '#17131a' : undefined} />
         </div>
       )}
 
@@ -67,7 +67,7 @@ function AdminRelatePage() {
       </div>
 
       {loading && <div style={{ color: '#443c42', fontSize: 14 }}>loading…</div>}
-      {error && <div style={{ color: '#c1216b', fontSize: 14 }}>error: {error}</div>}
+      {error && <div style={{ color: '#17131a', fontSize: 14 }}>error: {error}</div>}
       {!loading && !error && rows.length === 0 && (
         <div style={{ background: '#fff', borderRadius: 16, padding: 24, color: '#443c42', textAlign: 'center', border: '1px solid rgba(11,8,15,.08)' }}>
           no spills waiting. SLA is being met. 💚
@@ -83,18 +83,18 @@ function AdminRelatePage() {
 
 function QueueCard({ row }: { row: RelateQueueRow }) {
   return (
-    <li style={{ background: '#fff', border: `1px solid ${row.past_sla ? 'rgba(193,33,107,.35)' : 'rgba(11,8,15,.08)'}`, borderRadius: 16, padding: 18 }}>
+    <li style={{ background: '#fff', border: `1px solid ${row.past_sla ? 'rgba(23,19,26,.35)' : 'rgba(11,8,15,.08)'}`, borderRadius: 16, padding: 18 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, flexWrap: 'wrap' }}>
         <span style={{ fontSize: 22 }}>{row.emoji}</span>
         <strong style={{ fontSize: 14 }}>{row.alias}</strong>
         <Badge color="#7f77dd">{row.pillar}</Badge>
         <Badge color={row.support === 'advice' ? '#c87c4a' : '#5b8a5e'}>{row.support === 'advice' ? 'wants advice' : 'wants to be heard'}</Badge>
-        <span style={{ marginLeft: 'auto', fontSize: 12, color: row.past_sla ? '#c1216b' : '#6f666c', fontWeight: row.past_sla ? 600 : 400 }}>
+        <span style={{ marginLeft: 'auto', fontSize: 12, color: row.past_sla ? '#17131a' : '#6f666c', fontWeight: row.past_sla ? 600 : 400 }}>
           {row.past_sla ? `⚠ ${row.minutes_open} min · past SLA` : `${row.minutes_open} min ago`}
         </span>
       </div>
       {row.title && <div style={{ fontWeight: 600, fontSize: 15, marginBottom: 4 }}>{row.title}</div>}
-      <p style={{ margin: '0 0 12px', fontSize: 14, lineHeight: 1.55, color: '#3a2a32' }}>{row.body}</p>
+      <p style={{ margin: '0 0 12px', fontSize: 14, lineHeight: 1.55, color: '#303030' }}>{row.body}</p>
       <Link to="/room" search={{ id: row.situation_id }} style={{ display: 'inline-block', background: '#0b080f', color: '#fff', textDecoration: 'none', padding: '8px 16px', borderRadius: 999, fontSize: 13, fontWeight: 600 }}>
         open & respond →
       </Link>
@@ -132,7 +132,7 @@ function BackfillButton() {
         } finally { setBusy(false) }
       }}
       disabled={busy}
-      style={{ padding: '7px 14px', border: '1px solid rgba(11,8,15,.12)', background: '#fff', borderRadius: 999, cursor: 'pointer', fontWeight: 600, color: '#c1216b', fontSize: 12 }}
+      style={{ padding: '7px 14px', border: '1px solid rgba(11,8,15,.12)', background: '#fff', borderRadius: 999, cursor: 'pointer', fontWeight: 600, color: '#17131a', fontSize: 12 }}
       title="Backfill embeddings for situations missing a vector"
     >
       {busy ? 'embedding…' : msg ? `embed · ${msg}` : 'embed batch'}
@@ -151,9 +151,9 @@ function SchedulerHealthCard() {
       .catch((e) => !cancel && setErr(e instanceof Error ? e.message : 'failed'))
     return () => { cancel = true }
   }, [run])
-  if (err) return <div style={{ marginTop: 16, fontSize: 13, color: '#c1216b' }}>scheduler: {err}</div>
+  if (err) return <div style={{ marginTop: 16, fontSize: 13, color: '#17131a' }}>scheduler: {err}</div>
   if (!h) return null
-  const overdueColor = h.scheduled_overdue > 10 ? '#c1216b' : undefined
+  const overdueColor = h.scheduled_overdue > 10 ? '#17131a' : undefined
   return (
     <div style={{ marginTop: 16, padding: 14, background: '#fff', borderRadius: 14, border: '1px solid rgba(11,8,15,.08)' }}>
       <div style={{ fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6f666c', marginBottom: 8 }}>
@@ -161,7 +161,7 @@ function SchedulerHealthCard() {
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12 }}>
         <Stat label="sent" value={String(h.sent_24h)} />
-        <Stat label="failed" value={String(h.failed_24h)} accent={h.failed_24h > 0 ? '#c1216b' : undefined} />
+        <Stat label="failed" value={String(h.failed_24h)} accent={h.failed_24h > 0 ? '#17131a' : undefined} />
         <Stat label="retrying" value={String(h.retrying)} />
         <Stat label="overdue" value={String(h.scheduled_overdue)} sub={h.oldest_overdue_minutes != null ? `oldest ${h.oldest_overdue_minutes}m` : undefined} accent={overdueColor} />
       </div>

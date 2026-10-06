@@ -6,31 +6,25 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/faq";
 const URL = `${SITE_URL}/faq`;
-const TITLE = "Shutap FAQ — is it therapy, is it pseudonymous, is my data safe?";
+const TITLE = "Shutap FAQ";
 const DESCRIPTION =
-  "answers about shutap: what it is, how the cards are written, why it's pseudonymous, whether it's therapy (it isn't), and how to delete your data.";
-const CAPSULE =
-  "you type what happened. shutap writes you a set of joke cards — every card a different angle on the same situation. here are the questions people ask first.";
+  "Answers about Shutap: what it is, what's free, posting, privacy and safety.";
+const CAPSULE = "Short answers.";
 
 const QA: { heading: string; body: string }[] = [
-  { heading: "What is Shutap?", body: "You type what happened — the comment at dinner, the text at 11pm, the meeting you weren't invited to — and Shutap writes you a set of three joke cards: the take, the clapback and the roast. They land face down. You turn one over and keep it if it lands." },
-  { heading: "How do I use it?", body: "Type the situation in the box on the home page and press enter. Three cards come up face down; tap one to turn it over. To save, share or post the card you turned over, pick a free alias (a fake name — no password). The full walkthrough is at shutap.com/how-it-works." },
-  { heading: "Is Shutap therapy or a mental-health service?", body: "No. Shutap writes jokes, not prescriptions. It is an entertainment service, not a healthcare, medical, mental-health, crisis, or legal service. Nothing here is advice, diagnosis, or treatment." },
-  { heading: "Is Shutap pseudonymous?", body: "You get a name — something like Feral Norwegian Heron. It sticks across your sets, and it is not yours. Your real name is never shown. Names, addresses, workplaces and other identifying details are stripped before anything is stored." },
-  { heading: "Who writes the cards?", body: "The cards are written by AI, not by a person. Nobody is standing by to reply. The AI can get things wrong, and it cannot give medical, mental-health, or legal advice." },
-  { heading: "What can I bring here?", body: "Family, partners, exes, roommates, managers, landlords, the friend who's been doing the thing for nine years, the stranger who felt like commenting. Big things and extremely small ones." },
-  { heading: "Is Shutap free?", body: "Yes. Guests get five situations a day, flip one of each set's three cards, and can share or save that card — 1080×1920 with a small shutap mark. Nothing a guest writes is stored. Sharing and saving are free at every tier. A free alias — a fake name, no password — gets the same five situations a day and flips all three, kept in your set list and the Mirror's record, for free, forever, with the shutap mark on the cards. A membership ($7.99/month or $49.99/year) buys every set kept clean — no mark — and the Mirror reading." },
-  { heading: "How many sets can I write a day?", body: "Five a day, at every tier — guest, free alias or member. The deck resets every day in your own timezone. When today's deck is spent, the box says so before it sends anything, so nothing is written and nothing is charged." },
-  { heading: "Why are two of my cards still face down?", body: "Because you're a guest, and one flip is the guest deal. The other two are written and waiting; an alias flips them. Anyone with an alias flips all three of every situation." },
-  { heading: "What gets kept when I sign in?", body: "Every card you flip — with an alias, that's all three of each situation. They go into your set list and into the Mirror's private record. A guest can already share or save the card they flipped (marked); what an alias adds is keeping it, and flipping the other two — the card they had flipped comes with them." },
-  { heading: "What does a membership actually buy?", body: "A clean card and the Mirror: every set kept with no shutap mark — every card is the same phone-screen picture, 1080×1920, at every tier; the paid difference is the absent mark — and the Mirror reading the patterns across everything you keep. It does not buy more situations; five a day is the deal for everyone. It does not buy advice, a diagnosis, or relief, and the jokes are the same jokes. There is no free trial: the first period is charged when you subscribe, and you can cancel anytime." },
-  { heading: "Does the joke ever go at me?", body: "No. The joke goes at the situation, never at the person telling it, and it never points at a real person and calls them a name." },
-  { heading: "Who can see what I write?", body: "Only what you choose to post appears publicly, always in scrubbed, de-identified form. Anything flagged as heavy is kept private and never published." },
-  { heading: "What if something is genuinely heavy?", body: "Shutap stops joking. It isn't a crisis service, but it routes you to real help: in the US call or text 988; in the UK, Samaritans at 116 123; anywhere, findahelpline.com." },
-  { heading: "What is the Mirror?", body: "The Mirror is the paid part: a private record of the cards you've kept and what keeps repeating — same person, same week of the month, same move. Every card you turn over while signed in is added to it. It observes; it never diagnoses or tells you what to do." },
-  { heading: "Can I delete my sets or account?", body: "Yes, anytime. From Account & Data settings you can delete any set, export your data, and delete your account. You can also email privacy@shutap.com." },
-  { heading: "Do you sell my data?", body: "No. Shutap does not sell your personal information." },
-  { heading: "Who can use Shutap?", body: "Adults 18 and older." },
+  { heading: "What is Shutap?", body: "Paste what happened. Shutap writes three jokes: the take, the clapback, the roast. Post the best one to a room, or download it." },
+  { heading: "Is it free?", body: "Yes. Writing, posting, following and commenting are free. Five stories a day for everyone. Guests see one joke per story; sign in free to see all three." },
+  { heading: "What does Shutap+ buy?", body: "No watermark on downloads, plus the Mirror. $7.99/month or $49.99/year. Cancel anytime. It doesn't buy more stories." },
+  { heading: "How do rooms work?", body: "Rooms are topics: office, work, family, school, live, social. Post a joke to one. People can like, comment, save and follow you." },
+  { heading: "Who sees what I write?", body: "Only what you post. Everything else stays private. Names, places and contact details are removed before anything is saved." },
+  { heading: "Is my name on anything?", body: "No. You get a made-up name. That's what people see and follow." },
+  { heading: "What can't I post?", body: "Jokes about a real person someone could identify, real names, hate, spam. Anyone can report a post. Enough reports take it down." },
+  { heading: "Who writes the jokes?", body: "AI. It can get things wrong." },
+  { heading: "Is this therapy?", body: "No. Shutap writes jokes. No advice, no diagnosis." },
+  { heading: "What if something is heavy?", body: "Shutap stops joking. US: call or text 988. UK: Samaritans 116 123. Anywhere: findahelpline.com." },
+  { heading: "Can I delete my stuff?", body: "Yes. Delete any post, set or your account in settings, or email privacy@shutap.com." },
+  { heading: "Do you sell my data?", body: "No." },
+  { heading: "Who can use it?", body: "Adults 18+." },
 ];
 
 const OTHERS = [
@@ -77,7 +71,7 @@ export const Route = createFileRoute("/faq")({
   component: () => (
     <ContentPage
       breadcrumbs={[{ name: "FAQ", path: "/faq" }]}
-      h1="frequently asked questions"
+      h1="FAQ"
       capsule={CAPSULE}
       sections={QA}
       others={OTHERS}
