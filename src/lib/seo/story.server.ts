@@ -11,7 +11,7 @@ async function admin() {
 }
 
 const SELECT =
-  "id, slug, pillar, clean_text, title, initial_scan, scan_band, scan_reasoning, is_public, is_seed, crisis_flag, deleted_at, room_id, created_at, updated_at";
+  "id, slug, pillar, clean_text, title, initial_scan, scan_band, scan_reasoning, is_public, is_seed, crisis_flag, deleted_at, room_id, created_at, updated_at, kind";
 
 function coerce(row: Record<string, unknown> | null): StoryRow | null {
   if (!row) return null;
@@ -80,6 +80,8 @@ export async function listIndexableStoriesForSitemap(limit = 5000): Promise<
   const { data } = await sb
     .from("situations")
     .select("pillar, slug, updated_at")
+    // Spill and Scan stories are retired; only joke posts are indexable.
+    .eq("kind", "joke")
     .eq("is_public", true)
     .eq("crisis_flag", false)
     .eq("is_seed", false)
@@ -100,6 +102,7 @@ export async function countIndexableStories(): Promise<number> {
   const { count } = await sb
     .from("situations")
     .select("id", { count: "exact", head: true })
+    .eq("kind", "joke")
     .eq("is_public", true)
     .eq("crisis_flag", false)
     .eq("is_seed", false)

@@ -46,7 +46,9 @@ export const Route = createFileRoute("/story/$pillar/$slug")({
     const { row, relates } = loaderData;
     const title = storyQueryTitle(row);
     const description = storyDescription(row.clean_text);
-    const indexable = isStoryIndexable({
+    // Spill and Scan stories are retired: the page still renders for old
+    // links, but only joke posts are offered to search engines.
+    const indexable = row.kind === "joke" && isStoryIndexable({
       is_public: row.is_public,
       is_seed: row.is_seed,
       crisis_flag: row.crisis_flag,

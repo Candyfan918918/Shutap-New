@@ -5,6 +5,7 @@ import { OUTCOMES, isOutcomeIndexable } from "@/lib/seo/outcomes";
 import { PROFILES, isProfileIndexable } from "@/lib/seo/profiles";
 import { countIndexableStories } from "@/lib/seo/story.server";
 import { renderSitemapIndex } from "@/lib/seo/sitemap";
+import { listPostsForSitemap } from "./sitemaps/posts[.]xml";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -26,6 +27,12 @@ export const Route = createFileRoute("/sitemap.xml")({
         const storyCount = await countIndexableStories();
         if (storyCount > 0) {
           children.push({ loc: `${SITE_URL}/sitemaps/stories.xml` });
+        }
+
+        // Room posts: advertised once at least one public post exists.
+        const posts = await listPostsForSitemap(1)
+        if (posts.length > 0) {
+          children.push({ loc: `${SITE_URL}/sitemaps/posts.xml` });
         }
 
         return new Response(renderSitemapIndex(children), {

@@ -55,6 +55,7 @@ import { Route as RoomsIndexRouteImport } from './routes/rooms.index'
 import { Route as RoomsIdRouteImport } from './routes/rooms.$id'
 import { Route as SitemapsCoreDotxmlRouteImport } from './routes/sitemaps/core[.]xml'
 import { Route as SitemapsOutcomesDotxmlRouteImport } from './routes/sitemaps/outcomes[.]xml'
+import { Route as SitemapsPostsDotxmlRouteImport } from './routes/sitemaps/posts[.]xml'
 import { Route as SitemapsProfilesDotxmlRouteImport } from './routes/sitemaps/profiles[.]xml'
 import { Route as SitemapsStoriesDotxmlRouteImport } from './routes/sitemaps/stories[.]xml'
 import { Route as SubscribeReturnRouteImport } from './routes/subscribe.return'
@@ -311,6 +312,11 @@ const SitemapsOutcomesDotxmlRoute = SitemapsOutcomesDotxmlRouteImport.update({
   path: '/sitemaps/outcomes.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapsPostsDotxmlRoute = SitemapsPostsDotxmlRouteImport.update({
+  id: '/sitemaps/posts.xml',
+  path: '/sitemaps/posts.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapsProfilesDotxmlRoute = SitemapsProfilesDotxmlRouteImport.update({
   id: '/sitemaps/profiles.xml',
   path: '/sitemaps/profiles.xml',
@@ -488,6 +494,7 @@ export interface FileRoutesByFullPath {
   '/rooms/$id': typeof RoomsIdRoute
   '/sitemaps/core.xml': typeof SitemapsCoreDotxmlRoute
   '/sitemaps/outcomes.xml': typeof SitemapsOutcomesDotxmlRoute
+  '/sitemaps/posts.xml': typeof SitemapsPostsDotxmlRoute
   '/sitemaps/profiles.xml': typeof SitemapsProfilesDotxmlRoute
   '/sitemaps/stories.xml': typeof SitemapsStoriesDotxmlRoute
   '/subscribe/return': typeof SubscribeReturnRoute
@@ -559,6 +566,7 @@ export interface FileRoutesByTo {
   '/rooms/$id': typeof RoomsIdRoute
   '/sitemaps/core.xml': typeof SitemapsCoreDotxmlRoute
   '/sitemaps/outcomes.xml': typeof SitemapsOutcomesDotxmlRoute
+  '/sitemaps/posts.xml': typeof SitemapsPostsDotxmlRoute
   '/sitemaps/profiles.xml': typeof SitemapsProfilesDotxmlRoute
   '/sitemaps/stories.xml': typeof SitemapsStoriesDotxmlRoute
   '/subscribe/return': typeof SubscribeReturnRoute
@@ -632,6 +640,7 @@ export interface FileRoutesById {
   '/rooms/$id': typeof RoomsIdRoute
   '/sitemaps/core.xml': typeof SitemapsCoreDotxmlRoute
   '/sitemaps/outcomes.xml': typeof SitemapsOutcomesDotxmlRoute
+  '/sitemaps/posts.xml': typeof SitemapsPostsDotxmlRoute
   '/sitemaps/profiles.xml': typeof SitemapsProfilesDotxmlRoute
   '/sitemaps/stories.xml': typeof SitemapsStoriesDotxmlRoute
   '/subscribe/return': typeof SubscribeReturnRoute
@@ -705,6 +714,7 @@ export interface FileRouteTypes {
     | '/rooms/$id'
     | '/sitemaps/core.xml'
     | '/sitemaps/outcomes.xml'
+    | '/sitemaps/posts.xml'
     | '/sitemaps/profiles.xml'
     | '/sitemaps/stories.xml'
     | '/subscribe/return'
@@ -776,6 +786,7 @@ export interface FileRouteTypes {
     | '/rooms/$id'
     | '/sitemaps/core.xml'
     | '/sitemaps/outcomes.xml'
+    | '/sitemaps/posts.xml'
     | '/sitemaps/profiles.xml'
     | '/sitemaps/stories.xml'
     | '/subscribe/return'
@@ -848,6 +859,7 @@ export interface FileRouteTypes {
     | '/rooms/$id'
     | '/sitemaps/core.xml'
     | '/sitemaps/outcomes.xml'
+    | '/sitemaps/posts.xml'
     | '/sitemaps/profiles.xml'
     | '/sitemaps/stories.xml'
     | '/subscribe/return'
@@ -920,6 +932,7 @@ export interface RootRouteChildren {
   RoomsIdRoute: typeof RoomsIdRoute
   SitemapsCoreDotxmlRoute: typeof SitemapsCoreDotxmlRoute
   SitemapsOutcomesDotxmlRoute: typeof SitemapsOutcomesDotxmlRoute
+  SitemapsPostsDotxmlRoute: typeof SitemapsPostsDotxmlRoute
   SitemapsProfilesDotxmlRoute: typeof SitemapsProfilesDotxmlRoute
   SitemapsStoriesDotxmlRoute: typeof SitemapsStoriesDotxmlRoute
   UPseudonymRoute: typeof UPseudonymRoute
@@ -1262,6 +1275,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapsOutcomesDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemaps/posts.xml': {
+      id: '/sitemaps/posts.xml'
+      path: '/sitemaps/posts.xml'
+      fullPath: '/sitemaps/posts.xml'
+      preLoaderRoute: typeof SitemapsPostsDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemaps/profiles.xml': {
       id: '/sitemaps/profiles.xml'
       path: '/sitemaps/profiles.xml'
@@ -1526,6 +1546,7 @@ const rootRouteChildren: RootRouteChildren = {
   RoomsIdRoute: RoomsIdRoute,
   SitemapsCoreDotxmlRoute: SitemapsCoreDotxmlRoute,
   SitemapsOutcomesDotxmlRoute: SitemapsOutcomesDotxmlRoute,
+  SitemapsPostsDotxmlRoute: SitemapsPostsDotxmlRoute,
   SitemapsProfilesDotxmlRoute: SitemapsProfilesDotxmlRoute,
   SitemapsStoriesDotxmlRoute: SitemapsStoriesDotxmlRoute,
   UPseudonymRoute: UPseudonymRoute,

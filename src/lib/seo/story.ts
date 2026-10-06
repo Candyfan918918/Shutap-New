@@ -22,6 +22,7 @@ export interface StoryRow {
   room_id: string | null;
   created_at: string;
   updated_at: string;
+  kind?: string | null;
 }
 
 export interface StoryGateInput {
