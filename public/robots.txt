@@ -11,7 +11,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -28,7 +27,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -45,7 +43,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -62,7 +59,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -79,7 +75,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -96,7 +91,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -113,7 +107,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -130,7 +123,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -147,7 +139,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -164,7 +155,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -181,7 +171,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -198,7 +187,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -215,7 +203,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -232,7 +219,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -249,7 +235,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -266,7 +251,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -283,7 +267,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -300,7 +283,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
@@ -317,7 +299,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /welcome
 Disallow: /stream
-Disallow: /room$
 Disallow: /activity
 Disallow: /profile
 Disallow: /mirror
