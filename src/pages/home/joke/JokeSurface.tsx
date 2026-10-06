@@ -1145,9 +1145,9 @@ export function JokeSurface() {
   return (
     <>
       {/* ══ 1 · hero + the composer ══ */}
-      <section id="joke" style={{ position: 'relative', overflow: 'hidden', background: 'radial-gradient(ellipse 80% 60% at 50% 0%, #f8e4eb, #fbf6f7 70%)', padding: 'clamp(36px,7vh,72px) clamp(16px,4vw,28px) clamp(24px,4vh,44px)' }}>
+      <section id="joke" style={{ position: 'relative', overflow: 'hidden', background: 'transparent', padding: 'clamp(36px,7vh,72px) clamp(16px,4vw,28px) clamp(24px,4vh,44px)' }}>
         <div style={{ maxWidth: 880, margin: '0 auto', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(13px,2.2vh,20px)' }}>
-          <h1 style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(36px,7vw,72px)', lineHeight: 1.02, letterSpacing: '-.05em', textAlign: 'center', margin: 0, color: '#1a1418' }}>
+          <h1 style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(36px,7vw,72px)', lineHeight: 1.02, letterSpacing: '-.05em', textAlign: 'center', margin: 0, color: '#8e1c4c' }}>
             Say it <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, letterSpacing: '-.02em', color: '#b8456b' }}>funnier.</span>
           </h1>
           <p style={{ margin: 0, fontFamily: SORA, fontSize: 'clamp(15px,1.6vw,17px)', color: '#6b6b6b', textAlign: 'center' }}>
@@ -1285,7 +1285,7 @@ export function JokeSurface() {
 
       {/* ══ 4 · the offer, then the three cards ══ */}
       {set && !crisis ? (
-        <section ref={deckRef} style={{ background: '#fbf6f7', padding: 'clamp(16px,3vh,36px) clamp(16px,4vw,28px) clamp(36px,6vh,72px)' }}>
+        <section ref={deckRef} style={{ background: 'transparent', padding: 'clamp(16px,3vh,36px) clamp(16px,4vw,28px) clamp(36px,6vh,72px)' }}>
           <CardBackStyles />
           <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 18 }}>
 
@@ -1438,7 +1438,7 @@ export function JokeSurface() {
 
       {/* ══ 5 · the set list, and the one place the plan is mentioned unprompted ══ */}
       {signedIn && list.length > 0 ? (
-        <section style={{ background: '#f8eef1', padding: '0 clamp(16px,4vw,28px) clamp(36px,6vh,72px)' }}>
+        <section style={{ background: 'transparent', padding: '0 clamp(16px,4vw,28px) clamp(36px,6vh,72px)' }}>
           <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* The fold. A line, not a panel: the count is the reason to open
                 it, so it sits in the same row as the title and the caret. */}
@@ -1453,7 +1453,7 @@ export function JokeSurface() {
                 border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', width: '100%',
               }}
             >
-              <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'clamp(20px,2.6vw,26px)', letterSpacing: '-.03em', color: INK }}>
+              <span style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'clamp(20px,2.6vw,26px)', letterSpacing: '-.03em', color: '#8e1c4c' }}>
                 Your set list
               </span>
               <span style={{ fontFamily: SORA, fontSize: 13, color: '#8a8689' }}>

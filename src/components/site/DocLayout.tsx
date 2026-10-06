@@ -35,7 +35,7 @@ export function DocLayout({
   }, [pathname])
 
   return (
-    <div style={{ background: '#fbf6f7', minHeight: '100vh', color: '#100c14' }}>
+    <div style={{ background: 'transparent', minHeight: '100vh', color: '#100c14' }}>
       
       <div
         style={{

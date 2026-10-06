@@ -12,16 +12,17 @@
   --rose: #b8456b;
   --rose-ink: #9b3559;
   --pink: #e7548a;
+  --wine: #8e1c4c;
   --sora: 'Sora', system-ui, sans-serif;
   --news: 'Newsreader', Georgia, serif;
-  background: var(--bg);
+  background: transparent;
   color: var(--ink);
   font-family: var(--sora);
   min-height: 70vh;
 }
 .fd * { box-sizing: border-box; }
 .fd-col { max-width: 640px; margin: 0 auto; padding: 18px 16px 64px; display: flex; flex-direction: column; gap: 14px; }
-.fd-h1 { font-weight: 800; font-size: 26px; letter-spacing: -0.04em; margin: 0; }
+.fd-h1 { font-weight: 800; font-size: 26px; letter-spacing: -0.04em; margin: 0; color: var(--wine); }
 .fd-row { display: flex; align-items: center; gap: 8px; }
 .fd-between { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .fd-muted { color: var(--muted); font-size: 13px; }

@@ -144,7 +144,7 @@ export function GlobalHeader() {
   const inkStrong = dark ? '#ffffff' : '#111111'
   const inkMuted = dark ? '#b5b5b5' : '#6b6b6b'
   const inkActive = dark ? '#ffffff' : '#111111'
-  const barBg = dark ? '#111111' : '#fbf6f7'
+  const barBg = dark ? '#111111' : 'rgba(251,246,247,.92)'
   const barBorder = dark ? '1px solid rgba(255,255,255,.08)' : '1px solid rgba(90,30,50,.09)'
   const pillBorder = dark ? '1px solid rgba(255,255,255,.14)' : '1px solid rgba(0,0,0,.14)'
   const menuBg = dark ? '#1b1b1b' : '#fff'
@@ -193,6 +193,7 @@ export function GlobalHeader() {
         top: 0,
         zIndex: 40,
         background: barBg,
+        backdropFilter: dark ? undefined : 'blur(8px)',
         borderBottom: barBorder,
         transition: 'background-color .35s ease, border-color .35s ease, color .35s ease',
       }}
