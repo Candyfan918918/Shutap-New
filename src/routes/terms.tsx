@@ -4,9 +4,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/terms`
-const TITLE = 'Terms of Service — Shutap'
+const TITLE = "Terms of Service — Shutap AI Joke Generator"
 const DESCRIPTION =
-  'The terms for using Shutap, the AI joke generator: what it is and isn’t, daily limits, Shutap+, rooms and your posts, house rules, AI output, billing and liability.'
+  "Terms for using Shutap, the AI joke generator for content creators and comedians: using the jokes you generate, posting to rooms, house rules, Shutap+ billing, AI output and liability."
 
 export const Route = createFileRoute('/terms')({
   head: () => ({

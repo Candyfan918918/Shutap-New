@@ -4,9 +4,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/contact`
-const TITLE = 'Contact — Shutap'
+const TITLE = "Contact Shutap — AI Joke Generator for Creators"
 const DESCRIPTION =
-  'Write to Shutap at hello@shutap.com for help, privacy, legal, safety and reports.'
+  "Questions, feedback, partnerships, press, privacy or reports: write to Shutap at hello@shutap.com."
 
 type Cbox = { email: string; label: string; sub: string }
 

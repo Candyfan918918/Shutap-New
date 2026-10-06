@@ -4,9 +4,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/privacy`
-const TITLE = 'Privacy Policy — Shutap'
+const TITLE = "Privacy Policy — Shutap AI Joke Generator"
 const DESCRIPTION =
-  'How Shutap handles your data: names and details scrubbed before storage, a pseudonym instead of your real name, no sale of personal data, and delete or export anytime.'
+  "How Shutap, the AI joke generator, handles your data: names and details removed before saving, a made-up name instead of your real one, no sale of personal data, delete or export anytime."
 
 export const Route = createFileRoute('/privacy')({
   head: () => ({

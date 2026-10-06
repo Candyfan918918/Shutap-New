@@ -5,40 +5,28 @@ import { SITE_URL } from "@/lib/site";
 
 const PATH = "/trust";
 const TITLE =
-  "Trust and privacy — Shutap";
+  "Trust & Privacy — Shutap AI Joke Generator";
 const DESCRIPTION =
-  "How Shutap protects you: a pseudonym instead of your name, details scrubbed before storage, private until you post, reporting and fast takedowns.";
+  "How Shutap keeps the jokes on the situation and your identity private: a made-up name, names and places removed before saving, private until you post, reporting and takedowns.";
 const CAPSULE =
-  "Shutap removes names and identifying details before anything is stored and keeps only the cleaned text. You appear under a pseudonym, never your real name. Your jokes stay private unless you post them to a room.";
+  "Shutap is an AI joke generator for creators and comedians, and the jokes come from real stories. So privacy is built in: names and details come out before anything is saved, you post under a made-up name, and nothing is public unless you post it.";
 const SECTIONS = [
-  {
-    heading: "a pseudonym, not your name",
-    body: "You appear under a made-up name. Your real name is never shown to anyone.",
-  },
-  {
-    heading: "the scrubber",
-    body: "Before storage, Shutap removes names, addresses, places, phone numbers and emails from what you write. We keep only the cleaned text.",
-  },
-  {
-    heading: "private until you post",
-    body: "Jokes you don't post stay private. Only what you post to a room is public, under your pseudonym. The Mirror is private to you. Anything flagged by the crisis check is never posted.",
-  },
-  {
-    heading: "reporting",
-    body: "Anyone can report a post or comment. When three different people report a post, it's hidden until we review it. Content that breaks the house rules is removed.",
-  },
-  {
-    heading: "your data",
-    body: "Delete any post, comment or set, export your data, or delete your account at any time. We don't sell personal data.",
-  },
-  {
-    heading: "takedowns",
-    body: "If a post is about you, ask us to remove it at hello@shutap.com or through the report page.",
-  },
+  { heading: "A made-up name, never your real one", body: "You post, comment and get followed under a Shutap name. Your real name is never shown to anyone." },
+  { heading: "Names and places removed before saving", body: "Before anything is stored, Shutap removes names, addresses, places, phone numbers and emails from what you write — including captions and comments. Only the cleaned text is kept." },
+  { heading: "Private until you post", body: "Jokes you write stay in your private set list. Only what you post to a room is public. The Mirror is private to you." },
+  { heading: "Jokes about situations, not people", body: "Shutap's jokes go at the situation, never at a real person someone could identify. That keeps your content shareable and keeps rooms from turning into callouts." },
+  { heading: "Reporting and takedowns", body: "Anyone can report a post or comment. When three different people report a post, it's hidden until reviewed. If a post is about you, email hello@shutap.com or use the report page and we'll take a look." },
+  { heading: "Crisis check", body: "If something you write reads as a crisis, Shutap writes no jokes, posts nothing, and shows where to get help. Shutap is not a crisis service." },
+  { heading: "Your data, your call", body: "Delete any post, comment, set or your whole account, or export your data, at any time. We don't sell personal data." },
+  { heading: "AI, disclosed", body: "Jokes are written and ranked by AI models. AI can be wrong or offensive, so you decide what to post." },
 ];
 const OTHERS = [
+  { href: "/", label: "Write jokes" },
   { href: "/about", label: "About" },
   { href: "/how-it-works", label: "How it works" },
+  { href: "/privacy", label: "Privacy policy" },
+  { href: "/guidelines", label: "House rules" },
+  { href: "/ai-disclosure", label: "AI disclosure" },
 ];
 
 export const Route = createFileRoute("/trust")({
@@ -70,7 +58,7 @@ export const Route = createFileRoute("/trust")({
   }),
   component: () => (
     <ContentPage
-      h1="trust and privacy"
+      h1="Trust and privacy"
       capsule={CAPSULE}
       sections={SECTIONS}
       others={OTHERS}

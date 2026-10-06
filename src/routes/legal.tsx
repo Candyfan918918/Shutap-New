@@ -4,9 +4,9 @@ import { DocLayout } from "@/components/site/DocLayout";
 import { SITE_URL } from "@/lib/site";
 
 const URL = `${SITE_URL}/legal`;
-const TITLE = "Legal & policies — Shutap";
+const TITLE = "Legal & Policies — Shutap AI Joke Generator"
 const DESCRIPTION =
-  "All of Shutap's legal pages in one place: how it works, FAQ, terms, privacy, house rules, crisis help, contact, AI disclosure and the medical and legal disclaimer.";
+  "Shutap's terms, privacy policy, house rules, AI disclosure, disclaimer, crisis help and contact, in one place."
 
 type Item = { href: string; label: string; sub: string };
 

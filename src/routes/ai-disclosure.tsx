@@ -4,9 +4,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/ai-disclosure`
-const TITLE = 'AI disclosure — Shutap'
+const TITLE = "AI Disclosure — How Shutap's AI Joke Generator Works"
 const DESCRIPTION =
-  'Every joke on Shutap is written by AI (Google Gemini and OpenAI models, via the Lovable AI Gateway). It can be wrong or offensive, and you decide what to post.'
+  "Every joke on Shutap is written and ranked by AI (Google Gemini and OpenAI models, via the Lovable AI Gateway). AI can be wrong or offensive; you decide what to post."
 
 export const Route = createFileRoute('/ai-disclosure')({
   head: () => ({

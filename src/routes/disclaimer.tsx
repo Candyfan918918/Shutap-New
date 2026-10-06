@@ -4,9 +4,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/disclaimer`
-const TITLE = 'Medical and legal disclaimer — Shutap'
+const TITLE = "Disclaimer — Shutap AI Joke Generator"
 const DESCRIPTION =
-  'Shutap writes jokes for entertainment. It is not therapy, not advice, not a diagnosis, and not a crisis service. 18+.'
+  "Shutap is an AI joke generator for entertainment. It is not therapy, advice, a diagnosis or a crisis service. Adults 18+."
 
 export const Route = createFileRoute('/disclaimer')({
   head: () => ({

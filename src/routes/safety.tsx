@@ -4,9 +4,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/safety`
-const TITLE = 'Crisis help — Shutap'
+const TITLE = "Crisis Help — Shutap"
 const DESCRIPTION =
-  'Shutap is not a crisis service. If you need help now: US call or text 988, UK and Ireland Samaritans 116 123, or findahelpline.com.'
+  "Shutap is a joke generator, not a crisis service. If you need help now: US call or text 988, UK and Ireland Samaritans 116 123, or findahelpline.com."
 
 type Card = { name: string; action: string; href: string; external?: boolean }
 
