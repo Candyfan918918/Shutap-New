@@ -14,10 +14,7 @@ export function SeoPage({ children }: { children: ReactNode }) {
         <div style={{ maxWidth: 780, margin: '0 auto', padding: '14px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
           <Link to="/" style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 15, letterSpacing: '-.01em', color: '#0b080f', textDecoration: 'none' }}>shutap</Link>
           <nav style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }}>
-            <Link to="/relationships" style={navLink}>Relationships</Link>
-            <Link to="/marriage" style={navLink}>Marriage</Link>
-            <Link to="/family" style={navLink}>Family</Link>
-            <Link to="/career" style={navLink}>Career</Link>
+            <Link to="/" style={navLink}>Write</Link>
             <Link to="/rooms" style={navLink}>Rooms</Link>
             <Link to="/faq" style={navLink}>FAQ</Link>
           </nav>
