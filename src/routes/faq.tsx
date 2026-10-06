@@ -35,6 +35,7 @@ const QA: { heading: string; body: string }[] = [
 const OTHERS = [
   { href: "/", label: "Write jokes" },
   { href: "/how-it-works", label: "How it works" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
   { href: "/rooms", label: "Rooms" },
   { href: "/trust", label: "Trust & privacy" },

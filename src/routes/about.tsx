@@ -47,6 +47,7 @@ const SECTIONS = [
 const OTHERS = [
   { href: "/", label: "Write jokes" },
   { href: "/how-it-works", label: "How it works" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/rooms", label: "Rooms" },
   { href: "/faq", label: "FAQ" },
   { href: "/trust", label: "Trust & privacy" },

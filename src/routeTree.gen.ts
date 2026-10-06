@@ -31,6 +31,7 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as MethodologyRouteImport } from './routes/methodology'
 import { Route as MirrorRouteImport } from './routes/mirror'
 import { Route as PreferencesRouteImport } from './routes/preferences'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RelationshipsRouteImport } from './routes/relationships'
 import { Route as ReportRouteImport } from './routes/report'
@@ -188,6 +189,11 @@ const MirrorRoute = MirrorRouteImport.update({
 const PreferencesRoute = PreferencesRouteImport.update({
   id: '/preferences',
   path: '/preferences',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -471,6 +477,7 @@ export interface FileRoutesByFullPath {
   '/methodology': typeof MethodologyRoute
   '/mirror': typeof MirrorRoute
   '/preferences': typeof PreferencesRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/relationships': typeof RelationshipsRoute
   '/report': typeof ReportRoute
@@ -543,6 +550,7 @@ export interface FileRoutesByTo {
   '/methodology': typeof MethodologyRoute
   '/mirror': typeof MirrorRoute
   '/preferences': typeof PreferencesRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/relationships': typeof RelationshipsRoute
   '/report': typeof ReportRoute
@@ -617,6 +625,7 @@ export interface FileRoutesById {
   '/methodology': typeof MethodologyRoute
   '/mirror': typeof MirrorRoute
   '/preferences': typeof PreferencesRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/relationships': typeof RelationshipsRoute
   '/report': typeof ReportRoute
@@ -691,6 +700,7 @@ export interface FileRouteTypes {
     | '/methodology'
     | '/mirror'
     | '/preferences'
+    | '/pricing'
     | '/privacy'
     | '/relationships'
     | '/report'
@@ -763,6 +773,7 @@ export interface FileRouteTypes {
     | '/methodology'
     | '/mirror'
     | '/preferences'
+    | '/pricing'
     | '/privacy'
     | '/relationships'
     | '/report'
@@ -836,6 +847,7 @@ export interface FileRouteTypes {
     | '/methodology'
     | '/mirror'
     | '/preferences'
+    | '/pricing'
     | '/privacy'
     | '/relationships'
     | '/report'
@@ -910,6 +922,7 @@ export interface RootRouteChildren {
   MethodologyRoute: typeof MethodologyRoute
   MirrorRoute: typeof MirrorRoute
   PreferencesRoute: typeof PreferencesRoute
+  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   RelationshipsRoute: typeof RelationshipsRoute
   ReportRoute: typeof ReportRoute
@@ -1105,6 +1118,13 @@ declare module '@tanstack/react-router' {
       path: '/preferences'
       fullPath: '/preferences'
       preLoaderRoute: typeof PreferencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -1523,6 +1543,7 @@ const rootRouteChildren: RootRouteChildren = {
   MethodologyRoute: MethodologyRoute,
   MirrorRoute: MirrorRoute,
   PreferencesRoute: PreferencesRoute,
+  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   RelationshipsRoute: RelationshipsRoute,
   ReportRoute: ReportRoute,

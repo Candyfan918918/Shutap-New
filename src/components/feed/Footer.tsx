@@ -4,6 +4,8 @@ import './feed.css'
 const LINKS: Array<[string, string]> = [
   ['/rooms', 'rooms'],
   ['/about', 'about'],
+  ['/how-it-works', 'how it works'],
+  ['/pricing', 'pricing'],
   ['/faq', 'faq'],
   ['/terms', 'terms'],
   ['/privacy', 'privacy'],

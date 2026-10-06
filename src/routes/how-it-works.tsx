@@ -29,7 +29,7 @@ const OTHERS = [
   { href: "/rooms", label: "Rooms" },
   { href: "/faq", label: "FAQ" },
   { href: "/about", label: "About" },
-  { href: "/subscribe", label: "Shutap+" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/trust", label: "Trust & privacy" },
 ];
 
