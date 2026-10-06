@@ -12,31 +12,32 @@ const ANNUAL = PLAN_TO_PRICE.annual.amount
 const PER_MONTH = ANNUAL / 12
 const SAVE_PCT = Math.round((1 - ANNUAL / (MONTHLY * 12)) * 100)
 
-const TITLE = 'Pricing — Free AI Joke Generator, Shutap+ from $4.17/mo'
-const DESCRIPTION = `Shutap is a free AI joke generator for content creators and comedians. Shutap+ is ${usd(MONTHLY)}/month or ${usd(ANNUAL)}/year: no watermark on downloads, plus the Mirror. Cancel anytime.`
+const TITLE = 'Pricing — Free AI Bit & Joke Generator, Shutap+ from $4.17/mo'
+const DESCRIPTION = `Shutap is a free AI bit generator for content creators and comedians, with teleprompter, scene and screenplay views. Shutap+ is ${usd(MONTHLY)}/month or ${usd(ANNUAL)}/year: no watermark on downloads, plus the Mirror. Cancel anytime.`
 
 const FREE = [
-  'Three jokes per story: the take, the clapback, the roast',
+  'A full bit per story: hook, setup, tags and button',
+  'Teleprompter, scene and screenplay page',
   'Five stories a day',
-  'First set with no account',
-  'Set list of every joke you keep',
+  'First bit with no account',
+  'Set list of every bit you keep',
   'Post to rooms, like, comment, follow',
-  'Downloads for TikTok, Reels and Shorts, with a small watermark',
+  'Downloads with a small watermark',
 ]
 const PLUS = [
   'Everything in Free',
   'No watermark on any download',
   'The Mirror: what keeps coming up in your stories',
-  'Same five stories a day — Shutap+ never sells more jokes',
+  'Same five stories a day — Shutap+ never sells more bits',
   'Cancel anytime; access runs to the end of the period',
 ]
 const QA = [
-  { q: 'Is the AI joke generator really free?', a: 'Yes. Writing jokes, keeping them, posting to rooms, following and commenting are free. Shutap+ only removes the watermark and adds the Mirror.' },
+  { q: 'Is the AI bit generator really free?', a: 'Yes. Writing bits, the teleprompter, scene and screenplay views, keeping bits, posting to rooms, following and commenting are free. Shutap+ only removes the watermark and adds the Mirror.' },
   { q: 'What does Shutap+ cost?', a: `${usd(MONTHLY)} a month, or ${usd(ANNUAL)} a year (about ${usd(PER_MONTH)} a month, ${SAVE_PCT}% less than monthly). Prices are in US dollars; tax may be added at checkout.` },
   { q: 'Is there a free trial?', a: 'No trial. The free plan is the trial: write as many sets as the daily limit allows before you decide.' },
-  { q: 'Do paid members get more jokes?', a: 'No. Everyone gets five stories a day. Shutap+ is about clean downloads and the Mirror, not volume.' },
+  { q: 'Do paid members get more bits?', a: 'No. Everyone gets five stories a day. Shutap+ is about clean downloads and the Mirror, not volume.' },
   { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your account; you keep Shutap+ until the end of the period you paid for. Payments are handled by Stripe.' },
-  { q: 'Can I use the jokes commercially?', a: 'You can use the jokes Shutap writes for you in your own videos and sets, on any plan. See the terms for details.' },
+  { q: 'Can I use the bits commercially?', a: 'You can use the bits Shutap writes for you in your own videos and sets, on any plan. See the terms for details.' },
 ]
 
 export const Route = createFileRoute('/pricing')({
@@ -60,7 +61,7 @@ export const Route = createFileRoute('/pricing')({
           '@context': 'https://schema.org',
           '@type': 'Product',
           name: 'Shutap',
-          description: 'AI joke generator for content creators and comedians.',
+          description: 'AI bit and joke generator for content creators and comedians, with teleprompter, scene and screenplay views.',
           brand: { '@type': 'Brand', name: 'Shutap' },
           url: SITE_URL,
           offers: [
@@ -101,7 +102,7 @@ function PricingPage() {
             Free to write. {usd(MONTHLY)} to go clean.
           </h1>
           <p className="fd-muted" style={{ fontSize: 16, maxWidth: 560, margin: 0 }}>
-            Shutap is a free AI joke generator for content creators and comedians. Shutap+ removes the watermark and adds the Mirror.
+            Shutap is a free AI bit generator for content creators and comedians. Shutap+ removes the watermark and adds the Mirror.
           </p>
         </div>
 

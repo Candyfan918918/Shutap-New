@@ -86,11 +86,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Shutap — Joke Generator for Creators & Comedians" },
+      { title: "Shutap — AI Bit & Joke Generator for Creators & Comedians" },
       {
         name: "description",
         content:
-          "Paste what happened and get a set of jokes for TikTok, Reels or the stage. Built for content creators, comedians and anyone who wants to say it funnier.",
+          "Paste what happened and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
       },
       { name: "author", content: "Shutap" },
       { property: "og:site_name", content: "Shutap" },
@@ -100,13 +100,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Paste what happened and get a set of jokes for TikTok, Reels or the stage. Built for content creators, comedians and anyone who wants to say it funnier.",
+          "Paste what happened and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
       },
       ...ogImageMeta(),
       { name: "twitter:title", content: "SHUTAP. Say it funnier." },
       {
         name: "twitter:description",
-        content: "Paste what happened and get a set of jokes for TikTok, Reels or the stage. Built for content creators, comedians and anyone who wants to say it funnier.",
+        content: "Paste what happened and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
       },
     ],
     links: [
@@ -134,13 +134,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           url: "https://shutap.com",
           image: "https://shutap.com/og/shutap-og-v2.png",
           description:
-            "Shutap is a joke generator for content creators and comedians. Paste what happened — at work, at school, at the gym, in the group chat — and Shutap writes it into a set of jokes, each taking a different angle on the same situation, ready for TikTok, Reels or the stage. Pseudonymous. Identifying details are stripped before storage. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
+            "Shutap is an AI bit generator for content creators and comedians. Paste something that happened and Shutap writes it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or post the best one to a room. Pseudonymous. Identifying details are stripped before storage. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
           offers: {
             "@type": "Offer",
             price: "0",
             priceCurrency: "USD",
             description:
-              "Free to use. The Mirror subscription is $7.99/month or $49.99/year.",
+              "Free to use. Shutap+ is $7.99/month or $49.99/year.",
           },
         }),
       },

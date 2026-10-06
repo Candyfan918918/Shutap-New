@@ -5,43 +5,43 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/about";
-const TITLE = "About Shutap — AI Joke Generator for Content Creators & Comedians";
+const TITLE = "About Shutap — AI Bit & Joke Generator for Content Creators & Comedians";
 const DESCRIPTION =
-  "Shutap is an AI joke generator for content creators and comedians. Paste a real story, get a take, a clapback and a roast for TikTok, Reels, YouTube Shorts or the stage.";
+  "Shutap is an AI bit generator for content creators and comedians. Paste a real story, get a bit with a hook, setup, tags and button, then run it in the teleprompter, as a scene or a screenplay page.";
 const CAPSULE =
-  "Shutap is an AI joke generator built for content creators and comedians. You paste something that actually happened. Shutap writes it into a set of jokes, each from a different angle, ready to film for TikTok, Instagram Reels or YouTube Shorts, or to work into a stand-up set.";
+  "Shutap is an AI bit generator for content creators and comedians. Paste something that happened. Shutap writes it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page.";
 const SECTIONS = [
   {
-    heading: "An AI joke generator that starts with your story",
-    body: "Most joke generators hand you puns about a keyword. Shutap starts from a real situation: the coworker, the group chat, the landlord, the date. The details are where the funny is, so the jokes come out specific to what happened to you, not generic one-liners anyone could post.",
+    heading: "A bit, not a pun",
+    body: "Most joke generators hand you a one-liner about a keyword. Shutap writes a bit from your real story: a hook that stops the scroll, a setup that tells it straight, tags that keep the laughs coming, and a button to end on. It uses your details, so it sounds like you, not like anyone could have posted it.",
   },
   {
     heading: "Built for content creators",
-    body: "Storytime videos, POV skits, talking-head clips and captions all need a punchline. Paste the story you were going to tell anyway and get jokes you can say to camera. Download any joke as a vertical image for TikTok, Reels or Shorts, or copy the text into your script.",
+    body: "Storytime, POV, talking-head and skit videos all run on the same structure. Paste the story you were going to tell anyway, get the bit, and read it straight off the teleprompter while you film for TikTok, Instagram Reels or YouTube Shorts.",
   },
   {
     heading: "Built for comedians",
-    body: "Stand-up comedians already know the move: take a bad night and turn it into a bit. Shutap gives you three angles on the same premise to test against your own instincts — the take that names what was really going on, the clapback you wish you'd said, and the roast. Use it to get unstuck on a premise, find a tag, or warm up before you write.",
+    body: "Stand-up starts with a premise and lives on tags. Shutap gives you a first draft of the bit — setup, tags, button — to push against your own instincts. Use it to get unstuck, find a new tag, or warm up before a writing session, then rehearse it on the prompter.",
   },
   {
-    heading: "Three angles on every story",
-    body: "The take: what actually happened here, said sharper than you'd say it. The clapback: the comeback you thought of in the shower. The roast: the situation, roasted. Every set is written fresh for your story.",
+    heading: "Teleprompter, scene and screenplay",
+    body: "Every bit comes in three views. The teleprompter scrolls it full-screen for filming to camera. The scene lays it out beat by beat for a POV or sketch. The screenplay page formats it like a script, with characters and action, ready to shoot or share.",
   },
   {
     heading: "Post the best one to a room",
-    body: "Rooms are public feeds by topic: office, work, family, school, live and social. Post a joke under your Shutap name, get likes and comments, follow writers you like, and see what's landing for other creators.",
+    body: "Rooms are public feeds by topic: office, work, family, school, live and social. Post a bit under your Shutap name, get likes and comments, follow writers you like, and see what's landing for other creators.",
   },
   {
     heading: "The one rule",
-    body: "Jokes go at the situation, never at a real person someone could identify. Names, places and contact details are removed before anything is saved, and anyone can report a post that breaks the rule.",
+    body: "Bits go at the situation, never at a real person someone could identify. Names, places and contact details are removed before anything is saved, and anyone can report a post that breaks the rule.",
   },
   {
     heading: "Free to start",
-    body: "Your first set needs no account. Signing in is free and shows all three jokes, keeps them in your set list and lets you post. Shutap+ removes the watermark from downloads and adds the Mirror.",
+    body: "Your first bit needs no account. Signing in is free, keeps every bit in your set list and lets you post. Shutap+ removes the watermark from downloads and adds the Mirror.",
   },
   {
     heading: "Who makes Shutap",
-    body: "Shutap is an independent product. Questions, ideas or press: hello@shutap.com. Adults 18+. Shutap writes jokes; it is not therapy or advice.",
+    body: "Shutap is an independent product. Questions, ideas or press: hello@shutap.com. Adults 18+. Shutap writes comedy; it is not therapy or advice.",
   },
 ];
 const OTHERS = [
@@ -84,7 +84,7 @@ export const Route = createFileRoute("/about")({
   component: () => (
     <ContentPage
       breadcrumbs={[{ name: "About", path: PATH }]}
-      h1="About Shutap, the AI joke generator"
+      h1="About Shutap, the AI bit generator"
       capsule={CAPSULE}
       sections={SECTIONS}
       others={OTHERS}

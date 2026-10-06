@@ -14,7 +14,7 @@ const ITEMS: Item[] = [
   {
     href: "/how-it-works",
     label: "How it works",
-    sub: "paste what happened, get three jokes. what\u2019s free and what Shutap+ adds.",
+    sub: "paste what happened, get the bit: teleprompter, scene, screenplay page. what\u2019s free and what Shutap+ adds.",
   },
   {
     href: "/faq",

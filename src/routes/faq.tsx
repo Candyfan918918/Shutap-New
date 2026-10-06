@@ -6,28 +6,30 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/faq";
 const URL = `${SITE_URL}/faq`;
-const TITLE = "AI Joke Generator FAQ — Shutap for Creators & Comedians";
+const TITLE = "AI Bit & Joke Generator FAQ — Shutap for Creators & Comedians";
 const DESCRIPTION =
-  "Answers about Shutap, the AI joke generator for content creators and comedians: is it free, can it write stand-up and TikTok jokes, roasts and comebacks, who owns the jokes, privacy and pricing.";
+  "Answers about Shutap, the AI bit generator for content creators and comedians: is it free, the teleprompter, scene and screenplay views, TikTok and stand-up, who owns the bits, privacy and pricing.";
 const CAPSULE =
-  "Everything people ask about Shutap, the AI joke generator that turns a real story into jokes for TikTok, Reels, YouTube Shorts and the stage.";
+  "Everything people ask about Shutap, the AI bit generator that turns a real story into a bit for TikTok, Reels, YouTube Shorts and the stage.";
 
 const QA: { heading: string; body: string }[] = [
-  { heading: "What is Shutap?", body: "Shutap is an AI joke generator for content creators and comedians. Paste something that happened and it writes three jokes about it: a take, a clapback and a roast. Download them, use them in your content or on stage, or post the best one to a room." },
-  { heading: "Is Shutap a free joke generator?", body: "Yes. Writing jokes is free, and your first set needs no account. Signing in is free and shows all three jokes per story, keeps them, and lets you post, follow and comment. Shutap+ is optional." },
-  { heading: "How is Shutap different from other AI joke generators?", body: "Most joke generators write generic puns about a topic. Shutap writes from your actual story, so the jokes use your details and three different angles on the same situation. Each set is written fresh and several drafts are ranked before you see one." },
-  { heading: "Can Shutap write jokes for TikTok, Reels and YouTube Shorts?", body: "Yes. That's what it's built for. Use a joke as the punchline of a storytime, POV or talking-head video, put it in a caption, or download it as a vertical image to post." },
-  { heading: "Can comedians use Shutap to write stand-up?", body: "Yes. Paste a premise or a story from your life and use the three angles to find a tag, a callback or a new direction. Treat it as a writing partner for first drafts; the bit is still yours to shape and perform." },
-  { heading: "Can it write roasts and comebacks?", body: "Every set includes a roast and a clapback — the comeback you wish you'd said. They roast the situation, not a real person someone could identify." },
-  { heading: "Can I use the jokes in my own videos and sets?", body: "Yes. You can download, share and use the jokes Shutap writes for you in your own content and performances. AI can produce lines similar to existing jokes, so check anything you rely on commercially." },
-  { heading: "What are rooms?", body: "Rooms are public feeds by topic: office, work, family, school, live and social. Post a joke under your Shutap name, get likes and comments, save jokes and follow other writers." },
+  { heading: "What is Shutap?", body: "Shutap is an AI bit generator for content creators and comedians. Paste something that happened and it writes it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page." },
+  { heading: "What is a bit?", body: "A bit is a short comedy routine built around one story: a hook to grab attention, a setup that tells what happened, tags that add laughs on the same premise, and a button that ends it." },
+  { heading: "Is Shutap a free joke generator?", body: "Yes. Writing bits is free, and your first bit needs no account. Signing in is free, keeps every bit, and lets you post, follow and comment. Shutap+ is optional." },
+  { heading: "How is Shutap different from other AI joke generators?", body: "Most joke generators write generic one-liners about a topic. Shutap writes a full bit from your actual story, using your details, and gives you a teleprompter, a scene and a screenplay page to perform it." },
+  { heading: "What does the teleprompter do?", body: "It shows your bit full-screen and scrolls it at talking pace, so you can read it while you film to camera." },
+  { heading: "What are the scene and screenplay views?", body: "The scene lays the bit out beat by beat for a POV video or sketch. The screenplay page formats it like a script, with characters and action, ready to shoot or share with a collaborator." },
+  { heading: "Can Shutap write bits for TikTok, Reels and YouTube Shorts?", body: "Yes. That's what it's built for: storytime, POV, talking-head and skit videos. The hook is written for the first two seconds of a vertical video." },
+  { heading: "Can comedians use Shutap to write stand-up?", body: "Yes. Paste a premise or a story from your life and use the bit as a first draft: find a tag, a callback or a new direction, then rehearse it on the prompter. The final bit is still yours to shape and perform." },
+  { heading: "Can it write roasts and comebacks?", body: "Yes. Tags and buttons often land as a roast of the situation or the comeback you wish you'd said. They go at the situation, never a real person someone could identify." },
+  { heading: "Can I use the bits in my own videos and sets?", body: "Yes. You can download, share and perform the bits Shutap writes for you in your own content. AI can produce lines similar to existing jokes, so check anything you rely on commercially." },
+  { heading: "What are rooms?", body: "Rooms are public feeds by topic: office, work, family, school, live and social. Post a bit under your Shutap name, get likes and comments, save bits and follow other writers." },
   { heading: "How much does Shutap+ cost?", body: "$7.99 a month or $49.99 a year. It removes the watermark from downloads and adds the Mirror. Everyone, free or paid, gets five stories a day. Cancel anytime." },
-  { heading: "Is there a daily limit?", body: "Five stories a day for everyone." },
-  { heading: "Is my real name on anything?", body: "No. You use a made-up Shutap name. Names, addresses, places, phone numbers and emails are removed from what you write before it's saved. Jokes stay private unless you post them." },
-  { heading: "What can't I post?", body: "Jokes that target a real, identifiable person, real names, harassment, hate, spam or anything illegal. Anyone can report a post; when three people report it, it's hidden for review." },
-  { heading: "Who writes the jokes?", body: "AI models write and rank them. AI can get things wrong or miss the joke, so you decide what to post." },
-  { heading: "Is Shutap therapy or advice?", body: "No. Shutap is an entertainment tool that writes jokes. If something you paste reads as a crisis, it writes no jokes and shows where to get help: in the US call or text 988, in the UK Samaritans 116 123, anywhere findahelpline.com." },
-  { heading: "Can I delete my jokes or account?", body: "Yes, anytime. Delete posts, sets or your whole account in your account settings, or email hello@shutap.com." },
+  { heading: "Is my real name on anything?", body: "No. You use a made-up Shutap name. Names, addresses, places, phone numbers and emails are removed from what you write before it's saved. Bits stay private unless you post them." },
+  { heading: "What can't I post?", body: "Bits that target a real, identifiable person, real names, harassment, hate, spam or anything illegal. Anyone can report a post; when three people report it, it's hidden for review." },
+  { heading: "Who writes the bits?", body: "AI models write and rank them. AI can get things wrong or miss the joke, so you decide what to film and post." },
+  { heading: "Is Shutap therapy or advice?", body: "No. Shutap is an entertainment tool that writes comedy. If something you paste reads as a crisis, it writes nothing and shows where to get help: in the US call or text 988, in the UK Samaritans 116 123, anywhere findahelpline.com." },
+  { heading: "Can I delete my bits or account?", body: "Yes, anytime. Delete posts, bits or your whole account in your account settings, or email hello@shutap.com." },
   { heading: "Do you sell my data?", body: "No." },
   { heading: "Who can use Shutap?", body: "Adults 18 and older." },
 ];
@@ -76,7 +78,7 @@ export const Route = createFileRoute("/faq")({
   component: () => (
     <ContentPage
       breadcrumbs={[{ name: "FAQ", path: "/faq" }]}
-      h1="AI joke generator FAQ"
+      h1="AI bit generator FAQ"
       capsule={CAPSULE}
       sections={QA}
       others={OTHERS}

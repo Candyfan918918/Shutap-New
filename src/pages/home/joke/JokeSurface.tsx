@@ -1151,7 +1151,7 @@ export function JokeSurface() {
             Say it <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, letterSpacing: '-.02em', color: '#b8456b' }}>funnier.</span>
           </h1>
           <p style={{ margin: 0, fontFamily: SORA, fontSize: 'clamp(15px,1.6vw,17px)', color: '#6b6b6b', textAlign: 'center' }}>
-            Paste what happened. Get jokes. Post the best one.
+            Paste what happened. Get the bit. Film it.
           </p>
 
 
