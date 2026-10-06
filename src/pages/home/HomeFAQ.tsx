@@ -3,7 +3,7 @@
 export const HOME_FAQ: Array<{ q: string; a: string }> = [
   {
     q: 'What is Shutap?',
-    a: 'Shutap is an AI bit generator for content creators and comedians. Paste something that happened and it writes it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page.',
+    a: 'Shutap is an AI bit generator for content creators and comedians. Write your story and it turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page.',
   },
   {
     q: 'Is Shutap a free joke generator?',

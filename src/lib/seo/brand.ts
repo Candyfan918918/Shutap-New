@@ -7,10 +7,10 @@ export const BRAND = {
   tagline: "SHUTAP. Say it funnier.",
   // The entity sentence (locked) — goes in every machine-read surface.
   entitySentence:
-    "Shutap is an AI bit generator for content creators and comedians. Paste something that happened and Shutap writes it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or post the best one to a room. Pseudonymous. Your real name never shows.",
+    "Shutap is an AI bit generator for content creators and comedians. Write your story and Shutap turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or post the best one to a room. Pseudonymous. Your real name never shows.",
   // Short variant for title tags.
   entitySentenceShort:
-    "Shutap — AI bit generator. Paste what happened, get the bit.",
+    "Shutap — AI bit generator. Write your story, get the bit.",
 } as const;
 
 export const PILLARS = [

@@ -8,9 +8,9 @@ import { listNewestRooms } from '@/lib/newest-rooms.functions'
 
 const HOME_TITLE = "Shutap — AI Bit & Joke Generator for Creators & Comedians"
 const HOME_DESCRIPTION =
-  "Paste what happened and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage."
+  "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage."
 const HOME_OG_DESCRIPTION =
-  "Paste what happened and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage."
+  "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage."
 
 const HOME_URL = `${SITE_URL}/`
 
@@ -35,7 +35,7 @@ export const Route = createFileRoute('/')({
       { property: "og:url", content: HOME_URL },
       ...ogImageMeta(),
       { name: "twitter:title", content: "SHUTAP. Say it funnier." },
-      { name: "twitter:description", content: "Paste what happened and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage." },
+      { name: "twitter:description", content: "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage." },
     ],
     links: [
       { rel: "canonical", href: HOME_URL },

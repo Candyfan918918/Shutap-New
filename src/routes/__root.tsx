@@ -90,7 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Paste what happened and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
+          "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
       },
       { name: "author", content: "Shutap" },
       { property: "og:site_name", content: "Shutap" },
@@ -100,13 +100,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Paste what happened and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
+          "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
       },
       ...ogImageMeta(),
       { name: "twitter:title", content: "SHUTAP. Say it funnier." },
       {
         name: "twitter:description",
-        content: "Paste what happened and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
+        content: "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
       },
     ],
     links: [
@@ -134,7 +134,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           url: "https://shutap.com",
           image: "https://shutap.com/og/shutap-og-v2.png",
           description:
-            "Shutap is an AI bit generator for content creators and comedians. Paste something that happened and Shutap writes it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or post the best one to a room. Pseudonymous. Identifying details are stripped before storage. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
+            "Shutap is an AI bit generator for content creators and comedians. Write your story and Shutap turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or post the best one to a room. Pseudonymous. Identifying details are stripped before storage. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
           offers: {
             "@type": "Offer",
             price: "0",

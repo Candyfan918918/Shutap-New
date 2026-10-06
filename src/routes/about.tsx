@@ -7,9 +7,9 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 const PATH = "/about";
 const TITLE = "About Shutap — AI Bit & Joke Generator for Content Creators & Comedians";
 const DESCRIPTION =
-  "Shutap is an AI bit generator for content creators and comedians. Paste a real story, get a bit with a hook, setup, tags and button, then run it in the teleprompter, as a scene or a screenplay page.";
+  "Shutap is an AI bit generator for content creators and comedians. Write your story, get a bit with a hook, setup, tags and button, then run it in the teleprompter, as a scene or a screenplay page.";
 const CAPSULE =
-  "Shutap is an AI bit generator for content creators and comedians. Paste something that happened. Shutap writes it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page.";
+  "Shutap is an AI bit generator for content creators and comedians. Write your story. Shutap turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page.";
 const SECTIONS = [
   {
     heading: "A bit, not a pun",
@@ -17,7 +17,7 @@ const SECTIONS = [
   },
   {
     heading: "Built for content creators",
-    body: "Storytime, POV, talking-head and skit videos all run on the same structure. Paste the story you were going to tell anyway, get the bit, and read it straight off the teleprompter while you film for TikTok, Instagram Reels or YouTube Shorts.",
+    body: "Storytime, POV, talking-head and skit videos all run on the same structure. Write the story you were going to tell anyway, get the bit, and read it straight off the teleprompter while you film for TikTok, Instagram Reels or YouTube Shorts.",
   },
   {
     heading: "Built for comedians",

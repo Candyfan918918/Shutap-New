@@ -114,7 +114,7 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
       <div style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 16, padding: '18px 20px', textAlign: 'left', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
         <div style={{ flex: 'none', marginTop: 3 }}><EyeMark size={22} /></div>
         <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.55, color: TEXT }}>
-          paste what happened. get it back funnier.
+          write your story. get the bit.
         </div>
       </div>
       {resuming ? (

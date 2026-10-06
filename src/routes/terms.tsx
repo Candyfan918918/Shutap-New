@@ -39,8 +39,8 @@ function TermsPage() {
 
       <h3>1. What Shutap is</h3>
       <p>
-        Shutap is an AI bit and joke generator for content creators and comedians. You paste what
-        happened. Shutap removes identifying details and writes comedy from it, with teleprompter,
+        Shutap is an AI bit and joke generator for content creators and comedians. You write your
+        story. Shutap removes identifying details and writes comedy from it, with teleprompter,
         scene and screenplay views. You can download, share or post what it writes to a room.
         Shutap is for entertainment only.
       </p>

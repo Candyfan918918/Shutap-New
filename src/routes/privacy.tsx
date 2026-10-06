@@ -48,7 +48,7 @@ function PrivacyPage() {
           notification settings and consent records.
         </li>
         <li>
-          <b>What you write:</b> the stories you paste and the jokes Shutap writes, stored only in
+          <b>What you write:</b> the stories you write and the jokes Shutap writes, stored only in
           scrubbed form.
         </li>
         <li>

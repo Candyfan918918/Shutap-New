@@ -1151,7 +1151,7 @@ export function JokeSurface() {
             Say it <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, letterSpacing: '-.02em', color: '#b8456b' }}>funnier.</span>
           </h1>
           <p style={{ margin: 0, fontFamily: SORA, fontSize: 'clamp(15px,1.6vw,17px)', color: '#6b6b6b', textAlign: 'center' }}>
-            Paste what happened. Get the bit. Film it.
+            Write your story. Get the bit. Film it.
           </p>
 
 
@@ -1169,7 +1169,7 @@ export function JokeSurface() {
                 void onSubmit()
               }}
               enterKeyHint="send"
-              placeholder="what happened?"
+              placeholder="write your story…"
               disabled={phase !== 'idle'}
               className="joke-input"
               style={{ width: '100%', resize: 'vertical', minHeight: 116, border: 'none', outline: 'none', background: 'transparent', fontFamily: SORA, fontSize: 18, lineHeight: 1.5, color: '#000', WebkitTextFillColor: '#000', caretColor: '#000', opacity: phase === 'idle' ? 1 : 0.6 }}
@@ -1217,7 +1217,7 @@ export function JokeSurface() {
               }}
             >
               <ol style={{ margin: 0, padding: '12px 18px', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7, background: '#fff', border: '1px solid rgba(90,30,50,.10)', borderRadius: 16, fontFamily: SORA, fontSize: 14, lineHeight: 1.5, color: '#333', textAlign: 'left' }}>
-                <li>1. Paste what happened.</li>
+                <li>1. Write your story.</li>
                 <li>2. Get three jokes: the take, the clapback, the roast.</li>
                 <li>3. Post the best one to a room, or download it.</li>
               </ol>
@@ -1639,5 +1639,5 @@ export function JokeSurface() {
  *  The daily budget is not one of these any more — it gets the limit sheet. */
 function refusalCopy(reason: 'rate_limited' | 'not_found'): string {
   if (reason === 'rate_limited') return 'Too fast. Try again in a minute.'
-  return 'Lost that set. Paste it again.'
+  return 'Lost that one. Write it again.'
 }
