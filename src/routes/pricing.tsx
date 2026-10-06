@@ -22,7 +22,7 @@ const FREE = [
   'First bit with no account',
   'Set list of every bit you keep',
   'Post to rooms, like, comment, follow',
-  'Downloads with a small watermark',
+  'Downloads with a Shutap watermark',
 ]
 const PLUS = [
   'Everything in Free',

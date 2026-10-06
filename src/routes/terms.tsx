@@ -146,7 +146,7 @@ function TermsPage() {
       <p>
         Everyone gets <b>five stories a day</b>. A guest sees one joke from each set. Signing in is
         free and shows all three, keeps them in your set list, and lets you download, share and
-        post them. Free downloads carry a small watermark.
+        post them. Guest and free downloads carry a Shutap watermark.
       </p>
       <p>
         Limits reset once a day in the timezone on your account (UTC for guests). Limits are a cost

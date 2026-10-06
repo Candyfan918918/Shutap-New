@@ -19,7 +19,7 @@ const STEPS = [
 ];
 const SECTIONS = [
   ...STEPS,
-  { heading: "What's free", body: "Writing bits is free. Your first bit needs no account. Signing in is free, keeps every bit in your set list, and lets you post, follow, like and comment. Free downloads carry a small Shutap watermark." },
+  { heading: "What's free", body: "Writing bits is free. Your first bit needs no account. Signing in is free, keeps every bit in your set list, and lets you post, follow, like and comment. Guest and free downloads carry a large Shutap watermark." },
   { heading: "Daily limit", body: "Five stories a day for everyone, free or paid." },
   { heading: "Shutap+", body: "$7.99 a month or $49.99 a year. Removes the watermark from every download and adds the Mirror, a private read-back of what keeps coming up in your stories. It doesn't buy more bits. Cancel anytime." },
   { heading: "Tips for a funnier bit", body: "Give the specific detail, not the summary: the exact text, the time it happened, the object involved. Say who did what. Leave out real names — Shutap removes them anyway. If a bit feels thin, add what they actually said and run it again." },

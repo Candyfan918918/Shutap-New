@@ -76,15 +76,22 @@ export function CardLockup({ ink, eyes = false }: { ink: string; eyes?: boolean 
 
 /** The guest/free mark: three rows of the name, turned 22°, in the
  *  surface's own watermark ink. Part of the image, never a corner badge. */
+/** The heavy mark on a guest or free card, matching the download: the name
+ *  tiled corner to corner, plus a solid band along the bottom. */
 export function CardWatermark({ color }: { color: string }) {
   return (
-    <div aria-hidden style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 'calc(9 * var(--cq, 1cqw))', transform: 'rotate(-22deg)', pointerEvents: 'none' }}>
-      {[0, 1, 2].map((i) => (
-        <div key={i} style={{ font: '800 calc(13 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '-.04em', whiteSpace: 'nowrap', color, textAlign: 'center' }}>
-          shutap · shutap
-        </div>
-      ))}
-    </div>
+    <>
+      <div aria-hidden style={{ position: 'absolute', inset: '-30%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 'calc(10 * var(--cq, 1cqw))', transform: 'rotate(-22deg)', pointerEvents: 'none' }}>
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div key={i} style={{ font: '800 calc(8 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '-.02em', whiteSpace: 'nowrap', color, textAlign: 'center' }}>
+            SHUTAP.COM · SHUTAP.COM · SHUTAP.COM
+          </div>
+        ))}
+      </div>
+      <div aria-hidden style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 'calc(9 * var(--cq, 1cqw))', background: '#b8456b', color: '#fff', display: 'grid', placeItems: 'center', font: '800 calc(3.4 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '.06em', pointerEvents: 'none' }}>
+        MADE WITH SHUTAP.COM · WRITE YOURS FREE
+      </div>
+    </>
   )
 }
 

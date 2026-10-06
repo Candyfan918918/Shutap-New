@@ -273,7 +273,7 @@ export const MEMBER_BENEFITS: { line: string; detail: string }[] = [
 export const ALWAYS_FREE = [
   'writing jokes',
   'posting, following, commenting',
-  'downloads with a small watermark',
+  'downloads with a Shutap watermark',
 ]
 
 /* ─────────────────────────── the two asks ───────────────────────────

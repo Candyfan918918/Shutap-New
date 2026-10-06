@@ -1379,7 +1379,7 @@ export function JokeSurface() {
 
             {deck.revealedSlots.length > 0 ? (
               <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: FAINT }}>
-                {tier === 'paying' ? 'no watermark' : 'downloads carry a small watermark'}
+                {tier === 'paying' ? 'no watermark' : 'downloads carry a Shutap watermark'}
               </div>
             ) : null}
 

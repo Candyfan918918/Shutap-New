@@ -51,8 +51,8 @@ export const DARK_TEXT = '#ffffff'
 export const DARK_TEXT_2 = '#bdb8bb'
 export const DARK_TEXT_3 = '#8f898d'
 export const DARK_RULE = 'rgba(255,255,255,.16)'
-export const WATERMARK_DARK = 'rgba(255,255,255,.085)'
-export const WATERMARK_LIGHT = 'rgba(11,8,15,.05)'
+export const WATERMARK_DARK = 'rgba(255,255,255,.14)'
+export const WATERMARK_LIGHT = 'rgba(184,69,107,.13)'
 /** The wordmark's "ap" is the brand pink on every card, whatever the face. */
 export const BRAND_PINK = '#e7548a'
 
@@ -252,25 +252,38 @@ function eyeMark(x: number, y: number, width: number): string {
   )
 }
 
-/** The diagonal wash a free card carries: three rows of the name at 13cqw,
- *  9cqw apart, centred and turned 22°, in the surface's watermark ink. */
+/** The heavy mark a guest or free card carries: the name tiled corner to
+ *  corner, turned 22°, under the words so the joke still reads. Paid exports
+ *  carry none of it. */
 function watermark(dark: boolean): string {
-  const size = 13 * CQW
-  const gap = 9 * CQW
-  const total = 3 * size + 2 * gap
-  const top = (VB_H - total) / 2
-  const text = 'shutap · shutap'
-  const fill = dark ? '#ffffff' : LIGHT_INK_STRONG
-  const opacity = dark ? 0.085 : 0.05
+  const size = 8 * CQW
+  const gap = 6.5 * CQW
+  const rows = 14
+  const text = 'SHUTAP.COM \u00b7 SHUTAP.COM \u00b7 SHUTAP.COM'
+  const fill = dark ? '#ffffff' : '#b8456b'
+  const opacity = dark ? 0.14 : 0.13
+  const startY = -VB_H * 0.25
   return (
     `<g opacity="${opacity}" transform="rotate(-22 ${VB_W / 2} ${VB_H / 2})">` +
-    [0, 1, 2]
-      .map((i) => {
-        const baseline = top + i * (size + gap) + size * 0.78
-        return `<text x="${VB_W / 2}" y="${r1(baseline)}" text-anchor="middle" font-family="${DISPLAY}" font-weight="800" font-size="${r1(size)}" letter-spacing="${r1(-0.04 * size)}" fill="${fill}">${text}</text>`
+    Array.from({ length: rows })
+      .map((_, i) => {
+        const baseline = startY + i * (size + gap) * 1.55
+        return `<text x="${VB_W / 2}" y="${r1(baseline)}" text-anchor="middle" font-family="${DISPLAY}" font-weight="800" font-size="${r1(size)}" letter-spacing="${r1(-0.02 * size)}" fill="${fill}">${text}</text>`
       })
       .join('') +
     `</g>`
+  )
+}
+
+/** A solid band across the bottom of a guest or free card, over everything:
+ *  where it was made and how to get it clean. */
+function markBand(): string {
+  const h = 9 * CQW
+  const y = VB_H - h
+  const size = 3.4 * CQW
+  return (
+    `<rect x="0" y="${r1(y)}" width="${VB_W}" height="${r1(h)}" fill="#b8456b"/>` +
+    `<text x="${VB_W / 2}" y="${r1(y + h / 2 + size * 0.36)}" text-anchor="middle" font-family="${DISPLAY}" font-weight="800" font-size="${r1(size)}" letter-spacing="${r1(0.06 * size)}" fill="#ffffff">MADE WITH SHUTAP.COM \u00b7 WRITE YOURS FREE</text>`
   )
 }
 
@@ -362,6 +375,7 @@ export function renderCardSvg(art: CardArt): string {
   ${header}
   ${middle}
   ${foot}
+  ${art.mark ? markBand() : ''}
 </svg>`
 }
 
