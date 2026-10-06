@@ -10,7 +10,7 @@ export function SeoPage({ children }: { children: ReactNode }) {
   const navLink = { fontFamily: "'Newsreader',serif" as const, fontStyle: 'italic' as const, fontSize: 14, color: '#443c42', textDecoration: 'none' };
   const footLink = { fontFamily: "'Newsreader',serif" as const, fontStyle: 'italic' as const, fontSize: 13, color: '#443c42', textDecoration: 'none' };
   return (
-    <div style={{ minHeight: '100vh', background: '#ffffff', color: '#0b080f' }}>
+    <div style={{ minHeight: '100vh', background: '#fbf6f7', color: '#0b080f' }}>
       <header style={{ borderBottom: '.5px solid rgba(11,8,15,.08)' }}>
         <div style={{ maxWidth: 780, margin: '0 auto', padding: '14px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
           <Link to="/" style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 15, letterSpacing: '-.01em', color: '#0b080f', textDecoration: 'none' }}>shutap</Link>

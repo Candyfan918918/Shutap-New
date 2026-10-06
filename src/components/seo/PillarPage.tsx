@@ -25,7 +25,7 @@ export function PillarPage({
     <main
       style={{
         minHeight: "100vh",
-        background: "#ffffff",
+        background: "#fbf6f7",
         color: "#100c14",
         fontFamily: "'Sora', system-ui, sans-serif",
         padding: "clamp(48px, 8vw, 96px) clamp(20px, 5vw, 40px)",

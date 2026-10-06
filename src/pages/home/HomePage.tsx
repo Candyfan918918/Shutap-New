@@ -31,7 +31,7 @@ export function HomePage({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCo
   }, [navigate])
 
   return (
-    <div className="home-immersive" style={{ background: '#ffffff', color: '#111111', fontFamily: "'Sora',system-ui,sans-serif" }}>
+    <div className="home-immersive" style={{ background: '#fbf6f7', color: '#1a1418', fontFamily: "'Sora',system-ui,sans-serif" }}>
       <HomeImmersive openRoomsCount={openRoomsCount} newestRooms={newestRooms} />
     </div>
   )

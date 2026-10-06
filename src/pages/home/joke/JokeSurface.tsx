@@ -1145,10 +1145,10 @@ export function JokeSurface() {
   return (
     <>
       {/* ══ 1 · hero + the composer ══ */}
-      <section id="joke" style={{ position: 'relative', overflow: 'hidden', background: '#fff', padding: 'clamp(36px,7vh,72px) clamp(16px,4vw,28px) clamp(24px,4vh,44px)' }}>
+      <section id="joke" style={{ position: 'relative', overflow: 'hidden', background: 'radial-gradient(ellipse 80% 60% at 50% 0%, #f8e4eb, #fbf6f7 70%)', padding: 'clamp(36px,7vh,72px) clamp(16px,4vw,28px) clamp(24px,4vh,44px)' }}>
         <div style={{ maxWidth: 880, margin: '0 auto', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(13px,2.2vh,20px)' }}>
-          <h1 style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(36px,7vw,72px)', lineHeight: 1.02, letterSpacing: '-.05em', textAlign: 'center', margin: 0, color: '#111' }}>
-            Say it funnier.
+          <h1 style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(36px,7vw,72px)', lineHeight: 1.02, letterSpacing: '-.05em', textAlign: 'center', margin: 0, color: '#1a1418' }}>
+            Say it <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontWeight: 400, letterSpacing: '-.02em', color: '#b8456b' }}>funnier.</span>
           </h1>
           <p style={{ margin: 0, fontFamily: SORA, fontSize: 'clamp(15px,1.6vw,17px)', color: '#6b6b6b', textAlign: 'center' }}>
             Paste what happened. Get jokes. Post the best one.
@@ -1156,7 +1156,7 @@ export function JokeSurface() {
 
 
 
-          <div style={{ width: '100%', position: 'relative', background: '#fff', border: '1.5px solid rgba(0,0,0,.16)', borderRadius: 22, padding: 'clamp(14px,2.2vw,20px)', boxShadow: '0 20px 50px -36px rgba(0,0,0,.35)', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ width: '100%', position: 'relative', background: '#fff', border: '1.5px solid rgba(184,69,107,.28)', borderRadius: 22, padding: 'clamp(14px,2.2vw,20px)', boxShadow: '0 20px 50px -34px rgba(160,50,90,.4)', display: 'flex', flexDirection: 'column', gap: 10 }}>
             <textarea
               rows={4}
               value={text}
@@ -1216,7 +1216,7 @@ export function JokeSurface() {
                 transition: 'max-height .38s cubic-bezier(.2,.8,.2,1), opacity .28s, transform .28s',
               }}
             >
-              <ol style={{ margin: 0, padding: '12px 18px', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7, background: '#f5f5f4', border: '1px solid rgba(0,0,0,.07)', borderRadius: 16, fontFamily: SORA, fontSize: 14, lineHeight: 1.5, color: '#333', textAlign: 'left' }}>
+              <ol style={{ margin: 0, padding: '12px 18px', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7, background: '#fff', border: '1px solid rgba(90,30,50,.10)', borderRadius: 16, fontFamily: SORA, fontSize: 14, lineHeight: 1.5, color: '#333', textAlign: 'left' }}>
                 <li>1. Paste what happened.</li>
                 <li>2. Get three jokes: the take, the clapback, the roast.</li>
                 <li>3. Post the best one to a room, or download it.</li>
@@ -1268,7 +1268,7 @@ export function JokeSurface() {
       {/* ══ 3 · crisis — support register only, and nothing else ══ */}
       {crisis ? (
         <section style={{ background: '#fff', padding: '0 clamp(16px,4vw,28px) clamp(40px,7vh,80px)' }}>
-          <div style={{ maxWidth: 640, margin: '0 auto', background: '#fff', border: '1.5px solid #111', borderRadius: 22, padding: '26px 24px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ maxWidth: 640, margin: '0 auto', background: '#fff', border: '1.5px solid rgba(184,69,107,.4)', borderRadius: 22, padding: '26px 24px', display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 19, color: '#111' }}>No jokes for this one.</div>
             <p style={{ fontFamily: SORA, fontSize: 16, lineHeight: 1.55, color: '#333', margin: 0 }}>
               This sounds heavy. Talk to a person now — free, any hour.
@@ -1285,7 +1285,7 @@ export function JokeSurface() {
 
       {/* ══ 4 · the offer, then the three cards ══ */}
       {set && !crisis ? (
-        <section ref={deckRef} style={{ background: 'linear-gradient(180deg,#fff,rgba(16,12,20,.04))', padding: 'clamp(16px,3vh,36px) clamp(16px,4vw,28px) clamp(36px,6vh,72px)' }}>
+        <section ref={deckRef} style={{ background: '#fbf6f7', padding: 'clamp(16px,3vh,36px) clamp(16px,4vw,28px) clamp(36px,6vh,72px)' }}>
           <CardBackStyles />
           <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 18 }}>
 
@@ -1438,7 +1438,7 @@ export function JokeSurface() {
 
       {/* ══ 5 · the set list, and the one place the plan is mentioned unprompted ══ */}
       {signedIn && list.length > 0 ? (
-        <section style={{ background: 'rgba(16,12,20,.04)', padding: '0 clamp(16px,4vw,28px) clamp(36px,6vh,72px)' }}>
+        <section style={{ background: '#f8eef1', padding: '0 clamp(16px,4vw,28px) clamp(36px,6vh,72px)' }}>
           <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* The fold. A line, not a panel: the count is the reason to open
                 it, so it sits in the same row as the title and the caret. */}
@@ -1565,7 +1565,7 @@ export function JokeSurface() {
                   type="button"
                   aria-pressed={postTopic === t}
                   onClick={() => setPostTopic(t)}
-                  style={{ height: 32, padding: '0 13px', borderRadius: 999, border: postTopic === t ? '1px solid #111' : '1px solid rgba(0,0,0,.16)', background: postTopic === t ? '#111' : '#fff', color: postTopic === t ? '#fff' : '#333', fontFamily: SORA, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
+                  style={{ height: 32, padding: '0 13px', borderRadius: 999, border: postTopic === t ? '1px solid #b8456b' : '1px solid rgba(90,30,50,.18)', background: postTopic === t ? '#f6e9ee' : '#fff', color: postTopic === t ? '#9b3559' : '#3a3236', fontFamily: SORA, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
                 >
                   {t}
                 </button>
@@ -1627,7 +1627,7 @@ export function JokeSurface() {
       />
 
       {toast ? (
-        <div style={{ position: 'fixed', left: '50%', bottom: 24, transform: 'translateX(-50%)', zIndex: 99, background: '#111', color: '#fff', fontFamily: SORA, fontSize: 13, padding: '11px 18px', borderRadius: 999, maxWidth: 'calc(100vw - 32px)', textAlign: 'center' }}>
+        <div style={{ position: 'fixed', left: '50%', bottom: 24, transform: 'translateX(-50%)', zIndex: 99, background: '#2a2025', color: '#fff', fontFamily: SORA, fontSize: 13, padding: '11px 18px', borderRadius: 999, maxWidth: 'calc(100vw - 32px)', textAlign: 'center' }}>
           {toast}
         </div>
       ) : null}

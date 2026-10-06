@@ -144,8 +144,8 @@ export function GlobalHeader() {
   const inkStrong = dark ? '#ffffff' : '#111111'
   const inkMuted = dark ? '#b5b5b5' : '#6b6b6b'
   const inkActive = dark ? '#ffffff' : '#111111'
-  const barBg = dark ? '#111111' : '#ffffff'
-  const barBorder = dark ? '1px solid rgba(255,255,255,.08)' : '1px solid rgba(0,0,0,.08)'
+  const barBg = dark ? '#111111' : '#fbf6f7'
+  const barBorder = dark ? '1px solid rgba(255,255,255,.08)' : '1px solid rgba(90,30,50,.09)'
   const pillBorder = dark ? '1px solid rgba(255,255,255,.14)' : '1px solid rgba(0,0,0,.14)'
   const menuBg = dark ? '#1b1b1b' : '#fff'
   const menuBorder = dark ? '1px solid rgba(255,255,255,.10)' : '1px solid rgba(0,0,0,.10)'
@@ -226,7 +226,7 @@ export function GlobalHeader() {
           {alias ? (
             <Link to="/activity" aria-label={unread ? `activity, ${unread} new` : 'activity'} style={{ position: 'relative', display: 'grid', placeItems: 'center', width: 36, height: 36, borderRadius: 999, color: pathname.startsWith('/activity') ? inkActive : inkMuted }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z" strokeLinejoin="round" /><path d="M10 20.5a2 2 0 0 0 4 0" /></svg>
-              {unread ? <span style={{ position: 'absolute', top: 6, right: 7, width: 8, height: 8, borderRadius: 99, background: inkActive, border: `2px solid ${barBg}` }} /> : null}
+              {unread ? <span style={{ position: 'absolute', top: 6, right: 7, width: 8, height: 8, borderRadius: 99, background: '#e7548a', border: `2px solid ${barBg}` }} /> : null}
             </Link>
           ) : null}
 
@@ -255,7 +255,7 @@ export function GlobalHeader() {
                       width: 26,
                       height: 26,
                       borderRadius: '50%',
-                      background: dark ? '#2a2a2a' : '#f2f2f1',
+                      background: dark ? '#2a2a2a' : '#f6e9ee',
                       display: 'grid',
                       placeItems: 'center',
                       fontSize: 14,
@@ -314,8 +314,8 @@ export function GlobalHeader() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  background: inkActive,
-                  color: barBg,
+                  background: '#b8456b',
+                  color: '#fff',
                   border: 0,
                   borderRadius: 999,
                   padding: '9px 18px',

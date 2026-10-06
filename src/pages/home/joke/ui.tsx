@@ -15,8 +15,8 @@ export const INK = '#0b080f'
 export const PROSE = '#2a2529'
 export const MUTED = '#5f595d'
 export const FAINT = '#8a8488'
-export const ACCENT = '#17131a'
-export const ACCENT_SOFT = '#8f898d'
+export const ACCENT = '#b8456b'
+export const ACCENT_SOFT = '#e7a3bb'
 export const VIOLET = '#7F77DD'
 export const DARK = '#100c14'
 
@@ -110,10 +110,10 @@ export function Button({
   const height = size === 'sm' ? 36 : 44
   const palette: Record<string, CSSProperties> = {
     primary: {
-      background: 'linear-gradient(155deg,#8f898d,#17131a 55%,#2b2630)',
+      background: 'linear-gradient(155deg,#cf6189,#b8456b 55%,#a33a5e)',
       color: '#fff',
       border: 'none',
-      boxShadow: '0 14px 30px -18px rgba(23,19,26,.75)',
+      boxShadow: '0 14px 30px -18px rgba(160,50,90,.6)',
     },
     secondary: {
       background: '#fff',

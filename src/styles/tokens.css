@@ -4,10 +4,10 @@
    nine type steps, four button heights. Nothing else gets invented. */
 :root {
   /* canvas & ink */
-  --bg: #ffffff;          /* page canvas */
-  --bg-card: #fdfbf9;     /* card fields */
+  --bg: #fbf6f7;          /* page canvas */
+  --bg-card: #fdf8f9;     /* card fields */
   --surface: #ffffff;     /* cards */
-  --surface-2: #fdfbf9;   /* hover fills, tints */
+  --surface-2: #f8eef1;   /* hover fills, tints */
   --ink: #17131a;         /* default text + ink buttons */
   --ink-strong: #0b080f;  /* section headlines */
   --dark-bg: #100c14;     /* footer, overlays */
