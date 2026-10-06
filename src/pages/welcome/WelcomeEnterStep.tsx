@@ -41,10 +41,11 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
   const enterRoom = () => {
     const router = getRouterRef()
     const goPath = (to: string) => { if (router) router.navigate({ to }); else window.location.replace(to) }
-    const goHash = (hash: 'spill' | 'scan') => { if (router) router.navigate({ to: '/', hash }); else window.location.replace('/#' + hash) }
+    // Spill and Scan are retired: their old intents land on the write box.
+    const goHash = (_hash: 'spill' | 'scan') => { if (router) router.navigate({ to: '/' }); else window.location.replace('/') }
     const goRoom = (roomId: string) => {
-      if (router) router.navigate({ to: '/room', search: { id: roomId } as never })
-      else window.location.replace('/room?id=' + encodeURIComponent(roomId))
+      if (router) router.navigate({ to: '/rooms/$id', params: { id: roomId } })
+      else window.location.replace('/rooms/' + encodeURIComponent(roomId))
     }
     try {
       const intent = readIntent()
@@ -88,7 +89,7 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
       const durable = takeDurableReturn()
       if (durable) { goUrl(durable); return }
     } catch { /* noop */ }
-    goPath('/stream')
+    goPath('/')
   }
 
   useEffect(() => {
@@ -107,21 +108,21 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
           welcome, {displayName}
         </Words>
         <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 16, lineHeight: 1.6, color: SOFT, maxWidth: '34ch', margin: '0 auto' }}>
-          the room knows you now. whatever you're carrying, you can put it down here.
+          you're in. your jokes are saved to your set list.
         </div>
       </div>
       <div style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 16, padding: '18px 20px', textAlign: 'left', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
         <div style={{ flex: 'none', marginTop: 3 }}><EyeMark size={22} /></div>
         <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.55, color: TEXT }}>
-          when you're ready, tap the eye anytime. i'll be here.
+          paste what happened. get it back funnier.
         </div>
       </div>
       {resuming ? (
         <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 16, color: SOFT }}>
-          taking you back to your story…
+          taking you back…
         </div>
       ) : (
-        <button style={primaryBtn} onClick={enterRoom}>enter the room →</button>
+        <button style={primaryBtn} onClick={enterRoom}>start →</button>
       )}
     </div>
   )

@@ -44,11 +44,11 @@ export function PillarPage({
           style={{
             fontFamily: "'Sora', system-ui, sans-serif",
             fontSize: "clamp(32px, 6vw, 52px)",
-            fontWeight: 700,
+            fontWeight: 800,
             letterSpacing: "-0.03em",
             lineHeight: 1.1,
             margin: "0 0 28px",
-            color: "#100c14",
+            color: "#8e1c4c",
           }}
         >
           {h1}
@@ -71,7 +71,7 @@ export function PillarPage({
           {capsule}
         </p>
 
-        <Section title="what this is for">{what}</Section>
+        <Section title="What makes it funny">{what}</Section>
 
         <p
           style={{
@@ -117,7 +117,7 @@ export function PillarPage({
             fontSize: 15,
           }}
         >
-          <span style={{ color: "#656565" }}>other rooms:</span>
+          <span style={{ color: "#656565" }}>More:</span>
           {others.map((o) => (
             <a
               key={o.href}
@@ -145,7 +145,7 @@ export function PillarPage({
               paddingBottom: 2,
             }}
           >
-            SHUTAP. Say it funnier.
+            Turn yours into a joke →
           </a>
         </p>
       </article>

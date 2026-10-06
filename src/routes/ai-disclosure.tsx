@@ -4,9 +4,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/ai-disclosure`
-const TITLE = 'AI Disclosure — Shutap'
+const TITLE = 'AI disclosure — Shutap'
 const DESCRIPTION =
-  'What the AI on Shutap does, what it isn\u2019t, that it can be wrong, and which models we use — Google Gemini via the Lovable AI Gateway.'
+  'Every joke on Shutap is written by AI (Google Gemini and OpenAI models, via the Lovable AI Gateway). It can be wrong or offensive, and you decide what to post.'
 
 export const Route = createFileRoute('/ai-disclosure')({
   head: () => ({
@@ -30,8 +30,8 @@ function AiDisclosurePage() {
   return (
     <DocLayout
       active="/ai-disclosure"
-      title="AI Disclosure"
-      subline="shown before your first companion message"
+      title="AI disclosure"
+      subline="what writes your jokes"
     >
       <div
         style={{
@@ -88,16 +88,24 @@ function AiDisclosurePage() {
             color: '#e4dfe2',
           }}
         >
-          your cards are written by ai — not a human, and not a therapist.
-          it&rsquo;s here to listen, reflect, and keep you company. it can get things wrong, and it
-          can&rsquo;t give medical, mental-health, or legal advice. if things feel heavy,
-          we&rsquo;ll point you to real help. 🤍
+          your jokes are written by ai, not a person. it can get things wrong, miss the joke, or
+          say something offensive. it&rsquo;s not therapy, and it can&rsquo;t give medical,
+          mental-health or legal advice. you decide what to post.
         </div>
       </div>
       <p>
-        Several jurisdictions (notably California) increasingly require clear disclosure that a
-        user is interacting with AI, not a person. Shutap shows this before the first companion
-        message and keeps a persistent <b>ai</b> label on the eye.
+        Shutap uses AI models (Google&rsquo;s Gemini and OpenAI models, through the Lovable AI Gateway) to remove
+        identifying details, run the crisis check, write your jokes and build the Mirror. No
+        person writes or reviews a joke before you see it.
+      </p>
+      <p>
+        AI output can be inaccurate, unfunny or offensive. Treat it as entertainment. You are
+        responsible for what you download, share and post. We don&rsquo;t use your content to
+        train AI models.
+      </p>
+      <p>
+        Some places, including California, require clear notice when you&rsquo;re dealing with AI
+        rather than a person. This page is that notice.
       </p>
     </DocLayout>
   )

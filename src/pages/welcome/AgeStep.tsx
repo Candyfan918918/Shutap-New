@@ -25,7 +25,7 @@ export function AgeStep({ ageBlocked, onBlocked, onConfirm }: AgeStepProps) {
     if (age < 18) {
       try { sessionStorage.setItem('shutap_age_rejected', '1') } catch { /* noop */ }
       onBlocked()
-      setMsg({ kind: 'err', text: 'shutap is 18+ only. account access is not available.' })
+      setMsg({ kind: 'err', text: "shutap is 18+ only. you can't make an account." })
       return
     }
     setMsg(null)
@@ -35,9 +35,9 @@ export function AgeStep({ ageBlocked, onBlocked, onConfirm }: AgeStepProps) {
   return (
     <div className="wstep" style={{ display: 'flex', flexDirection: 'column', gap: 24, textAlign: 'center' }}>
       <div>
-        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 22, lineHeight: 1.4, color: TEXT, marginBottom: 8 }}>one small thing first.</Words>
+        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 22, lineHeight: 1.4, color: TEXT, marginBottom: 8 }}>How old are you?</Words>
         <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15, color: SOFT, lineHeight: 1.55, maxWidth: '34ch', margin: '0 auto' }}>
-          shutap is 18 and over. some of what's shared here is honest in ways that need a little life experience to hold.
+          Shutap is 18+.
         </div>
       </div>
       <div>
@@ -63,7 +63,7 @@ export function AgeStep({ ageBlocked, onBlocked, onConfirm }: AgeStepProps) {
       </div>
       {ageBlocked ? (
         <div data-testid="age-blocked" style={{ padding: '14px 16px', borderRadius: 12, background: 'rgba(23,19,26,.08)', border: '1px solid rgba(23,19,26,.35)', color: '#e2dde0', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, lineHeight: 1.5 }}>
-          shutap is 18 and over. this session is closed to account content. clear your browser session to try another day.
+          shutap is 18+ only. accounts aren't available on this browser.
         </div>
       ) : (
         <button style={primaryBtn} onClick={confirmAge}>confirm →</button>

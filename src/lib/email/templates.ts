@@ -1,7 +1,7 @@
 // Template registry. Each template pins its sender identity, subject,
 // and full email-safe HTML design (loaded verbatim from src/lib/email/designs/
-// via Vite `?raw`). Plain-text fallbacks live per template. All check-in
-// beats share the spill-followup design shell and inject a one-line beat.
+// via Vite `?raw`). Plain-text fallbacks live per template. The check-in
+// templates are no longer sent; they keep a short generic copy.
 
 import welcomeHtml from './designs/welcome.html?raw'
 import spillFollowupHtml from './designs/spill-followup.html?raw'
@@ -57,8 +57,8 @@ export type TemplateEntry = {
   /** Full HTML document loaded from src/lib/email/designs/. */
   htmlDesign: string
   /**
-   * For check-in variants: the one-line beat copy that replaces the
-   * spill-followup shell's day-1 paragraph text.
+   * For check-in variants (no longer sent): optional one-line copy for
+   * the follow-up shell's main paragraph.
    */
   beatLine?: string
   buildBodyText: (v: TemplateVars) => string
@@ -67,214 +67,169 @@ export type TemplateEntry = {
 // Salutation for text fallbacks.
 const g = (v: TemplateVars) => (v.alias ? `hey ${v.alias.toLowerCase()},` : 'hey,')
 
-// Text-fallback builder for check-in beats — mirrors the previous copy.
+// Text-fallback builder for the (unused) check-in templates.
 const checkinText = (line: (v: TemplateVars) => string) => (v: TemplateVars) =>
-  `${g(v)}\n\n${line(v)}\n\nopen the check-in: ${v.deep_link ?? ''}`
+  `${g(v)}\n\n${line(v)}\n\nopen shutap: ${v.deep_link ?? ''}`
+
+// One generic line for every retired check-in template.
+const CHECKIN_LINE = 'got a new story? paste it in and get it back funnier.'
+const checkin = (id: TemplateId): TemplateEntry => ({
+  id,
+  identity: 'hello',
+  emailClass: 'engagement',
+  subject: () => 'got a new one?',
+  preview: () => 'paste what happened. get it back funnier.',
+  cta: 'open shutap',
+  htmlDesign: spillFollowupHtml,
+  beatLine: CHECKIN_LINE,
+  buildBodyText: checkinText(() => CHECKIN_LINE),
+})
 
 export const TEMPLATES: Record<TemplateId, TemplateEntry> = {
   welcome: {
     id: 'welcome',
     identity: 'hello',
     emailClass: 'transactional',
-    subject: () => "you're in — finally, somewhere to not shut up",
-    preview: () => "your space to say the thing you can't say anywhere else.",
-    cta: 'start your first vent',
+    subject: () => "you're in. SHUTAP. Say it funnier.",
+    preview: () => 'paste what happened. get three jokes back.',
+    cta: 'write your first jokes',
     htmlDesign: welcomeHtml,
     buildBodyText: (v) => `${g(v)}
 
-you're in. no real names here — pseudonymous, a safe space. just a room full of people who've been where you are, and lived to tell what happened next.
+you're in. paste what happened and get three jokes back: the take, the clapback, the roast. keep them, download them, or post them to a room.
 
-start your first vent: ${v.deep_link ?? v.cta_url ?? 'https://shutap.com'}`,
+your made-up name is what people see. your real name never shows.
+
+write your first jokes: ${v.deep_link ?? v.cta_url ?? 'https://shutap.com'}`,
   },
 
-  checkin_day1: {
-    id: 'checkin_day1',
-    identity: 'hello',
-    emailClass: 'engagement',
-    subject: () => "how'd you sleep on it?",
-    preview: () => 'been thinking about what you spilled.',
-    cta: 'go back to your room',
-    htmlDesign: spillFollowupHtml,
-    beatLine: (`been thinking about {{situation_hint}}. how'd you sleep on it?`),
-    buildBodyText: checkinText((v) => `been thinking about ${v.situation_hint || 'what you spilled'}. how'd you sleep on it?`),
-  },
-  checkin_day2: {
-    id: 'checkin_day2',
-    identity: 'hello',
-    emailClass: 'engagement',
-    subject: () => 'you good today?',
-    preview: () => 'no pressure, just checking.',
-    cta: 'go back to your room',
-    htmlDesign: spillFollowupHtml,
-    beatLine: `no pressure, just checking — you good today?`,
-    buildBodyText: checkinText(() => `no pressure, just checking — you good today?`),
-  },
-  checkin_day3: {
-    id: 'checkin_day3',
-    identity: 'hello',
-    emailClass: 'engagement',
-    subject: () => 'ok be honest',
-    preview: () => 'did you do anything or still stewing.',
-    cta: 'go back to your room',
-    htmlDesign: spillFollowupHtml,
-    beatLine: `ok be honest — did you do anything or still stewing 😤`,
-    buildBodyText: checkinText(() => `ok be honest — did you do anything or still stewing 😤`),
-  },
-  checkin_day7: {
-    id: 'checkin_day7',
-    identity: 'hello',
-    emailClass: 'engagement',
-    subject: () => 'where are things now?',
-    preview: () => 'a week in.',
-    cta: 'go back to your room',
-    htmlDesign: spillFollowupHtml,
-    beatLine: `a week in. where are things now?`,
-    buildBodyText: checkinText(() => `a week in. where are things now?`),
-  },
-  checkin_day14: {
-    id: 'checkin_day14',
-    identity: 'hello',
-    emailClass: 'engagement',
-    subject: () => 'looking back — what happened?',
-    preview: () => 'two weeks on.',
-    cta: 'go back to your room',
-    htmlDesign: spillFollowupHtml,
-    beatLine: `two weeks on. looking back — what happened?`,
-    buildBodyText: checkinText(() => `two weeks on. looking back — what happened?`),
-  },
-  checkin_day30: {
-    id: 'checkin_day30',
-    identity: 'hello',
-    emailClass: 'engagement',
-    subject: () => "still going? where's it at now?",
-    preview: () => 'a month later.',
-    cta: 'go back to your room',
-    htmlDesign: spillFollowupHtml,
-    beatLine: `a month later. still going? where's it at now?`,
-    buildBodyText: checkinText(() => `a month later. still going? where's it at now?`),
-  },
+  checkin_day1: checkin('checkin_day1'),
+  checkin_day2: checkin('checkin_day2'),
+  checkin_day3: checkin('checkin_day3'),
+  checkin_day7: checkin('checkin_day7'),
+  checkin_day14: checkin('checkin_day14'),
+  checkin_day30: checkin('checkin_day30'),
 
   reengagement: {
     id: 'reengagement',
     identity: 'hello',
     emailClass: 'nontransactional',
-    subject: () => "the room's been quiet without you",
-    preview: () => "no pressure. the door's still open.",
-    cta: 'come back in',
+    subject: () => 'something happen this week?',
+    preview: () => 'paste it in. get it back funnier.',
+    cta: 'write some jokes',
     htmlDesign: reengagementHtml,
     buildBodyText: (v) => `${g(v)}
 
-the room's been quiet without you. no pressure — whatever made you step away is welcome here too. but people showed up this week carrying stories that rhyme with yours.
+something annoying happen lately? paste it in and get three jokes back. or see what people are posting in the rooms.
 
-come back in: ${v.deep_link ?? v.cta_url ?? 'https://shutap.com'}`,
+write some jokes: ${v.deep_link ?? v.cta_url ?? 'https://shutap.com'}`,
   },
 
   scan_followup: {
     id: 'scan_followup',
     identity: 'hello',
     emailClass: 'engagement',
-    subject: () => 'your scan, a day later — anything shift?',
-    preview: () => 'a scan is a snapshot, not a sentence.',
-    cta: 'scan it again',
+    subject: () => 'got a new one?',
+    preview: () => 'paste what happened. get it back funnier.',
+    cta: 'open shutap',
     htmlDesign: scanFollowupHtml,
     buildBodyText: (v) => `${g(v)}
 
-yesterday you scanned ${v.scan_topic || 'a situation'}. a day later — has anything shifted? a scan is a snapshot, not a sentence.
+${CHECKIN_LINE}
 
-scan it again: ${v.rescan_url ?? v.deep_link ?? ''}
-or spill it to the room: ${v.spill_url ?? ''}`,
+open shutap: ${v.deep_link ?? 'https://shutap.com'}`,
   },
 
   magic_link: {
     id: 'magic_link',
     identity: 'hello',
     emailClass: 'transactional',
-    subject: () => 'your sign-in link for shutap',
-    preview: () => 'one-time link. works once, expires in 10 minutes.',
-    cta: 'sign in to shutap',
+    subject: () => 'your shutap sign-in link',
+    preview: () => 'works once. expires in 10 minutes.',
+    cta: 'sign in',
     htmlDesign: magicLinkHtml,
     buildBodyText: (v) => `${g(v)}
 
-tap the link below to sign in to shutap. it works once and expires in 10 minutes.
+tap the link to sign in. it works once and expires in 10 minutes.
 
 ${v.magic_link ?? ''}
 
-or use this code: ${v.code ?? ''}
+or enter this code: ${v.code ?? ''}
 
-didn't ask to sign in? you can ignore this — no one gets in without this link.`,
+didn't ask for this? ignore it. no one gets in without this link.`,
   },
 
   new_reply: {
     id: 'new_reply',
     identity: 'hello',
     emailClass: 'engagement',
-    subject: () => "you're not the only one — someone related to your story",
-    preview: () => "someone left their side of it.",
-    cta: 'read what they said',
+    subject: () => 'someone commented on your post',
+    preview: () => 'see what they said.',
+    cta: 'see the comment',
     htmlDesign: newReplyHtml,
     buildBodyText: (v) => `${g(v)}
 
-your story in ${v.room_title || 'the room'} is finding people. ${v.replier_alias || 'someone'} left this: "${v.reply_snippet || ''}"
+${v.replier_alias || 'someone'} commented on your post in ${v.room_title || 'a room'}: "${v.reply_snippet || ''}"
 
-read what they said: ${v.cta_url ?? v.deep_link ?? ''}`,
+see the comment: ${v.cta_url ?? v.deep_link ?? ''}`,
   },
 
   digest: {
     id: 'digest',
     identity: 'hello',
     emailClass: 'nontransactional',
-    subject: () => 'rooms that resonated this week',
-    preview: () => 'the companion pulled a few rooms that sound like yours.',
-    cta: 'open the stream',
+    subject: () => 'this week in the rooms',
+    preview: () => 'likes, comments, and new followers on your posts.',
+    cta: 'open the rooms',
     htmlDesign: digestHtml,
     buildBodyText: (v) => `${g(v)}
 
-the companion pulled a few rooms this week that sound like they might be yours.
+here's what happened on your posts this week, plus what people are posting in the rooms.
 
-open the stream: ${v.cta_url ?? v.deep_link ?? 'https://shutap.com'}`,
+open the rooms: ${v.cta_url ?? v.deep_link ?? 'https://shutap.com/rooms'}`,
   },
 
   milestone: {
     id: 'milestone',
     identity: 'hello',
     emailClass: 'engagement',
-    subject: () => 'your story made the hall',
-    preview: () => 'enough people found their omg same to land it in the hall of fame.',
-    cta: 'see it in the hall',
+    subject: () => 'your post is getting likes',
+    preview: () => 'people are liking what you posted.',
+    cta: 'see your post',
     htmlDesign: milestoneHtml,
     buildBodyText: (v) => `${g(v)}
 
-you were brave enough to say it out loud — and it landed. ${v.room_title || 'your story'} resonated with more people than almost anything shared this month. ${v.resonance_count || ''} people found their omg same in the ${v.hall_name || ''} hall.
+people are liking ${v.room_title || 'your post'}.
 
-see it in the hall: ${v.cta_url ?? v.deep_link ?? ''}`,
+see your post: ${v.cta_url ?? v.deep_link ?? ''}`,
   },
 
   popular_today: {
     id: 'popular_today',
     identity: 'hello',
     emailClass: 'nontransactional',
-    subject: () => "the room everyone's in today",
-    preview: () => "one story is resonating harder than anything else right now.",
-    cta: 'step into the room',
+    subject: () => 'popular in the rooms today',
+    preview: () => 'the post everyone is liking today.',
+    cta: 'see the post',
     htmlDesign: popularTodayHtml,
     buildBodyText: (v) => `${g(v)}
 
-one story is resonating harder than anything else right now — ${v.room_title || 'the top room today'}.
+the post everyone is liking today: ${v.room_title || 'see it in the rooms'}.
 
-step into the room: ${v.cta_url ?? v.deep_link ?? ''}`,
+see the post: ${v.cta_url ?? v.deep_link ?? ''}`,
   },
 
   mirror_receipt: {
     id: 'mirror_receipt',
     identity: 'hello',
     emailClass: 'transactional',
-    subject: (v) => `your mirror receipt — ${v.amount ?? ''}`.trim(),
-    preview: () => 'payment received. the mirror stays open.',
+    subject: (v) => `your Shutap+ receipt — ${v.amount ?? ''}`.trim(),
+    preview: () => 'payment received. thanks.',
     cta: 'view invoice',
     htmlDesign: mirrorReceiptHtml,
     buildBodyText: (v) => `${g(v)}
 
-payment received — ${v.amount ?? ''} for the mirror (${v.plan_interval ?? ''}), covering ${v.period_range ?? ''}. tax included where it applies.
+payment received: ${v.amount ?? ''} for Shutap+ (${v.plan_interval ?? ''}), covering ${v.period_range ?? ''}. tax included where it applies.
 
 view your invoice: ${v.invoice_url ?? ''}`,
   },
@@ -283,13 +238,13 @@ view your invoice: ${v.invoice_url ?? ''}`,
     id: 'mirror_cancelled',
     identity: 'hello',
     emailClass: 'transactional',
-    subject: (v) => `cancelled — the mirror stays open until ${v.access_until ?? 'the end of your period'}`,
-    preview: () => 'no further charges. your scans are always yours.',
-    cta: 'resume subscription',
+    subject: (v) => `cancelled. Shutap+ stays on until ${v.access_until ?? 'the end of your period'}`,
+    preview: () => 'no more charges. your jokes stay yours.',
+    cta: 'resume Shutap+',
     htmlDesign: mirrorCancelledHtml,
     buildBodyText: (v) => `${g(v)}
 
-your cancellation went through. the mirror stays open until ${v.access_until ?? 'the end of your billing period'}, and there are no further charges after that. your scans are always yours. venting, scan & being heard stay free, always.
+you've cancelled. Shutap+ stays on until ${v.access_until ?? 'the end of your billing period'}, with no more charges after that. your jokes stay in your set list, and writing jokes stays free.
 
 changed your mind? resume anytime: ${v.resume_url ?? 'https://shutap.com/subscribe'}`,
   },
@@ -298,32 +253,30 @@ changed your mind? resume anytime: ${v.resume_url ?? 'https://shutap.com/subscri
     id: 'mirror_trial_ending',
     identity: 'hello',
     emailClass: 'transactional',
-    subject: (v) => `your trial ends ${v.trial_end ?? 'soon'} — no surprises`,
-    preview: () => 'two days left. keep it or cancel — no surprises either way.',
+    subject: (v) => `your Shutap+ trial ends ${v.trial_end ?? 'soon'}`,
+    preview: () => 'keep it or cancel. no surprises.',
     cta: 'open the mirror',
     htmlDesign: mirrorTrialEndingHtml,
     buildBodyText: (v) => `${g(v)}
 
-we promised to tell you before anything is charged — this is that email. your free trial ends ${v.trial_end ?? 'soon'}. if the mirror's been useful, do nothing — your ${v.plan_interval ?? ''} plan (${v.amount ?? ''} + tax where it applies) starts then. not for you? cancel from your profile before then and you won't be charged a cent.
+heads up before anything is charged: your free trial ends ${v.trial_end ?? 'soon'}. to keep Shutap+, do nothing. your ${v.plan_interval ?? ''} plan (${v.amount ?? ''} + tax where it applies) starts then. don't want it? cancel from your account before then and you won't be charged.
 
 open the mirror: ${v.deep_link ?? 'https://shutap.com/mirror'}
 manage or cancel: ${v.manage_url ?? 'https://shutap.com/profile'}`,
   },
 
-
-
   hall_updates: {
     id: 'hall_updates',
     identity: 'hello',
     emailClass: 'nontransactional',
-    subject: () => 'new in the halls this week',
-    preview: () => 'the stories that resonated most across shutap this week.',
-    cta: 'wander the halls',
+    subject: () => 'new in the rooms this week',
+    preview: () => 'the posts people liked most this week.',
+    cta: 'open the rooms',
     htmlDesign: hallUpdatesHtml,
     buildBodyText: (v) => `${g(v)}
 
-these stories resonated with more people than any others this week — the ones that made a room full of strangers feel a little less alone.
+the posts people liked most in the rooms this week.
 
-wander the halls: ${v.cta_url ?? v.deep_link ?? 'https://shutap.com/halls'}`,
+open the rooms: ${v.cta_url ?? v.deep_link ?? 'https://shutap.com/rooms'}`,
   },
 }

@@ -86,7 +86,7 @@ export function CardBack({
             border: `1.5px solid ${LIT}`, font: '700 calc(3.8 * var(--cq, 1cqw))/1 Sora,sans-serif', color: LIT, whiteSpace: 'nowrap',
           }}
         >
-          {spent ? 'face down. still yours.' : 'tap to flip →'}
+          {spent ? 'sign in to see it' : 'tap to see it →'}
         </span>
       </div>
     </div>

@@ -4,17 +4,18 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/safety`
-const TITLE = "if it's heavy — Shutap"
+const TITLE = 'Crisis help — Shutap'
 const DESCRIPTION =
-  'shutap isn\u2019t a crisis service. if you need real help right now, here\u2019s where to get it.'
+  'Shutap is not a crisis service. If you need help now: US call or text 988, UK and Ireland Samaritans 116 123, or findahelpline.com.'
 
 type Card = { name: string; action: string; href: string; external?: boolean }
 
 const CARDS: Card[] = [
   { name: 'US — 988 Suicide & Crisis Lifeline', action: 'call or text 988', href: 'tel:988' },
-  { name: 'UK — Samaritans', action: 'call 116 123', href: 'tel:116123' },
+  { name: 'US — Crisis Text Line', action: 'text HOME to 741741', href: 'sms:741741' },
+  { name: 'UK & Ireland — Samaritans', action: 'call 116 123', href: 'tel:116123' },
   {
-    name: 'Anywhere — findahelpline.com',
+    name: 'Anywhere else — findahelpline.com',
     action: 'find a line in your country',
     href: 'https://findahelpline.com',
     external: true,
@@ -43,12 +44,12 @@ function SafetyPage() {
   return (
     <DocLayout
       active="/safety"
-      title="Crisis & Safety"
-      subline="you deserve real, human help — right now"
+      title="Crisis help"
+      subline="if you need help right now"
     >
       <p>
-        Shutap isn&rsquo;t a crisis service, and our companion isn&rsquo;t a counselor. If
-        you&rsquo;re in crisis, you deserve real, human help right now:
+        Shutap is a joke generator, not a crisis service. If you or someone else is in danger, get
+        help from a person now:
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, margin: '18px 0' }}>
         {CARDS.map((c) => (
@@ -81,9 +82,9 @@ function SafetyPage() {
         ))}
       </div>
       <p>
-        When our companion notices something serious, it will stop and point you here. Crisis
-        messages are kept private, are never made public, and are never used for anything but
-        supporting you. You&rsquo;re not alone. 🤍
+        Shutap runs a crisis check on what people type, post and comment. If something reads as a
+        crisis, Shutap writes no jokes, posts nothing, and shows these lines instead. Anything
+        flagged stays private and is never posted.
       </p>
     </DocLayout>
   )

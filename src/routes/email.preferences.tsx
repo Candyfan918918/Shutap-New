@@ -26,18 +26,18 @@ type GroupKey =
 const GROUPS: { key: GroupKey; title: string; desc: string }[] = [
   {
     key: 'notif_checkins_opt_out',
-    title: 'check-ins',
-    desc: 'the day 1 / 2 / 3 / 7 / 14 / 30 follow-ups after you spill.',
+    title: 'reminders',
+    desc: 'the occasional note about your account.',
   },
   {
     key: 'notif_community_opt_out',
-    title: 'community updates',
-    desc: 'when someone replies to your room, or your spill hits a milestone.',
+    title: 'activity',
+    desc: 'likes, comments, and new followers on your posts.',
   },
   {
     key: 'notif_digest_opt_out',
-    title: 'digests & highlights',
-    desc: 'weekly digest, popular today, hall updates, and re-engagement notes.',
+    title: 'roundups',
+    desc: "what's popular in rooms, and a catch-up when you've been away.",
   },
 ]
 
@@ -194,8 +194,7 @@ function PreferencesRoute() {
                   fontSize: 14.5,
                 }}
               >
-                this link isn't valid or has expired. sign in to manage your email
-                preferences.
+                this link expired. sign in to manage your email.
               </p>
               <a
                 href="/auth?next=/email/preferences"
@@ -232,8 +231,7 @@ function PreferencesRoute() {
                     lineHeight: 1.55,
                   }}
                 >
-                  you unsubscribed from all optional email. toggle any group back on
-                  below to resume it.
+                  you're unsubscribed from all optional email. turn any back on below.
                 </div>
               ) : null}
 
@@ -322,7 +320,7 @@ function PreferencesRoute() {
             textAlign: 'center',
           }}
         >
-          transactional and security emails (magic links, account notices) always arrive.
+          sign-in links and account emails always arrive.
         </p>
       </div>
       <style>{`

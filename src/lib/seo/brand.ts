@@ -7,10 +7,10 @@ export const BRAND = {
   tagline: "SHUTAP. Say it funnier.",
   // The entity sentence (locked) — goes in every machine-read surface.
   entitySentence:
-    "life's a bitch, so make fun of it. type what happened, draw three angles, flip one and see what it does with it. pseudonymous — your real name never shows.",
+    "Shutap is an AI joke generator for creators, comedians and anyone with a story. Paste what happened and Shutap writes three jokes: the take, the clapback and the roast. Download them for TikTok, Reels or the stage, or post the best one to a room. Pseudonymous. Your real name never shows.",
   // Short variant for title tags.
   entitySentenceShort:
-    "Shutap — say it funnier. type what happened, draw three angles, flip one.",
+    "Shutap — AI joke generator. Paste what happened, get three jokes.",
 } as const;
 
 export const PILLARS = [
@@ -18,21 +18,21 @@ export const PILLARS = [
     slug: "relationships",
     title: "Relationships",
     blurb:
-      "dating, partners, situationships, breakups, the gray area in between.",
+      "Dating, situationships, breakups and the texts you shouldn't have sent.",
   },
   {
     slug: "marriage",
     title: "Marriage",
-    blurb: "the long-haul stuff: roommate energy, resentment, repair, leaving, staying.",
+    blurb: "The long haul: chore wars, roommate energy and the same fight on repeat.",
   },
   {
     slug: "family",
     title: "Family",
-    blurb: "parents, siblings, in-laws, the dinner comment, the guilt.",
+    blurb: "Parents, siblings, in-laws and the comment at dinner.",
   },
   {
     slug: "career",
     title: "Career",
-    blurb: "work, money, bosses, burnout, the job everyone tells you to be grateful for.",
+    blurb: "Meetings, managers, pay and the job you're supposed to be grateful for.",
   },
 ] as const;

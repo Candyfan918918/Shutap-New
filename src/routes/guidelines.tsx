@@ -4,9 +4,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/guidelines`
-const TITLE = 'house rules — Shutap'
+const TITLE = 'House rules — Shutap'
 const DESCRIPTION =
-  'the joke goes at the situation, not at a person. what\u2019s allowed here and what gets removed.'
+  'Joke about the situation, never about a real person. What\u2019s allowed in Shutap rooms and what gets removed.'
 
 export const Route = createFileRoute('/guidelines')({
   head: () => ({
@@ -30,8 +30,8 @@ function GuidelinesPage() {
   return (
     <DocLayout
       active="/guidelines"
-      title="Community Guidelines"
-      subline="the short version, in our own voice"
+      title="House rules"
+      subline="the short version"
     >
       <div
         style={{
@@ -43,32 +43,34 @@ function GuidelinesPage() {
         }}
       >
         <ul style={{ margin: 0, paddingLeft: 18 }}>
-          <li>this is a place to be heard. be real, be kind to each other.</li>
           <li>
-            <b>don&rsquo;t post other people&rsquo;s private info</b> — names, addresses, anything
-            that could identify someone. (we scrub a lot of this automatically, but don&rsquo;t
-            try.)
-          </li>
-          <li>no harassment, threats, hate, or cruelty aimed at people.</li>
-          <li>
-            <b>the joke goes at the situation, never at a person.</b> a card you share carries your
-            scrubbed situation with it — don&rsquo;t put the names back in the caption, and
-            don&rsquo;t aim a card at someone who can be identified.
+            <b>Joke about the situation, never about a real person someone could identify.</b>
           </li>
           <li>
-            five situations a day is the deal at every tier. don&rsquo;t mint sessions or
-            accounts to get around it — the deck is a cost, not a score.
+            <b>No real names.</b> No addresses, workplaces, handles or anything else that points to
+            someone. Our scrubber removes a lot of this. Don&rsquo;t add it back in a caption or
+            comment.
           </li>
-          <li>nothing illegal — and absolutely nothing sexual involving minors.</li>
-          <li>don&rsquo;t impersonate, spam, or scrape.</li>
-          <li>don&rsquo;t use shutap to sell services or give professional advice to others.</li>
+          <li>No harassment, threats or targeting anyone.</li>
+          <li>No hate.</li>
+          <li>No sexual content involving minors. Ever.</li>
+          <li>No doxxing.</li>
+          <li>No spam, impersonation or scraping.</li>
+          <li>Nothing illegal.</li>
           <li>
-            see something that breaks this? <b>report it</b> — there&rsquo;s a button on every
-            post.
+            Five stories a day is the limit for everyone. Don&rsquo;t make extra accounts to get
+            around it.
+          </li>
+          <li>
+            See something that breaks these rules? <b>Report it.</b> When three different people
+            report a post, it&rsquo;s hidden until we review it.
           </li>
         </ul>
       </div>
-      <p style={{ marginTop: 16 }}>We remove content and accounts that break these rules.</p>
+      <p style={{ marginTop: 16 }}>
+        Break the rules and we remove the content and may suspend or close the account. You can
+        delete your own posts and comments at any time.
+      </p>
     </DocLayout>
   )
 }

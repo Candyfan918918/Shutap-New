@@ -87,8 +87,8 @@ function Consent() {
         Connect {name} to your Shutap account
       </h1>
       <p style={{ opacity: 0.8, marginBottom: 24 }}>
-        {name} is asking to act as you on Shutap — reading your spills and creating new ones on your
-        behalf. You can revoke this any time from your account.
+        {name} wants to act as you on Shutap: read your stories and jokes, and make new ones.
+        You can revoke this any time from your account.
       </p>
       {error && (
         <p role="alert" style={{ color: "hsl(var(--destructive))", marginBottom: 16 }}>

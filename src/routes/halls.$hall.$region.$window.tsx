@@ -1,3 +1,6 @@
+// Legacy URLs. The old leaderboard feature is retired; these pages render a
+// short noindex page pointing to rooms and the joke generator. Loader and
+// gating logic are unchanged so indexed URLs keep resolving.
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { ogImageMeta } from "@/lib/seo/meta";
 import { SeoPage } from "@/components/seo/SeoPage";
@@ -41,9 +44,9 @@ export const Route = createFileRoute("/halls/$hall/$region/$window")({
       : (params.hall as string);
     const hallMeta = isValidHall(params.hall) ? HALLS[params.hall as HallSlug] : null;
     const title = hallMeta
-      ? `${hallMeta.title} · ${params.region} · ${params.window} — shutap halls`
-      : "halls — shutap";
-    const description = hallMeta?.blurb ?? "Shutap halls — curated collections of rooms.";
+      ? `${hallMeta.title} jokes — Shutap rooms`
+      : "Jokes in rooms — Shutap";
+    const description = hallMeta?.blurb ?? "The jokes people post on Shutap live in rooms.";
 
     const metaTags: Array<Record<string, string>> = [
       { title },
@@ -87,7 +90,7 @@ export const Route = createFileRoute("/halls/$hall/$region/$window")({
         ? [
             ...scripts,
             breadcrumbScript([
-              { name: "Halls", path: "/halls" },
+              { name: "Rooms", path: "/halls" },
               {
                 name: title,
                 path: `/halls/${params.hall}/${params.region}/${params.window}`,
@@ -100,35 +103,34 @@ export const Route = createFileRoute("/halls/$hall/$region/$window")({
   component: HallPage,
   notFoundComponent: () => (
     <SeoPage>
-      <h1 style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 30, margin: '0 0 12px', color: '#0b080f' }}>no hall at that path.</h1>
+      <h1 style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 30, margin: '0 0 12px', color: '#0b080f' }}>This page doesn't exist.</h1>
       <p style={{ fontFamily: "'Newsreader',serif", color: '#443c42' }}>
-        try{" "}
-        <Link
-          to="/halls/$hall/$region/$window"
-          params={{ hall: "most-related", region: "global", window: "30d" }}
+        The jokes people post live in{" "}
+        <a
+          href="/rooms"
           style={{ color: '#17131a', borderBottom: '1px solid rgba(23,19,26,.3)', textDecoration: 'none' }}
         >
-          most relatable · global · 30d
-        </Link>
+          rooms
+        </a>
         .
       </p>
     </SeoPage>
   ),
   errorComponent: ({ reset }) => (
     <SeoPage>
-      <h1 style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 30, margin: '0 0 12px', color: '#0b080f' }}>couldn't load this hall.</h1>
+      <h1 style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 30, margin: '0 0 12px', color: '#0b080f' }}>Something broke loading this page.</h1>
       <button
         onClick={reset}
         style={{ marginTop: 8, background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', color: '#2b2630', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15 }}
-      >try again →</button>
+      >Try again →</button>
     </SeoPage>
   ),
 });
 
 const HALL_DISPLAY: Record<HallSlug, string> = {
-  'most-related':   'most relatable',
-  'longest-thread': 'bravest',
-  'best-outcomes':  'most loving',
+  'most-related':   'Most liked',
+  'longest-thread': 'Most talked about',
+  'best-outcomes':  'Most saved',
 }
 
 function HallPage() {
@@ -147,29 +149,33 @@ function HallPage() {
         <header style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <Breadcrumbs
             trail={[
-              { name: 'halls', path: '/halls' },
-              { name: `${display} · ${region} · ${window}`, path: `/halls/${hall}/${region}/${window}` },
+              { name: 'Rooms', path: '/halls' },
+              { name: display, path: `/halls/${hall}/${region}/${window}` },
             ]}
           />
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2b2630' }} />
             <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: '#2b2630' }}>
-              hall · {region} · {window}
+              rooms
             </span>
           </div>
           <h1 style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 'clamp(26px,5vw,36px)', margin: 0, color: '#0b080f', letterSpacing: '-.01em', lineHeight: 1.15 }}>
-            {display}.
+            The best jokes now live in rooms.
           </h1>
           <p style={{ fontFamily: "'Newsreader',serif", fontSize: 16, lineHeight: 1.55, color: '#443c42', margin: 0, maxWidth: '46ch' }}>
-            {meta.blurb}
+            Rooms are public topic feeds: office, work, family, school, live and social. Like, comment, save and follow.
           </p>
         </header>
 
         {!view || view.entries.length === 0 ? (
-          <p style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15.5, color: '#6f666c', margin: 0 }}>
-            we haven't gathered enough signal here yet. halls publish once at least{" "}
-            {MIN_HALL_ENTRIES} rooms qualify for a (region, window) cell.
-          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <a href="/rooms" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 16, color: '#17131a', borderBottom: '1px solid rgba(23,19,26,.3)', textDecoration: 'none', alignSelf: 'flex-start' }}>
+              See rooms →
+            </a>
+            <Link to="/" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 16, color: '#17131a', borderBottom: '1px solid rgba(23,19,26,.3)', textDecoration: 'none', alignSelf: 'flex-start' }}>
+              Turn yours into a joke →
+            </Link>
+          </div>
         ) : (
           <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 10 }}>
             {view.entries.map((e, i) => (

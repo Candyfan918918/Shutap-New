@@ -2,16 +2,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SeoPage } from "@/components/seo/SeoPage";
 
-// Phase 4 — defamation / privacy / takedown route.
+// Defamation / privacy / takedown route.
 // Public surface (URL is sharable) but noindex: takedown intake should not
 // itself appear in search results. Submissions are intentionally simple —
-// they email the trust contact; no DB writes here.
+// they email hello@shutap.com; no DB writes here.
 export const Route = createFileRoute("/report")({
   head: () => {
     const url = "/report";
-    const title = "report a room — shutap";
+    const title = "Report a post — Shutap";
     const description =
-      "Privacy, defamation, and safety reports. Real names and identifying details get removed fast.";
+      "Report a Shutap post or comment for privacy, defamation or safety. Real names and identifying details are removed fast.";
     return {
       meta: [
         { title },
@@ -32,7 +32,9 @@ const REASONS = [
   "names someone else who didn't consent",
   "defamatory or factually false claim about an identifiable person",
   "minor or vulnerable person depicted",
-  "doxxing / contact info",
+  "doxxing or contact info",
+  "harassment, hate or targeting",
+  "copyright",
   "other privacy or safety concern",
 ] as const;
 
@@ -47,21 +49,21 @@ function ReportPage() {
       <article className="space-y-8">
         <header className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">
-            report a room
+            report a post
           </h1>
           <p className="text-muted-foreground">
-            we take privacy and defamation reports seriously. most takedowns
-            resolve within 24–48 hours. you don't have to be the person mentioned
-            to file one.
+            use the report button on any post or comment, or this form. when
+            three different people report a post, it's hidden until we review
+            it. you don't have to be the person mentioned to report.
           </p>
         </header>
 
         {submitted ? (
           <div className="rounded-lg border border-border p-5">
-            <p className="font-medium">thanks — we've got it.</p>
+            <p className="font-medium">thanks. we've got it.</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              a human reviews every report. if it's a clear privacy or safety
-              issue, the content is removed immediately while we investigate.
+              a person reviews every report. content that breaks the house rules
+              is removed.
             </p>
           </div>
         ) : (
@@ -69,11 +71,11 @@ function ReportPage() {
             className="space-y-5"
             onSubmit={(e) => {
               e.preventDefault();
-              // Hand off to trust@ via mailto — no DB writes from a public unauth surface.
+              // Hand off to hello@ via mailto — no DB writes from a public unauth surface.
               const body = encodeURIComponent(
                 `Reason: ${reason}\nURL: ${url}\n\nDetails:\n${details}`,
               );
-              window.location.href = `mailto:trust@shutap.com?subject=${encodeURIComponent(
+              window.location.href = `mailto:hello@shutap.com?subject=${encodeURIComponent(
                 "[shutap] report: " + reason,
               )}&body=${body}`;
               setSubmitted(true);
@@ -93,7 +95,7 @@ function ReportPage() {
             </label>
 
             <label className="block space-y-1">
-              <span className="text-sm font-medium">URL of the content</span>
+              <span className="text-sm font-medium">link to the post or comment</span>
               <input
                 type="url"
                 required
@@ -110,7 +112,7 @@ function ReportPage() {
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
                 rows={6}
-                placeholder="what's the issue? if you're the person referenced, say so — we fast-track those."
+                placeholder="what's the issue? if it's about you, say so and we'll move it up."
                 className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
               />
             </label>
@@ -123,9 +125,9 @@ function ReportPage() {
             </button>
 
             <p className="text-xs text-muted-foreground">
-              you can also email{" "}
-              <a href="mailto:trust@shutap.com" className="underline">
-                trust@shutap.com
+              or email{" "}
+              <a href="mailto:hello@shutap.com" className="underline">
+                hello@shutap.com
               </a>{" "}
               directly.
             </p>

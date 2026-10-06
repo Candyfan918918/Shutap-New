@@ -2,7 +2,7 @@
 // No PII. Pseudonym is the only stable identifier.
 // Indexable only when the author has accrued enough signal (§8 gate).
 
-export const MIN_PROFILE_SIGNAL = 5; // e.g. stories + outcomes confirmed
+export const MIN_PROFILE_SIGNAL = 5; // minimum public activity before indexing
 
 export interface PseudonymProfile {
   pseudonym: string;
@@ -15,7 +15,7 @@ export interface PseudonymProfile {
   bio?: string;
 }
 
-// Empty until alias accounts exist. The route renders a 404 for unknown
+// Empty until pseudonym profiles exist. The route renders a 404 for unknown
 // handles and a noindex empty-state for handles below the signal gate.
 export const PROFILES: PseudonymProfile[] = [];
 

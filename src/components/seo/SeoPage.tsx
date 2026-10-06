@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 /**
  * Minimal SSR-rendered shell for content/SEO pages.
  * Blush design surface, Newsreader italic headings via child content.
- * Lowercase chrome per brand voice.
  */
 export function SeoPage({ children }: { children: ReactNode }) {
   const navLink = { fontFamily: "'Newsreader',serif" as const, fontStyle: 'italic' as const, fontSize: 14, color: '#443c42', textDecoration: 'none' };
@@ -15,11 +14,12 @@ export function SeoPage({ children }: { children: ReactNode }) {
         <div style={{ maxWidth: 780, margin: '0 auto', padding: '14px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
           <Link to="/" style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 15, letterSpacing: '-.01em', color: '#0b080f', textDecoration: 'none' }}>shutap</Link>
           <nav style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }}>
-            <Link to="/relationships" style={navLink}>relationships</Link>
-            <Link to="/marriage" style={navLink}>marriage</Link>
-            <Link to="/family" style={navLink}>family</Link>
-            <Link to="/career" style={navLink}>career</Link>
-            <Link to="/faq" style={navLink}>faq</Link>
+            <Link to="/relationships" style={navLink}>Relationships</Link>
+            <Link to="/marriage" style={navLink}>Marriage</Link>
+            <Link to="/family" style={navLink}>Family</Link>
+            <Link to="/career" style={navLink}>Career</Link>
+            <Link to="/rooms" style={navLink}>Rooms</Link>
+            <Link to="/faq" style={navLink}>FAQ</Link>
           </nav>
         </div>
       </header>
@@ -31,19 +31,19 @@ export function SeoPage({ children }: { children: ReactNode }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
             <span style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 13, color: '#443c42' }}>SHUTAP. Say it funnier.</span>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-              <Link to="/about" style={footLink}>about</Link>
-              <Link to="/methodology" style={footLink}>methodology</Link>
-              <Link to="/trust" style={footLink}>trust</Link>
+              <Link to="/about" style={footLink}>About</Link>
+              <Link to="/methodology" style={footLink}>Methodology</Link>
+              <Link to="/trust" style={footLink}>Trust</Link>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', paddingTop: 10, borderTop: '.5px solid rgba(11,8,15,.06)' }}>
-            <Link to="/terms" style={footLink}>terms</Link>
-            <Link to="/privacy" style={footLink}>privacy</Link>
-            <Link to="/guidelines" style={footLink}>guidelines</Link>
-            <Link to="/safety" style={footLink}>safety</Link>
-            <Link to="/ai-disclosure" style={footLink}>ai disclosure</Link>
-            <Link to="/report" style={footLink}>report</Link>
-            <Link to="/contact" style={footLink}>contact</Link>
+            <Link to="/terms" style={footLink}>Terms</Link>
+            <Link to="/privacy" style={footLink}>Privacy</Link>
+            <Link to="/guidelines" style={footLink}>Guidelines</Link>
+            <Link to="/safety" style={footLink}>Safety</Link>
+            <Link to="/ai-disclosure" style={footLink}>AI disclosure</Link>
+            <Link to="/report" style={footLink}>Report</Link>
+            <Link to="/contact" style={footLink}>Contact</Link>
           </div>
         </div>
       </footer>

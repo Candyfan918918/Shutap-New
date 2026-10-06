@@ -5,28 +5,28 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/family";
-const TITLE = "Family — parents, siblings, in-laws: real stories | Shutap";
+const TITLE = "Jokes about family — AI joke generator | Shutap";
 const DESCRIPTION =
-  "Family, as material: parents, siblings, in-laws, the dinner comment, the guilt. type what happened and shutap writes you a set.";
-const H1 = "family";
+  "Turn family into material: parents, siblings, in-laws, the comment at dinner. Paste what happened and Shutap's joke generator writes three jokes.";
+const H1 = "Family";
 const CAPSULE =
-  "Parents, siblings, in-laws, the dinner comment, the guilt that comes with all of it. Type what happened and shutap writes you a set of joke cards about the situation — pseudonymously, never about you.";
+  "Parents, siblings, in-laws and the comment at dinner. Paste what happened and Shutap writes three jokes about it. Download them for TikTok, Reels or the stage, or post the best one to a room.";
 const WHAT =
-  "Family is the stuff that's hard to say out loud to anyone who knows them: the parent who won't change, the sibling thing that never ended, the in-laws, the comment at dinner. Type it under a pseudonym and shutap writes the set.";
+  "Family is great material because everyone has a role nobody agreed to, and the same scene replays every holiday. The good jokes live in the details: the group chat, the seating plan, the gift that was really a message. Shutap writes the take, the clapback and the roast, always at the situation.";
 const INVITE =
-  "You can type the thing here you can't say at dinner. shutap writes the set.";
+  "Paste the thing you can't say at dinner. Shutap writes the jokes.";
 const FAQ = [
   {
-    q: "Is it normal to feel guilty about my family?",
-    a: "Very. Guilt, obligation and the pull between love and distance are some of the most common things typed in here \u2014 and some of the best material.",
+    q: "Can I joke about my family privately?",
+    a: "Yes. You post under a pseudonym, and names and places are removed before anything is saved. Keep the jokes, download them, or post the best one to a room.",
   },
   {
-    q: "Can I write about my family privately?",
-    a: "Yes \u2014 under a pseudonym, with identifying details removed before storage. Nothing is published unless you post it.",
+    q: "Will the jokes target my mom?",
+    a: "No. Jokes go at the situation, never at a real person someone could identify.",
   },
   {
-    q: "What will I get here that I won't get elsewhere?",
-    a: "Not a verdict and not advice. A set of joke cards about the situation, written the way a comedian works a bad dinner into a bit.",
+    q: "Is this family advice?",
+    a: "No. Shutap writes jokes. It is not advice and not therapy.",
   },
 ];
 const PILLAR = "Family";
@@ -34,8 +34,7 @@ const OTHERS = [
   { href: "/relationships", label: "Relationships" },
   { href: "/marriage", label: "Marriage" },
   { href: "/career", label: "Career" },
-  { href: "/lived-intelligence", label: "Lived intelligence" },
-  { href: "/about", label: "About" },
+  { href: "/rooms?topic=family", label: "Family room" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/faq", label: "FAQ" },
 ];

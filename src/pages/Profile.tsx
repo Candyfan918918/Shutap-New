@@ -68,7 +68,7 @@ export function ProfilePage() {
   const deleteAccountFn = useServerFn(deleteMyAccount)
   const [rows, setRows] = useState<Situation[] | null>(null)
   const [email, setEmail] = useState<string>('')
-  const [tab, setTab] = useState<Tab>('all')
+  const [tab, setTab] = useState<Tab>('cards')
   const [busy, setBusy] = useState<string | null>(null)
   const [alias, setAlias] = useState<{ emotion: string; nation: string; creature: string; emoji: string; display_name: string } | null>(null)
   const [editAlias, setEditAlias] = useState(false)
@@ -107,9 +107,9 @@ export function ProfilePage() {
       const image = res.images[0]
       if (!image) throw new Error('no image')
       saveBlob(await svgToPng(image.svg, res.width, res.height), image.filename)
-      toast(`saved at ${res.width}×${res.height}${res.mark ? ' · with the shutap mark' : ' · clean'}`)
+      toast(`saved at ${res.width}×${res.height}${res.mark ? ' · with watermark' : ' · no watermark'}`)
     } catch {
-      toast('the image did not render. try once more?')
+      toast('couldn\'t make the image. try again?')
     } finally {
       setCardBusy(false)
     }
@@ -126,7 +126,7 @@ export function ProfilePage() {
         return
       }
       await navigator.clipboard.writeText(text)
-      toast('copied. paste it wherever it lands best.')
+      toast('copied.')
     } catch {
       // A dismissed share sheet lands here too, which is not worth a message.
     }
@@ -243,7 +243,7 @@ export function ProfilePage() {
     try {
       const next = !s.is_public
       await update({ data: { id: s.id, is_public: next } })
-      toast(next ? 'posted to the stream.' : 'moved to private journal.')
+      toast(next ? 'posted.' : 'made private.')
       await refresh()
     } catch {
       toast('couldn\'t update.')
@@ -294,7 +294,7 @@ export function ProfilePage() {
         const row = a as { emotion: string; nation: string; creature: string; emoji: string; display_name: string }
         setAlias(row)
         cacheAlias(row)
-        toast('new alias.')
+        toast('new name.')
       }
     } catch { toast('couldn\'t re-roll.') }
     finally { setAliasBusy(false) }
@@ -308,7 +308,7 @@ export function ProfilePage() {
         const row = a as { emotion: string; nation: string; creature: string; emoji: string; display_name: string }
         setAlias(row)
         cacheAlias(row)
-        toast('alias saved.')
+        toast('name saved.')
         setEditAlias(false)
       }
     } catch { toast('couldn\'t save.') }
@@ -328,10 +328,10 @@ export function ProfilePage() {
               <span style={{ width: 68, height: 68, borderRadius: '50%', background: 'linear-gradient(135deg,#d6d0d4,#2b2630)', display: 'grid', placeItems: 'center', fontSize: 30, color: '#fff', boxShadow: '0 8px 22px -8px rgba(0,0,0,.5)' }}>{alias.emoji}</span>
               <div style={{ flex: 1, minWidth: 180 }}>
                 <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 22, letterSpacing: '-.02em', color: '#fdfbf9' }}>{alias.display_name}</div>
-                <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13.5, color: '#bdb8bb', marginTop: 2 }}>{maskedEmail || 'anonymous'}</div>
+                <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13.5, color: '#bdb8bb', marginTop: 2 }}>{maskedEmail || 'signed in'}</div>
               </div>
-              <button disabled={aliasBusy} onClick={() => setEditAlias((v) => !v)} style={btn('#d6d0d4')}>{editAlias ? 'close' : 'edit alias'}</button>
-              <button disabled={aliasBusy} onClick={onReroll} style={btn('#d6d0d4')}>re-roll</button>
+              <button disabled={aliasBusy} onClick={() => setEditAlias((v) => !v)} style={btn('#d6d0d4')}>{editAlias ? 'close' : 'edit name'}</button>
+              <button disabled={aliasBusy} onClick={onReroll} style={btn('#d6d0d4')}>new name</button>
             </div>
 
             {editAlias && (
@@ -367,12 +367,11 @@ export function ProfilePage() {
             {/* stats inside the hero */}
             <div style={{ position: 'relative', display: 'flex', gap: 26, flexWrap: 'wrap', marginTop: 18, paddingTop: 16, borderTop: '.5px solid rgba(255,255,255,.10)' }}>
               {[
-                { n: counts.rooms, label: 'rooms open' },
-                { n: counts.journals, label: 'private journals' },
-                { n: counts.scans, label: 'scans' },
+                { n: counts.rooms, label: 'posted' },
+                { n: counts.journals, label: 'private' },
                 // An em dash rather than 0: a guest has not kept none, a guest
                 // cannot keep. Zero would read as a score.
-                { n: jokeTier === 'guest' ? '—' : String(cards?.length ?? 0), label: 'cards kept' },
+                { n: jokeTier === 'guest' ? '—' : String(cards?.length ?? 0), label: 'jokes kept' },
               ].map((s) => (
                 <div key={s.label}>
                   <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 21, color: '#fff', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums' }}>{s.n}</div>
@@ -383,9 +382,11 @@ export function ProfilePage() {
           </div>
         )}
 
+        <h1 style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 22, letterSpacing: '-.02em', color: '#0b080f', margin: '0 0 10px' }}>your set list</h1>
+
         {/* tabs (underline) */}
         <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap', marginBottom: 22, borderBottom: '.5px solid rgba(11,8,15,.08)' }}>
-          {(['all', 'rooms', 'journals', 'scans', 'cards'] as Tab[]).map((f) => {
+          {(['cards', 'all', 'rooms', 'journals'] as Tab[]).map((f) => {
             const active = tab === f
             return (
               <button
@@ -404,11 +405,11 @@ export function ProfilePage() {
                   marginBottom: -1,
                 }}
               >
-                {f === 'all' ? 'all'
-                  : f === 'rooms' ? 'rooms'
-                    : f === 'journals' ? 'journals'
-                      : f === 'scans' ? 'scans ✦'
-                        : 'cards 🃏'}
+                {f === 'all' ? 'stories'
+                  : f === 'rooms' ? 'posted'
+                    : f === 'journals' ? 'private'
+                      : f === 'scans' ? 'older'
+                        : 'jokes'}
               </button>
             )
           })}
@@ -432,7 +433,7 @@ export function ProfilePage() {
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '50px 0', fontFamily: 'Newsreader,serif', fontStyle: 'italic', color: '#6f666c' }}>
             nothing here yet.{' '}
-            <span style={{ color: '#17131a', cursor: 'pointer' }} onClick={() => navigate('/')}>start a spill →</span>
+            <span style={{ color: '#17131a', cursor: 'pointer' }} onClick={() => navigate('/')}>paste what happened →</span>
           </div>
         ) : (
           <div style={{ display: 'grid', gap: 10 }}>
@@ -443,7 +444,7 @@ export function ProfilePage() {
               const title = s.title || (s.clean_text || s.body || '').slice(0, 80) || 'untitled'
               const subline = [
                 s.pillar || null,
-                isScan ? 'scan' : s.is_public ? 'room' : 'journal',
+                isScan ? 'story' : s.is_public ? 'posted' : 'private',
                 s.edited ? 'edited' : null,
                 timeAgo(s.created_at),
               ].filter(Boolean).join(' · ')
@@ -457,10 +458,10 @@ export function ProfilePage() {
                   actions={
                     <>
                       {s.is_public && s.room_id && (
-                        <button onClick={() => navigate('/room?id=' + s.room_id)} style={btn('#17131a')}>open room →</button>
+                        <button onClick={() => navigate('/room?id=' + s.room_id)} style={btn('#17131a')}>view post →</button>
                       )}
                       <button disabled={busy === s.id} onClick={() => togglePrivacy(s)} style={btn('#2b2630')}>
-                        {s.is_public ? 'make private' : 'post to stream'}
+                        {s.is_public ? 'make private' : 'post'}
                       </button>
                       <button disabled={busy === s.id} onClick={() => onDelete(s)} style={btn('#b3261e')}>delete</button>
                     </>
@@ -474,7 +475,7 @@ export function ProfilePage() {
         {/* billing card */}
         <div style={{ marginTop: 36, paddingTop: 22, borderTop: '.5px solid rgba(11,8,15,.08)' }}>
           <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 10.5, letterSpacing: '.16em', textTransform: 'uppercase', color: '#6f666c', marginBottom: 10 }}>
-            billing
+            account
           </div>
           <BillingCard billing={billing} onOpenPortal={openPortal} portalBusy={portalBusy} navigate={navigate} />
         </div>
@@ -493,7 +494,7 @@ export function ProfilePage() {
           ) : (
             <div style={{ background: '#fff5f5', border: '.5px solid rgba(179,38,30,.24)', borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 15, color: '#0b080f', lineHeight: 1.5 }}>
-                this permanently deletes your account, alias, stories, scans, and cancels any active subscription. it cannot be undone.
+                this deletes your account, your made-up name, your stories and jokes, and cancels any subscription. it can't be undone.
               </div>
               <div style={{ fontFamily: 'Sora,sans-serif', fontSize: 11, color: '#443c42' }}>
                 type <strong>delete my account</strong> to confirm.
@@ -603,8 +604,8 @@ function btn(color: string): React.CSSProperties {
 }
 
 function planLabelFor(priceId: string | null): string {
-  if (priceId === 'mirror_monthly') return 'monthly · $7.99/mo'
-  if (priceId === 'mirror_annual') return 'annual · $49.99/yr'
+  if (priceId === 'mirror_monthly') return 'Shutap+ monthly · $7.99/mo'
+  if (priceId === 'mirror_annual') return 'Shutap+ annual · $49.99/yr'
   return priceId ?? 'unknown plan'
 }
 
@@ -626,10 +627,10 @@ function BillingCard({
     return (
       <div style={{ background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
         <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 15, color: '#0b080f' }}>
-          you're on the free tier.
+          you're on free.
         </div>
         <div>
-          <button onClick={() => navigate('/subscribe?plan=annual')} style={btn('#17131a')}>open the mirror reading →</button>
+          <button onClick={() => navigate('/subscribe?plan=annual')} style={btn('#17131a')}>get Shutap+ →</button>
         </div>
       </div>
     )
@@ -705,11 +706,11 @@ function CardsTab({
   const total = cards?.length ?? 0
   const guest = tier === 'guest'
   const keepRule = tier === 'paying'
-    ? 'every card you turn over is kept'
-    : tier === 'free' ? 'the card you turn over is kept' : 'guests keep nothing'
+    ? 'every joke kept · no watermark'
+    : tier === 'free' ? 'every joke kept' : 'guests keep nothing'
   const meter = guest
-    ? 'reading is free, forever'
-    : `${total} kept across ${groups.length} situation${groups.length === 1 ? '' : 's'}`
+    ? 'sign in to keep jokes'
+    : `${total} kept from ${groups.length} stor${groups.length === 1 ? 'y' : 'ies'}`
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -730,8 +731,7 @@ function CardsTab({
         <div style={{ textAlign: 'center', padding: '44px 0 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
           <Eyes size={30} />
           <p style={{ margin: 0, maxWidth: '38ch', fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#2a2529', textWrap: 'pretty' }}>
-            you read the whole set and kept none of it — a guest deck writes nothing down. reading
-            stays free; an alias is only needed to keep one.
+            guests don't keep jokes. sign in free to see all three and keep them.
           </p>
           <button
             type="button"
@@ -743,13 +743,13 @@ function CardsTab({
               boxShadow: '0 14px 30px -18px rgba(23,19,26,.75)',
             }}
           >
-            pick an alias · free
+            sign in · free
           </button>
         </div>
       ) : total === 0 ? (
         <div style={{ textAlign: 'center', padding: '50px 0', fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 15, color: '#6f666c' }}>
           nothing kept yet.{' '}
-          <span style={{ color: '#17131a', cursor: 'pointer' }} onClick={() => navigate('/')}>write a set →</span>
+          <span style={{ color: '#17131a', cursor: 'pointer' }} onClick={() => navigate('/')}>paste what happened →</span>
         </div>
       ) : (
         <>
@@ -794,8 +794,7 @@ function MirrorMemory({
 
   const paying = tier === 'paying'
   const stats = [
-    { n: String(total), label: 'joke signals', blur: 'none' },
-    { n: paying ? 'boundary' : '—', label: 'behaviour on repeat', blur: paying ? 'none' : 'blur(4px)' },
+    { n: String(total), label: 'jokes kept', blur: 'none' },
     { n: favourite, label: 'your angle', blur: 'none' },
   ]
 
@@ -805,13 +804,13 @@ function MirrorMemory({
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 9 }}>
         <Eyes size={18} />
         <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 11, letterSpacing: '.22em', textTransform: 'uppercase', color: '#8a8488' }}>
-          mirror memory · 🃏 joke
+          the mirror
         </span>
       </div>
       <p style={{ margin: 0, position: 'relative', fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 17, lineHeight: 1.55, color: '#efedeb', textWrap: 'pretty', maxWidth: '46ch' }}>
         {paying
-          ? 'every card you keep feeds the mirror as its own 🃏 joke signal — five situations a day is enough to see which behaviour keeps coming back, and how your jokes changed as you did.'
-          : 'every card you keep enters the mirror as a 🃏 joke signal — all three of each situation. members get the patterns read back, and every card clean — no mark.'}
+          ? 'every joke you keep goes into the mirror. it shows what keeps coming back.'
+          : 'every joke you keep goes into the mirror. Shutap+ shows the patterns, with no watermark.'}
       </p>
       <div style={{ position: 'relative', display: 'flex', gap: 26, flexWrap: 'wrap', paddingTop: 14, borderTop: '.5px solid rgba(255,255,255,.10)' }}>
         {stats.map((s) => (
@@ -831,7 +830,7 @@ function MirrorMemory({
           onClick={() => navigate('/mirror')}
           style={{ padding: '6px 12px', borderRadius: 999, border: '.5px solid #ff7eb340', background: '#ff7eb310', color: '#d6d0d4', fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '.02em', cursor: 'pointer' }}
         >
-          open the mirror reading →
+          open the mirror →
         </button>
       </div>
     </div>

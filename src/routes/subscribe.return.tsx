@@ -3,6 +3,6 @@ import { SubscribeReturnPage } from '@/pages/Subscribe'
 
 export const Route = createFileRoute('/subscribe/return')({
   ssr: false,
-  head: () => ({ meta: [{ title: 'Subscribe · Return — Shutap' }] }),
+  head: () => ({ meta: [{ title: 'Shutap+ checkout — Shutap' }] }),
   component: SubscribeReturnPage,
 })

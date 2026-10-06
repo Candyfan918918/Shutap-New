@@ -4,28 +4,28 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/relationships";
-const TITLE = "Relationships — vent about dating & breakups | Shutap";
+const TITLE = "Jokes about dating & relationships — joke generator | Shutap";
 const DESCRIPTION =
-  "Dating, partners, situationships, breakups — as material. type what happened and shutap writes you a set of joke cards about it.";
-const H1 = "relationships";
+  "Turn dating, situationships and breakups into jokes. Paste what happened and Shutap's joke generator writes three: the take, the clapback and the roast.";
+const H1 = "Relationships";
 const CAPSULE =
-  "Dating, partners, situationships, breakups, and the gray area in between. Type what happened and shutap writes you a set of joke cards — every card a different angle on the same mess, always at the situation and never at you.";
+  "Dating, situationships, breakups and the texts you shouldn't have sent. Paste what happened and Shutap writes three jokes about it. Download them for TikTok, Reels or the stage, or post the best one to a room.";
 const WHAT =
-  "Relationships is where the messy middle goes: the text you're overthinking, the fight that keeps repeating, the situationship with no name, the breakup you're not sure about. Type it under a pseudonym and shutap turns it into a set you flip one card at a time. Keep the ones that land.";
+  "Relationships are two people performing for each other, and the seams show: the three-day text gap, the read receipt, the \"we should talk\" that turns out to be about a sofa. Shutap writes three angles on it. The take names what was really going on. The clapback is the line you wish you'd said. The roast goes at the situation itself.";
 const INVITE =
-  "You don't have to have the words yet. Type whatever it is; shutap writes the set.";
+  "You don't need it to be funny yet. Paste it as it happened and Shutap writes the jokes.";
 const FAQ = [
   {
-    q: "Is it normal to feel this way about my relationship?",
-    a: "Almost certainly. The situation you thought was uniquely yours is one plenty of people are living too. Shutap doesn\u2019t rule on it \u2014 it writes jokes about it, which is a faster way out of your own head.",
+    q: "Can I turn my breakup into a joke?",
+    a: "Yes. Paste what happened. Shutap writes three jokes about the situation. The more specific the details, the better the jokes.",
   },
   {
-    q: "Can I post about my relationship pseudonymously?",
-    a: "You write under a consistent pseudonym, never your real name, and identifying details are stripped before anything is stored.",
+    q: "Will the jokes be about my ex?",
+    a: "They're about the situation, never a real person someone could identify. Names and places are removed before anything is saved.",
   },
   {
-    q: "What makes Shutap different from asking Reddit?",
-    a: "Nobody here is going to tell you what to do. You type what happened and get a set of joke cards \u2014 the absurd detail, the pattern, the whole thing played back at an angle you hadn\u2019t tried.",
+    q: "Is this relationship advice?",
+    a: "No. Shutap writes jokes. It is not advice and not therapy.",
   },
 ];
 const PILLAR = "Relationships";
@@ -33,8 +33,7 @@ const OTHERS = [
   { href: "/marriage", label: "Marriage" },
   { href: "/family", label: "Family" },
   { href: "/career", label: "Career" },
-  { href: "/lived-intelligence", label: "Lived intelligence" },
-  { href: "/about", label: "About" },
+  { href: "/rooms", label: "Rooms" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/faq", label: "FAQ" },
 ];

@@ -13,8 +13,8 @@ export const Route = createFileRoute("/is-it-normal/$slug")({
   },
   head: ({ params, loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Not found" }] };
-    const title = `${capitalize(loaderData.question)} — shutap`;
-    const description = loaderData.answer.slice(0, 155);
+    const title = `${capitalize(loaderData.question)} — jokes about it | Shutap`;
+    const description = trimDescription(loaderData.answer);
     const url = `${SITE_URL}/is-it-normal/${params.slug}`;
     return {
       meta: [
@@ -66,21 +66,21 @@ export const Route = createFileRoute("/is-it-normal/$slug")({
   component: SituationHubPage,
   notFoundComponent: () => (
     <SeoPage>
-      <h1 className="text-2xl font-semibold">we don't have a room for that question yet.</h1>
+      <h1 className="text-2xl font-semibold">We don't have a page for that question.</h1>
       <p className="mt-3 text-muted-foreground">
-        try one of the{" "}
-        <Link to="/relationships" className="underline">
-          pillars
-        </Link>{" "}
-        to find something close.
+        Paste what happened and{" "}
+        <Link to="/" className="underline">
+          Shutap writes the jokes
+        </Link>
+        .
       </p>
     </SeoPage>
   ),
   errorComponent: ({ reset }) => (
     <SeoPage>
-      <h1 className="text-2xl font-semibold">something broke loading this room.</h1>
+      <h1 className="text-2xl font-semibold">Something broke loading this page.</h1>
       <button onClick={reset} className="mt-3 underline">
-        try again
+        Try again
       </button>
     </SeoPage>
   ),
@@ -88,6 +88,11 @@ export const Route = createFileRoute("/is-it-normal/$slug")({
 
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function trimDescription(s: string) {
+  if (s.length <= 155) return s;
+  return s.slice(0, 152).replace(/\s+\S*$/, "") + "…";
 }
 
 function SituationHubPage() {
@@ -104,7 +109,7 @@ function SituationHubPage() {
         </header>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">people also ask</h2>
+          <h2 className="text-xl font-semibold">People also ask</h2>
           <dl className="space-y-5">
             {hub.paa.map((p) => (
               <div key={p.q} className="space-y-1">
@@ -116,21 +121,21 @@ function SituationHubPage() {
         </section>
 
         <section className="space-y-3 rounded-lg border border-border p-5">
-          <h2 className="text-base font-semibold">turn yours into a joke</h2>
+          <h2 className="text-base font-semibold">Turn yours into a joke</h2>
           <p className="text-sm text-muted-foreground">
-            paste what happened. get jokes. post the best one.
+            Paste what happened. Get three jokes. Download them or post the best one.
           </p>
           <Link
             to="/"
             className="inline-block text-sm font-medium underline underline-offset-4"
           >
-            open a room →
+            Write jokes about it →
           </Link>
         </section>
 
         {siblings.length > 0 && (
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold">more from {hub.pillar}</h2>
+            <h2 className="text-xl font-semibold">More about {hub.pillar}</h2>
             <ul className="space-y-2">
               {siblings.map((s) => (
                 <li key={s.slug}>

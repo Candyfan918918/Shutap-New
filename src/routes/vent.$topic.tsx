@@ -1,6 +1,7 @@
-/* Programmatic SEO topic pages at /vent/:topic.
- * Reads real rooms from the app's existing seed source (same source Stream
- * uses today). Emits FAQPage + QAPage JSON-LD. No writes, no schema changes. */
+/* Programmatic SEO topic pages at /vent/:topic (legacy slug, kept for
+ * indexed URLs). Copy is about turning the topic into jokes. Reads example
+ * rooms from the existing seed source. Emits FAQPage + QAPage JSON-LD.
+ * No writes, no schema changes. */
 import { ogImageMeta } from "@/lib/seo/meta";
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { SHUTAP_SEED } from '@/data/seed'
@@ -23,6 +24,12 @@ function isSeedRoom(r: Room): boolean {
 function roomsForTopic(slug: string): Room[] {
   return (SHUTAP_SEED.rooms || []).filter((r) => (r.category || '').toLowerCase() === slug).slice(0, 8)
 }
+// Map legacy topic slugs to the /rooms topic filter where one exists.
+function roomsHref(slug: string): string {
+  if (slug === 'family') return '/rooms?topic=family'
+  if (slug === 'work') return '/rooms?topic=work'
+  return '/rooms'
+}
 function countsByTopic(): Record<string, number> {
   const map: Record<string, number> = {}
   for (const r of SHUTAP_SEED.rooms || []) {
@@ -43,11 +50,11 @@ export const Route = createFileRoute('/vent/$topic')({
   },
   head: ({ params, loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: 'Vent topic' }, { name: 'robots', content: 'noindex' }] }
+      return { meta: [{ title: 'Jokes — Shutap' }, { name: 'robots', content: 'noindex' }] }
     }
     const t = loaderData.topic
     const url = `${SITE_URL}/vent/${t.slug}`
-    const title = `Vent about ${t.label} — Shutap`
+    const title = `Jokes about ${t.label} — AI joke generator | Shutap`
     const desc = t.intro
     const faqItems = FAQ_ITEMS(t)
     // QAPage JSON-LD is only emitted when we have REAL (non-seed) rooms for
@@ -98,7 +105,7 @@ export const Route = createFileRoute('/vent/$topic')({
               }),
             }]
           : []),
-        breadcrumbScript([{ name: `Vent about ${t.label}`, path: `/vent/${t.slug}` }]),
+        breadcrumbScript([{ name: `Jokes about ${t.label}`, path: `/vent/${t.slug}` }]),
       ],
     }
   },
@@ -109,34 +116,33 @@ export const Route = createFileRoute('/vent/$topic')({
 function TopicNotFound() {
   return (
     <div style={{ minHeight: '60vh', background: '#ffffff', padding: 60, textAlign: 'center', fontFamily: NEWS, fontStyle: 'italic', color: '#383136' }}>
-      no room for that topic here.{' '}
-      <Link to="/vent/$topic" params={{ topic: 'family' }} style={{ color: '#17131a' }}>see topics →</Link>
+      We don't have a page for that topic.{' '}
+      <Link to="/" style={{ color: '#17131a' }}>Write jokes about it →</Link>
     </div>
   )
 }
 
 function FAQ_ITEMS(t: VentTopic): Array<{ q: string; a: string }> {
   return [
-    { q: 'is shutap pseudonymous?', a: 'yes. you get a persistent alias like 🦉 Quiet Indonesian Owl. your real name, email, and identity stay permanently outside.' },
+    { q: 'How does it work?', a: `Paste what happened with ${t.label}. Shutap writes three jokes: the take, the clapback and the roast. Download them for TikTok, Reels or the stage, or post the best one to a room.` },
     t.topicQuestion,
-    { q: 'is this therapy?', a: 'no. shutap writes jokes, not prescriptions. it is an entertainment service, not a medical, mental-health, or crisis service. in an emergency, call or text 988 (US) or visit findahelpline.com.' },
-    { q: 'does it cost anything?', a: 'typing your situation and reading your set are free. the full mirror — your patterns read as cards — requires a subscription.' },
-    { q: 'what happens after i spill?', a: 'a room opens. people who\u2019ve lived your exact thing sit in. over the next days the companion checks in — what happened next? that is your mirror starting to form.' },
+    { q: 'Is it pseudonymous?', a: 'Yes. You post under a pseudonym, never your real name. Names and places are removed before anything is saved.' },
+    { q: 'Is this a crisis service?', a: 'No. Shutap writes jokes. It is not therapy, advice or a crisis service. In an emergency, call or text 988 (US) or visit findahelpline.com.' },
+    { q: 'Does it cost anything?', a: 'No. Guests see one joke. Sign in free to see all three.' },
   ]
 }
 
 function VentTopicPage() {
-  const { topic, rooms, sittingNow, counts } = Route.useLoaderData()
-  const total = rooms.length
+  const { topic, rooms } = Route.useLoaderData()
   const faq = FAQ_ITEMS(topic)
 
   return (
     <div style={{ background: '#ffffff', color: '#0b080f', minHeight: '100vh', fontFamily: "'Sora',system-ui,sans-serif" }}>
       <main style={{ maxWidth: 900, margin: '0 auto', padding: '46px 22px 60px' }}>
-        <Breadcrumbs trail={[{ name: `vent about ${topic.label}`, path: `/vent/${topic.slug}` }]} />
+        <Breadcrumbs trail={[{ name: `Jokes about ${topic.label}`, path: `/vent/${topic.slug}` }]} />
 
         <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.22em', textTransform: 'uppercase', color: '#2b2630', marginBottom: 10 }}>
-          public rooms · {topic.label}
+          joke generator · {topic.label}
         </div>
         <h1 style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(30px,4.6vw,52px)', letterSpacing: '-.03em', lineHeight: 1.05, margin: '0 0 18px' }}>
           {topic.h1}
@@ -146,19 +152,18 @@ function VentTopicPage() {
         </p>
         {rooms.some(isSeedRoom) && (
           <p style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: '#6f666c', margin: '0 0 22px', maxWidth: '52ch' }}>
-            some stories below are illustrative examples — real rooms are filling in.
+            The situations below are examples of the kind of thing people paste in.
           </p>
         )}
 
         <div style={{ fontFamily: SORA, fontWeight: 600, fontSize: 12.5, color: '#17131a', marginBottom: 26, display: 'inline-flex', alignItems: 'center', gap: 8, letterSpacing: '.05em' }}>
-          {total > 0 ? `${total} public rooms · ${sittingNow} sitting in now` : 'rooms are forming.'}
+          <Link to="/" style={{ color: '#17131a' }}>Write jokes about it →</Link>
         </div>
 
         {/* Topic chips */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 28 }}>
           {VENT_TOPICS.map((t) => {
             const active = t.slug === topic.slug
-            const n = counts[t.slug] || 0
             return (
               <Link
                 key={t.slug}
@@ -178,13 +183,13 @@ function VentTopicPage() {
                   textDecoration: 'none',
                 }}
               >
-                {t.label} {n ? <span style={{ opacity: .55, marginLeft: 4 }}>{n}</span> : null}
+                {t.label}
               </Link>
             )
           })}
         </div>
 
-        {/* Room cards */}
+        {/* Example situations */}
         {rooms.length > 0 ? (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: 16 }}>
             {rooms.map((r: Room) => (
@@ -195,14 +200,14 @@ function VentTopicPage() {
           </div>
         ) : (
           <p style={{ fontFamily: NEWS, fontStyle: 'italic', color: '#6f666c' }}>
-            no rooms here yet. <Link to="/" style={{ color: '#17131a' }}>open one →</Link>
+            No examples here yet. <Link to="/" style={{ color: '#17131a' }}>Paste yours →</Link>
           </p>
         )}
 
         {/* FAQ */}
         <div style={{ marginTop: 56 }}>
           <Words as="div" style={{ fontFamily: SORA, fontWeight: 700, fontSize: 11, letterSpacing: '.22em', textTransform: 'uppercase', color: '#2b2630', marginBottom: 12 }}>
-            common questions
+            Common questions
           </Words>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {faq.map((f, i) => (
@@ -219,13 +224,18 @@ function VentTopicPage() {
 
         {/* CTA */}
         <div style={{ marginTop: 56, background: '#100c14', color: '#fdfbf9', borderRadius: 24, padding: '46px 30px', textAlign: 'center' }}>
-          <Words as="h2" style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(28px,4vw,44px)', letterSpacing: '-.03em', margin: '0 0 12px' }}>say it here.</Words>
+          <Words as="h2" style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(28px,4vw,44px)', letterSpacing: '-.03em', margin: '0 0 12px' }}>Say it funnier.</Words>
           <p style={{ fontFamily: NEWS, fontStyle: 'italic', color: '#bdb8bb', fontSize: 16, margin: '0 0 22px' }}>
-            open a room. someone who's lived your exact {topic.label} thing is around.
+            Paste what happened with {topic.label}. Get three jokes. Post the best one.
           </p>
-          <Link to="/welcome" style={{ display: 'inline-block', background: 'linear-gradient(155deg,#d6d0d4,#2b2630 55%,#17131a)', color: '#fff', textDecoration: 'none', padding: '14px 26px', borderRadius: 999, fontFamily: SORA, fontWeight: 700, fontSize: 14 }}>
-            join shutap →
+          <Link to="/" style={{ display: 'inline-block', background: 'linear-gradient(155deg,#d6d0d4,#2b2630 55%,#17131a)', color: '#fff', textDecoration: 'none', padding: '14px 26px', borderRadius: 999, fontFamily: SORA, fontWeight: 700, fontSize: 14 }}>
+            Turn yours into a joke →
           </Link>
+          <div style={{ marginTop: 16 }}>
+            <a href={roomsHref(topic.slug)} style={{ color: '#bdb8bb', fontFamily: NEWS, fontStyle: 'italic', fontSize: 15 }}>
+              or see what people posted in rooms →
+            </a>
+          </div>
         </div>
       </main>
 
@@ -236,12 +246,11 @@ function VentTopicPage() {
 
 function VentRoomCard({ room, seed = false }: { room: Room; seed?: boolean }) {
   const snippet = (room.body || '').replace(/\s+/g, ' ').trim().slice(0, 180) + ((room.body || '').length > 180 ? '…' : '')
-  const topComment = room.comments && room.comments[0]
   return (
     <article style={{ background: '#fff', borderRadius: 18, padding: 20, border: '.5px solid rgba(11,8,15,.06)', boxShadow: '0 10px 28px -22px rgba(20,16,22,.28)', display: 'flex', flexDirection: 'column', gap: 12 }}>
       {seed && (
         <span style={{ alignSelf: 'flex-start', fontFamily: SORA, fontWeight: 700, fontSize: 10, letterSpacing: '.22em', textTransform: 'uppercase', color: '#6f666c', background: '#fdfbf9', padding: '3px 8px', borderRadius: 999 }}>
-          example story
+          example
         </span>
       )}
       <header style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -255,16 +264,10 @@ function VentRoomCard({ room, seed = false }: { room: Room; seed?: boolean }) {
         {room.title}
       </h3>
       <p style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14.5, color: '#383136', lineHeight: 1.55, margin: 0 }}>{snippet}</p>
-      {topComment && (
-        <div style={{ borderLeft: '2px solid #2b2630', paddingLeft: 12, fontFamily: NEWS, fontStyle: 'italic', fontSize: 13, color: '#443c42' }}>
-          <div style={{ fontFamily: SORA, fontStyle: 'normal', fontWeight: 700, fontSize: 9.5, letterSpacing: '.22em', textTransform: 'uppercase', color: '#17131a', marginBottom: 4 }}>WHAT HELPED</div>
-          "{topComment.text}"
-        </div>
-      )}
       <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: SORA, fontWeight: 600, fontSize: 12, color: '#443c42' }}>
-        <span>{room.sitting ?? 0} sitting · {room.relates ?? 0} relate</span>
-        <Link to="/stream" hash={`room-${room.id}`} style={{ color: '#17131a', fontFamily: NEWS, fontStyle: 'italic', textDecoration: 'none' }}>
-          sit in this room →
+        <span />
+        <Link to="/" style={{ color: '#17131a', fontFamily: NEWS, fontStyle: 'italic', textDecoration: 'none' }}>
+          Write jokes about yours →
         </Link>
       </footer>
     </article>

@@ -22,7 +22,7 @@ const QA: { heading: string; body: string }[] = [
   { heading: "Who writes the jokes?", body: "AI. It can get things wrong." },
   { heading: "Is this therapy?", body: "No. Shutap writes jokes. No advice, no diagnosis." },
   { heading: "What if something is heavy?", body: "Shutap stops joking. US: call or text 988. UK: Samaritans 116 123. Anywhere: findahelpline.com." },
-  { heading: "Can I delete my stuff?", body: "Yes. Delete any post, set or your account in settings, or email privacy@shutap.com." },
+  { heading: "Can I delete my stuff?", body: "Yes. Delete any post, set or your account in settings, or email hello@shutap.com." },
   { heading: "Do you sell my data?", body: "No." },
   { heading: "Who can use it?", body: "Adults 18+." },
 ];

@@ -35,22 +35,22 @@ export const IDENTITIES: Record<IdentityId, Identity> = {
   safety: {
     id: 'safety',
     fromName: 'shutap safety',
-    fromAddress: 'safety@shutap.com',
-    replyTo: 'safety@shutap.com',
+    fromAddress: 'hello@shutap.com',
+    replyTo: 'hello@shutap.com',
     allowedClasses: ['transactional'],
   },
   privacy: {
     id: 'privacy',
     fromName: 'shutap privacy',
-    fromAddress: 'privacy@shutap.com',
-    replyTo: 'privacy@shutap.com',
+    fromAddress: 'hello@shutap.com',
+    replyTo: 'hello@shutap.com',
     allowedClasses: ['transactional'],
   },
   legal: {
     id: 'legal',
     fromName: 'shutap legal',
-    fromAddress: 'legal@shutap.com',
-    replyTo: 'legal@shutap.com',
+    fromAddress: 'hello@shutap.com',
+    replyTo: 'hello@shutap.com',
     allowedClasses: ['transactional'],
   },
 }

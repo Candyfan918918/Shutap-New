@@ -1,7 +1,6 @@
-// Confirmed-outcome aggregates surfaced at /what-happens/$slug.
-// Gated by §8: a slug only renders an indexable page when it has
-// enough confirmed, dated, attributed outcomes (>= MIN_OUTCOMES).
-// Until then, the route 404s or renders a noindex empty-state.
+// Legacy data shape for /what-happens/$slug. The route stays live for
+// indexed URLs but renders a short noindex page pointing to the joke
+// generator. Nothing populates this list.
 
 import type { PillarSlug } from "./hubs";
 
@@ -23,7 +22,7 @@ export interface OutcomeAggregate {
   pillar: PillarSlug;
   /** Verbatim question matching the parent situation hub. */
   question: string;
-  /** Headline aggregate, e.g. "of 412 people who left, 71% said they'd do it sooner." */
+  /** Headline line for the page. */
   headline: string;
   /** Methodology blurb — how aggregation was computed. */
   method: string;
@@ -35,8 +34,7 @@ export interface OutcomeAggregate {
   claims: OutcomeClaim[];
 }
 
-// Empty until the Wisdom Graph has seeded outcomes. Phase 3 ships
-// the rendering surface; data lands as confirmations accrue.
+// Intentionally empty.
 export const OUTCOMES: OutcomeAggregate[] = [];
 
 export function getOutcome(slug: string): OutcomeAggregate | undefined {

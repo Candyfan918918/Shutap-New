@@ -97,7 +97,7 @@ export function storyUrl(pillar: PillarSlug, slug: string): string {
 
 /**
  * DiscussionForumPosting JSON-LD. Chosen over QAPage because Shutap
- * stories are first-person shares with community reactions, not
+ * stories are first-person posts with likes and comments, not
  * question/answer pairs with a defined accepted answer.
  */
 export function buildStoryJsonLd(args: {
@@ -121,14 +121,14 @@ export function buildStoryJsonLd(args: {
   if (typeof args.score === "number") {
     additional.push({
       "@type": "PropertyValue",
-      name: "shutap_scan_score",
+      name: "shutap_score",
       value: args.score,
     });
   }
   if (args.band) {
     additional.push({
       "@type": "PropertyValue",
-      name: "shutap_scan_band",
+      name: "shutap_band",
       value: args.band,
     });
   }
@@ -141,7 +141,7 @@ export function buildStoryJsonLd(args: {
     articleBody: args.text,
     datePublished: args.datePublished,
     dateModified: args.dateModified,
-    author: { "@type": "Person", name: "anonymous" },
+    author: { "@type": "Person", name: "pseudonymous" },
     publisher: { "@type": "Organization", name: "Shutap", url: SITE_URL },
     interactionStatistic: interactions,
     ...(additional.length ? { additionalProperty: additional } : {}),

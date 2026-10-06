@@ -5,31 +5,35 @@ import { SITE_URL } from "@/lib/site";
 
 const PATH = "/trust";
 const TITLE =
-  "Trust & privacy — pseudonymous by design | Shutap";
+  "Trust and privacy — Shutap";
 const DESCRIPTION =
-  "How Shutap protects you: pseudonymity, automatic PII scrubbing before storage, what is and isn't public, and a fast takedown path.";
+  "How Shutap protects you: a pseudonym instead of your name, details scrubbed before storage, private until you post, reporting and fast takedowns.";
 const CAPSULE =
-  "Shutap is pseudonymous by design. You post under an alias, and an automatic scrubber removes personal identifiers before anything is stored — only the scrubbed version is kept. Crisis messages are never public. Your real name is never shown.";
+  "Shutap removes names and identifying details before anything is stored and keeps only the cleaned text. You appear under a pseudonym, never your real name. Your jokes stay private unless you post them to a room.";
 const SECTIONS = [
   {
-    heading: "pseudonymous, not exposed",
-    body: "You choose a consistent alias. Your real name never appears to other users. Pseudonymity is stronger than anonymity — your voice builds a history without revealing who you are.",
+    heading: "a pseudonym, not your name",
+    body: "You appear under a made-up name. Your real name is never shown to anyone.",
   },
   {
     heading: "the scrubber",
-    body: "Before storage, an automatic pass removes names, addresses, specific locations, phone numbers, and emails from what you write. We keep the de-identified version, not the raw text.",
+    body: "Before storage, Shutap removes names, addresses, places, phone numbers and emails from what you write. We keep only the cleaned text.",
   },
   {
-    heading: "what is and isn't public",
-    body: "Only content you choose to make public appears to the community, always de-identified. Private entries and crisis-flagged messages are never shown publicly and are never sold.",
+    heading: "private until you post",
+    body: "Jokes you don't post stay private. Only what you post to a room is public, under your pseudonym. The Mirror is private to you. Anything flagged by the crisis check is never posted.",
   },
   {
-    heading: "your rights",
-    body: "You can edit or delete any story, export your data, and delete your account at any time.",
+    heading: "reporting",
+    body: "Anyone can report a post or comment. When three different people report a post, it's hidden until we review it. Content that breaks the house rules is removed.",
   },
   {
-    heading: "takedown",
-    body: "If a story is about you, there's a fast path to request its removal. Contact privacy@shutap.com.",
+    heading: "your data",
+    body: "Delete any post, comment or set, export your data, or delete your account at any time. We don't sell personal data.",
+  },
+  {
+    heading: "takedowns",
+    body: "If a post is about you, ask us to remove it at hello@shutap.com or through the report page.",
   },
 ];
 const OTHERS = [
@@ -57,7 +61,7 @@ export const Route = createFileRoute("/trust")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "Trust & privacy at Shutap",
+          name: "Trust and privacy at Shutap",
           description: DESCRIPTION,
           url: `${SITE_URL}${PATH}`,
         }),
@@ -66,7 +70,7 @@ export const Route = createFileRoute("/trust")({
   }),
   component: () => (
     <ContentPage
-      h1="trust & privacy"
+      h1="trust and privacy"
       capsule={CAPSULE}
       sections={SECTIONS}
       others={OTHERS}

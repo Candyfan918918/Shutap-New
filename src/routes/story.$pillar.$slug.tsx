@@ -1,7 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SeoPage } from "@/components/seo/SeoPage";
 import { getPublicStory } from "@/lib/story.functions";
-import { RelateNudge } from "@/components/RelateNudge";
 import {
   buildStoryJsonLd,
   isStoryIndexable,
@@ -38,7 +37,7 @@ export const Route = createFileRoute("/story/$pillar/$slug")({
     if (!loaderData) {
       return {
         meta: [
-          { title: "story not found — shutap" },
+          { title: "Post not found — Shutap" },
           { name: "robots", content: "noindex, follow" },
         ],
         links: [{ rel: "canonical", href: url }],
@@ -92,19 +91,19 @@ export const Route = createFileRoute("/story/$pillar/$slug")({
   component: StoryPage,
   notFoundComponent: () => (
     <SeoPage>
-      <h1 className="text-2xl font-semibold">this story isn't public.</h1>
+      <h1 className="text-2xl font-semibold">This post isn't public.</h1>
       <p className="mt-3 text-muted-foreground">
-        it may have been removed, kept private, or set aside for care.
+        It may have been removed or kept private.
       </p>
-      <Link to="/stream" className="mt-4 inline-block underline">
-        see what people are carrying →
-      </Link>
+      <a href="/rooms" className="mt-4 inline-block underline">
+        See jokes in rooms →
+      </a>
     </SeoPage>
   ),
   errorComponent: ({ reset }) => (
     <SeoPage>
-      <h1 className="text-2xl font-semibold">something broke loading this.</h1>
-      <button onClick={reset} className="mt-3 underline">try again</button>
+      <h1 className="text-2xl font-semibold">Something broke loading this page.</h1>
+      <button onClick={reset} className="mt-3 underline">Try again</button>
     </SeoPage>
   ),
 });
@@ -123,12 +122,12 @@ function StoryPage() {
   const reasoning = (row.scan_reasoning ?? null) as Record<string, { note?: string; weight?: number }> | null;
   const resonanceLine =
     resonance.display_count && resonance.display_count >= 5
-      ? `${resonance.display_count}+ similar stories`
+      ? `${resonance.display_count}+ similar situations`
       : resonance.stories.length > 0
         ? resonance.fallback
-          ? "other people carrying something in the same room"
-          : `${resonance.stories.length} similar stories`
-        : "no matches yet — you might be the first";
+          ? `More about ${row.pillar}`
+          : `${resonance.stories.length} similar situations`
+        : "Nothing similar yet";
 
   return (
     <SeoPage>
@@ -136,13 +135,13 @@ function StoryPage() {
         <header className="space-y-2">
           <Breadcrumbs trail={storyTrail(row.pillar, row.slug ?? "", storyQueryTitle(row))} />
           <p className="text-sm uppercase tracking-wider text-muted-foreground">
-            {row.pillar} · someone lived this
+            {row.pillar} · a real situation
           </p>
           <h1 className="text-3xl font-semibold tracking-tight">
             {storyQueryTitle(row)}
           </h1>
           <p className="text-xs text-muted-foreground">
-            {relates} people said "same" · shared {new Date(row.created_at).toLocaleDateString()}
+            Posted {new Date(row.created_at).toLocaleDateString()}
           </p>
         </header>
 
@@ -152,17 +151,17 @@ function StoryPage() {
 
         {typeof row.initial_scan === "number" && (
           <section className="space-y-2 border-l-2 border-border pl-4">
-            <h2 className="text-xl font-semibold">the scan read this</h2>
+            <h2 className="text-xl font-semibold">Score</h2>
             <p className="text-3xl font-semibold">{row.initial_scan}</p>
             {row.scan_band && (
-              <p className="text-sm text-muted-foreground">band: {row.scan_band}</p>
+              <p className="text-sm text-muted-foreground">Band: {row.scan_band}</p>
             )}
           </section>
         )}
 
         {reasoning && typeof reasoning === "object" && (
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold">why the scan said what it said</h2>
+            <h2 className="text-xl font-semibold">What went into the score</h2>
             <ul className="space-y-2">
               {Object.entries(reasoning).map(([k, v]) => {
                 const label = REASONING_LABELS[k] ?? k;
@@ -204,15 +203,15 @@ function StoryPage() {
         </section>
 
         <section className="rounded-md border border-border p-5">
-          <p className="text-sm text-muted-foreground">carrying something similar?</p>
+          <p className="text-sm text-muted-foreground">Got one like this?</p>
           <Link to="/" className="mt-2 inline-block text-lg font-medium underline">
-            spill yours →
+            Turn yours into a joke →
           </Link>
         </section>
 
         {siblings.length > 0 && (
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold">other stories in {row.pillar}</h2>
+            <h2 className="text-xl font-semibold">More about {row.pillar}</h2>
             <ul className="space-y-2">
               {siblings.map((s) =>
                 s.slug ? (
@@ -231,7 +230,6 @@ function StoryPage() {
           </section>
         )}
       </article>
-      <RelateNudge currentRoomId={row.room_id ?? null} currentIsCrisis={row.crisis_flag ?? false} />
     </SeoPage>
   );
 }

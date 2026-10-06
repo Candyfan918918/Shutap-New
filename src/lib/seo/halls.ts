@@ -1,19 +1,19 @@
-// Halls = curated collection pages at /halls/$hall/$region/$window.
-// Each hall is a leaderboard view over confirmed outcomes / room signal.
-// Indexability is gated on a minimum population per (hall, region, window).
+// Legacy URLs at /halls/$hall/$region/$window. These pages now render a
+// short noindex page pointing to rooms and the joke generator. Slugs stay
+// so indexed URLs keep resolving.
 
 export const HALLS = {
   "most-related": {
-    title: "most-related",
-    blurb: "rooms the most people said 'same' to.",
+    title: "Most liked",
+    blurb: "The jokes people liked most now live in rooms.",
   },
   "longest-thread": {
-    title: "longest-thread",
-    blurb: "the rooms that wouldn't stop unfolding.",
+    title: "Most talked about",
+    blurb: "The jokes people commented on most now live in rooms.",
   },
   "best-outcomes": {
-    title: "best-outcomes",
-    blurb: "what people said they're glad they did.",
+    title: "Most saved",
+    blurb: "The jokes people saved most now live in rooms.",
   },
 } as const;
 
@@ -31,7 +31,7 @@ export interface HallEntry {
   id: string;
   title: string;
   href: string;
-  /** e.g. "same: 412" or "outcomes: 88". */
+  /** Short metric label, e.g. "likes". */
   metric: string;
 }
 
@@ -43,8 +43,7 @@ export interface HallView {
   updatedAt: string;
 }
 
-// Empty until the data pipeline seeds confirmed signal. Routes still
-// render the shell and emit noindex while populations are below threshold.
+// Intentionally empty. Routes render the short page and emit noindex.
 export function getHallView(
   hall: HallSlug,
   region: Region,

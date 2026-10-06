@@ -5,28 +5,28 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/career";
-const TITLE = "Career & work — real stories about work life | Shutap";
+const TITLE = "Jokes about work & career — joke generator | Shutap";
 const DESCRIPTION =
-  "Work, as material: managers, burnout, money, the job you're supposed to be grateful for. type what happened and shutap writes you a set.";
-const H1 = "career";
+  "Turn work into material: meetings, managers, pay, reply-all. Paste what happened and Shutap's joke generator writes three jokes for TikTok, Reels or the stage.";
+const H1 = "Career";
 const CAPSULE =
-  "Work, money, managers, burnout, the job everyone says you should be grateful for. Type what happened and shutap writes you a set of joke cards about the situation \u2014 never about you.";
+  "Meetings, managers, pay and the job you're supposed to be grateful for. Paste what happened and Shutap writes three jokes about it. Download them for TikTok, Reels or the stage, or post the best one to a room.";
 const WHAT =
-  "Career is where the things you can't say on Slack go: the burnout you're hiding, the manager who is the problem, the money stress, the quiet urge to quit. Type it under a pseudonym and shutap writes the set.";
+  "Work runs on rules nobody believes in, which is why it's funny: the meeting about the meeting, the \"quick sync,\" the pizza party instead of a raise. Shutap writes the take, the clapback and the roast. The jokes go at the situation, not at a coworker anyone could identify.";
 const INVITE =
-  "No LinkedIn voice. Just what work is really doing to you \u2014 and a set written about it.";
+  "Paste the thing you can't say on Slack. Shutap writes the jokes.";
 const FAQ = [
   {
-    q: "Is it normal to feel burned out or stuck at work?",
-    a: "Extremely. Burnout, resentment and feeling trapped in a good job are among the most common things typed in here.",
+    q: "Can I joke about my job without it getting back to me?",
+    a: "You post under a pseudonym. Names, company names and places are removed before anything is saved.",
   },
   {
-    q: "Can I write about my job or manager without it getting back to me?",
-    a: "Yes. You write under a pseudonym, never your real name, and identifying details are stripped before storage.",
+    q: "Can I use the jokes on stage or TikTok?",
+    a: "Yes. Download them for TikTok, Reels or the stage, or post the best one to a room.",
   },
   {
-    q: "How is this more useful than career advice?",
-    a: "It isn\u2019t advice and doesn\u2019t try to be. You get a set of joke cards about the situation \u2014 which is what makes the meeting survivable, not a five-step framework.",
+    q: "Is this career advice?",
+    a: "No. Shutap writes jokes. It is not advice and not therapy.",
   },
 ];
 const PILLAR = "Career";
@@ -34,8 +34,7 @@ const OTHERS = [
   { href: "/relationships", label: "Relationships" },
   { href: "/marriage", label: "Marriage" },
   { href: "/family", label: "Family" },
-  { href: "/lived-intelligence", label: "Lived intelligence" },
-  { href: "/about", label: "About" },
+  { href: "/rooms?topic=work", label: "Work room" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/faq", label: "FAQ" },
 ];

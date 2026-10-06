@@ -1,6 +1,7 @@
-// Vent topic metadata — read-only. Categories mirror the values already
-// present in the seed rooms (family, work, romance, friendship, parenting,
-// money, roommates, stranger). Copy is honest and short; no invented stats.
+// Topic metadata for the legacy /vent/:topic URLs. The slug stays for
+// indexed URLs; visible copy is about turning the topic into jokes.
+// Categories mirror the values in the seed rooms (family, work, romance,
+// friendship, parenting, money, roommates, stranger). No invented stats.
 
 export type VentTopic = {
   slug: string
@@ -14,89 +15,89 @@ export const VENT_TOPICS: VentTopic[] = [
   {
     slug: 'family',
     label: 'family',
-    h1: 'somewhere to vent about family.',
+    h1: 'Jokes about family.',
     intro:
-      "family is the one you can't leave. parents, siblings, in-laws, the guilt that shows up before the words do — type it and get a set written about it.",
+      "Family is great material. Everyone has a role, nobody agreed to it, and the same argument comes back every holiday. Paste what happened and Shutap writes the jokes.",
     topicQuestion: {
-      q: 'i can\u2019t say this in front of my family — is that ok here?',
-      a: "yes. shutap is pseudonymous — no one at the family dinner can find your room. spill what you actually think; the room stays outside your real life.",
+      q: 'Can I joke about my family without them finding out?',
+      a: "Yes. You post under a pseudonym, and names and places are removed before anything is saved. The jokes go at the situation, never at a real person someone could identify.",
     },
   },
   {
     slug: 'work',
     label: 'work',
-    h1: 'somewhere to vent about work.',
+    h1: 'Jokes about work.',
     intro:
-      'bosses, coworkers, burnout, the job everyone tells you to be grateful for — say the thing you can\u2019t say on slack.',
+      'Meetings that could have been an email, reply-all, the job you\u2019re supposed to be grateful for. Work runs on rules nobody believes in, which is why it\u2019s funny. Paste what happened and Shutap writes the jokes.',
     topicQuestion: {
-      q: 'can my employer find my spill?',
-      a: 'no. rooms are pseudonymous. real names, emails, and workplace details are scrubbed before anything is seen.',
+      q: 'Can my employer trace a joke back to me?',
+      a: 'Names, company names and places are removed before anything is saved, and you post under a pseudonym. Nothing is public unless you post it to a room.',
     },
   },
   {
     slug: 'romance',
-    label: 'romance',
-    h1: 'somewhere to vent about romance.',
+    label: 'dating',
+    h1: 'Jokes about dating.',
     intro:
-      'dating, situationships, the person you keep almost leaving. spill it; someone here has lived your exact thing.',
+      'Situationships, the three-day text gap, the date who brought a business plan. Dating is two people performing for each other, and the seams show. Paste what happened and Shutap writes the jokes.',
     topicQuestion: {
-      q: 'my partner will never see this, right?',
-      a: 'right. pseudonymous means your alias sits under the spill — never your name. what you post here does not travel back.',
+      q: 'Will the jokes be about my ex?',
+      a: 'They\u2019re about the situation, never a real person someone could identify. Names are removed before anything is saved, so the joke works for anyone who\u2019s been there.',
     },
   },
   {
     slug: 'friendship',
     label: 'friendship',
-    h1: 'somewhere to vent about friendship.',
+    h1: 'Jokes about friendship.',
     intro:
-      'the fade-out, the drama, the friend who never says sorry. it counts. type it and shutap writes the set.',
+      'The group chat that went quiet, the friend who only calls when they need a ride, the fade-out nobody announced. Paste what happened and Shutap writes the jokes.',
     topicQuestion: {
-      q: "is it dramatic to vent about friends?",
-      a: "no. friend grief is real grief. the rooms here take it seriously without making you defend that it hurts.",
+      q: 'Is a friend thing too small to joke about?',
+      a: 'No. Small and specific is where jokes come from. The more detail you paste, the sharper the jokes get.',
     },
   },
   {
     slug: 'parenting',
     label: 'parenting',
-    h1: 'somewhere to vent about parenting.',
+    h1: 'Jokes about parenting.',
     intro:
-      'the tantrum you handled badly. the day you didn\u2019t like being a parent. the thing you can\u2019t say to the other parents at pickup.',
+      'The negotiation over one sock, the pickup-line politics, the toddler who runs the house. Parenting is a job with a boss who can\u2019t read. Paste what happened and Shutap writes the jokes.',
     topicQuestion: {
-      q: 'will i get judged for saying the thing?',
-      a: 'you write under a pseudonym, identifying details are stripped, and nothing is published unless you post it.',
+      q: 'Can I joke about my kids here?',
+      a: 'Joke about the situation: the bedtime standoff, the school email, the snack economy. Names are removed before anything is saved, and jokes never target a real person someone could identify.',
     },
   },
   {
     slug: 'money',
     label: 'money',
-    h1: 'somewhere to vent about money.',
+    h1: 'Jokes about money.',
     intro:
-      'debt, the paycheck that doesn\u2019t clear, the friend who kept borrowing. name the thing.',
+      'The subscription you forgot, the friend who borrowed and forgot, the rent that went up for "market reasons." Paste what happened and Shutap writes the jokes.',
     topicQuestion: {
-      q: 'is it ok to vent about money without asking for advice?',
-      a: 'yes. rooms are optional \u2014 a card only leaves your set if you post it.',
+      q: 'Will Shutap give me money advice?',
+      a: 'No. Shutap writes jokes. It is not financial advice and not therapy.',
     },
   },
   {
     slug: 'roommates',
     label: 'roommates',
-    h1: 'somewhere to vent about roommates.',
+    h1: 'Jokes about roommates.',
     intro:
-      'the dishes, the passive notes on the fridge, the person you signed a lease with and now barely speak to.',
+      'The passive note on the fridge, the dish that has lived in the sink since spring, the person you share a lease with and avoid in the hallway. Paste what happened and Shutap writes the jokes.',
     topicQuestion: {
-      q: 'can i vent without starting a fight at home?',
-      a: 'that is the whole point. pseudonymous rooms let you say what would blow up in your kitchen.',
+      q: 'Can I post a roommate joke without starting a fight at home?',
+      a: 'Names and places are removed before anything is saved, and you post under a pseudonym. Keep it private, download it, or post the best one to a room.',
     },
   },
   {
     slug: 'stranger',
-    label: 'stranger',
-    h1: "somewhere to vent about a stranger who won\u2019t leave your head.",
+    label: 'strangers',
+    h1: 'Jokes about strangers.',
     intro:
-      'the stranger on the train. the person who dropped their coffee and cried. the barista who remembered your order and made your week. small encounters count too.',
+      'The guy on the train taking a speakerphone call, the person who reclined into your lap, the barista who spelled your name like a ransom note. Paste what happened and Shutap writes the jokes.',
     topicQuestion: {
-      q: 'these feel small — do they belong here?',
-      a: 'they do. small moments carry weight. the room will sit in.',
+      q: 'Is a two-minute encounter enough material?',
+      a: 'Usually. Strangers are easy to write about because nobody knows who they are. Paste the details and Shutap does the rest.',
     },
   },
 ]

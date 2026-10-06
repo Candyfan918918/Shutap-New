@@ -9,11 +9,11 @@ import { SiteFooter } from './SiteFooter'
 const DOC_NAV: { href: string; label: string }[] = [
   { href: '/terms', label: 'Terms of Service' },
   { href: '/privacy', label: 'Privacy Policy' },
-  { href: '/guidelines', label: 'Community Guidelines' },
-  { href: '/safety', label: 'Crisis & Safety' },
+  { href: '/guidelines', label: 'Guidelines' },
+  { href: '/safety', label: 'Crisis Help' },
   { href: '/contact', label: 'Contact' },
   { href: '/ai-disclosure', label: 'AI Disclosure' },
-  { href: '/disclaimer', label: 'Medical / Legal Disclaimer' },
+  { href: '/disclaimer', label: 'Disclaimer' },
 ]
 
 export function DocLayout({
@@ -120,7 +120,7 @@ export function DocLayout({
                 fontWeight: 800,
                 fontSize: 'clamp(24px, 5vw, 32px)',
                 letterSpacing: '-.02em',
-                color: '#0b080f',
+                color: '#8e1c4c',
                 margin: '0 0 8px',
                 lineHeight: 1.15,
               }}

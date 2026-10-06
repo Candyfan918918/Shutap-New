@@ -3,12 +3,12 @@ import { ogImageMeta } from "@/lib/seo/meta";
 import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
-const TITLE =
-  "Lived Intelligence — the human counterpart to AI | Shutap";
+// Legacy URL. The old concept is retired; this is now a short page that
+// points to the joke generator and rooms. Kept noindex so it doesn't
+// compete with the main pages.
+const TITLE = "Shutap — AI joke generator";
 const DESCRIPTION =
-  "Lived Intelligence is the practical knowledge earned by living through real situations — the human counterpart to AI. Shutap is built to capture it.";
-const DEFINITION =
-  "The practical knowledge that comes from living through real situations and seeing how they turn out — the human counterpart to artificial intelligence.";
+  "Shutap is an AI joke generator. Paste what happened and get three jokes: the take, the clapback and the roast.";
 const URL = `${SITE_URL}/lived-intelligence`;
 
 export const Route = createFileRoute("/lived-intelligence")({
@@ -18,7 +18,8 @@ export const Route = createFileRoute("/lived-intelligence")({
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
-      { property: "og:type", content: "article" },
+      { property: "og:type", content: "website" },
+      { name: "robots", content: "noindex, follow" },
       { property: "og:url", content: URL },
       ...ogImageMeta(),
       { name: "twitter:title", content: TITLE },
@@ -26,26 +27,7 @@ export const Route = createFileRoute("/lived-intelligence")({
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Article",
-          headline: "What is Lived Intelligence?",
-          description: DESCRIPTION,
-          about: "Lived Intelligence",
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "DefinedTerm",
-          name: "Lived Intelligence",
-          description: DEFINITION,
-        }),
-      },
-      breadcrumbScript([{ name: "Lived Intelligence", path: "/lived-intelligence" }]),
+      breadcrumbScript([{ name: "Say it funnier", path: "/lived-intelligence" }]),
     ],
   }),
   component: LivedIntelligencePage,
@@ -80,7 +62,7 @@ function LivedIntelligencePage() {
             color: "#100c14",
           }}
         >
-          what is lived intelligence?
+          Say it funnier.
         </h1>
 
         <p
@@ -97,48 +79,24 @@ function LivedIntelligencePage() {
             boxShadow: "0 12px 30px -24px rgba(20,16,22,.3)",
           }}
         >
-          Lived Intelligence is the practical knowledge that comes from living
-          through real situations and seeing how they turn out — the human
-          counterpart to artificial intelligence. Where AI is trained on text,
-          lived intelligence is earned through experience: the real-world
-          record of what people actually did in hard moments, and what happened
-          next.
+          Shutap is an AI joke generator for creators, comedians and anyone
+          with a story. Paste what happened and Shutap writes three jokes: the
+          take, the clapback and the roast.
         </p>
 
-        <Section title="What it is">
-          Every day, people make hard calls in their relationships, marriages,
-          families, and work — and then live with the results. That
-          accumulated, first-hand knowledge of situation, decision, and outcome
-          is lived intelligence. It isn't advice or theory. It's what actually
-          happened — and on Shutap, it's the material a set is written from.
+        <Section title="What you can do with them">
+          Download them for TikTok, Reels or the stage, or post the best one to
+          a room. Rooms are public topic feeds where people like, comment, save
+          and follow.
         </Section>
 
-        <Section title="How it differs from artificial intelligence">
-          Artificial intelligence predicts from patterns in existing text.
-          Lived intelligence is the ground truth underneath it: the real
-          decisions and real outcomes that text only describes second-hand. AI
-          can tell you what people generally say to do. Lived intelligence
-          shows you what people like you actually did — and how it turned out.
+        <Section title="The rules">
+          Jokes go at the situation, never at a real person someone could
+          identify. Names and places are removed before anything is saved.
+          Pseudonymous. 18+. Not therapy or advice.
         </Section>
 
-        <Section title="Why it compounds">
-          One situation is an anecdote. Hundreds of them, kept under one
-          pseudonym, become something a single post never is: a record of what
-          keeps happening to you — the same person, the same week of the month,
-          the same move. Most apps throw this away the second you close the
-          tab. Shutap keeps it, which is why the jokes get sharper the longer
-          you use it.
-        </Section>
-
-        <Section title="How Shutap captures it">
-          On Shutap, you type what actually happened — pseudonymously, with
-          identifying details stripped before storage — and shutap writes it
-          into a set of joke cards. Your lived intelligence is the material.
-          Over time, the sets stack up into the Mirror: a record of what keeps
-          coming back, read to you in your own numbers.
-        </Section>
-
-        <p style={{ marginTop: 56, fontSize: 15 }}>
+        <p style={{ marginTop: 40, fontSize: 15 }}>
           <a
             href="/"
             style={{
@@ -149,7 +107,20 @@ function LivedIntelligencePage() {
               paddingBottom: 2,
             }}
           >
-            SHUTAP. Say it funnier.
+            Write jokes about it →
+          </a>
+        </p>
+        <p style={{ marginTop: 20, fontSize: 15 }}>
+          <a
+            href="/rooms"
+            style={{
+              color: "#3a3438",
+              textDecoration: "none",
+              borderBottom: "1px solid rgba(60,55,60,.35)",
+              paddingBottom: 2,
+            }}
+          >
+            See rooms →
           </a>
         </p>
       </article>

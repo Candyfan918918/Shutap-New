@@ -5,28 +5,28 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/marriage";
-const TITLE = "Marriage — real stories about married life | Shutap";
+const TITLE = "Jokes about marriage — AI joke generator | Shutap";
 const DESCRIPTION =
-  "Marriage, as material: resentment, repair, roommate energy, staying, leaving. type what happened and shutap writes you a set of joke cards.";
-const H1 = "marriage";
+  "Turn marriage into material: chore wars, roommate energy, the same fight on repeat. Paste what happened and Shutap's joke generator writes three jokes.";
+const H1 = "Marriage";
 const CAPSULE =
-  "The long-haul stuff: roommate energy, resentment, repair, the question of leaving or staying. Type what happened and shutap writes you a set of joke cards about the situation \u2014 never about you.";
+  "The long haul: chore wars, roommate energy, the thermostat, the same fight on repeat. Paste what happened and Shutap writes three jokes about it. Download them for TikTok, Reels or the stage, or post the best one to a room.";
 const WHAT =
-  "Marriage is where the quiet, complicated things live: the distance that crept in, the same argument on a loop, the part of you that wonders. Type it under a pseudonym and shutap writes the set. You flip the cards one at a time and keep the ones that land.";
+  "Marriage is a long-running show with two writers who disagree about the plot. The good material is in the specifics: who loaded the dishwasher wrong, what \"I'm fine\" meant on Tuesday, the argument that has its own seasons. Shutap writes the take, the clapback and the roast. Every joke goes at the situation, not at you.";
 const INVITE =
-  "No performance, no highlight reel. Just what it's actually like \u2014 and a set written about it.";
+  "No highlight reel. Paste what actually happened and Shutap writes the jokes.";
 const FAQ = [
   {
-    q: "Is it normal to feel lonely or distant in my marriage?",
-    a: "It\u2019s one of the most common things people type in here. Distance, resentment and roommate energy show up again and again \u2014 and they make unusually good material.",
+    q: "Can I joke about my marriage without my spouse knowing?",
+    a: "You post under a pseudonym, never your real name. Names and places are removed before anything is saved. Nothing is public unless you post it to a room.",
   },
   {
-    q: "Can I write about my marriage without my spouse or anyone knowing?",
-    a: "Yes. You write under a pseudonym, never your real name, and identifying details are removed before storage. Nothing ties a set back to you.",
+    q: "Will the jokes make fun of my husband or wife?",
+    a: "No. The jokes go at the situation, never at a real person someone could identify.",
   },
   {
-    q: "How is this different from marriage advice online?",
-    a: "Shutap doesn\u2019t give advice at all. It writes jokes about the situation. If you want instructions, this is the wrong website.",
+    q: "Is this marriage advice?",
+    a: "No. Shutap writes jokes. It is not advice and not therapy.",
   },
 ];
 const PILLAR = "Marriage";
@@ -34,8 +34,7 @@ const OTHERS = [
   { href: "/relationships", label: "Relationships" },
   { href: "/family", label: "Family" },
   { href: "/career", label: "Career" },
-  { href: "/lived-intelligence", label: "Lived intelligence" },
-  { href: "/about", label: "About" },
+  { href: "/rooms", label: "Rooms" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/faq", label: "FAQ" },
 ];

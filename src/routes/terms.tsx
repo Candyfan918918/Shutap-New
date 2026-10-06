@@ -6,7 +6,7 @@ import { SITE_URL } from '@/lib/site'
 const URL = `${SITE_URL}/terms`
 const TITLE = 'Terms of Service — Shutap'
 const DESCRIPTION =
-  'Terms for using Shutap, a pseudonymous entertainment service that writes joke cards from what you type — what Shutap is and isn\u2019t, daily limits, what a membership buys, your content, AI use, and liability.'
+  'The terms for using Shutap, the AI joke generator: what it is and isn’t, daily limits, Shutap+, rooms and your posts, house rules, AI output, billing and liability.'
 
 export const Route = createFileRoute('/terms')({
   head: () => ({
@@ -31,179 +31,197 @@ function TermsPage() {
     <DocLayout
       active="/terms"
       title="Terms of Service"
-      subline="Effective: September 6, 2026 · Operator: Shutap"
+      subline="Last updated: October 6, 2026 · Operator: Shutap"
     >
-      <h3>1. What Shutap is — and is not.</h3>
       <p>
-        Shutap is a pseudonymous entertainment service. You type a situation, identifying details
-        are removed, and an AI writes you a set of three humorous &ldquo;joke cards&rdquo; about
-        that situation. Signed-in users may keep the cards they turn over, share them, post them to
-        rooms, and (as members) have a private record of them read back by the
-        &ldquo;Mirror.&rdquo;{' '}
-        <b>Shutap is not a healthcare, medical, mental-health, crisis, or legal service.</b> Using
-        Shutap does not create a therapist–patient, physician–patient, attorney–client, or any
-        other professional relationship. Nothing on Shutap — including anything our AI companion or
-        the &ldquo;Mirror&rdquo; says — is medical, psychological, or legal advice, diagnosis, or
-        treatment. Do not use Shutap as a substitute for professional care.
+        These terms are an agreement between you and Shutap. By using Shutap, you agree to them.
       </p>
 
-      <h3>2. Emergencies.</h3>
+      <h3>1. What Shutap is</h3>
       <p>
-        Shutap is not for emergencies. If you or someone else may be in danger or crisis, contact
-        emergency services (in the US, call or text <b>988</b> or call <b>911</b>) or the resources
-        at findahelpline.com. Our companion will route you to these resources, but it cannot and
-        does not provide crisis intervention.
+        Shutap is an AI joke generator. You paste what happened. Shutap removes identifying
+        details and writes a set of three jokes: the take, the clapback and the roast. You can
+        download a joke as an image, share it, or post it to a room. Shutap is for entertainment
+        only.
       </p>
 
-      <h3>3. Eligibility.</h3>
+      <h3>2. What Shutap is not</h3>
       <p>
-        You must be <b>18 or older</b> to use Shutap. By using it you represent that you are 18+.
+        <b>
+          Shutap is not therapy, not medical or legal advice, not a diagnosis, and not a crisis
+          service.
+        </b>{' '}
+        Using it creates no professional relationship of any kind. Nothing on Shutap, including the
+        Mirror, is advice. Don&rsquo;t use Shutap in place of professional care.
       </p>
 
-      <h3>4. Your account and pseudonym.</h3>
+      <h3>3. Emergencies</h3>
       <p>
-        You use Shutap under a pseudonym; your real name is not displayed. We do not guarantee
-        anonymity against lawful legal process (e.g., a valid subpoena) and may disclose information
-        where legally required (see Privacy Policy). You are responsible for activity under your
+        If you or someone else may be in danger, contact emergency services. In the US, call or
+        text <b>988</b> or call <b>911</b>. In the UK and Ireland, call Samaritans on{' '}
+        <b>116 123</b>. Elsewhere, go to findahelpline.com. If something you type reads as a
+        crisis, Shutap writes no jokes and shows these resources instead.
+      </p>
+
+      <h3>4. Age</h3>
+      <p>
+        You must be <b>18 or older</b> to use Shutap. By using it, you confirm you are.
+      </p>
+
+      <h3>5. Your account and pseudonym</h3>
+      <p>
+        You use Shutap under a pseudonym. Your real name is never shown. We can&rsquo;t promise
+        anonymity against valid legal process, and we may disclose information when the law
+        requires it (see the Privacy Policy). You are responsible for what happens under your
         account.
       </p>
 
-      <h3>5. Your content, and the cards.</h3>
+      <h3>6. Your content</h3>
       <p>
-        You own what you write. By submitting a situation, you grant us a non-exclusive, worldwide,
-        royalty-free license to host, store, de-identify, display (where you choose to make content
-        public), and use de-identified content to operate and improve the service, including
-        aggregated, de-identified insights. The cards are generated for you from your situation;
-        you may keep, save, share and post the cards you turn over for personal, non-commercial
-        use, with or without the shutap mark according to your plan (Section 9). Cards you leave
-        face down are not stored and are not yours to claim later. You represent that your content is yours to share and does not
-        violate anyone&rsquo;s rights.{' '}
-        <b>
-          Do not post other people&rsquo;s private or identifying information; do not post unlawful,
-          infringing, harassing, or harmful content
-        </b>{' '}
-        (see Community Guidelines).
+        You own what you write and post. To run Shutap, you give us a non-exclusive, worldwide,
+        royalty-free license to store, process, de-identify, host, display and distribute your
+        content on Shutap. We may also use de-identified content in aggregate to operate and
+        improve the service. The license for a post ends when you delete it, except for copies we
+        must keep by law and copies others already downloaded or shared.
+      </p>
+      <p>
+        The jokes Shutap writes for you are yours to download, share and post, including in your
+        own content. AI output may be similar to output for other people, and we don&rsquo;t
+        promise any joke is unique or free of third-party rights.
+      </p>
+      <p>
+        You confirm you have the right to share what you submit and that it doesn&rsquo;t
+        violate anyone&rsquo;s rights or these terms.
       </p>
 
-      <h3>6. AI-generated content.</h3>
+      <h3>7. Rooms and public posts</h3>
       <p>
-        Shutap&rsquo;s cards, companion and Mirror are powered by artificial intelligence. Cards
-        and responses are generated automatically,{' '}
-        <b>may be inaccurate, incomplete, or inappropriate, and must not be relied upon</b> for any
-        decision. They are for reflection and support only, are provided &ldquo;as is,&rdquo; and
-        are not the advice of any professional. You use AI features at your own discretion and risk.
+        Rooms are public topic feeds. When you post a joke to a room, anyone can see it under your
+        pseudonym, and people can like, comment on, save, report and follow. Jokes you don&rsquo;t
+        post stay private. You can delete your posts and comments at any time. We can&rsquo;t
+        recall copies others have already downloaded or shared.
       </p>
 
-      <h3>7. Acceptable use.</h3>
+      <h3>8. House rules</h3>
+      <p>Joke about the situation, never about a real person someone could identify. Don&rsquo;t:</p>
+      <ul>
+        <li>post real names or anyone&rsquo;s private or identifying information (doxxing);</li>
+        <li>harass, threaten or target anyone;</li>
+        <li>post hate;</li>
+        <li>post any sexual content involving minors;</li>
+        <li>post anything illegal or infringing;</li>
+        <li>spam, impersonate, scrape, or misuse the service or its AI;</li>
+        <li>try to identify other users;</li>
+        <li>make extra accounts or sessions to get around limits.</li>
+      </ul>
+
+      <h3>9. Moderation and reporting</h3>
       <p>
-        You agree not to: post others&rsquo; personal/identifying information; harass, threaten, or
-        abuse; post illegal content (including any sexual content involving minors); impersonate;
-        spam; scrape or misuse the service or its AI; attempt to de-anonymize other users; or use
-        Shutap to provide professional services to others. We may remove content and suspend
-        accounts that violate these terms.
+        Anyone can report a post or comment. When three different people report a post, it is
+        hidden until we review it. We may remove any content and suspend or close any account that
+        breaks these terms or the law, with or without notice. To ask us to remove content about
+        you, write to hello@shutap.com or use the report page.
       </p>
 
-      <h3>8. Reporting and takedown.</h3>
+      <h3>10. Copyright notices</h3>
       <p>
-        You can report content via the in-product report tools. We review reports and remove content
-        that violates these terms or the law, and we maintain a path for individuals to request
-        removal of content about them.
+        If you believe content on Shutap infringes your copyright, email hello@shutap.com with:
+        your contact details; the work you say is infringed; the link to the content; a statement
+        that you believe in good faith the use isn&rsquo;t authorized; a statement, under penalty
+        of perjury, that your notice is accurate and you are the owner or authorized to act for
+        them; and your physical or electronic signature. If your content was removed and you
+        believe it was a mistake, you may send a counter-notice to the same address. We close the
+        accounts of repeat infringers.
       </p>
 
-      <h3 id="plans">9. Free use, daily limits, and what a membership buys.</h3>
+      <h3>11. AI output</h3>
       <p>
-        <b>Free, always:</b> typing up to five situations a day. A guest turns over one of each
-        set&rsquo;s three cards; the other two stay face down until an alias is chosen. A signed-in
-        free alias turns over all three cards of each situation, keeps them in its set list and the
-        Mirror&rsquo;s record, and may save them (1080&times;1920, with a small shutap mark), share
-        them, and post them to a room. Guests keep nothing and nothing a guest writes is stored;
-        when a guest chooses an alias, the card they had turned over comes with them.
-      </p>
-      <p>
-        <b>Membership:</b> a paid subscription removes the shutap mark from every card, on screen
-        and in every export (1080&times;1920, the same size at every tier), and adds the
-        Mirror&rsquo;s patterns across everything kept. It does not add situations: five a day is
-        the allowance at every tier. A membership buys the clean card and the Mirror. It does not
-        buy advice, diagnosis, treatment, or relief, and it does not change what the jokes are.
-      </p>
-      <p>
-        <b>Limits:</b> daily allowances reset once a day in the timezone stored on your account
-        (UTC for guests). When a day&rsquo;s allowance is spent, no set is written and nothing is
-        charged against it. Allowances are a cost control, not a promise: we may change, reduce, or
-        suspend them, including per-network rate limits, to keep the service running, and we may
-        refuse to write a set for any situation that our safety systems flag. A card that was
-        generated is not refunded to the allowance if you choose not to turn it over.
+        Jokes are written by AI.{' '}
+        <b>They can be wrong, unfunny or offensive, and you must not rely on them</b> for any
+        decision. They are provided &ldquo;as is.&rdquo; You are responsible for what you post,
+        download and share.
       </p>
 
-      <h3 id="refunds">10. Subscriptions, billing &amp; refunds.</h3>
+      <h3 id="plans">12. Free use and daily limits</h3>
       <p>
-        Membership features (Section 9, including the &ldquo;Mirror&rdquo;) require a paid
-        subscription: <b>US$7.99 per month or US$49.99 per year</b>, plus any applicable taxes.{' '}
-        <b>There is no free trial; the first period is charged when you subscribe.</b>{' '}
-        Subscriptions renew automatically each billing period at the price shown at checkout (plus
-        any applicable taxes) until cancelled. We email a receipt for every charge. You can cancel anytime from your profile or the
-        billing portal; cancellation takes effect at the end of the current billing period, and you
-        keep access until then. <b>Payments already made — for the current or past periods — are
-        not refunded</b>, except where a refund is required by applicable law. Cancelling returns
-        you to the free tier (the same five situations a day, with the shutap mark on the cards) at
-        the end of the period; the cards you kept stay in your set list. Typing up to five
-        situations a day and turning over your cards remain free.
+        Everyone gets <b>five stories a day</b>. A guest sees one joke from each set. Signing in is
+        free and shows all three, keeps them in your set list, and lets you download, share and
+        post them. Free downloads carry a small watermark.
+      </p>
+      <p>
+        Limits reset once a day in the timezone on your account (UTC for guests). Limits are a cost
+        control, not a promise. We may change, reduce or pause them, add rate limits, and refuse
+        to write a set for anything our safety checks flag.
       </p>
 
-      <h3>11. Assumption of risk.</h3>
+      <h3 id="refunds">13. Shutap+, billing and refunds</h3>
       <p>
-        Shutap involves user-generated emotional content and AI-generated jokes and responses. You
-        understand and accept that such content may be upsetting, inaccurate, unfunny, or unhelpful,
-        that a joke about your situation is still a joke about your situation, and you use the
-        service at your own risk.
+        Shutap+ costs <b>US$7.99 per month or US$49.99 per year</b>, plus any taxes, billed through
+        Stripe. It removes the watermark from downloads and adds the Mirror. It does not add more
+        jokes or stories: five a day is the limit on every plan.
+      </p>
+      <p>
+        <b>There is no free trial. You are charged when you subscribe.</b> Shutap+ renews
+        automatically each period at the price shown at checkout until you cancel. You can cancel
+        anytime. You keep access until the end of the paid period, then return to the free plan.
+        Your set list stays. <b>Payments already made are not refunded</b>, except where the law
+        requires it.
       </p>
 
-      <h3>12. Disclaimers.</h3>
+      <h3>14. Your risk</h3>
       <p>
-        The service is provided &ldquo;as is&rdquo; and &ldquo;as available,&rdquo; without
-        warranties of any kind, express or implied, including fitness for a particular purpose and
-        any warranty that the service or AI output is accurate, reliable, or suitable for your
-        needs.
+        Jokes about real situations can sting, miss, or land wrong. You use Shutap at your own
+        risk.
       </p>
 
-      <h3>13. Limitation of liability.</h3>
+      <h3>15. Disclaimers</h3>
       <p>
-        To the maximum extent permitted by law, Shutap and its operators will not be liable for any
-        indirect, incidental, special, consequential, or punitive damages, or for any reliance on
-        AI output or user content; and our total liability will not exceed the greater of the
-        amounts you paid us in the past 12 months or <b>US$100</b>.
+        Shutap is provided &ldquo;as is&rdquo; and &ldquo;as available,&rdquo; without warranties
+        of any kind, express or implied, including fitness for a particular purpose,
+        non-infringement, and any warranty that the service or AI output is accurate, reliable or
+        suitable for you.
       </p>
 
-      <h3>14. Indemnification.</h3>
+      <h3>16. Limitation of liability</h3>
       <p>
-        You agree to indemnify Shutap against claims arising from your content or your violation of
+        To the fullest extent the law allows, Shutap and its operators are not liable for any
+        indirect, incidental, special, consequential or punitive damages, or for any reliance on AI
+        output or user content. Our total liability is limited to the greater of what you paid us
+        in the past 12 months or <b>US$100</b>.
+      </p>
+
+      <h3>17. Indemnity</h3>
+      <p>
+        You agree to indemnify Shutap against claims arising from your content or your breach of
         these terms.
       </p>
 
-      <h3>15. Termination.</h3>
-      <p>You may delete your account anytime. We may suspend or terminate access for violations.</p>
-
-      <h3>16. Dispute resolution &amp; governing law.</h3>
+      <h3>18. Ending your use</h3>
       <p>
-        Before filing any claim, you agree to first contact us at legal@shutap.com and try to
-        resolve it informally for at least 30 days. Any dispute that cannot be resolved that way
-        will be settled by <b>binding individual arbitration</b>, not in court — except that either
-        party may bring an individual claim in small-claims court. You and Shutap{' '}
-        <b>waive any right to a jury trial and to participate in a class action</b> or class-wide
+        You can delete your account at any time. We may suspend or end your access if you break
+        these terms.
+      </p>
+
+      <h3>19. Disputes and governing law</h3>
+      <p>
+        Before filing any claim, contact us at hello@shutap.com and try to resolve it informally
+        for at least 30 days. Anything not resolved that way goes to{' '}
+        <b>binding individual arbitration</b>, not court, except that either side may bring an
+        individual claim in small-claims court. You and Shutap{' '}
+        <b>give up any right to a jury trial and to take part in a class action</b> or class-wide
         arbitration. These terms are governed by the laws of the State of Delaware, USA, without
-        regard to its conflict-of-laws rules; the exclusive venue for any matter not subject to
-        arbitration is the state or federal courts located in Delaware.
+        regard to conflict-of-laws rules. The state or federal courts in Delaware are the only
+        venue for anything not subject to arbitration.
       </p>
 
-      <h3>17. Changes.</h3>
+      <h3>20. Changes</h3>
       <p>
-        We may update these terms; material changes will be notified and re-accepted, with a new
-        version stamp.
+        We may update these terms. We&rsquo;ll post the new version with a new date and ask you to
+        accept material changes.
       </p>
 
-      <h3>18. Contact.</h3>
-      <p>legal@shutap.com.</p>
-
+      <h3>21. Contact</h3>
+      <p>hello@shutap.com</p>
     </DocLayout>
   )
 }

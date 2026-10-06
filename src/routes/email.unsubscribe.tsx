@@ -114,7 +114,7 @@ function UnsubscribeRoute() {
                 fontSize: 16,
               }}
             >
-              transactional and security emails may still arrive — everything else is off.
+              sign-in links and account emails still arrive. everything else is off.
             </p>
             {state.email ? (
               <p style={{ color: '#6f666c', fontSize: 12.5, margin: '0 0 26px' }}>
@@ -166,8 +166,7 @@ function UnsubscribeRoute() {
                 fontSize: 15.5,
               }}
             >
-              the token may have expired or already been used. sign in to manage your email
-              preferences directly.
+              it may have expired or been used. sign in to manage your email.
             </p>
           </>
         )}

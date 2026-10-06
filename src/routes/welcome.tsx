@@ -4,7 +4,7 @@ import { WelcomeNativePage } from '@/pages/WelcomeNative'
 export const Route = createFileRoute('/welcome')({
   ssr: false,
   head: () => ({
-    meta: [{ title: 'Welcome — Shutap' }, { name: 'robots', content: 'noindex' }],
+    meta: [{ title: 'Sign in — Shutap' }, { name: 'robots', content: 'noindex' }],
     styles: [
       { children: 'html,body{background:#100c14}' },
     ],

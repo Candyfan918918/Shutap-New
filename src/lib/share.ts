@@ -1,6 +1,5 @@
-/* Shutap §22 — companion-initiated share engine. Faithful TS port of
-   project/share-engine.js. The companion catches a positive-valence peak and
-   hands over a finished slide-up share card (valence-gated, frequency-capped).
+/* Shutap share engine. Faithful TS port of project/share-engine.js.
+   Offers a finished slide-up share sheet (valence-gated, frequency-capped).
    Self-contained imperative DOM, same as the prototype. */
 
 export interface ShareOpts {
@@ -330,7 +329,7 @@ function bubbleConfirm(sheet: HTMLElement) {
   d.setAttribute('data-shared-confirm', '')
   d.style.cssText =
     'margin-top:12px;font-family:Newsreader,serif;font-style:italic;font-size:13.5px;color:#7fd4a8;text-align:center'
-  d.textContent = 'passed on. someone out there will feel less alone. ♥'
+  d.textContent = 'shared.'
   sheet.appendChild(d)
 }
 
@@ -359,7 +358,7 @@ function showSheet(id: string, opts: ShareOpts) {
   const capWrap = document.createElement('div')
   capWrap.style.cssText = 'margin-top:14px'
   capWrap.innerHTML =
-    '<div style="font-family:Sora,sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8f898d;margin-bottom:6px">your caption · edit freely</div>'
+    '<div style="font-family:Sora,sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8f898d;margin-bottom:6px">caption · edit it</div>'
   const cap = document.createElement('textarea')
   cap.rows = 2
   cap.value = opts.caption || ''
@@ -391,7 +390,7 @@ function showSheet(id: string, opts: ShareOpts) {
   foot.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px'
   foot.innerHTML =
     '<span style="font-family:Newsreader,serif;font-style:italic;font-size:12px;color:#8f898d">' +
-    (opts.privacy || 'only this card leaves — never your words or name.') +
+    (opts.privacy || 'only the joke is shared. never your name.') +
     '</span>'
   const no = document.createElement('span')
   no.textContent = 'not now'

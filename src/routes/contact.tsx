@@ -6,30 +6,15 @@ import { SITE_URL } from '@/lib/site'
 const URL = `${SITE_URL}/contact`
 const TITLE = 'Contact — Shutap'
 const DESCRIPTION =
-  'shutap is small on purpose. a real person reads every message. write us at hello@shutap.com, privacy@shutap.com, safety@shutap.com, or legal@shutap.com.'
+  'Write to Shutap at hello@shutap.com for help, privacy, legal, safety and reports.'
 
 type Cbox = { email: string; label: string; sub: string }
 
 const CBOXES: Cbox[] = [
   {
     email: 'hello@shutap.com',
-    label: 'general',
-    sub: 'questions, feedback, \u201cwhat is this?\u201d \u2014 anything that doesn\u2019t fit below.',
-  },
-  {
-    email: 'privacy@shutap.com',
-    label: 'privacy & your data',
-    sub: 'access, export, or delete your data; anything about how we handle it.',
-  },
-  {
-    email: 'safety@shutap.com',
-    label: 'safety & reports',
-    sub: "report content or a person, or flag something that isn\u2019t safe.",
-  },
-  {
-    email: 'legal@shutap.com',
-    label: 'legal',
-    sub: 'takedown requests, legal process, and everything in Terms & Privacy.',
+    label: 'email us',
+    sub: 'help, privacy and data requests, legal, safety and reports.',
   },
 ]
 
@@ -56,12 +41,9 @@ function ContactPage() {
     <DocLayout
       active="/contact"
       title="Contact"
-      subline="a real person reads every message — not a bot"
+      subline="one address for everything"
     >
-      <p>
-        shutap is small on purpose. when you write in, a person reads it and writes back. pick the
-        box that fits, and we&rsquo;ll get to you — usually within a couple of days.
-      </p>
+      <p>A person reads every message. We usually reply within a couple of days.</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, margin: '20px 0 4px' }}>
         {CBOXES.map((c) => (
           <a
@@ -115,7 +97,7 @@ function ContactPage() {
         ))}
       </div>
       <p style={{ marginTop: 14 }}>
-        in an emergency, don&rsquo;t email us — we can&rsquo;t respond in real time. use the{' '}
+        in an emergency, don&rsquo;t email us. we can&rsquo;t reply in real time. use the{' '}
         <a
           href="/safety"
           style={{ color: '#000000', textDecoration: 'none', fontWeight: 600 }}
@@ -131,8 +113,7 @@ function ContactPage() {
           color: '#443c42',
         }}
       >
-        shutap is 18+, pseudonymous, and not a medical or legal service. please don&rsquo;t send us
-        anything that could identify you or someone else unless it&rsquo;s necessary. 🤍
+        please don&rsquo;t send anything that identifies you or someone else unless you need to.
       </p>
     </DocLayout>
   )

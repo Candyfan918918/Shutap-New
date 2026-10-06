@@ -57,7 +57,7 @@ export function FlipCard({
     <button
       type="button"
       onClick={onTap}
-      aria-label={revealed ? `${label} — ${hint}` : `flip ${label} — ${hint}`}
+      aria-label={revealed ? `${label} — ${hint}` : `show ${label} — ${hint}`}
       // Spent cards stay tappable: the tap is what points at the paywall.
       // aria-disabled says "this will not turn over", which is true, without
       // taking the control out of the tab order and stranding the pointer.

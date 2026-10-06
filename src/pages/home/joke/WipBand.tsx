@@ -50,13 +50,13 @@ const DEALING = [
   "sharpening the clapback until it's rude but legally fine.",
   'the roast is currently being roasted.',
   "i had one about the sigh. i'm keeping that one.",
-  'double-checking no card accidentally gives advice. gross.',
+  'double-checking no joke accidentally gives advice. gross.'
 ]
 
 const LATE = [
   'still here. good jokes take longer than bad ones, apparently.',
-  'four versions written, two of them turned into therapy. deleted.',
-  'taking a minute because i refuse to hand you a mid card.',
+  'four versions written. two were too nice. deleted.',
+  'taking a minute because i refuse to hand you a mid joke.',
 ]
 
 const VERY_LATE = [
@@ -268,7 +268,7 @@ export function WipBand({
                     color: done ? '#17131a' : active ? MUTED : FAINT,
                   }}
                 >
-                  {done ? 'written' : active ? 'writing…' : phase === 'reading' ? 'shuffling' : 'face down'}
+                  {done ? 'written' : active ? 'writing…' : phase === 'reading' ? 'reading' : 'waiting'}
                 </span>
               </div>
             )

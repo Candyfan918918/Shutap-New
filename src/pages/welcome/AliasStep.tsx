@@ -72,9 +72,9 @@ export function AliasStep({ birth, initial, onComplete }: AliasStepProps) {
   return (
     <div className="wstep" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
       <div>
-        <div style={{ fontFamily: "'Sora',sans-serif", fontWeight: 600, fontSize: 10, letterSpacing: '.16em', textTransform: 'uppercase', color: ACCENT, marginBottom: 14 }}>your name in the room</div>
-        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.5, color: TEXT, marginBottom: 8 }}>it won't be yours. it will be the name the room knows you by.</Words>
-        <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15, color: SOFT }}>one alias. always yours. never your real name.</div>
+        <div style={{ fontFamily: "'Sora',sans-serif", fontWeight: 600, fontSize: 10, letterSpacing: '.16em', textTransform: 'uppercase', color: ACCENT, marginBottom: 14 }}>your name on Shutap</div>
+        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.5, color: TEXT, marginBottom: 8 }}>Pick a made-up name.</Words>
+        <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15, color: SOFT }}>it's what people see. your real name never shows.</div>
       </div>
       <div style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 20, padding: '28px 24px', textAlign: 'center' }}>
         <div key={alias.display_name + 'emoji'} style={{ fontSize: 44, marginBottom: 16, animation: 'wslotIn .35s ease' }}>{emoji}</div>
@@ -90,8 +90,8 @@ export function AliasStep({ birth, initial, onComplete }: AliasStepProps) {
         <div style={{ textAlign: 'center', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 14, color: msg.kind === 'err' ? ACCENT : '#e2dde0' }}>{msg.text}</div>
       )}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <button style={ghostBtn} onClick={spin} disabled={busy}>spin again</button>
-        <button style={primaryBtn} onClick={keepAlias} disabled={busy}>this is me →</button>
+        <button style={ghostBtn} onClick={spin} disabled={busy}>another one</button>
+        <button style={primaryBtn} onClick={keepAlias} disabled={busy}>use this name →</button>
       </div>
     </div>
   )

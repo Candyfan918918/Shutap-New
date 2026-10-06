@@ -2,8 +2,8 @@
 const INFO_LINKS: { href: string; label: string }[] = [
   { href: '/terms', label: 'terms' },
   { href: '/privacy', label: 'privacy' },
-  { href: '/guidelines', label: 'house rules' },
-  { href: '/safety', label: "if it's heavy" },
+  { href: '/guidelines', label: 'rules' },
+  { href: '/safety', label: 'crisis help' },
   { href: '/about', label: 'what shutap is' },
   { href: '/how-it-works', label: 'how it works' },
   { href: '/contact', label: 'contact' },
@@ -58,7 +58,7 @@ export function SiteFooter() {
             color: '#443c42',
           }}
         >
-          shutap writes jokes, not prescriptions. 18+ · pseudonymous · not therapy, not advice.
+          SHUTAP. Say it funnier. · 18+ · pseudonymous · not therapy or advice.
         </div>
       </div>
       <style>{`
