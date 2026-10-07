@@ -58,6 +58,20 @@ function wrap(text: string, width: number): string[] {
 
 const esc = (s: string) => s.replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)')
 
+/** The heavy mark for guest and free files: SHUTAP.COM tiled at -22 degrees
+ *  in pale rose under the text, and a rose line across the foot. */
+function markOps(): string[] {
+  const ops = ['q 0.95 0.84 0.88 rg']
+  for (let i = 0; i < 16; i++) {
+    const y = -320 + i * 75
+    ops.push(`BT /F1 34 Tf 0.927 0.375 -0.375 0.927 ${-60} ${y} Tm (SHUTAP.COM . SHUTAP.COM . SHUTAP.COM . SHUTAP.COM) Tj ET`)
+  }
+  ops.push('Q')
+  ops.push(`q 0.72 0.27 0.42 rg 0 0 612 34 re f Q`)
+  ops.push(`q 1 g BT /F1 11 Tf ${(306 - 41 * CHAR_W * 11 / 12 / 2).toFixed(1)} 13 Td (MADE WITH SHUTAP.COM - WRITE YOURS FREE) Tj ET Q`)
+  return ops
+}
+
 /** Blank line before an element, except inside a speech (character →
  *  parenthetical → dialogue). */
 function gapBefore(prev: ScreenplayElement['type'] | null, cur: ScreenplayElement['type']): number {
@@ -67,7 +81,7 @@ function gapBefore(prev: ScreenplayElement['type'] | null, cur: ScreenplayElemen
   return 1
 }
 
-export function screenplayPdf(elements: ScreenplayElement[], title: string): Blob {
+export function screenplayPdf(elements: ScreenplayElement[], title: string, opts: { watermark?: boolean } = {}): Blob {
   const pages: string[][] = [[]]
   let y = TOP
   let prev: ScreenplayElement['type'] | null = null
@@ -104,7 +118,7 @@ export function screenplayPdf(elements: ScreenplayElement[], title: string): Blo
     pageIds.push(pageId)
     // page number top right from page 2, as screenplays do
     const num = i > 0 ? [`BT /F1 12 Tf ${(7.5 * PT - 3 * CHAR_W).toFixed(1)} ${(792 - 0.5 * PT).toFixed(1)} Td (${i + 1}.) Tj ET`] : []
-    const stream = [...num, ...ops].join('\n')
+    const stream = [...(opts.watermark ? markOps() : []), '0 g', ...num, ...ops].join('\n')
     objs[pageId] = `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents ${contentId} 0 R >>`
     objs[contentId] = `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`
   })
@@ -126,4 +140,22 @@ export function screenplayPdf(elements: ScreenplayElement[], title: string): Blo
 export function pdfFilename(hook: string): string {
   const slug = ascii(hook).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48)
   return `${slug || 'bit'}-screenplay.pdf`
+}
+
+/** The bit itself as a plain script page: hook, setup, tags, button. */
+export function scriptPdf(v: { hook: string; setup: string; tags: string[]; button: string }, watermark: boolean): Blob {
+  const els: ScreenplayElement[] = [
+    { type: 'scene_heading', text: 'THE BIT' },
+    { type: 'character', text: 'HOOK' },
+    { type: 'dialogue', text: v.hook },
+    { type: 'character', text: 'SETUP' },
+    { type: 'dialogue', text: v.setup },
+    ...v.tags.flatMap((t, i) => [
+      { type: 'character' as const, text: `TAG ${i + 1}` },
+      { type: 'dialogue' as const, text: t },
+    ]),
+    { type: 'character', text: 'BUTTON' },
+    { type: 'dialogue', text: v.button },
+  ]
+  return screenplayPdf(els, v.hook, { watermark })
 }

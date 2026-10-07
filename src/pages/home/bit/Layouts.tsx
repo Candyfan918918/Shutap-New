@@ -155,11 +155,13 @@ export function ScreenplayView({
   version,
   onBack,
   say,
+  watermark,
 }: {
   bitId: string
   version: BitVersion
   onBack: () => void
   say: (m: string) => void
+  watermark: boolean
 }) {
   const screenplay = useServerFn(getScreenplay)
   const [nonce, setNonce] = useState(0)
@@ -177,7 +179,7 @@ export function ScreenplayView({
   }
 
   function download(els: ScreenplayElement[]) {
-    const blob = screenplayPdf(els, version.hook)
+    const blob = screenplayPdf(els, version.hook, { watermark })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url

@@ -599,3 +599,34 @@ export const getScene = createServerFn({ method: 'POST' })
 export const getScreenplay = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => LayoutInput.parse(d))
   .handler(({ data }) => layoutFor<ScreenplayElement[]>('screenplay', data.bit_id, data.version_id, data.anon_session_id ?? null))
+
+/* ───────────────────────── download ───────────────────────── */
+
+export type ExportResult =
+  | { ok: true; svg: string; filename: string; watermarked: boolean; tier: BitTier }
+  | { ok: false; reason: 'not_found' }
+
+/** The picture, drawn here so the tier decides the mark: guest and free get
+ *  the heavy watermark, Shutap+ gets a clean file. A guest's picture carries
+ *  only the hook and setup — the same lines they can read. */
+export const exportBit = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) =>
+    z.object({ bit_id: z.string().uuid(), version_id: z.string().uuid(), format: z.enum(['bit', 'hook']), ...Ctx }).parse(d),
+  )
+  .handler(async ({ data }): Promise<ExportResult> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
+    if (!row) return { ok: false, reason: 'not_found' }
+    const { data: v } = await supabaseAdmin
+      .from('bit_versions')
+      .select('hook, setup, tags, button')
+      .eq('id', data.version_id)
+      .eq('bit_id', row.id)
+      .maybeSingle()
+    if (!v) return { ok: false, reason: 'not_found' }
+    const { renderBitSvg, artFilename } = await import('./bits/art')
+    const watermarked = id.tier !== 'paying'
+    const svg = renderBitSvg({ ...v, format: data.format, locked: !id.userId, watermark: watermarked })
+    return { ok: true, svg, filename: artFilename(v.hook, data.format), watermarked, tier: id.tier }
+  })

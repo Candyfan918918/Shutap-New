@@ -32,6 +32,7 @@ import { Versions } from './Versions'
 import { MixYourOwn } from './MixYourOwn'
 import { Prompter } from './Prompter'
 import { SceneView, ScreenplayView } from './Layouts'
+import { DownloadSheet } from './DownloadSheet'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
@@ -102,6 +103,8 @@ function resetLabel(iso: string | undefined): string {
 
 
 
+
+
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
 
 export function BitSurface() {
@@ -124,6 +127,7 @@ export function BitSurface() {
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const [prompter, setPrompter] = useState<BitVersion | null>(null)
+  const [downloadOpen, setDownloadOpen] = useState(false)
   const topRef = useRef<HTMLDivElement | null>(null)
   const restoring = useRef(false)
 
@@ -454,7 +458,11 @@ export function BitSurface() {
                   {k}
                 </button>
               ))}
-              {(['download', 'post'] as const).map((k) => (
+              <button className="bt-act" onClick={() => setDownloadOpen(true)}>
+                <ActionIcon name="download" />
+                download
+              </button>
+              {(['post'] as const).map((k) => (
                 <button key={k} className="bt-act" disabled aria-disabled="true">
                   <ActionIcon name={k} />
                   {k}
@@ -510,9 +518,13 @@ export function BitSurface() {
           {phase === 'scene' ? (
             <SceneView bitId={bit.id} version={version} onBack={backToBit} onPrompter={() => setPrompter(version)} say={say} />
           ) : (
-            <ScreenplayView bitId={bit.id} version={version} onBack={backToBit} say={say} />
+            <ScreenplayView bitId={bit.id} version={version} onBack={backToBit} say={say} watermark={tier !== 'paying'} />
           )}
         </div>
+      )}
+
+      {downloadOpen && bit && version && (
+        <DownloadSheet bitId={bit.id} version={version} tier={tier} locked={bit.locked} onClose={() => setDownloadOpen(false)} say={say} />
       )}
 
       {prompter && <Prompter bit={prompter} onClose={() => setPrompter(null)} />}
