@@ -13,6 +13,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { WORDS_PER_SECOND, bitWords, type BitDraft } from '@/lib/bits/shared'
+import './bit.css'
 
 type WakeLockSentinelLike = { release: () => Promise<void> }
 

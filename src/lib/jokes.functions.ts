@@ -1220,6 +1220,9 @@ export const postJokeCardToRoom = createServerFn({ method: 'POST' })
       .parse(d),
   )
   .handler(async ({ data }) => {
+    // Retired in phase 7: a post is a whole bit or a whole scene now
+    // (postBitToRoom). Single joke cards no longer post.
+    if (process.env['ALLOW_CARD_POSTS'] !== '1') throw new Error('card posts are retired: post a whole bit or scene')
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
     if (!id.userId) throw new Error('sign in first')

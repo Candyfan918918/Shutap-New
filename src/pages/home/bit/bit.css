@@ -155,3 +155,12 @@
 .bt-dl-pdf b { font-family: 'Courier New', Courier, monospace; font-size: 15px; color: #1a1418; }
 .bt-sheet .bt-chip { height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid rgba(90,30,50,.2); background: #fff; font: 600 13px 'Sora', system-ui, sans-serif; color: #3a3236; cursor: pointer; }
 .bt-sheet .bt-chip[aria-pressed='true'] { border-color: #b8456b; background: #f6e9ee; color: #9b3559; }
+
+/* post sheet */
+.bt-post-prev { border: 1px solid rgba(90,30,50,.12); border-radius: 14px; padding: 12px 14px; max-height: 230px; overflow: auto; display: flex; flex-direction: column; gap: 2px; }
+.bt-post-prev .h { font-weight: 800; font-size: 18px; letter-spacing: -0.02em; color: #8e1c4c; margin-bottom: 6px; }
+.bt-post-prev p { margin: 0 0 6px; font-family: 'Newsreader', Georgia, serif; font-size: 15.5px; line-height: 1.35; }
+.bt-sheet .bt-lbl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #7d7277; }
+.bt-sheet .bt-lbl.r { color: #b8456b; }
+.bt-sheet .bt-note { margin: 0; color: #7d7277; }
+.bt-sheet .bt-chips { display: flex; gap: 6px; flex-wrap: wrap; }

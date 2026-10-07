@@ -630,3 +630,115 @@ export const exportBit = createServerFn({ method: 'POST' })
     const svg = renderBitSvg({ ...v, format: data.format, locked: !id.userId, watermark: watermarked })
     return { ok: true, svg, filename: artFilename(v.hook, data.format), watermarked, tier: id.tier }
   })
+
+/* ───────────────────────── post to rooms ───────────────────────── */
+
+export type PostResult =
+  | { ok: true; room_id: string; already: boolean }
+  | { ok: false; reason: 'sign_in' | 'not_found' | 'names' | 'crisis' | 'no_scene' | 'failed' }
+
+/** A post is a whole bit or a whole scene, never a single joke. The content
+ *  is snapshotted on the room so a later version never changes a post that
+ *  already has likes and comments. */
+export const postBitToRoom = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        bit_id: z.string().uuid(),
+        version_id: z.string().uuid(),
+        kind: z.enum(['bit', 'scene']),
+        topic: z.enum(['office', 'work', 'family', 'school', 'live', 'social']),
+        ...Ctx,
+      })
+      .parse(d),
+  )
+  .handler(async ({ data }): Promise<PostResult> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
+    const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
+    if (!row) return { ok: false, reason: 'not_found' }
+    const { data: v } = await supabaseAdmin
+      .from('bit_versions')
+      .select('id, hook, setup, tags, button, est_seconds, scene')
+      .eq('id', data.version_id)
+      .eq('bit_id', row.id)
+      .maybeSingle()
+    if (!v) return { ok: false, reason: 'not_found' }
+
+    const { data: existing } = await supabaseAdmin
+      .from('rooms')
+      .select('id')
+      .eq('bit_version_id', v.id)
+      .eq('post_kind', data.kind)
+      .eq('hidden', false)
+      .maybeSingle()
+    if (existing) return { ok: true, room_id: existing.id as string, already: true }
+
+    let postData: Record<string, unknown>
+    let body: string
+    if (data.kind === 'scene') {
+      let beats = v.scene as SceneBeat[] | null
+      if (!beats) {
+        const { writeScene } = await import('./bits/pipeline.server')
+        beats = await writeScene(row.story_clean, v)
+        if (!beats) return { ok: false, reason: 'no_scene' }
+        await supabaseAdmin.from('bit_versions').update({ scene: beats } as never).eq('id', v.id)
+      }
+      postData = { hook: v.hook, beats, secs: v.est_seconds }
+      body = beats.map((b, i) => `${i + 1}. ${b.shot} · ${b.speaker}: ${b.line}`).join('\n')
+    } else {
+      postData = { hook: v.hook, setup: v.setup, tags: v.tags, button: v.button, secs: v.est_seconds }
+      body = [v.setup, ...v.tags, v.button].join('\n\n')
+    }
+
+    // The lines came from a scrubbed story, but a post is public: check again.
+    const scrubbed = await runScrub(`${v.hook}\n\n${body}`)
+    if ((scrubbed.replacements ?? []).some((r) => r.detected_type === 'name' || r.detected_type === 'phone' || r.detected_type === 'email' || r.detected_type === 'address')) {
+      return { ok: false, reason: 'names' }
+    }
+    const guard = await runClassifyCrisis(`${v.hook}\n\n${body}`)
+    if (guard.crisis) return { ok: false, reason: 'crisis' }
+
+    const { data: alias } = await supabaseAdmin.from('aliases').select('display_name, emoji').eq('user_id', id.userId).maybeSingle()
+    const title = String(v.hook).slice(0, 600)
+    const { data: situation, error: sitErr } = await supabaseAdmin
+      .from('situations')
+      .insert({
+        alias_id: id.userId,
+        pillar: 'family',
+        clean_text: row.story_clean,
+        kind: 'joke',
+        title,
+        body,
+        is_public: true,
+        crisis_flag: false,
+        is_seed: false,
+        status: 'open',
+      } as never)
+      .select('id')
+      .single()
+    if (sitErr || !situation) return { ok: false, reason: 'failed' }
+
+    const { data: room, error: roomErr } = await supabaseAdmin
+      .from('rooms')
+      .insert({
+        author_id: id.userId,
+        alias: (alias?.display_name as string) ?? 'someone',
+        emoji: (alias?.emoji as string) ?? '🎤',
+        title,
+        body,
+        support: 'heard',
+        hall: 'relatable',
+        source: 'joke',
+        topic: data.topic,
+        post_kind: data.kind,
+        bit_version_id: v.id,
+        post_data: postData,
+      } as never)
+      .select('id')
+      .single()
+    if (roomErr || !room) return { ok: false, reason: 'failed' }
+    await supabaseAdmin.from('situations').update({ room_id: room.id } as never).eq('id', situation.id)
+    return { ok: true, room_id: room.id as string, already: false }
+  })

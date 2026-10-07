@@ -33,6 +33,7 @@ import { MixYourOwn } from './MixYourOwn'
 import { Prompter } from './Prompter'
 import { SceneView, ScreenplayView } from './Layouts'
 import { DownloadSheet } from './DownloadSheet'
+import { PostSheet } from './PostSheet'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
@@ -105,6 +106,8 @@ function resetLabel(iso: string | undefined): string {
 
 
 
+
+
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
 
 export function BitSurface() {
@@ -128,6 +131,7 @@ export function BitSurface() {
   const [toast, setToast] = useState<string | null>(null)
   const [prompter, setPrompter] = useState<BitVersion | null>(null)
   const [downloadOpen, setDownloadOpen] = useState(false)
+  const [postOpen, setPostOpen] = useState(false)
   const topRef = useRef<HTMLDivElement | null>(null)
   const restoring = useRef(false)
 
@@ -462,12 +466,16 @@ export function BitSurface() {
                 <ActionIcon name="download" />
                 download
               </button>
-              {(['post'] as const).map((k) => (
-                <button key={k} className="bt-act" disabled aria-disabled="true">
-                  <ActionIcon name={k} />
-                  {k}
-                </button>
-              ))}
+              <button
+                className="bt-act"
+                onClick={() => {
+                  if (bit.locked) return setSheet('signin')
+                  setPostOpen(true)
+                }}
+              >
+                <ActionIcon name="post" />
+                post
+              </button>
             </div>
 
             {!bit.locked && (
@@ -521,6 +529,10 @@ export function BitSurface() {
             <ScreenplayView bitId={bit.id} version={version} onBack={backToBit} say={say} watermark={tier !== 'paying'} />
           )}
         </div>
+      )}
+
+      {postOpen && bit && version && (
+        <PostSheet bitId={bit.id} version={version} audience={bit.controls.audience} tier={tier} onClose={() => setPostOpen(false)} />
       )}
 
       {downloadOpen && bit && version && (

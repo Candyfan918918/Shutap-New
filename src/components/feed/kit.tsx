@@ -4,6 +4,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { rememberReturnTo } from '@/lib/auth'
 import { reportPost, toggleLike, toggleSave, toggleFollow, deletePost } from '@/lib/feed.functions'
 import { REPORT_REASONS, TOPIC_LABEL, ago, type FeedPost, type ReportReason } from '@/lib/feed-shared'
+import { Prompter } from '@/pages/home/bit/Prompter'
 import './feed.css'
 
 export function goSignIn() {
@@ -45,6 +46,12 @@ export function Sheet({ open, onClose, children }: { open: boolean; onClose: () 
 }
 
 const I = {
+  prompter: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+      <rect x="3" y="4" width="18" height="13" rx="2" />
+      <path d="M7 9h10M7 12h6M9 21h6M12 17v4" />
+    </svg>
+  ),
   heart: (on: boolean) => (
     <svg viewBox="0 0 24 24" fill={on ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" aria-hidden>
       <path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 4 4.5 7.3 4.5c2 0 3.4 1.1 4.7 2.8 1.3-1.7 2.7-2.8 4.7-2.8 3.3 0 5.7 3.1 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z" strokeLinejoin="round" />
@@ -178,6 +185,59 @@ export async function sharePost(id: string, joke: string, say: (m: string) => vo
   }
 }
 
+/** A bit post: the four parts, labelled. A scene post: the numbered beats. */
+export function PostBody({ post }: { post: FeedPost }) {
+  if (post.kind === 'scene' && post.scene) {
+    const sc = post.scene
+    return (
+      <div className="fd-bit">
+        <span className="fd-pill">scene · ~{sc.secs}s</span>
+        <p className="fd-hook">{sc.hook}</p>
+        <ol className="fd-beats">
+          {sc.beats.map((b, i) => (
+            <li key={i}>
+              <span className="n" aria-hidden="true">{i + 1}</span>
+              <div>
+                <span className="shot">
+                  {b.shot} · {b.speaker}
+                </span>
+                <span className="line">{b.line}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )
+  }
+  if (post.kind === 'bit' && post.bit) {
+    const b = post.bit
+    return (
+      <div className="fd-bit">
+        <span className="fd-pill">bit · ~{b.secs}s</span>
+        <div className="fd-part">
+          <span className="lb r">hook</span>
+          <p className="fd-hook">{b.hook}</p>
+        </div>
+        <div className="fd-part">
+          <span className="lb">setup</span>
+          <p className="v">{b.setup}</p>
+        </div>
+        {b.tags.map((t, i) => (
+          <div key={i} className="fd-part">
+            <span className="lb">tag {i + 1}</span>
+            <p className="v">{t}</p>
+          </div>
+        ))}
+        <div className="fd-part">
+          <span className="lb r">button</span>
+          <p className="v">{b.button}</p>
+        </div>
+      </div>
+    )
+  }
+  return null
+}
+
 export function PostCard({
   post,
   signedIn,
@@ -199,6 +259,7 @@ export function PostCard({
   const [p, setP] = useState(post)
   const [menu, setMenu] = useState(false)
   const [reporting, setReporting] = useState(false)
+  const [prompting, setPrompting] = useState(false)
   useEffect(() => setP(post), [post])
 
   const onLike = async () => {
@@ -256,13 +317,25 @@ export function PostCard({
         ) : null}
       </div>
 
-      {p.situation ? <p className="fd-situation">{p.situation}</p> : null}
-      {linkJoke ? (
-        <Link to="/rooms/$id" params={{ id: p.id }} style={{ textDecoration: 'none' }}>
-          {joke}
-        </Link>
+      {p.kind !== 'card' ? (
+        linkJoke ? (
+          <Link to="/rooms/$id" params={{ id: p.id }} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <PostBody post={p} />
+          </Link>
+        ) : (
+          <PostBody post={p} />
+        )
       ) : (
-        joke
+        <>
+          {p.situation ? <p className="fd-situation">{p.situation}</p> : null}
+          {linkJoke ? (
+            <Link to="/rooms/$id" params={{ id: p.id }} style={{ textDecoration: 'none' }}>
+              {joke}
+            </Link>
+          ) : (
+            joke
+          )}
+        </>
       )}
 
       <div className="fd-actions">
@@ -281,6 +354,11 @@ export function PostCard({
           {I.share}
         </button>
         <span className="fd-spacer" />
+        {p.kind !== 'card' ? (
+          <button className="fd-act" aria-label="open in teleprompter" onClick={() => setPrompting(true)}>
+            {I.prompter}
+          </button>
+        ) : null}
         <button className="fd-act" aria-label="more" onClick={() => setMenu(true)}>
           {I.more}
         </button>
@@ -314,6 +392,19 @@ export function PostCard({
           cancel
         </button>
       </Sheet>
+      {prompting && (p.bit || p.scene) ? (
+        <Prompter
+          bit={
+            p.bit ?? {
+              hook: p.scene!.hook,
+              setup: '',
+              tags: p.scene!.beats.filter((b) => /^me\b/i.test(b.speaker)).map((b) => b.line),
+              button: '',
+            }
+          }
+          onClose={() => setPrompting(false)}
+        />
+      ) : null}
       <ReportSheet
         open={reporting}
         roomId={p.id}
