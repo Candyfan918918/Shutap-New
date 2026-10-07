@@ -475,3 +475,83 @@ export const claimGuestBits = createServerFn({ method: 'POST' })
       .select('id')
     return { claimed: (rows as unknown[] | null)?.length ?? 0 }
   })
+
+/* ───────────────────────── Mix your own ───────────────────────── */
+
+export type MixPool = { hooks: string[]; tags: string[]; buttons: string[] }
+
+function uniq(xs: string[]): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const x of xs) {
+    const t = (x ?? '').trim()
+    if (!t || seen.has(t.toLowerCase())) continue
+    seen.add(t.toLowerCase())
+    out.push(t)
+  }
+  return out
+}
+
+/** The lines on offer: every hook, tag and button the judge kept for this
+ *  story, plus the spare tags. Read from the server copy on save too, so a
+ *  mix can only ever be made of lines the pipeline actually wrote. */
+async function mixPool(admin: any, bitId: string): Promise<MixPool> {
+  const { data } = await admin.from('bits').select('candidates, alt_tags').eq('id', bitId).maybeSingle()
+  const cands = (Array.isArray(data?.candidates) ? data.candidates : []) as BitDraft[]
+  return {
+    hooks: uniq(cands.map((c) => c.hook)),
+    tags: uniq([...cands.flatMap((c) => c.tags ?? []), ...((data?.alt_tags ?? []) as string[])]),
+    buttons: uniq(cands.map((c) => c.button)),
+  }
+}
+
+export const getMixOptions = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) => z.object({ bit_id: z.string().uuid(), ...Ctx }).parse(d))
+  .handler(async ({ data }): Promise<{ ok: true; pool: MixPool } | { ok: false; reason: 'sign_in' | 'not_found' }> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
+    const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
+    if (!row) return { ok: false, reason: 'not_found' }
+    return { ok: true, pool: await mixPool(supabaseAdmin, row.id) }
+  })
+
+/** Save the three picks as a 'mix' version. The setup stays from the version
+ *  the user started on. */
+export const saveMix = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        bit_id: z.string().uuid(),
+        from_version_id: z.string().uuid().optional(),
+        hook: z.string().min(1).max(400),
+        tag: z.string().min(1).max(600),
+        button: z.string().min(1).max(600),
+        ...Ctx,
+      })
+      .parse(d),
+  )
+  .handler(async ({ data }): Promise<VersionResult> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
+    const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
+    if (!row) return { ok: false, reason: 'not_found' }
+    const versions = await loadVersions(supabaseAdmin, row.id)
+    if (versions.length >= MAX_VERSIONS) return { ok: false, reason: 'too_many' }
+    const pool = await mixPool(supabaseAdmin, row.id)
+    const from = versions.find((v) => v.id === data.from_version_id) ?? versions[0]
+    // Only lines the pipeline wrote for this story, or the current version's own.
+    const okHook = pool.hooks.includes(data.hook) || from?.hook === data.hook
+    const okTag = pool.tags.includes(data.tag) || !!from?.tags.includes(data.tag)
+    const okButton = pool.buttons.includes(data.button) || from?.button === data.button
+    if (!from || !okHook || !okTag || !okButton) return { ok: false, reason: 'not_found' }
+    const saved = await insertVersion(
+      supabaseAdmin,
+      row.id,
+      'mix',
+      { hook: data.hook, setup: from.setup, tags: [data.tag], button: data.button, why: 'Your mix: the hook, tag and ending you picked.' },
+      from.heat,
+    )
+    return { ok: true, version: toVersion(saved, false) }
+  })

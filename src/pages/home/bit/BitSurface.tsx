@@ -28,6 +28,8 @@ import {
 import { setDurableReturn } from '@/lib/auth-guard'
 import { anonSessionId, clearAnonSessionId, jokeTrack } from '../joke/jokeClient'
 import { ActionIcon } from './icons'
+import { Versions } from './Versions'
+import { MixYourOwn } from './MixYourOwn'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
@@ -36,7 +38,7 @@ const PENDING_KEY = 'shutap_bit_pending'
 const PENDING_TTL = 60 * 60 * 1000
 
 type ShownBit = Bit & { locked: boolean }
-type Phase = 'write' | 'writing' | 'bit' | 'crisis'
+type Phase = 'write' | 'writing' | 'bit' | 'mix' | 'crisis'
 type Notice = { text: string; swaps: string[] }
 
 const STEPS = ['reading it · names removed', 'finding the angle', 'writing four, ranking them', 'timing it at talking pace']
@@ -92,6 +94,8 @@ function resetLabel(iso: string | undefined): string {
 
 
 
+
+
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
 
 export function BitSurface() {
@@ -111,11 +115,29 @@ export function BitSurface() {
   const [notice, setNotice] = useState<Notice | null>(null)
   const [sheet, setSheet] = useState<null | 'signin' | 'limit' | 'rate'>(null)
   const [error, setError] = useState<string | null>(null)
+  const [currentId, setCurrentId] = useState<string | null>(null)
+  const [toast, setToast] = useState<string | null>(null)
   const topRef = useRef<HTMLDivElement | null>(null)
   const restoring = useRef(false)
 
   const ctx = useCallback(() => ({ anon_session_id: anonSessionId() }), [])
-  const version: BitVersion | null = bit?.versions[bit.versions.length - 1] ?? null
+  const version: BitVersion | null = bit ? (bit.versions.find((v) => v.id === currentId) ?? bit.versions[0] ?? null) : null
+
+  const say = useCallback((m: string) => {
+    setToast(m)
+    window.setTimeout(() => setToast(null), 3200)
+  }, [])
+
+  function addVersion(v: BitVersion) {
+    setBit((b) => (b ? { ...b, versions: [...b.versions, v] } : b))
+    setCurrentId(v.id)
+    jokeTrack('version_made', tier, { kind: v.kind })
+  }
+
+  function backToBit() {
+    setPhase('bit')
+    requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+  }
 
   /* draft + controls survive a reload */
   useEffect(() => {
@@ -157,6 +179,7 @@ export function BitSurface() {
       const r = await fetchBit({ data: { bit_id: note.bit_id, ...ctx() } })
       if (r.bit) {
         setBit(r.bit)
+        setCurrentId(r.bit.versions[0]?.id ?? null)
         setPhase('bit')
         jokeTrack('bit_unlocked', t, {})
         requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
@@ -222,6 +245,7 @@ export function BitSurface() {
     setTier(res.tier)
     setUsage(res.usage)
     setBit(res.bit)
+    setCurrentId(res.bit.versions[0]?.id ?? null)
     const swaps = res.replacements.map((r) => r.replacement).filter(Boolean)
     setNotice(res.notice || swaps.length ? { text: res.notice, swaps } : null)
     setPhase('bit')
@@ -378,8 +402,8 @@ export function BitSurface() {
                 <p className="bt-v">{version.setup}</p>
               </div>
               {version.tags.map((t, i) => (
-                <div key={i} className={`bt-slot${bit.locked ? ' locked' : ''}`}>
-                  <span className="bt-lbl">tag {i + 1}</span>
+                <div key={i} className={`bt-slot${bit.locked ? ' locked' : ''}${i === 0 && version.kind === 'tag_swap' ? ' new' : ''}`}>
+                  <span className={`bt-lbl${i === 0 && version.kind === 'tag_swap' ? ' r' : ''}`}>tag {i + 1}{i === 0 && version.kind === 'tag_swap' ? ' · swapped' : ''}</span>
                   <p className="bt-v" aria-hidden={bit.locked || undefined}>{t}</p>
                 </div>
               ))}
@@ -405,6 +429,20 @@ export function BitSurface() {
               ))}
             </div>
 
+            {!bit.locked && (
+              <Versions
+                bit={bit}
+                current={version}
+                onSelect={(id) => setCurrentId(id)}
+                onAdd={addVersion}
+                onMix={() => {
+                  setPhase('mix')
+                  requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+                }}
+                say={say}
+              />
+            )}
+
             <div className="bt-row">
               <button className="bt-btn ghost" onClick={writeAnother}>
                 write another
@@ -414,6 +452,28 @@ export function BitSurface() {
           </>
         )}
       </div>
+
+      {phase === 'mix' && bit && version && (
+        <div className="bt-col" style={{ marginTop: 0 }}>
+          <MixYourOwn
+            bit={bit}
+            from={version}
+            onSaved={(v) => {
+              setBit((b) => (b ? { ...b, versions: [...b.versions, v] } : b))
+              setCurrentId(v.id)
+              jokeTrack('mix_done', tier)
+            }}
+            onBack={backToBit}
+            onPrompter={() => backToBit()}
+          />
+        </div>
+      )}
+
+      {toast && (
+        <div role="status" className="bt-toast">
+          {toast}
+        </div>
+      )}
 
       {sheet && (
         <div

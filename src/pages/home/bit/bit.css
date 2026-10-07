@@ -91,3 +91,22 @@
 @media (min-width: 640px) { .bt-scrim { align-items: center; } .bt-sheet { border-radius: 22px; } }
 
 @media (prefers-reduced-motion: reduce) { .bt * { transition: none !important; animation: none !important; } }
+
+/* versions, spare tags */
+.bt-opt { width: 100%; text-align: left; border: 1.5px solid var(--line-2); border-radius: 14px; background: var(--card); padding: 12px 14px; font: 17px/1.4 var(--news); color: var(--ink); cursor: pointer; }
+.bt-opt[aria-pressed='true'] { border-color: var(--rose); background: var(--tint); }
+.bt-slot.new { background: var(--tint); border-radius: 12px; padding: 10px 12px; margin: 4px -12px; border-bottom: 0; }
+.bt-chip[aria-busy='true'] { opacity: 0.6; cursor: progress; }
+
+/* Mix your own */
+.bt-steplabels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+.bt-steplabels span { font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+.bt-steplabels span.on { color: var(--rose); }
+.bt-pick { width: 100%; display: flex; align-items: flex-start; gap: 12px; text-align: left; border: 1.5px solid var(--line-2); border-radius: 16px; background: var(--card); padding: 16px; cursor: pointer; font-family: var(--sora); color: var(--ink); }
+.bt-pick[aria-checked='true'] { border-color: var(--rose); background: var(--tint); }
+.bt-pick .dot { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--line-2); background: #fff; flex: none; display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 800; margin-top: 2px; }
+.bt-pick[aria-checked='true'] .dot { border-color: var(--rose); background: var(--rose); }
+.bt-pick .t { font-family: var(--news); font-size: 20px; line-height: 1.32; }
+.bt-pick:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+.bt-toast { position: fixed; left: 50%; top: 72px; transform: translateX(-50%); background: #2a2025; color: #fff; font: 600 13px var(--sora); padding: 10px 16px; border-radius: 999px; z-index: 90; max-width: calc(100vw - 32px); text-align: center; }
+.bt-h2:focus { outline: none; }
