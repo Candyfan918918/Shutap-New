@@ -110,3 +110,20 @@
 .bt-pick:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
 .bt-toast { position: fixed; left: 50%; top: 72px; transform: translateX(-50%); background: #2a2025; color: #fff; font: 600 13px var(--sora); padding: 10px 16px; border-radius: 999px; z-index: 90; max-width: calc(100vw - 32px); text-align: center; }
 .bt-h2:focus { outline: none; }
+
+/* teleprompter (portalled to <body>, so it carries its own colours) */
+.bt-stage { position: fixed; inset: 0; z-index: 100; background: #121014; color: #f6eef1; display: flex; flex-direction: column; gap: 12px; padding: calc(env(safe-area-inset-top, 0px) + 14px) 18px calc(env(safe-area-inset-bottom, 0px) + 14px); font-family: 'Sora', system-ui, sans-serif; }
+.bt-stage .bt-lbl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.bt-stage .bt-between { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.bt-stage .bt-note { margin: 0; font-size: 12.5px; }
+.bt-stage-view { flex: 1; position: relative; overflow: hidden; cursor: pointer; -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 72%, transparent); mask-image: linear-gradient(transparent, #000 14%, #000 72%, transparent); }
+.bt-stage-text { position: absolute; left: 18px; right: 0; max-width: 820px; margin: 0 auto; font-weight: 700; font-size: clamp(30px, 7vw, 54px); line-height: 1.3; letter-spacing: -0.015em; will-change: transform; transform-origin: center top; }
+.bt-stage-text p { margin: 0 0 0.85em; }
+.bt-stage-guide { position: absolute; left: 0; top: calc(36% + 0.55em); width: 0; height: 0; border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-left: 11px solid #e7548a; z-index: 1; font-size: clamp(30px, 7vw, 54px); }
+.bt-stage-count { position: absolute; inset: 0; display: grid; place-items: center; font-size: 140px; font-weight: 800; color: #e7548a; background: rgba(18, 16, 20, 0.55); z-index: 2; }
+.bt-stage-hint { position: absolute; left: 50%; bottom: 16%; transform: translateX(-50%); white-space: nowrap; font-size: 14px; font-weight: 700; color: #f6eef1; background: rgba(34, 28, 32, 0.92); border: 1px solid #3a3036; border-radius: 999px; padding: 9px 16px; z-index: 2; }
+.bt-stage-ctrl { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.bt-stage-btn { height: 44px; min-width: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #3a3036; background: #221c20; color: #f6eef1; font: 700 14px 'Sora', system-ui, sans-serif; cursor: pointer; }
+.bt-stage-btn.go { background: #b8456b; border-color: #b8456b; min-width: 96px; }
+.bt-stage-btn[aria-pressed='true'] { border-color: #e7548a; color: #ffb3cf; }
+.bt-stage-btn:focus-visible { outline: 2px solid #e7548a; outline-offset: 2px; }

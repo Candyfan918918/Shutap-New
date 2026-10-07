@@ -30,6 +30,7 @@ import { anonSessionId, clearAnonSessionId, jokeTrack } from '../joke/jokeClient
 import { ActionIcon } from './icons'
 import { Versions } from './Versions'
 import { MixYourOwn } from './MixYourOwn'
+import { Prompter } from './Prompter'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
@@ -96,6 +97,8 @@ function resetLabel(iso: string | undefined): string {
 
 
 
+
+
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
 
 export function BitSurface() {
@@ -117,6 +120,7 @@ export function BitSurface() {
   const [error, setError] = useState<string | null>(null)
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
+  const [prompter, setPrompter] = useState<BitVersion | null>(null)
   const topRef = useRef<HTMLDivElement | null>(null)
   const restoring = useRef(false)
 
@@ -421,7 +425,18 @@ export function BitSurface() {
             </article>
 
             <div className="bt-acts" role="group" aria-label="Use the bit">
-              {(['prompter', 'scene', 'screenplay', 'download', 'post'] as const).map((k) => (
+              <button
+                className="bt-act"
+                onClick={() => {
+                  if (bit.locked) return setSheet('signin')
+                  setPrompter(version)
+                  jokeTrack('prompter_opened', tier, { kind: version.kind })
+                }}
+              >
+                <ActionIcon name="prompter" />
+                prompter
+              </button>
+              {(['scene', 'screenplay', 'download', 'post'] as const).map((k) => (
                 <button key={k} className="bt-act" disabled aria-disabled="true">
                   <ActionIcon name={k} />
                   {k}
@@ -464,10 +479,15 @@ export function BitSurface() {
               jokeTrack('mix_done', tier)
             }}
             onBack={backToBit}
-            onPrompter={() => backToBit()}
+            onPrompter={(v) => {
+              setPrompter(v)
+              jokeTrack('prompter_opened', tier, { kind: 'mix' })
+            }}
           />
         </div>
       )}
+
+      {prompter && <Prompter bit={prompter} onClose={() => setPrompter(null)} />}
 
       {toast && (
         <div role="status" className="bt-toast">
