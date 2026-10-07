@@ -721,7 +721,9 @@ export const postBitToRoom = createServerFn({ method: 'POST' })
       } as never)
       .select('id')
       .single()
-    if (sitErr || !situation) return { ok: false, reason: 'failed' }
+    // The story page behind the post is secondary: a failure here is logged,
+    // and the post still goes up.
+    if (sitErr || !situation) console.error('[bit-post] situation insert failed', sitErr?.message)
 
     const { data: room, error: roomErr } = await supabaseAdmin
       .from('rooms')
@@ -741,7 +743,10 @@ export const postBitToRoom = createServerFn({ method: 'POST' })
       } as never)
       .select('id')
       .single()
-    if (roomErr || !room) return { ok: false, reason: 'failed' }
-    await supabaseAdmin.from('situations').update({ room_id: room.id } as never).eq('id', situation.id)
+    if (roomErr || !room) {
+      console.error('[bit-post] room insert failed', roomErr?.message)
+      return { ok: false, reason: 'failed' }
+    }
+    if (situation) await supabaseAdmin.from('situations').update({ room_id: room.id } as never).eq('id', situation.id)
     return { ok: true, room_id: room.id as string, already: false }
   })
