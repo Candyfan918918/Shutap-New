@@ -204,13 +204,27 @@ export function BitSurface() {
     }
   }, [claim, fetchBit, refresh, ctx])
 
+  /* /?bit=<id> reopens a bit from the set list (or a reload). */
+  const openFromLink = useCallback(async () => {
+    const id = new URLSearchParams(window.location.search).get('bit')
+    if (!id || !/^[0-9a-f-]{36}$/i.test(id) || readPending()) return
+    try {
+      const r = await fetchBit({ data: { bit_id: id, ...ctx() } })
+      if (r.bit) {
+        setBit(r.bit)
+        setCurrentId(r.bit.versions[0]?.id ?? null)
+        setPhase('bit')
+      }
+    } catch { /* not theirs, or gone: stay on the box */ }
+  }, [fetchBit, ctx])
+
   useEffect(() => {
-    void refresh().then(() => restore())
+    void refresh().then(() => restore()).then(() => openFromLink())
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user.is_anonymous !== true) void restore()
     })
     return () => sub.subscription.unsubscribe()
-  }, [refresh, restore])
+  }, [refresh, restore, openFromLink])
 
   /* the writing clock */
   useEffect(() => {
@@ -278,6 +292,7 @@ export function BitSurface() {
   }
 
   function writeAnother() {
+    if (window.location.search.includes('bit=')) window.history.replaceState(null, '', '/')
     setBit(null)
     setNotice(null)
     setPhase('write')

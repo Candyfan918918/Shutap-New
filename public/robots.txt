@@ -16,6 +16,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -33,6 +34,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -50,6 +52,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -67,6 +70,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -84,6 +88,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -101,6 +106,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -118,6 +124,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -135,6 +142,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -152,6 +160,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -169,6 +178,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -186,6 +196,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -203,6 +214,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -220,6 +232,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -237,6 +250,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -254,6 +268,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -271,6 +286,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -288,6 +304,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -305,6 +322,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
@@ -322,6 +340,7 @@ Disallow: /profile
 Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
+Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report

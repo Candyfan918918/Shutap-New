@@ -38,6 +38,7 @@ import { Route as RelationshipsRouteImport } from './routes/relationships'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as RoomRouteImport } from './routes/room'
 import { Route as SafetyRouteImport } from './routes/safety'
+import { Route as SetListRouteImport } from './routes/set-list'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StreamRouteImport } from './routes/stream'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
@@ -225,6 +226,11 @@ const RoomRoute = RoomRouteImport.update({
 const SafetyRoute = SafetyRouteImport.update({
   id: '/safety',
   path: '/safety',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetListRoute = SetListRouteImport.update({
+  id: '/set-list',
+  path: '/set-list',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -490,6 +496,7 @@ export interface FileRoutesByFullPath {
   '/report': typeof ReportRoute
   '/room': typeof RoomRoute
   '/safety': typeof SafetyRoute
+  '/set-list': typeof SetListRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
@@ -564,6 +571,7 @@ export interface FileRoutesByTo {
   '/report': typeof ReportRoute
   '/room': typeof RoomRoute
   '/safety': typeof SafetyRoute
+  '/set-list': typeof SetListRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
@@ -640,6 +648,7 @@ export interface FileRoutesById {
   '/report': typeof ReportRoute
   '/room': typeof RoomRoute
   '/safety': typeof SafetyRoute
+  '/set-list': typeof SetListRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
@@ -716,6 +725,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/room'
     | '/safety'
+    | '/set-list'
     | '/sitemap.xml'
     | '/stream'
     | '/subscribe'
@@ -790,6 +800,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/room'
     | '/safety'
+    | '/set-list'
     | '/sitemap.xml'
     | '/stream'
     | '/subscribe'
@@ -865,6 +876,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/room'
     | '/safety'
+    | '/set-list'
     | '/sitemap.xml'
     | '/stream'
     | '/subscribe'
@@ -941,6 +953,7 @@ export interface RootRouteChildren {
   ReportRoute: typeof ReportRoute
   RoomRoute: typeof RoomRoute
   SafetyRoute: typeof SafetyRoute
+  SetListRoute: typeof SetListRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StreamRoute: typeof StreamRoute
   SubscribeRoute: typeof SubscribeRouteWithChildren
@@ -1180,6 +1193,13 @@ declare module '@tanstack/react-router' {
       path: '/safety'
       fullPath: '/safety'
       preLoaderRoute: typeof SafetyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/set-list': {
+      id: '/set-list'
+      path: '/set-list'
+      fullPath: '/set-list'
+      preLoaderRoute: typeof SetListRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -1570,6 +1590,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReportRoute: ReportRoute,
   RoomRoute: RoomRoute,
   SafetyRoute: SafetyRoute,
+  SetListRoute: SetListRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StreamRoute: StreamRoute,
   SubscribeRoute: SubscribeRouteWithChildren,

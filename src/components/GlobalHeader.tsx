@@ -284,7 +284,8 @@ export function GlobalHeader() {
                     <div style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: 12.5 }}>{alias.name}</div>
                     {slug ? <Link to="/u/$pseudonym" params={{ pseudonym: slug }} style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link> : null}
                     <Link to="/rooms" search={{ tab: 'saved' }} style={menuItem} onClick={() => setMenuOpen(false)}>saved</Link>
-                    <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>set list</Link>
+                    <Link to="/set-list" style={menuItem} onClick={() => setMenuOpen(false)}>set list</Link>
+                    <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>account</Link>
                     <Link to="/mirror" style={menuItem} onClick={() => setMenuOpen(false)}>the mirror</Link>
                     {admin && (
                       <Link to="/admin" style={menuItem} onClick={() => setMenuOpen(false)}>
