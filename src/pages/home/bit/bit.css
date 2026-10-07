@@ -164,3 +164,8 @@
 .bt-sheet .bt-lbl.r { color: #b8456b; }
 .bt-sheet .bt-note { margin: 0; color: #7d7277; }
 .bt-sheet .bt-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* caption + hashtags */
+.bt-cap { border: 1px solid rgba(90,30,50,.12); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; background: #fff; }
+.bt-cap .cap { margin: 0; font-size: 15px; line-height: 1.4; color: #1a1418; }
+.bt-cap .tags { margin: 0; font-size: 14px; font-weight: 600; color: #9b3559; line-height: 1.5; word-break: break-word; }

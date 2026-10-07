@@ -1543,3 +1543,32 @@ to one page: about 40 short lines in total.
 Return only JSON:
 {"elements":[{"type":"scene_heading","text":"..."},{"type":"action","text":"..."},
              {"type":"character","text":"ME"},{"type":"dialogue","text":"..."}, ...]}`
+
+/* ───────────────────────── bit → caption + hashtags ─────────────────────────
+   Written on first open of the download sheet, cached per version on
+   bit_versions.caption. Same version stamp as the bit prompts. */
+export const CAPTION_PROMPT = `You write the post caption and hashtags for a short comedy video. The person
+who wrote the story performs the bit to camera; this is the text under the
+video on TikTok, Reels or Shorts.
+
+STORY:
+{{SITUATION}}
+
+THE BIT:
+{{BIT}}
+
+AUDIENCE: {{AUDIENCE}}
+
+CAPTION: one or two short lines, under 150 characters. It makes someone
+want to watch to the end: a teaser in the performer's voice, not a summary
+and not the punchline. Lowercase is fine. At most one emoji, only if it
+earns its place. Never "story time", never "wait for it", never "POV:" unless
+the bit is literally a POV. No real names. No advice, no therapy words.
+
+HASHTAGS: 5 to 8, most specific first. Two or three about this exact
+situation (#roommates, #badroommate), two about the format (#comedy,
+#standupcomedy, #storytime only if it fits), one or two broad reach tags.
+No spaces inside a tag, no banned or sexual tags, no tags with real names.
+
+Return only JSON:
+{"caption":"...","hashtags":["#...","#..."]}`

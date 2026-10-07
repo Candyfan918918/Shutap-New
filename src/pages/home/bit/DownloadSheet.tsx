@@ -11,6 +11,7 @@ import type { BitTier, BitVersion } from '@/lib/bits/shared'
 import { PLAN_TO_PRICE, usd } from '@/lib/pricing'
 import { anonSessionId, canShareFiles, isShareAbort, jokeTrack, saveBlob, svgToPng } from '../joke/jokeClient'
 import { scriptPdf } from './screenplay-pdf'
+import { CaptionBox } from './CaptionBox'
 
 type Format = 'bit' | 'hook' | 'pdf'
 const FORMATS: { key: Format; label: string }[] = [
@@ -104,7 +105,7 @@ export function DownloadSheet({
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="bt-sheet" role="dialog" aria-modal="true" aria-labelledby="dl-title">
+      <div className="bt-sheet" role="dialog" aria-modal="true" aria-labelledby="dl-title" style={{ maxHeight: '92vh', overflow: 'auto' }}>
         <div className="bt-between">
           <h3 id="dl-title">Download</h3>
           <button className="bt-btn ghost sm" onClick={onClose}>
@@ -136,6 +137,7 @@ export function DownloadSheet({
         <button className="bt-btn block" disabled={!ready} onClick={() => void save()}>
           save
         </button>
+        <CaptionBox bitId={bitId} versionId={version.id} tier={tier} locked={locked} say={say} />
         {tier !== 'paying' && (
           <button
             className="bt-btn ghost block"
