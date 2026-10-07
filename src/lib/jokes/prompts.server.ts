@@ -1455,3 +1455,65 @@ names; nothing about bodies, age, looks or intelligence.
 
 Return only JSON:
 {"hook":"...","setup":"...","tags":["..."],"button":"...","why":"..."}`
+
+/* ───────────────────────── bit → scene, bit → screenplay ─────────────────────────
+   Phase 5. Both take a finished bit version and lay it out for filming; they
+   do not write new jokes. Cached per version on bit_versions.scene /
+   bit_versions.screenplay. Same version stamp as the bit prompts. */
+
+export const SCENE_PROMPT = `You turn a finished comedy bit into a shot list for a short vertical video
+(TikTok, Reels, Shorts). The person who wrote the story performs it, first
+person, as ME. Do not write new jokes and do not improve the old ones: every
+line ME says comes from the bit, in order, close to word for word.
+
+STORY:
+{{SITUATION}}
+
+THE BIT:
+{{BIT}}
+
+Write 4 to 8 beats. Each beat is one shot:
+- "shot": the framing and place, short and filmable on a phone by one person
+  ("cold open · selfie, hallway, 11pm", "talking head", "cutaway · the
+  door", "insert · the fridge", "punch-in"). Use places and objects from the
+  story.
+- "speaker": ME, or another person by role in caps with (O.S.) if off screen
+  ("HER (O.S.)", "MY BOSS"), or "—" for a silent shot.
+- "line": what is said. Another person may only say words the story says
+  they said; otherwise give them a silent shot and describe the action in
+  "line" without dialogue.
+- "on_screen": optional caption text, at most 6 words, lowercase. The first
+  beat's on_screen is the hook.
+
+No real names. No advice, no therapy words.
+
+Return only JSON:
+{"beats":[{"shot":"...","speaker":"...","line":"...","on_screen":"..."}]}`
+
+export const SCREENPLAY_PROMPT = `You format a finished comedy bit as one screenplay page in standard format.
+The person who wrote the story performs it, first person, as ME. Do not
+write new jokes and do not improve the old ones: ME's dialogue is the bit,
+in order, close to word for word.
+
+STORY:
+{{SITUATION}}
+
+THE BIT:
+{{BIT}}
+
+Use these elements, in screenplay order:
+- "scene_heading": INT. or EXT., the place from the story, DAY or NIGHT.
+- "action": present tense, what we see. Short paragraphs. Introduce ME
+  with an age range in caps the first time: "ME (30s)".
+- "character": the speaker in caps (ME, HER (O.S.), MY BOSS).
+- "parenthetical": a short delivery note in parentheses, only when needed.
+- "dialogue": what they say. Another person may only say words the story
+  says they said.
+- "transition": end with "CUT TO BLACK."
+
+No real names. No camera directions beyond what the action needs. Keep it
+to one page: about 40 short lines in total.
+
+Return only JSON:
+{"elements":[{"type":"scene_heading","text":"..."},{"type":"action","text":"..."},
+             {"type":"character","text":"ME"},{"type":"dialogue","text":"..."}, ...]}`

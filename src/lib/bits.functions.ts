@@ -31,6 +31,8 @@ import {
   type BitTier,
   type BitUsage,
   type BitVersion,
+  type SceneBeat,
+  type ScreenplayElement,
   type VersionKind,
 } from './bits/shared'
 
@@ -555,3 +557,45 @@ export const saveMix = createServerFn({ method: 'POST' })
     )
     return { ok: true, version: toVersion(saved, false) }
   })
+
+/* ───────────────────────── scene + screenplay ───────────────────────── */
+
+export type LayoutResult<T> = { ok: true; data: T } | { ok: false; reason: 'sign_in' | 'not_found' | 'rate_limited' | 'failed' }
+
+async function layoutFor<T>(
+  kind: 'scene' | 'screenplay',
+  bitId: string,
+  versionId: string,
+  anonSessionId: string | null,
+): Promise<LayoutResult<T>> {
+  const supabaseAdmin = await adminDb()
+  const id = await resolveJokeIdentity(anonSessionId)
+  if (!id.userId) return { ok: false, reason: 'sign_in' }
+  const row = await loadOwnedBit(supabaseAdmin, bitId, id)
+  if (!row) return { ok: false, reason: 'not_found' }
+  const { data: v } = await supabaseAdmin
+    .from('bit_versions')
+    .select(`id, hook, setup, tags, button, ${kind}`)
+    .eq('id', versionId)
+    .eq('bit_id', row.id)
+    .maybeSingle()
+  if (!v) return { ok: false, reason: 'not_found' }
+  if (v[kind]) return { ok: true, data: v[kind] as T }
+  const { day } = await resolveDayInfo(supabaseAdmin, id.userId)
+  if ((await chargeNetwork(supabaseAdmin, day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+  const { writeScene, writeScreenplay } = await import('./bits/pipeline.server')
+  const made = kind === 'scene' ? await writeScene(row.story_clean, v) : await writeScreenplay(row.story_clean, v)
+  if (!made) return { ok: false, reason: 'failed' }
+  await supabaseAdmin.from('bit_versions').update({ [kind]: made } as never).eq('id', v.id)
+  return { ok: true, data: made as T }
+}
+
+const LayoutInput = z.object({ bit_id: z.string().uuid(), version_id: z.string().uuid(), ...Ctx })
+
+export const getScene = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) => LayoutInput.parse(d))
+  .handler(({ data }) => layoutFor<SceneBeat[]>('scene', data.bit_id, data.version_id, data.anon_session_id ?? null))
+
+export const getScreenplay = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) => LayoutInput.parse(d))
+  .handler(({ data }) => layoutFor<ScreenplayElement[]>('screenplay', data.bit_id, data.version_id, data.anon_session_id ?? null))

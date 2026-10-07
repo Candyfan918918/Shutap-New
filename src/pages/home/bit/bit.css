@@ -127,3 +127,23 @@
 .bt-stage-btn.go { background: #b8456b; border-color: #b8456b; min-width: 96px; }
 .bt-stage-btn[aria-pressed='true'] { border-color: #e7548a; color: #ffb3cf; }
 .bt-stage-btn:focus-visible { outline: 2px solid #e7548a; outline-offset: 2px; }
+
+/* scene */
+.bt-beats { list-style: none; margin: 0; padding: 4px 16px; }
+.bt-beat { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 8px; padding-block: 12px; border-bottom: 1px solid var(--line); }
+.bt-beat:last-child { border-bottom: 0; }
+.bt-beat .n { font-weight: 800; color: var(--rose); font-size: 19px; }
+.bt-beat .shot { font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.bt-beat .line { font-family: var(--news); font-size: 17px; line-height: 1.38; }
+.bt-beat .ost { display: inline-block; margin-top: 4px; font-size: 12px; font-weight: 700; background: var(--ink); color: #fff; border-radius: 6px; padding: 3px 7px; }
+
+/* screenplay page */
+.bt-page { background: #fff; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 18px 40px -30px rgba(0, 0, 0, 0.4); padding: 28px 22px; font-family: 'Courier Prime', 'Courier New', Courier, monospace; font-size: 13.5px; line-height: 1.45; color: #111; overflow-x: auto; }
+.bt-page p { margin: 0 0 14px; white-space: pre-wrap; }
+.bt-page .sp-scene_heading { text-transform: uppercase; font-weight: 700; }
+.bt-page .sp-character { text-transform: uppercase; margin: 0 0 0 38%; }
+.bt-page .sp-parenthetical { margin: 0 0 0 28%; }
+.bt-page .sp-dialogue { margin: 0 14% 14px 18%; }
+.bt-page .sp-character + .sp-dialogue, .bt-page .sp-parenthetical + .sp-dialogue { margin-top: 0; }
+.bt-page .sp-transition { text-transform: uppercase; text-align: right; }
+@media (min-width: 560px) { .bt-page { padding: 40px 48px; font-size: 14.5px; } }

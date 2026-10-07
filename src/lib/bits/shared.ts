@@ -65,3 +65,11 @@ export function bitWords(b: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>
 export function estSeconds(b: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>): number {
   return Math.max(1, Math.round(bitWords(b) / WORDS_PER_SECOND))
 }
+
+/* ── phase 5: the bit laid out for filming ── */
+export type SceneBeat = { shot: string; speaker: string; line: string; on_screen: string }
+export type ScreenplayElement = {
+  type: 'scene_heading' | 'action' | 'character' | 'parenthetical' | 'dialogue' | 'transition'
+  text: string
+}
+export const SCREENPLAY_TYPES: ScreenplayElement['type'][] = ['scene_heading', 'action', 'character', 'parenthetical', 'dialogue', 'transition']

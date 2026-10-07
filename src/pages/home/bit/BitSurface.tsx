@@ -31,6 +31,7 @@ import { ActionIcon } from './icons'
 import { Versions } from './Versions'
 import { MixYourOwn } from './MixYourOwn'
 import { Prompter } from './Prompter'
+import { SceneView, ScreenplayView } from './Layouts'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
@@ -39,7 +40,7 @@ const PENDING_KEY = 'shutap_bit_pending'
 const PENDING_TTL = 60 * 60 * 1000
 
 type ShownBit = Bit & { locked: boolean }
-type Phase = 'write' | 'writing' | 'bit' | 'mix' | 'crisis'
+type Phase = 'write' | 'writing' | 'bit' | 'mix' | 'scene' | 'screenplay' | 'crisis'
 type Notice = { text: string; swaps: string[] }
 
 const STEPS = ['reading it · names removed', 'finding the angle', 'writing four, ranking them', 'timing it at talking pace']
@@ -92,6 +93,8 @@ function resetLabel(iso: string | undefined): string {
   const time = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
   return d.toDateString() === new Date().toDateString() ? `at ${time}` : `tomorrow at ${time}`
 }
+
+
 
 
 
@@ -436,7 +439,22 @@ export function BitSurface() {
                 <ActionIcon name="prompter" />
                 prompter
               </button>
-              {(['scene', 'screenplay', 'download', 'post'] as const).map((k) => (
+              {(['scene', 'screenplay'] as const).map((k) => (
+                <button
+                  key={k}
+                  className="bt-act"
+                  onClick={() => {
+                    if (bit.locked) return setSheet('signin')
+                    setPhase(k)
+                    jokeTrack(`${k}_opened`, tier, { kind: version.kind })
+                    requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+                  }}
+                >
+                  <ActionIcon name={k} />
+                  {k}
+                </button>
+              ))}
+              {(['download', 'post'] as const).map((k) => (
                 <button key={k} className="bt-act" disabled aria-disabled="true">
                   <ActionIcon name={k} />
                   {k}
@@ -484,6 +502,16 @@ export function BitSurface() {
               jokeTrack('prompter_opened', tier, { kind: 'mix' })
             }}
           />
+        </div>
+      )}
+
+      {(phase === 'scene' || phase === 'screenplay') && bit && version && (
+        <div className="bt-col">
+          {phase === 'scene' ? (
+            <SceneView bitId={bit.id} version={version} onBack={backToBit} onPrompter={() => setPrompter(version)} say={say} />
+          ) : (
+            <ScreenplayView bitId={bit.id} version={version} onBack={backToBit} say={say} />
+          )}
         </div>
       )}
 

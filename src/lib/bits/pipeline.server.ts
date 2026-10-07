@@ -21,6 +21,8 @@ import {
   BIT_VARY_PROMPT,
   BIT_VARY_RULES,
   BIT_VOICES,
+  SCENE_PROMPT,
+  SCREENPLAY_PROMPT,
   fill,
 } from '@/lib/jokes/prompts.server'
 import {
@@ -31,7 +33,16 @@ import {
   writerModel,
   type Premise,
 } from '@/lib/jokes/pipeline.server'
-import { WORDS_PER_SECOND, bitWords, type BitControls, type BitDraft, type VaryKind } from './shared'
+import {
+  SCREENPLAY_TYPES,
+  WORDS_PER_SECOND,
+  bitWords,
+  type BitControls,
+  type BitDraft,
+  type SceneBeat,
+  type ScreenplayElement,
+  type VaryKind,
+} from './shared'
 
 export { BIT_PROMPT_VERSION }
 
@@ -310,4 +321,58 @@ export async function varyBitDraft(
 
 export function heatFor(kind: VaryKind | 'original', controls: BitControls): number {
   return kind === 'hotter' ? Math.min(5, controls.heat + 2) : controls.heat
+}
+
+/* ── phase 5: scene and screenplay ── */
+
+
+function bitAsText(b: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>): string {
+  return `HOOK: ${b.hook}\nSETUP: ${b.setup}\n${b.tags.map((t, j) => `TAG ${j + 1}: ${t}`).join('\n')}\nBUTTON: ${b.button}`
+}
+
+async function layout<T>(template: string, story: string, bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>, parse: (raw: unknown) => T | null): Promise<T | null> {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await callAgent({
+      model: writerModel(),
+      temperature: 0.7,
+      maxTokens: 2500,
+      timeoutMs: BIT_BUDGET.vary(),
+      messages: [{ role: 'user', content: fill(template, { SITUATION: story.slice(0, 2000), BIT: bitAsText(bit) }) }],
+    })
+    if (res.error) {
+      console.warn('[bit-layout] gateway error', res.error)
+      continue
+    }
+    const out = parse(tryParseJson(res.text))
+    if (out) return out
+  }
+  return null
+}
+
+export function writeScene(story: string, bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>): Promise<SceneBeat[] | null> {
+  return layout(SCENE_PROMPT, story, bit, (raw) => {
+    const list = Array.isArray((raw as any)?.beats) ? ((raw as any).beats as any[]) : []
+    const beats = list
+      .map((b) => ({
+        shot: tidy(b?.shot).slice(0, 120),
+        speaker: tidy(b?.speaker).slice(0, 40) || '—',
+        line: tidy(b?.line).slice(0, 600),
+        on_screen: tidy(b?.on_screen).slice(0, 60),
+      }))
+      .filter((b) => b.shot && b.line && !toneFailure(b.line))
+      .slice(0, 10)
+    return beats.length >= 3 ? beats : null
+  })
+}
+
+export function writeScreenplay(story: string, bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>): Promise<ScreenplayElement[] | null> {
+  return layout(SCREENPLAY_PROMPT, story, bit, (raw) => {
+    const list = Array.isArray((raw as any)?.elements) ? ((raw as any).elements as any[]) : []
+    const els = list
+      .map((e) => ({ type: String(e?.type ?? '') as ScreenplayElement['type'], text: tidy(e?.text).slice(0, 800) }))
+      .filter((e) => SCREENPLAY_TYPES.includes(e.type) && e.text && !toneFailure(e.text))
+      .slice(0, 60)
+    const hasDialogue = els.some((e) => e.type === 'dialogue')
+    return els.length >= 4 && hasDialogue ? els : null
+  })
 }
