@@ -21,6 +21,7 @@ import {
   BIT_VARY_PROMPT,
   BIT_VARY_RULES,
   BIT_VOICES,
+  BIT_ANGLE_FINDER,
   SCENE_PROMPT,
   SCREENPLAY_PROMPT,
   fill,
@@ -81,7 +82,7 @@ function maxWords(c: BitControls): number {
 
 /** The observations, the four dealt ones first, numbered for the writer. */
 export function formatPremisesForBit(premises: Premise[]): string {
-  if (!premises.length) return '(none: read the story yourself, past the obvious)'
+  if (!premises.length) return BIT_ANGLE_FINDER
   const ordered = [...premises.filter((p) => p.used), ...premises.filter((p) => !p.used)]
   return ordered.map((p, i) => `${i + 1}. ${p.t}`).join('\n')
 }
@@ -133,7 +134,7 @@ export async function runBitPass(
   story: string,
   premises: Premise[],
   controls: BitControls,
-): Promise<{ bits: BitDraft[]; altTags: string[]; model: string; error?: string }> {
+): Promise<{ bits: BitDraft[]; altTags: string[]; angles: string[]; model: string; error?: string }> {
   const prompt = fill(BIT_PROMPT, {
     SITUATION: story.slice(0, 2000),
     PREMISES: formatPremisesForBit(premises),
@@ -146,8 +147,8 @@ export async function runBitPass(
     timeoutMs: BIT_BUDGET.write(),
     messages: [{ role: 'user', content: prompt }],
   })
-  if (res.error) return { bits: [], altTags: [], model: res.model, error: res.error }
-  const parsed = tryParseJson<{ bits?: unknown; alt_tags?: unknown }>(res.text)
+  if (res.error) return { bits: [], altTags: [], angles: [], model: res.model, error: res.error }
+  const parsed = tryParseJson<{ bits?: unknown; alt_tags?: unknown; angles?: unknown }>(res.text)
   const bits = (Array.isArray(parsed?.bits) ? parsed!.bits : [])
     .map(cleanBit)
     .filter((b): b is BitDraft => !!b)
@@ -155,7 +156,8 @@ export async function runBitPass(
     .map(tidy)
     .filter((t) => t && !hardRuleFailure(t, story, 'the_roast', { ignoreLength: true }))
     .slice(0, 5)
-  return { bits, altTags, model: res.model, ...(bits.length ? {} : { error: 'no bits parsed' }) }
+  const angles = (Array.isArray(parsed?.angles) ? parsed!.angles : []).map(tidy).filter(Boolean).slice(0, 6)
+  return { bits, altTags, angles, model: res.model, ...(bits.length ? {} : { error: 'no bits parsed' }) }
 }
 
 /* ── stage 3 · the judge ── */
@@ -232,7 +234,9 @@ export async function writeBitFromStory(
   premisesPromise?: Promise<Premise[]>,
 ): Promise<WrittenBit | null> {
   const t0 = Date.now()
-  const premises = await (premisesPromise ?? startPremises(story))
+  // Since bit-1.1 the writer finds its own angles (BIT_ANGLE_FINDER), which
+  // saves the separate premise call. BIT_PREMISE_PASS=on brings it back.
+  const premises = premisesPromise ? await premisesPromise : premisePassOn() ? await startPremises(story) : []
   const t1 = Date.now()
 
   let pass = await runBitPass(story, premises, controls)
@@ -251,7 +255,11 @@ export async function writeBitFromStory(
     return null
   }
 
-  const verdict = await runBitJudge(story, controls, passing)
+  // Since bit-1.1 the writer orders its own four, strongest first, which
+  // saves the judge call. BIT_JUDGE=on brings the judge back.
+  const verdict: BitVerdict = judgeOn()
+    ? await runBitJudge(story, controls, passing)
+    : { order: passing.map((_, i) => i), why: null, model: 'writer-order' }
   const t3 = Date.now()
   if (verdict.error) console.warn('[bit-judge] fell back to writer order', verdict.error)
   // The judge may reject everything; then the rules' survivors stand in
@@ -262,7 +270,7 @@ export async function writeBitFromStory(
   return {
     ranked,
     altTags: pass.altTags,
-    premises,
+    premises: premises.length ? premises : pass.angles.map((t) => ({ t, used: true })),
     judgeWhy: verdict.why,
     writerModel: pass.model,
     judgeModel: verdict.model,
@@ -270,6 +278,14 @@ export async function writeBitFromStory(
     timings: { premises_ms: t1 - t0, write_ms: t2 - t1, judge_ms: t3 - t2 },
     rejected,
   }
+}
+
+const flag = (name: string) => (process.env[name] ?? '').trim().toLowerCase() === 'on'
+function premisePassOn(): boolean {
+  return flag('BIT_PREMISE_PASS')
+}
+function judgeOn(): boolean {
+  return flag('BIT_JUDGE')
 }
 
 /** Stage 1 on the bit budget: one attempt, then the writer reads the story itself. */

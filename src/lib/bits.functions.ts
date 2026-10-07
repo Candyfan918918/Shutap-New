@@ -16,7 +16,7 @@ import { z } from 'zod'
 import { hasContactDetails, runScrub } from './agents/scrubber.functions'
 import { runClassifyCrisis } from './agents/guard.functions'
 import { resolveJokeIdentity, resolveDayInfo, type JokeIdentity } from './jokes/session.server'
-import { heatFor, startPremises, varyBitDraft, writeBitFromStory } from './bits/pipeline.server'
+import { heatFor, varyBitDraft, writeBitFromStory } from './bits/pipeline.server'
 import { chargeNetwork, chargeStory, readCounter, refundStory, usageFrom } from './bits/usage.server'
 import {
   AUDIENCES,
@@ -225,8 +225,11 @@ async function writeCore(
   if (!clean) return { status: 'failed', tier: id.tier, usage }
   const tScrub = Date.now()
 
-  // 3 · the Guard, with the premise pass started beside it
-  const premises = startPremises(clean)
+  // 3 · the Guard, with the writer started beside it to save its time. A
+  // crisis throws the writer's work away unread: nothing is charged, stored
+  // or shown, and the help block is all that comes back.
+  const controls = { ...DEFAULT_CONTROLS, ...(controlsIn ?? {}) } as BitControls
+  const writing = writeBitFromStory(clean, controls).catch(() => null)
   const crisis = await runClassifyCrisis(clean)
   const tGuard = Date.now()
   if (crisis.crisis) {
@@ -242,8 +245,7 @@ async function writeCore(
   // 4 · charge, then write
   const bitId = crypto.randomUUID()
   if (!lab) await chargeStory(supabaseAdmin, counter, bitId)
-  const controls = { ...DEFAULT_CONTROLS, ...(controlsIn ?? {}) } as BitControls
-  const written = await writeBitFromStory(clean, controls, premises)
+  const written = await writing
   if (!written || !written.ranked.length) {
     if (!lab) await refundStory(supabaseAdmin, id.subjectKey, day, bitId)
     return { status: 'failed', tier: id.tier, usage }

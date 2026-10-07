@@ -1265,7 +1265,7 @@ export function fill(template: string, vars: Record<string, string | undefined>)
    kept bit as hotter / tighter / escalate.
 
    BIT_PROMPT_VERSION is stamped on every bit. Bump it on ANY edit below. */
-export const BIT_PROMPT_VERSION = 'bit-1.0'
+export const BIT_PROMPT_VERSION = 'bit-1.1'
 
 /** What each audience control changes. The aim never changes: the situation. */
 export const BIT_AUDIENCE: Record<string, string> = {
@@ -1304,7 +1304,7 @@ person, as they would actually say it.
 STORY:
 {{SITUATION}}
 
-OBSERVATIONS ABOUT IT (from a reader who notices things; not jokes yet):
+ANGLES:
 {{PREMISES}}
 
 AUDIENCE: {{AUDIENCE}}
@@ -1362,17 +1362,43 @@ HARD RULES — a bit that breaks one is worthless, however funny:
   restatement, not a joke. The tag must arrive somewhere the story's words
   could not reach.
 
-WRITE FOUR DIFFERENT BITS. Each one builds on a different observation, so
-they are genuinely different angles, not rewordings. Then write FIVE spare
-tags for the strongest angle: lines that could replace a tag in it.
+WRITE FOUR DIFFERENT BITS. Each one builds on a different angle, so they
+are genuinely different, not rewordings. PUT THE STRONGEST BIT FIRST: the
+first one is the one the performer sees, so judge them against the rules
+above before you order them — a picture beats a finding, a landing you can
+point at beats an abstraction, a button that ends it beats one that
+explains it. Then write FIVE spare tags for the first bit's angle: lines
+that could replace a tag in it.
 
 For each bit, "why" is one plain sentence on what makes it work (the
 picture and why it only fits this story). No jargon.
 
-Return only JSON:
-{"bits":[{"hook":"...","setup":"...","tags":["...","..."],"button":"...","why":"..."},
+Return only JSON, "angles" first (one short sentence each, the angle each
+bit is built on, in the same order as the bits):
+{"angles":["...","...","...","..."],
+ "bits":[{"hook":"...","setup":"...","tags":["...","..."],"button":"...","why":"..."},
          {...},{...},{...}],
  "alt_tags":["...","...","...","...","..."]}`
+
+/** Filled in as {{PREMISES}} when no separate premise pass ran (the default
+ *  since bit-1.1): the writer finds its own angles, with the premise pass's
+ *  engines condensed. */
+export const BIT_ANGLE_FINDER = `Find the angles yourself before you write. An angle is an observation about
+what is absurd, hypocritical or quietly revealing in the story — not a joke
+yet. Look in this order and use what fires:
+1. THE ERRAND — the decision was made before the event; name the physical
+   task done one step earlier (the thing packed, booked, written).
+2. CLAIM VERSUS ACT — the word they used for what they did, against what
+   they actually did.
+3. SENTIMENT AS PRETEXT — the warm feeling that arrived because something
+   was needed.
+4. PROCESS LANGUAGE — the administrative word that makes it sound
+   procedural; name the institution that word belongs to.
+5. SELF-APPOINTMENT — what the person quietly turned themselves into (an
+   auditor, a committee, a press office).
+Keep the object from the story in every angle (the fridge, the camera, the
+11pm knock). Go past the first three things anyone would notice. Never
+make the teller's feelings, body or worth an angle.`
 
 export const BIT_JUDGE_PROMPT = `You choose which of these comedy bits is the funniest one to perform. You
 are not the writer and you have no stake in any of them. The person who
