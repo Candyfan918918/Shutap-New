@@ -50,7 +50,6 @@ import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as ApiCompleteRouteImport } from './routes/api/complete'
-import { Route as DesignJokeCardsRouteImport } from './routes/design.joke-cards'
 import { Route as EmailPreferencesRouteImport } from './routes/email.preferences'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email.unsubscribe'
 import { Route as IsItNormalSlugRouteImport } from './routes/is-it-normal.$slug'
@@ -290,11 +289,6 @@ const ApiCompleteRoute = ApiCompleteRouteImport.update({
   path: '/api/complete',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DesignJokeCardsRoute = DesignJokeCardsRouteImport.update({
-  id: '/design/joke-cards',
-  path: '/design/joke-cards',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const EmailPreferencesRoute = EmailPreferencesRouteImport.update({
   id: '/email/preferences',
   path: '/email/preferences',
@@ -508,7 +502,6 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/api/complete': typeof ApiCompleteRoute
-  '/design/joke-cards': typeof DesignJokeCardsRoute
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
@@ -583,7 +576,6 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/api/complete': typeof ApiCompleteRoute
-  '/design/joke-cards': typeof DesignJokeCardsRoute
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
@@ -660,7 +652,6 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/api/complete': typeof ApiCompleteRoute
-  '/design/joke-cards': typeof DesignJokeCardsRoute
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
@@ -737,7 +728,6 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/profile'
     | '/api/complete'
-    | '/design/joke-cards'
     | '/email/preferences'
     | '/email/unsubscribe'
     | '/is-it-normal/$slug'
@@ -812,7 +802,6 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/profile'
     | '/api/complete'
-    | '/design/joke-cards'
     | '/email/preferences'
     | '/email/unsubscribe'
     | '/is-it-normal/$slug'
@@ -888,7 +877,6 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/profile'
     | '/api/complete'
-    | '/design/joke-cards'
     | '/email/preferences'
     | '/email/unsubscribe'
     | '/is-it-normal/$slug'
@@ -964,7 +952,6 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiCompleteRoute: typeof ApiCompleteRoute
-  DesignJokeCardsRoute: typeof DesignJokeCardsRoute
   EmailPreferencesRoute: typeof EmailPreferencesRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   IsItNormalSlugRoute: typeof IsItNormalSlugRoute
@@ -1277,13 +1264,6 @@ declare module '@tanstack/react-router' {
       path: '/api/complete'
       fullPath: '/api/complete'
       preLoaderRoute: typeof ApiCompleteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/design/joke-cards': {
-      id: '/design/joke-cards'
-      path: '/design/joke-cards'
-      fullPath: '/design/joke-cards'
-      preLoaderRoute: typeof DesignJokeCardsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/email/preferences': {
@@ -1602,7 +1582,6 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiCompleteRoute: ApiCompleteRoute,
-  DesignJokeCardsRoute: DesignJokeCardsRoute,
   EmailPreferencesRoute: EmailPreferencesRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   IsItNormalSlugRoute: IsItNormalSlugRoute,

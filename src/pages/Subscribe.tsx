@@ -4,6 +4,7 @@ import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe
 import { useServerFn } from '@tanstack/react-start'
 import { getStripe, getStripeEnvironment } from '@/lib/stripe'
 import { createMirrorCheckout, createMirrorPortal } from '@/lib/payments.functions'
+import { trackEvent } from '@/lib/tracking'
 import { getMyBillingStatus, type BillingStatus } from '@/lib/billing.functions'
 import { PLAN_TO_PRICE, usd, type PlanKey } from '@/lib/pricing'
 import { supabase } from '@/integrations/supabase/client'
@@ -196,6 +197,7 @@ export function SubscribePage() {
       })
       if ('error' in result) throw new Error(result.error)
       if (!result.clientSecret) throw new Error('No client secret returned')
+      void trackEvent('checkout', { plan: planKey })
       return result.clientSecret
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Could not start checkout'
