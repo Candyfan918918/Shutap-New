@@ -13,7 +13,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { z } from 'zod'
-import { runScrub } from './agents/scrubber.functions'
+import { hasContactDetails, runScrub } from './agents/scrubber.functions'
 import { runClassifyCrisis } from './agents/guard.functions'
 import { resolveJokeIdentity, resolveDayInfo, type JokeIdentity } from './jokes/session.server'
 import { heatFor, startPremises, varyBitDraft, writeBitFromStory } from './bits/pipeline.server'
@@ -692,11 +692,12 @@ export const postBitToRoom = createServerFn({ method: 'POST' })
       body = [v.setup, ...v.tags, v.button].join('\n\n')
     }
 
-    // The lines came from a scrubbed story, but a post is public: check again.
-    const scrubbed = await runScrub(`${v.hook}\n\n${body}`)
-    if ((scrubbed.replacements ?? []).some((r) => r.detected_type === 'name' || r.detected_type === 'phone' || r.detected_type === 'email' || r.detected_type === 'address')) {
-      return { ok: false, reason: 'names' }
-    }
+    // The lines were written from a story the Scrubber already cleaned, and
+    // the writer is told never to use names, so the model pass is not run
+    // again here: it redacts "when unsure" and flagged role words ("my
+    // husband") as names, refusing clean bits. The deterministic pass still
+    // runs, and the Guard.
+    if (hasContactDetails(`${v.hook}\n\n${body}`)) return { ok: false, reason: 'names' }
     const guard = await runClassifyCrisis(`${v.hook}\n\n${body}`)
     if (guard.crisis) return { ok: false, reason: 'crisis' }
 

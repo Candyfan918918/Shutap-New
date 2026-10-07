@@ -11,7 +11,7 @@ import { TOPICS, TOPIC_LABEL, type Topic } from '@/lib/feed-shared'
 import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 
 const FAIL: Record<string, string> = {
-  names: 'That has a name or contact detail in it. Edit the story and write it again.',
+  names: 'That has a phone number, email or link in it. Edit the story and write it again.',
   crisis: "This one can't be posted.",
   no_scene: "Couldn't lay out the scene. Try posting the bit.",
   sign_in: 'Sign in to post.',

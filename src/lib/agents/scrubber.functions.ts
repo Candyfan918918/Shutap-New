@@ -49,6 +49,15 @@ function regexScrub(raw: string): { text: string; replacements: ScrubReplacement
   return { text, replacements }
 }
 
+/** The deterministic pass alone, as a yes/no: does this text carry an email,
+ *  a link or a phone number? For text that was written FROM already-scrubbed
+ *  input (a bit about to be posted), where a second model pass only adds
+ *  false alarms — it "redacts when unsure", and flags role words like
+ *  "husband" as names. */
+export function hasContactDetails(text: string): boolean {
+  return regexScrub(String(text ?? '')).replacements.length > 0
+}
+
 const ScrubInput = z.object({ raw: z.string().min(1).max(8000) })
 
 // Plain server-side function. Call this directly from other server handlers
