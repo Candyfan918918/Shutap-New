@@ -16,6 +16,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AiDisclosureRouteImport } from './routes/ai-disclosure'
+import { Route as BitLabRouteImport } from './routes/bit-lab'
 import { Route as CareerRouteImport } from './routes/career'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
@@ -114,6 +115,11 @@ const AdminRoute = AdminRouteImport.update({
 const AiDisclosureRoute = AiDisclosureRouteImport.update({
   id: '/ai-disclosure',
   path: '/ai-disclosure',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BitLabRoute = BitLabRouteImport.update({
+  id: '/bit-lab',
+  path: '/bit-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CareerRoute = CareerRouteImport.update({
@@ -462,6 +468,7 @@ export interface FileRoutesByFullPath {
   '/activity': typeof ActivityRoute
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
+  '/bit-lab': typeof BitLabRoute
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -535,6 +542,7 @@ export interface FileRoutesByTo {
   '/activity': typeof ActivityRoute
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
+  '/bit-lab': typeof BitLabRoute
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -610,6 +618,7 @@ export interface FileRoutesById {
   '/activity': typeof ActivityRoute
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
+  '/bit-lab': typeof BitLabRoute
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -685,6 +694,7 @@ export interface FileRouteTypes {
     | '/activity'
     | '/admin'
     | '/ai-disclosure'
+    | '/bit-lab'
     | '/career'
     | '/contact'
     | '/disclaimer'
@@ -758,6 +768,7 @@ export interface FileRouteTypes {
     | '/activity'
     | '/admin'
     | '/ai-disclosure'
+    | '/bit-lab'
     | '/career'
     | '/contact'
     | '/disclaimer'
@@ -832,6 +843,7 @@ export interface FileRouteTypes {
     | '/activity'
     | '/admin'
     | '/ai-disclosure'
+    | '/bit-lab'
     | '/career'
     | '/contact'
     | '/disclaimer'
@@ -907,6 +919,7 @@ export interface RootRouteChildren {
   ActivityRoute: typeof ActivityRoute
   AdminRoute: typeof AdminRoute
   AiDisclosureRoute: typeof AiDisclosureRoute
+  BitLabRoute: typeof BitLabRoute
   CareerRoute: typeof CareerRoute
   ContactRoute: typeof ContactRoute
   DisclaimerRoute: typeof DisclaimerRoute
@@ -1013,6 +1026,13 @@ declare module '@tanstack/react-router' {
       path: '/ai-disclosure'
       fullPath: '/ai-disclosure'
       preLoaderRoute: typeof AiDisclosureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bit-lab': {
+      id: '/bit-lab'
+      path: '/bit-lab'
+      fullPath: '/bit-lab'
+      preLoaderRoute: typeof BitLabRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/career': {
@@ -1528,6 +1548,7 @@ const rootRouteChildren: RootRouteChildren = {
   ActivityRoute: ActivityRoute,
   AdminRoute: AdminRoute,
   AiDisclosureRoute: AiDisclosureRoute,
+  BitLabRoute: BitLabRoute,
   CareerRoute: CareerRoute,
   ContactRoute: ContactRoute,
   DisclaimerRoute: DisclaimerRoute,

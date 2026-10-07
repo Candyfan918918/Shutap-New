@@ -1251,3 +1251,207 @@ export function promptExemplars(): PromptExemplar[] {
 export function fill(template: string, vars: Record<string, string | undefined>): string {
   return template.replace(/\{\{([A-Z_]+)\}\}/g, (_, key: string) => vars[key] ?? `(no ${key.toLowerCase()})`)
 }
+
+/* ═══════════════════════════ the bit generator ═══════════════════════════
+   One story in, one bit out: a hook for the first two seconds on screen, a
+   setup, one to three tags, a button. The performer is the person who wrote
+   the story, saying it to camera or on stage, so a bit is written in their
+   mouth, first person.
+
+   Three stages, the same shape as the cards: the PREMISE PASS above (reused
+   as is, cached on bits.premises), the BIT PASS below (four whole bits in one
+   call, each built on a different premise, plus five spare tags), and the
+   BIT JUDGE (a different model family) ranking whole bits. VARY rewrites a
+   kept bit as hotter / tighter / escalate.
+
+   BIT_PROMPT_VERSION is stamped on every bit. Bump it on ANY edit below. */
+export const BIT_PROMPT_VERSION = 'bit-1.0'
+
+/** What each audience control changes. The aim never changes: the situation. */
+export const BIT_AUDIENCE: Record<string, string> = {
+  social: 'TikTok / Reels / Shorts. The hook has to stop a thumb. Talking-to-camera rhythm, short sentences, every line could be on-screen text.',
+  live: 'An open mic or a set. Spoken rhythm with room for a laugh after each tag. The setup can breathe a little more; the button is the laugh you walk off on.',
+  office: 'Said at work, to coworkers. Clean: no swearing, nothing HR would forward. Still a full-degree joke, just with its tie on.',
+  work: 'A work story told to friends after work. Swearing is fine if it lands; the boss, the meeting and the inbox are fair game.',
+  family: 'Told at a family dinner or in the group chat. Clean, warm on the surface, merciless underneath. Nobody at the table should be able to object out loud.',
+  school: 'A school or campus story. Clean. Teachers, group projects, the dining hall. No jokes about anyone under 18 beyond what the story gave.',
+}
+
+export const BIT_VOICES: Record<string, string> = {
+  deadpan: 'Deadpan. Flat delivery, no exclamation marks, the absurd stated like a weather report. Numbers and procedures instead of adjectives.',
+  storyteller: 'Storyteller. Warm, a little conspiratorial, builds a picture beat by beat and lets the listener get there one step before the button.',
+  roast: 'Roast. Hard and fast. Every tag is a verdict on the other party\'s move. Never on their body, age, looks or intelligence.',
+  dry: 'Dry. Understated, British-adjacent, the joke is in what is left unsaid. Shortest sentences of the four voices.',
+}
+
+/** Heat raises distance, never the aim: how far past the fact the picture goes. */
+export const BIT_HEAT: Record<number, string> = {
+  1: 'Heat 1: gentle. Observational, the picture stays close to the fact. Nobody would be hurt hearing it.',
+  2: 'Heat 2: light. One clear picture per tag, a little edge on the button.',
+  3: 'Heat 3: full. Every tag is a picture, the button is a verdict on the other party\'s move.',
+  4: 'Heat 4: hot. The pictures go further from the fact; the button would end the dinner.',
+  5: 'Heat 5: maximum distance. Absurd escalation, harshest precision. Still aimed only at the situation and the other party\'s behaviour, never at bodies, age, looks, intelligence, or the teller.',
+}
+
+/** Spoken length at 2.6 words a second. */
+export const BIT_SECONDS: Record<string, number> = { '15s': 15, '30s': 30, '60s': 60, '2m': 120 }
+
+export const BIT_PROMPT = `You write stand-up and short-form comedy bits. Someone wrote down a story
+from their life. They are going to perform the bit themselves: to camera for
+TikTok and Reels, or on stage at an open mic. Write it in their mouth, first
+person, as they would actually say it.
+
+STORY:
+{{SITUATION}}
+
+OBSERVATIONS ABOUT IT (from a reader who notices things; not jokes yet):
+{{PREMISES}}
+
+AUDIENCE: {{AUDIENCE}}
+VOICE: {{VOICE}}
+{{HEAT}}
+LENGTH: about {{SECONDS}} seconds spoken, which is about {{WORDS}} words for the
+whole bit at talking pace. Never more than {{MAX_WORDS}} words.
+
+A BIT HAS FOUR PARTS:
+
+HOOK — the first two seconds, also the on-screen text. At most 8 words.
+  Readable at a glance. It names the situation or its strangest fact so a
+  scrolling thumb stops. Not a question, not "story time", not "POV:",
+  not a pun. "my roommate's girlfriend" works. "she asked ME to keep it
+  down" works.
+
+SETUP — the facts, plainly, with their real detail: the time, the number,
+  the exact words someone said. One to three short sentences. The setup is
+  not trying to be funny yet; it is loading the gun. Use the details the
+  story gave and invent none.
+
+TAGS — 1 to 3 jokes on the SAME premise, each one a step further. A tag is
+  premise → picture → landing:
+    PICTURE: take the fact one step past what happened, into an image that
+      did not happen but had to. "She's not a guest anymore. She's a
+      utility." If it is a comparison, the second half is something you
+      can see or hold.
+    LANDING: the last word is a thing you can point at — a noun from their
+      life (the fridge, the shelf, the 11pm knock) — never an abstraction
+      like "dynamic", "boundaries", "situation", "energy".
+  The moves that work: their word made a world (take the word they used
+  and move into the building it came from); fake precision (an invented
+  number one notch more specific than theirs); the object given a life;
+  the errand (the physical task someone did before the event); the lineup
+  (two of something, one loses).
+
+BUTTON — the last line. The laugh you walk off on. A verdict, a reversal,
+  or a consequence, landing on a picture. Short. Never a moral, never
+  advice, never "and that's when I realized".
+
+HARD RULES — a bit that breaks one is worthless, however funny:
+- The joke goes at the situation and the other party's behaviour, never at
+  the person telling it: not their feelings, body, worth, or anything
+  critical they said about themselves.
+- No advice to anyone. No therapy or wellness words (boundaries, toxic,
+  gaslighting, trauma, healing, red flag, self-care, closure).
+- No invented facts about real people: no new lover, illness, habit or
+  motive. An invented number that is obviously a joke is fine.
+- No real names. Use roles: my roommate, my boss, my mom, her.
+- No jokes about bodies, age, looks, weight, intelligence, race, religion,
+  sexuality or disability.
+- THE SWAP TEST: if a tag would work just as well on someone else's story,
+  it is generic. Cut it.
+- THE NAMING TEST: a tag assembled from the story's own words is a
+  restatement, not a joke. The tag must arrive somewhere the story's words
+  could not reach.
+
+WRITE FOUR DIFFERENT BITS. Each one builds on a different observation, so
+they are genuinely different angles, not rewordings. Then write FIVE spare
+tags for the strongest angle: lines that could replace a tag in it.
+
+For each bit, "why" is one plain sentence on what makes it work (the
+picture and why it only fits this story). No jargon.
+
+Return only JSON:
+{"bits":[{"hook":"...","setup":"...","tags":["...","..."],"button":"...","why":"..."},
+         {...},{...},{...}],
+ "alt_tags":["...","...","...","...","..."]}`
+
+export const BIT_JUDGE_PROMPT = `You choose which of these comedy bits is the funniest one to perform. You
+are not the writer and you have no stake in any of them. The person who
+wrote the story will perform it themselves, first person.
+
+STORY:
+{{SITUATION}}
+
+AUDIENCE: {{AUDIENCE}}
+
+BITS:
+{{BITS}}
+
+HARD RULES — a bit that breaks any is out regardless of how funny it is:
+1. The jokes go at the situation or the other party's behaviour, never at
+   the teller's feelings, body or worth.
+2. No advice. No therapy or wellness vocabulary. No reassurance.
+3. No invented facts about the other person (a new lover, illness, habit,
+   motive). An obviously comic number is fine.
+4. No ridicule of bodies, age, looks, intelligence, race, religion,
+   sexuality or disability. No real names.
+5. THE SWAP TEST: if the tags would work on a different person's story, out.
+
+THEN RANK what survives, weighted in this order:
+- IS THERE A PICTURE. A tag that goes one step past the fact into an image
+  beats a correct observation with no image. A bit made of findings ranks
+  below a weaker idea with a picture.
+- THE HOOK. Would a scrolling thumb stop? Specific and strange beats
+  general. Eight words or fewer.
+- THE BUTTON. Does it land on a picture and end the bit, or explain it?
+  A button that is a moral or a summary ranks down hard.
+- LANDINGS. Last words you can point at beat abstractions.
+- ESCALATION. Each tag one step further on the same premise beats three
+  unrelated jokes.
+- SAYABLE. Read it aloud in the performer's mouth. Does a person say this,
+  or does a report contain it?
+- FITS THE AUDIENCE and the length.
+
+Return only JSON:
+{"winner": <index>, "why": "<one plain clause on what made it win>",
+ "ranking": [<indices, best first>],
+ "rejected": [{"i": <index>, "rule": "<which hard rule it broke>"}]}
+If every bit breaks a hard rule, return {"winner": null}.`
+
+export const BIT_VARY_RULES: Record<string, string> = {
+  hotter: `HOTTER: raise the heat two levels (max 5). Push every picture further
+from the fact and make the button harder. Heat is distance, not aim: still
+only at the situation and the other party's behaviour.`,
+  tighter: `TIGHTER: about 60% of the words. Keep the best tag only and cut
+everything that is not load-bearing. The hook may get shorter. The button
+lands on the sharpest contradiction in the story.`,
+  escalate: `ESCALATE: each tag moves the situation one step further along the
+same line (a week, a month, a year; a guest, a tenant, a landlord) and the
+button flips who is in charge.`,
+}
+
+export const BIT_VARY_PROMPT = `You rewrite a comedy bit. The person who wrote the story performs it
+themselves, first person.
+
+STORY:
+{{SITUATION}}
+
+THE BIT AS IT IS:
+{{BIT}}
+
+AUDIENCE: {{AUDIENCE}}
+VOICE: {{VOICE}}
+
+{{KIND_RULE}}
+
+Keep the four parts: hook (at most 8 words, readable on screen in two
+seconds), setup (the facts plainly, no invented ones), 1 to 3 tags (each a
+picture that lands on a thing you can point at), button (the last line, a
+verdict or reversal, never a moral). Same hard rules as always: the joke
+goes at the situation and the other party's behaviour, never at the teller;
+no advice; no therapy words; no invented facts about real people; no
+names; nothing about bodies, age, looks or intelligence.
+
+"why" is one plain sentence on what changed and why it works.
+
+Return only JSON:
+{"hook":"...","setup":"...","tags":["..."],"button":"...","why":"..."}`

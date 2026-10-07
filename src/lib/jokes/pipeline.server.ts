@@ -240,6 +240,19 @@ export function hardRuleFailure(
   return null
 }
 
+/** The tone rules alone — advice, reassurance, therapy words, banned
+ *  constructions — for text that is allowed to restate the situation (a
+ *  bit's hook and setup), where the naming test and length do not apply. */
+export function toneFailure(text: string): string | null {
+  const t = text.trim()
+  if (!t) return 'empty'
+  if (ADVICE.test(t)) return 'advice'
+  if (REASSURANCE.test(t)) return 'reassurance'
+  if (CLINICAL.test(outsideQuotes(t, 'the_roast'))) return 'clinical vocabulary'
+  for (const x of BANNED) if (x.re.test(t)) return `banned construction: ${x.rule}`
+  return null
+}
+
 export function passesGuardrails(line: string, situation = '', slot: SlotKey = 'the_roast'): boolean {
   return hardRuleFailure(line, situation, slot) === null
 }
@@ -984,12 +997,12 @@ export function dealPositionally(premises: Premise[]): Premise[] {
   return out
 }
 
-async function askForPremises(situation: string): Promise<Premise[] | null> {
+async function askForPremises(situation: string, timeoutMs = BUDGET.premises()): Promise<Premise[] | null> {
   const res = await callAgent({
     model: writerModel(),
     temperature: 1.0,
     maxTokens: 2200,
-    timeoutMs: BUDGET.premises(),
+    timeoutMs,
     messages: [{ role: 'user', content: fill(PREMISE_PROMPT, { SITUATION: situation.slice(0, 1500) }) }],
   })
   if (res.error) {
@@ -1017,10 +1030,14 @@ async function askForPremises(situation: string): Promise<Premise[] | null> {
 /** Stage 1. Twelve observations, four of them dealt to cards. A deal the
  *  model got wrong (not four, or not one per slot) is asked for once more;
  *  a second wrong deal is dealt positionally and logged. Persisted as-is. */
-export async function runPremisePass(situation: string): Promise<Premise[]> {
+export async function runPremisePass(
+  situation: string,
+  opts: { timeoutMs?: number; attempts?: number } = {},
+): Promise<Premise[]> {
   let last: Premise[] | null = null
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const got = await askForPremises(situation)
+  const attempts = opts.attempts ?? 2
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    const got = await askForPremises(situation, opts.timeoutMs ?? BUDGET.premises())
     if (got === null) {
       // The gateway itself failed: a second attempt is a second timeout.
       break
