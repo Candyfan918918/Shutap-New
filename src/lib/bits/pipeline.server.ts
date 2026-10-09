@@ -28,6 +28,7 @@ import {
   fill,
 } from '@/lib/jokes/prompts.server'
 import {
+  clinicalWord,
   hardRuleFailure,
   judgeModel,
   runPremisePass,
@@ -116,17 +117,36 @@ export function cleanBit(raw: unknown): BitDraft | null {
  *  may restate the story (that is their job), so they get the tone rules
  *  only; the tags and the button must also pass the naming test. */
 export function bitFailure(b: BitDraft, story: string, controls: BitControls): string | null {
-  if (b.hook.split(/\s+/).length > 10) return 'hook over 10 words'
+  // A therapy word the STORY itself used is the story's vocabulary, not the
+  // writer's register ("trigger" in a story about guns, "healing" about a
+  // cut finger): quote it so the clinical check reads past it.
+  const own = (line: string) => {
+    let out = line
+    for (let i = 0; i < 4; i++) {
+      const w = clinicalWord(out)
+      if (!w || !story.toLowerCase().includes(w)) break
+      out = out.replace(new RegExp(`\\b${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi'), (m) => `"${m}"`)
+    }
+    return out
+  }
   for (const part of [b.hook, b.setup]) {
-    const f = toneFailure(part)
+    const f = toneFailure(own(part))
     if (f) return f
   }
   for (const line of [...b.tags, b.button]) {
-    const f = hardRuleFailure(line, story, 'the_roast', { ignoreLength: true })
+    const f = hardRuleFailure(own(line), story, 'the_roast', { ignoreLength: true })
     if (f && f !== 'too short') return f
   }
+  if (b.hook.split(/\s+/).length > 10) return 'hook over 10 words'
   if (bitWords(b) > maxWords(controls)) return 'over length'
   return null
+}
+
+/** Rules that protect people (advice, reassurance, therapy words, banned
+ *  constructions) are never relaxed. The rest are craft: when no bit passes
+ *  them all, the best craft-only miss is shown rather than nothing. */
+export function isSafetyFailure(rule: string): boolean {
+  return rule === 'advice' || rule === 'reassurance' || rule === 'clinical vocabulary' || rule.startsWith('banned construction')
 }
 
 /* ── stage 2 · the bit pass ── */
@@ -215,6 +235,9 @@ export async function runBitJudge(story: string, controls: BitControls, bits: Bi
 
 /* ── the whole run ── */
 
+/** Why a run returned nothing, for the failure log (no story text). */
+export type BitFailure = { rejected: { hook: string; rule: string }[]; error: string | null }
+
 export type WrittenBit = {
   /** best first; [0] is the bit the user sees */
   ranked: BitDraft[]
@@ -233,6 +256,7 @@ export async function writeBitFromStory(
   story: string,
   controls: BitControls,
   premisesPromise?: Promise<Premise[]>,
+  sink?: { failure?: BitFailure },
 ): Promise<WrittenBit | null> {
   const t0 = Date.now()
   // Since bit-1.1 the writer finds its own angles (BIT_ANGLE_FINDER), which
@@ -246,13 +270,31 @@ export async function writeBitFromStory(
   const t2 = Date.now()
 
   const rejected: { hook: string; rule: string }[] = []
-  const passing = pass.bits.filter((b) => {
-    const f = bitFailure(b, story, controls)
-    if (f) rejected.push({ hook: b.hook, rule: f })
-    return !f
-  })
+  const judge = (bits: BitDraft[]) => {
+    const ok: BitDraft[] = []
+    const craftOnly: BitDraft[] = []
+    for (const b of bits) {
+      const f = bitFailure(b, story, controls)
+      if (!f) ok.push(b)
+      else {
+        rejected.push({ hook: b.hook, rule: f })
+        if (!isSafetyFailure(f)) craftOnly.push(b)
+      }
+    }
+    return { ok, craftOnly }
+  }
+  let sorted = judge(pass.bits)
+  // Nothing safe to show at all: write once more before giving up.
+  if (!sorted.ok.length && !sorted.craftOnly.length) {
+    pass = await runBitPass(story, premises, controls)
+    sorted = judge(pass.bits)
+  }
+  // Only craft misses (too long, a restatement, a soft landing): show the
+  // shortest of them rather than an error. Safety misses are never shown.
+  const passing = sorted.ok.length ? sorted.ok : [...sorted.craftOnly].sort((a, b) => bitWords(a) - bitWords(b))
   if (!passing.length) {
     console.warn('[bit] nothing passed the rules', { rejected, error: pass.error })
+    if (sink) sink.failure = { rejected, error: pass.error ?? null }
     return null
   }
 

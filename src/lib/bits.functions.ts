@@ -16,7 +16,7 @@ import { z } from 'zod'
 import { hasContactDetails, runScrub } from './agents/scrubber.functions'
 import { runClassifyCrisis } from './agents/guard.functions'
 import { resolveJokeIdentity, resolveDayInfo, type JokeIdentity } from './jokes/session.server'
-import { heatFor, varyBitDraft, writeBitFromStory } from './bits/pipeline.server'
+import { heatFor, varyBitDraft, writeBitFromStory, type BitFailure } from './bits/pipeline.server'
 import { chargeNetwork, chargeStory, readCounter, refundStory, usageFrom } from './bits/usage.server'
 import {
   AUDIENCES,
@@ -229,7 +229,11 @@ async function writeCore(
   // crisis throws the writer's work away unread: nothing is charged, stored
   // or shown, and the help block is all that comes back.
   const controls = { ...DEFAULT_CONTROLS, ...(controlsIn ?? {}) } as BitControls
-  const writing = writeBitFromStory(clean, controls).catch(() => null)
+  const sink: { failure?: BitFailure } = {}
+  const writing = writeBitFromStory(clean, controls, undefined, sink).catch((e) => {
+    sink.failure = { rejected: [], error: e instanceof Error ? e.message : 'threw' }
+    return null
+  })
   const crisis = await runClassifyCrisis(clean)
   const tGuard = Date.now()
   if (crisis.crisis) {
@@ -247,6 +251,12 @@ async function writeCore(
   if (!lab) await chargeStory(supabaseAdmin, counter, bitId)
   const written = await writing
   if (!written || !written.ranked.length) {
+    // Logged without the story: the controls, the rules that refused each
+    // candidate, and any gateway error. Enough to see why, nothing to read.
+    await supabaseAdmin
+      .from('bit_failures')
+      .insert({ user_id: id.userId, controls, rejected: sink.failure?.rejected ?? [], error: sink.failure?.error ?? null, lab, ms: Date.now() - started } as never)
+      .then(() => null, () => null)
     if (!lab) await refundStory(supabaseAdmin, id.subjectKey, day, bitId)
     return { status: 'failed', tier: id.tier, usage }
   }

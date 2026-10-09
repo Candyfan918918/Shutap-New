@@ -253,6 +253,12 @@ export function toneFailure(text: string): string | null {
   return null
 }
 
+/** The therapy word a line uses outside quotes, if any. */
+export function clinicalWord(text: string): string | null {
+  const m = outsideQuotes(text, 'the_roast').match(CLINICAL)
+  return m ? m[0].toLowerCase() : null
+}
+
 export function passesGuardrails(line: string, situation = '', slot: SlotKey = 'the_roast'): boolean {
   return hardRuleFailure(line, situation, slot) === null
 }
