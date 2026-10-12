@@ -133,10 +133,17 @@ export function bitFailure(b: BitDraft, story: string, controls: BitControls): s
     const f = toneFailure(own(part))
     if (f) return f
   }
+  // Check every line before answering: a safety failure anywhere outranks
+  // a craft failure on an earlier line, so the closest-miss fallback never
+  // shows a bit whose later tag or button breaks a safety rule.
+  let craft: string | null = null
   for (const line of [...b.tags, b.button]) {
     const f = hardRuleFailure(own(line), story, 'the_roast', { ignoreLength: true })
-    if (f && f !== 'too short') return f
+    if (!f || f === 'too short') continue
+    if (isSafetyFailure(f)) return f
+    craft ??= f
   }
+  if (craft) return craft
   if (b.hook.split(/\s+/).length > 10) return 'hook over 10 words'
   if (bitWords(b) > maxWords(controls)) return 'over length'
   return null
