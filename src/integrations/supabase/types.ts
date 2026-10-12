@@ -134,6 +134,152 @@ export type Database = {
         }
         Relationships: []
       }
+      bit_failures: {
+        Row: {
+          controls: Json | null
+          created_at: string
+          error: string | null
+          id: string
+          lab: boolean
+          ms: number | null
+          rejected: Json
+          user_id: string | null
+        }
+        Insert: {
+          controls?: Json | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          lab?: boolean
+          ms?: number | null
+          rejected?: Json
+          user_id?: string | null
+        }
+        Update: {
+          controls?: Json | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          lab?: boolean
+          ms?: number | null
+          rejected?: Json
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      bit_versions: {
+        Row: {
+          bit_id: string
+          button: string
+          caption: Json | null
+          created_at: string
+          est_seconds: number
+          heat: number
+          hook: string
+          id: string
+          kind: string
+          scene: Json | null
+          screenplay: Json | null
+          setup: string
+          tags: string[]
+          why: string | null
+        }
+        Insert: {
+          bit_id: string
+          button: string
+          caption?: Json | null
+          created_at?: string
+          est_seconds?: number
+          heat?: number
+          hook: string
+          id?: string
+          kind: string
+          scene?: Json | null
+          screenplay?: Json | null
+          setup: string
+          tags?: string[]
+          why?: string | null
+        }
+        Update: {
+          bit_id?: string
+          button?: string
+          caption?: Json | null
+          created_at?: string
+          est_seconds?: number
+          heat?: number
+          hook?: string
+          id?: string
+          kind?: string
+          scene?: Json | null
+          screenplay?: Json | null
+          setup?: string
+          tags?: string[]
+          why?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bit_versions_bit_id_fkey"
+            columns: ["bit_id"]
+            isOneToOne: false
+            referencedRelation: "bits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bits: {
+        Row: {
+          alt_tags: string[]
+          anon_key: string | null
+          candidates: Json
+          controls: Json
+          created_at: string
+          id: string
+          judge_model: string | null
+          judge_why: string | null
+          premises: Json | null
+          prompt_version: string | null
+          story_clean: string
+          timings: Json
+          used_fallback: boolean
+          user_id: string | null
+          writer_model: string | null
+        }
+        Insert: {
+          alt_tags?: string[]
+          anon_key?: string | null
+          candidates?: Json
+          controls?: Json
+          created_at?: string
+          id?: string
+          judge_model?: string | null
+          judge_why?: string | null
+          premises?: Json | null
+          prompt_version?: string | null
+          story_clean: string
+          timings?: Json
+          used_fallback?: boolean
+          user_id?: string | null
+          writer_model?: string | null
+        }
+        Update: {
+          alt_tags?: string[]
+          anon_key?: string | null
+          candidates?: Json
+          controls?: Json
+          created_at?: string
+          id?: string
+          judge_model?: string | null
+          judge_why?: string | null
+          premises?: Json | null
+          prompt_version?: string | null
+          story_clean?: string
+          timings?: Json
+          used_fallback?: boolean
+          user_id?: string | null
+          writer_model?: string | null
+        }
+        Relationships: []
+      }
       checkin_responses: {
         Row: {
           action: string | null
@@ -466,6 +612,24 @@ export type Database = {
           trigger?: string | null
           type?: string
           v?: string
+        }
+        Relationships: []
+      }
+      follows: {
+        Row: {
+          created_at: string
+          followee_id: string
+          follower_id: string
+        }
+        Insert: {
+          created_at?: string
+          followee_id: string
+          follower_id: string
+        }
+        Update: {
+          created_at?: string
+          followee_id?: string
+          follower_id?: string
         }
         Relationships: []
       }
@@ -994,6 +1158,44 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          id: string
+          kind: string
+          read_at: string | null
+          room_id: string | null
+          user_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          read_at?: string | null
+          room_id?: string | null
+          user_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          read_at?: string | null
+          room_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       outcomes: {
         Row: {
           alias_id: string
@@ -1099,6 +1301,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      post_reports: {
+        Row: {
+          comment_id: string | null
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string | null
+          resolved_at: string | null
+          room_id: string
+        }
+        Insert: {
+          comment_id?: string | null
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id?: string | null
+          resolved_at?: string | null
+          room_id: string
+        }
+        Update: {
+          comment_id?: string | null
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string | null
+          resolved_at?: string | null
+          room_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_reports_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -1239,50 +1479,102 @@ export type Database = {
           },
         ]
       }
+      room_saves: {
+        Row: {
+          created_at: string
+          room_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          room_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          room_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_saves_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rooms: {
         Row: {
           alias: string
           author_id: string
+          bit_version_id: string | null
           body: string
+          card_id: string | null
           created_at: string
           emoji: string
           hall: string
+          hidden: boolean
           id: string
+          post_data: Json | null
+          post_kind: string
           reflection: string | null
           source: string
           support: string
           title: string
+          topic: string | null
           updated_at: string
         }
         Insert: {
           alias: string
           author_id: string
+          bit_version_id?: string | null
           body: string
+          card_id?: string | null
           created_at?: string
           emoji: string
           hall: string
+          hidden?: boolean
           id?: string
+          post_data?: Json | null
+          post_kind?: string
           reflection?: string | null
           source?: string
           support: string
           title: string
+          topic?: string | null
           updated_at?: string
         }
         Update: {
           alias?: string
           author_id?: string
+          bit_version_id?: string | null
           body?: string
+          card_id?: string | null
           created_at?: string
           emoji?: string
           hall?: string
+          hidden?: boolean
           id?: string
+          post_data?: Json | null
+          post_kind?: string
           reflection?: string | null
           source?: string
           support?: string
           title?: string
+          topic?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "rooms_bit_version_id_fkey"
+            columns: ["bit_version_id"]
+            isOneToOne: false
+            referencedRelation: "bit_versions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       situations: {
         Row: {
