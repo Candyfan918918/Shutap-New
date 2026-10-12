@@ -169,7 +169,8 @@ export const getPost = createServerFn({ method: 'GET' })
       .select(POST_COLS + ', source, hidden')
       .eq('id', data.id)
       .maybeSingle()
-    if (!row || row.hidden || row.source !== 'joke') return { post: null, comments: [] as FeedComment[], signedIn: !!uid }
+    // Any published room opens by link (spills/scans too); only the feed list is joke-only.
+    if (!row || row.hidden) return { post: null, comments: [] as FeedComment[], signedIn: !!uid }
     const [post] = await hydrate(db, [row as RoomRow], uid)
     const { data: cs } = await db
       .from('comments')

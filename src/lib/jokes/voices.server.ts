@@ -402,7 +402,13 @@ export async function loadExamples(
       console.error('[joke-hof] load failed; using seed', err)
     }
   }
-  if (rows.length === 0) rows = SEED_HALL_OF_FAME.filter((h) => h.slot === args.slot)
+  // Seed winners are always in play: merge any not already in the table.
+  {
+    const have = new Set(rows.map((r) => r.joke_text.trim().toLowerCase()))
+    for (const h of SEED_HALL_OF_FAME) {
+      if (h.slot === args.slot && !have.has(h.joke_text.trim().toLowerCase())) rows.push({ ...h })
+    }
+  }
 
   // A row without an embedding gets one now, once, and keeps it — but a
   // card flip pays for a handful at most, in parallel. The rest catch up on
@@ -488,6 +494,10 @@ export async function loadHallOfFameLines(admin: Admin | null): Promise<HallOfFa
             }),
           )
         }
+        const have = new Set(rows.map((r) => r.text.trim().toLowerCase()))
+        SEED_HALL_OF_FAME.forEach((h, i) => {
+          if (!have.has(h.joke_text.trim().toLowerCase())) rows.push({ id: `seed:${i}`, text: h.joke_text, embedding: null })
+        })
         return rows
       }
     } catch (err) {
