@@ -136,6 +136,7 @@ export function BitSurface() {
   const [postOpen, setPostOpen] = useState(false)
   const topRef = useRef<HTMLDivElement | null>(null)
   const restoring = useRef(false)
+  const typed = useRef(false)
 
   const ctx = useCallback(() => ({ anon_session_id: anonSessionId() }), [])
   const version: BitVersion | null = bit ? (bit.versions.find((v) => v.id === currentId) ?? bit.versions[0] ?? null) : null
@@ -210,9 +211,12 @@ export function BitSurface() {
   const openFromLink = useCallback(async () => {
     const id = new URLSearchParams(window.location.search).get('bit')
     if (!id || !/^[0-9a-f-]{36}$/i.test(id) || readPending()) return
+    // The link opens the bit once; a refresh afterwards lands on a clean box.
+    window.history.replaceState(window.history.state, '', '/')
     try {
       const r = await fetchBit({ data: { bit_id: id, ...ctx() } })
-      if (r.bit) {
+      // Never swap an old bit over a story the visitor has started typing.
+      if (r.bit && !typed.current) {
         setBit(r.bit)
         setCurrentId(r.bit.versions[0]?.id ?? null)
         setPhase('bit')
@@ -326,7 +330,7 @@ export function BitSurface() {
                 placeholder="write your story…"
                 value={story}
                 maxLength={4000}
-                onChange={(e) => setStory(e.target.value)}
+                onChange={(e) => { typed.current = true; setStory(e.target.value) }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void onWrite()
                 }}

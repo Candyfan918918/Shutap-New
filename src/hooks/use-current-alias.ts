@@ -10,12 +10,9 @@ export function useCurrentAlias(): {
   userId: string | null
   refresh: () => Promise<void>
 } {
-  const [alias, setAlias] = useState<Alias | null>(() => {
-    try {
-      const r = localStorage.getItem('shutap_alias')
-      return r ? (JSON.parse(r) as Alias) : null
-    } catch { return null }
-  })
+  // Start empty so the server and browser render the same header; the
+  // cached alias paints right after hydration.
+  const [alias, setAlias] = useState<Alias | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
 
   const refresh = async () => {
@@ -45,6 +42,10 @@ export function useCurrentAlias(): {
 
   useEffect(() => {
     let mounted = true
+    try {
+      const r = localStorage.getItem('shutap_alias')
+      if (r) setAlias(JSON.parse(r) as Alias)
+    } catch { /* noop */ }
     void refresh()
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (!mounted) return
