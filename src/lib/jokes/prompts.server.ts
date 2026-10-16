@@ -1265,7 +1265,7 @@ export function fill(template: string, vars: Record<string, string | undefined>)
    kept bit as hotter / tighter / escalate.
 
    BIT_PROMPT_VERSION is stamped on every bit. Bump it on ANY edit below. */
-export const BIT_PROMPT_VERSION = 'bit-1.1'
+export const BIT_PROMPT_VERSION = 'bit-1.2'
 
 /** What each audience control changes. The aim never changes: the situation. */
 export const BIT_AUDIENCE: Record<string, string> = {
@@ -1335,11 +1335,35 @@ TAGS — 1 to 3 jokes on the SAME premise, each one a step further. A tag is
     LANDING: the last word is a thing you can point at — a noun from their
       life (the fridge, the shelf, the 11pm knock) — never an abstraction
       like "dynamic", "boundaries", "situation", "energy".
-  The moves that work: their word made a world (take the word they used
-  and move into the building it came from); fake precision (an invented
-  number one notch more specific than theirs); the object given a life;
-  the errand (the physical task someone did before the event); the lineup
-  (two of something, one loses).
+  The moves that work. Use a DIFFERENT move for each tag and the button.
+  The examples show the move on other stories; never reuse their words.
+  - ADD A NUMBER: an invented figure one notch more specific than theirs.
+      ("$4,000 on the Bahamas. His favourite part was the hotel TV.")
+  - GIVE IT A JOB: the person or object gets a job title that fits what
+      they did. ("He's a health inspector who tastes the evidence.")
+  - THEIR WORD MADE A WORLD: take the word they used and move into the
+      building it came from.
+  - THE OBJECT GIVEN A LIFE: the thing in the story wants, decides, wins.
+  - THE ERRAND: the physical task someone did before the event.
+  - SPLIT YOURSELF IN TWO: two versions of the teller, only one of them
+      did it. ("I left at 8:00 in spirit and 8:30 in Honda.")
+  - TALK LIKE A SIGN: the line said in short, official, final words, as a
+      shop or an office would say it. ("Mommy is closed.")
+  - THE LINEUP: three items, and the last one is the one you can see or
+      smell. ("Notes of 2019, parking lot, and somebody's dog.")
+  - CUT THE SETUP: if a line still works without its first half, drop the
+      first half. Start where it gets funny.
+
+  ONE WORLD — the pictures come from the story's own world (the kitchen,
+  the drop-off line, the hotel room, the group chat) or from a word someone
+  in the story said. Never carry one borrowed world through the bit — a
+  courtroom, a war, a fashion show, a premiere, an office, a sports match.
+  At most one borrowed image in the whole bit, and only if it is sharper
+  than anything the story's own world offers.
+
+  NO SHAPE TWICE — no two lines in a bit share a sentence shape. At most one
+  line in the whole bit may use "it wasn't X, it was Y", "not X but Y",
+  "went from X to Y" or "less X and more Y".
 
 BUTTON — the last line. The laugh you walk off on. A verdict, a reversal,
   or a consequence, landing on a picture. Short. Never a moral, never
