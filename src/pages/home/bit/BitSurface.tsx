@@ -330,7 +330,7 @@ export function BitSurface() {
                 placeholder="write your story…"
                 value={story}
                 maxLength={4000}
-                onChange={(e) => setStory(e.target.value)}
+                onChange={(e) => { typed.current = true; setStory(e.target.value) }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void onWrite()
                 }}
