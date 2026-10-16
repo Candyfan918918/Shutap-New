@@ -447,12 +447,10 @@ export function BitSurface() {
                 <span className="bt-lbl r">button</span>
                 <p className="bt-v" style={{ fontWeight: 500 }} aria-hidden={bit.locked || undefined}>{version.button}</p>
               </div>
-              {bit.locked ? (
+              {bit.locked && (
                 <button className="bt-btn block" style={{ marginTop: 8 }} onClick={() => setSheet('signin')}>
                   sign in free to see the tags and button
                 </button>
-              ) : (
-                version.why && <p className="bt-why">{version.why}</p>
               )}
             </article>
 
