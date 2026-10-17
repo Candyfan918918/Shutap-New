@@ -12,6 +12,7 @@ import {
 } from "@/lib/seo/story";
 import { breadcrumbScript, storyTrail } from "@/lib/seo/breadcrumbs";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { INDEX_USER_CONTENT } from "@/lib/seo/flags";
 
 type StoryLite = Pick<StoryRow, "id" | "slug" | "pillar" | "title" | "clean_text" | "initial_scan">;
 type LoaderData = {
@@ -48,7 +49,7 @@ export const Route = createFileRoute("/story/$pillar/$slug")({
     const description = storyDescription(row.clean_text);
     // Spill and Scan stories are retired: the page still renders for old
     // links, but only joke posts are offered to search engines.
-    const indexable = row.kind === "joke" && isStoryIndexable({
+    const indexable = INDEX_USER_CONTENT && row.kind === "joke" && isStoryIndexable({
       is_public: row.is_public,
       is_seed: row.is_seed,
       crisis_flag: row.crisis_flag,

@@ -2,11 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { renderUrlset, type SitemapEntry } from "@/lib/seo/sitemap";
 import { listIndexableStoriesForSitemap } from "@/lib/seo/story.server";
+import { INDEX_USER_CONTENT } from "@/lib/seo/flags";
 
 export const Route = createFileRoute("/sitemaps/stories.xml")({
   server: {
     handlers: {
       GET: async () => {
+        // Retired: tells crawlers the URL is gone for good.
+        if (!INDEX_USER_CONTENT) return new Response("Gone", { status: 410 });
         const rows = await listIndexableStoriesForSitemap(5000);
         if (rows.length === 0) {
           return new Response("Not Found", { status: 404 });

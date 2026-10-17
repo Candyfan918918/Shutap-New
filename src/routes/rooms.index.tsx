@@ -14,6 +14,9 @@ export const Route = createFileRoute('/rooms/')({
     meta: [
       { title: 'Rooms — Shutap' },
       { name: 'description', content: 'Jokes people wrote about their own day. Office, work, family, school, live, social.' },
+      { name: 'robots', content: 'noindex, follow' },
+      { property: 'og:title', content: 'Rooms — Shutap' },
+      { property: 'og:url', content: `${SITE_URL}/rooms` },
     ],
     links: [{ rel: 'canonical', href: `${SITE_URL}/rooms` }],
   }),

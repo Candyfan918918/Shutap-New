@@ -1,33 +1,24 @@
 # Shutap
 
-> Shutap turns a personal story — a family comment that landed wrong, a partner who took someone else's side, a manager who made it weird, a friend who keeps doing the thing — into a set of joke cards, each taking a different comedic angle on the same situation, the way a comedian works one bad night into a routine. Pseudonymous. Identifying details are stripped before storage. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.
+> Shutap is an AI bit generator for content creators and comedians. Write your story and Shutap turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or post the best one to a room. Pseudonymous. Your real name never shows.
 
-Shutap is an entertainment web application, not a healthcare, mental-health, crisis, or legal service. Members keep a consistent pseudonym across sets, which is what lets the Mirror read back what keeps coming back. 18+.
-
-The brand line is "SHUTAP. Joke about it." The tagline is "life's a bitch. so make fun of it."
+The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Signing in is free; Shutap+ removes the watermark on downloads. Shutap writes jokes about the situation, never about a real person someone could identify. It is an entertainment tool, not a healthcare, mental-health, crisis or legal service. 18+.
 
 ## Core
 
-- [What Shutap is](https://shutap.com/about): You have the material. Shutap does the writing part — jokes about the situation, never about you.
-- [How it works](https://shutap.com/how-it-works): You type what happened, Shutap writes the set, you flip the cards and keep the ones that land.
-- [Lived Intelligence](https://shutap.com/lived-intelligence): The practical knowledge earned by living through real situations — and the material a set is written from.
-- [Trust & privacy](https://shutap.com/trust): Pseudonymity model, identifying details stripped before storage, what is and isn't indexed, takedown path.
+- [What Shutap is](https://shutap.com/about): An AI bit generator for content creators and comedians — storytime, POV, talking-head and skit videos, and first drafts for stand-up.
+- [How it works](https://shutap.com/how-it-works): Write the story, names and places are removed, get the bit, then pick teleprompter, scene or screenplay page.
+- [Pricing](https://shutap.com/pricing): Free to write; Shutap+ removes the download watermark.
+- [FAQ](https://shutap.com/faq): Is it free, can I use the bits in my own videos and sets, is my name on anything, what can I post.
+- [Trust & privacy](https://shutap.com/trust): Made-up name, names and places removed before saving, private until you post, takedown path.
 
-## Pillars
+## Policies
 
-- [Relationships](https://shutap.com/relationships): Dating, partners, situationships, breakups, the gray area in between.
-- [Marriage](https://shutap.com/marriage): The long-haul stuff — roommate energy, resentment, repair, leaving, staying.
-- [Family](https://shutap.com/family): Parents, siblings, in-laws, the dinner comment, the guilt.
-- [Career](https://shutap.com/career): Work, money, managers, burnout, the job everyone tells you to be grateful for.
-
-## Legal & policies
-
-- [FAQ](https://shutap.com/faq): Common questions — is it therapy (no), is it pseudonymous (yes), how is my data handled.
-- [Terms of Service](https://shutap.com/terms): The rules of the room; 18+; not a medical or legal service.
-- [Privacy Policy](https://shutap.com/privacy): Pseudonymous by design, identifying details stripped before storage, no sale of data, full access/export/delete rights.
-- [House rules](https://shutap.com/guidelines): The joke goes at the situation, not at a person.
-- [If it's heavy](https://shutap.com/safety): Crisis resources (988, Samaritans, findahelpline) and how Shutap stops joking and routes to real help.
-- [AI Disclosure](https://shutap.com/ai-disclosure): The cards are written by AI — not a person. It gets things wrong and cannot give medical, mental-health, or legal advice.
+- [Terms of Service](https://shutap.com/terms): The rules; 18+.
+- [Privacy Policy](https://shutap.com/privacy): No sale of data; access, export and delete rights.
+- [House rules](https://shutap.com/guidelines): Jokes go at the situation, not at a person.
+- [If it's heavy](https://shutap.com/safety): Crisis resources, and how Shutap stops joking and points to real help.
+- [AI Disclosure](https://shutap.com/ai-disclosure): The bits are written by AI. It gets things wrong and gives no medical, mental-health or legal advice.
 - [Legal hub](https://shutap.com/legal): Index of all policy pages.
 
 ## Optional

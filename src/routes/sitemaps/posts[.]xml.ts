@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { renderUrlset, type SitemapEntry } from "@/lib/seo/sitemap";
+import { INDEX_USER_CONTENT } from "@/lib/seo/flags";
 
 /** Joke posts in rooms that are public and not hidden. Posts younger than
  *  ten minutes are left out so a quick delete never reaches a crawler. */
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/sitemaps/posts.xml")({
   server: {
     handlers: {
       GET: async () => {
+        if (!INDEX_USER_CONTENT) return new Response("Gone", { status: 410 });
         const rows = await listPostsForSitemap();
         if (rows.length === 0) return new Response("Not Found", { status: 404 });
         const entries: SitemapEntry[] = rows.map((r) => ({
