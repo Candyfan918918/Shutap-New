@@ -1,6 +1,8 @@
 // Public server fn: today's "what to post" idea for the homepage.
 // Same pattern as listNewestRooms — read-only, service role, plain DTO out.
 import { createServerFn } from '@tanstack/react-start'
+import type { Interest } from './wiki-interest.server'
+export type { Interest } from './wiki-interest.server'
 
 export type DailyIdea = {
   day: string
@@ -19,7 +21,9 @@ export type SignalTopic = {
   chosen?: boolean
   direction?: 'rising' | 'peaking' | 'steady' | 'cooling'
   note?: string
-  heat?: Partial<Record<Platform, Heat>>
+  heat?: Partial<Record<Platform, Heat | null>>
+  wiki?: string
+  interest?: Interest | null
   sources?: { label: string; url: string }[]
 }
 export type DailySignals = {
@@ -50,7 +54,12 @@ export const listDailyIdea = createServerFn({ method: 'GET' }).handler(async ():
       .limit(1)
       .maybeSingle()
     if (error || !data) return null
-    return data as unknown as DailyIdea
+    const idea = data as unknown as DailyIdea
+    if (idea.signals?.topics?.length) {
+      const { readWikiInterest } = await import('./wiki-interest.server')
+      idea.signals = { ...idea.signals, topics: await Promise.all(idea.signals.topics.map(async (topic) => ({ ...topic, interest: topic.wiki ? await readWikiInterest(topic.wiki).catch(() => null) : null }))) }
+    }
+    return idea
   } catch {
     return null
   }

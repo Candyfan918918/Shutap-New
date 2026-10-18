@@ -8,8 +8,8 @@ import { createPortal } from 'react-dom'
 import { EyeMark, ShutapWordmark } from '@/components/brand/EyeMark'
 
 export const SORA = "'Sora',system-ui,sans-serif"
-export const NEWS = "'Newsreader',Georgia,serif"
-export const INTER = "'Inter',system-ui,sans-serif"
+export const NEWS = "'Newsreader',serif"
+export const INTER = "'Sora',sans-serif"
 
 export const INK = '#0b080f'
 export const PROSE = '#2a2529'
@@ -69,7 +69,7 @@ export function CardLockup({ ink, eyes = false }: { ink: string; eyes?: boolean 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 'calc(2.4 * var(--cq, 1cqw))' }}>
       {eyes ? <EyeMark style={{ width: 'calc(9 * var(--cq, 1cqw))', height: 'calc(6.17 * var(--cq, 1cqw))' }} /> : null}
-      <ShutapWordmark ink={ink} style={{ fontSize: 'calc(6 * var(--cq, 1cqw))', fontWeight: 700, letterSpacing: '-.04em' }} />
+      <ShutapWordmark ink={ink} style={{ fontSize: 'calc(6 * var(--cq, 1cqw))', fontWeight: 700, letterSpacing: '0' }} />
     </div>
   )
 }
@@ -80,7 +80,7 @@ export function CardWatermark({ color }: { color: string }) {
   return (
     <div aria-hidden style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 'calc(9 * var(--cq, 1cqw))', transform: 'rotate(-22deg)', pointerEvents: 'none' }}>
       {[0, 1, 2].map((i) => (
-        <div key={i} style={{ font: '800 calc(13 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '-.04em', whiteSpace: 'nowrap', color, textAlign: 'center' }}>
+        <div key={i} style={{ font: '800 calc(13 * var(--cq, 1cqw))/1 Sora,sans-serif', letterSpacing: '0', whiteSpace: 'nowrap', color, textAlign: 'center' }}>
           shutap · shutap
         </div>
       ))}
@@ -107,7 +107,7 @@ export function Button({
   style?: CSSProperties
   title?: string
 }) {
-  const height = size === 'sm' ? 36 : 44
+  const height = 'var(--home-control-height, 40px)'
   const palette: Record<string, CSSProperties> = {
     primary: {
       background: 'linear-gradient(155deg,#cf6189,#b8456b 55%,#a33a5e)',
@@ -145,8 +145,8 @@ export function Button({
         cursor: disabled ? 'default' : 'pointer',
         fontFamily: SORA,
         fontWeight: 700,
-        fontSize: size === 'sm' ? 13 : 14.5,
-        letterSpacing: '-.01em',
+        fontSize: 'var(--fs-small)',
+        letterSpacing: '0',
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -167,9 +167,9 @@ export function Eyebrow({ children, style }: { children: ReactNode; style?: CSSP
     <span
       style={{
         fontFamily: SORA,
-        fontWeight: 800,
-        fontSize: 11,
-        letterSpacing: '.22em',
+        fontWeight: 700,
+        fontSize: 'var(--fs-label)',
+        letterSpacing: '.14em',
         textTransform: 'uppercase',
         color: FAINT,
         ...style,
@@ -307,7 +307,7 @@ export function CompanionLine({
           flex: 1,
           fontFamily: NEWS,
           fontStyle: 'italic',
-          fontSize: 17,
+          fontSize: 'var(--fs-body)',
           lineHeight: 1.5,
           color: tone === 'dark' ? '#efedeb' : PROSE,
           textWrap: 'pretty',

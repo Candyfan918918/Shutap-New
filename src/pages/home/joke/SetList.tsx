@@ -66,12 +66,12 @@ export function SetList({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 10 }}>
-            <span style={{ flex: 1, minWidth: 0, fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, lineHeight: 1.45, color: MUTED, textWrap: 'pretty' }}>
+            <span style={{ flex: 1, minWidth: 0, fontFamily: NEWS, fontStyle: 'italic', fontSize: 'var(--fs-read)', lineHeight: 1.45, color: MUTED, textWrap: 'pretty' }}>
               {group.situation}
             </span>
             <span
               style={{
-                flex: 'none', fontFamily: SORA, fontWeight: 600, fontSize: 10.5,
+                flex: 'none', fontFamily: SORA, fontWeight: 500, fontSize: 'var(--fs-label)',
                 letterSpacing: '.14em', textTransform: 'uppercase', color: FAINT, whiteSpace: 'nowrap',
               }}
             >
@@ -104,19 +104,19 @@ export function SetList({
                           onClick={() => onOpenRoom(card.room_id as string)}
                           style={{ marginRight: 'auto', padding: 0, border: 'none', background: 'none', cursor: 'pointer' }}
                         >
-                          <Eyebrow style={{ fontSize: 10, letterSpacing: '.14em', color: '#17131a' }}>
+                          <Eyebrow style={{ fontSize: 'var(--fs-label)', letterSpacing: '.14em', color: '#17131a' }}>
                             ◎ in a room →
                           </Eyebrow>
                         </button>
                       ) : (
-                        <Eyebrow style={{ fontSize: 10, letterSpacing: '.14em', color: '#17131a', marginRight: 'auto' }}>
+                        <Eyebrow style={{ fontSize: 'var(--fs-label)', letterSpacing: '.14em', color: '#17131a', marginRight: 'auto' }}>
                           ◎ in a room
                         </Eyebrow>
                       )
                     ) : null}
                     {!card.room_id && onPost ? (
                       <RowButton strong onClick={() => onPost(card)}>
-                        <span aria-hidden style={{ fontFamily: 'Inter,sans-serif', fontWeight: 400, fontSize: 13 }}>◎</span>
+                        <span aria-hidden style={{ fontFamily: 'Sora,sans-serif', fontWeight: 400, fontSize: 'var(--fs-small)' }}>◎</span>
                         post as a room
                       </RowButton>
                     ) : null}
@@ -149,7 +149,7 @@ function RowButton({ children, onClick, strong }: { children: React.ReactNode; o
         background: 'transparent',
         border: strong ? '1.5px solid rgba(11,8,15,.16)' : '1px solid rgba(11,8,15,.08)',
         color: strong ? INK : MUTED,
-        fontFamily: SORA, fontWeight: 800, fontSize: 12, lineHeight: 1,
+        fontFamily: SORA, fontWeight: 800, fontSize: 'var(--fs-label)', lineHeight: 1,
       }}
     >
       {children}

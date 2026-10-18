@@ -140,10 +140,10 @@ export function MixYourOwn({
           <i className="done" />
         </div>
         <span className="bt-lbl r">your mix</span>
-        <h1 className="bt-h2" style={{ fontSize: 28 }} tabIndex={-1} ref={headRef}>
+        <h1 className="bt-h2" style={{ fontSize: 'var(--fs-h2)' }} tabIndex={-1} ref={headRef}>
           Here's your version.
         </h1>
-        <p className="bt-note" style={{ fontSize: 14, color: 'var(--muted)' }}>
+        <p className="bt-note" style={{ fontSize: 'var(--fs-small)', color: 'var(--muted)' }}>
           Saved next to the others. The setup stays from the version you started on.
         </p>
         <article className="bt-card" style={{ paddingTop: 8 }}>
@@ -199,14 +199,14 @@ export function MixYourOwn({
           </span>
         ))}
       </div>
-      <h1 className="bt-h2" style={{ fontSize: 28 }} tabIndex={-1} ref={headRef}>
+      <h1 className="bt-h2" style={{ fontSize: 'var(--fs-h2)' }} tabIndex={-1} ref={headRef}>
         {part.q}
       </h1>
-      <p className="bt-note" style={{ fontSize: 14, color: 'var(--muted)', marginTop: -6 }}>
+      <p className="bt-note" style={{ fontSize: 'var(--fs-small)', color: 'var(--muted)', marginTop: -6 }}>
         Tap the one you'd rather say out loud. You can change your mind until you tap next.
       </p>
 
-      {failed && <p role="alert" className="bt-note" style={{ color: 'var(--rose-ink)', fontSize: 14 }}>Couldn't load the lines. Go back and try again.</p>}
+      {failed && <p role="alert" className="bt-note" style={{ color: 'var(--rose-ink)', fontSize: 'var(--fs-small)' }}>Couldn't load the lines. Go back and try again.</p>}
       {!pool && !failed && <p className="bt-note">loading the lines…</p>}
 
       {pool && (

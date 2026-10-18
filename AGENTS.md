@@ -14,3 +14,6 @@
 <!-- LOVABLE:END (agent notes) -->
 
 - Client build splits vendor code into chunks (vite.config.ts manualChunks) so no chunk exceeds ~750KB — Vite's bundled import scanner crashes on larger chunks in fresh installs.
+
+- Enrich daily trend DTOs with fail-soft Wikipedia readings in a server-only helper; never substitute numeric demo data into production.
+- Homepage typography uses shared home.css scale tokens; shared header typography is scoped with a homepage marker to preserve other pages.

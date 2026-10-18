@@ -23,7 +23,7 @@ export function HomeRest() {
         <section style={{ padding: '40px 0 8px' }}>
           <div className="fd-col" style={{ padding: '0 16px 12px', maxWidth: 1080 }}>
             <div className="fd-between">
-              <h2 className="fd-h1" style={{ fontSize: 22 }}>
+              <h2 className="fd-h1" style={{ fontSize: 'var(--fs-read)' }}>
                 From the rooms
               </h2>
               <Link to="/rooms" className="fd-link fd-muted">
@@ -44,7 +44,7 @@ export function HomeRest() {
                   {p.emoji} {p.alias}
                   {p.topic ? ` · ${TOPIC_LABEL[p.topic]}` : ''} · {ago(p.created_at)}
                 </span>
-                <p className="fd-joke" style={{ fontSize: 18, display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                <p className="fd-joke" style={{ fontSize: 'var(--fs-body)', display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                   {p.joke}
                 </p>
                 <span className="fd-faint">
@@ -57,10 +57,10 @@ export function HomeRest() {
       ) : null}
 
       <section className="fd-col" style={{ paddingTop: 48, gap: 0 }}>
-        <h2 className="fd-h1" style={{ fontSize: 22, marginBottom: 8 }}>
+        <h2 className="fd-h1" style={{ fontSize: 'var(--fs-read)', marginBottom: 8 }}>
           Our goal: say it funnier
         </h2>
-        <p style={{ margin: '0 0 16px', fontSize: 15, lineHeight: 1.55, color: '#555' }}>
+        <p className="home-reading" style={{ margin: '0 0 16px', fontSize: 'var(--fs-read)', lineHeight: 1.6, color: '#555' }}>
           Humor is a form of wisdom, and the people who use it well are listened to. Shutap helps people say it funnier.
         </p>
         <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))' }}>
@@ -70,8 +70,8 @@ export function HomeRest() {
             ['Exploring', 'Short videos, screenwriting and audio stories. Plans, not promised dates.'],
           ].map(([h, b]) => (
             <div key={h} style={{ border: '1px solid rgba(0,0,0,.09)', borderRadius: 14, padding: '14px 16px' }}>
-              <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{h}</div>
-              <div style={{ fontSize: 14, lineHeight: 1.5, color: '#555' }}>{b}</div>
+              <div style={{ fontWeight: 700, fontSize: 'var(--fs-label)', letterSpacing: '.14em', textTransform: 'uppercase', marginBottom: 4 }}>{h}</div>
+              <div style={{ fontFamily: 'Newsreader,serif', fontWeight: 400, fontSize: 'var(--fs-read)', lineHeight: 1.6, color: '#555' }}>{b}</div>
             </div>
           ))}
         </div>
@@ -81,16 +81,16 @@ export function HomeRest() {
       </section>
 
       <section className="fd-col" style={{ paddingTop: 40, gap: 0 }}>
-        <h2 className="fd-h1" style={{ fontSize: 22, marginBottom: 10 }}>
+        <h2 className="fd-h1" style={{ fontSize: 'var(--fs-read)', marginBottom: 10 }}>
           AI bit generator FAQ
         </h2>
         {HOME_FAQ.map((f) => (
           <details key={f.q} style={{ borderTop: '1px solid rgba(0,0,0,.09)', padding: '14px 0' }}>
-            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 15, listStyle: 'none', display: 'flex', justifyContent: 'space-between' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 500, fontSize: 'var(--fs-body)', listStyle: 'none', display: 'flex', justifyContent: 'space-between' }}>
               {f.q}
               <span aria-hidden style={{ color: '#9a9a9a' }}>+</span>
             </summary>
-            <p style={{ margin: '8px 0 0', fontSize: 15, lineHeight: 1.5, color: '#555' }}>{f.a}</p>
+            <p className="home-faq-answer" style={{ margin: '8px 0 0', fontSize: 'var(--fs-read)', lineHeight: 1.6, color: '#555' }}>{f.a}</p>
           </details>
         ))}
         <Link to="/faq" className="fd-link fd-muted" style={{ marginTop: 12 }}>

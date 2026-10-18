@@ -160,8 +160,8 @@ export function GlobalHeader() {
         to={to}
         style={{
           fontFamily: "'Sora',system-ui,sans-serif",
-          fontWeight: 600,
-          fontSize: 14,
+          fontWeight: isHome ? 500 : 600,
+          fontSize: isHome ? 'var(--fs-body)' : 14,
           color: active ? inkActive : inkMuted,
           textDecoration: 'none',
           padding: '6px 10px',
@@ -178,7 +178,7 @@ export function GlobalHeader() {
     padding: '9px 11px',
     borderRadius: 10,
     fontFamily: "'Sora',system-ui,sans-serif",
-    fontSize: 14,
+    fontSize: isHome ? 'var(--fs-body)' : 14,
     color: menuInk,
     textDecoration: 'none',
     cursor: 'pointer',
@@ -188,6 +188,7 @@ export function GlobalHeader() {
     <header
       ref={headerRef}
       data-hdr-variant={variant}
+      className={isHome ? 'homepage-header' : undefined}
       style={{
         position: 'sticky',
         top: 0,
@@ -260,7 +261,7 @@ export function GlobalHeader() {
                       background: dark ? '#2a2a2a' : '#f6e9ee',
                       display: 'grid',
                       placeItems: 'center',
-                      fontSize: 14,
+                      fontSize: isHome ? 'var(--fs-body)' : 14,
                       flex: 'none',
                     }}
                   >
@@ -282,7 +283,7 @@ export function GlobalHeader() {
                       zIndex: 70,
                     }}
                   >
-                    <div style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: 12.5 }}>{alias.name}</div>
+                    <div style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name}</div>
                     {slug ? <Link to="/u/$pseudonym" params={{ pseudonym: slug }} style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link> : null}
                     <Link to="/rooms" search={{ tab: 'saved' }} style={menuItem} onClick={() => setMenuOpen(false)}>saved</Link>
                     <Link to="/set-list" style={menuItem} onClick={() => setMenuOpen(false)}>set list</Link>
@@ -324,7 +325,7 @@ export function GlobalHeader() {
                   padding: '9px 18px',
                   fontFamily: 'Sora,sans-serif',
                   fontWeight: 700,
-                  fontSize: 13,
+                  fontSize: isHome ? 'var(--fs-small)' : 13,
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
                   flexShrink: 0,
