@@ -23,7 +23,7 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const children: { loc: string; lastmod?: string }[] = [
-          { loc: `${SITE_URL}/sitemaps/core.xml`, lastmod: coreLastmod },
+          { loc: `${SITE_URL}/sitemaps/pages.xml`, lastmod: coreLastmod },
         ];
 
         if (OUTCOMES.filter(isOutcomeIndexable).length > 0) {
