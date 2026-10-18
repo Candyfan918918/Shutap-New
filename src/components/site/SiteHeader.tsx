@@ -121,6 +121,7 @@ export function SiteHeader() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }} ref={areaRef}>
           {navLink('/', 'write')}
           {navLink('/guides', 'guides')}
+          {navLink('/funniest', 'funniest')}
           {navLink('/business', 'enterprise')}
           {!mounted ? (
             <span style={{ width: 78, height: 34 }} aria-hidden />
