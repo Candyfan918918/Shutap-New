@@ -144,7 +144,7 @@ html.home-scroll-snap {
 .todays-idea .ti-small{font-family:'Sora',system-ui,sans-serif;font-size:12px;margin:14px 0 0}
 .todays-idea .ti-why{font-family:'Newsreader',Georgia,serif;font-size:17px;line-height:1.55;margin:0 0 24px;overflow-wrap:anywhere}
 .todays-idea .ti-trend{font-family:'Sora',system-ui,sans-serif;font-size:13px;min-width:0}
-.todays-idea .ti-row{display:grid;grid-template-columns:minmax(0,1fr) repeat(5,34px);gap:6px;align-items:center}
+.todays-idea .ti-row{display:grid;grid-template-columns:minmax(0,1fr) repeat(6,34px);gap:6px;align-items:center}
 .todays-idea .ti-head{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ti-muted);margin-bottom:6px}
 .todays-idea .ti-col{text-align:center}
 .todays-idea .ti-short{display:none}
@@ -157,6 +157,7 @@ html.home-scroll-snap {
 .todays-idea .ti-h1{background:var(--ti-h1)}
 .todays-idea .ti-h2{background:var(--ti-h2)}
 .todays-idea .ti-h3{background:var(--ti-h3)}
+.todays-idea .ti-na{display:inline-flex;align-items:center;justify-content:center;background:transparent;outline:1.5px dashed var(--ti-line);outline-offset:-1.5px;color:var(--ti-muted);font-size:11px;line-height:1}
 .todays-idea .ti-pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:999px;white-space:nowrap}
 .todays-idea .ti-pick{margin-left:6px;background:#c1216b;color:#fff}
 .todays-idea .ti-dir{border:1px solid var(--ti-line)}
@@ -170,8 +171,9 @@ html.home-scroll-snap {
 .todays-idea .ti-foot{font-size:12px;color:var(--ti-muted);margin:14px 0 0;line-height:1.45}
 @media (max-width:600px){
   .todays-idea{margin-top:64px;padding:44px 16px 52px}
-  .todays-idea .ti-row{grid-template-columns:minmax(0,1fr) repeat(5,26px);gap:4px}
-  .todays-idea .ti-cell{width:22px;height:22px;border-radius:6px}
+  .todays-idea .ti-row{grid-template-columns:minmax(0,1fr) repeat(6,24px);gap:3px}
+  .todays-idea .ti-cell{width:20px;height:20px;border-radius:5px}
+  .todays-idea .ti-na{font-size:10px}
   .todays-idea .ti-long{display:none}
   .todays-idea .ti-short{display:inline}
 }
