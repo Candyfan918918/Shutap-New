@@ -124,3 +124,16 @@ html.home-scroll-snap {
   [data-fresh]{animation:none}
   .home-hero-ticker{animation:none}
 }
+
+/* what to post today */
+.todays-idea{padding:24px 16px 0;max-width:720px;margin:0 auto;box-sizing:border-box;width:100%}
+.todays-idea .ti-card{background:#fff;color:#1a1418;border:1px solid rgba(26,20,24,.1);border-radius:18px;padding:20px;box-sizing:border-box;min-width:0}
+.todays-idea .ti-muted{color:rgba(26,20,24,.55)}
+.todays-idea .ti-block{margin-top:18px}
+.todays-idea .ti-copy{font-family:'Sora',system-ui,sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:9px 18px;border-radius:999px;border:0;background:#c1216b;color:#fff;cursor:pointer}
+@media (prefers-color-scheme: dark){
+  .todays-idea .ti-card{background:#1c1619;color:#f4eef1;border-color:rgba(255,255,255,.12)}
+  .todays-idea .ti-muted{color:rgba(244,238,241,.6)}
+}
+.dark .todays-idea .ti-card{background:#1c1619;color:#f4eef1;border-color:rgba(255,255,255,.12)}
+.dark .todays-idea .ti-muted{color:rgba(244,238,241,.6)}

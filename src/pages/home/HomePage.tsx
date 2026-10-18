@@ -11,8 +11,9 @@ export function HomeFooter() {
 }
 
 import type { NewestRoom } from '@/lib/newest-rooms.functions'
+import type { DailyIdea } from '@/lib/daily-idea.functions'
 
-export function HomePage({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCount?: number; newestRooms?: NewestRoom[] } = {}) {
+export function HomePage({ openRoomsCount = 0, newestRooms = [], dailyIdea = null }: { openRoomsCount?: number; newestRooms?: NewestRoom[]; dailyIdea?: DailyIdea | null } = {}) {
   const navigate = useNavigate()
 
   // Old links: /#spill and /#scan now land on the write box. /#mirror goes
@@ -32,7 +33,7 @@ export function HomePage({ openRoomsCount = 0, newestRooms = [] }: { openRoomsCo
 
   return (
     <div className="home-immersive" style={{ background: 'transparent', color: '#1a1418', fontFamily: "'Sora',system-ui,sans-serif" }}>
-      <HomeImmersive openRoomsCount={openRoomsCount} newestRooms={newestRooms} />
+      <HomeImmersive openRoomsCount={openRoomsCount} newestRooms={newestRooms} dailyIdea={dailyIdea} />
     </div>
   )
 }
