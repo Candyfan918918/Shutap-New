@@ -54,6 +54,8 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as ApiCompleteRouteImport } from './routes/api/complete'
 import { Route as EmailPreferencesRouteImport } from './routes/email.preferences'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email.unsubscribe'
+import { Route as FunniestIndexRouteImport } from './routes/funniest.index'
+import { Route as FunniestSlugRouteImport } from './routes/funniest.$slug'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as IsItNormalSlugRouteImport } from './routes/is-it-normal.$slug'
@@ -313,6 +315,16 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FunniestIndexRoute = FunniestIndexRouteImport.update({
+  id: '/funniest/',
+  path: '/funniest/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FunniestSlugRoute = FunniestSlugRouteImport.update({
+  id: '/funniest/$slug',
+  path: '/funniest/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuidesIndexRoute = GuidesIndexRouteImport.update({
   id: '/guides/',
   path: '/guides/',
@@ -530,6 +542,7 @@ export interface FileRoutesByFullPath {
   '/api/complete': typeof ApiCompleteRoute
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/funniest/$slug': typeof FunniestSlugRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
   '/rooms/$id': typeof RoomsIdRoute
@@ -542,6 +555,7 @@ export interface FileRoutesByFullPath {
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
+  '/funniest/': typeof FunniestIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/rooms/': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -608,6 +622,7 @@ export interface FileRoutesByTo {
   '/api/complete': typeof ApiCompleteRoute
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/funniest/$slug': typeof FunniestSlugRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
   '/rooms/$id': typeof RoomsIdRoute
@@ -620,6 +635,7 @@ export interface FileRoutesByTo {
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
+  '/funniest': typeof FunniestIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/rooms': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -688,6 +704,7 @@ export interface FileRoutesById {
   '/api/complete': typeof ApiCompleteRoute
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/funniest/$slug': typeof FunniestSlugRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
   '/rooms/$id': typeof RoomsIdRoute
@@ -700,6 +717,7 @@ export interface FileRoutesById {
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
+  '/funniest/': typeof FunniestIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/rooms/': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -768,6 +786,7 @@ export interface FileRouteTypes {
     | '/api/complete'
     | '/email/preferences'
     | '/email/unsubscribe'
+    | '/funniest/$slug'
     | '/guides/$slug'
     | '/is-it-normal/$slug'
     | '/rooms/$id'
@@ -780,6 +799,7 @@ export interface FileRouteTypes {
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
+    | '/funniest/'
     | '/guides/'
     | '/rooms/'
     | '/.lovable/oauth/consent'
@@ -846,6 +866,7 @@ export interface FileRouteTypes {
     | '/api/complete'
     | '/email/preferences'
     | '/email/unsubscribe'
+    | '/funniest/$slug'
     | '/guides/$slug'
     | '/is-it-normal/$slug'
     | '/rooms/$id'
@@ -858,6 +879,7 @@ export interface FileRouteTypes {
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
+    | '/funniest'
     | '/guides'
     | '/rooms'
     | '/.lovable/oauth/consent'
@@ -925,6 +947,7 @@ export interface FileRouteTypes {
     | '/api/complete'
     | '/email/preferences'
     | '/email/unsubscribe'
+    | '/funniest/$slug'
     | '/guides/$slug'
     | '/is-it-normal/$slug'
     | '/rooms/$id'
@@ -937,6 +960,7 @@ export interface FileRouteTypes {
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
+    | '/funniest/'
     | '/guides/'
     | '/rooms/'
     | '/.lovable/oauth/consent'
@@ -1004,6 +1028,7 @@ export interface RootRouteChildren {
   ApiCompleteRoute: typeof ApiCompleteRoute
   EmailPreferencesRoute: typeof EmailPreferencesRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  FunniestSlugRoute: typeof FunniestSlugRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
   IsItNormalSlugRoute: typeof IsItNormalSlugRoute
   RoomsIdRoute: typeof RoomsIdRoute
@@ -1015,6 +1040,7 @@ export interface RootRouteChildren {
   UPseudonymRoute: typeof UPseudonymRoute
   VentTopicRoute: typeof VentTopicRoute
   WhatHappensSlugRoute: typeof WhatHappensSlugRoute
+  FunniestIndexRoute: typeof FunniestIndexRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
   RoomsIndexRoute: typeof RoomsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -1346,6 +1372,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/funniest/': {
+      id: '/funniest/'
+      path: '/funniest'
+      fullPath: '/funniest/'
+      preLoaderRoute: typeof FunniestIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/funniest/$slug': {
+      id: '/funniest/$slug'
+      path: '/funniest/$slug'
+      fullPath: '/funniest/$slug'
+      preLoaderRoute: typeof FunniestSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/guides/': {
       id: '/guides/'
       path: '/guides'
@@ -1666,6 +1706,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCompleteRoute: ApiCompleteRoute,
   EmailPreferencesRoute: EmailPreferencesRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  FunniestSlugRoute: FunniestSlugRoute,
   GuidesSlugRoute: GuidesSlugRoute,
   IsItNormalSlugRoute: IsItNormalSlugRoute,
   RoomsIdRoute: RoomsIdRoute,
@@ -1677,6 +1718,7 @@ const rootRouteChildren: RootRouteChildren = {
   UPseudonymRoute: UPseudonymRoute,
   VentTopicRoute: VentTopicRoute,
   WhatHappensSlugRoute: WhatHappensSlugRoute,
+  FunniestIndexRoute: FunniestIndexRoute,
   GuidesIndexRoute: GuidesIndexRoute,
   RoomsIndexRoute: RoomsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
