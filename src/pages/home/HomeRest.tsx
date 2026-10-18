@@ -56,30 +56,6 @@ export function HomeRest() {
         </section>
       ) : null}
 
-      <section className="fd-col" style={{ paddingTop: 48, gap: 0 }}>
-        <h2 className="fd-h1" style={{ fontSize: 'var(--fs-read)', marginBottom: 8 }}>
-          Our goal: say it funnier
-        </h2>
-        <p className="home-reading" style={{ margin: '0 0 16px', fontSize: 'var(--fs-read)', lineHeight: 1.6, color: '#555' }}>
-          Humor is a form of wisdom, and the people who use it well are listened to. Shutap helps people say it funnier.
-        </p>
-        <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))' }}>
-          {[
-            ['Today', 'The AI bit generator for content creators and comedians: your story becomes a bit, then a teleprompter, a scene or a screenplay page.'],
-            ['Next', 'Shutap Enterprise for presentations, demos, launches and meetings, and the Shutap joke dataset.'],
-            ['Exploring', 'Short videos, screenwriting and audio stories. Plans, not promised dates.'],
-          ].map(([h, b]) => (
-            <div key={h} style={{ border: '1px solid rgba(0,0,0,.09)', borderRadius: 14, padding: '14px 16px' }}>
-              <div style={{ fontWeight: 700, fontSize: 'var(--fs-label)', letterSpacing: '.14em', textTransform: 'uppercase', marginBottom: 4 }}>{h}</div>
-              <div style={{ fontFamily: 'Newsreader,serif', fontWeight: 400, fontSize: 'var(--fs-read)', lineHeight: 1.6, color: '#555' }}>{b}</div>
-            </div>
-          ))}
-        </div>
-        <Link to="/business" className="fd-link fd-muted" style={{ marginTop: 12 }}>
-          Shutap Enterprise: request pricing →
-        </Link>
-      </section>
-
       <section className="fd-col" style={{ paddingTop: 40, gap: 0 }}>
         <h2 className="fd-h1" style={{ fontSize: 'var(--fs-read)', marginBottom: 10 }}>
           AI bit generator FAQ
