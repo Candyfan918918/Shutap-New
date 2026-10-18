@@ -52,7 +52,10 @@ export async function phCapture(
   if (typeof window === 'undefined') return
   try {
     await initPostHog()
-    _ph?.capture(name, props)
+    // PostHog Web analytics (visitors, pages, sources, UTMs) reads only the
+    // standard `$pageview` event. The app's own `page_view` is renamed here;
+    // PostHog fills in the URL, referrer and UTM properties itself.
+    _ph?.capture(name === 'page_view' ? '$pageview' : name, props)
   } catch { /* noop */ }
 }
 
