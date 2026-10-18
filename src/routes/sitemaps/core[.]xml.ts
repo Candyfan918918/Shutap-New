@@ -4,7 +4,7 @@ import { renderUrlset, type SitemapEntry } from "@/lib/seo/sitemap";
 import { GUIDES, guidePath } from "@/lib/seo/guides";
 import { FUNNIEST, FUNNIEST_HUB, funniestPath } from "@/lib/seo/funniest";
 
-const entries: SitemapEntry[] = [
+export const CORE_ENTRIES: SitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/guides", changefreq: "weekly", priority: "0.9" },
   ...GUIDES.map((g): SitemapEntry => ({
@@ -49,7 +49,7 @@ export const Route = createFileRoute("/sitemaps/core.xml")({
   server: {
     handlers: {
       GET: async () => {
-        return new Response(renderUrlset(entries), {
+        return new Response(renderUrlset(CORE_ENTRIES), {
           headers: {
             "Content-Type": "application/xml",
             "Cache-Control": "public, max-age=3600",
