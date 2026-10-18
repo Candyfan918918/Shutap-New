@@ -2,4 +2,4 @@
 - [x] Unify all homepage typography, including navigation, footer and FAQ.
 - [x] Verify tests, preview errors, forbidden wording and phone/desktop light/dark views.
 - [x] Add a focused AI joke generator page and prominent guides link.
-- [ ] Verify the new page, search metadata and guides-to-writer navigation.
+- [x] Verify the new page, search metadata and guides-to-writer navigation.
