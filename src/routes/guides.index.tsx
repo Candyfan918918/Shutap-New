@@ -12,7 +12,7 @@ const DESCRIPTION =
 const CAPSULE =
   "Shutap is an AI bit generator for content creators and comedians. These guides cover the craft: how to turn a story into a bit, how long a TikTok bit should be, and how to write tags, plus the tools for scripts, skits, teleprompter and screenplay pages.";
 
-const toItems = (kind: "tool" | "guide") =>
+const toItems = (kind: "tool" | "guide" | "business") =>
   GUIDES.filter((g) => g.kind === kind).map((g) => ({
     href: guidePath(g.slug),
     label: g.h1,
@@ -61,6 +61,13 @@ export const Route = createFileRoute("/guides/")({
       linkGroups={[
         { heading: "Tools", items: toItems("tool") },
         { heading: "Guides", items: toItems("guide") },
+        {
+          heading: "For business (in development)",
+          items: [
+            { href: "/business", label: "Request information or the joke dataset", blurb: "Tell us who you are and what you need." },
+            ...toItems("business"),
+          ],
+        },
       ]}
       cta={{ label: "Write your story, get the bit", href: "/" }}
       others={[

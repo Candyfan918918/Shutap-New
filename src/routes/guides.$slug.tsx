@@ -20,7 +20,7 @@ export const Route = createFileRoute("/guides/$slug")({
     const path = guidePath(g.slug);
     const url = `${SITE_URL}${path}`;
     const jsonLd =
-      g.kind === "guide"
+      g.kind !== "tool"
         ? {
             "@context": "https://schema.org",
             "@type": "Article",
@@ -53,7 +53,7 @@ export const Route = createFileRoute("/guides/$slug")({
         { name: "description", content: g.description },
         { property: "og:title", content: g.title },
         { property: "og:description", content: g.description },
-        { property: "og:type", content: g.kind === "guide" ? "article" : "website" },
+        { property: "og:type", content: g.kind !== "tool" ? "article" : "website" },
         { property: "og:url", content: url },
         ...ogImageMeta(),
         { name: "twitter:title", content: g.title },

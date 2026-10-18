@@ -32,6 +32,10 @@ const SECTIONS = [
     body: "Rooms are public feeds by topic: office, work, family, school, live and social. Post a bit under your Shutap name, get likes and comments, follow writers you like, and see what's landing for other creators.",
   },
   {
+    heading: "Where Shutap is going: business",
+    body: "Bits are the start. We are building humor for the way businesses talk: presentations and slides, roadshows, product demos and launches, and meetings. It is in development. If you want information, or want to ask about the Shutap joke dataset, use the form at shutap.com/business.",
+  },
+  {
     heading: "The one rule",
     body: "Bits go at the situation, never at a real person someone could identify. Names, places and contact details are removed before anything is saved, and anyone can report a post that breaks the rule.",
   },
@@ -41,7 +45,7 @@ const SECTIONS = [
   },
   {
     heading: "Who makes Shutap",
-    body: "Shutap is an independent product. Questions, ideas or press: hello@shutap.com. Adults 18+. Shutap writes comedy; it is not therapy or advice.",
+    body: "Shutap is an independent product. Questions, ideas or press: hello@shutap.com. Business inquiries: shutap.com/business. Adults 18+. Shutap writes comedy; it is not therapy or advice.",
   },
 ];
 const OTHERS = [
@@ -49,6 +53,7 @@ const OTHERS = [
   { href: "/how-it-works", label: "How it works" },
   { href: "/pricing", label: "Pricing" },
   { href: "/guides", label: "Guides" },
+  { href: "/business", label: "For business" },
   { href: "/faq", label: "FAQ" },
   { href: "/trust", label: "Trust & privacy" },
 ];

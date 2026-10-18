@@ -31,7 +31,7 @@ function TermsPage() {
     <DocLayout
       active="/terms"
       title="Terms of Service"
-      subline="Last updated: October 6, 2026 · Operator: Shutap"
+      subline="Last updated: October 17, 2026 · Operator: Shutap"
     >
       <p>
         These terms are an agreement between you and Shutap. By using Shutap, you agree to them.
@@ -43,6 +43,12 @@ function TermsPage() {
         story. Shutap removes identifying details and writes comedy from it, with teleprompter,
         scene and screenplay views. You can download, share or post what it writes to a room.
         Shutap is for entertainment only.
+      </p>
+      <p>
+        We are also developing tools for businesses, such as presentations, demos, launches and
+        meetings. These are not yet available. A business inquiry, or a request about our joke
+        dataset, is not an offer or a contract. Any business access or dataset access would be
+        covered by a separate written agreement.
       </p>
 
       <h3>2. What Shutap is not</h3>

@@ -42,6 +42,11 @@ const ITEMS: Item[] = [
     sub: "shutap is not a crisis service. where to get help now.",
   },
   {
+    href: "/business",
+    label: "For business",
+    sub: "request information or ask about the joke dataset. in development.",
+  },
+  {
     href: "/contact",
     label: "Contact",
     sub: "hello@shutap.com, for everything.",

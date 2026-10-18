@@ -5,7 +5,7 @@
 // Voice: terse, concrete. No card counts, no wellness vocabulary, no claims
 // about features that are not in the product.
 
-export type GuideKind = "tool" | "guide";
+export type GuideKind = "tool" | "guide" | "business";
 
 export interface GuideSection {
   heading: string;
@@ -473,7 +473,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "funny-for-business",
-    kind: "guide",
+    kind: "business",
     title: "Shutap for Business: Make Every Presentation and Conversation Funnier | Shutap",
     h1: "Shutap for business",
     description:
@@ -509,7 +509,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "funny-presentations-and-slides",
-    kind: "guide",
+    kind: "business",
     title: "Make Presentations and Slides Funny Without Being Cringe | Shutap",
     h1: "Make presentations and slides funny",
     description:
@@ -549,7 +549,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "funny-product-demos-and-launches",
-    kind: "guide",
+    kind: "business",
     title: "Funny Product Demos and Launches: Humor That Sells | Shutap",
     h1: "Funny product demos and launches",
     description:
