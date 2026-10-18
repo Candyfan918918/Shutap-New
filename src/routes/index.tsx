@@ -5,6 +5,7 @@ import { HOME_FAQ } from '@/pages/home/HomeFAQ'
 import { SITE_URL } from '@/lib/site'
 import { countOpenRooms } from '@/lib/rooms-count.functions'
 import { listNewestRooms } from '@/lib/newest-rooms.functions'
+import { listDailyIdea } from '@/lib/daily-idea.functions'
 
 const HOME_TITLE = "Shutap — AI Bit & Joke Generator for Creators & Comedians"
 const HOME_DESCRIPTION =
@@ -19,11 +20,12 @@ export const Route = createFileRoute('/')({
     'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400',
   }),
   loader: async () => {
-    const [openRooms, newestRooms] = await Promise.all([
+    const [openRooms, newestRooms, dailyIdea] = await Promise.all([
       countOpenRooms().catch(() => 0),
       listNewestRooms().catch(() => []),
+      listDailyIdea().catch(() => null),
     ])
-    return { openRooms, newestRooms }
+    return { openRooms, newestRooms, dailyIdea }
   },
   head: () => ({
     meta: [
@@ -60,6 +62,6 @@ export const Route = createFileRoute('/')({
 })
 
 function HomeRouteComponent() {
-  const { openRooms, newestRooms } = Route.useLoaderData()
-  return <HomePage openRoomsCount={openRooms} newestRooms={newestRooms} />
+  const { openRooms, newestRooms, dailyIdea } = Route.useLoaderData()
+  return <HomePage openRoomsCount={openRooms} newestRooms={newestRooms} dailyIdea={dailyIdea} />
 }
