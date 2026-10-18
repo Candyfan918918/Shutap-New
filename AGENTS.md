@@ -12,3 +12,5 @@
 <!-- LOVABLE:BEGIN (agent notes) -->
 - `node_modules/vite/dist/node/chunks/node.js` carries a patch: the bundled es-module-lexer@1.7.0 wasm cannot lex sources > ~750KB ("Parse error @:1:1" in vite:build-import-analysis on large SSR chunks), so the region is replaced with an import of `es-module-lexer@2.3.2` (same parse shape). If Vite is ever reinstalled or updated, re-apply this patch or the build breaks once the SSR bundle grows past the limit.
 <!-- LOVABLE:END (agent notes) -->
+
+- Client build splits vendor code into chunks (vite.config.ts manualChunks) so no chunk exceeds ~750KB — Vite's bundled import scanner crashes on larger chunks in fresh installs.
