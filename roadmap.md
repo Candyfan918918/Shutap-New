@@ -1,0 +1,3 @@
+- [ ] Add live Wikipedia interest with safe fallback and one-hour caching.
+- [ ] Redesign the daily panel around insights, with compact demo.
+- [ ] Verify calculations, live fetch, phone layout, copy, and build status.
