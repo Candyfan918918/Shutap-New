@@ -32,6 +32,18 @@ const SECTIONS = [
     body: "Every bit comes in three views. The teleprompter scrolls it full-screen for filming to camera. The scene lays it out beat by beat for a POV or sketch. The screenplay page formats it like a script, with characters and action, ready to shoot or share.",
   },
   {
+    heading: "What to post today",
+    body: "Never start from a blank page. The homepage shows a daily idea of what to post, with a hook, a short bit and a tag, drawn from what is trending, along with a trend panel that shows which topics are rising or cooling.",
+  },
+  {
+    heading: "The funniest: learn from the best",
+    body: "The funniest is a growing series of educational pages. Each asks who is the funniest in a category, using published rankings and sources, then breaks down how that person was funny into techniques you can use, each with an original example line and a way to try it. Read them at shutap.com/funniest.",
+  },
+  {
+    heading: "Why Shutap is different",
+    body: "Shutap writes a whole bit from your own story, then lets you steer it: hotter, tighter, escalate, or mix your own lines. It sits on a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat. Around the tool you get a daily idea of what to post and a library of techniques taken from funny people. To our knowledge, no other joke tool pairs all of these, and the aim is simple: you get funnier, and the voice stays yours.",
+  },
+  {
     heading: "Post the best one to a room",
     body: "Rooms are public feeds by topic: office, work, family, school, live and social. Post a bit under your Shutap name, get likes and comments, follow writers you like, and see what's landing for other creators.",
   },
@@ -57,6 +69,7 @@ const OTHERS = [
   { href: "/how-it-works", label: "How it works" },
   { href: "/pricing", label: "Pricing" },
   { href: "/guides", label: "Guides" },
+  { href: "/funniest", label: "The funniest" },
   { href: "/business", label: "Enterprise" },
   { href: "/faq", label: "FAQ" },
   { href: "/trust", label: "Trust & privacy" },
