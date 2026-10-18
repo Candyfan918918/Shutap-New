@@ -16,6 +16,7 @@ export function SeoPage({ children }: { children: ReactNode }) {
           <nav style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }}>
             <Link to="/" style={navLink}>Write</Link>
             <Link to="/guides" style={navLink}>Guides</Link>
+            <Link to="/business" style={navLink}>For business</Link>
             <Link to="/faq" style={navLink}>FAQ</Link>
           </nav>
         </div>

@@ -223,6 +223,7 @@ export function GlobalHeader() {
           <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {navLink('/', 'write')}
             {navLink('/guides', 'guides')}
+          {navLink('/business', 'for business')}
           </span>
           {alias ? (
             <Link to="/activity" aria-label={unread ? `activity, ${unread} new` : 'activity'} style={{ position: 'relative', display: 'grid', placeItems: 'center', width: 36, height: 36, borderRadius: 999, color: pathname.startsWith('/activity') ? inkActive : inkMuted }}>
