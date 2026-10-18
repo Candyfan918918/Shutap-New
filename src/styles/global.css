@@ -28,6 +28,14 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
+/* Once <WaveDots /> is animating the grid on a canvas, drop the static CSS
+   dots so there is only one layer. Glow stays. */
+html.dots-live body {
+  background-image:
+    radial-gradient(ellipse 80% 520px at 50% -80px, rgba(231, 84, 138, 0.16), rgba(231, 84, 138, 0) 72%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
 
 /* ── shared brand-eye blink (used by every <EyeMark />) ──────────────── */
 /* Applied via the .shutap-blink class. Wrapped in prefers-reduced-motion so

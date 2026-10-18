@@ -18,6 +18,7 @@ import soraBlackWoff2 from "@fontsource/sora/files/sora-latin-800-normal.woff2?u
 import newsreaderItalicWoff2 from "@fontsource/newsreader/files/newsreader-latin-400-italic.woff2?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { GlobalHeader } from "@/components/GlobalHeader";
+import { WaveDots } from "@/components/motion/WaveDots";
 
 import { useNavigate } from "@/compat/router";
 
@@ -249,7 +250,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      
+      <WaveDots />
       <GlobalHeader />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
