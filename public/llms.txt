@@ -14,6 +14,7 @@ The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Sign
 
 ## Guides and tools
 
+- [AI joke generator](https://shutap.com/ai-joke-generator): Turn your story into a complete comedy bit with a hook, setup, tags and a button.
 - [All guides and tools](https://shutap.com/guides): Index of the pages below.
 - [Storytime script generator](https://shutap.com/guides/storytime-script-generator): Turn a story into a script with a hook, setup, tags and a button.
 - [Stand-up bit generator](https://shutap.com/guides/stand-up-bit-generator): A first draft of a bit from a real story.
