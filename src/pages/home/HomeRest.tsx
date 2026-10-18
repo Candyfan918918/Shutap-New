@@ -58,7 +58,7 @@ export function HomeRest() {
 
       <section className="fd-col" style={{ paddingTop: 40, gap: 0 }}>
         <h2 className="fd-h1" style={{ fontSize: 'var(--fs-read)', marginBottom: 10 }}>
-          AI bit generator FAQ
+          AI joke generator FAQ
         </h2>
         {HOME_FAQ.map((f) => (
           <details key={f.q} style={{ borderTop: '1px solid rgba(0,0,0,.09)', padding: '14px 0' }}>

@@ -7,11 +7,11 @@ import { countOpenRooms } from '@/lib/rooms-count.functions'
 import { listNewestRooms } from '@/lib/newest-rooms.functions'
 import { listDailyIdea } from '@/lib/daily-idea.functions'
 
-const HOME_TITLE = "Shutap — AI Bit & Joke Generator for Creators & Comedians"
+const HOME_TITLE = "Shutap — AI Joke Generator for Creators"
 const HOME_DESCRIPTION =
-  "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage."
+  "Shutap is the AI joke generator for creators. Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page."
 const HOME_OG_DESCRIPTION =
-  "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage."
+  "Shutap is the AI joke generator for creators. Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page."
 
 const HOME_URL = `${SITE_URL}/`
 
@@ -31,13 +31,13 @@ export const Route = createFileRoute('/')({
     meta: [
       { title: HOME_TITLE },
       { name: "description", content: HOME_DESCRIPTION },
-      { property: "og:title", content: "SHUTAP. Say it funnier." },
+      { property: "og:title", content: "Shutap — AI Joke Generator for Creators" },
       { property: "og:description", content: HOME_OG_DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: HOME_URL },
       ...ogImageMeta(),
-      { name: "twitter:title", content: "SHUTAP. Say it funnier." },
-      { name: "twitter:description", content: "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage." },
+      { name: "twitter:title", content: "Shutap — AI Joke Generator for Creators" },
+      { name: "twitter:description", content: "Shutap is the AI joke generator for creators. Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page." },
     ],
     links: [
       { rel: "canonical", href: HOME_URL },

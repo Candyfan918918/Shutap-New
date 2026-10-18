@@ -212,7 +212,7 @@ export const GUIDES: Guide[] = [
   {
     slug: "how-shutap-is-built",
     kind: "guide",
-    title: "How Shutap Is Built: An AI Bit Generator You Steer | Shutap",
+    title: "How Shutap Is Built: An AI Joke Generator You Steer | Shutap",
     h1: "How Shutap is built",
     description:
       "How Shutap turns your story into a bit: twelve observations, four whole bits, rules in code, a second model as judge, then hotter, tighter, escalate and mix-your-own controls so you stay the writer.",

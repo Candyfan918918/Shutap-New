@@ -319,6 +319,7 @@ export function BitSurface() {
             <div className="bt-hero">
               <h1 className="bt-h1">
                 Say it <em>funnier.</em>
+                <span className="bt-h1-kicker">The AI joke generator for creators.</span>
               </h1>
               <p className="bt-sub">Write your story. Get the bit. Film it.</p>
             </div>

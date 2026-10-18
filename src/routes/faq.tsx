@@ -7,11 +7,11 @@ import { FAQ_ITEMS as QA } from "@/lib/seo/faq";
 
 const PATH = "/faq";
 const URL = `${SITE_URL}/faq`;
-const TITLE = "AI Bit & Joke Generator FAQ — Shutap for Creators & Comedians";
+const TITLE = "AI Joke Generator FAQ — Shutap for Creators";
 const DESCRIPTION =
-  "Answers about Shutap, the AI bit generator for content creators and comedians: is it free, the teleprompter, scene and screenplay views, TikTok and stand-up, who owns the bits, privacy and pricing.";
+  "Answers about Shutap, the AI joke generator for creators: is it free, the teleprompter, scene and screenplay views, TikTok and stand-up, who owns the bits, privacy and pricing.";
 const CAPSULE =
-  "Everything people ask about Shutap, the AI bit generator that turns a real story into a bit for TikTok, Reels, YouTube Shorts and the stage.";
+  "Everything people ask about Shutap, the AI joke generator that turns a real story into a bit for TikTok, Reels, YouTube Shorts and the stage.";
 
 
 
@@ -60,7 +60,7 @@ export const Route = createFileRoute("/faq")({
   component: () => (
     <ContentPage
       breadcrumbs={[{ name: "FAQ", path: "/faq" }]}
-      h1="AI bit generator FAQ"
+      h1="AI joke generator FAQ"
       capsule={CAPSULE}
       sections={QA}
       others={OTHERS}

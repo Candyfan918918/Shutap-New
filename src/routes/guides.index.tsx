@@ -10,7 +10,7 @@ const TITLE = "Guides & Tools for Writing Funnier Videos and Sets | Shutap";
 const DESCRIPTION =
   "Guides and tools for creators and comedians: storytime scripts, stand-up bits, POV skits, teleprompter and screenplay pages, plus how to write a hook, tags and a button.";
 const CAPSULE =
-  "Shutap is an AI bit generator for content creators and comedians. These guides cover the craft: how to turn a story into a bit, how long a TikTok bit should be, and how to write tags, plus the tools for scripts, skits, teleprompter and screenplay pages.";
+  "Shutap is an AI joke generator for creators. These guides cover the craft: how to turn a story into a bit, how long a TikTok bit should be, and how to write tags, plus the tools for scripts, skits, teleprompter and screenplay pages.";
 
 const toItems = (kind: "tool" | "guide" | "business") =>
   GUIDES.filter((g) => g.kind === kind).map((g) => ({

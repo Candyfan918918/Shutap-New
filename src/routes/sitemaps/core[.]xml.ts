@@ -16,6 +16,7 @@ export function getCoreEntries(): SitemapEntry[] {
   return [
   { path: "/", lastmod: todayPacific(), changefreq: "daily", priority: "1.0" },
   { path: "/guides", lastmod: newest(GUIDES.map((g) => g.published)), changefreq: "weekly", priority: "0.9" },
+  { path: "/ai-joke-generator", lastmod: "2026-10-18", changefreq: "monthly", priority: "0.9" },
   ...GUIDES.map((g): SitemapEntry => ({
     path: guidePath(g.slug),
     lastmod: g.published,
