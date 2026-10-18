@@ -12,7 +12,7 @@ export type DailyIdea = {
   signals: DailySignals | null
 }
 
-export type Platform = 'tiktok' | 'instagram' | 'youtube' | 'x' | 'reddit'
+export type Platform = 'news' | 'tiktok' | 'instagram' | 'youtube' | 'x' | 'reddit'
 export type Heat = 0 | 1 | 2 | 3
 export type SignalTopic = {
   topic: string
