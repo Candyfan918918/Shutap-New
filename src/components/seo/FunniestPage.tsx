@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
@@ -151,8 +152,8 @@ export function FunniestPage({
         )}
 
         <p style={{ margin: '8px 0 36px' }}>
-          <a
-            href="/"
+          <Link
+            to="/"
             style={{
               display: 'inline-block',
               background: BRAND,
@@ -165,7 +166,7 @@ export function FunniestPage({
             }}
           >
             Try these techniques on your own story →
-          </a>
+          </Link>
         </p>
 
         <section style={{ marginBottom: 32 }}>
@@ -195,9 +196,9 @@ export function FunniestPage({
         >
           <span style={{ color: '#656565' }}>more:</span>
           {others.map((o) => (
-            <a
+            <Link
               key={o.href}
-              href={o.href}
+              to={o.href}
               style={{
                 color: INK,
                 textDecoration: 'none',
@@ -206,13 +207,13 @@ export function FunniestPage({
               }}
             >
               {o.label.toLowerCase()}
-            </a>
+            </Link>
           ))}
         </nav>
 
         <p style={{ marginTop: 40, fontSize: 15 }}>
-          <a
-            href="/"
+          <Link
+            to="/"
             style={{
               color: '#17131a',
               textDecoration: 'none',
@@ -222,7 +223,7 @@ export function FunniestPage({
             }}
           >
             SHUTAP. Say it funnier.
-          </a>
+          </Link>
         </p>
       </article>
     </main>
