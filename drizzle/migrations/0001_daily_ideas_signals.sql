@@ -1,0 +1,1 @@
+alter table public.daily_ideas add column why_now text, add column signals jsonb;

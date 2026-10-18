@@ -526,8 +526,10 @@ export type Database = {
           day: string
           hook: string
           id: string
+          signals: Json | null
           tag: string
           topic: string
+          why_now: string | null
         }
         Insert: {
           bit: string
@@ -535,8 +537,10 @@ export type Database = {
           day: string
           hook: string
           id?: string
+          signals?: Json | null
           tag: string
           topic: string
+          why_now?: string | null
         }
         Update: {
           bit?: string
@@ -544,8 +548,10 @@ export type Database = {
           day?: string
           hook?: string
           id?: string
+          signals?: Json | null
           tag?: string
           topic?: string
+          why_now?: string | null
         }
         Relationships: []
       }

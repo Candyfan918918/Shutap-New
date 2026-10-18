@@ -126,14 +126,56 @@ html.home-scroll-snap {
 }
 
 /* what to post today */
-.todays-idea{padding:24px 16px 0;max-width:720px;margin:0 auto;box-sizing:border-box;width:100%}
-.todays-idea .ti-card{background:#fff;color:#1a1418;border:1px solid rgba(26,20,24,.1);border-radius:18px;padding:20px;box-sizing:border-box;min-width:0}
-.todays-idea .ti-muted{color:rgba(26,20,24,.55)}
-.todays-idea .ti-block{margin-top:18px}
-.todays-idea .ti-copy{font-family:'Sora',system-ui,sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:9px 18px;border-radius:999px;border:0;background:#c1216b;color:#fff;cursor:pointer}
-@media (prefers-color-scheme: dark){
-  .todays-idea .ti-card{background:#1c1619;color:#f4eef1;border-color:rgba(255,255,255,.12)}
-  .todays-idea .ti-muted{color:rgba(244,238,241,.6)}
+.todays-idea{--ti-fg:#1a1418;--ti-muted:rgba(26,20,24,.58);--ti-line:rgba(26,20,24,.14);--ti-bg:rgba(193,33,107,.05);--ti-h0:transparent;--ti-h1:#f7d4e3;--ti-h2:#e27aa8;--ti-h3:#c1216b;
+  margin-top:72px;padding:56px 16px 64px;background:var(--ti-bg);color:var(--ti-fg);width:100%;box-sizing:border-box;overflow:hidden;scroll-margin-top:72px}
+.todays-idea .ti-inner{max-width:1040px;margin:0 auto;min-width:0}
+.todays-idea .ti-eyebrow{font-family:'Sora',system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#c1216b;overflow-wrap:anywhere}
+.todays-idea .ti-hook{font-family:'Sora',system-ui,sans-serif;font-weight:800;font-size:clamp(32px,6vw,56px);line-height:1.04;letter-spacing:-.02em;margin:14px 0 32px;overflow-wrap:anywhere}
+.todays-idea .ti-cols{display:grid;grid-template-columns:minmax(0,1fr);gap:40px}
+@media (min-width:960px){.todays-idea .ti-cols{grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:56px}}
+.todays-idea .ti-label{font-family:'Sora',system-ui,sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ti-muted);margin-bottom:8px}
+.todays-idea .ti-bit{font-family:'Newsreader',Georgia,serif;font-size:clamp(20px,2.2vw,22px);line-height:1.7;white-space:pre-line;margin:0;overflow-wrap:anywhere}
+.todays-idea .ti-tag{margin-top:24px;padding:14px 18px;border-left:3px solid #c1216b;background:rgba(193,33,107,.08);border-radius:0 10px 10px 0}
+.todays-idea .ti-tag p{font-family:'Newsreader',Georgia,serif;font-size:20px;line-height:1.5;margin:0;overflow-wrap:anywhere}
+.todays-idea .ti-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:24px}
+.todays-idea .ti-copy{font-family:'Sora',system-ui,sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:10px 20px;border-radius:999px;border:0;background:#c1216b;color:#fff;cursor:pointer}
+.todays-idea .ti-write{font-family:'Sora',system-ui,sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#c1216b;text-decoration:none}
+.todays-idea .ti-muted{color:var(--ti-muted)}
+.todays-idea .ti-small{font-family:'Sora',system-ui,sans-serif;font-size:12px;margin:14px 0 0}
+.todays-idea .ti-why{font-family:'Newsreader',Georgia,serif;font-size:17px;line-height:1.55;margin:0 0 24px;overflow-wrap:anywhere}
+.todays-idea .ti-trend{font-family:'Sora',system-ui,sans-serif;font-size:13px;min-width:0}
+.todays-idea .ti-row{display:grid;grid-template-columns:minmax(0,1fr) repeat(5,34px);gap:6px;align-items:center}
+.todays-idea .ti-head{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ti-muted);margin-bottom:6px}
+.todays-idea .ti-col{text-align:center}
+.todays-idea .ti-short{display:none}
+.todays-idea .ti-topic{padding:8px 0;border-top:1px solid var(--ti-line)}
+.todays-idea .ti-name{overflow-wrap:anywhere;line-height:1.3}
+.todays-idea .ti-chosen{font-weight:800}
+.todays-idea .ti-cellwrap{display:flex;justify-content:center}
+.todays-idea .ti-cell{display:inline-block;width:26px;height:26px;border-radius:7px;vertical-align:middle;box-sizing:border-box}
+.todays-idea .ti-h0{background:var(--ti-h0);border:1.5px solid var(--ti-line)}
+.todays-idea .ti-h1{background:var(--ti-h1)}
+.todays-idea .ti-h2{background:var(--ti-h2)}
+.todays-idea .ti-h3{background:var(--ti-h3)}
+.todays-idea .ti-pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.todays-idea .ti-pick{margin-left:6px;background:#c1216b;color:#fff}
+.todays-idea .ti-dir{border:1px solid var(--ti-line)}
+.todays-idea .ti-rising,.todays-idea .ti-peaking{color:#c1216b;border-color:rgba(193,33,107,.4)}
+.todays-idea .ti-meta{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin-top:6px}
+.todays-idea .ti-note{color:var(--ti-muted);font-size:12px;line-height:1.4;flex:1 1 160px;min-width:0}
+.todays-idea .ti-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:11px;color:var(--ti-muted)}
+.todays-idea .ti-legend .ti-cell{width:14px;height:14px;border-radius:4px;margin-right:2px}
+.todays-idea .ti-sources{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:14px;font-size:12px}
+.todays-idea .ti-sources a{color:#c1216b;text-decoration:underline;text-underline-offset:2px}
+.todays-idea .ti-foot{font-size:12px;color:var(--ti-muted);margin:14px 0 0;line-height:1.45}
+@media (max-width:600px){
+  .todays-idea{margin-top:64px;padding:44px 16px 52px}
+  .todays-idea .ti-row{grid-template-columns:minmax(0,1fr) repeat(5,26px);gap:4px}
+  .todays-idea .ti-cell{width:22px;height:22px;border-radius:6px}
+  .todays-idea .ti-long{display:none}
+  .todays-idea .ti-short{display:inline}
 }
-.dark .todays-idea .ti-card{background:#1c1619;color:#f4eef1;border-color:rgba(255,255,255,.12)}
-.dark .todays-idea .ti-muted{color:rgba(244,238,241,.6)}
+@media (prefers-color-scheme: dark){
+  .todays-idea{--ti-fg:#f4eef1;--ti-muted:rgba(244,238,241,.62);--ti-line:rgba(255,255,255,.22);--ti-bg:rgba(193,33,107,.1);--ti-h1:#5a1f3a;--ti-h2:#9a2a5e;--ti-h3:#e0468f}
+}
+.dark .todays-idea{--ti-fg:#f4eef1;--ti-muted:rgba(244,238,241,.62);--ti-line:rgba(255,255,255,.22);--ti-bg:rgba(193,33,107,.1);--ti-h1:#5a1f3a;--ti-h2:#9a2a5e;--ti-h3:#e0468f}

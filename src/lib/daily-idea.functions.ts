@@ -8,6 +8,24 @@ export type DailyIdea = {
   hook: string
   bit: string
   tag: string
+  why_now: string | null
+  signals: DailySignals | null
+}
+
+export type Platform = 'tiktok' | 'instagram' | 'youtube' | 'x' | 'reddit'
+export type Heat = 0 | 1 | 2 | 3
+export type SignalTopic = {
+  topic: string
+  chosen?: boolean
+  direction?: 'rising' | 'peaking' | 'steady' | 'cooling'
+  note?: string
+  heat?: Partial<Record<Platform, Heat>>
+  sources?: { label: string; url: string }[]
+}
+export type DailySignals = {
+  platforms?: Platform[]
+  topics?: SignalTopic[]
+  read_at?: string
 }
 
 function pacificToday(): string {
@@ -26,13 +44,13 @@ export const listDailyIdea = createServerFn({ method: 'GET' }).handler(async ():
     // Exact day first; otherwise the latest row before today.
     const { data, error } = await supabaseAdmin
       .from('daily_ideas')
-      .select('day, topic, hook, bit, tag')
+      .select('day, topic, hook, bit, tag, why_now, signals')
       .lte('day', pacificToday())
       .order('day', { ascending: false })
       .limit(1)
       .maybeSingle()
     if (error || !data) return null
-    return data as DailyIdea
+    return data as unknown as DailyIdea
   } catch {
     return null
   }
