@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import './feed.css'
 
 const LINKS: Array<[string, string]> = [
-  ['/rooms', 'rooms'],
+  ['/guides', 'guides'],
   ['/about', 'about'],
   ['/how-it-works', 'how it works'],
   ['/pricing', 'pricing'],

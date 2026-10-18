@@ -4,6 +4,7 @@ import type { Crumb } from '@/lib/seo/breadcrumbs'
 
 type Section = { heading: string; body: string };
 type Other = { href: string; label: string };
+type LinkGroup = { heading: string; items: { href: string; label: string; blurb: string }[] };
 
 export function ContentPage({
   breadcrumbs,
@@ -12,6 +13,8 @@ export function ContentPage({
   sections,
   others,
   nosnippetCapsule,
+  cta,
+  linkGroups,
 }: {
   breadcrumbs?: Crumb[];
   h1: string;
@@ -19,6 +22,8 @@ export function ContentPage({
   sections: Section[];
   others?: Other[];
   nosnippetCapsule?: boolean;
+  cta?: { label: string; href: string };
+  linkGroups?: LinkGroup[];
 }) {
   return (
     <main
@@ -88,6 +93,64 @@ export function ContentPage({
             </p>
           </section>
         ))}
+
+        {linkGroups?.map((g) => (
+          <section key={g.heading} style={{ marginBottom: 36 }}>
+            <h2
+              style={{
+                fontFamily: "'Sora', system-ui, sans-serif",
+                fontSize: "clamp(20px, 2.6vw, 24px)",
+                fontWeight: 600,
+                letterSpacing: "-0.02em",
+                margin: "0 0 14px",
+                color: "#0b080f",
+              }}
+            >
+              {g.heading}
+            </h2>
+            <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 12 }}>
+              {g.items.map((it) => (
+                <li key={it.href}>
+                  <a
+                    href={it.href}
+                    style={{
+                      display: "block",
+                      textDecoration: "none",
+                      color: "#0b080f",
+                      background: "#ffffff",
+                      border: "1px solid rgba(11,8,15,.10)",
+                      borderRadius: 14,
+                      padding: "16px 18px",
+                    }}
+                  >
+                    <span style={{ display: "block", fontWeight: 600, fontSize: 17 }}>{it.label}</span>
+                    <span style={{ display: "block", fontSize: 15, color: "#443c42", marginTop: 4 }}>{it.blurb}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+
+        {cta && (
+          <p style={{ margin: "8px 0 36px" }}>
+            <a
+              href={cta.href}
+              style={{
+                display: "inline-block",
+                background: "#8e1c4c",
+                color: "#ffffff",
+                textDecoration: "none",
+                fontWeight: 600,
+                fontSize: 17,
+                padding: "14px 24px",
+                borderRadius: 999,
+              }}
+            >
+              {cta.label} →
+            </a>
+          </p>
+        )}
 
         {others && others.length > 0 && (
           <nav

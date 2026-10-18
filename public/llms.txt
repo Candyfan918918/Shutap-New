@@ -12,6 +12,18 @@ The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Sign
 - [FAQ](https://shutap.com/faq): Is it free, can I use the bits in my own videos and sets, is my name on anything, what can I post.
 - [Trust & privacy](https://shutap.com/trust): Made-up name, names and places removed before saving, private until you post, takedown path.
 
+## Guides and tools
+
+- [All guides and tools](https://shutap.com/guides): Index of the pages below.
+- [Storytime script generator](https://shutap.com/guides/storytime-script-generator): Turn a story into a script with a hook, setup, tags and a button.
+- [Stand-up bit generator](https://shutap.com/guides/stand-up-bit-generator): A first draft of a bit from a real story.
+- [POV and skit generator](https://shutap.com/guides/pov-skit-generator): See a bit as a scene, beat by beat.
+- [Teleprompter for comedy](https://shutap.com/guides/comedy-teleprompter): Run any bit full-screen and read it to camera.
+- [Comedy screenplay page generator](https://shutap.com/guides/comedy-screenplay-format): A bit laid out as a script page.
+- [How to turn a story into a bit](https://shutap.com/guides/how-to-turn-a-story-into-a-bit): Moment, detail, hook, setup, tags, button.
+- [How long should a TikTok bit be](https://shutap.com/guides/how-long-should-a-tiktok-bit-be): Word counts for 15s, 30s, 60s and 2 minute bits.
+- [How to write comedy tags](https://shutap.com/guides/how-to-write-comedy-tags): What a tag is, how to find one, how many to write.
+
 ## Policies
 
 - [Terms of Service](https://shutap.com/terms): The rules; 18+.

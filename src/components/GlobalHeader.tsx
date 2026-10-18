@@ -222,7 +222,7 @@ export function GlobalHeader() {
           <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}@media (max-width: 420px){[data-gh-pill]{padding:7px 12px !important}}`}</style>
           <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {navLink('/', 'write')}
-            {navLink('/rooms', 'rooms')}
+            {navLink('/guides', 'guides')}
           </span>
           {alias ? (
             <Link to="/activity" aria-label={unread ? `activity, ${unread} new` : 'activity'} style={{ position: 'relative', display: 'grid', placeItems: 'center', width: 36, height: 36, borderRadius: 999, color: pathname.startsWith('/activity') ? inkActive : inkMuted }}>

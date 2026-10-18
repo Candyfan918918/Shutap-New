@@ -186,7 +186,7 @@ see the comment: ${v.cta_url ?? v.deep_link ?? ''}`,
 
 here's what happened on your posts this week, plus what people are posting in the rooms.
 
-open the rooms: ${v.cta_url ?? v.deep_link ?? 'https://shutap.com/rooms'}`,
+open the rooms: ${v.cta_url ?? v.deep_link ?? 'https://shutap.com/rooms?tab=new'}`,
   },
 
   milestone: {
@@ -277,6 +277,6 @@ manage or cancel: ${v.manage_url ?? 'https://shutap.com/profile'}`,
 
 the posts people liked most in the rooms this week.
 
-open the rooms: ${v.cta_url ?? v.deep_link ?? 'https://shutap.com/rooms'}`,
+open the rooms: ${v.cta_url ?? v.deep_link ?? 'https://shutap.com/rooms?tab=new'}`,
   },
 }

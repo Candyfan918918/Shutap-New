@@ -4,6 +4,6 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 // search results land somewhere useful.
 export const Route = createFileRoute('/career')({
   beforeLoad: () => {
-    throw redirect({ to: '/rooms', search: { topic: 'work' }, statusCode: 301 })
+    throw redirect({ to: '/guides', statusCode: 301 })
   },
 })

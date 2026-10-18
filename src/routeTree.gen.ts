@@ -52,6 +52,8 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as ApiCompleteRouteImport } from './routes/api/complete'
 import { Route as EmailPreferencesRouteImport } from './routes/email.preferences'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email.unsubscribe'
+import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as IsItNormalSlugRouteImport } from './routes/is-it-normal.$slug'
 import { Route as RoomsIndexRouteImport } from './routes/rooms.index'
 import { Route as RoomsIdRouteImport } from './routes/rooms.$id'
@@ -299,6 +301,16 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IsItNormalSlugRoute = IsItNormalSlugRouteImport.update({
   id: '/is-it-normal/$slug',
   path: '/is-it-normal/$slug',
@@ -504,6 +516,7 @@ export interface FileRoutesByFullPath {
   '/api/complete': typeof ApiCompleteRoute
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
   '/rooms/$id': typeof RoomsIdRoute
   '/sitemaps/core.xml': typeof SitemapsCoreDotxmlRoute
@@ -515,6 +528,7 @@ export interface FileRoutesByFullPath {
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
+  '/guides/': typeof GuidesIndexRoute
   '/rooms/': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -578,6 +592,7 @@ export interface FileRoutesByTo {
   '/api/complete': typeof ApiCompleteRoute
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
   '/rooms/$id': typeof RoomsIdRoute
   '/sitemaps/core.xml': typeof SitemapsCoreDotxmlRoute
@@ -589,6 +604,7 @@ export interface FileRoutesByTo {
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
+  '/guides': typeof GuidesIndexRoute
   '/rooms': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -654,6 +670,7 @@ export interface FileRoutesById {
   '/api/complete': typeof ApiCompleteRoute
   '/email/preferences': typeof EmailPreferencesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/is-it-normal/$slug': typeof IsItNormalSlugRoute
   '/rooms/$id': typeof RoomsIdRoute
   '/sitemaps/core.xml': typeof SitemapsCoreDotxmlRoute
@@ -665,6 +682,7 @@ export interface FileRoutesById {
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
+  '/guides/': typeof GuidesIndexRoute
   '/rooms/': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -730,6 +748,7 @@ export interface FileRouteTypes {
     | '/api/complete'
     | '/email/preferences'
     | '/email/unsubscribe'
+    | '/guides/$slug'
     | '/is-it-normal/$slug'
     | '/rooms/$id'
     | '/sitemaps/core.xml'
@@ -741,6 +760,7 @@ export interface FileRouteTypes {
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
+    | '/guides/'
     | '/rooms/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -804,6 +824,7 @@ export interface FileRouteTypes {
     | '/api/complete'
     | '/email/preferences'
     | '/email/unsubscribe'
+    | '/guides/$slug'
     | '/is-it-normal/$slug'
     | '/rooms/$id'
     | '/sitemaps/core.xml'
@@ -815,6 +836,7 @@ export interface FileRouteTypes {
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
+    | '/guides'
     | '/rooms'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -879,6 +901,7 @@ export interface FileRouteTypes {
     | '/api/complete'
     | '/email/preferences'
     | '/email/unsubscribe'
+    | '/guides/$slug'
     | '/is-it-normal/$slug'
     | '/rooms/$id'
     | '/sitemaps/core.xml'
@@ -890,6 +913,7 @@ export interface FileRouteTypes {
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
+    | '/guides/'
     | '/rooms/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -954,6 +978,7 @@ export interface RootRouteChildren {
   ApiCompleteRoute: typeof ApiCompleteRoute
   EmailPreferencesRoute: typeof EmailPreferencesRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  GuidesSlugRoute: typeof GuidesSlugRoute
   IsItNormalSlugRoute: typeof IsItNormalSlugRoute
   RoomsIdRoute: typeof RoomsIdRoute
   SitemapsCoreDotxmlRoute: typeof SitemapsCoreDotxmlRoute
@@ -964,6 +989,7 @@ export interface RootRouteChildren {
   UPseudonymRoute: typeof UPseudonymRoute
   VentTopicRoute: typeof VentTopicRoute
   WhatHappensSlugRoute: typeof WhatHappensSlugRoute
+  GuidesIndexRoute: typeof GuidesIndexRoute
   RoomsIndexRoute: typeof RoomsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -1280,6 +1306,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/is-it-normal/$slug': {
       id: '/is-it-normal/$slug'
       path: '/is-it-normal/$slug'
@@ -1584,6 +1624,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCompleteRoute: ApiCompleteRoute,
   EmailPreferencesRoute: EmailPreferencesRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  GuidesSlugRoute: GuidesSlugRoute,
   IsItNormalSlugRoute: IsItNormalSlugRoute,
   RoomsIdRoute: RoomsIdRoute,
   SitemapsCoreDotxmlRoute: SitemapsCoreDotxmlRoute,
@@ -1594,6 +1635,7 @@ const rootRouteChildren: RootRouteChildren = {
   UPseudonymRoute: UPseudonymRoute,
   VentTopicRoute: VentTopicRoute,
   WhatHappensSlugRoute: WhatHappensSlugRoute,
+  GuidesIndexRoute: GuidesIndexRoute,
   RoomsIndexRoute: RoomsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,

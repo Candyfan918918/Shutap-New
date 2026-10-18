@@ -120,7 +120,7 @@ export function SiteHeader() {
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }} ref={areaRef}>
           {navLink('/', 'write')}
-          {navLink('/rooms', 'rooms')}
+          {navLink('/guides', 'guides')}
           {!mounted ? (
             <span style={{ width: 78, height: 34 }} aria-hidden />
           ) : alias ? (

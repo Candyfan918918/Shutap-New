@@ -16,7 +16,7 @@ const ROOM: Record<string, 'family' | 'work' | 'school' | 'social'> = {
 export const Route = createFileRoute('/vent/$topic')({
   beforeLoad: ({ params }) => {
     const topic = ROOM[params.topic]
-    if (topic) throw redirect({ to: '/rooms', search: { topic }, statusCode: 301 })
+    if (topic) throw redirect({ to: '/guides', statusCode: 301 })
     throw redirect({ to: '/', statusCode: 301 })
   },
 })

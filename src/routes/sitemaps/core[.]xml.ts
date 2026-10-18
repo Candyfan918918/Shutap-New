@@ -1,9 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { renderUrlset, type SitemapEntry } from "@/lib/seo/sitemap";
+import { GUIDES, guidePath } from "@/lib/seo/guides";
 
 const entries: SitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
+  { path: "/guides", changefreq: "weekly", priority: "0.9" },
+  ...GUIDES.map((g): SitemapEntry => ({
+    path: guidePath(g.slug),
+    lastmod: g.published,
+    changefreq: "monthly",
+    priority: g.kind === "tool" ? "0.8" : "0.7",
+  })),
   { path: "/about", changefreq: "monthly", priority: "0.8" },
   { path: "/how-it-works", changefreq: "monthly", priority: "0.8" },
   { path: "/pricing", changefreq: "monthly", priority: "0.8" },

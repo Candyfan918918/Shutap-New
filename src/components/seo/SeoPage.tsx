@@ -15,7 +15,7 @@ export function SeoPage({ children }: { children: ReactNode }) {
           <Link to="/" style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 15, letterSpacing: '-.01em', color: '#0b080f', textDecoration: 'none' }}>shutap</Link>
           <nav style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }}>
             <Link to="/" style={navLink}>Write</Link>
-            <Link to="/rooms" style={navLink}>Rooms</Link>
+            <Link to="/guides" style={navLink}>Guides</Link>
             <Link to="/faq" style={navLink}>FAQ</Link>
           </nav>
         </div>
