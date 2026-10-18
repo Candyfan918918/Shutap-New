@@ -347,6 +347,130 @@ export const GUIDES: Guide[] = [
   },
 
   {
+    slug: "ai-joke-generators-compared",
+    kind: "guide",
+    title: "AI Joke Generators Compared: Shutap, Witscript, Punchlines.ai, ChatGPT | Shutap",
+    h1: "AI joke generators compared",
+    description:
+      "A plain comparison of AI joke generators: Shutap, Witscript, Punchlines.ai and ChatGPT. What each takes as input, what it returns, and who it fits.",
+    capsule:
+      "AI joke generators split into two kinds: tools that return one-liners from a setup or headline (Witscript, Punchlines.ai), general chatbots you prompt for jokes (ChatGPT), and Shutap, which writes a whole bit from a story from your own life and lets you steer it.",
+    blurb: "Shutap, Witscript, Punchlines.ai and ChatGPT side by side: input, output and fit.",
+    sections: [
+      {
+        heading: "The three kinds of tool",
+        body: "One-liner tools take a setup or headline and return punchlines. General chatbots take any prompt and return whatever you ask for, jokes included. Bit tools take a story and return a structured piece you can perform. Which one you need depends on whether you want a line, a draft, or a bit.",
+      },
+      {
+        heading: "Shutap",
+        body: "Input: a story from your own life. Output: a whole bit with a hook, setup, tags and a button, in your choice of audience, voice, length and heat. You steer it: hotter, tighter, escalate, swap a tag, or mix your own from lines Shutap wrote for your story. It views as a teleprompter, a scene or a screenplay page. Best for creators and comedians turning real stories into material. The first bit needs no account.",
+      },
+      {
+        heading: "Witscript",
+        body: "Input: a setup sentence, such as a news headline or an observation. Output: several jokes with a favorite picked, plus tools to punch up a joke, rate it and find setups from the news. Built by former late-night head writer Joe Toplyn, it is a paid monthly subscription and, per its site, currently limited to users in the United States. Best for topical joke writing from a given setup.",
+      },
+      {
+        heading: "Punchlines.ai",
+        body: "Input: a setup or headline in a chat box. Output: late-night style punchlines. It has offered a limited number of free tries. Best for fast topical one-liners.",
+      },
+      {
+        heading: "ChatGPT and other general chatbots",
+        body: "Input: any prompt. Output: jokes in whatever style you describe. They are flexible and free to start, and a good way to brainstorm. They are not built around comedy structure, so the result depends heavily on how well you prompt and how much you edit, and they do not give you a hook, tags and a button unless you ask for them.",
+      },
+      {
+        heading: "Which should you pick",
+        body: "Topical one-liners from the news: Witscript or Punchlines.ai. Open-ended brainstorming: a chatbot. A bit built from something that happened to you, ready to film or take to an open mic: Shutap. Many writers use more than one.",
+      },
+      {
+        heading: "About this page",
+        body: "Descriptions come from each tool's public pages and third-party listings as of October 2026. Features, prices and availability change, so check each site. Shutap is written by its own founder and is listed here as one option among several.",
+      },
+    ],
+    related: ["shutap-vs-punchlines-ai", "shutap-vs-witscript", "shutap-vs-chatgpt-for-jokes"],
+    cta: CTA,
+    published: PUBLISHED,
+  },
+  {
+    slug: "shutap-vs-witscript",
+    kind: "guide",
+    title: "Shutap vs Witscript: Which AI Joke Writer Fits? | Shutap",
+    h1: "Shutap vs Witscript",
+    description:
+      "Witscript turns a setup sentence into jokes. Shutap turns your own story into a whole bit you can steer. How they differ and who each is for.",
+    capsule:
+      "Witscript takes a setup sentence, such as a headline, and returns jokes. Shutap takes a story from your own life and returns a whole bit with a hook, setup, tags and a button, then lets you make it hotter, tighter or more escalated.",
+    blurb: "Setup-to-jokes versus story-to-bit.",
+    sections: [
+      {
+        heading: "The short answer",
+        body: "Use Witscript when you have a setup and want jokes on it, especially topical ones. Use Shutap when the material is something that happened to you and you want a bit to perform. They solve neighboring problems.",
+      },
+      {
+        heading: "What Witscript does",
+        body: "Per its own site, you give it a setup sentence and it returns several jokes and picks a favorite. It also offers a tool to punch up a joke, one that rates a joke, and one that suggests setups from current news. It was created by Joe Toplyn, a former late-night head writer, and is a paid monthly subscription currently available to users in the United States.",
+      },
+      {
+        heading: "What Shutap does",
+        body: "You write a real story. Shutap lists observations about it, writes four whole bits, checks them with rules in code, and has a second AI model from a different family rank them. You get a hook, a setup, tags and a button, then steer: hotter, tighter, escalate, swap a tag, or mix your own from lines it wrote for your story.",
+      },
+      {
+        heading: "Input and output",
+        body: "Witscript starts from a sentence and returns jokes. Shutap starts from a story and returns a structured bit, viewable as a teleprompter, a scene or a screenplay page.",
+      },
+      {
+        heading: "Who should use which",
+        body: "Writers of topical material, speeches and captions fit Witscript. Creators and comedians building bits from their own lives fit Shutap. Using both is reasonable.",
+      },
+      {
+        heading: "About this page",
+        body: "Witscript details come from its public site as of October 2026 and may have changed. Check witscript.joetoplyn.com for the current offer.",
+      },
+    ],
+    related: ["ai-joke-generators-compared", "how-shutap-is-built", "shutap-vs-punchlines-ai"],
+    cta: CTA,
+    published: PUBLISHED,
+  },
+  {
+    slug: "shutap-vs-chatgpt-for-jokes",
+    kind: "guide",
+    title: "Shutap vs ChatGPT for Writing Jokes and Bits | Shutap",
+    h1: "Shutap vs ChatGPT for jokes",
+    description:
+      "ChatGPT can write jokes if you prompt it well. Shutap is built to turn your story into a bit and let you steer it. What the difference means in practice.",
+    capsule:
+      "ChatGPT is a general chatbot that can write jokes when prompted. Shutap is built for one job: turning a story from your life into a whole bit with a hook, setup, tags and a button, with checks for picture, specificity and no advice, and controls to steer the result.",
+    blurb: "A general chatbot versus a tool built for bits.",
+    sections: [
+      {
+        heading: "The short answer",
+        body: "ChatGPT is flexible and a good brainstorming partner. Shutap does one thing, bits from your story, and builds the steps and checks around it so you do not have to prompt for them.",
+      },
+      {
+        heading: "What you do yourself with a chatbot",
+        body: "With a general chatbot you decide the structure, write the prompt, ask for tags, ask for a button, and judge the result. You can get good material, and it takes prompting skill and editing. The model tends to explain or generalize unless you push it.",
+      },
+      {
+        heading: "What Shutap does for you",
+        body: "Shutap finds observations in your story first, writes four whole bits from different ones, removes lines that would work on anyone's story, blocks advice and jokes at the teller, and ranks the rest with a second model so the writer does not grade itself. Then it gives you the controls: audience, voice, length, heat, hotter, tighter, escalate, swap a tag and mix your own.",
+      },
+      {
+        heading: "Formats",
+        body: "A chatbot returns text. Shutap returns a bit you can run as a full-screen teleprompter, read as a beat-by-beat scene, or print as a screenplay page.",
+      },
+      {
+        heading: "Who should use which",
+        body: "Use a chatbot for open-ended brainstorming and anything outside comedy. Use Shutap when you want a bit from a real story with less prompting and more control over the comedy.",
+      },
+      {
+        heading: "Limits",
+        body: "Both are AI and both get things wrong. In either case you decide what to perform, and a real audience is the final test.",
+      },
+    ],
+    related: ["ai-joke-generators-compared", "how-shutap-is-built", "shutap-vs-witscript"],
+    cta: CTA,
+    published: PUBLISHED,
+  },
+  {
     slug: "how-to-turn-a-story-into-a-bit",
     kind: "guide",
     title: "How to Turn a Story Into a Comedy Bit (Step by Step) | Shutap",
