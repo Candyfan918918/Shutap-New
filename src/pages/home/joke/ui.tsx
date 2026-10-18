@@ -107,7 +107,7 @@ export function Button({
   style?: CSSProperties
   title?: string
 }) {
-  const height = size === 'sm' ? 36 : 44
+  const height = 'var(--home-control-height, 40px)'
   const palette: Record<string, CSSProperties> = {
     primary: {
       background: 'linear-gradient(155deg,#cf6189,#b8456b 55%,#a33a5e)',
@@ -167,7 +167,7 @@ export function Eyebrow({ children, style }: { children: ReactNode; style?: CSSP
     <span
       style={{
         fontFamily: SORA,
-        fontWeight: 800,
+        fontWeight: 700,
         fontSize: 'var(--fs-label)',
         letterSpacing: '.14em',
         textTransform: 'uppercase',

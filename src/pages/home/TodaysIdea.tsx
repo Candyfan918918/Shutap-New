@@ -17,7 +17,7 @@ function ChangeBadge({ topic }: { topic: SignalTopic }) {
   const direction = topic.direction ?? 'steady'
   const change = topic.interest?.change
   return <span className={`ti-badge ti-${direction}`} aria-label={`${direction}${change == null ? '' : `, ${change}%`}`}>
-    {ARROWS[direction]} {change == null ? direction : `${Math.abs(change)}%`}
+    {change != null && change < 0 ? '↓' : ARROWS[direction]} {change == null ? direction : `${Math.abs(change)}%`}
   </span>
 }
 
