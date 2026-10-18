@@ -76,3 +76,10 @@ export function todayPacific(): string {
     day: "2-digit",
   }).format(new Date());
 }
+
+/**
+ * Cache header for every sitemap response. s-maxage is required: without it the
+ * edge cache kept sitemaps for weeks (core.xml and sitemap.xml went stale), while
+ * pages that set s-maxage (the homepage) refresh within minutes.
+ */
+export const SITEMAP_CACHE_CONTROL = "public, max-age=300, s-maxage=300";

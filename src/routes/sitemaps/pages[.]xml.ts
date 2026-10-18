@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { renderUrlset } from "@/lib/seo/sitemap";
+import { renderUrlset, SITEMAP_CACHE_CONTROL } from "@/lib/seo/sitemap";
 import { getCoreEntries } from "./core[.]xml";
 
 // Same URLs as /sitemaps/core.xml. The sitemap index points here because the
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/sitemaps/pages.xml")({
         return new Response(renderUrlset(getCoreEntries()), {
           headers: {
             "Content-Type": "application/xml",
-            "Cache-Control": "public, max-age=3600",
+            "Cache-Control": SITEMAP_CACHE_CONTROL,
           },
         });
       },

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { renderUrlset, type SitemapEntry } from "@/lib/seo/sitemap";
+import { renderUrlset, type SitemapEntry, SITEMAP_CACHE_CONTROL } from "@/lib/seo/sitemap";
 import { INDEX_USER_CONTENT } from "@/lib/seo/flags";
 
 /** Joke posts in rooms that are public and not hidden. Posts younger than
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/sitemaps/posts.xml")({
           priority: "0.6",
         }));
         return new Response(renderUrlset(entries), {
-          headers: { "Content-Type": "application/xml", "Cache-Control": "public, max-age=900" },
+          headers: { "Content-Type": "application/xml", "Cache-Control": SITEMAP_CACHE_CONTROL },
         });
       },
     },
