@@ -519,6 +519,36 @@ export type Database = {
           },
         ]
       }
+      daily_ideas: {
+        Row: {
+          bit: string
+          created_at: string
+          day: string
+          hook: string
+          id: string
+          tag: string
+          topic: string
+        }
+        Insert: {
+          bit: string
+          created_at?: string
+          day: string
+          hook: string
+          id?: string
+          tag: string
+          topic: string
+        }
+        Update: {
+          bit?: string
+          created_at?: string
+          day?: string
+          hook?: string
+          id?: string
+          tag?: string
+          topic?: string
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           id: string
