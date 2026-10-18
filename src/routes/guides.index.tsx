@@ -42,11 +42,15 @@ export const Route = createFileRoute("/guides/")({
           name: "Shutap guides and tools",
           description: DESCRIPTION,
           url: `${SITE_URL}${PATH}`,
-          hasPart: GUIDES.map((g) => ({
+          hasPart: [{
+            "@type": "WebPage",
+            name: "AI joke generator",
+            url: `${SITE_URL}/ai-joke-generator`,
+          }, ...GUIDES.map((g) => ({
             "@type": "WebPage",
             name: g.h1,
             url: `${SITE_URL}${guidePath(g.slug)}`,
-          })),
+          }))],
         }),
       },
       breadcrumbScript([{ name: "Guides", path: PATH }]),
@@ -59,7 +63,10 @@ export const Route = createFileRoute("/guides/")({
       capsule={CAPSULE}
       sections={[]}
       linkGroups={[
-        { heading: "Tools", items: toItems("tool") },
+        { heading: "Tools", items: [
+          { href: "/ai-joke-generator", label: "AI joke generator", blurb: "Turn your own story into a complete comedy bit: hook, setup, tags and button — not random one-liners." },
+          ...toItems("tool"),
+        ] },
         { heading: "Guides", items: toItems("guide") },
         {
           heading: "Shutap Enterprise (in development)",
