@@ -14,12 +14,21 @@ export type DailyIdea = {
 
 export type Platform = 'news' | 'tiktok' | 'instagram' | 'youtube' | 'x' | 'reddit'
 export type Heat = 0 | 1 | 2 | 3
+export type Interest = {
+  series: { date: string; views: number }[]
+  thisWeek: number
+  lastWeek: number
+  change: number | null
+  peakDay: string
+}
 export type SignalTopic = {
   topic: string
+  wiki?: string
+  interest?: Interest | null
   chosen?: boolean
   direction?: 'rising' | 'peaking' | 'steady' | 'cooling'
   note?: string
-  heat?: Partial<Record<Platform, Heat>>
+  heat?: Partial<Record<Platform, Heat | null>>
   sources?: { label: string; url: string }[]
 }
 export type DailySignals = {
@@ -50,7 +59,20 @@ export const listDailyIdea = createServerFn({ method: 'GET' }).handler(async ():
       .limit(1)
       .maybeSingle()
     if (error || !data) return null
-    return data as unknown as DailyIdea
+    const idea = data as unknown as DailyIdea
+    const { readWikiInterest } = await import('./wiki-interest.server')
+    if (idea.signals?.topics) {
+      const now = new Date()
+      idea.signals = { ...idea.signals, topics: await Promise.all(idea.signals.topics
+        .filter((topic) => topic && typeof topic.topic === 'string')
+        .map(async (topic) => ({
+          ...topic,
+          interest: typeof topic.wiki === 'string' && topic.wiki.trim()
+            ? await readWikiInterest(topic.wiki.trim(), now).catch(() => null)
+            : null,
+        }))) }
+    }
+    return idea
   } catch {
     return null
   }

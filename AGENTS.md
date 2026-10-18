@@ -14,3 +14,4 @@
 <!-- LOVABLE:END (agent notes) -->
 
 - Client build splits vendor code into chunks (vite.config.ts manualChunks) so no chunk exceeds ~750KB — Vite's bundled import scanner crashes on larger chunks in fresh installs.
+- Daily interest enrichment uses a server-only fetch helper with bounded requests and hourly per-article caching; failures return null so public homepage rendering stays safe.
