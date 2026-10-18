@@ -471,6 +471,122 @@ export const GUIDES: Guide[] = [
     published: PUBLISHED,
   },
   {
+    slug: "funny-for-business",
+    kind: "guide",
+    title: "Shutap for Business: Make Every Presentation and Conversation Funnier | Shutap",
+    h1: "Shutap for business",
+    description:
+      "Where Shutap is heading: helping teams bring humor to presentations, roadshows, demos, product launches and meetings, written from their own material.",
+    capsule:
+      "Shutap's goal is to make the way businesses talk funnier: presentations, roadshows, demos, product launches, slides and meetings, written from the speaker's own stories and facts, with the speaker staying in control.",
+    blurb: "The business direction: humor for presentations, roadshows, demos, launches and meetings.",
+    sections: [
+      {
+        heading: "Why business needs funnier people",
+        body: "Most corporate communication is forgettable. Slides get skimmed, demos blur together and meetings drift. A well-placed funny line makes a point stick, lowers the room's guard and makes the speaker easier to trust. Shutap is built on the idea that humor is wisdom, and that people who use it well get listened to.",
+      },
+      {
+        heading: "What Shutap is building",
+        body: "The same engine that turns a story into a bit is being shaped for work: finding what is actually funny in your material, writing candidate lines in your voice, and letting you make them hotter, tighter or more escalated. The plan covers presentations and slides, roadshows and investor pitches, product demos and launches, and everyday conversations and meetings.",
+      },
+      {
+        heading: "You stay the speaker",
+        body: "Shutap drafts and you decide. It does not write your talk or speak for you. It offers lines grounded in your own facts, and you choose what goes in, what gets cut and how it sounds in your mouth.",
+      },
+      {
+        heading: "Guardrails for work",
+        body: "Lines go at the situation, never at a colleague, customer or competitor by name, and never at the speaker. No advice, no jokes about bodies, age, race, religion, sexuality or disability. Names and details are replaced with role labels before anything is stored.",
+      },
+      {
+        heading: "Where this stands today",
+        body: "Shutap's bit engine is live now and already has an audience setting for work and office. Tools made specifically for presentations, slides, demos and meetings are in development, and this page describes where Shutap is heading rather than a finished feature. Try the engine on a real story and see how the writing works.",
+      },
+    ],
+    related: ["funny-presentations-and-slides", "funny-product-demos-and-launches", "humor-is-wisdom"],
+    cta: CTA,
+    published: PUBLISHED,
+  },
+  {
+    slug: "funny-presentations-and-slides",
+    kind: "guide",
+    title: "Make Presentations and Slides Funny Without Being Cringe | Shutap",
+    h1: "Make presentations and slides funny",
+    description:
+      "How to add humor to a presentation or slide deck without undercutting your message, and how Shutap is heading toward helping.",
+    capsule:
+      "The funniest slides come from something true about your material, not from a joke bolted on. Find the real absurd detail, say it plainly, place it at a transition, then move on. Shutap is being built to help presenters find and sharpen those lines.",
+    blurb: "Where to put humor in a deck, how to write it, and what to avoid.",
+    sections: [
+      {
+        heading: "Start with a true detail",
+        body: "The best presentation humor is a real observation about your topic, your industry or your own experience. Generic jokes pasted in from the internet feel like filler. A specific detail from your material cannot be used by anyone else.",
+      },
+      {
+        heading: "Place it at a transition",
+        body: "Put one funny line where attention dips: after a dense slide, at the start of a new section, or at the close. One well-placed line beats five scattered ones.",
+      },
+      {
+        heading: "Keep it short and plain",
+        body: "State the facts plainly, add one twist, and stop. Do not explain the joke, and do not apologize for it.",
+      },
+      {
+        heading: "Aim at the situation, not people",
+        body: "Joke about the process, the jargon, the situation or yourself carefully. Avoid naming colleagues, customers or competitors, and avoid anything about identity.",
+      },
+      {
+        heading: "Check the room",
+        body: "Know the audience. A board meeting, a customer webinar and an all-hands call for different levels of heat. Shutap's heat control exists for exactly this.",
+      },
+      {
+        heading: "Where this stands today",
+        body: "Shutap's bit engine is live now and already has an audience setting for work and office. Tools made specifically for presentations, slides, demos and meetings are in development, and this page describes where Shutap is heading rather than a finished feature. Try the engine on a real story and see how the writing works.",
+      },
+    ],
+    related: ["funny-for-business", "funny-product-demos-and-launches", "how-to-write-comedy-tags"],
+    cta: CTA,
+    published: PUBLISHED,
+  },
+  {
+    slug: "funny-product-demos-and-launches",
+    kind: "guide",
+    title: "Funny Product Demos and Launches: Humor That Sells | Shutap",
+    h1: "Funny product demos and launches",
+    description:
+      "How humor helps product demos, launches and roadshows land, and how to write it from real customer and product stories.",
+    capsule:
+      "A demo or launch is easier to remember when it carries one real, funny story: the problem everyone has lived through. Start from a true customer or team story, state it plainly and let the product be the button. Shutap is being built to help find those moments.",
+    blurb: "Humor for demos, launches and roadshows, built from real stories.",
+    sections: [
+      {
+        heading: "Open with the problem everyone recognizes",
+        body: "The pain your product removes is usually absurd when you describe it plainly. A true story about the old way of doing things gets a laugh and sets up your solution.",
+      },
+      {
+        heading: "Make the product the button",
+        body: "The strongest structure is setup, tags, then the product as the turn. The audience laughs at the problem and then sees the fix.",
+      },
+      {
+        heading: "Use real stories, not stock jokes",
+        body: "A story from a real customer, a launch-week disaster or a team mishap carries credibility that stock humor cannot. Names and identifying details should be removed or approved.",
+      },
+      {
+        heading: "Roadshows and pitches",
+        body: "Pitches are repeated many times. Humor that lives in a tight tag or button survives repetition and can be adapted to each room.",
+      },
+      {
+        heading: "Keep control",
+        body: "You should be able to tighten, escalate or cut any line. Shutap's controls are designed around that.",
+      },
+      {
+        heading: "Where this stands today",
+        body: "Shutap's bit engine is live now and already has an audience setting for work and office. Tools made specifically for presentations, slides, demos and meetings are in development, and this page describes where Shutap is heading rather than a finished feature. Try the engine on a real story and see how the writing works.",
+      },
+    ],
+    related: ["funny-for-business", "funny-presentations-and-slides", "how-shutap-is-built"],
+    cta: CTA,
+    published: PUBLISHED,
+  },
+  {
     slug: "how-to-turn-a-story-into-a-bit",
     kind: "guide",
     title: "How to Turn a Story Into a Comedy Bit (Step by Step) | Shutap",

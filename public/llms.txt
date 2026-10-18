@@ -26,6 +26,9 @@ The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Sign
 - [AI joke generators compared](https://shutap.com/guides/ai-joke-generators-compared): Shutap, Witscript, Punchlines.ai and ChatGPT side by side.
 - [Shutap vs Witscript](https://shutap.com/guides/shutap-vs-witscript): Setup-to-jokes versus story-to-bit.
 - [Shutap vs ChatGPT for jokes](https://shutap.com/guides/shutap-vs-chatgpt-for-jokes): A general chatbot versus a tool built for bits.
+- [Shutap for business](https://shutap.com/guides/funny-for-business): Direction: humor for presentations, roadshows, demos, launches and meetings (in development).
+- [Make presentations and slides funny](https://shutap.com/guides/funny-presentations-and-slides): Where to put humor in a deck and how to write it.
+- [Funny product demos and launches](https://shutap.com/guides/funny-product-demos-and-launches): Humor for demos, launches and roadshows from real stories.
 - [How to turn a story into a bit](https://shutap.com/guides/how-to-turn-a-story-into-a-bit): Moment, detail, hook, setup, tags, button.
 - [How long should a TikTok bit be](https://shutap.com/guides/how-long-should-a-tiktok-bit-be): Word counts for 15s, 30s, 60s and 2 minute bits.
 - [How to write comedy tags](https://shutap.com/guides/how-to-write-comedy-tags): What a tag is, how to find one, how many to write.
