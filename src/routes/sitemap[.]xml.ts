@@ -5,25 +5,27 @@ import { OUTCOMES, isOutcomeIndexable } from "@/lib/seo/outcomes";
 import { PROFILES, isProfileIndexable } from "@/lib/seo/profiles";
 import { countIndexableStories } from "@/lib/seo/story.server";
 import { INDEX_USER_CONTENT } from "@/lib/seo/flags";
-import { renderSitemapIndex } from "@/lib/seo/sitemap";
+import { renderSitemapIndex, todayPacific } from "@/lib/seo/sitemap";
 import { listPostsForSitemap } from "./sitemaps/posts[.]xml";
 import { GUIDES } from "@/lib/seo/guides";
 import { FUNNIEST } from "@/lib/seo/funniest";
 
-/** Newest guide or funniest date, so crawlers see core.xml change the day a page is added. */
-const coreLastmod = [
-  ...GUIDES.map((g) => g.published),
-  ...FUNNIEST.map((e) => e.updated ?? e.published),
-]
-  .sort()
-  .at(-1);
+/** Today: the homepage idea changes daily, so the pages sitemap changes daily. Also covers any newer guide or funniest date. */
+const coreLastmod = () =>
+  [
+    todayPacific(),
+    ...GUIDES.map((g) => g.published),
+    ...FUNNIEST.map((e) => e.updated ?? e.published),
+  ]
+    .sort()
+    .at(-1);
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
         const children: { loc: string; lastmod?: string }[] = [
-          { loc: `${SITE_URL}/sitemaps/pages.xml`, lastmod: coreLastmod },
+          { loc: `${SITE_URL}/sitemaps/pages.xml`, lastmod: coreLastmod() },
         ];
 
         if (OUTCOMES.filter(isOutcomeIndexable).length > 0) {

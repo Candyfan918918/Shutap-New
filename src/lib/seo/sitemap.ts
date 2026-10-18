@@ -66,3 +66,13 @@ export function renderSitemapIndex(
     `</sitemapindex>`,
   ].join("\n");
 }
+
+/** Today's date in Pacific time (YYYY-MM-DD), the site's publishing day. */
+export function todayPacific(): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Los_Angeles",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+}
