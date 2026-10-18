@@ -12,6 +12,10 @@ const CAPSULE =
   "Shutap is an AI bit generator for content creators and comedians. Write your story. Shutap turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page.";
 const SECTIONS = [
   {
+    heading: "Our goal: say it funnier",
+    body: "Shutap exists to help people say it funnier, because humor is a form of wisdom and the people who use it well are listened to. Today that starts with bits for creators and comedians. Over time we want to bring it to more of how people speak and tell stories, so nobody has to say it flat.",
+  },
+  {
     heading: "A bit, not a pun",
     body: "Most joke generators hand you a one-liner about a keyword. Shutap writes a bit from your real story: a hook that stops the scroll, a setup that tells it straight, tags that keep the laughs coming, and a button to end on. It uses your details, so it sounds like you, not like anyone could have posted it.",
   },
@@ -32,8 +36,8 @@ const SECTIONS = [
     body: "Rooms are public feeds by topic: office, work, family, school, live and social. Post a bit under your Shutap name, get likes and comments, follow writers you like, and see what's landing for other creators.",
   },
   {
-    heading: "Shutap Enterprise",
-    body: "Bits are the start. Shutap Enterprise brings original, human-steered humor to the way companies speak: presentations and slides, roadshows and investor pitches, product demos and launches, and meetings and conversations. It is written from your own material, your speakers stay in control, and it is built on a growing dataset of situations paired with jokes, tagged by technique, voice and heat. It is in development. To request pricing and a tailored solution, or to ask about the joke dataset, use the form at shutap.com/business.",
+    heading: "What is coming next",
+    body: "The bit generator is the tool you can use today. Next we are building Shutap Enterprise, which brings original, human-steered humor to presentations and slides, roadshows, product demos, launches and meetings, written from a company's own material. We are also building the Shutap joke dataset, a growing collection of situations paired with jokes, tagged by technique, voice and heat. Beyond that we are exploring short videos, screenwriting and audio stories. These are plans, not promises of dates, and we will say so when each is ready. To request Enterprise pricing and solutions, or to ask about the dataset, use the form at shutap.com/business.",
   },
   {
     heading: "The one rule",
