@@ -12,8 +12,11 @@ import { useEffect, useRef } from 'react'
 
 const PITCH = 18            // px between dots — matches background-size in global.css
 const RADIUS = 1            // px — matches the 1px radial-gradient stop
-const COLOR = 'rgba(184, 69, 107, 0.16)'
-const AMP = 3.2             // px of vertical travel at the crest
+const RGB = '184, 69, 107'
+const ALPHA_LOW = 0.1       // trough — a touch fainter than the old static 0.16
+const ALPHA_HIGH = 0.34     // crest — the wave reads as a band of darker dots
+const BUCKETS = 8           // alpha steps, so each frame is 8 fills, not one per dot
+const AMP = 6               // px of vertical travel at the crest
 const WAVELENGTH = 420      // px between crests
 const PERIOD = 6.5          // seconds per full wave cycle
 
@@ -54,24 +57,32 @@ export function WaveDots() {
     const start = performance.now()
     const draw = (now: number) => {
       const t = (now - start) / 1000
+      // Re-check size every frame: a tab opened hidden can report 0×0 at
+      // mount and never fire a resize, which left the canvas blank.
+      if (window.innerWidth !== w || window.innerHeight !== h) resize()
       const sy = window.scrollY
       const yOff = -(sy % PITCH)
       ctx.clearRect(0, 0, w, h)
-      ctx.fillStyle = COLOR
-      ctx.beginPath()
+      const paths: Path2D[] = Array.from({ length: BUCKETS }, () => new Path2D())
       for (let y = yOff - PITCH; y < h + PITCH; y += PITCH) {
         const docY = y + sy
         for (let x = PITCH / 2; x < w + PITCH; x += PITCH) {
           const phase = kx * x + ky * docY - omega * t
-          const dy = Math.sin(phase) * AMP
-          const dx = Math.cos(phase) * AMP * 0.35
-          const cx = x + dx
-          const cy = y + PITCH / 2 + dy
-          ctx.moveTo(cx + RADIUS, cy)
-          ctx.arc(cx, cy, RADIUS, 0, Math.PI * 2)
+          const s = Math.sin(phase)
+          const lift = (s + 1) / 2                     // 0 trough → 1 crest
+          const cx = x + Math.cos(phase) * AMP * 0.35
+          const cy = y + PITCH / 2 - s * AMP
+          const r = RADIUS * (0.85 + lift * 0.55)
+          const b = Math.min(BUCKETS - 1, Math.floor(lift * BUCKETS))
+          paths[b].moveTo(cx + r, cy)
+          paths[b].arc(cx, cy, r, 0, Math.PI * 2)
         }
       }
-      ctx.fill()
+      for (let b = 0; b < BUCKETS; b++) {
+        const a = ALPHA_LOW + ((b + 0.5) / BUCKETS) * (ALPHA_HIGH - ALPHA_LOW)
+        ctx.fillStyle = `rgba(${RGB}, ${a.toFixed(3)})`
+        ctx.fill(paths[b])
+      }
       raf = requestAnimationFrame(draw)
     }
 
