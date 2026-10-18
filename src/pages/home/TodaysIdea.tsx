@@ -1,186 +1,146 @@
-// "what to post today" — its own band on the home page, with the day's trend reading.
 import { useEffect, useState } from 'react'
-import type { DailyIdea, Heat, Platform, SignalTopic } from '@/lib/daily-idea.functions'
+import { Button } from '@/components/ui/button'
+import type { DailyIdea, Interest, Platform, SignalTopic } from '@/lib/daily-idea.functions'
 
-const PLATFORMS: { key: Platform; name: string; short: string }[] = [
-  { key: 'news', name: 'News', short: 'N' },
-  { key: 'tiktok', name: 'TikTok', short: 'TT' },
-  { key: 'instagram', name: 'Instagram', short: 'IG' },
-  { key: 'youtube', name: 'YouTube', short: 'YT' },
-  { key: 'x', name: 'X', short: 'X' },
-  { key: 'reddit', name: 'Reddit', short: 'R' },
+const PLATFORMS: { key: Platform; name: string }[] = [
+  { key: 'news', name: 'News' }, { key: 'tiktok', name: 'TikTok' },
+  { key: 'instagram', name: 'Instagram' }, { key: 'youtube', name: 'YouTube' },
+  { key: 'x', name: 'X' }, { key: 'reddit', name: 'Reddit' },
 ]
 const LEVELS = ['quiet', 'some', 'busy', 'hot'] as const
 const DIRECTION: Record<string, string> = {
-  rising: 'rising ↑',
-  peaking: 'peaking ▲',
-  steady: 'steady →',
-  cooling: 'cooling ↓',
+  rising: 'rising ↑', peaking: 'peaking ▲', steady: 'steady →', cooling: 'cooling ↓',
 }
-
+const number = (value: number) => value.toLocaleString('en-US')
+const titleCase = (value: string) => value.replace(/\b\p{L}/gu, (letter) => letter.toUpperCase())
+const changeText = (value: number | null | undefined) => value == null ? '–' : `${value > 0 ? '+' : value < 0 ? '−' : ''}${Math.abs(value)}%`
 function formatDay(day: string): string {
-  const [y, m, d] = day.split('-').map(Number)
-  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
+  return new Date(`${day}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
 }
-
-function clampHeat(v: unknown): Heat | null {
-  if (v === null || v === undefined || v === '') return null
-  const n = Math.round(Number(v))
-  return n >= 0 && n <= 3 ? (n as Heat) : null
+function Direction({ topic }: { topic?: SignalTopic }) {
+  return topic?.direction && DIRECTION[topic.direction]
+    ? <span className={`ti-pill ti-dir ti-${topic.direction}`}>{DIRECTION[topic.direction]}</span> : null
 }
-
-function Trend({ topics }: { topics: SignalTopic[] }) {
-  const sorted = [...topics].sort((a, b) => Number(!!b.chosen) - Number(!!a.chosen))
-  const chosen = sorted.find((t) => t.chosen)
-  return (
-    <div className="ti-trend">
-      <div className="ti-grid" role="table">
-        <div className="ti-row ti-head" role="row">
-          <span role="columnheader" />
-          {PLATFORMS.map((p) => (
-            <span key={p.key} role="columnheader" className="ti-col" title={p.name}>
-              <span className="ti-long">{p.name}</span>
-              <span className="ti-short">{p.short}</span>
-            </span>
-          ))}
-        </div>
-        {sorted.map((t, i) => (
-          <div key={i} className="ti-topic">
-            <div className="ti-row" role="row">
-              <span role="rowheader" className={t.chosen ? 'ti-name ti-chosen' : 'ti-name'}>
-                {t.topic}
-                {t.chosen ? <span className="ti-pill ti-pick">today's pick</span> : null}
-              </span>
-              {PLATFORMS.map((p) => {
-                const h = clampHeat(t.heat?.[p.key])
-                const label = h === null ? 'not read' : LEVELS[h]
-                return (
-                  <span key={p.key} role="cell" className="ti-cellwrap">
-                    {h === null ? (
-                      <span className="ti-cell ti-na" aria-label={`${p.name}: ${label}`} title={`${p.name}: ${label}`}>
-                        –
-                      </span>
-                    ) : (
-                      <span className={`ti-cell ti-h${h}`} aria-label={`${p.name}: ${label}`} title={`${p.name}: ${label}`} />
-                    )}
-                  </span>
-                )
-              })}
-            </div>
-            {t.direction || t.note ? (
-              <div className="ti-meta">
-                {t.direction && DIRECTION[t.direction] ? (
-                  <span className={`ti-pill ti-dir ti-${t.direction}`}>{DIRECTION[t.direction]}</span>
-                ) : null}
-                {t.note ? <span className="ti-note">{t.note}</span> : null}
-              </div>
-            ) : null}
-          </div>
-        ))}
+function Sparkline({ interest }: { interest: Interest }) {
+  const values = interest.series.map((day) => day.views)
+  const min = Math.min(...values), max = Math.max(...values)
+  const points = values.map((value, i) => ({ x: 3 + i * 114 / Math.max(1, values.length - 1), y: max === min ? 16 : 29 - (value - min) / (max - min) * 26 }))
+  const last = points.at(-1)
+  return <svg className="ti-spark" viewBox="0 0 120 32" width="120" height="32" aria-hidden="true">
+    <polyline points={points.map((point) => `${point.x},${point.y}`).join(' ')} fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+    {last ? <circle cx={last.x} cy={last.y} r="3" fill="currentColor" /> : null}
+  </svg>
+}
+function Leaderboard({ topics }: { topics: SignalTopic[] }) {
+  return <section className="ti-board" aria-label="trending now">
+    <h3 className="ti-label">trending now</h3>
+    <ol className="ti-ranking">
+      {topics.map((topic, index) => {
+        const href = topic.wiki ? `https://en.wikipedia.org/wiki/${encodeURIComponent(topic.wiki)}` : topic.sources?.find((source) => /^https?:\/\//.test(source.url))?.url
+        const content = <>
+          <span className="ti-rank">{index + 1}</span>
+          <div className="ti-row-words"><div className="ti-name">{topic.topic}{topic.chosen ? <span className="ti-pill ti-pick">today's pick</span> : null}</div>
+            {topic.note ? <p className="ti-note">{topic.note}</p> : null}</div>
+          <div className="ti-reading">{topic.interest ? <><Sparkline interest={topic.interest} /><span className={`ti-change ${(topic.interest.change ?? 0) > 0 ? 'ti-up' : ''}`}>{changeText(topic.interest.change)}</span></> : null}</div>
+          <div className="ti-row-direction"><Direction topic={topic} /></div>
+        </>
+        return <li key={`${topic.topic}-${index}`} className={topic.chosen ? 'ti-ranked ti-selected' : 'ti-ranked'}>
+          {href ? <a className="ti-rank-link" href={href} target="_blank" rel="noopener noreferrer">{content}</a> : <div className="ti-rank-link">{content}</div>}
+        </li>
+      })}
+    </ol>
+  </section>
+}
+function Attention({ topics }: { topics: SignalTopic[] }) {
+  const dates = [...new Set(topics.flatMap((topic) => topic.interest?.series.map((day) => day.date) ?? []))].sort().slice(-14)
+  if (!dates.length) return null
+  return <section className="ti-attention" aria-label="the last 14 days">
+    <h3 className="ti-label">the last 14 days</h3>
+    <div className="ti-days" aria-hidden="true">{dates.map((date, index) => <span key={date} className={index === dates.length - 1 ? 'ti-latest' : ''} title={formatDay(date)}>{['S', 'M', 'T', 'W', 'T', 'F', 'S'][new Date(`${date}T00:00:00Z`).getUTCDay()]}</span>)}</div>
+    {topics.map((topic, index) => {
+      const max = Math.max(...(topic.interest?.series.map((day) => day.views) ?? [0]))
+      return <div className="ti-history" key={`${topic.topic}-${index}`}>
+        <div className="ti-history-name">{topic.topic}</div>
+        {topic.interest ? <div className="ti-tiles">{dates.map((date) => {
+          const day = topic.interest?.series.find((value) => value.date === date)
+          if (!day) return <span key={date} className="ti-tile ti-unavailable" />
+          const level = max > 0 ? Math.min(4, Math.floor(day.views / max * 4)) : 0
+          const label = `${formatDay(date)}: ${number(day.views)} views`
+          return <span key={date} className={`ti-tile ti-level-${level}`} title={label} aria-label={label} role="img" />
+        })}</div> : <p className="ti-no-reading">no reading</p>}
       </div>
-
-      <div className="ti-legend">
-        {LEVELS.map((l, h) => (
-          <span key={l}>
-            <span className={`ti-cell ti-h${h}`} aria-hidden /> {l}
-          </span>
-        ))}
-        <span>
-          <span className="ti-cell ti-na" aria-hidden /> not read
-        </span>
-      </div>
-
-      {chosen?.sources?.length ? (
-        <div className="ti-sources">
-          {chosen.sources.map((s, i) => (
-            <a key={i} href={s.url} target="_blank" rel="noopener noreferrer">
-              {s.label}
-            </a>
-          ))}
-        </div>
-      ) : null}
-
-      <p className="ti-foot">
-        a reading of what search could see this morning across coverage and public posts — levels, not platform numbers.
-        dashed means that platform couldn’t be read.
-      </p>
-    </div>
-  )
+    })}
+    <p className="ti-scale"><span className="ti-scale-swatches" aria-hidden="true">{[0, 1, 2, 3, 4].map((level) => <span key={level} className={`ti-tile ti-level-${level}`} />)}</span>fewer → more views (per topic)</p>
+  </section>
 }
-
+function ShowingUp({ topics }: { topics: SignalTopic[] }) {
+  const rows = topics.map((topic) => ({ topic, platforms: PLATFORMS.filter((platform) => {
+    const heat = topic.heat?.[platform.key]
+    return typeof heat === 'number' && Number.isInteger(heat) && heat >= 0 && heat <= 3
+  }) })).filter((row) => row.platforms.length)
+  if (!rows.length) return null
+  return <section className="ti-showing" aria-label="where it's showing up"><h3 className="ti-label">where it's showing up</h3>
+    {rows.map(({ topic, platforms }, index) => <div className="ti-platform-topic" key={`${topic.topic}-${index}`}>
+      <span className="ti-history-name">{topic.topic}</span><div className="ti-chips">{platforms.map((platform) => <span className="ti-platform-chip" key={platform.key}>{platform.name} · {LEVELS[topic.heat?.[platform.key] ?? 0]}</span>)}</div>
+    </div>)}
+  </section>
+}
 export function TodaysIdea({ idea }: { idea: DailyIdea | null }) {
-  const [copied, setCopied] = useState(false)
-
+  const [copied, updateCopied] = useState(false)
+  const [expanded, updateExpanded] = useState(false)
   useEffect(() => {
-    if (idea && window.location.hash === '#today') {
-      requestAnimationFrame(() => document.getElementById('today')?.scrollIntoView())
-    }
+    if (idea && window.location.hash === '#today') requestAnimationFrame(() => document.getElementById('today')?.scrollIntoView())
   }, [idea])
-
+  useEffect(() => {
+    if (!copied) return
+    const timer = window.setTimeout(() => updateCopied(false), 2000)
+    return () => window.clearTimeout(timer)
+  }, [copied])
   if (!idea) return null
-
+  const topics = [...(idea.signals?.topics?.filter((topic) => topic && topic.topic) ?? [])].sort((a, b) =>
+    Number(Boolean(b.chosen)) - Number(Boolean(a.chosen)) || (b.interest?.change ?? -Infinity) - (a.interest?.change ?? -Infinity))
+  const chosen = topics.find((topic) => topic.chosen)
+  const interest = chosen?.interest
   const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(`HOOK: ${idea.hook}\n\n${idea.bit}\n\nTAG: ${idea.tag}`)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      /* clipboard blocked */
-    }
+    try { await navigator.clipboard.writeText(`HOOK: ${idea.hook}\n\n${idea.bit}\n\nTAG: ${idea.tag}`); updateCopied(true) } catch { /* clipboard blocked */ }
   }
-
-  const writeYours = (e: React.MouseEvent) => {
-    e.preventDefault()
-    const box = document.querySelector('textarea') as HTMLTextAreaElement | null
+  const writeYours = (event: React.MouseEvent) => {
+    event.preventDefault()
+    const box = document.querySelector('textarea')
     if (!box) return
-    box.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    box.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' })
     box.focus({ preventScroll: true })
   }
-
-  const topics = idea.signals?.topics?.filter((t) => t && t.topic) ?? []
-
-  return (
-    <section id="today" className="todays-idea" aria-label="what to post today">
-      <div className="ti-inner">
-        <div className="ti-eyebrow">
-          what to post today · {formatDay(idea.day)} · {idea.topic}
+  return <section id="today" className="todays-idea" aria-label="what to post today">
+    <div className="ti-inner">
+      <header className="ti-header">
+        <div className="ti-eyebrow">what to post today · {formatDay(idea.day)}</div>
+        <h2 className="ti-headline">{titleCase(chosen?.topic ?? idea.topic)}</h2>
+        <div className="ti-stats">
+          {interest && interest.change !== null ? <div className="ti-stat"><strong className="ti-stat-number">{changeText(interest.change)}</strong><span>interest this week vs last</span></div> : null}
+          <Direction topic={chosen} />
+          {interest ? <p className="ti-readers">people reading about it this week: <strong>{number(interest.thisWeek)}</strong></p> : null}
         </div>
-        <h2 className="ti-hook">{idea.hook}</h2>
-
-        <div className="ti-cols">
-          <div className="ti-left">
-            <div className="ti-label">the bit</div>
-            <p className="ti-bit">{idea.bit}</p>
-
-            <div className="ti-tag">
-              <div className="ti-label">tag</div>
-              <p>{idea.tag}</p>
-            </div>
-
-            <div className="ti-actions">
-              <button type="button" className="ti-copy" onClick={copy}>
-                {copied ? 'copied' : 'copy'}
-              </button>
-              <a href="#" onClick={writeYours} className="ti-write">
-                write yours ↑
-              </a>
-            </div>
-            <p className="ti-muted ti-small">new one every morning. film it, it's yours.</p>
-          </div>
-
-          {idea.why_now || topics.length ? (
-            <div className="ti-right">
-              {idea.why_now ? (
-                <>
-                  <div className="ti-label">why today</div>
-                  <p className="ti-why">{idea.why_now}</p>
-                </>
-              ) : null}
-              {topics.length ? <Trend topics={topics} /> : null}
-            </div>
-          ) : null}
+        {idea.why_now ? <div className="ti-why-wrap"><h3 className="ti-label">why today</h3><p className="ti-why">{idea.why_now}</p></div> : null}
+      </header>
+      <div className="ti-layout">
+        <div className="ti-insights">
+          <Leaderboard topics={topics} />
+          <Attention topics={topics} />
+          <ShowingUp topics={topics} />
+          <div className="ti-sources">{chosen?.sources?.filter((source) => /^https?:\/\//.test(source.url)).map((source, index) => <a key={index} href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a>)}</div>
+          <p className="ti-foot">interest = English Wikipedia page views, read live, updated daily. topics and notes from this morning's search of public coverage.</p>
         </div>
+        <aside className="ti-demo" aria-label="demo: today's bit">
+          <h3 className="ti-label">demo: today's bit</h3>
+          <p className="ti-demo-hook">{idea.hook}</p>
+          <div id="ti-demo-words" className={`ti-demo-words ${expanded ? 'ti-expanded' : ''}`}><p className="ti-bit">{idea.bit}</p></div>
+          <Button variant="ghost" size="sm" className="ti-expand" aria-expanded={expanded} aria-controls="ti-demo-words" onClick={() => updateExpanded(!expanded)}>{expanded ? 'read less' : 'read all'}</Button>
+          <p className="ti-tag">{idea.tag}</p>
+          <div className="ti-actions"><Button size="sm" className="ti-copy" onClick={copy}>{copied ? 'copied' : 'copy'}</Button><Button variant="link" size="sm" asChild className="ti-write"><a href="#" onClick={writeYours}>write yours ↑</a></Button></div>
+          <p className="ti-small">new one every morning. film it, it's yours.</p>
+        </aside>
       </div>
-    </section>
-  )
+    </div>
+  </section>
 }
