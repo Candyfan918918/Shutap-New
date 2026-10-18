@@ -66,7 +66,7 @@ export function SetList({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 10 }}>
-            <span style={{ flex: 1, minWidth: 0, fontFamily: NEWS, fontStyle: 'italic', fontSize: 'var(--fs-body)', lineHeight: 1.45, color: MUTED, textWrap: 'pretty' }}>
+            <span style={{ flex: 1, minWidth: 0, fontFamily: NEWS, fontStyle: 'italic', fontSize: 'var(--fs-read)', lineHeight: 1.45, color: MUTED, textWrap: 'pretty' }}>
               {group.situation}
             </span>
             <span

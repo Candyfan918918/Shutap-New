@@ -169,7 +169,7 @@ export function Eyebrow({ children, style }: { children: ReactNode; style?: CSSP
         fontFamily: SORA,
         fontWeight: 800,
         fontSize: 'var(--fs-label)',
-        letterSpacing: '.22em',
+        letterSpacing: '.14em',
         textTransform: 'uppercase',
         color: FAINT,
         ...style,
