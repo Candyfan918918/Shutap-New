@@ -15,6 +15,27 @@ export default defineConfig({
   },
   vite: {
     plugins: [mcpPlugin()],
+    // Keep every client chunk well under ~750KB: Vite's bundled import scanner
+    // crashes ("Parse error @:1:1") on larger chunks in fresh installs.
+    environments: {
+      client: {
+        build: {
+          rollupOptions: {
+            output: {
+              manualChunks(id: string) {
+                if (!id.includes("node_modules")) return undefined;
+                const m = id.split("node_modules/").pop()!.split("/");
+                const pkg = m[0].startsWith("@") ? `${m[0]}/${m[1]}` : m[0];
+                if (pkg === "react" || pkg === "react-dom" || pkg === "scheduler") return "vendor-react";
+                if (pkg.startsWith("@supabase")) return "vendor-supabase";
+                if (pkg.startsWith("@tanstack")) return "vendor-tanstack";
+                return "vendor";
+              },
+            },
+          },
+        },
+      },
+    },
   },
 });
 
