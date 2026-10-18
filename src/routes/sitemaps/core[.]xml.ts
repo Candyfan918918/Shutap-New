@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { renderUrlset, type SitemapEntry } from "@/lib/seo/sitemap";
 import { GUIDES, guidePath } from "@/lib/seo/guides";
+import { FUNNIEST, FUNNIEST_HUB, funniestPath } from "@/lib/seo/funniest";
 
 const entries: SitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
@@ -11,6 +12,22 @@ const entries: SitemapEntry[] = [
     lastmod: g.published,
     changefreq: "monthly",
     priority: g.kind === "tool" ? "0.8" : "0.7",
+  })),
+  ...(FUNNIEST.length > 0
+    ? [
+        {
+          path: FUNNIEST_HUB,
+          lastmod: FUNNIEST.map((e) => e.updated ?? e.published).sort().at(-1),
+          changefreq: "daily",
+          priority: "0.8",
+        } as SitemapEntry,
+      ]
+    : []),
+  ...FUNNIEST.map((e): SitemapEntry => ({
+    path: funniestPath(e.slug),
+    lastmod: e.updated ?? e.published,
+    changefreq: "monthly",
+    priority: "0.7",
   })),
   { path: "/about", changefreq: "monthly", priority: "0.8" },
   { path: "/how-it-works", changefreq: "monthly", priority: "0.8" },
