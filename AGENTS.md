@@ -17,3 +17,4 @@
 
 - Enrich daily trend DTOs with fail-soft Wikipedia readings in a server-only helper; never substitute numeric demo data into production.
 - Homepage typography uses shared home.css scale tokens; shared header typography is scoped with a homepage marker to preserve other pages.
+- Focused product search pages reuse ContentPage and link to the existing writer; this preserves one generation flow rather than duplicating its controls or access rules.
