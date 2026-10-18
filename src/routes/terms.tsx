@@ -45,10 +45,10 @@ function TermsPage() {
         Shutap is for entertainment only.
       </p>
       <p>
-        We are also developing tools for businesses, such as presentations, demos, launches and
-        meetings. These are not yet available. A business inquiry, or a request about our joke
-        dataset, is not an offer or a contract. Any business access or dataset access would be
-        covered by a separate written agreement.
+        We are also developing Shutap Enterprise, for presentations, demos, launches and meetings.
+        It is not yet available. A request for pricing or solutions, or a request about our joke
+        dataset, is not an offer or a contract. Any enterprise or dataset access would be covered
+        by a separate written agreement.
       </p>
 
       <h3>2. What Shutap is not</h3>

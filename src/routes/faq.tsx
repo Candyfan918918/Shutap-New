@@ -32,10 +32,10 @@ const QA: { heading: string; body: string }[] = [
   { heading: "Can I delete my bits or account?", body: "Yes, anytime. Delete posts, bits or your whole account in your account settings, or email hello@shutap.com." },
   { heading: "Do you sell my data?", body: "No." },
   { heading: "Who can use Shutap?", body: "Adults 18 and older." },
-  { heading: "Is Shutap for businesses?", body: "That is where Shutap is heading. We are building humor for presentations and slides, roadshows, product demos and launches, and meetings. It is in development and there is no business product to buy yet. You can request information at shutap.com/business." },
-  { heading: "How do I ask about business use or a pilot?", body: "Use the request form at shutap.com/business with your name, title, company and work email, or write to hello@shutap.com. A person replies." },
-  { heading: "What is the Shutap joke dataset?", body: "A growing dataset that pairs real situations with jokes, tagged by technique, voice and heat, built up by hand. It helps guide how Shutap writes. If you want to know what is available and on what terms, ask at shutap.com/business. Access is reviewed case by case and terms are not yet fixed." },
-  { heading: "Do you store business inquiries?", body: "The form sends your details to hello@shutap.com by email and we use them only to reply to you. We do not add them to your account or to the joke dataset." },
+  { heading: "What is Shutap Enterprise?", body: "Shutap Enterprise brings original, human-steered humor to presentations and slides, roadshows, product demos and launches, and meetings, written from your own material. It is in development. You can request pricing and a tailored solution at shutap.com/business." },
+  { heading: "How do I get Enterprise pricing?", body: "Use the request form at shutap.com/business with your name, title, company, work email and what you need, or write to hello@shutap.com. A person replies to scope a solution and share pricing." },
+  { heading: "What is the Shutap joke dataset?", body: "A growing dataset that pairs real situations with jokes, tagged by technique, voice and heat, built up by hand. It helps guide how Shutap writes. If you want to know what is available and on what terms, request it at shutap.com/business. Access is reviewed case by case and terms are not yet fixed." },
+  { heading: "Do you store Enterprise requests?", body: "The form sends your details to hello@shutap.com by email and we use them only to reply to you. We do not add them to your account or to the joke dataset." },
 ];
 
 const OTHERS = [
@@ -44,7 +44,7 @@ const OTHERS = [
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
   { href: "/guides", label: "Guides" },
-  { href: "/business", label: "For business" },
+  { href: "/business", label: "Enterprise" },
   { href: "/trust", label: "Trust & privacy" },
   { href: "/terms", label: "Terms" },
   { href: "/privacy", label: "Privacy" },

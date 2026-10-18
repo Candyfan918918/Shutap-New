@@ -16,7 +16,7 @@ export function SeoPage({ children }: { children: ReactNode }) {
           <nav style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }}>
             <Link to="/" style={navLink}>Write</Link>
             <Link to="/guides" style={navLink}>Guides</Link>
-            <Link to="/business" style={navLink}>For business</Link>
+            <Link to="/business" style={navLink}>Enterprise</Link>
             <Link to="/faq" style={navLink}>FAQ</Link>
           </nav>
         </div>
@@ -41,7 +41,7 @@ export function SeoPage({ children }: { children: ReactNode }) {
             <Link to="/safety" style={footLink}>Safety</Link>
             <Link to="/ai-disclosure" style={footLink}>AI disclosure</Link>
             <Link to="/report" style={footLink}>Report</Link>
-            <Link to="/business" style={footLink}>Business</Link>
+            <Link to="/business" style={footLink}>Enterprise</Link>
             <Link to="/contact" style={footLink}>Contact</Link>
           </div>
         </div>

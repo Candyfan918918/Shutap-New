@@ -33,7 +33,7 @@ export interface Guide {
 }
 
 const CTA = { label: "Write your story, get the bit", href: "/" };
-const BIZ_CTA = { label: "Request information", href: "/business" };
+const BIZ_CTA = { label: "Request pricing and solutions", href: "/business" };
 const PUBLISHED = "2026-10-17";
 
 export const GUIDES: Guide[] = [
@@ -474,8 +474,8 @@ export const GUIDES: Guide[] = [
   {
     slug: "funny-for-business",
     kind: "business",
-    title: "Shutap for Business: Make Every Presentation and Conversation Funnier | Shutap",
-    h1: "Shutap for business",
+    title: "Shutap Enterprise: Humor for Presentations, Demos and Meetings | Shutap",
+    h1: "Shutap Enterprise",
     description:
       "Where Shutap is heading: helping teams bring humor to presentations, roadshows, demos, product launches and meetings, written from their own material.",
     capsule:

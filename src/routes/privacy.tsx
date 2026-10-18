@@ -60,8 +60,8 @@ function PrivacyPage() {
           your network address for rate limiting. Counters hold no content.
         </li>
         <li>
-          <b>Business inquiries:</b> if you use the form at shutap.com/business, the name, title,
-          company, work email and message you send. They are emailed to us and used only to
+          <b>Enterprise requests:</b> if you use the form at shutap.com/business, the name, title,
+          company, work email, company size, needs, timeline and message you send. They are emailed to us and used only to
           reply to you. They are not added to your account or to our dataset.
         </li>
         <li>
@@ -118,7 +118,7 @@ function PrivacyPage() {
       <p>
         We keep your data while your account is active and as long as needed for the purposes
         above. Delete a post, a set or your account and we remove it, except where the law
-        requires us to keep it. Daily counters are kept per day and hold no content. Business inquiries are kept in our email only as long as needed to respond and for our records, and you can ask us to delete yours. For guests,
+        requires us to keep it. Daily counters are kept per day and hold no content. Enterprise requests are kept in our email only as long as needed to respond and for our records, and you can ask us to delete yours. For guests,
         we keep the scrubbed story only long enough to write the set and, if you sign in, move it
         to your account.
       </p>

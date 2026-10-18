@@ -21,6 +21,7 @@ import { Route as BusinessRouteImport } from './routes/business'
 import { Route as CareerRouteImport } from './routes/career'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
+import { Route as EnterpriseRouteImport } from './routes/enterprise'
 import { Route as FamilyRouteImport } from './routes/family'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GuidelinesRouteImport } from './routes/guidelines'
@@ -143,6 +144,11 @@ const ContactRoute = ContactRouteImport.update({
 const DisclaimerRoute = DisclaimerRouteImport.update({
   id: '/disclaimer',
   path: '/disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnterpriseRoute = EnterpriseRouteImport.update({
+  id: '/enterprise',
+  path: '/enterprise',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FamilyRoute = FamilyRouteImport.update({
@@ -491,6 +497,7 @@ export interface FileRoutesByFullPath {
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/enterprise': typeof EnterpriseRoute
   '/family': typeof FamilyRoute
   '/faq': typeof FaqRoute
   '/guidelines': typeof GuidelinesRoute
@@ -568,6 +575,7 @@ export interface FileRoutesByTo {
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/enterprise': typeof EnterpriseRoute
   '/family': typeof FamilyRoute
   '/faq': typeof FaqRoute
   '/guidelines': typeof GuidelinesRoute
@@ -647,6 +655,7 @@ export interface FileRoutesById {
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/enterprise': typeof EnterpriseRoute
   '/family': typeof FamilyRoute
   '/faq': typeof FaqRoute
   '/guidelines': typeof GuidelinesRoute
@@ -726,6 +735,7 @@ export interface FileRouteTypes {
     | '/career'
     | '/contact'
     | '/disclaimer'
+    | '/enterprise'
     | '/family'
     | '/faq'
     | '/guidelines'
@@ -803,6 +813,7 @@ export interface FileRouteTypes {
     | '/career'
     | '/contact'
     | '/disclaimer'
+    | '/enterprise'
     | '/family'
     | '/faq'
     | '/guidelines'
@@ -881,6 +892,7 @@ export interface FileRouteTypes {
     | '/career'
     | '/contact'
     | '/disclaimer'
+    | '/enterprise'
     | '/family'
     | '/faq'
     | '/guidelines'
@@ -960,6 +972,7 @@ export interface RootRouteChildren {
   CareerRoute: typeof CareerRoute
   ContactRoute: typeof ContactRoute
   DisclaimerRoute: typeof DisclaimerRoute
+  EnterpriseRoute: typeof EnterpriseRoute
   FamilyRoute: typeof FamilyRoute
   FaqRoute: typeof FaqRoute
   GuidelinesRoute: typeof GuidelinesRoute
@@ -1100,6 +1113,13 @@ declare module '@tanstack/react-router' {
       path: '/disclaimer'
       fullPath: '/disclaimer'
       preLoaderRoute: typeof DisclaimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/enterprise': {
+      id: '/enterprise'
+      path: '/enterprise'
+      fullPath: '/enterprise'
+      preLoaderRoute: typeof EnterpriseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/family': {
@@ -1613,6 +1633,7 @@ const rootRouteChildren: RootRouteChildren = {
   CareerRoute: CareerRoute,
   ContactRoute: ContactRoute,
   DisclaimerRoute: DisclaimerRoute,
+  EnterpriseRoute: EnterpriseRoute,
   FamilyRoute: FamilyRoute,
   FaqRoute: FaqRoute,
   GuidelinesRoute: GuidelinesRoute,

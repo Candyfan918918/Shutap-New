@@ -62,9 +62,9 @@ export const Route = createFileRoute("/guides/")({
         { heading: "Tools", items: toItems("tool") },
         { heading: "Guides", items: toItems("guide") },
         {
-          heading: "For business (in development)",
+          heading: "Shutap Enterprise (in development)",
           items: [
-            { href: "/business", label: "Request information or the joke dataset", blurb: "Tell us who you are and what you need." },
+            { href: "/business", label: "Request pricing and solutions", blurb: "Humor for presentations, demos, launches and meetings." },
             ...toItems("business"),
           ],
         },

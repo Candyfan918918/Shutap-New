@@ -1,4 +1,4 @@
-// Business / dataset inquiry form. Emails hello@shutap.com via Resend; nothing is stored.
+// Enterprise pricing / solutions request form. Emails hello@shutap.com via Resend; nothing is stored.
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 
@@ -7,7 +7,12 @@ const InquirySchema = z.object({
   title: z.string().trim().min(1).max(120),
   company: z.string().trim().min(1).max(160),
   email: z.string().trim().email().max(200),
-  interest: z.enum(['information', 'dataset', 'both']),
+  companySize: z.enum(['1-50', '51-500', '501-5000', '5000+']),
+  useCases: z
+    .array(z.enum(['presentations', 'roadshows', 'demos', 'meetings', 'dataset', 'other']))
+    .min(1)
+    .max(6),
+  timeline: z.enum(['now', 'quarter', 'exploring']),
   message: z.string().trim().max(2000).optional().default(''),
   website: z.string().max(200).optional().default(''), // honeypot
 })
@@ -21,29 +26,27 @@ export const submitBusinessInquiry = createServerFn({ method: 'POST' })
     if (data.website) return { ok: true as const } // bot: pretend success
     const { sendResendEmail } = await import('@/lib/resend.server')
     const { IDENTITIES, formatFrom } = await import('@/lib/email/identities')
-    const label =
-      data.interest === 'dataset'
-        ? 'dataset request'
-        : data.interest === 'both'
-          ? 'information + dataset request'
-          : 'information request'
+    const label = data.useCases.includes('dataset') ? 'enterprise + dataset pricing request' : 'enterprise pricing request'
+    const uc = data.useCases.join(', ')
     const html = `<!doctype html><html><body style="font-family:Sora,Arial,sans-serif;color:#0b080f;padding:24px">
-<p style="margin:0 0 6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6f666c">business inquiry · ${esc(label)}</p>
+<p style="margin:0 0 6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6f666c">enterprise inquiry · ${esc(label)}</p>
 <table style="font-size:14px;line-height:1.6;border-collapse:collapse">
 <tr><td style="padding-right:14px;color:#6f666c">name</td><td>${esc(data.name)}</td></tr>
 <tr><td style="padding-right:14px;color:#6f666c">title</td><td>${esc(data.title)}</td></tr>
 <tr><td style="padding-right:14px;color:#6f666c">company</td><td>${esc(data.company)}</td></tr>
 <tr><td style="padding-right:14px;color:#6f666c">email</td><td>${esc(data.email)}</td></tr>
-<tr><td style="padding-right:14px;color:#6f666c">interest</td><td>${esc(label)}</td></tr>
+<tr><td style="padding-right:14px;color:#6f666c">company size</td><td>${esc(data.companySize)}</td></tr>
+<tr><td style="padding-right:14px;color:#6f666c">use cases</td><td>${esc(uc)}</td></tr>
+<tr><td style="padding-right:14px;color:#6f666c">timeline</td><td>${esc(data.timeline)}</td></tr>
 </table>
 <p style="white-space:pre-wrap;font-size:14px;margin-top:14px">${esc(data.message || '(no message)')}</p>
 </body></html>`
-    const text = `Business inquiry (${label})\nName: ${data.name}\nTitle: ${data.title}\nCompany: ${data.company}\nEmail: ${data.email}\n\n${data.message}`
+    const text = `Enterprise inquiry (${label})\nName: ${data.name}\nTitle: ${data.title}\nCompany: ${data.company}\nSize: ${data.companySize}\nEmail: ${data.email}\nUse cases: ${uc}\nTimeline: ${data.timeline}\n\n${data.message}`
     const res = await sendResendEmail({
       to: IDENTITIES.hello.fromAddress,
       from: formatFrom(IDENTITIES.hello),
       replyTo: data.email,
-      subject: `business inquiry · ${label} · ${data.company}`.slice(0, 120),
+      subject: `enterprise inquiry · ${label} · ${data.company}`.slice(0, 120),
       html,
       text,
     })

@@ -43,8 +43,8 @@ const ITEMS: Item[] = [
   },
   {
     href: "/business",
-    label: "For business",
-    sub: "request information or ask about the joke dataset. in development.",
+    label: "Shutap Enterprise",
+    sub: "request pricing and a tailored solution, or ask about the joke dataset. in development.",
   },
   {
     href: "/contact",

@@ -3,7 +3,7 @@ import './feed.css'
 
 const LINKS: Array<[string, string]> = [
   ['/guides', 'guides'],
-  ['/business', 'for business'],
+  ['/business', 'enterprise'],
   ['/about', 'about'],
   ['/how-it-works', 'how it works'],
   ['/pricing', 'pricing'],

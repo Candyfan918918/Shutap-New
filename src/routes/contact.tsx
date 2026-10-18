@@ -109,10 +109,10 @@ function ContactPage() {
         }}
       >
         <div style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 14.5, color: '#0b080f' }}>
-          business and dataset requests
+          enterprise pricing and dataset requests
         </div>
         <div style={{ fontSize: 13, lineHeight: 1.55, color: '#443c42', marginTop: 4 }}>
-          presentations, demos, launches and meetings are in development. use the form at /business for information or the joke dataset.
+          shutap enterprise brings humor to presentations, demos, launches and meetings. request pricing and a tailored solution at /business.
         </div>
       </a>
       <p style={{ marginTop: 14 }}>
