@@ -207,6 +207,145 @@ export const GUIDES: Guide[] = [
   },
 
   // ---- guides ---------------------------------------------------------
+  // ---- how it is built / comparison ------------------------------------
+  {
+    slug: "how-shutap-is-built",
+    kind: "guide",
+    title: "How Shutap Is Built: An AI Bit Generator You Steer | Shutap",
+    h1: "How Shutap is built",
+    description:
+      "How Shutap turns your story into a bit: twelve observations, four whole bits, rules in code, a second model as judge, then hotter, tighter, escalate and mix-your-own controls so you stay the writer.",
+    capsule:
+      "Shutap writes a draft from your own story, then hands it back for you to steer. Twelve observations come first, four whole bits are written from different ones, rules written in code filter them, a second AI model ranks what is left, and you can make the winner hotter, tighter or more escalated, or rebuild it from lines Shutap wrote for your story.",
+    blurb: "The pipeline in detail: observations, whole bits, rules, a judge, and the steering controls.",
+    sections: [
+      {
+        heading: "What makes it different",
+        body: "Most joke generators take a topic and return a line you either use or do not. Shutap works the other way. It starts from your story, writes a whole bit with a hook, setup, tags and a button, and then gives you controls to change it. You stay the writer. Shutap is the draft and the sparring partner.",
+      },
+      {
+        heading: "You start with a story, not a prompt",
+        body: "You write what happened, the way you would tell a friend. Before anything is saved, names, places and contact details are replaced with role labels, and you can see what changed. If a story reads as heavy, Shutap does not turn it into a joke. It stops and points to real help instead.",
+      },
+      {
+        heading: "Step one: find what is actually funny",
+        body: "Shutap does not begin by writing jokes. It first lists twelve observations about your story: what is strange about it, what someone said against what they did, what a word was hiding. The list is saved with the story, so every rewrite later starts from the same observations instead of guessing again.",
+      },
+      {
+        heading: "Step two: write whole bits, not lines",
+        body: "Four complete bits are written in one pass, each built on a different observation, plus five spare tags. Every bit has a hook of eight words or fewer that can sit on screen for two seconds, a setup that states the facts plainly, one to three tags that each end on something you can picture, and a button. Four controls shape the writing: audience (social, live, office, work, family or school), voice (deadpan, storyteller, roast or dry), length (15 seconds to 2 minutes) and heat from 1 to 5. Heat changes how far a picture travels from the facts, never who the joke is aimed at.",
+      },
+      {
+        heading: "Step three: rules in code, then a judge",
+        body: "Rules written in code run first, so they hold even when a model slips. No advice. Jokes go at the situation and the other party's behavior, never at the teller or a real person. No invented facts about someone else. No jokes about bodies, age, looks, intelligence, race, religion, sexuality or disability. And the swap test: if a tag would work just as well on a stranger's story, it is cut. The bits that pass are ranked by a second AI model from a different family than the writer, so the model that wrote a bit never grades its own work. It ranks on whether there is a picture, whether the hook would stop a thumb, whether the button lands instead of explaining, and whether a person would actually say the line out loud. If the judge is unavailable, the first bit that passes the rules is used.",
+      },
+      {
+        heading: "A library of comedy technique",
+        body: "Behind the prompts is a library of named comedy techniques: how a joke gets a picture, how tags escalate on one premise, how a button turns a situation around. There is also a hall of fame of lines the founder approved as funny. It sets the bar for what counts, and new writing is checked against it so Shutap does not repeat those lines. The library teaches Shutap how funny writing is built. The writing you get back is about your story.",
+      },
+      {
+        heading: "You steer",
+        body: "Hotter raises the heat two levels, up to 5, and pushes every picture further. Tighter cuts the bit to about 60 percent of its words and keeps only the best tag. Escalate moves each tag one step further along the same line and flips who is in charge on the button. Swap a tag trades one line for another. Mix your own lets you pick the hook, the tag and the button you like from the lines Shutap actually wrote for your story, and rebuilds the bit around the setup. Every change is saved as a new version, so you can go back.",
+      },
+      {
+        heading: "Then film it",
+        body: "Each bit can run in a full-screen teleprompter, as a scene laid out beat by beat with shots, speakers and on-screen text, or as a screenplay page with scene headings, action, character names and dialogue. Length is estimated from the word count at about 2.6 words a second.",
+      },
+      {
+        heading: "Versioned, tested, and honest about limits",
+        body: "Every bit is stamped with the version of the prompts that wrote it. Changes to the writing are checked against a fixed set of test stories that are never used as examples. Shutap is written by AI and gets things wrong, so you decide what to perform. Test it on a real audience before you trust it.",
+      },
+    ],
+    related: ["shutap-vs-punchlines-ai", "how-to-turn-a-story-into-a-bit", "stand-up-bit-generator"],
+    cta: CTA,
+    published: PUBLISHED,
+  },
+  {
+    slug: "shutap-vs-punchlines-ai",
+    kind: "guide",
+    title: "Shutap vs Punchlines.ai: Which AI Joke Tool Fits? | Shutap",
+    h1: "Shutap vs Punchlines.ai",
+    description:
+      "Punchlines.ai writes late-night style one-liners from a headline or setup. Shutap writes a whole bit from your own story and lets you steer it. Which to use, and when.",
+    capsule:
+      "Punchlines.ai and Shutap do different jobs. Punchlines.ai writes late-night style punchlines from a headline or setup you give it. Shutap writes a whole bit, with a hook, setup, tags and a button, from a story from your own life, then lets you make it hotter, tighter or more escalated.",
+    blurb: "A fair comparison: one-liners from headlines versus a whole bit from your story.",
+    sections: [
+      {
+        heading: "The short answer",
+        body: "If you want quick one-liners on a news headline, in a late-night monologue style, Punchlines.ai is built for that. If you want to turn something that happened to you into a bit you will perform, on camera or on stage, Shutap is built for that. They overlap less than the names suggest.",
+      },
+      {
+        heading: "What Punchlines.ai does",
+        body: "According to its public descriptions, you give it a joke setup or a news headline and it returns punchlines in the style of late-night monologue jokes, using a model fine-tuned on thousands of them. It offers a limited number of free jokes a day, with more after signing in. The unit of output is a line.",
+      },
+      {
+        heading: "What Shutap does",
+        body: "You write a real story. Shutap lists observations about it, writes four whole bits, filters them with rules written in code, and has a second AI model pick the best. The unit of output is a bit: a hook, a setup, tags and a button, in your choice of audience, voice, length and heat. The first one needs no account.",
+      },
+      {
+        heading: "Who is the writer",
+        body: "With a one-liner generator you pick from lines. With Shutap you keep steering. Make the bit hotter, tighter or more escalated, swap a tag, or mix your own from the hooks, tags and buttons Shutap wrote for your story. The material is yours, and so is the final call.",
+      },
+      {
+        heading: "What you can do with the result",
+        body: "A one-liner goes into a caption or a monologue. A Shutap bit runs in a full-screen teleprompter, lays out as a scene beat by beat, or formats as a screenplay page, so it is ready to film or take to an open mic.",
+      },
+      {
+        heading: "Which should you use",
+        body: "Use Punchlines.ai for topical one-liners built on news. Use Shutap when the funny thing is your own story and you want to perform it. Plenty of people could reasonably use both.",
+      },
+      {
+        heading: "About this page",
+        body: "The description of Punchlines.ai comes from its public pages and third-party listings as of October 2026, and tools change. Check its own site for what it does today.",
+      },
+    ],
+    related: ["how-shutap-is-built", "stand-up-bit-generator", "how-to-turn-a-story-into-a-bit"],
+    cta: CTA,
+    published: PUBLISHED,
+  },
+
+  {
+    slug: "humor-is-wisdom",
+    kind: "guide",
+    title: "Humor Is Wisdom: Why Shutap Exists | Shutap",
+    h1: "Humor is wisdom",
+    description:
+      "Shutap's vision: humor is a form of human wisdom, and technology should help people find and sharpen their own, not replace it.",
+    capsule:
+      "Shutap is built on one belief from its founder: humor is wisdom. Seeing a hard moment clearly enough to say something true and funny about it is a skill worth building, and technology should help people build it rather than do it for them.",
+    blurb: "The belief behind Shutap: humor is human wisdom, and technology should sharpen it.",
+    sections: [
+      {
+        heading: "The belief",
+        body: "Humor is wisdom. To make someone laugh about a hard moment, you have to see it clearly: what actually happened, what everyone was pretending, and what is absurd underneath. That is a way of understanding, and the people who do it well are rarely fooled.",
+      },
+      {
+        heading: "What the founder sees in technology",
+        body: "Candy, the founder of Shutap, does not think the tools of the last decade have left people feeling better. This is a personal view, not a study. Feeds and assistants make more content and more answers, and they often leave people more hurried, more compared and more alone with their thoughts. Shutap starts from a different question: what if technology helped people get better at something deeply human instead of doing it for them?",
+      },
+      {
+        heading: "Why the funniest people matter",
+        body: "Watch who gets welcomed into a room. The funniest people tend to be wanted at the table, listened to when they speak, and followed when they lead. Humor lets a person say the hard thing in a way others can hear. It builds trust, lowers the temperature and makes a point stick. A leader who can find the funny in a bad day is easier to follow through it.",
+      },
+      {
+        heading: "Technology that enhances, not replaces",
+        body: "Shutap does not write your bit for you and send you off. It reads your story, offers observations and drafts, and hands the pen back: hotter, tighter, escalate, or mix your own lines. The point is that you get funnier, and the voice stays yours. A tool that makes you better at being funny is a different thing from a tool that is funny instead of you.",
+      },
+      {
+        heading: "Where it goes",
+        body: "Today Shutap is built for creators and comedians who turn stories into bits. The same idea reaches further: conversations, interviews, roadshows, demos, product launches and meetings are all better when the person talking can find the true and funny thing to say. The aim is the same throughout, to help people bring more of their own humor into the room.",
+      },
+      {
+        heading: "What Shutap is not",
+        body: "Shutap is entertainment and a writing tool. It is not therapy, not crisis care and not advice, and it is for adults 18 and over. If you are struggling, please reach out to a person or a local helpline. In the US you can call or text 988, in the UK and Ireland Samaritans on 116 123, and findahelpline.com lists services worldwide.",
+      },
+    ],
+    related: ["how-shutap-is-built", "shutap-vs-punchlines-ai", "how-to-turn-a-story-into-a-bit"],
+    cta: CTA,
+    published: PUBLISHED,
+  },
+
   {
     slug: "how-to-turn-a-story-into-a-bit",
     kind: "guide",

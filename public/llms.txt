@@ -20,6 +20,9 @@ The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Sign
 - [POV and skit generator](https://shutap.com/guides/pov-skit-generator): See a bit as a scene, beat by beat.
 - [Teleprompter for comedy](https://shutap.com/guides/comedy-teleprompter): Run any bit full-screen and read it to camera.
 - [Comedy screenplay page generator](https://shutap.com/guides/comedy-screenplay-format): A bit laid out as a script page.
+- [How Shutap is built](https://shutap.com/guides/how-shutap-is-built): Observations, whole bits, rules in code, a judge model, and hotter/tighter/escalate/mix-your-own controls.
+- [Shutap vs Punchlines.ai](https://shutap.com/guides/shutap-vs-punchlines-ai): One-liners from headlines versus a whole bit from your own story.
+- [Humor is wisdom](https://shutap.com/guides/humor-is-wisdom): The founder's vision and why Shutap exists.
 - [How to turn a story into a bit](https://shutap.com/guides/how-to-turn-a-story-into-a-bit): Moment, detail, hook, setup, tags, button.
 - [How long should a TikTok bit be](https://shutap.com/guides/how-long-should-a-tiktok-bit-be): Word counts for 15s, 30s, 60s and 2 minute bits.
 - [How to write comedy tags](https://shutap.com/guides/how-to-write-comedy-tags): What a tag is, how to find one, how many to write.
