@@ -16,6 +16,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AiDisclosureRouteImport } from './routes/ai-disclosure'
+import { Route as AiJokeGeneratorRouteImport } from './routes/ai-joke-generator'
 import { Route as BitLabRouteImport } from './routes/bit-lab'
 import { Route as BusinessRouteImport } from './routes/business'
 import { Route as CareerRouteImport } from './routes/career'
@@ -122,6 +123,11 @@ const AdminRoute = AdminRouteImport.update({
 const AiDisclosureRoute = AiDisclosureRouteImport.update({
   id: '/ai-disclosure',
   path: '/ai-disclosure',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiJokeGeneratorRoute = AiJokeGeneratorRouteImport.update({
+  id: '/ai-joke-generator',
+  path: '/ai-joke-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BitLabRoute = BitLabRouteImport.update({
@@ -510,6 +516,7 @@ export interface FileRoutesByFullPath {
   '/activity': typeof ActivityRoute
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
+  '/ai-joke-generator': typeof AiJokeGeneratorRoute
   '/bit-lab': typeof BitLabRoute
   '/business': typeof BusinessRoute
   '/career': typeof CareerRoute
@@ -591,6 +598,7 @@ export interface FileRoutesByTo {
   '/activity': typeof ActivityRoute
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
+  '/ai-joke-generator': typeof AiJokeGeneratorRoute
   '/bit-lab': typeof BitLabRoute
   '/business': typeof BusinessRoute
   '/career': typeof CareerRoute
@@ -674,6 +682,7 @@ export interface FileRoutesById {
   '/activity': typeof ActivityRoute
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
+  '/ai-joke-generator': typeof AiJokeGeneratorRoute
   '/bit-lab': typeof BitLabRoute
   '/business': typeof BusinessRoute
   '/career': typeof CareerRoute
@@ -757,6 +766,7 @@ export interface FileRouteTypes {
     | '/activity'
     | '/admin'
     | '/ai-disclosure'
+    | '/ai-joke-generator'
     | '/bit-lab'
     | '/business'
     | '/career'
@@ -838,6 +848,7 @@ export interface FileRouteTypes {
     | '/activity'
     | '/admin'
     | '/ai-disclosure'
+    | '/ai-joke-generator'
     | '/bit-lab'
     | '/business'
     | '/career'
@@ -920,6 +931,7 @@ export interface FileRouteTypes {
     | '/activity'
     | '/admin'
     | '/ai-disclosure'
+    | '/ai-joke-generator'
     | '/bit-lab'
     | '/business'
     | '/career'
@@ -1003,6 +1015,7 @@ export interface RootRouteChildren {
   ActivityRoute: typeof ActivityRoute
   AdminRoute: typeof AdminRoute
   AiDisclosureRoute: typeof AiDisclosureRoute
+  AiJokeGeneratorRoute: typeof AiJokeGeneratorRoute
   BitLabRoute: typeof BitLabRoute
   BusinessRoute: typeof BusinessRoute
   CareerRoute: typeof CareerRoute
@@ -1117,6 +1130,13 @@ declare module '@tanstack/react-router' {
       path: '/ai-disclosure'
       fullPath: '/ai-disclosure'
       preLoaderRoute: typeof AiDisclosureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-joke-generator': {
+      id: '/ai-joke-generator'
+      path: '/ai-joke-generator'
+      fullPath: '/ai-joke-generator'
+      preLoaderRoute: typeof AiJokeGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bit-lab': {
@@ -1688,6 +1708,7 @@ const rootRouteChildren: RootRouteChildren = {
   ActivityRoute: ActivityRoute,
   AdminRoute: AdminRoute,
   AiDisclosureRoute: AiDisclosureRoute,
+  AiJokeGeneratorRoute: AiJokeGeneratorRoute,
   BitLabRoute: BitLabRoute,
   BusinessRoute: BusinessRoute,
   CareerRoute: CareerRoute,
