@@ -33,6 +33,7 @@ export interface Guide {
 }
 
 const CTA = { label: "Write your story, get the bit", href: "/" };
+const BIZ_CTA = { label: "Request information", href: "/business" };
 const PUBLISHED = "2026-10-17";
 
 export const GUIDES: Guide[] = [
@@ -503,7 +504,7 @@ export const GUIDES: Guide[] = [
       },
     ],
     related: ["funny-presentations-and-slides", "funny-product-demos-and-launches", "humor-is-wisdom"],
-    cta: CTA,
+    cta: BIZ_CTA,
     published: PUBLISHED,
   },
   {
@@ -543,7 +544,7 @@ export const GUIDES: Guide[] = [
       },
     ],
     related: ["funny-for-business", "funny-product-demos-and-launches", "how-to-write-comedy-tags"],
-    cta: CTA,
+    cta: BIZ_CTA,
     published: PUBLISHED,
   },
   {
@@ -583,7 +584,7 @@ export const GUIDES: Guide[] = [
       },
     ],
     related: ["funny-for-business", "funny-presentations-and-slides", "how-shutap-is-built"],
-    cta: CTA,
+    cta: BIZ_CTA,
     published: PUBLISHED,
   },
   {

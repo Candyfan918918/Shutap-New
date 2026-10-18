@@ -33,6 +33,8 @@ The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Sign
 - [How long should a TikTok bit be](https://shutap.com/guides/how-long-should-a-tiktok-bit-be): Word counts for 15s, 30s, 60s and 2 minute bits.
 - [How to write comedy tags](https://shutap.com/guides/how-to-write-comedy-tags): What a tag is, how to find one, how many to write.
 
+- [Business inquiries](https://shutap.com/business): Request information or ask about the Shutap joke dataset (in development).
+
 ## Policies
 
 - [Terms of Service](https://shutap.com/terms): The rules; 18+.

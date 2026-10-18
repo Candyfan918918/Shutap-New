@@ -40,6 +40,7 @@ export function SeoPage({ children }: { children: ReactNode }) {
             <Link to="/safety" style={footLink}>Safety</Link>
             <Link to="/ai-disclosure" style={footLink}>AI disclosure</Link>
             <Link to="/report" style={footLink}>Report</Link>
+            <Link to="/business" style={footLink}>Business</Link>
             <Link to="/contact" style={footLink}>Contact</Link>
           </div>
         </div>
