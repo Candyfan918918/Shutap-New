@@ -98,7 +98,7 @@ function GuideRoute() {
       capsule={g.capsule}
       sections={g.sections}
       cta={g.cta}
-      others={[...related, { href: "/guides", label: "All guides" }, { href: "/pricing", label: "Pricing" }]}
+      others={[...related, { href: "/guides", label: "All guides" }, { href: "/funniest", label: "The funniest" }, { href: "/business", label: "Shutap Enterprise" }, { href: "/pricing", label: "Pricing" }]}
     />
   );
 }

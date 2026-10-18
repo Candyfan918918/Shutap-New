@@ -25,7 +25,8 @@ The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Sign
 - [Humor is wisdom](https://shutap.com/guides/humor-is-wisdom): The founder's vision and why Shutap exists.
 - [AI joke generators compared](https://shutap.com/guides/ai-joke-generators-compared): Shutap, Witscript, Punchlines.ai and ChatGPT side by side.
 - [Shutap vs Witscript](https://shutap.com/guides/shutap-vs-witscript): Setup-to-jokes versus story-to-bit.
-- [Shutap vs ChatGPT for jokes](https://shutap.com/guides/shutap-vs-chatgpt-for-jokes): A general chatbot versus a tool built for bits.
+- [Shutap vs ChatGPT and Claude for jokes](https://shutap.com/guides/shutap-vs-chatgpt-for-jokes): General assistants versus a tool built for bits.
+- [Shutap vs Claude for jokes](https://shutap.com/guides/shutap-vs-claude-for-jokes): A general assistant versus a tool built for bits, with daily ideas and technique guides.
 - [Shutap Enterprise overview](https://shutap.com/guides/funny-for-business): Direction: humor for presentations, roadshows, demos, launches and meetings (in development).
 - [Make presentations and slides funny](https://shutap.com/guides/funny-presentations-and-slides): Where to put humor in a deck and how to write it.
 - [Funny product demos and launches](https://shutap.com/guides/funny-product-demos-and-launches): Humor for demos, launches and roadshows from real stories.

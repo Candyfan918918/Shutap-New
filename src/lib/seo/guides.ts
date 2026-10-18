@@ -245,6 +245,18 @@ export const GUIDES: Guide[] = [
         body: "Behind the prompts is a library of named comedy techniques: how a joke gets a picture, how tags escalate on one premise, how a button turns a situation around. There is also a hall of fame of lines the founder approved as funny. It sets the bar for what counts, and new writing is checked against it so Shutap does not repeat those lines. The library teaches Shutap how funny writing is built. The writing you get back is about your story.",
       },
       {
+        heading: "A growing dataset",
+        body: "The writing is guided by a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat, built up by hand. It grows as we add to it, so the guidance gets better over time.",
+      },
+      {
+        heading: "What to post today",
+        body: "Never start from a blank page. The Shutap homepage shows a daily idea of what to post, with a hook, a short bit and a tag, drawn from what is trending, alongside a trend panel that shows which topics are rising or cooling.",
+      },
+      {
+        heading: "Learn from the funniest",
+        body: "The funniest is a series of educational pages. Each asks who is the funniest in a category, such as US presidents, using published rankings and sources, then breaks down how that person was funny into techniques you can use, each with an original example line and a way to try it. Read them at shutap.com/funniest.",
+      },
+      {
         heading: "You steer",
         body: "Hotter raises the heat two levels, up to 5, and pushes every picture further. Tighter cuts the bit to about 60 percent of its words and keeps only the best tag. Escalate moves each tag one step further along the same line and flips who is in charge on the button. Swap a tag trades one line for another. Mix your own lets you pick the hook, the tag and the button you like from the lines Shutap actually wrote for your story, and rebuilds the bit around the setup. Every change is saved as a new version, so you can go back.",
       },
@@ -257,7 +269,7 @@ export const GUIDES: Guide[] = [
         body: "Every bit is stamped with the version of the prompts that wrote it. Changes to the writing are checked against a fixed set of test stories that are never used as examples. Shutap is written by AI and gets things wrong, so you decide what to perform. Test it on a real audience before you trust it.",
       },
     ],
-    related: ["shutap-vs-punchlines-ai", "how-to-turn-a-story-into-a-bit", "stand-up-bit-generator"],
+    related: ["ai-joke-generators-compared", "shutap-vs-chatgpt-for-jokes", "humor-is-wisdom"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -291,6 +303,10 @@ export const GUIDES: Guide[] = [
       {
         heading: "What you can do with the result",
         body: "A one-liner goes into a caption or a monologue. A Shutap bit runs in a full-screen teleprompter, lays out as a scene beat by beat, or formats as a screenplay page, so it is ready to film or take to an open mic.",
+      },
+      {
+        heading: "Beyond the bit",
+        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat.",
       },
       {
         heading: "Which should you use",
@@ -334,6 +350,10 @@ export const GUIDES: Guide[] = [
         body: "Shutap does not write your bit for you and send you off. It reads your story, offers observations and drafts, and hands the pen back: hotter, tighter, escalate, or mix your own lines. The point is that you get funnier, and the voice stays yours. A tool that makes you better at being funny is a different thing from a tool that is funny instead of you.",
       },
       {
+        heading: "Learn from the funniest",
+        body: "If humor is wisdom, it can be studied. The funniest is a series of pages that ask who is the funniest in a category, using published rankings and sources, then break down the techniques that made them funny, each with an original example line and a way to try it.",
+      },
+      {
         heading: "Where it goes",
         body: "Today Shutap is built for creators and comedians who turn stories into bits. The same idea reaches further: conversations, interviews, roadshows, demos, product launches and meetings are all better when the person talking can find the true and funny thing to say. The aim is the same throughout, to help people bring more of their own humor into the room.",
       },
@@ -355,7 +375,7 @@ export const GUIDES: Guide[] = [
     description:
       "A plain comparison of AI joke generators: Shutap, Witscript, Punchlines.ai and ChatGPT. What each takes as input, what it returns, and who it fits.",
     capsule:
-      "AI joke generators split into two kinds: tools that return one-liners from a setup or headline (Witscript, Punchlines.ai), general chatbots you prompt for jokes (ChatGPT), and Shutap, which writes a whole bit from a story from your own life and lets you steer it.",
+      "AI joke generators fall into three kinds: tools that return one-liners from a setup or headline (Witscript, Punchlines.ai), general chatbots you prompt for jokes (ChatGPT, Claude), and Shutap, which writes a whole bit from a story from your own life and lets you steer it.",
     blurb: "Shutap, Witscript, Punchlines.ai and ChatGPT side by side: input, output and fit.",
     sections: [
       {
@@ -375,8 +395,12 @@ export const GUIDES: Guide[] = [
         body: "Input: a setup or headline in a chat box. Output: late-night style punchlines. It has offered a limited number of free tries. Best for fast topical one-liners.",
       },
       {
-        heading: "ChatGPT and other general chatbots",
+        heading: "ChatGPT, Claude and other general chatbots",
         body: "Input: any prompt. Output: jokes in whatever style you describe. They are flexible and free to start, and a good way to brainstorm. They are not built around comedy structure, so the result depends heavily on how well you prompt and how much you edit, and they do not give you a hook, tags and a button unless you ask for them.",
+      },
+      {
+        heading: "What Shutap adds around the tool",
+        body: "Shutap pairs the bit generator with a daily what-to-post idea, The funniest (a series that teaches the techniques of funny people), and a growing joke dataset behind the writing. To our knowledge, no other joke tool pairs all of these.",
       },
       {
         heading: "Which should you pick",
@@ -387,7 +411,7 @@ export const GUIDES: Guide[] = [
         body: "Descriptions come from each tool's public pages and third-party listings as of October 2026. Features, prices and availability change, so check each site. Shutap is written by its own founder and is listed here as one option among several.",
       },
     ],
-    related: ["shutap-vs-punchlines-ai", "shutap-vs-witscript", "shutap-vs-chatgpt-for-jokes"],
+    related: ["shutap-vs-punchlines-ai", "shutap-vs-witscript", "shutap-vs-chatgpt-for-jokes", "shutap-vs-claude-for-jokes"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -419,6 +443,10 @@ export const GUIDES: Guide[] = [
         body: "Witscript starts from a sentence and returns jokes. Shutap starts from a story and returns a structured bit, viewable as a teleprompter, a scene or a screenplay page.",
       },
       {
+        heading: "Beyond the bit",
+        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat.",
+      },
+      {
         heading: "Who should use which",
         body: "Writers of topical material, speeches and captions fit Witscript. Creators and comedians building bits from their own lives fit Shutap. Using both is reasonable.",
       },
@@ -434,17 +462,17 @@ export const GUIDES: Guide[] = [
   {
     slug: "shutap-vs-chatgpt-for-jokes",
     kind: "guide",
-    title: "Shutap vs ChatGPT for Writing Jokes and Bits | Shutap",
-    h1: "Shutap vs ChatGPT for jokes",
+    title: "Shutap vs ChatGPT and Claude for Writing Jokes and Bits | Shutap",
+    h1: "Shutap vs ChatGPT and Claude for jokes",
     description:
-      "ChatGPT can write jokes if you prompt it well. Shutap is built to turn your story into a bit and let you steer it. What the difference means in practice.",
+      "ChatGPT and Claude can write jokes if you prompt them well. Shutap is built to turn your story into a bit and let you steer it. What the difference means in practice.",
     capsule:
-      "ChatGPT is a general chatbot that can write jokes when prompted. Shutap is built for one job: turning a story from your life into a whole bit with a hook, setup, tags and a button, with checks for picture, specificity and no advice, and controls to steer the result.",
+      "ChatGPT and Claude are general assistants that can write jokes when prompted. Shutap is built for one job: turning a story from your life into a whole bit with a hook, setup, tags and a button, with checks for picture, specificity and no advice, and controls to steer the result.",
     blurb: "A general chatbot versus a tool built for bits.",
     sections: [
       {
         heading: "The short answer",
-        body: "ChatGPT is flexible and a good brainstorming partner. Shutap does one thing, bits from your story, and builds the steps and checks around it so you do not have to prompt for them.",
+        body: "ChatGPT and Claude are flexible, capable writers and good brainstorming partners. Shutap does one thing, bits from your story, and builds the steps and checks around it so you do not have to prompt for them.",
       },
       {
         heading: "What you do yourself with a chatbot",
@@ -453,6 +481,10 @@ export const GUIDES: Guide[] = [
       {
         heading: "What Shutap does for you",
         body: "Shutap finds observations in your story first, writes four whole bits from different ones, removes lines that would work on anyone's story, blocks advice and jokes at the teller, and ranks the rest with a second model so the writer does not grade itself. Then it gives you the controls: audience, voice, length, heat, hotter, tighter, escalate, swap a tag and mix your own.",
+      },
+      {
+        heading: "What only Shutap has around the tool",
+        body: "A daily idea of what to post with a hook, a bit and a tag, drawn from what is trending. The funniest, a series of educational pages that break down the techniques of funny people with original example lines. And a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat. A general chatbot gives you a blank box. Shutap gives you the structure, the checks and the learning material around it.",
       },
       {
         heading: "Formats",
@@ -585,6 +617,50 @@ export const GUIDES: Guide[] = [
     ],
     related: ["funny-for-business", "funny-presentations-and-slides", "how-shutap-is-built"],
     cta: BIZ_CTA,
+    published: PUBLISHED,
+  },
+  {
+    slug: "shutap-vs-claude-for-jokes",
+    kind: "guide",
+    title: "Shutap vs Claude for Writing Jokes and Bits | Shutap",
+    h1: "Shutap vs Claude for jokes",
+    description:
+      "Claude is a general AI assistant that can draft and edit jokes. Shutap is built to turn your story into a bit you can steer, with daily ideas and technique guides around it.",
+    capsule:
+      "Claude is a general AI assistant that writes and edits well, jokes included, when you prompt it. Shutap is built for one job: turning a story from your life into a whole bit with a hook, setup, tags and a button, with controls to steer it and learning material around it.",
+    blurb: "A general assistant versus a tool built for bits.",
+    sections: [
+      {
+        heading: "The short answer",
+        body: "Claude is a strong general writer and a good partner for brainstorming and editing a joke you already have. Shutap is a specialized tool: it starts from your story, builds the structure and checks of a bit for you, and surrounds it with a daily post idea and technique guides.",
+      },
+      {
+        heading: "What you do yourself with Claude",
+        body: "You decide the structure, write the prompt, ask for tags and a button, and judge the result. With good prompting you can get strong material. It is flexible, and it is also work, and the result depends on how you steer it.",
+      },
+      {
+        heading: "What Shutap does for you",
+        body: "Shutap finds observations in your story first, writes four whole bits from different ones, removes lines that would work on anyone's story, blocks advice and jokes at the teller, and ranks the rest with a second model from a different family. Then you steer: audience, voice, length, heat, hotter, tighter, escalate, swap a tag, or mix your own.",
+      },
+      {
+        heading: "What only Shutap has around the tool",
+        body: "A daily idea of what to post with a hook, a bit and a tag, drawn from what is trending. The funniest, a series of educational pages that break down the techniques of funny people with original example lines. And a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat.",
+      },
+      {
+        heading: "Formats",
+        body: "Shutap returns a bit you can run as a full-screen teleprompter, read as a beat-by-beat scene, or print as a screenplay page.",
+      },
+      {
+        heading: "Who should use which",
+        body: "Use Claude for open-ended writing, editing and anything outside comedy. Use Shutap when you want a bit from a real story with less prompting, more control over the comedy, and ideas and lessons to keep you going.",
+      },
+      {
+        heading: "Limits",
+        body: "Both are AI and both get things wrong. You decide what to perform, and a real audience is the final test.",
+      },
+    ],
+    related: ["shutap-vs-chatgpt-for-jokes", "ai-joke-generators-compared", "how-shutap-is-built"],
+    cta: CTA,
     published: PUBLISHED,
   },
   {
