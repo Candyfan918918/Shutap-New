@@ -114,6 +114,18 @@ function PrivacyPage() {
         posted, is excluded from aggregated data, and is never sold.
       </p>
 
+      <h3>7a. Shutap Enterprise requests</h3>
+      <p>
+        If you ask about Shutap Enterprise or the joke dataset at shutap.com/business, we collect
+        the name, title, company, work email, company size, needs, timeline and message you
+        send. The form emails them to us through Resend. We use them only to reply, to scope a
+        solution and to share pricing. We do not add them to an account, to Mirror patterns or to
+        the joke dataset, and we do not sell them. Please do not send confidential company
+        material through the form. If we later work together, how company material is handled
+        would be set out in a separate written agreement before any is shared. To see or delete
+        your request, write to hello@shutap.com.
+      </p>
+
       <h3>8. Retention</h3>
       <p>
         We keep your data while your account is active and as long as needed for the purposes

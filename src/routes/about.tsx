@@ -33,7 +33,7 @@ const SECTIONS = [
   },
   {
     heading: "Shutap Enterprise",
-    body: "Bits are the start. Shutap Enterprise brings original, human-steered humor to the way companies speak: presentations and slides, roadshows, product demos and launches, and meetings, written from your own material. It is in development. To request pricing and a tailored solution, or to ask about the Shutap joke dataset, use the form at shutap.com/business.",
+    body: "Bits are the start. Shutap Enterprise brings original, human-steered humor to the way companies speak: presentations and slides, roadshows and investor pitches, product demos and launches, and meetings and conversations. It is written from your own material, your speakers stay in control, and it is built on a growing dataset of situations paired with jokes, tagged by technique, voice and heat. It is in development. To request pricing and a tailored solution, or to ask about the joke dataset, use the form at shutap.com/business.",
   },
   {
     heading: "The one rule",
