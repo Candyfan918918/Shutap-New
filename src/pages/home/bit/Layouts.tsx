@@ -56,7 +56,7 @@ function Top({ title, meta, onBack }: { title: string; meta: string; onBack: () 
         </button>
         <span className="bt-lbl">{meta}</span>
       </div>
-      <h1 className="bt-h2" style={{ fontSize: 28 }}>
+      <h1 className="bt-h2" style={{ fontSize: 'var(--fs-h2)' }}>
         {title}
       </h1>
     </>

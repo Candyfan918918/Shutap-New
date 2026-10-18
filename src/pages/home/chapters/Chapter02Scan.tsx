@@ -5,7 +5,7 @@ import { useReactiveCard, useMagnetic } from '@/components/motion'
 import { EyeMark } from '@/components/brand/EyeMark'
 
 const SORA = "'Sora',system-ui,sans-serif"
-const NEWS = "'Newsreader',Georgia,serif"
+const NEWS = "'Newsreader',serif"
 
 const PHASE_TIMES = [0, 2300, 4600, 6500, 12200] // start of P1..P4, then restart
 
@@ -64,13 +64,13 @@ export function Chapter02Scan({ onCtaScan }: { onCtaScan: () => void }) {
     >
       <div className="home-grid-2" style={{ maxWidth: 1280, margin: '0 auto', width: '100%', display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: 'clamp(34px,6vw,90px)', padding: 'clamp(90px,12vh,150px) clamp(20px,4vw,32px)', alignItems: 'center' }}>
         <div style={{ order: 2 }}>
-          <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 12, letterSpacing: '.24em', textTransform: 'uppercase', color: '#aaa3e8', marginBottom: 22 }}>
+          <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'var(--fs-label)', letterSpacing: '.24em', textTransform: 'uppercase', color: '#aaa3e8', marginBottom: 22 }}>
             chapter 02 — scan it
           </div>
-          <h2 style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'clamp(30px,3.8vw,54px)', lineHeight: 1.08, letterSpacing: '-.04em', margin: '0 0 24px', color: '#fff' }}>
+          <h2 style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'var(--fs-h2)', lineHeight: 1.08, letterSpacing: '0', margin: '0 0 24px', color: '#fff' }}>
             how heavy is it, <em style={{ fontFamily: NEWS, fontStyle: 'italic', color: '#aaa3e8', fontWeight: 400 }}>really?</em>
           </h2>
-          <p style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 'clamp(16px,1.4vw,20px)', lineHeight: 1.6, color: '#c6c0ef', maxWidth: '44ch', margin: '0 0 32px' }}>
+          <p style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 'var(--fs-h2)', lineHeight: 1.6, color: '#c6c0ef', maxWidth: '44ch', margin: '0 0 32px' }}>
             a 60-second read. the companion asks, you answer, and you get a private intensity score — before you decide whether the world gets to sit in.
           </p>
           <button
@@ -88,7 +88,7 @@ export function Chapter02Scan({ onCtaScan }: { onCtaScan: () => void }) {
               borderRadius: 999,
               fontFamily: SORA,
               fontWeight: 700,
-              fontSize: 15,
+              fontSize: 'var(--fs-body)',
               cursor: 'pointer',
             }}
           >
@@ -110,10 +110,10 @@ export function Chapter02Scan({ onCtaScan }: { onCtaScan: () => void }) {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(23,19,26,.16)', color: '#e2dde0', border: '.5px solid rgba(23,19,26,.3)', borderRadius: 999, padding: '4px 12px', fontFamily: SORA, fontWeight: 600, fontSize: 10.5, letterSpacing: '.08em', textTransform: 'uppercase' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(23,19,26,.16)', color: '#e2dde0', border: '.5px solid rgba(23,19,26,.3)', borderRadius: 999, padding: '4px 12px', fontFamily: SORA, fontWeight: 500, fontSize: 'var(--fs-label)', letterSpacing: '.08em', textTransform: 'uppercase' }}>
                 relationships
               </span>
-              <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 12.5, color: '#6f666c' }}>
+              <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 'var(--fs-small)', color: '#6f666c' }}>
                 the scan · sample
               </span>
             </div>
@@ -134,7 +134,7 @@ export function Chapter02Scan({ onCtaScan }: { onCtaScan: () => void }) {
               {phase === 2 && (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 300, gap: 16 }}>
                   <EyeMark size={46} />
-                  <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16.5, color: '#c6c0ef' }}>reading the weight of it…</div>
+                  <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 'var(--fs-body)', color: '#c6c0ef' }}>reading the weight of it…</div>
                   <div style={{ display: 'inline-flex', gap: 7 }}>
                     <span className="home-breathe-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: '#7F77DD' }} />
                     <span className="home-breathe-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: '#7F77DD', animationDelay: '.2s' }} />
@@ -145,7 +145,7 @@ export function Chapter02Scan({ onCtaScan }: { onCtaScan: () => void }) {
               {phase === 3 && <ScanDial value={counter} progress={dialProgress} />}
             </div>
 
-            <div style={{ marginTop: 10, opacity: .6, textAlign: 'center', fontFamily: SORA, fontWeight: 800, fontSize: 8.5, letterSpacing: '.28em', color: '#bdb8bb' }}>
+            <div style={{ marginTop: 10, opacity: .6, textAlign: 'center', fontFamily: SORA, fontWeight: 800, fontSize: 'var(--fs-label)', letterSpacing: '.28em', color: '#bdb8bb' }}>
               SHUTAP · THE SCAN
             </div>
             {card.decor}
@@ -167,10 +167,10 @@ function ScanQuestion({ n, question, options, highlight }: { n: number; question
   }, [reduce, highlight, n])
   return (
     <div>
-      <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 10, letterSpacing: '.22em', textTransform: 'uppercase', color: '#8d86c9', marginBottom: 10 }}>
+      <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 'var(--fs-label)', letterSpacing: '.22em', textTransform: 'uppercase', color: '#8d86c9', marginBottom: 10 }}>
         question {n} of 6
       </div>
-      <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 20, lineHeight: 1.45, color: '#fdfbf9', marginBottom: 18 }}>
+      <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 'var(--fs-read)', lineHeight: 1.45, color: '#fdfbf9', marginBottom: 18 }}>
         {question}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
@@ -183,7 +183,7 @@ function ScanQuestion({ n, question, options, highlight }: { n: number; question
                 display: 'block',
                 fontFamily: NEWS,
                 fontStyle: 'italic',
-                fontSize: 14.5,
+                fontSize: 'var(--fs-small)',
                 padding: '11px 14px',
                 border: '1px solid ' + (active ? '#aaa3e8' : 'rgba(255,255,255,.14)'),
                 background: active ? 'rgba(90,90,95,.25)' : 'rgba(255,255,255,.05)',
@@ -225,17 +225,17 @@ function ScanDial({ value, progress }: { value: number; progress: number }) {
           />
         </svg>
         <div style={{ position: 'absolute', textAlign: 'center' }}>
-          <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 52, letterSpacing: '-.04em', color: '#2b2630', lineHeight: .9, fontVariantNumeric: 'tabular-nums' }}>
+          <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'var(--fs-h2)', letterSpacing: '0', color: '#2b2630', lineHeight: .9, fontVariantNumeric: 'tabular-nums' }}>
             {value}
           </div>
-          <div style={{ fontFamily: SORA, fontWeight: 600, fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#6f666c', marginTop: 5 }}>
+          <div style={{ fontFamily: SORA, fontWeight: 500, fontSize: 'var(--fs-label)', letterSpacing: '.18em', textTransform: 'uppercase', color: '#6f666c', marginTop: 5 }}>
             of 999 · heavy &amp; loud
           </div>
         </div>
       </div>
       <div style={{ textAlign: 'center', marginBottom: 14 }}>
-        <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 20, color: '#fdfbf9', lineHeight: 1.15 }}>Carrying It Loud</div>
-        <div style={{ marginTop: 6, fontFamily: NEWS, fontStyle: 'italic', fontSize: 13.5, lineHeight: 1.5, color: '#bdb8bb' }}>
+        <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 'var(--fs-read)', color: '#fdfbf9', lineHeight: 1.15 }}>Carrying It Loud</div>
+        <div style={{ marginTop: 6, fontFamily: NEWS, fontStyle: 'italic', fontSize: 'var(--fs-small)', lineHeight: 1.5, color: '#bdb8bb' }}>
           the part that hurts is how unseen it makes you feel — and you keep showing up anyway.
         </div>
       </div>

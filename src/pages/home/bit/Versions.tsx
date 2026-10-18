@@ -108,14 +108,14 @@ export function Versions({
           ))}
         </div>
         {current.id !== original.id && (
-          <p className="bt-note" style={{ fontSize: 13 }}>
+          <p className="bt-note" style={{ fontSize: 'var(--fs-small)' }}>
             The bit above is now the {chipLabel(current, bit.versions)} version. Every version is saved.
           </p>
         )}
         <div className="bt-between" style={{ borderTop: '1px solid var(--line)', paddingTop: 12 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <b style={{ fontSize: 15 }}>Mix your own</b>
-            <span className="bt-note" style={{ fontSize: 13, color: 'var(--muted)' }}>
+            <b style={{ fontSize: 'var(--fs-body)' }}>Mix your own</b>
+            <span className="bt-note" style={{ fontSize: 'var(--fs-small)', color: 'var(--muted)' }}>
               pick your favorite hook, tag and ending, one at a time
             </span>
           </div>

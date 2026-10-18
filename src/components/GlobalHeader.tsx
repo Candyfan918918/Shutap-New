@@ -160,8 +160,8 @@ export function GlobalHeader() {
         to={to}
         style={{
           fontFamily: "'Sora',system-ui,sans-serif",
-          fontWeight: 600,
-          fontSize: 14,
+          fontWeight: 500,
+          fontSize: isHome ? 'var(--fs-small)' : 13,
           color: active ? inkActive : inkMuted,
           textDecoration: 'none',
           padding: '6px 10px',
@@ -178,7 +178,7 @@ export function GlobalHeader() {
     padding: '9px 11px',
     borderRadius: 10,
     fontFamily: "'Sora',system-ui,sans-serif",
-    fontSize: 14,
+    fontSize: isHome ? 'var(--fs-small)' : 13,
     color: menuInk,
     textDecoration: 'none',
     cursor: 'pointer',
@@ -188,6 +188,7 @@ export function GlobalHeader() {
     <header
       ref={headerRef}
       data-hdr-variant={variant}
+      className={isHome ? 'homepage-header' : undefined}
       style={{
         position: 'sticky',
         top: 0,
@@ -219,7 +220,7 @@ export function GlobalHeader() {
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}@media (max-width: 420px){[data-gh-pill]{padding:7px 12px !important}}`}</style>
+          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:var(--fs-small,13px) !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:var(--fs-small,13px) !important}}@media (max-width: 420px){[data-gh-pill]{padding:7px 12px !important}}`}</style>
           <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {navLink('/', 'write')}
             {navLink('/guides', 'guides')}
@@ -260,7 +261,7 @@ export function GlobalHeader() {
                       background: dark ? '#2a2a2a' : '#f6e9ee',
                       display: 'grid',
                       placeItems: 'center',
-                      fontSize: 14,
+                      fontSize: isHome ? 'var(--fs-small)' : 13,
                       flex: 'none',
                     }}
                   >
@@ -282,7 +283,7 @@ export function GlobalHeader() {
                       zIndex: 70,
                     }}
                   >
-                    <div style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: 12.5 }}>{alias.name}</div>
+                    <div style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 13 }}>{alias.name}</div>
                     {slug ? <Link to="/u/$pseudonym" params={{ pseudonym: slug }} style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link> : null}
                     <Link to="/rooms" search={{ tab: 'saved' }} style={menuItem} onClick={() => setMenuOpen(false)}>saved</Link>
                     <Link to="/set-list" style={menuItem} onClick={() => setMenuOpen(false)}>set list</Link>
@@ -324,7 +325,7 @@ export function GlobalHeader() {
                   padding: '9px 18px',
                   fontFamily: 'Sora,sans-serif',
                   fontWeight: 700,
-                  fontSize: 13,
+                  fontSize: isHome ? 'var(--fs-small)' : 13,
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
                   flexShrink: 0,

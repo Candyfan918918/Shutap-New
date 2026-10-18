@@ -411,7 +411,7 @@ export function mountImmersive(root: HTMLElement, hooks: ImmersiveHooks): () => 
   const compBubble = (text: string, mine: boolean) => {
     if (!cLog) return null
     const d = document.createElement('div')
-    d.style.cssText = 'max-width:86%;padding:10px 14px;border-radius:16px;font-family:Newsreader,serif;font-style:italic;font-size:15px;line-height:1.55;' + (mine ? 'align-self:flex-end;background:#2b2630;color:#fff;border-bottom-right-radius:5px' : 'align-self:flex-start;background:rgba(255,255,255,.07);color:#e9e4f6;border-bottom-left-radius:5px')
+    d.style.cssText = 'max-width:86%;padding:10px 14px;border-radius:16px;font-family:Newsreader,serif;font-style:italic;font-size:var(--fs-body);line-height:1.55;' + (mine ? 'align-self:flex-end;background:#2b2630;color:#fff;border-bottom-right-radius:5px' : 'align-self:flex-start;background:rgba(255,255,255,.07);color:#e9e4f6;border-bottom-left-radius:5px')
     d.textContent = text; cLog.appendChild(d); cLog.scrollTop = cLog.scrollHeight; return d
   }
   const openComp = () => {

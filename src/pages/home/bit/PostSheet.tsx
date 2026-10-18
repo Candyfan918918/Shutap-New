@@ -66,7 +66,7 @@ export function PostSheet({
         {done ? (
           <>
             <h3 id="post-title">Posted.</h3>
-            <p className="bt-sub" style={{ fontSize: 15 }}>It's in the {TOPIC_LABEL[topic]} room under your Shutap name.</p>
+            <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>It's in the {TOPIC_LABEL[topic]} room under your Shutap name.</p>
             <Link to="/rooms/$id" params={{ id: done }} className="bt-btn block">
               view post
             </Link>
@@ -105,7 +105,7 @@ export function PostSheet({
               ) : (
                 <>
                   <b className="h">{version.hook}</b>
-                  <p className="bt-note" style={{ fontSize: 13 }}>
+                  <p className="bt-note" style={{ fontSize: 'var(--fs-small)' }}>
                     Posts the shot list: numbered beats with the shot, who says it, and the line. It's laid out when you post if you haven't opened it yet.
                   </p>
                 </>
@@ -119,11 +119,11 @@ export function PostSheet({
                 </button>
               ))}
             </div>
-            <p className="bt-note" style={{ fontSize: 12.5 }}>
+            <p className="bt-note" style={{ fontSize: 'var(--fs-small)' }}>
               Posts under your Shutap name. Jokes about the situation, never a real person. Names are checked again before it goes up.
             </p>
             {error && (
-              <p role="alert" className="bt-note" style={{ color: 'var(--rose-ink, #9b3559)', fontSize: 13.5 }}>
+              <p role="alert" className="bt-note" style={{ color: 'var(--rose-ink, #9b3559)', fontSize: 'var(--fs-small)' }}>
                 {error}
               </p>
             )}

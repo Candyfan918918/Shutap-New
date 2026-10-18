@@ -352,7 +352,7 @@ export function BitSurface() {
               </button>
             </div>
             {error && (
-              <p role="alert" className="bt-note" style={{ textAlign: 'center', color: 'var(--rose-ink)', fontSize: 14 }}>
+              <p role="alert" className="bt-note" style={{ textAlign: 'center', color: 'var(--rose-ink)', fontSize: 'var(--fs-small)' }}>
                 {error}
               </p>
             )}
@@ -366,7 +366,7 @@ export function BitSurface() {
         {phase === 'writing' && (
           <div className="bt-card" style={{ display: 'flex', flexDirection: 'column', gap: 18, padding: 22, marginTop: 'clamp(8px, 4vh, 40px)' }}>
             <span className="bt-lbl r">writing your bit</span>
-            <p style={{ margin: 0, fontFamily: 'var(--news)', fontSize: 17, lineHeight: 1.45, color: 'var(--muted)', whiteSpace: 'pre-wrap' }}>
+            <p style={{ margin: 0, fontFamily: 'var(--news)', fontSize: 'var(--fs-body)', lineHeight: 1.45, color: 'var(--muted)', whiteSpace: 'pre-wrap' }}>
               {story.trim().slice(0, 600)}
             </p>
             <div className="bt-steps" aria-live="polite">
@@ -388,7 +388,7 @@ export function BitSurface() {
         {phase === 'crisis' && (
           <div className="bt-card bt-help" style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: 24, marginTop: 'clamp(8px, 4vh, 40px)' }}>
             <h2 className="bt-h2" style={{ color: 'var(--ink)' }}>No jokes for this one.</h2>
-            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.55, color: 'var(--ink-2)' }}>
+            <p style={{ margin: 0, fontSize: 'var(--fs-body)', lineHeight: 1.55, color: 'var(--ink-2)' }}>
               This sounds heavy. Talk to a person now, free, any hour.
             </p>
             <ul>
@@ -413,7 +413,7 @@ export function BitSurface() {
                     looks right
                   </button>
                 </div>
-                {notice.text && <p style={{ margin: 0, fontSize: 15, lineHeight: 1.45 }}>{notice.text}</p>}
+                {notice.text && <p style={{ margin: 0, fontSize: 'var(--fs-body)', lineHeight: 1.45 }}>{notice.text}</p>}
                 {notice.swaps.length > 0 && (
                   <div className="bt-swaps">
                     {notice.swaps.map((s, i) => (
@@ -445,7 +445,7 @@ export function BitSurface() {
               ))}
               <div className={`bt-slot${bit.locked ? ' locked' : ''}`}>
                 <span className="bt-lbl r">button</span>
-                <p className="bt-v" style={{ fontWeight: 500 }} aria-hidden={bit.locked || undefined}>{version.button}</p>
+                <p className="bt-v" style={{ fontWeight: 400 }} aria-hidden={bit.locked || undefined}>{version.button}</p>
               </div>
               {bit.locked && (
                 <button className="bt-btn block" style={{ marginTop: 8 }} onClick={() => setSheet('signin')}>
@@ -577,7 +577,7 @@ export function BitSurface() {
             {sheet === 'signin' && (
               <>
                 <h3 id="bit-sheet-title">Keep this bit.</h3>
-                <p className="bt-sub" style={{ fontSize: 15 }}>
+                <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
                   Free. You get a made-up name; your real one never shows. The tags and button are waiting.
                 </p>
                 <button className="bt-btn block" onClick={signInForBit}>
@@ -592,7 +592,7 @@ export function BitSurface() {
             {sheet === 'limit' && (
               <>
                 <h3 id="bit-sheet-title">That's {WORDS[usage?.cap ?? 5] ?? usage?.cap} for today.</h3>
-                <p className="bt-sub" style={{ fontSize: 15 }}>
+                <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
                   Resets {resetLabel(usage?.resets_at)}. Your story stays in the box. Shutap+ doesn't add more; it removes the watermark.
                 </p>
                 <button className="bt-btn block" onClick={() => setSheet(null)}>
@@ -603,7 +603,7 @@ export function BitSurface() {
             {sheet === 'rate' && (
               <>
                 <h3 id="bit-sheet-title">Too many from this network.</h3>
-                <p className="bt-sub" style={{ fontSize: 15 }}>Try again in a bit. Your story stays in the box.</p>
+                <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>Try again in a bit. Your story stays in the box.</p>
                 <button className="bt-btn block" onClick={() => setSheet(null)}>
                   ok
                 </button>
