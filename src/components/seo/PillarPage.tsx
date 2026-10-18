@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import type { Crumb } from "@/lib/seo/breadcrumbs";
 
@@ -119,9 +120,9 @@ export function PillarPage({
         >
           <span style={{ color: "#656565" }}>More:</span>
           {others.map((o) => (
-            <a
+            <Link
               key={o.href}
-              href={o.href}
+              to={o.href}
               style={{
                 color: "#100c14",
                 textDecoration: "none",
@@ -130,13 +131,13 @@ export function PillarPage({
               }}
             >
               {o.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
         <p style={{ marginTop: 40, fontSize: 15 }}>
-          <a
-            href="/"
+          <Link
+            to="/"
             style={{
               color: "#3a3438",
               textDecoration: "none",
@@ -146,7 +147,7 @@ export function PillarPage({
             }}
           >
             Turn yours into a joke →
-          </a>
+          </Link>
         </p>
       </article>
     </main>

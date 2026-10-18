@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
@@ -111,8 +112,8 @@ export function ContentPage({
             <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 12 }}>
               {g.items.map((it) => (
                 <li key={it.href}>
-                  <a
-                    href={it.href}
+                  <Link
+                    to={it.href}
                     style={{
                       display: "block",
                       textDecoration: "none",
@@ -125,7 +126,7 @@ export function ContentPage({
                   >
                     <span style={{ display: "block", fontWeight: 600, fontSize: 17 }}>{it.label}</span>
                     <span style={{ display: "block", fontSize: 15, color: "#443c42", marginTop: 4 }}>{it.blurb}</span>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -134,8 +135,8 @@ export function ContentPage({
 
         {cta && (
           <p style={{ margin: "8px 0 36px" }}>
-            <a
-              href={cta.href}
+            <Link
+              to={cta.href}
               style={{
                 display: "inline-block",
                 background: "#8e1c4c",
@@ -148,7 +149,7 @@ export function ContentPage({
               }}
             >
               {cta.label} →
-            </a>
+            </Link>
           </p>
         )}
 
@@ -167,9 +168,9 @@ export function ContentPage({
           >
             <span style={{ color: "#656565" }}>more:</span>
             {others.map((o) => (
-              <a
+              <Link
                 key={o.href}
-                href={o.href}
+                to={o.href}
                 style={{
                   color: "#0b080f",
                   textDecoration: "none",
@@ -178,14 +179,14 @@ export function ContentPage({
                 }}
               >
                 {o.label.toLowerCase()}
-              </a>
+              </Link>
             ))}
           </nav>
         )}
 
         <p style={{ marginTop: 40, fontSize: 15 }}>
-          <a
-            href="/"
+          <Link
+            to="/"
             style={{
               color: "#17131a",
               textDecoration: "none",
@@ -195,7 +196,7 @@ export function ContentPage({
             }}
           >
             SHUTAP. Say it funnier.
-          </a>
+          </Link>
         </p>
       </article>
     </main>
