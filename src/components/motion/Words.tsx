@@ -79,13 +79,18 @@ export function Words({ children, as, className, style, stagger }: WordsProps) {
   const [mounted, setMounted] = useState(false)
   const [inView, setInView] = useState(false)
   const Tag = (as || 'span') as keyof React.JSX.IntrinsicElements
+  // Page titles stay visible through hydration and scrolling; replaying a
+  // reveal makes the whole page appear to reload.
+  const staticHeading = Tag === 'h1'
 
   // useLayoutEffect flips to 'hidden' before the browser paints, so the
   // hidden state paints at least once before the observer flips to 'in'.
-  useIsoLayoutEffect(() => { setMounted(true) }, [])
+  useIsoLayoutEffect(() => {
+    if (!staticHeading) setMounted(true)
+  }, [staticHeading])
 
   useEffect(() => {
-    if (reduce) return
+    if (reduce || staticHeading) return
     const el = ref.current
     if (!el || typeof IntersectionObserver === 'undefined') return
     const io = new IntersectionObserver(
@@ -104,11 +109,11 @@ export function Words({ children, as, className, style, stagger }: WordsProps) {
     )
     io.observe(el)
     return () => io.disconnect()
-  }, [reduce])
+  }, [reduce, staticHeading])
 
   const label = useMemo(() => flatten(children).replace(/\s+/g, ' ').trim(), [children])
 
-  if (reduce) {
+  if (reduce || staticHeading) {
     return React.createElement(Tag, { className, style, ref }, children)
   }
 
