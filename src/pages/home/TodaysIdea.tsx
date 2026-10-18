@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import type { DailyIdea, Heat, Platform, SignalTopic } from '@/lib/daily-idea.functions'
 
 const PLATFORMS: { key: Platform; name: string; short: string }[] = [
+  { key: 'news', name: 'News', short: 'N' },
   { key: 'tiktok', name: 'TikTok', short: 'TT' },
   { key: 'instagram', name: 'Instagram', short: 'IG' },
   { key: 'youtube', name: 'YouTube', short: 'YT' },
@@ -22,9 +23,10 @@ function formatDay(day: string): string {
   return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
 }
 
-function clampHeat(v: unknown): Heat {
+function clampHeat(v: unknown): Heat | null {
+  if (v === null || v === undefined || v === '') return null
   const n = Math.round(Number(v))
-  return (n >= 0 && n <= 3 ? n : 0) as Heat
+  return n >= 0 && n <= 3 ? (n as Heat) : null
 }
 
 function Trend({ topics }: { topics: SignalTopic[] }) {
@@ -51,9 +53,16 @@ function Trend({ topics }: { topics: SignalTopic[] }) {
               </span>
               {PLATFORMS.map((p) => {
                 const h = clampHeat(t.heat?.[p.key])
+                const label = h === null ? 'not read' : LEVELS[h]
                 return (
                   <span key={p.key} role="cell" className="ti-cellwrap">
-                    <span className={`ti-cell ti-h${h}`} aria-label={`${p.name}: ${LEVELS[h]}`} title={`${p.name}: ${LEVELS[h]}`} />
+                    {h === null ? (
+                      <span className="ti-cell ti-na" aria-label={`${p.name}: ${label}`} title={`${p.name}: ${label}`}>
+                        –
+                      </span>
+                    ) : (
+                      <span className={`ti-cell ti-h${h}`} aria-label={`${p.name}: ${label}`} title={`${p.name}: ${label}`} />
+                    )}
                   </span>
                 )
               })}
@@ -76,6 +85,9 @@ function Trend({ topics }: { topics: SignalTopic[] }) {
             <span className={`ti-cell ti-h${h}`} aria-hidden /> {l}
           </span>
         ))}
+        <span>
+          <span className="ti-cell ti-na" aria-hidden /> not read
+        </span>
       </div>
 
       {chosen?.sources?.length ? (
@@ -89,7 +101,8 @@ function Trend({ topics }: { topics: SignalTopic[] }) {
       ) : null}
 
       <p className="ti-foot">
-        a reading of what search turned up this morning across public posts and coverage — levels, not platform numbers.
+        a reading of what search could see this morning across coverage and public posts — levels, not platform numbers.
+        dashed means that platform couldn’t be read.
       </p>
     </div>
   )
