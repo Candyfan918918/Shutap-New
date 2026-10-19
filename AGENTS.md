@@ -21,3 +21,4 @@
 - The shared Words wrapper renders H1 titles statically so hydration and scrolling never hide or replay page headings.
 
 - Content routes own search and social descriptions; use pageMeta for utility pages and keep root metadata free of homepage-specific descriptions, URLs and images to prevent inheritance across unrelated pages.
+- The root layout's GlobalHeader is the only site header; page shells (SeoPage, DocLayout) must not render their own top bar, and the header holds a neutral placeholder until sign-in status is known so the sign-in pill never flashes.
