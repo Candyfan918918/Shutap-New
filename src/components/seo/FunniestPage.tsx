@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { FazierBadge } from "@/components/site/FazierBadge";
 import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
@@ -225,6 +226,7 @@ export function FunniestPage({
             SHUTAP. Say it funnier.
           </Link>
         </p>
+        <FazierBadge />
       </article>
     </main>
   )
