@@ -9,11 +9,15 @@ export function useCurrentAlias(): {
   alias: Alias | null
   userId: string | null
   refresh: () => Promise<void>
+  /** True once the browser knows whether someone is signed in. Before that,
+   *  the header shows a neutral placeholder instead of guessing "sign in". */
+  ready: boolean
 } {
   // Start empty so the server and browser render the same header; the
   // cached alias paints right after hydration.
   const [alias, setAlias] = useState<Alias | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
+  const [ready, setReady] = useState(false)
 
   const refresh = async () => {
     const { data } = await supabase.auth.getSession()
@@ -25,10 +29,12 @@ export function useCurrentAlias(): {
     if (!uid || anon) {
       setUserId(null)
       setAlias(null)
+      setReady(true)
       try { localStorage.removeItem('shutap_alias') } catch { /* noop */ }
       return
     }
     setUserId(uid)
+    setReady(true)
     try {
       const { getMyAlias } = await import('@/lib/alias.functions')
       const row = await getMyAlias()
@@ -44,7 +50,7 @@ export function useCurrentAlias(): {
     let mounted = true
     try {
       const r = localStorage.getItem('shutap_alias')
-      if (r) setAlias(JSON.parse(r) as Alias)
+      if (r) { setAlias(JSON.parse(r) as Alias); setReady(true) }
     } catch { /* noop */ }
     void refresh()
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
@@ -56,7 +62,7 @@ export function useCurrentAlias(): {
     return () => { mounted = false; sub.subscription.unsubscribe() }
   }, [])
 
-  return { alias, userId, refresh }
+  return { alias, userId, refresh, ready }
 }
 
 export function useIsAdmin(): boolean {

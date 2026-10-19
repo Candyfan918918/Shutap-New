@@ -2,26 +2,14 @@ import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 /**
- * Minimal SSR-rendered shell for content/SEO pages.
+ * Minimal SSR-rendered shell for content/SEO pages. The site-wide header
+ * comes from the root layout; this shell must not add a second one.
  * Blush design surface, Newsreader italic headings via child content.
  */
 export function SeoPage({ children }: { children: ReactNode }) {
-  const navLink = { fontFamily: "'Newsreader',serif" as const, fontStyle: 'italic' as const, fontSize: 14, color: '#443c42', textDecoration: 'none' };
   const footLink = { fontFamily: "'Newsreader',serif" as const, fontStyle: 'italic' as const, fontSize: 13, color: '#443c42', textDecoration: 'none' };
   return (
     <div style={{ minHeight: '100vh', background: 'transparent', color: '#0b080f' }}>
-      <header style={{ borderBottom: '.5px solid rgba(11,8,15,.08)' }}>
-        <div style={{ maxWidth: 780, margin: '0 auto', padding: '14px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-          <Link to="/" style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 15, letterSpacing: '-.01em', color: '#0b080f', textDecoration: 'none' }}>shutap</Link>
-          <nav style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }}>
-            <Link to="/" style={navLink}>Write</Link>
-            <Link to="/guides" style={navLink}>Guides</Link>
-            <Link to="/business" style={navLink}>Enterprise</Link>
-            <Link to="/faq" style={navLink}>FAQ</Link>
-          </nav>
-        </div>
-      </header>
-
       <main style={{ maxWidth: 780, margin: '0 auto', padding: '32px 22px 80px' }}>{children}</main>
 
       <footer style={{ borderTop: '.5px solid rgba(11,8,15,.08)' }}>

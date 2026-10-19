@@ -76,7 +76,7 @@ export function GlobalHeader() {
   const [variant, setVariant] = useState<Variant>(routeVariant)
   const dark = variant === 'dark'
   const navigate = useNavigate()
-  const { alias } = useCurrentAlias()
+  const { alias, userId, ready } = useCurrentAlias()
   const admin = useIsAdmin()
   const [menuOpen, setMenuOpen] = useState(false)
   const areaRef = useRef<HTMLDivElement>(null)
@@ -307,11 +307,18 @@ export function GlobalHeader() {
                   </div>
                 )}
               </>
-            ) : isWelcome ? (
+            ) : isWelcome || !ready || userId ? (
+              // Until we know who is here (and while a signed-in person's
+              // name loads) hold the space with a quiet circle, so the
+              // "sign in" pill never flashes before the avatar appears.
               // On /welcome the user is already inside the join flow —
               // render an inert placeholder so header spacing stays stable
               // and there's no "join → welcome" tautology.
-              <span aria-hidden style={{ width: 72, height: 34, display: 'inline-block' }} />
+              isWelcome ? (
+                <span aria-hidden style={{ width: 72, height: 34, display: 'inline-block' }} />
+              ) : (
+                <span aria-hidden style={{ width: 36, height: 36, borderRadius: 999, border: pillBorder, display: 'inline-block', boxSizing: 'border-box' }} />
+              )
             ) : (
               <button
                 type="button"
