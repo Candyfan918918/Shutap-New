@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo/page-meta'
 // Bit lab: an admin-only bench for the bit engine. Write a bit from any
 // story (or the three samples at once), see every candidate the judge
 // ranked, what the rules threw out and why, and how long each stage took.
@@ -11,7 +12,7 @@ import '@/components/feed/feed.css'
 
 export const Route = createFileRoute('/bit-lab')({
   ssr: false,
-  head: () => ({ meta: [{ title: 'Bit lab — Shutap' }, { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta("Bit lab — Shutap", "Review candidate comedy bits, writing checks and timing in the private bit-engine lab.", "/bit-lab"), { name: 'robots', content: 'noindex' }] }),
   beforeLoad: async () => {
     try {
       if (!(await amIAdmin())) throw notFound()

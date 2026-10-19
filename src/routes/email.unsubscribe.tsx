@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo/page-meta'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { useEffect, useState } from 'react'
@@ -10,9 +11,8 @@ export const Route = createFileRoute('/email/unsubscribe')({
   }),
   head: () => ({
     meta: [
-      { title: 'unsubscribed · shutap' },
+      ...pageMeta("unsubscribed · shutap", "Review your Shutap email unsubscribe result and manage your email preferences.", "/email/unsubscribe"),
       { name: 'robots', content: 'noindex,nofollow' },
-      { name: 'description', content: 'email unsubscribe' },
     ],
   }),
   component: UnsubscribeRoute,

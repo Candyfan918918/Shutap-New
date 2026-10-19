@@ -19,3 +19,5 @@
 - Homepage typography uses shared home.css scale tokens; shared header typography is scoped with a homepage marker to preserve other pages.
 - Focused product search pages reuse ContentPage and link to the existing writer; this preserves one generation flow rather than duplicating its controls or access rules.
 - The shared Words wrapper renders H1 titles statically so hydration and scrolling never hide or replay page headings.
+
+- Content routes own search and social descriptions; use pageMeta for utility pages and keep root metadata free of homepage-specific descriptions, URLs and images to prevent inheritance across unrelated pages.
