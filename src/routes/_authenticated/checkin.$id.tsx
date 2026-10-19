@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo/page-meta'
 // Check-in card route — opened from the floating eye or an email deep link.
 // Authenticated; renders the beat copy + one-tap chips and writes a response.
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
@@ -6,6 +7,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { getCheckin, recordCheckinResponse, snoozeCheckin } from '@/lib/checkins.functions'
 
 export const Route = createFileRoute('/_authenticated/checkin/$id')({
+  head: ({ params }) => ({ meta: [...pageMeta('Check-in — Shutap', 'Read and respond to your private Shutap check-in.', `/checkin/${params.id}`), { name: 'robots', content: 'noindex' }] }),
   component: CheckinCard,
 })
 

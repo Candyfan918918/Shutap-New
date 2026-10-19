@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo/page-meta'
 // Feedback summary — real feedback_events roll-up (loved / friction / questions).
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
@@ -6,7 +7,7 @@ import { getFeedbackSummary, type FeedbackSummary } from '@/lib/feedback-summary
 import { AdminShell } from '@/components/AdminShell'
 
 export const Route = createFileRoute('/_authenticated/admin/feedback')({
-  head: () => ({ meta: [{ title: 'Admin · Feedback — Shutap' }, { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta("Admin · Feedback — Shutap", "Review feedback, questions and reported friction in the private administration area.", "/admin/feedback"), { name: 'robots', content: 'noindex' }] }),
   component: AdminFeedbackPage,
 })
 

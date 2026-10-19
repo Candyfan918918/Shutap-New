@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo/page-meta'
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
@@ -5,7 +6,7 @@ import { adminListEvents } from '@/lib/admin.functions'
 import { AdminShell } from '@/components/AdminShell'
 
 export const Route = createFileRoute('/_authenticated/admin/events')({
-  head: () => ({ meta: [{ title: 'Admin · Events — Shutap' }, { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta("Admin · Events — Shutap", "Filter and review recorded Shutap events in the private administration area.", "/admin/events"), { name: 'robots', content: 'noindex' }] }),
   component: AdminEventsPage,
 })
 

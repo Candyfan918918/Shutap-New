@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo/page-meta'
 // Relate SLA queue — auth-gated under /admin/relate.
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
@@ -9,7 +10,7 @@ import { schedulerHealth, type SchedulerHealth } from '@/lib/scheduler-health.fu
 import { AdminShell } from '@/components/AdminShell'
 
 export const Route = createFileRoute('/_authenticated/admin/relate')({
-  head: () => ({ meta: [{ title: 'Admin · Relate SLA — Shutap' }, { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta("Admin · Relate SLA — Shutap", "Review the relate queue and delivery status in the private administration area.", "/admin/relate"), { name: 'robots', content: 'noindex' }] }),
   component: AdminRelatePage,
 })
 
