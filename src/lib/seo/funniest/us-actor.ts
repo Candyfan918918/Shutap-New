@@ -3,6 +3,7 @@ import type { FunniestEntry } from "../funniest";
 const entry: FunniestEntry = {
   slug: "us-actor",
   category: "US actor",
+  field: "screen-and-stage",
   title: "Who Is the Funniest US Actor? 4 Techniques | Shutap",
   h1: "Who is the funniest US actor?",
   description:

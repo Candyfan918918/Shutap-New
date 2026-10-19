@@ -3,6 +3,7 @@ import type { FunniestEntry } from "../funniest";
 const entry: FunniestEntry = {
   slug: "indian-court-wit",
   category: "Indian court wit",
+  field: "writers-and-thinkers",
   title: "Who Was the Funniest Indian Court Wit? 4 Techniques | Shutap",
   h1: "Who was the funniest Indian court wit?",
   description:
