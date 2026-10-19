@@ -19,6 +19,9 @@ export const Route = createFileRoute('/')({
   headers: () => ({
     'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400',
   }),
+  // Coming back to Write reuses the last reading for 5 minutes instead of
+  // waiting on three server round-trips every click.
+  staleTime: 5 * 60_000,
   loader: async () => {
     const [openRooms, newestRooms, dailyIdea] = await Promise.all([
       countOpenRooms().catch(() => 0),
