@@ -4,4 +4,5 @@
 - [x] Add a focused AI joke generator page and prominent guides link.
 - [x] Verify the new page, search metadata and guides-to-writer navigation.
 - [x] Correct duplicate descriptions and inherited social previews on content pages.
-- [x] Verify rendered page metadata and record completed SEO corrections.
+- [x] Verify rendered page metadata and record completed SEO corrections.- [x] Add the small Fazier launch badge to every site footer.
+- [x] Verify the badge renders small and unwrapped at desktop and phone widths.
