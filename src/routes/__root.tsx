@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ogImageMeta } from "@/lib/seo/meta";
 import {
   Outlet,
   Link,
@@ -88,27 +87,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Shutap — AI Joke Generator for Creators" },
-      {
-        name: "description",
-        content:
-          "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
-      },
       { name: "author", content: "Shutap" },
       { property: "og:site_name", content: "Shutap" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://shutap.com" },
-      { property: "og:title", content: "SHUTAP. Say it funnier." },
-      {
-        property: "og:description",
-        content:
-          "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
-      },
-      ...ogImageMeta(),
-      { name: "twitter:title", content: "SHUTAP. Say it funnier." },
-      {
-        name: "twitter:description",
-        content: "Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page. For TikTok, Reels and the stage.",
-      },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [
       { rel: "preload", as: "font", type: "font/woff2", href: soraBoldWoff2, crossOrigin: "anonymous" },
