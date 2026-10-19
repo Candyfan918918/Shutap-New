@@ -3,6 +3,7 @@ import type { FunniestEntry } from "../funniest";
 const entry: FunniestEntry = {
   slug: "chinese-philosopher",
   category: "Chinese philosopher",
+  field: "writers-and-thinkers",
   title: "Who Was the Funniest Chinese Philosopher? 5 Techniques | Shutap",
   h1: "Who was the funniest Chinese philosopher?",
   description:

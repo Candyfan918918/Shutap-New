@@ -3,6 +3,7 @@ import type { FunniestEntry } from "../funniest";
 const entry: FunniestEntry = {
   slug: "silicon-valley-billionaire",
   category: "Silicon Valley billionaire",
+  field: "business",
   title: "Funniest Silicon Valley Billionaire? 5 Techniques | Shutap",
   h1: "Who is the funniest Silicon Valley billionaire?",
   description:

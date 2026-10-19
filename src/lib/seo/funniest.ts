@@ -39,10 +39,37 @@ export interface FunniestSource {
   url: string;
 }
 
+/** Shelf on the /funniest hub, used for filtering. */
+export type FunniestField =
+  | "politics"
+  | "business"
+  | "screen-and-stage"
+  | "sports"
+  | "science"
+  | "writers-and-thinkers"
+  | "other";
+
+export const FUNNIEST_FIELDS: { id: FunniestField; label: string }[] = [
+  { id: "politics", label: "Politics & public life" },
+  { id: "business", label: "Business" },
+  { id: "screen-and-stage", label: "Screen, stage & music" },
+  { id: "sports", label: "Sports" },
+  { id: "science", label: "Science & space" },
+  { id: "writers-and-thinkers", label: "Writers & thinkers" },
+  { id: "other", label: "Other" },
+];
+
 export interface FunniestEntry {
   slug: string;
   /** Category as people search it, e.g. "US president". */
   category: string;
+  /**
+   * Hub shelf. Pick the closest: politics (presidents, prime ministers, judges,
+   * first ladies), business (CEOs, founders, billionaires), screen-and-stage
+   * (actors, musicians, chefs, anchors), sports, science (incl. astronauts),
+   * writers-and-thinkers (authors, poets, philosophers, monks, court wits).
+   */
+  field?: FunniestField;
   /** <title>. Keep under ~60 characters. */
   title: string;
   h1: string;
@@ -71,6 +98,10 @@ export const FUNNIEST: FunniestEntry[] = Object.values(
 )
   .map((m) => m.default)
   .sort((a, b) => a.published.localeCompare(b.published) || a.slug.localeCompare(b.slug));
+
+export function funniestField(e: FunniestEntry): FunniestField {
+  return e.field ?? "other";
+}
 
 export function getFunniest(slug: string): FunniestEntry | undefined {
   return FUNNIEST.find((e) => e.slug === slug);

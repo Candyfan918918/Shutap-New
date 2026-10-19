@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ogImageMeta } from "@/lib/seo/meta";
 import { ContentPage } from "@/components/seo/ContentPage";
+import { FunniestBrowser } from "@/components/seo/FunniestBrowser";
 import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 import { FUNNIEST, FUNNIEST_HUB, funniestPath } from "@/lib/seo/funniest";
@@ -52,16 +53,6 @@ export const Route = createFileRoute("/funniest/")({
       h1="The funniest people in the world, and what to take from them"
       capsule={CAPSULE}
       sections={[]}
-      linkGroups={[
-        {
-          heading: "The series",
-          items: [...FUNNIEST].reverse().map((e) => ({
-            href: funniestPath(e.slug),
-            label: e.h1,
-            blurb: e.blurb,
-          })),
-        },
-      ]}
       cta={{ label: "Try a technique on your own story", href: "/" }}
       others={[
         { href: "/guides", label: "Guides" },
@@ -69,6 +60,8 @@ export const Route = createFileRoute("/funniest/")({
         { href: "/how-it-works", label: "How it works" },
         { href: "/about", label: "About" },
       ]}
-    />
+    >
+      <FunniestBrowser entries={FUNNIEST} />
+    </ContentPage>
   ),
 });

@@ -3,6 +3,7 @@ import type { FunniestEntry } from "../funniest";
 const entry: FunniestEntry = {
   slug: "us-president",
   category: "US president",
+  field: "politics",
   title: "Who Was the Funniest US President? 4 Techniques | Shutap",
   h1: "Who was the funniest US president?",
   description:

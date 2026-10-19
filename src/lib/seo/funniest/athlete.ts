@@ -3,6 +3,7 @@ import type { FunniestEntry } from "../funniest";
 const entry: FunniestEntry = {
   slug: "athlete",
   category: "athlete",
+  field: "sports",
   title: "Who Is the Funniest Athlete? 4 Techniques | Shutap",
   h1: "Who is the funniest athlete?",
   description:

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
@@ -16,6 +17,7 @@ export function ContentPage({
   nosnippetCapsule,
   cta,
   linkGroups,
+  children,
 }: {
   breadcrumbs?: Crumb[];
   h1: string;
@@ -25,6 +27,8 @@ export function ContentPage({
   nosnippetCapsule?: boolean;
   cta?: { label: string; href: string };
   linkGroups?: LinkGroup[];
+  /** Custom content rendered after sections, before link groups. */
+  children?: ReactNode;
 }) {
   return (
     <main
@@ -94,6 +98,8 @@ export function ContentPage({
             </p>
           </section>
         ))}
+
+        {children}
 
         {linkGroups?.map((g) => (
           <section key={g.heading} style={{ marginBottom: 36 }}>
