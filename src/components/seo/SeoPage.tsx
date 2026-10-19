@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { FazierBadge } from "@/components/site/FazierBadge";
 import type { ReactNode } from "react";
 
 /**
@@ -32,6 +33,7 @@ export function SeoPage({ children }: { children: ReactNode }) {
             <Link to="/business" style={footLink}>Enterprise</Link>
             <Link to="/contact" style={footLink}>Contact</Link>
           </div>
+          <FazierBadge />
         </div>
       </footer>
     </div>

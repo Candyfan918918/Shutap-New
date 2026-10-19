@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { FazierBadge } from "@/components/site/FazierBadge";
 import { Link } from "@tanstack/react-router";
 import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
@@ -204,6 +205,7 @@ export function ContentPage({
             SHUTAP. Say it funnier.
           </Link>
         </p>
+        <FazierBadge />
       </article>
     </main>
   );
