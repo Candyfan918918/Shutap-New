@@ -24,7 +24,7 @@ export function FazierBadge({
       onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.72')}
     >
       <img
-        src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light"
+        src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=neutral"
         width={64}
         alt="Fazier badge"
         loading="lazy"
