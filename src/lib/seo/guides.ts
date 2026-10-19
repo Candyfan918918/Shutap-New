@@ -36,7 +36,7 @@ const CTA = { label: "Write your story, get the bit", href: "/" };
 const BIZ_CTA = { label: "Request pricing and solutions", href: "/business" };
 const PUBLISHED = "2026-10-17";
 
-export const GUIDES: Guide[] = [
+const CORE_GUIDES: Guide[] = [
   // ---- tools ----------------------------------------------------------
   {
     slug: "storytime-script-generator",
@@ -787,6 +787,20 @@ export const GUIDES: Guide[] = [
     cta: CTA,
     published: PUBLISHED,
   },
+];
+
+// Daily guides: one file per guide in ./guides-daily/<slug>.ts, each with a
+// default export of type Guide. Added by the daily guide agent as one pull
+// request per guide, so parallel PRs never edit the same lines.
+const DAILY_GUIDES: Guide[] = Object.values(
+  import.meta.glob<{ default: Guide }>("./guides-daily/*.ts", { eager: true }),
+)
+  .map((m) => m.default)
+  .sort((a, b) => a.published.localeCompare(b.published));
+
+export const GUIDES: Guide[] = [
+  ...CORE_GUIDES,
+  ...DAILY_GUIDES.filter((g) => !CORE_GUIDES.some((c) => c.slug === g.slug)),
 ];
 
 export function getGuide(slug: string): Guide | undefined {
