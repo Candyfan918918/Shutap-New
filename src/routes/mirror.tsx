@@ -15,6 +15,9 @@ export const Route = createFileRoute('/mirror')({
       { property: 'og:title', content: TITLE },
       { property: 'og:description', content: DESCRIPTION },
       { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
+      { name: 'twitter:title', content: TITLE },
+      { name: 'twitter:description', content: DESCRIPTION },
       { property: 'og:url', content: `${SITE_URL}/mirror` },
       // Private, per-user surface: intentionally kept out of the index.
       { name: 'robots', content: 'noindex' },

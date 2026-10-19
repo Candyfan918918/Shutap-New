@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo/page-meta'
 import { createFileRoute } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { useEffect, useState } from 'react'
@@ -10,9 +11,8 @@ export const Route = createFileRoute('/email/preferences')({
   }),
   head: () => ({
     meta: [
-      { title: 'email preferences · shutap' },
+      ...pageMeta("email preferences · shutap", "Choose which account reminders, activity emails and room roundups Shutap sends you.", "/email/preferences"),
       { name: 'robots', content: 'noindex,nofollow' },
-      { name: 'description', content: 'manage your shutap email preferences' },
     ],
   }),
   component: PreferencesRoute,

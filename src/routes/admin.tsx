@@ -1,10 +1,11 @@
+import { pageMeta } from '@/lib/seo/page-meta'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { AdminAnalyticsPage } from '@/pages/AdminAnalytics'
 import { amIAdmin } from '@/lib/admin.functions'
 
 export const Route = createFileRoute('/admin')({
   ssr: false,
-  head: () => ({ meta: [{ title: 'Admin · Analytics — Shutap' }, { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta("Admin · Analytics — Shutap", "Review Shutap activity and analytics in the private administration area.", "/admin"), { name: 'robots', content: 'noindex' }] }),
   beforeLoad: async () => {
     try {
       const ok = await amIAdmin()

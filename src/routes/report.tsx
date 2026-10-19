@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SeoPage } from "@/components/seo/SeoPage";
@@ -8,7 +9,7 @@ import { SeoPage } from "@/components/seo/SeoPage";
 // they email hello@shutap.com; no DB writes here.
 export const Route = createFileRoute("/report")({
   head: () => {
-    const url = "/report";
+    const url = `${SITE_URL}/report`;
     const title = "Report a post — Shutap";
     const description =
       "Report a Shutap post or comment for privacy, defamation or safety. Real names and identifying details are removed fast.";
@@ -20,6 +21,10 @@ export const Route = createFileRoute("/report")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:url", content: url },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
       ],
       links: [{ rel: "canonical", href: url }],
     };

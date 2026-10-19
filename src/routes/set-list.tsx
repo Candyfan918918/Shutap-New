@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo/page-meta'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
@@ -10,7 +11,7 @@ import '@/components/feed/feed.css'
 
 export const Route = createFileRoute('/set-list')({
   ssr: false,
-  head: () => ({ meta: [{ title: 'Your set list — Shutap' }, { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta("Your set list — Shutap", "Revisit your saved comedy bits and their versions, or start writing a new story.", "/set-list"), { name: 'robots', content: 'noindex' }] }),
   component: SetListPage,
 })
 

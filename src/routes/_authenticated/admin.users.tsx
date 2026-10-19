@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo/page-meta'
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
@@ -5,7 +6,7 @@ import { adminListUsers } from '@/lib/admin.functions'
 import { AdminShell } from '@/components/AdminShell'
 
 export const Route = createFileRoute('/_authenticated/admin/users')({
-  head: () => ({ meta: [{ title: 'Admin · Users — Shutap' }, { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta("Admin · Users — Shutap", "Review Shutap accounts in the private user administration area.", "/admin/users"), { name: 'robots', content: 'noindex' }] }),
   component: AdminUsersPage,
 })
 

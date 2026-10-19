@@ -1,6 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { pageMeta } from '@/lib/seo/page-meta';
 
 type ConsentDetails = {
   client?: { name?: string; client_uri?: string; logo_uri?: string };
@@ -11,6 +12,7 @@ type ConsentDetails = {
 
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   ssr: false,
+  head: () => ({ meta: [...pageMeta('Authorize an app — Shutap', 'Review an app’s request to connect to your Shutap account.', '/.lovable/oauth/consent'), { name: 'robots', content: 'noindex' }] }),
   validateSearch: (s: Record<string, unknown>) => ({
     authorization_id: typeof s.authorization_id === "string" ? s.authorization_id : "",
   }),
