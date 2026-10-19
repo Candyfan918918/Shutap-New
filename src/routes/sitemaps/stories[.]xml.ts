@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { renderUrlset, type SitemapEntry } from "@/lib/seo/sitemap";
+import { renderUrlset, type SitemapEntry, SITEMAP_CACHE_CONTROL } from "@/lib/seo/sitemap";
 import { listIndexableStoriesForSitemap } from "@/lib/seo/story.server";
 import { INDEX_USER_CONTENT } from "@/lib/seo/flags";
 
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/sitemaps/stories.xml")({
         return new Response(renderUrlset(entries), {
           headers: {
             "Content-Type": "application/xml",
-            "Cache-Control": "public, max-age=900",
+            "Cache-Control": SITEMAP_CACHE_CONTROL,
           },
         });
       },

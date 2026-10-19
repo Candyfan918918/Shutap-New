@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { PROFILES, isProfileIndexable } from "@/lib/seo/profiles";
-import { renderUrlset, type SitemapEntry } from "@/lib/seo/sitemap";
+import { renderUrlset, type SitemapEntry, SITEMAP_CACHE_CONTROL } from "@/lib/seo/sitemap";
 
 export const Route = createFileRoute("/sitemaps/profiles.xml")({
   server: {
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/sitemaps/profiles.xml")({
         return new Response(renderUrlset(entries), {
           headers: {
             "Content-Type": "application/xml",
-            "Cache-Control": "public, max-age=3600",
+            "Cache-Control": SITEMAP_CACHE_CONTROL,
           },
         });
       },

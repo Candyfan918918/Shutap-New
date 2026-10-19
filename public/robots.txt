@@ -41,4 +41,6 @@ Disallow: /bit-lab
 Disallow: /lovable/
 Disallow: /report
 
+Sitemap: https://shutap.com/sitemap-index.xml
+Sitemap: https://shutap.com/sitemaps/site.xml
 Sitemap: https://shutap.com/sitemap.xml

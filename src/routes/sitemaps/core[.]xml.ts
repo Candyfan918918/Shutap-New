@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { renderUrlset, todayPacific, type SitemapEntry } from "@/lib/seo/sitemap";
+import { renderUrlset, todayPacific, type SitemapEntry, SITEMAP_CACHE_CONTROL } from "@/lib/seo/sitemap";
 import { GUIDES, guidePath } from "@/lib/seo/guides";
 import { FUNNIEST, FUNNIEST_HUB, funniestPath } from "@/lib/seo/funniest";
 
@@ -63,7 +63,7 @@ export const Route = createFileRoute("/sitemaps/core.xml")({
         return new Response(renderUrlset(getCoreEntries()), {
           headers: {
             "Content-Type": "application/xml",
-            "Cache-Control": "public, max-age=3600",
+            "Cache-Control": SITEMAP_CACHE_CONTROL,
           },
         });
       },
