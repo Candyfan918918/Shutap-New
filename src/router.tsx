@@ -19,7 +19,10 @@ export const getRouter = () => {
     routeTree,
     context: { queryClient },
     scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
+    // Start loading a page as soon as a link is hovered or touched, and keep
+    // that early load for 30s so the click itself is instant.
+    defaultPreload: "intent",
+    defaultPreloadStaleTime: 30_000,
   });
 
   // Only expose on the client — the server creates a router per request and
