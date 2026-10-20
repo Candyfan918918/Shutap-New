@@ -1,9 +1,9 @@
 # Shutap auth emails (Lovable Cloud → Emails → Auth emails)
 
 Six designs, one layout, generated from the brand tokens in `src/styles/tokens.css`:
-canvas `#fbf6f7`, card `#ffffff`, ink `#17131a` / `#0b080f`, accent `#e7548a` (wordmark "ap"),
-eyebrow `#c1216b`, Sora + Newsreader italic. Every email ends with the founder sign-off
-(Candy Fan · Founder, Shutap · hello@shutap.com) and the footer line "SHUTAP. Say it funnier."
+canvas `#fbf6f7`, card `#ffffff`, ink `#17131a` / `#0b080f`, accent `#c1216b` (logo "ap"),
+eyebrow `#c1216b`, Sora + Newsreader italic. Every email opens with the shutap logo + "SHUTAP. Say it funnier." and ends with the founder sign-off
+(Candy Fan · Founder, Shutap · hello@shutap.com)
 
 | file | Lovable template | subject |
 |---|---|---|
@@ -29,5 +29,5 @@ The subject is the first-line HTML comment in each file.
 
 1. In Lovable: Cloud → Emails → Auth emails → **Customize auth emails** (generates the six React Email files).
 2. Port each design into its generated file: same structure, inline styles, swap the placeholders for the file's existing props. Don't touch the props or callback URLs.
-3. Logo is served from `https://shutap.com/email/eyes-a0a440d8.png` (`public/email/`) — publish once so it resolves.
+3. Logo is served from `https://shutap.com/email/shutap-wordmark.png` (`public/email/`) — publish once so it resolves.
 4. TanStack Start app → publish to apply.
