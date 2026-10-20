@@ -37,7 +37,9 @@ export type GuideTopic =
   | "growing-views"
   | "watch-time"
   | "comedy-creators"
-  | "using-shutap";
+  | "using-shutap"
+  | "shutap-vs-other-tools"
+  | "ai-writing-partner";
 
 export interface GuideTopicInfo {
   id: GuideTopic;
@@ -147,6 +149,20 @@ export const GUIDE_TOPICS: GuideTopicInfo[] = [
     title: "How to Use Shutap: Workflows for Creators & Comics | Shutap",
     description: "How to use Shutap as a storytime writer, a stand-up drafting partner, a skit planner, a caption writer and more, step by step.",
     intro: "Practical workflows: how to use Shutap as a storytime script writer, a first-draft partner for stand-up, a skit planner, a punch-up pass, and more.",
+  },
+  {
+    id: "shutap-vs-other-tools",
+    label: "Shutap vs other tools",
+    title: "Shutap vs ChatGPT, Claude, Gemini & Joke Tools | Shutap",
+    description: "How Shutap compares with ChatGPT, Claude, Gemini, Punchlines.ai, Witscript and other comedy script writers: what each is built for and when to use which.",
+    intro: "Honest comparisons with general AI assistants and other comedy tools: what each one is built for, where it is stronger, and when Shutap is the better fit.",
+  },
+  {
+    id: "ai-writing-partner",
+    label: "AI as a writing partner",
+    title: "Brainstorm Comedy With AI Without Losing Your Voice | Shutap",
+    description: "How to use AI to brainstorm and punch up comedy while the jokes stay yours: drafts to push against, not a ghostwriter.",
+    intro: "Using AI the way writers use a room: to throw out options, find the angle you missed and test a tag, while you decide what stays. The voice on stage or on camera has to be yours.",
   },
 ];
 
@@ -947,6 +963,12 @@ const ARTICLES: Guide[] = Object.values(
 
 // Topics for the hand-written guides (kept here so their objects stay untouched).
 const BASE_TOPICS: Record<string, GuideTopic> = {
+  "shutap-vs-punchlines-ai": "shutap-vs-other-tools",
+  "ai-joke-generators-compared": "shutap-vs-other-tools",
+  "shutap-vs-witscript": "shutap-vs-other-tools",
+  "shutap-vs-chatgpt-for-jokes": "shutap-vs-other-tools",
+  "shutap-vs-claude-for-jokes": "shutap-vs-other-tools",
+  "how-shutap-is-built": "using-shutap",
   "how-to-turn-a-story-into-a-bit": "storytime-and-pov",
   "how-long-should-a-tiktok-bit-be": "storytime-and-pov",
   "how-to-write-comedy-tags": "writing-jokes",
