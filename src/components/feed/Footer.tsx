@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { FazierBadge } from '@/components/site/FazierBadge'
+import { LaunchBadges } from '@/components/site/LaunchBadges'
 import './feed.css'
 
 const LINKS: Array<[string, string]> = [
@@ -35,7 +35,7 @@ export function Footer() {
         <span className="fd-faint" data-nosnippet>
           18+ · pseudonymous · jokes at the situation, never a person · not therapy or advice · emergency: call or text 988 (US)
         </span>
-        <FazierBadge align="center" />
+        <LaunchBadges align="center" />
       </div>
     </footer>
   )
