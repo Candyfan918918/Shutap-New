@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Find your type",
-      body: "Most comedians are known for one register and borrow from two others. To find yours, write the same small situation five ways: observational, dry, sarcastic, self-deprecating and absurd. Read them out loud. The one you can say without forcing it is your home base. Shutap, the AI joke generator for creators, lets you pick a voice such as deadpan, dry, storyteller or roast and write the same story in each, which is a fast way to run that test.",
+      body: "Most comedians are known for one register and borrow from two others. To find yours, write the same small situation five ways: observational, dry, sarcastic, self-deprecating and absurd. Read them out loud. The one you can say without forcing it is your home base. Shutap, the AI joke generator for creators, can give you a draft of the same story in different voices, such as deadpan, dry, storyteller or roast. Treat them as options to react to: keep the one that sounds like you, then rewrite it in your own words.",
     },
   ],
   faq: [
