@@ -255,13 +255,13 @@ changed your mind? resume anytime: ${v.resume_url ?? 'https://shutap.com/subscri
     emailClass: 'transactional',
     subject: (v) => `your Shutap+ trial ends ${v.trial_end ?? 'soon'}`,
     preview: () => 'keep it or cancel. no surprises.',
-    cta: 'open the mirror',
+    cta: 'open shutap',
     htmlDesign: mirrorTrialEndingHtml,
     buildBodyText: (v) => `${g(v)}
 
 heads up before anything is charged: your free trial ends ${v.trial_end ?? 'soon'}. to keep Shutap+, do nothing. your ${v.plan_interval ?? ''} plan (${v.amount ?? ''} + tax where it applies) starts then. don't want it? cancel from your account before then and you won't be charged.
 
-open the mirror: ${v.deep_link ?? 'https://shutap.com/mirror'}
+open shutap: ${v.deep_link ?? 'https://shutap.com'}
 manage or cancel: ${v.manage_url ?? 'https://shutap.com/profile'}`,
   },
 
