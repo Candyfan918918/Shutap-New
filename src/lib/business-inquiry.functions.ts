@@ -54,5 +54,18 @@ export const submitBusinessInquiry = createServerFn({ method: 'POST' })
       console.error('business inquiry email failed', res.error)
       return { ok: false as const }
     }
+    // Confirmation to the requester, from hello@shutap.com. Best-effort.
+    try {
+      const { sendEmail } = await import('@/lib/email/send.server')
+      const first = data.name.split(/\s+/)[0] || data.name
+      await sendEmail('hello', 'enterprise_received', {
+        first_name: esc(first),
+        first_name_plain: first,
+        company: esc(data.company),
+        company_plain: data.company,
+      }, data.email)
+    } catch (e) {
+      console.warn('enterprise confirmation email failed', e)
+    }
     return { ok: true as const }
   })

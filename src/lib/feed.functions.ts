@@ -227,13 +227,19 @@ export const toggleLike = createServerFn({ method: 'POST' })
       await db.from('room_relates').delete().eq('room_id', data.room_id).eq('user_id', uid)
     } else {
       await db.from('room_relates').insert({ room_id: data.room_id, user_id: uid })
-      const author = await roomAuthor(db, data.room_id)
-      if (author) await notify(db, author, uid, 'like', data.room_id)
     }
     const { count } = await db
       .from('room_relates')
       .select('room_id', { count: 'exact', head: true })
       .eq('room_id', data.room_id)
+    if (!had) {
+      const author = await roomAuthor(db, data.room_id)
+      if (author) {
+        await notify(db, author, uid, 'like', data.room_id)
+        const { emailOnLike } = await import('./email/events.server')
+        await emailOnLike(db, { authorId: author, actorId: uid, roomId: data.room_id, likes: count ?? 0 })
+      }
+    }
     return { liked: !had, likes: count ?? 0 }
   })
 
@@ -274,7 +280,11 @@ export const addComment = createServerFn({ method: 'POST' })
       .single()
     if (error) throw new Error(error.message)
     const author = await roomAuthor(db, data.room_id)
-    if (author) await notify(db, author, uid, 'comment', data.room_id)
+    if (author) {
+      await notify(db, author, uid, 'comment', data.room_id)
+      const { emailOnComment } = await import('./email/events.server')
+      await emailOnComment(db, { authorId: author, actorId: uid, roomId: data.room_id, text: clean })
+    }
     const { data: a } = await db.from('aliases').select('display_name, emoji').eq('user_id', uid).maybeSingle()
     const name = (a?.display_name as string) ?? 'you'
     const comment: FeedComment = {
@@ -410,6 +420,8 @@ export const toggleFollow = createServerFn({ method: 'POST' })
     else {
       await db.from('follows').insert({ follower_id: uid, followee_id: a.user_id })
       await notify(db, a.user_id, uid, 'follow', null)
+      const { emailOnFollow } = await import('./email/events.server')
+      await emailOnFollow(db, { userId: a.user_id, actorId: uid })
     }
     const { count } = await db
       .from('follows')

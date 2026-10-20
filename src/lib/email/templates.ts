@@ -16,6 +16,8 @@ import hallUpdatesHtml from './designs/hall-updates.html?raw'
 import mirrorReceiptHtml from './designs/mirror-receipt.html?raw'
 import mirrorCancelledHtml from './designs/mirror-cancelled.html?raw'
 import mirrorTrialEndingHtml from './designs/mirror-trial-ending.html?raw'
+import newFollowerHtml from './designs/new-follower.html?raw'
+import enterpriseReceivedHtml from './designs/enterprise-received.html?raw'
 
 import type { EmailClass, IdentityId } from './identities'
 
@@ -38,6 +40,8 @@ export type TemplateId =
   | 'mirror_receipt'
   | 'mirror_cancelled'
   | 'mirror_trial_ending'
+  | 'new_follower'
+  | 'enterprise_received'
 
 export type TemplateVars = {
   alias?: string
@@ -278,5 +282,39 @@ manage or cancel: ${v.manage_url ?? 'https://shutap.com/profile'}`,
 the posts people liked most in the rooms this week.
 
 open the rooms: ${v.cta_url ?? v.deep_link ?? 'https://shutap.com/rooms?tab=new'}`,
+  },
+
+  new_follower: {
+    id: 'new_follower',
+    identity: 'hello',
+    emailClass: 'engagement',
+    subject: (v) => `${v.follower_plain || 'someone'} followed you on shutap`,
+    preview: () => 'your next bit lands in their feed.',
+    cta: 'write a new bit',
+    htmlDesign: newFollowerHtml,
+    buildBodyText: (v) => `${g(v)}
+
+${v.follower_plain || 'someone'} just followed you. your next bit lands in their feed.
+
+write a new bit: ${v.cta_url ?? 'https://shutap.com'}`,
+  },
+
+  enterprise_received: {
+    id: 'enterprise_received',
+    identity: 'hello',
+    emailClass: 'transactional',
+    subject: () => 'got your Shutap Enterprise request',
+    preview: () => 'a reply is coming from hello@shutap.com.',
+    cta: 'try shutap',
+    htmlDesign: enterpriseReceivedHtml,
+    buildBodyText: (v) => `hi ${v.first_name_plain || 'there'},
+
+thanks for asking about Shutap Enterprise for ${v.company_plain || 'your team'}. I read every request myself and will reply from hello@shutap.com. reply to this email to add anything.
+
+until then, try it on your own material: https://shutap.com
+
+talk soon,
+Candy Fan
+Founder, Shutap`,
   },
 }

@@ -33,7 +33,7 @@ export type SendOpts = {
 }
 
 // Community templates — engagement class, suppressed by notif_community_opt_out.
-const COMMUNITY_TEMPLATES = new Set<TemplateId>(['new_reply', 'milestone'])
+const COMMUNITY_TEMPLATES = new Set<TemplateId>(['new_reply', 'milestone', 'new_follower'])
 // Digest / nontransactional templates — suppressed by notif_digest_opt_out.
 const DIGEST_TEMPLATES = new Set<TemplateId>([
   'digest',

@@ -25,7 +25,9 @@ const SPILL_FOLLOWUP_DAY1_LINE =
   `a day ago you let it out, {{first_alias}}. that took something. while you were away, the room showed up for you.`
 
 const PLACEHOLDER_RE = /\{\{\{?(\w+)\}?\}\}/g
-const TR_RE = /<tr\b[^>]*>[\s\S]*?<\/tr>/gi
+// Innermost rows only: a row that contains no nested <tr>. Matching an outer
+// row would cut from its start to the first inner </tr> and break the layout.
+const TR_RE = /<tr\b[^>]*>(?:(?!<tr\b)[\s\S])*?<\/tr>/gi
 
 function firstAlias(alias?: string): string {
   if (!alias) return 'you'
