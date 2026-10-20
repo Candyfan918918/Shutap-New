@@ -3,7 +3,23 @@ import { LaunchBadges } from "@/components/site/LaunchBadges";
 import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
-import type { FunniestEntry } from '@/lib/seo/funniest'
+import type { FunniestEntry, FunniestSource } from '@/lib/seo/funniest'
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+/** "2012" | "May 2012" | "May 1, 2012" from YYYY[-MM[-DD]], no timezone math. */
+export function fmtDate(d: string): string {
+  const [y, m, day] = d.split('-')
+  if (!m) return y
+  const month = MONTHS[Number(m) - 1] ?? m
+  return day ? `${month} ${Number(day)}, ${y}` : `${month} ${y}`
+}
+
+function sourceDate(s: FunniestSource): string {
+  if (s.date) return fmtDate(s.date)
+  if (s.accessed) return `accessed ${fmtDate(s.accessed)}`
+  return ''
+}
 
 const INK = '#0b080f'
 const MUTED = '#443c42'
@@ -42,6 +58,8 @@ export function FunniestPage({
   breadcrumbs: Crumb[]
   others: { href: string; label: string }[]
 }) {
+  const updated = entry.updated ?? entry.published
+  const basis = entry.sources.filter((s) => s.kind === 'ranking' || s.kind === 'profile').slice(0, 3)
   return (
     <main
       style={{
@@ -71,19 +89,44 @@ export function FunniestPage({
           {entry.h1}
         </Words>
 
-        <p
+        <div
           style={{
             ...CARD,
-            fontFamily: "'Newsreader', Georgia, serif",
-            fontSize: 'clamp(19px, 2.4vw, 23px)',
-            lineHeight: 1.55,
             padding: '24px 26px',
-            margin: '0 0 48px',
+            margin: '0 0 20px',
             boxShadow: '0 12px 30px -24px rgba(20,16,22,.3)',
           }}
         >
-          {entry.capsule}
-        </p>
+          <p
+            style={{
+              fontFamily: "'Newsreader', Georgia, serif",
+              fontSize: 'clamp(20px, 2.6vw, 24px)',
+              lineHeight: 1.5,
+              margin: 0,
+            }}
+          >
+            {entry.answer}
+          </p>
+          <p style={{ fontSize: 14, color: MUTED, margin: '14px 0 0' }}>
+            Updated <time dateTime={updated}>{fmtDate(updated)}</time>
+            {basis.length > 0 && (
+              <>
+                {' · '}Based on{' '}
+                {basis.map((s, i) => (
+                  <span key={s.url}>
+                    {i > 0 ? (i === basis.length - 1 ? ' and ' : ', ') : ''}
+                    <a href={s.url} rel="noopener" target="_blank" style={{ color: MUTED }}>
+                      {s.publisher}
+                    </a>
+                    {s.date ? ` (${fmtDate(s.date)})` : ''}
+                  </span>
+                ))}
+              </>
+            )}
+          </p>
+        </div>
+
+        <p style={{ fontSize: 17, margin: '0 0 48px' }}>{entry.capsule}</p>
 
         <section style={{ marginBottom: 40 }}>
           <h2 style={h2Style}>The pick: {entry.pick.name}</h2>
@@ -152,6 +195,20 @@ export function FunniestPage({
           </section>
         )}
 
+        {entry.faq.length > 0 && (
+          <section style={{ marginBottom: 40 }}>
+            <h2 style={h2Style}>Questions people ask</h2>
+            <dl style={{ margin: 0, display: 'grid', gap: 18 }}>
+              {entry.faq.map((f) => (
+                <div key={f.q}>
+                  <dt style={{ fontSize: 17, fontWeight: 700, margin: '0 0 4px' }}>{f.q}</dt>
+                  <dd style={{ fontSize: 16, margin: 0 }}>{f.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+
         <p style={{ margin: '8px 0 36px' }}>
           <Link
             to="/"
@@ -175,6 +232,10 @@ export function FunniestPage({
           <ul style={{ margin: 0, paddingLeft: 20, fontSize: 15, display: 'grid', gap: 6 }}>
             {entry.sources.map((s) => (
               <li key={s.url}>
+                <span style={{ color: MUTED }}>
+                  {s.publisher}
+                  {sourceDate(s) ? `, ${sourceDate(s)}` : ''}:{' '}
+                </span>
                 <a href={s.url} rel="noopener" target="_blank" style={{ color: INK }}>
                   {s.label}
                 </a>

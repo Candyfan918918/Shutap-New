@@ -8,8 +8,10 @@ const entry: FunniestEntry = {
   h1: "Who was the funniest Indian court wit?",
   description:
     "Birbal, Akbar's adviser, is the Indian court wit most often named the funniest, with Tenali Raman the usual runner-up. What made the stories funny, and four techniques creators can use.",
+  answer:
+    "The funniest Indian court wit was Birbal, according to Encyclopaedia Britannica's biography of the Mughal adviser (2026), because the folk tales about him turn Emperor Akbar's own logic into a physical demonstration until it collapses, without ever insulting the king.",
   capsule:
-    "Birbal, the 16th-century adviser to the Mughal emperor Akbar, is the Indian court wit most often named the funniest. Britannica describes him as a charismatic wit whose friendship with Akbar became the basis for humorous stories that endure in Indian folklore, and Amar Chitra Katha calls him the wittiest minister at Akbar's court. Tenali Raman of Vijayanagara is the usual runner-up; Amar Chitra Katha calls him \"the Birbal of the south.\" Both men were real, but most of the famous stories about them are folklore. In those stories the wit rarely argues with the king. He takes the king's own logic and acts it out until it falls apart.",
+    "There is no formal ranking of Indian court wits, so this rests on reputation. Britannica describes Birbal, the 16th-century adviser to the Mughal emperor Akbar, as a charismatic wit whose friendship with Akbar became the basis for humorous stories that endure in Indian folklore, and Amar Chitra Katha calls him the wittiest minister at Akbar's court. Tenali Raman of Vijayanagara is the usual runner-up; Amar Chitra Katha notes he is sometimes called \"the Birbal of the south.\" Both men were real, but most of the famous stories about them are folklore.",
   blurb: "Birbal, Tenali Raman, and the trick of acting out the boss's bad logic.",
   pick: {
     name: "Birbal",
@@ -20,7 +22,7 @@ const entry: FunniestEntry = {
     {
       name: "Tenali Raman (Tenali Ramakrishna)",
       role: "Telugu poet at the court of Krishnadevaraya of Vijayanagara, early 16th century",
-      why: "Amar Chitra Katha calls him the beloved jester of Krishnadevaraya's court and \"the Birbal of the south,\" and David Shulman's study for Princeton University Press treats his folk tales as part of South India's comic tradition.",
+      why: "Amar Chitra Katha calls him the beloved jester of Krishnadevaraya's court and notes he is sometimes called \"the Birbal of the south,\" and David Shulman's study for Princeton University Press treats his folk tales as part of South India's comic tradition.",
     },
     {
       name: "Gopal Bhar (Gopal Bhand)",
@@ -84,54 +86,113 @@ const entry: FunniestEntry = {
     {
       label: "Encyclopaedia Britannica: Birbal",
       url: "https://www.britannica.com/biography/Birbal",
+      publisher: "Encyclopaedia Britannica",
+      date: "2026-01-28",
+      kind: "profile",
     },
     {
       label: "Amar Chitra Katha: Tales of Birbal and Other Stories (Birbal, Tenali Raman, Gopal)",
       url: "https://www.amarchitrakatha.com/?p=4988",
+      publisher: "Amar Chitra Katha",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Amar Chitra Katha: Raman the Matchless Wit",
       url: "https://shop.amarchitrakatha.com/products/raman-the-matchless-wit",
+      publisher: "Amar Chitra Katha",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Amar Chitra Katha: Tales of Humour (Tenali Raman, Birbal, Gopal the Jester)",
       url: "https://us.amarchitrakatha.com/products/tales-of-humour",
+      publisher: "Amar Chitra Katha",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Cal Poly Pomona Ahimsa Center lesson: Akbar and Birbal",
       url: "https://cpp.edu/ahimsacenter/inch/docs/akbar.pdf",
+      publisher: "Cal Poly Pomona Ahimsa Center",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "USC Digital Folklore Archives: Akbar and Birbal, the pond and the candle",
       url: "https://folklore.usc.edu/?p=16870",
+      publisher: "USC Digital Folklore Archives",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "USC Digital Folklore Archives: Akbar and Birbal, the small line",
       url: "https://folklore.usc.edu/?p=73593",
+      publisher: "USC Digital Folklore Archives",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "NCERT: Poorvi, English textbook for Grade 8 (contents, \"The Wit that Won Hearts\")",
       url: "https://www.ncert.nic.in/textbook/pdf/hepr1ps.pdf",
+      publisher: "NCERT",
+      date: "2025-05",
+      kind: "reference",
     },
     {
       label: "eSaral: summary of \"The Wit that Won Hearts\" (NCERT Class 8)",
       url: "https://www.esaral.com/the-wit-that-won-the-hearts-summary-class-8-full-chapter-explanation-with-word-meanings",
+      publisher: "eSaral",
+      date: "2026-05-28",
+      kind: "reference",
     },
     {
       label: "Princeton University Press: The King and the Clown in South Indian Myth and Poetry (David Shulman)",
       url: "https://press.princeton.edu/books/hardcover/9780691633688/the-king-and-the-clown-in-south-indian-myth-and-poetry",
+      publisher: "Princeton University Press",
+      date: "2016-04-19",
+      kind: "profile",
     },
     {
       label: "Frances Pritchett: Raja Birbal, portrait and note on the Akbar-Birbal jokes",
       url: "https://franpritchett.com/00routesdata/1500_1599/akbar/birbal/birbal.html",
+      publisher: "Frances Pritchett",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Banglapedia: Gopal Bhand",
       url: "https://en.banglapedia.org/index.php/Gopal_Bhand",
+      publisher: "Banglapedia",
+      date: "2021-06-18",
+      kind: "profile",
+    },
+  ],
+  faq: [
+    {
+      q: "Who was the funniest Indian court wit?",
+      a: "Birbal, adviser to the Mughal emperor Akbar, who lived from 1528 to 1586. Encyclopaedia Britannica credits him with a reputation as a charismatic wit, and Amar Chitra Katha calls him the wittiest minister at Akbar's court. No formal ranking exists, so this is reputation, not a vote.",
+    },
+    {
+      q: "Was Birbal really a jester?",
+      a: "Probably not in the way the stories suggest. Frances Pritchett writes that there seems to be \"no evidence that the real Birbal was a wit or jester at all.\" The historical Birbal was a poet, soldier and adviser, and the jokes are folklore attached to his name.",
+    },
+    {
+      q: "Who is called the Birbal of the south?",
+      a: "Tenali Raman, also known as Tenali Ramakrishna, a Telugu poet at the court of Krishnadevaraya of Vijayanagara in the early 16th century. Amar Chitra Katha notes he is sometimes called \"the Birbal of the south,\" and NCERT's Class 8 textbook Poorvi teaches one of his tales.",
+    },
+    {
+      q: "What is a famous Birbal story?",
+      a: "In a version kept by the USC Digital Folklore Archives, Akbar refuses to pay a man who stood in a freezing pond all night, claiming a distant palace light kept him warm. Birbal then \"cooks\" rice with a candle far below the pot, and the emperor sees his own excuse.",
+    },
+    {
+      q: "Who else was a famous Indian court jester?",
+      a: "Gopal Bhar, or Gopal Bhand, of Bengal, linked to Raja Krishnachandra of Nadia in the 18th century. Banglapedia calls him a legendary humorist of Bengal folk culture but adds that \"the historicity of Gopal Bhand is doubtful.\"",
     },
   ],
   related: ["us-president", "zen-monk"],
   published: "2026-10-17",
+  updated: "2026-10-20",
 };
 
 export default entry;

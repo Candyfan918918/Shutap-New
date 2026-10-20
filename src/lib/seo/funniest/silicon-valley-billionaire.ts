@@ -8,8 +8,10 @@ const entry: FunniestEntry = {
   h1: "Who is the funniest Silicon Valley billionaire?",
   description:
     "Elon Musk is the tech billionaire most often written about for his jokes, with Jensen Huang and Mark Zuckerberg close behind. What their humor does, and five techniques creators can use.",
+  answer:
+    "The funniest Silicon Valley billionaire is Elon Musk, according to a Business Insider retrospective on his humor (2024), because he turns jokes into props and stunts, like hauling a sink into Twitter's headquarters, and shrinks his own failures with deadpan understatement.",
   capsule:
-    "No poll ranks tech billionaires by wit, but Elon Musk is the one most often written about for his humor. SUCCESS magazine broke down his joke techniques as a leadership skill, Business Insider catalogued his running gags, and he hosted Saturday Night Live in 2021, though critics at NPR and Rolling Stone were unimpressed by that episode. Nvidia's Jensen Huang and Meta's Mark Zuckerberg are the other names that come up. Musk's humor leans on props, stunts and understatement; Huang's on blunt one-word answers; Zuckerberg's on mocking his own reputation.",
+    "There is no formal ranking of tech billionaires by wit, and Musk's humor divides people. SUCCESS magazine broke down his joke techniques as a leadership skill, and he hosted Saturday Night Live in 2021, though critics at NPR and Rolling Stone were unimpressed by that episode. Nvidia's Jensen Huang and Meta's Mark Zuckerberg are the other names that come up. Huang's humor runs on blunt one-word answers under pressure; Zuckerberg's on mocking the robot reputation the internet gave him.",
   blurb: "Musk, Huang, Zuckerberg, and the joke you can carry through a door.",
   pick: {
     name: "Elon Musk",
@@ -95,34 +97,78 @@ const entry: FunniestEntry = {
     {
       label: "SUCCESS: How to tell a joke like Elon Musk",
       url: "https://www.success.com/how-to-tell-a-joke-like-elon-musk",
+      publisher: "SUCCESS",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Business Insider (via Yahoo Finance): a look back at Elon Musk's humor, September 2024",
       url: "https://ca.finance.yahoo.com/news/look-back-elon-musks-middle-083000717.html",
+      publisher: "Business Insider",
+      date: "2024-09-15",
+      kind: "profile",
     },
     {
       label: "NPR: Elon Musk takes an awkward turn as Saturday Night Live host",
       url: "https://www.npr.org/transcripts/994620764",
+      publisher: "NPR",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Rolling Stone: Rob Sheffield reviews Elon Musk's SNL episode",
       url: "https://au.rollingstone.com/tv/tv-features/snl-elon-musk-review-25902",
+      publisher: "Rolling Stone",
+      date: "2021-05-10",
+      kind: "reference",
     },
     {
       label: "TechCrunch: Jensen Huang is 'running low on blood sugar,' pokes fun at reporters",
       url: "https://techcrunch.com/?p=2983719",
+      publisher: "TechCrunch",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Business Insider: Jensen Huang's Taylor Swift joke",
       url: "https://businessinsider.nl/nvidia-ceo-jensen-huangs-taylor-swift-joke-shows-hes-aware-of-his-reputation-among-ai-fanboys/",
+      publisher: "Business Insider Nederland",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Mediaite: Mark Zuckerberg on being called a robot for 20 years",
       url: "https://www.mediaite.com/media/podcasts/mark-zuckerberg-opens-up-to-theo-von-about-the-internet-calling-him-a-robot-for-20-years/",
+      publisher: "Mediaite",
+      date: "2025-04-29",
+      kind: "profile",
+    },
+  ],
+  faq: [
+    {
+      q: "Who is the funniest Silicon Valley billionaire?",
+      a: "Elon Musk is the tech billionaire most written about for his jokes. Business Insider's 2024 look back catalogued his running gags and stunts, and SUCCESS magazine analyzed his techniques. Nobody has ranked tech founders by wit, and plenty of people don't find Musk funny at all.",
+    },
+    {
+      q: "Was Elon Musk funny on Saturday Night Live?",
+      a: "Critics were lukewarm about his 2021 hosting turn. NPR TV critic Eric Deggans gave him credit for committing to the sketches but called the night \"kind of so-so,\" and Rolling Stone's Rob Sheffield, reviewing it on May 10, 2021, called the episode boring.",
+    },
+    {
+      q: "Did Musk really carry a sink into Twitter's headquarters?",
+      a: "Yes. Before taking over Twitter in 2022 he walked into its headquarters holding a bathroom sink and posted \"let that sink in!\" Business Insider lists it among the stunts where he turned a figure of speech into an object.",
+    },
+    {
+      q: "Is Jensen Huang funny?",
+      a: "He is the deadpan option. TechCrunch reported that at Nvidia's GTC conference in March 2025 he said he was \"running low on blood sugar\" and answered one long, technical question with a single \"Yes.\" Business Insider also wrote up his Taylor Swift joke about his fans in AI.",
+    },
+    {
+      q: "Does Mark Zuckerberg joke about being called a robot?",
+      a: "He does now. Mediaite reported on April 29, 2025 that, asked on Theo Von's podcast whether he was socially awkward, Zuckerberg said \"No, I'm really smooth,\" then called himself the most awkward person and joked about two decades of robot comments.",
     },
   ],
   related: ["billionaire"],
   published: "2026-10-17",
+  updated: "2026-10-20",
 };
 
 export default entry;

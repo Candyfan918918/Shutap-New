@@ -8,8 +8,10 @@ const entry: FunniestEntry = {
   h1: "Who is the funniest athlete?",
   description:
     "Charles Barkley is the one athlete who makes every major funniest-athletes list, with Shaquille O'Neal, Yogi Berra and Peyton Manning close behind. Four techniques creators and comedians can use.",
+  answer:
+    "The funniest athlete is Charles Barkley, according to rankings by Bleacher Report (2026), 24/7 Wall St. (2018) and Ranker's crowd vote (2025), which all place him in their top three, because he says the blunt thing a careful broadcaster would leave out and refuses to take it back.",
   capsule:
-    "Charles Barkley is the athlete most consistently named among the funniest. He is the only name on all four lists we checked: Bleacher Report's 2026 top ten, 24/7 Wall St.'s all-time ranking, Ranker's crowd-voted list and Bleacher Report's 2009 roundup, and he places in the top three on all three ranked ones. Each list has a different No. 1 (Peyton Manning, Yogi Berra and Shaquille O'Neal), so there is no single agreed winner. Barkley's humor comes from blunt honesty: he shrinks the stakes, admits what other people would hide, and rides a metaphor until it runs out.",
+    "Barkley is the only name on all four lists we checked: Bleacher Report's 2026 top ten, 24/7 Wall St.'s all-time ranking, Ranker's crowd-voted list and Bleacher Report's 2009 roundup, which says he \"simply doesn't have an edit button.\" Each list has a different No. 1 (Peyton Manning, Yogi Berra and Shaquille O'Neal), so there is no single agreed winner. Barkley's humor comes from blunt honesty: he shrinks the stakes, admits what other people would hide, and rides a metaphor until it runs out.",
   blurb: "Barkley, Shaq, Yogi, and the trick of saying what everyone else is too careful to say.",
   pick: {
     name: "Charles Barkley",
@@ -89,42 +91,92 @@ const entry: FunniestEntry = {
     {
       label: "Bleacher Report: Ranking the top 10 funniest athletes (Michelle Bruton, 2026)",
       url: "https://bleacherreport.com/articles/25503207-ranking-top-10-funniest-athletes",
+      publisher: "Bleacher Report",
+      date: "2026-09-28",
+      kind: "ranking",
     },
     {
       label: "24/7 Wall St.: Funniest athletes of all time",
       url: "https://247wallst.com/special-report/2018/12/06/funniest-athletes-of-all-time/",
+      publisher: "24/7 Wall St.",
+      date: "2018-12-06",
+      kind: "ranking",
     },
     {
       label: "Ranker: The funniest professional athletes (crowd-voted)",
       url: "https://www.ranker.com/crowdranked-list/funniest-professional-athletes",
+      publisher: "Ranker",
+      date: "2025-01-16",
+      kind: "ranking",
     },
     {
       label: "Bleacher Report: All-time funniest athletes (Ryan Lester, 2009)",
       url: "https://bleacherreport.com/articles/120607-all-time-funniest-athletes",
+      publisher: "Bleacher Report",
+      date: "2009-02-06",
+      kind: "ranking",
     },
     {
       label: "Kirkus Reviews: Barkley by Timothy Bella",
       url: "https://www.kirkusreviews.com/book-reviews/timothy-bella/barkley-bella/",
+      publisher: "Kirkus Reviews",
+      date: "2022-08-30",
+      kind: "profile",
     },
     {
       label: "The Seattle Times (AP, 1991): Barkley \"misquoted\" in own book",
       url: "https://archive.seattletimes.com/archive/19911213/1322835/barkley-misquoted-in-own-book",
+      publisher: "The Seattle Times",
+      date: "1991-12-13",
+      kind: "reference",
     },
     {
       label: "1819 News: Barkley on 60 Minutes (inflation, the back nine)",
       url: "https://1819news.com/news/item/charles-barkley-people-respect-my-opinions-because-i-dont-have-a-hidden-agenda",
+      publisher: "1819 News",
+      date: "2023-03-27",
+      kind: "reference",
     },
     {
       label: "Sports Illustrated: Barkley on falling asleep on the TNT set",
       url: "https://www.si.com/extra-mustard/2023/07/31/charles-barkley-makes-hilarious-admission-nba-on-tnt-set-habits-falling-asleep",
+      publisher: "Sports Illustrated",
+      date: "2023-07-31",
+      kind: "reference",
     },
     {
       label: "CBS Sports: Yogi's famous Yogi-isms didn't all come from Berra himself",
       url: "https://www.cbssports.com/mlb/news/yogis-famous-yogi-isms-they-didnt-all-come-from-berra-himself",
+      publisher: "CBS Sports",
+      date: "2015-09-23",
+      kind: "quote-check",
+    },
+  ],
+  faq: [
+    {
+      q: "Who is the funniest athlete?",
+      a: "Charles Barkley is the most consistent pick. He is the only athlete on all four lists checked here, and he places in the top three of Bleacher Report's 2026 ranking, 24/7 Wall St.'s 2018 all-time list and Ranker's crowd vote. No two of those lists agree on No. 1.",
+    },
+    {
+      q: "Who is No. 1 on the funniest athlete lists?",
+      a: "It depends on the list. Peyton Manning tops Michelle Bruton's 2026 ranking for Bleacher Report, Yogi Berra tops 24/7 Wall St.'s all-time list, and Shaquille O'Neal tops Ranker's crowd-voted list, where 2,977 voters had put Barkley second when we checked.",
+    },
+    {
+      q: "Was Charles Barkley really misquoted in his own autobiography?",
+      a: "That was his complaint in December 1991. The Associated Press story run by The Seattle Times reported Barkley saying he'd been misquoted in his own book, and the AP account has him admitting he hadn't read it. Kirkus retells the story in its review of Timothy Bella's 2022 biography.",
+    },
+    {
+      q: "Did Yogi Berra really say \"It's déjà vu all over again\"?",
+      a: "By his own account, no. CBS Sports (2015) reports that Berra told William Safire he never said it, and his memoir is titled The Yogi Book: I Really Didn't Say Everything I Said. \"90 percent of the game is half mental\" is one he did take credit for.",
+    },
+    {
+      q: "What kind of humor does Charles Barkley use?",
+      a: "Blunt honesty at the wrong volume. In a 2023 60 Minutes interview he played down Inside the NBA by naming what it isn't, inflation and Afghanistan, and called turning 60 the back nine. Asked about dozing on the TNT set, he admitted it and blamed the basketball.",
     },
   ],
   related: ["us-president", "scientist"],
   published: "2026-10-18",
+  updated: "2026-10-20",
 };
 
 export default entry;

@@ -35,12 +35,19 @@ export const Route = createFileRoute("/funniest/$slug")({
       "@type": "Article",
       headline: e.h1,
       description: e.description,
+      abstract: e.answer,
       url,
       datePublished: e.published,
       dateModified: e.updated ?? e.published,
       about: { "@type": "Person", name: e.pick.name, description: e.pick.role },
       mentions: e.runnersUp.map((p) => ({ "@type": "Person", name: p.name })),
-      citation: e.sources.map((s) => s.url),
+      citation: e.sources.map((s) => ({
+        "@type": "CreativeWork",
+        name: s.label,
+        url: s.url,
+        publisher: { "@type": "Organization", name: s.publisher },
+        ...(s.date ? { datePublished: s.date } : {}),
+      })),
       author: { "@type": "Organization", name: "Shutap", url: SITE_URL },
       publisher: { "@type": "Organization", name: "Shutap", url: SITE_URL },
     };
@@ -59,6 +66,22 @@ export const Route = createFileRoute("/funniest/$slug")({
       links: [{ rel: "canonical", href: url }],
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(jsonLd) },
+        ...(e.faq.length
+          ? [
+              {
+                type: "application/ld+json",
+                children: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  mainEntity: e.faq.map((f) => ({
+                    "@type": "Question",
+                    name: f.q,
+                    acceptedAnswer: { "@type": "Answer", text: f.a },
+                  })),
+                }),
+              },
+            ]
+          : []),
         breadcrumbScript([
           { name: "The funniest", path: FUNNIEST_HUB },
           { name: e.h1, path },
