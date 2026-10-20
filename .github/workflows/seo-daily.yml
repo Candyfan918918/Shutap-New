@@ -12,6 +12,12 @@ on:
 
 permissions:
   contents: write
+  id-token: write # keyless Google sign-in (Workload Identity Federation)
+
+env:
+  # Not secrets. Leave GCP_WIF_PROVIDER empty to skip Google.
+  GCP_WIF_PROVIDER: ""
+  GCP_SERVICE_ACCOUNT: shutap-seo-bot@project-1e0ec933-91ac-4b2c-8cc.iam.gserviceaccount.com
 
 concurrency:
   group: seo-daily
@@ -26,8 +32,21 @@ jobs:
         with:
           node-version: 20
 
+      - name: Google sign-in (keyless)
+        id: gauth
+        if: env.GCP_WIF_PROVIDER != ''
+        continue-on-error: true
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.GCP_WIF_PROVIDER }}
+          service_account: ${{ env.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/webmasters.readonly
+          create_credentials_file: false
+
       - name: Pull Search Console + Bing data
         env:
+          GSC_ACCESS_TOKEN: ${{ steps.gauth.outputs.access_token }}
           GSC_SERVICE_ACCOUNT: ${{ secrets.GSC_SERVICE_ACCOUNT }}
           BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
         run: node scripts/seo/search-data-pull.mjs
