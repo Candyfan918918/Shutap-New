@@ -49,12 +49,18 @@ function AdminUsersPage() {
 
   useEffect(() => {
     let dead = false
+    setErr(null)
     ;(async () => {
       try {
         const r = await load({ data: { q: q || undefined, include_anonymous: includeAnon, sort, dir } })
         if (!dead) setRows(r as Row[])
       } catch (e) {
-        if (!dead) setErr(e instanceof Error ? e.message : 'load failed')
+        if (!dead) {
+          const message = e instanceof Error ? e.message : 'Unable to load users. Please try again.'
+          setErr(message === 'Forbidden'
+            ? 'This account does not have admin access. Sign in with your admin account to view users.'
+            : message)
+        }
       }
     })()
     return () => { dead = true }
@@ -92,7 +98,7 @@ function AdminUsersPage() {
         </label>
       </div>
       {err && <div style={{ color: '#17131a', marginBottom: 12 }}>{err}</div>}
-      {!rows ? (
+      {err ? null : !rows ? (
         <div style={{ color: '#443c42' }}>loading…</div>
       ) : rows.length === 0 ? (
         <div style={{ color: '#443c42', fontStyle: 'italic' }}>no users yet</div>
