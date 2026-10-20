@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useRouterState, useNavigate } from '@tanstack/react-router'
 import { rememberReturnTo, signOut as doSignOut } from '@/lib/auth'
 import { useCurrentAlias, useIsAdmin } from '@/hooks/use-current-alias'
-import { EyeMark, ShutapWordmark } from './EyeMark'
 import { aliasSlug } from '@/lib/feed-shared'
 import { myAlias } from '@/lib/feed.functions'
 
@@ -141,7 +140,6 @@ export function GlobalHeader() {
     navigate({ to: '/' })
   }
 
-  const inkStrong = dark ? '#ffffff' : '#111111'
   const inkMuted = dark ? '#b5b5b5' : '#6b6b6b'
   const inkActive = dark ? '#ffffff' : '#111111'
   const barBg = dark ? '#111111' : 'rgba(251,246,247,.92)'
@@ -215,8 +213,13 @@ export function GlobalHeader() {
           to="/"
           style={{ display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', color: 'inherit', flexShrink: 0 }}
         >
-          <EyeMark size={32} />
-          <ShutapWordmark size={19} ink={inkStrong} letterSpacing="-.04em" />
+          <img
+            src={dark ? '/shutap-logo-dark.png' : '/shutap-logo.png'}
+            alt="Shutap"
+            width={92}
+            height={25}
+            style={{ display: 'block', height: 25, width: 'auto' }}
+          />
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
