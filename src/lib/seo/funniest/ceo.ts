@@ -8,8 +8,10 @@ const entry: FunniestEntry = {
   h1: "Who is the funniest CEO?",
   description:
     "Southwest Airlines co-founder Herb Kelleher is the CEO most often written about for his humor. What made him funny, who else gets named, and four techniques creators and comedians can use.",
+  answer:
+    "The funniest CEO was Herb Kelleher of Southwest Airlines, according to profiles in D Magazine (1996) and Fortune (2019), because he turned corporate fights into public theater and aimed most of his jokes at himself.",
   capsule:
-    "There is no formal ranking of the funniest CEO, but Herb Kelleher, co-founder and longtime CEO of Southwest Airlines, is the one most often written about for his humor. D Magazine called him the clown prince of the airline industry and Dallas business's go-to funny guy, Fortune remembered him as a clown with a spine of steel, and the Boston Globe's obituary opened on his Elvis costume and an arm-wrestling match he used to settle a business dispute. His humor turned corporate conflict into public theater and aimed most of its jokes at himself.",
+    "There is no formal ranking of the funniest CEO, so this pick rests on how often Kelleher is written about for his humor. D Magazine reported he'd been called the clown prince of the airline industry, Fortune's Shawn Tully closed his tribute calling him a clown with a spine of steel, and the Boston Globe's obituary opened on his Elvis costume and an arm-wrestling match he used to settle a business dispute. Richard Branson and EDS's Michael H. Jordan are the other names that come up.",
   blurb: "Herb Kelleher, an arm-wrestling match over a slogan, and the trick of turning a fight into a show.",
   pick: {
     name: "Herb Kelleher",
@@ -84,34 +86,74 @@ const entry: FunniestEntry = {
     {
       label: "D Magazine (1996): Herb Kelleher has more fun than you do",
       url: "https://www.dmagazine.com/publications/d-magazine/1996/august/business-herb-kelleher-has-more-fun-than-you-do/",
+      publisher: "D Magazine",
+      date: "1996-08-01",
+      kind: "profile",
     },
     {
       label: "D CEO (2006): Laugh it up (Kelleher, Michael Jordan of EDS)",
       url: "https://www.dmagazine.com/publications/d-ceo/2006/september/laugh-it-up/",
+      publisher: "D CEO",
+      date: "2006-09-01",
+      kind: "profile",
     },
     {
       label: "Fortune: Remembering Herb Kelleher",
       url: "https://fortune.com/2019/01/16/remembering-herb-kelleher-an-unparalleled-innovator-in-commercial-aviation",
+      publisher: "Fortune",
+      date: "2019-01-16",
+      kind: "profile",
     },
     {
       label: "Boston Globe: Herb Kelleher, co-founder of Southwest Airlines, dies at 87",
       url: "https://www.bostonglobe.com/metro/obituaries/2019/01/03/herb-kelleher-founder-southwest-airlines-dies/E8knAMWTzNP3ZeO89gIfLO/story.html",
+      publisher: "The Boston Globe",
+      date: "2019-01-03",
+      kind: "profile",
     },
     {
       label: "Southwest Airlines: Armed and dangerous, the Malice in Dallas",
       url: "https://southwest50.com/our-stories/armed-and-dangerous-the-malice-in-dallas",
+      publisher: "Southwest Airlines",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Southwest Airlines history: About Herb",
       url: "https://history.southwest.com/about-herb/",
+      publisher: "Southwest Airlines",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Business Traveller: Branson dresses up as AirAsia stewardess",
       url: "https://www.businesstraveller.com/news/video-branson-dresses-up-as-air-asia-stewardess/",
+      publisher: "Business Traveller",
+      accessed: "2026-10-20",
+      kind: "reference",
+    },
+  ],
+  faq: [
+    {
+      q: "Who is the funniest CEO?",
+      a: "Herb Kelleher, co-founder and longtime CEO of Southwest Airlines, is the one most often profiled for his humor. No poll ranks CEOs by funniness, but D Magazine reported in 1996 that he'd been called the clown prince of the airline industry, and Fortune's 2019 tribute called him a clown with a spine of steel.",
+    },
+    {
+      q: "What was the Malice in Dallas?",
+      a: "A 1992 arm-wrestling match between Kelleher and Kurt Herwald of Stevens Aviation over the slogan \"Just Plane Smart.\" Kelleher entered in a white bathrobe as Smokin' Herb and lost to \"Killer Kurt,\" who then let Southwest keep the slogan, according to Southwest's own account.",
+    },
+    {
+      q: "What is Herb Kelleher's funniest line?",
+      a: "One of the best documented is how he opened a lecture at Southern Methodist University, as D Magazine reported: \"Thank you for lowering your standards to have me here tonight.\" When the Dallas Love Field fight ended in a deal, D CEO quotes him: \"There's hope for world peace.\"",
+    },
+    {
+      q: "Which other CEOs are known for being funny?",
+      a: "Richard Branson of the Virgin Group, whom Business Traveller showed working an AirAsia flight dressed as a flight attendant after losing a Formula 1 bet, and Michael H. Jordan of EDS, named by D CEO in 2006 for spontaneous one-liners such as EDS once having more presidents than the UN.",
     },
   ],
   related: ["billionaire", "silicon-valley-billionaire"],
   published: "2026-10-19",
+  updated: "2026-10-20",
 };
 
 export default entry;

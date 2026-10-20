@@ -8,8 +8,10 @@ const entry: FunniestEntry = {
   h1: "Who is the funniest billionaire?",
   description:
     "Warren Buffett is the billionaire whose humor gets cited most, thanks to decades of one-liners in his shareholder letters. What made him funny, and five techniques creators and comedians can use.",
+  answer:
+    "The funniest billionaire is Warren Buffett, according to Fortune's roundup of the zingers in his annual shareholder letter (2015), because he turns dry money topics into homespun pictures: an ugly comparison, a beach metaphor, a two-word sales pitch.",
   capsule:
-    "Warren Buffett is the billionaire most often cited for his humor. Fortune rounds up the best one-liners from his annual letter as \"zingers,\" Bloomberg notes how he puts jokes into his accounting lessons, humor researcher Peter McGraw cites him as an example of humor in business, and Mark Gavagan collected his wit from 34 years of letters into a book. His late partner Charlie Munger, whose wit CNBC says made Berkshire meetings uproarious, is the runner-up. Buffett's humor turns dry money topics into homespun pictures: an ugly comparison, a beach metaphor, a two-word sales pitch.",
+    "There is no formal ranking of billionaires by humor, so this pick rests on how often Buffett's wit gets cited. Bloomberg notes how he puts jokes into his accounting lessons, humor researcher Peter McGraw cites him as an example of humor in business, and Mark Gavagan collected his wit from 34 years of letters into a book. His late partner Charlie Munger, whose wit CNBC says made Berkshire meetings uproarious, is the runner-up, and a few professional comedians, Jerry Seinfeld among them, have joined the billionaire ranks.",
   blurb: "Warren Buffett, Charlie Munger, and the trick of making a balance sheet funny.",
   pick: {
     name: "Warren Buffett",
@@ -100,38 +102,85 @@ const entry: FunniestEntry = {
     {
       label: "Fortune: Warren Buffett's annual zingers, the 2015 letter's best one-liners",
       url: "https://fortune.com/2015/02/28/warren-buffetts-annual-letter-quotes/",
+      publisher: "Fortune",
+      date: "2015-02-28",
+      kind: "profile",
     },
     {
       label: "Bloomberg: Why Buffett prefers colonoscopy to issuing Berkshire shares (2017)",
       url: "https://www.bloomberg.com/news/articles/2017-02-26/buffett-riffs-on-colonoscopy-swap-airlines-wealthy-in-letter",
+      publisher: "Bloomberg",
+      date: "2017-02-26",
+      kind: "reference",
     },
     {
       label: "Peter McGraw: humor in business, with Buffett as an example",
       url: "https://petermcgraw.org/?p=5540",
+      publisher: "Peter McGraw",
+      date: "2014-05-28",
+      kind: "profile",
     },
     {
       label: "Library Journal: review of Gems from Warren Buffett by Mark Gavagan",
       url: "https://www.libraryjournal.com/review/gems-from-warren-buffett-tidbits-of-his-wit-and-wisdom-drawn-from-34-years-of-letters-to-shareholders",
+      publisher: "Library Journal",
+      date: "2012-06-01",
+      kind: "profile",
     },
     {
       label: "Berkshire Hathaway: 2016 letter to shareholders",
       url: "https://www.berkshirehathaway.com/letters/2016ltr.pdf",
+      publisher: "Berkshire Hathaway",
+      date: "2017-02-25",
+      kind: "quote-check",
     },
     {
       label: "Berkshire Hathaway: 2001 letter to shareholders",
       url: "https://www.berkshirehathaway.com/letters/2001pdf.pdf",
+      publisher: "Berkshire Hathaway",
+      date: "2002-02-28",
+      kind: "quote-check",
     },
     {
       label: "CNBC: Charlie Munger's sharp wit turned Berkshire meetings into uproarious affairs",
       url: "https://www.cnbc.com/2023/11/28/charlie-mungers-sharp-wit-turned-berkshire-meetings-into-uproarious-affairs-heres-a-sample.html",
+      publisher: "CNBC",
+      date: "2023-11-28",
+      kind: "profile",
     },
     {
       label: "lovemoney: the world's richest comedians, including four billionaires",
       url: "https://www.lovemoney.com/gallerylist/569979/ranked-the-worlds-richest-comedians-including-4-billionaires",
+      publisher: "lovemoney",
+      date: "2026-07-12",
+      kind: "reference",
+    },
+  ],
+  faq: [
+    {
+      q: "Who is the funniest billionaire?",
+      a: "Warren Buffett is the billionaire whose humor gets cited most. Fortune's 2015 roundup called the best lines in his annual letter \"zingers,\" and Library Journal reviewed Mark Gavagan's 2012 book collecting his wit from 34 years of shareholder letters. No poll or vote ranks billionaires by humor.",
+    },
+    {
+      q: "What is Warren Buffett's funniest line?",
+      a: "Two favorites come straight from Berkshire Hathaway's letters. The letter signed February 25, 2017 says \"I would rather prep for a colonoscopy than issue Berkshire shares,\" and the one signed February 28, 2002 says you only learn \"who is swimming naked when the tide goes out.\"",
+    },
+    {
+      q: "Was Charlie Munger funnier than Warren Buffett?",
+      a: "He is the runner-up here, and some fans would flip the order. After Munger died in November 2023, CNBC wrote that his sharp wit turned Berkshire's annual meetings into uproarious affairs, quoting his verdict on getting rich by accident: \"I just overshot.\"",
+    },
+    {
+      q: "Are any comedians billionaires?",
+      a: "Four, by lovemoney's July 2026 list of the richest comedians: Byron Allen, Jerry Seinfeld at $1.1 billion, and South Park creators Trey Parker and Matt Stone at $1.2 billion each. They are paid to be funny; Buffett got funny while running Berkshire.",
+    },
+    {
+      q: "What kind of humor does Warren Buffett use?",
+      a: "Folksy, in Fortune's word. Bloomberg says he \"injects levity into his accounting lessons,\" and Peter McGraw notes he softens bad news with short one-liners. The pictures come from ordinary places: a barbershop, a beach at low tide, a doctor's office.",
     },
   ],
   related: ["silicon-valley-billionaire", "us-president"],
   published: "2026-10-17",
+  updated: "2026-10-20",
 };
 
 export default entry;

@@ -8,8 +8,10 @@ const entry: FunniestEntry = {
   h1: "Who is the funniest author?",
   description:
     "P.G. Wodehouse is the author most often named the funniest, with Mark Twain the classic American pick. What made them funny, and four techniques creators and comedians can use today.",
+  answer:
+    "The funniest author was P.G. Wodehouse, according to an AbeBooks poll of British readers reported by The Christian Science Monitor (2009), because his jokes live in the sentences: words bent out of shape and comparisons you can picture.",
   capsule:
-    "P.G. Wodehouse is the author most often named the funniest. When AbeBooks asked British readers for the funniest book they had ever read, his Right Ho, Jeeves came first, and his Code of the Woosters made the top ten too. The UK's longest-running prize for comic fiction is named after him, and in 1936 the Mark Twain Society gave him a medal for his contribution to the happiness of the world. Mark Twain, whose name is on America's top humor prize, is the usual American pick. Wodehouse's humor lives in the sentence: words bent out of shape, and comparisons you can picture.",
+    "AbeBooks asked 555 British readers for the funniest book they had ever read. Right Ho, Jeeves came first, Joseph Heller's Catch-22 second, and Wodehouse's Code of the Woosters made the top ten too. The UK's longest-running prize for comic fiction is named after him, and in 1936 the Mark Twain Society gave him a medal for his contribution to the happiness of the world. Mark Twain, whose name is on America's top humor prize, is the usual American pick, though many lines credited to both men need checking before you quote them.",
   blurb: "Wodehouse, Twain, and the trick of bending one word until it breaks.",
   pick: {
     name: "P.G. Wodehouse",
@@ -94,38 +96,85 @@ const entry: FunniestEntry = {
     {
       label: "Christian Science Monitor: British readers select the 10 funniest books ever (AbeBooks poll)",
       url: "https://www.csmonitor.com/Books/2009/0223/british-readers-select-the-10-funniest-books-ever",
+      publisher: "The Christian Science Monitor",
+      date: "2009-02-23",
+      kind: "ranking",
     },
     {
       label: "Westminster Abbey: order of service for the 2019 Wodehouse memorial stone (Mark Twain Society medal)",
       url: "https://prod-v7-archive.westminster-abbey.org/media/12687/pg-wodehouse-memorial-service.pdf",
+      publisher: "Westminster Abbey",
+      date: "2019-09-20",
+      kind: "profile",
     },
     {
       label: "Chortle: the Bollinger Everyman Wodehouse Prize 2025 shortlist",
       url: "https://www.chortle.co.uk/news/2025/10/27/59314/are_these_the_eight_funniest_books_of_2025%3F",
+      publisher: "Chortle",
+      date: "2025-10-27",
+      kind: "reference",
     },
     {
       label: "Wikipedia: Bollinger Everyman Wodehouse Prize (winners, including Terry Pratchett)",
       url: "https://en.wikipedia.org/wiki/Bollinger_Everyman_Wodehouse_Prize",
+      publisher: "Wikipedia",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Kennedy Center: the Mark Twain Prize for American Humor",
       url: "https://www.kennedy-center.org/news-room/press-release-landing-page/conan-obrien---26th-mark-twain-prize/",
+      publisher: "The Kennedy Center",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Madame Eulalie: annotations to The Code of the Woosters",
       url: "https://madameulalie.org/annots/pgwbooks/pgwcotw1.html",
+      publisher: "Madame Eulalie",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Quote Investigator: \"I always advise people never to give advice\"",
       url: "https://quoteinvestigator.com/2022/10/11/advice-never/",
+      publisher: "Quote Investigator",
+      date: "2022-10-11",
+      kind: "quote-check",
     },
     {
       label: "Quote Investigator: \"Reports of my death are greatly exaggerated\"",
       url: "https://quoteinvestigator.com/2024/06/07/report-death/",
+      publisher: "Quote Investigator",
+      date: "2024-06-07",
+      kind: "quote-check",
+    },
+  ],
+  faq: [
+    {
+      q: "Who is the funniest author?",
+      a: "P.G. Wodehouse is the author most often named. In a 2009 AbeBooks poll of 555 British readers, reported by The Christian Science Monitor, his Right Ho, Jeeves was voted the funniest book they had read, ahead of Joseph Heller's Catch-22 and Douglas Adams's The Hitchhiker's Guide to the Galaxy.",
+    },
+    {
+      q: "Who is the funniest American author?",
+      a: "Mark Twain is the usual American pick. The Kennedy Center named its Mark Twain Prize for American Humor after him to honor one of the world's greatest humorists. His 1897 correction about reports of his own death is still quoted today, usually in the wrong words.",
+    },
+    {
+      q: "Did Mark Twain say \"Reports of my death are greatly exaggerated\"?",
+      a: "Not in those words. Quote Investigator (2024) found that what Twain told the New York Journal in 1897 was \"The report of my death was an exaggeration.\" The longer \"greatly exaggerated\" version is a later newspaper rewording that stuck.",
+    },
+    {
+      q: "Did Wodehouse invent the word \"gruntled\"?",
+      a: "He gets credit for its first recorded use. In The Code of the Woosters (1938), Bertie Wooster says a man was far from being gruntled, and the Madame Eulalie annotators note the Oxford English Dictionary cites Wodehouse for it. He simply dropped the \"dis\" from disgruntled.",
+    },
+    {
+      q: "Is there a prize for the funniest novel?",
+      a: "Yes. The Bollinger Everyman Wodehouse Prize, the UK's longest-running prize for comic fiction, is named after Wodehouse. Terry Pratchett won it in 2012 with Snuff after three earlier shortlistings, and Chortle reported the eight books on the 2025 shortlist.",
     },
   ],
   related: ["us-president"],
   published: "2026-10-17",
+  updated: "2026-10-20",
 };
 
 export default entry;

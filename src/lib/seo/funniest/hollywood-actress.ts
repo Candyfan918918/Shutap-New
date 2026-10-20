@@ -8,8 +8,10 @@ const entry: FunniestEntry = {
   h1: "Who is the funniest Hollywood actress?",
   description:
     "Carol Burnett is the actress most often voted the funniest, with Lucille Ball the usual other answer. What made them funny, and four techniques creators and comedians can use today.",
+  answer:
+    "The funniest Hollywood actress is Carol Burnett, according to Ranker's crowd-voted list of the funniest female comedians (2025), because she commits to a sight gag past the point of reason and fires back quick, unplanned answers to her own audience.",
   capsule:
-    "Carol Burnett is the actress most often voted the funniest. She won a Prince George Citizen reader poll on the funniest lady of all with 57 percent of the vote, ahead of Lucille Ball, and sits first on Ranker's crowd-voted list of the funniest female comedians, ahead of Betty White and Ball. Ball is the usual other answer: Voice of America profiled her as one of television's funniest women. Burnett's comedy came from committing to a sight gag past the point of reason; Ball's came from a body losing a fight with an ordinary task.",
+    "Burnett also won a Prince George Citizen reader poll on the funniest lady of all with 57 percent of the vote, ahead of Lucille Ball at 29; on Ranker's list, Betty White is second and Ball third. Ball is the usual other answer: Voice of America profiled her as one of television's funniest women. Burnett's comedy came from committing to a sight gag past the point of reason; Ball's came from a body losing a fight with an ordinary task.",
   blurb: "Carol Burnett, Lucille Ball, and the trick of committing to the bit past the point of reason.",
   pick: {
     name: "Carol Burnett",
@@ -89,46 +91,99 @@ const entry: FunniestEntry = {
     {
       label: "Prince George Citizen: \"Who's the funniest lady of all? You chose Carol\" (reader poll)",
       url: "https://www.princegeorgecitizen.com/local-news/whos-the-funniest-lady-of-all-you-chose-carol-3690976",
+      publisher: "Prince George Citizen",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Ranker: The funniest female comedians of all time (crowd-voted)",
       url: "https://www.ranker.com/list/funniest-female-comedians/kel-varnsen?rlf=BLOG",
+      publisher: "Ranker",
+      date: "2025-04-15",
+      kind: "ranking",
     },
     {
       label: "Voice of America: Lucille Ball, one of television's funniest women",
       url: "https://learningenglish.voanews.com/amp/2035440.html",
+      publisher: "Voice of America",
+      date: "2012-05-18",
+      kind: "profile",
     },
     {
       label: "PBS Pioneers of Television: Funny Ladies (Burnett and Ball)",
       url: "https://www.pbs.org/wnet/pioneers-of-television/pioneering-programs/funny-ladies",
+      publisher: "PBS",
+      date: "2013-01-16",
+      kind: "profile",
     },
     {
       label: "Turner Classic Movies: Star of the Month, Lucille Ball",
       url: "https://www.tcm.com/articles/021459/star-of-the-month-lucille-ball",
+      publisher: "Turner Classic Movies",
+      date: "2021-09-22",
+      kind: "profile",
     },
     {
       label: "Warner Bros. Discovery: TCM's Funny Ladies, hosted by Carol Burnett and Illeana Douglas",
       url: "https://wbd.com/?p=2490",
+      publisher: "Warner Bros. Discovery",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "Smithsonian: National Museum of American History collects the Burnett curtain-rod costume",
       url: "https://www.si.edu/newsdesk/releases/national-museum-american-history-collects-legendary-burnett-costume",
+      publisher: "Smithsonian Institution",
+      date: "2009-05-12",
+      kind: "reference",
     },
     {
       label: "MeTV: 40 years of the \"Went with the Wind\" sketch (Bob Mackie's curtain rod)",
       url: "https://metv.com/stories/carol-burnett-curtain-dress-40th-anniversary",
+      publisher: "MeTV",
+      accessed: "2026-10-20",
+      kind: "reference",
     },
     {
       label: "The Takeout: Lucille Ball rehearsed the chocolate factory scene at See's Candies",
       url: "https://thetakeout.com/1989545/sees-chocolate-i-love-lucy-iconic-episode-lucille-ball",
+      publisher: "The Takeout",
+      date: "2025-10-13",
+      kind: "reference",
     },
     {
       label: "WTOP: Carol Burnett on her audience Q&A show",
       url: "https://wtop.com/entertainment/2019/07/qa-carol-burnett-brings-evening-of-laughter-reflection-to-strathmore/",
+      publisher: "WTOP",
+      date: "2019-07-09",
+      kind: "reference",
+    },
+  ],
+  faq: [
+    {
+      q: "Who is the funniest Hollywood actress?",
+      a: "Carol Burnett, according to Ranker's crowd-voted list of the funniest female comedians, last updated in 2025, where she sits first ahead of Betty White and Lucille Ball. She commits to a sight gag past the point of reason and answers her audience's questions on the spot.",
+    },
+    {
+      q: "Who won the Prince George Citizen poll for funniest lady?",
+      a: "Carol Burnett took 57 percent of 1,126 reader votes, ahead of Lucille Ball at 29 percent, Jean Stapleton at 9 and Roseanne Barr at 4. The poll page shows no publication date, so treat it as a fan vote rather than a dated survey.",
+    },
+    {
+      q: "Is Lucille Ball funnier than Carol Burnett?",
+      a: "Ball is the usual other answer. Voice of America profiled her in 2012 as one of television's funniest women, and Turner Classic Movies describes a perfectionist expert in slapstick and pantomime. In the fan votes cited here, Burnett still finishes ahead of her.",
+    },
+    {
+      q: "What is Carol Burnett's most famous sketch?",
+      a: "The 1976 Gone with the Wind parody, where her heroine wears a dress made from the drapes with the brass curtain rod still across her shoulders. The rod was Bob Mackie's idea, and the Smithsonian collected the costume in 2009.",
+    },
+    {
+      q: "How did Lucille Ball prepare for the chocolate factory scene?",
+      a: "The Takeout reports that Ball asked to rehearse at a See's Candies factory in Los Angeles before filming the 1952 I Love Lucy episode \"Job Switching,\" where a speeding conveyor belt beats Lucy and Ethel.",
     },
   ],
   related: ["us-actor"],
   published: "2026-10-17",
+  updated: "2026-10-20",
 };
 
 export default entry;

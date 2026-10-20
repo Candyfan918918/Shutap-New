@@ -8,8 +8,10 @@ const entry: FunniestEntry = {
   h1: "Who is the funniest US actor?",
   description:
     "Robin Williams tops the big audience polls for funniest comedy actor, with Bill Murray, Will Ferrell and Eddie Murphy close behind. What made them funny, and four techniques creators can use.",
+  answer:
+    "The funniest US actor was Robin Williams, according to a Ranker vote of 452,000 people reported by the Philippine Daily Inquirer (2017), because he mixed manic improvisation with rapid-fire impersonations and could build a bit out of whatever went wrong in the room.",
   capsule:
-    "Robin Williams is the actor most often voted the funniest. A Ranker vote of 452,000 people, reported by the Philippine Daily Inquirer in 2017, named him the greatest comedy actor of all time, ahead of Will Ferrell and Bill Murray, and a 2023 Showcase Cinemas survey of British filmgoers put him first among comedic actors too. A University of Turin analysis of film performers picked Bill Murray instead. Williams was known for manic improvisation and rapid-fire voices; Murray for a relaxed, underplayed delivery.",
+    "A Ranker vote of 452,000 people, reported by the Philippine Daily Inquirer in 2017, named him the greatest comedy actor of all time, ahead of Will Ferrell and Bill Murray, and a 2023 Showcase Cinemas survey of British filmgoers put him first among comedic actors too. A University of Turin analysis of film performers picked Bill Murray instead. Williams was known for manic improvisation and rapid-fire voices; Murray for a relaxed, underplayed delivery.",
   blurb: "Robin Williams, Bill Murray, and the trick of using whatever is in the room.",
   pick: {
     name: "Robin Williams",
@@ -89,30 +91,71 @@ const entry: FunniestEntry = {
     {
       label: "Inquirer Entertainment: Robin Williams voted funniest comedy actor of all time (Ranker vote)",
       url: "https://entertainment.inquirer.net/253622/robin-williams-voted-funniest-comedy-actor-time-recent-poll",
+      publisher: "Philippine Daily Inquirer",
+      date: "2017-12-08",
+      kind: "ranking",
     },
     {
       label: "Chortle: Mrs. Doubtfire named Britain's favourite comedy movie (Showcase Cinemas survey)",
       url: "https://www.chortle.co.uk/news/2023/01/26/52425/mrs._doubtfire_named_britain%E2%80%99s_favourite_comedy_movie",
+      publisher: "Chortle",
+      date: "2023-01-26",
+      kind: "ranking",
     },
     {
       label: "Far Out: The greatest comedy actor of all time, according to science (University of Turin study)",
       url: "https://faroutmagazine.co.uk/greatest-comedy-actor-all-time-science/",
+      publisher: "Far Out Magazine",
+      date: "2025-08-13",
+      kind: "ranking",
     },
     {
       label: "NPR Fresh Air: Robin Williams on looking for laughter",
       url: "https://www.npr.org/2014/08/12/339823090/robin-williams-in-looking-for-laughter-you-have-to-be-deeply-honest",
+      publisher: "NPR",
+      date: "2014-08-12",
+      kind: "profile",
     },
     {
       label: "Christian Science Monitor: Bill Murray to receive the Mark Twain Prize",
       url: "https://www.csmonitor.com/Arts-Culture/Movies/2016/0614/Bill-Murray-to-receive-Mark-Twain-Prize-How-he-s-influenced-film-comedy",
+      publisher: "The Christian Science Monitor",
+      date: "2016-06-14",
+      kind: "profile",
     },
     {
       label: "Arizona PBS: Will Ferrell, the 2011 Mark Twain Prize",
       url: "https://azpbs.org/pressroom/2011/10/will-ferrell-the-2011-mark-twain-prize/",
+      publisher: "Arizona PBS",
+      date: "2011-10-31",
+      kind: "reference",
+    },
+  ],
+  faq: [
+    {
+      q: "Who is the funniest US actor?",
+      a: "Robin Williams, according to a Ranker vote of 452,000 people reported by the Philippine Daily Inquirer in 2017, which named him the greatest comedy actor of all time. He mixed manic improvisation with rapid-fire impersonations and worked whatever went wrong on stage into the act.",
+    },
+    {
+      q: "Who else is considered the funniest actor?",
+      a: "Will Ferrell came second and Bill Murray third in the same Ranker vote, with Eddie Murphy fifth. A University of Turin analysis reported by Far Out Magazine put Murray first, and both Murray (2016) and Ferrell (2011) won the Kennedy Center Mark Twain Prize.",
+    },
+    {
+      q: "Did British audiences also pick Robin Williams?",
+      a: "Yes. A 2023 Showcase Cinemas survey of British filmgoers, reported by Chortle, named Mrs. Doubtfire the country's favourite comedy movie and put Williams first among comedic actors with 28 percent, with Eddie Murphy fifth.",
+    },
+    {
+      q: "What kind of humor did Robin Williams use?",
+      a: "Speed and range. NPR described manic improvisation mixed with rapid-fire impersonations, and Williams told Fresh Air in 2006 that a blown sound system early in his career taught him to work the crowd with whatever was in the room.",
+    },
+    {
+      q: "Why do some rankings pick Bill Murray over Robin Williams?",
+      a: "The University of Turin ranking weighs reviews and box office rather than an open vote. Critics quoted by The Christian Science Monitor in 2016 credit Murray's relaxed, underplayed delivery, the opposite of Williams's volume, for turning small exchanges into improvised scenes.",
     },
   ],
   related: ["hollywood-actress"],
   published: "2026-10-17",
+  updated: "2026-10-20",
 };
 
 export default entry;

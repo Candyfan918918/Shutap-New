@@ -8,8 +8,10 @@ const entry: FunniestEntry = {
   h1: "Who was the funniest Chinese philosopher?",
   description:
     "Zhuangzi is the Chinese philosopher most often called the funniest, with Confucius the surprise runner-up. What made the Daoist sage funny, and five techniques creators and comedians can use today.",
+  answer:
+    "The funniest Chinese philosopher was Zhuangzi (Zhuang Zhou), according to Xiao Dong Yue's 2010 study in Humor: International Journal of Humor Research and Christoph Harbsmeier's 1989 essay in Philosophy East and West, because he turned his deepest ideas into absurd little stories about talking animals, useless trees and arguments won on a technicality.",
   capsule:
-    "Zhuangzi, the Daoist thinker of the 4th century BCE, is the Chinese philosopher most often named the funniest. Psychologist Xiao Dong Yue, writing in the journal Humor, says he \"is recognized as the very first humorist in China,\" Sinologist Christoph Harbsmeier finds \"a pervasive touch of humor\" in the book that bears his name, and the Stanford Encyclopedia of Philosophy notes the humor and irony with which its deepest ideas are delivered. His comedy came from absurd little stories: talking animals, useless trees, and arguments won on a technicality.",
+    "There is no formal ranking of Chinese philosophers by humor, so this pick rests on scholarship. Psychologist Xiao Dong Yue says Zhuangzi \"is recognized as the very first humorist in China,\" Sinologist Christoph Harbsmeier finds \"a pervasive touch of humor\" in the book that bears his name, and the Stanford Encyclopedia of Philosophy notes the humor and irony with which its deepest ideas are delivered. Confucius is the surprise runner-up, with Han Feizi and the logician Gongsun Long behind him.",
   blurb: "Zhuangzi, Confucius, and the trick of winning an argument on a technicality.",
   pick: {
     name: "Zhuangzi (Zhuang Zhou)",
@@ -100,30 +102,71 @@ const entry: FunniestEntry = {
     {
       label: "Stanford Encyclopedia of Philosophy: Zhuangzi (Chad Hansen)",
       url: "https://plato.stanford.edu/archives/win2025/entries/zhuangzi",
+      publisher: "Stanford Encyclopedia of Philosophy",
+      date: "2024-03-24",
+      kind: "reference",
     },
     {
       label: "Stanford Encyclopedia of Philosophy, Spring 2003 archive: Zhuangzi (Harold Roth)",
       url: "https://plato.stanford.edu/archives/spr2003/entries/zhuangzi/",
+      publisher: "Stanford Encyclopedia of Philosophy",
+      date: "2001-11-10",
+      kind: "reference",
     },
     {
       label: "Christoph Harbsmeier, \"Humor in Ancient Chinese Philosophy,\" Philosophy East and West (1989)",
       url: "https://www.ikgf.fau.de/people/Humour-in-Chinese-Philosophy.pdf",
+      publisher: "Philosophy East and West",
+      date: "1989-07",
+      kind: "profile",
     },
     {
       label: "Xiao Dong Yue, \"Exploration of Chinese humor,\" Humor (2010)",
       url: "https://scholars.cityu.edu.hk/en/publications/exploration-of-chinese-humor-historical-review-empirical-findings/",
+      publisher: "Humor: International Journal of Humor Research",
+      date: "2010-08",
+      kind: "profile",
     },
     {
       label: "Columbia University Press: Genuine Pretending by Hans-Georg Moeller and Paul J. D'Ambrosio",
       url: "https://www.degruyterbrill.com/document/doi/10.7312/moel18398/html?lang=en",
+      publisher: "Columbia University Press",
+      date: "2017",
+      kind: "profile",
     },
     {
-      label: "Confucius Institute, University of Aberdeen: Harbsmeier lecture \"Confucius, the Humourist\"",
+      label: "Confucius Institute for Scotland: Harbsmeier lecture \"Confucius, the Humourist\" (2009)",
       url: "https://www.confuciusinstitute.ac.uk/announcements/guest-lecture-confucius-the-humourist-19-oct/",
+      publisher: "Confucius Institute for Scotland",
+      date: "2009-09-29",
+      kind: "reference",
+    },
+  ],
+  faq: [
+    {
+      q: "Who was the funniest Chinese philosopher?",
+      a: "Zhuangzi, the Daoist philosopher of the 4th century BCE. Xiao Dong Yue's 2010 study in the journal Humor calls him the very first humorist in China, and Christoph Harbsmeier's 1989 essay in Philosophy East and West finds a pervasive touch of humor in the book that bears his name.",
+    },
+    {
+      q: "Was Confucius funny?",
+      a: "Harbsmeier thinks so. He writes that the Analects describes Confucius as \"a man of wit and of humor,\" and he reads the ox-knife line, where Confucius teases a student for running a small town with state ritual and then says he was only joking, as self-irony.",
+    },
+    {
+      q: "Who else in ancient China was known for humor?",
+      a: "Harbsmeier names Han Feizi, whose book he calls the most important single source of pre-Han jokes, and the logician Gongsun Long, whom he describes as something of a logical court jester at the court of the Lord of Pingyuan.",
+    },
+    {
+      q: "What is Zhuangzi's funniest story?",
+      a: "A strong candidate is the fish debate on the Hao River. When Hui Shi asks how he could know the fish are enjoying themselves, Zhuangzi answers the word \"whence\" literally: \"I knew it from up above the Hao.\" Harbsmeier also singles out the priest's offer to the sacrificial pigs as black humor.",
+    },
+    {
+      q: "Did Zhuangzi write every story in the Zhuangzi?",
+      a: "No. The Stanford Encyclopedia of Philosophy treats the book as the work of several hands, and Harold Roth's 2001 entry says only the Inner Chapters, 1 to 7, are traditionally credited to Zhuangzi himself, so not every funny story in it is his.",
     },
   ],
   related: ["zen-monk", "indian-court-wit"],
   published: "2026-10-17",
+  updated: "2026-10-20",
 };
 
 export default entry;

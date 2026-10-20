@@ -8,8 +8,10 @@ const entry: FunniestEntry = {
   h1: "Who is the funniest scientist?",
   description:
     "Richard Feynman is the scientist most often written up for his humor, with George Gamow, Niels Bohr and Neil deGrasse Tyson close behind. Five techniques creators and comedians can use.",
+  answer:
+    "The funniest scientist was Richard Feynman, according to MIT Libraries' 2011 profile of his memoir Surely You're Joking, Mr. Feynman!, because he treated serious official settings, from Los Alamos security to his own Nobel Prize, as a game and described his biggest moments in small, plain words.",
   capsule:
-    "Richard Feynman is the scientist most often described as funny. MIT Libraries calls him a \"prankster extraordinaire\" whose collection of humorous anecdotes, Surely You're Joking, Mr. Feynman!, was a surprise bestseller, and Physics Today and The New York Times both wrote about his jokes and pranks. No formal poll ranks scientists by funniness, so this is a reputation, not a vote. Feynman's humor came from treating official, serious settings as if they were a game, and from describing his own big moments in small, plain words.",
+    "There is no formal ranking of scientists by funniness, so this is a reputation, not a vote. MIT Libraries calls Feynman a \"prankster extraordinaire\" whose collection of humorous anecdotes was a surprise bestseller, and Physics Today and The New York Times both wrote about his jokes and pranks. George Gamow, Niels Bohr and Neil deGrasse Tyson are the names that come up next, each for putting something playful inside something formal.",
   blurb: "Feynman, Gamow, Bohr, and the trick of putting a joke inside the paperwork.",
   pick: {
     name: "Richard Feynman",
@@ -100,38 +102,85 @@ const entry: FunniestEntry = {
     {
       label: "MIT Libraries, 150 Years in the Stacks: Surely You're Joking, Mr. Feynman! (\"prankster extraordinaire\")",
       url: "https://libraries.mit.edu/150books/?p=2365",
+      publisher: "MIT Libraries",
+      date: "2011-05-23",
+      kind: "profile",
     },
     {
       label: "Physics Today: Feynman the joker (Melinda Baldwin, 2018)",
       url: "https://physicstoday.aip.org/news/feynman-the-joker",
+      publisher: "Physics Today",
+      date: "2018-05-11",
+      kind: "profile",
     },
     {
       label: "The New York Times obituary of Feynman by James Gleick, 1988 (republished by MacTutor, University of St Andrews)",
       url: "https://mathshistory.st-andrews.ac.uk/Obituaries/Feynman_NY_Times",
+      publisher: "The New York Times",
+      date: "1988-02-17",
+      kind: "profile",
     },
     {
       label: "APS News, This Month in Physics History: the Alpher, Bethe, Gamow paper",
       url: "https://www.aps.org/apsnews/2008/04/origin-chemical-elements",
+      publisher: "APS News",
+      date: "2008-04-01",
+      kind: "profile",
     },
     {
       label: "Physics World: Why humour matters (Robert P. Crease, on Bohr and others)",
       url: "https://physicsworld.com/a/why-humour-matters-physics-tradition-of-thoughtful-joke-telling/",
+      publisher: "Physics World",
+      date: "2013-05-13",
+      kind: "profile",
     },
     {
       label: "Interesting Engineering: 25+ reasons Neil deGrasse Tyson is one of the funniest scientists",
       url: "https://interestingengineering.com/culture/25-reasons-neil-degrasse-tyson-is-one-of-the-funniest-scientists-of-all-time",
+      publisher: "Interesting Engineering",
+      date: "2018-10-05",
+      kind: "profile",
     },
     {
       label: "Quote Investigator: relativity, a hot stove and a pretty girl",
       url: "https://quoteinvestigator.com/2014/11/24/hot-stove/",
+      publisher: "Quote Investigator",
+      date: "2014-11-24",
+      kind: "quote-check",
     },
     {
       label: "History.com: things Albert Einstein never said",
       url: "https://www.history.com/articles/here-are-6-things-albert-einstein-never-said",
+      publisher: "History.com",
+      date: "2025-05-28",
+      kind: "quote-check",
+    },
+  ],
+  faq: [
+    {
+      q: "Who is the funniest scientist?",
+      a: "Richard Feynman, the physicist who won the 1965 Nobel Prize in Physics. MIT Libraries calls him a \"prankster extraordinaire,\" and Physics Today and James Gleick's 1988 New York Times obituary both wrote about his jokes. There is no formal ranking, so this is his reputation, not a poll result.",
+    },
+    {
+      q: "What is Richard Feynman's funniest line?",
+      a: "A strong contender is how he described his Nobel-winning work, quoted in Gleick's New York Times obituary: \"I won the prize for shoving a great problem under the carpet.\" At Los Alamos he also left notes in safes he had cracked, one reading in part \"Feynman the safecracker.\"",
+    },
+    {
+      q: "Which other scientists are known for being funny?",
+      a: "George Gamow, who APS News says added Hans Bethe to a 1948 paper so the authors read Alpher, Bethe, Gamow; Niels Bohr, who said some subjects are so serious one can only joke about them; and Neil deGrasse Tyson, whom Interesting Engineering called one of the funniest scientists.",
+    },
+    {
+      q: "Did Einstein really say the hot stove line about relativity?",
+      a: "Not directly, as far as the evidence goes. Quote Investigator traced the hot stove explanation to a 1929 New York Times article that credited an unnamed secretary, so the link to Einstein is indirect. History.com lists other popular Einstein lines he never said.",
+    },
+    {
+      q: "Are Feynman's funny stories true?",
+      a: "Most come from his own memoirs, told to Ralph Leighton years later, so they are his telling rather than a transcript. Physics Today's Melinda Baldwin adds that his love of jokes and verbal sparring also got him into trouble with colleagues, friends and family.",
     },
   ],
   related: ["author"],
   published: "2026-10-17",
+  updated: "2026-10-20",
 };
 
 export default entry;

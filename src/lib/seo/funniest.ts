@@ -12,6 +12,20 @@
 // - Techniques are described in our own words. Example lines are originals
 //   written by Shutap about everyday situations, never jokes about the person.
 // - No card counts, no wellness vocabulary, no claims the product can't back.
+// - Quotable first: `answer` is ONE sentence that assistants and search can
+//   lift whole: "The funniest <category> is <pick>, according to <publisher's
+//   ranking or profile>, because <the core of their style>."
+// - Every source names its publisher and a date (published/updated, or the date
+//   you accessed it if the page shows none). Mark the basis for the pick as
+//   kind "ranking" (a list, poll or book ranking) or "profile" (writing that
+//   names them for their humor). No ranking? Say so plainly in answer/capsule.
+// - 3–6 FAQ entries, rendered on the page and as FAQPage schema.
+// - Each page must add facts no earlier page has, and must not reuse an earlier
+//   page's pick, technique names, example lines or prose.
+// All of this is enforced by funniest-check.ts: an entry that fails is dropped
+// here and never published. Run `node scripts/seo/funniest-check.mjs <slug>`.
+
+import { funniestProblems } from "./funniest-check.ts";
 
 export interface FunniestPerson {
   name: string;
@@ -35,8 +49,22 @@ export interface FunniestTechnique {
 }
 
 export interface FunniestSource {
+  /** What the page is, e.g. "The funniest presidents in history (Bob Dole's list)". */
   label: string;
   url: string;
+  /** Who published it, e.g. "NPR". The answer sentence names the publisher of its basis. */
+  publisher: string;
+  /** Publication or last-updated date shown on the page: YYYY, YYYY-MM or YYYY-MM-DD. */
+  date?: string;
+  /** When the page was read, if it shows no date (YYYY-MM-DD). */
+  accessed?: string;
+  /** "ranking" or "profile" = the basis for the pick; "quote-check" = verifies a quote. */
+  kind?: "ranking" | "profile" | "quote-check" | "reference";
+}
+
+export interface FunniestFaq {
+  q: string;
+  a: string;
 }
 
 /** Shelf on the /funniest hub, used for filtering. */
@@ -74,7 +102,12 @@ export interface FunniestEntry {
   title: string;
   h1: string;
   description: string;
-  /** The direct answer engines quote: who, who says so, and the core of their style. */
+  /**
+   * ONE quotable sentence, shown first: "The funniest <category> is <pick>,
+   * according to <publisher> ..., because ...". Past tense ("was") for history.
+   */
+  answer: string;
+  /** Context after the answer (who else says so, the core of their style). Don't repeat the answer. */
   capsule: string;
   /** Short line for the hub. */
   blurb: string;
@@ -86,6 +119,8 @@ export interface FunniestEntry {
   /** Optional note: disputed quotes, myths, caveats. */
   checkNote?: string;
   sources: FunniestSource[];
+  /** 3–6 questions people ask about this category, answered in 12–80 words. */
+  faq: FunniestFaq[];
   /** Slugs of related entries. */
   related: string[];
   /** ISO dates. */
@@ -93,11 +128,20 @@ export interface FunniestEntry {
   updated?: string;
 }
 
-export const FUNNIEST: FunniestEntry[] = Object.values(
+const ALL: FunniestEntry[] = Object.values(
   import.meta.glob<{ default: FunniestEntry }>("./funniest/*.ts", { eager: true }),
 )
   .map((m) => m.default)
   .sort((a, b) => a.published.localeCompare(b.published) || a.slug.localeCompare(b.slug));
+
+/** Only entries that pass the publish gate are routed, listed or put in a sitemap. */
+export const FUNNIEST: FunniestEntry[] = ALL.filter((e) => {
+  const problems = funniestProblems(e, ALL);
+  if (problems.length && import.meta.env?.DEV) {
+    console.warn(`[funniest] /funniest/${e.slug} is not published:\n  - ${problems.join("\n  - ")}`);
+  }
+  return problems.length === 0;
+});
 
 export function funniestField(e: FunniestEntry): FunniestField {
   return e.field ?? "other";
