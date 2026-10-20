@@ -16,7 +16,7 @@ permissions:
 
 env:
   # Not secrets. Leave GCP_WIF_PROVIDER empty to skip Google.
-  GCP_WIF_PROVIDER: projects/352805808321/locations/global/workloadIdentityPools/github/providers/github-actions
+  GCP_WIF_PROVIDER: projects/352805808321/locations/global/workloadIdentityPools/shutap-github/providers/github-actions
   GCP_SERVICE_ACCOUNT: shutap-seo-bot@project-1e0ec933-91ac-4b2c-8cc.iam.gserviceaccount.com
 
 concurrency:
