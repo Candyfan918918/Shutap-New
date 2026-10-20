@@ -78,6 +78,9 @@ for (const [i, line] of allText.split("\n").entries()) {
   if (ventNoun.test(line)) fail(`"vent" used as a noun in: ${line.slice(0, 90)}`);
 }
 if (/\b\d+\s+(cards?|jokes? in a set)\b/i.test(allText)) fail("states a card/joke count");
+// Shutap is a draft to push against, never a ghostwriter.
+const ghost = allText.match(/\b(writes?|write|do(es)?) (all )?(your|the) (jokes|bits?|sets?|material|scripts?) for you\b|\bdone[- ]for[- ]you\b|\bno writing (needed|required)\b|\bwithout writing a (word|line)\b/i);
+if (ghost) fail(`reads like a ghostwriter ("${ghost[0]}") — Shutap gives a draft you push against and rewrite`);
 
 // ---------- facts ----------
 const statLike = /(\d+(\.\d+)?\s?%|\bpercent\b|\bstud(y|ies)\b|\bsurvey\b|\bresearch (shows|found)\b|\baccording to\b|\bmillion\b|\bbillion\b)/i;
