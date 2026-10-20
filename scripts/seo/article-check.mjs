@@ -82,6 +82,28 @@ if (/\b\d+\s+(cards?|jokes? in a set)\b/i.test(allText)) fail("states a card/jok
 const ghost = allText.match(/\b(writes?|write|do(es)?) (all )?(your|the) (jokes|bits?|sets?|material|scripts?) for you\b|\bdone[- ]for[- ]you\b|\bno writing (needed|required)\b|\bwithout writing a (word|line)\b/i);
 if (ghost) fail(`reads like a ghostwriter ("${ghost[0]}") — Shutap gives a draft you push against and rewrite`);
 
+// ---------- sounds like a person, not a model ----------
+const aiTells = [
+  "delve", "in today's fast-paced", "in today's digital", "it's important to note", "it is important to note",
+  "game-changer", "game changer", "unlock the", "unleash", "elevate your", "tapestry", "navigate the world",
+  "navigating the", "whether you're a", "whether you are a", "in conclusion", "in summary", "look no further",
+  "embark on", "a testament to", "the realm of", "dive into", "let's dive", "dive deep", "seamless",
+  "harness the power", "the power of humor", "at the end of the day", "first and foremost", "furthermore",
+  "moreover", "additionally,", "it's worth noting", "plays a crucial role", "crucial role", "ever-evolving",
+  "landscape of", "picture this", "buckle up", "ultimate guide", "comprehensive guide", "boost your",
+];
+const lower = allText.toLowerCase();
+for (const t of aiTells) if (lower.includes(t)) fail(`AI-sounding phrase "${t}" — say it plainly`);
+const dashes = (allText.match(/—/g) ?? []).length;
+if (dashes > Math.max(4, Math.round(total / 250))) fail(`${dashes} em dashes (max ~1 per 250 words) — use periods and commas`);
+const sentences = allText.split(/(?<=[.!?])\s+/).map((x) => words(x)).filter((n) => n > 0);
+const avg = sentences.reduce((a, b) => a + b, 0) / Math.max(1, sentences.length);
+const sd = Math.sqrt(sentences.reduce((a, b) => a + (b - avg) ** 2, 0) / Math.max(1, sentences.length));
+if (sentences.length > 20 && sd < 4) fail(`sentence lengths too uniform (sd ${sd.toFixed(1)}) — mix short and long`);
+const openers = (g.sections ?? []).map((x) => String(x.body).split(/\s+/).slice(0, 2).join(" ").toLowerCase());
+const dupOpen = openers.find((o, i) => openers.indexOf(o) !== i);
+if (dupOpen) fail(`two sections open the same way ("${dupOpen}…")`);
+
 // ---------- facts ----------
 const statLike = /(\d+(\.\d+)?\s?%|\bpercent\b|\bstud(y|ies)\b|\bsurvey\b|\bresearch (shows|found)\b|\baccording to\b|\bmillion\b|\bbillion\b)/i;
 const hasStats = statLike.test(allText);
