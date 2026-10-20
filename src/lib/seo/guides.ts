@@ -12,6 +12,16 @@ export interface GuideSection {
   body: string;
 }
 
+export interface GuideFaq {
+  q: string;
+  a: string;
+}
+
+export interface GuideSource {
+  label: string;
+  url: string;
+}
+
 export interface Guide {
   slug: string;
   kind: GuideKind;
@@ -30,13 +40,21 @@ export interface Guide {
   cta: { label: string; href: string };
   /** ISO date the page was first published. */
   published: string;
+  /** ISO date of the last substantive edit. */
+  updated?: string;
+  /** Search query this page targets (daily articles). One page per query. */
+  keyword?: string;
+  /** Questions people also ask, answered in 1-3 sentences. Rendered + FAQPage schema. */
+  faq?: GuideFaq[];
+  /** Where any fact or figure on the page comes from. */
+  sources?: GuideSource[];
 }
 
 const CTA = { label: "Write your story, get the bit", href: "/" };
 const BIZ_CTA = { label: "Request pricing and solutions", href: "/business" };
 const PUBLISHED = "2026-10-17";
 
-export const GUIDES: Guide[] = [
+const BASE_GUIDES: Guide[] = [
   // ---- tools ----------------------------------------------------------
   {
     slug: "storytime-script-generator",
@@ -788,6 +806,16 @@ export const GUIDES: Guide[] = [
     published: PUBLISHED,
   },
 ];
+
+// Daily articles: one file per article in ./articles/<slug>.ts (default export:
+// Guide, kind "guide"). Written by the daily article agent, one file per PR.
+const ARTICLES: Guide[] = Object.values(
+  import.meta.glob<{ default: Guide }>("./articles/*.ts", { eager: true }),
+)
+  .map((m) => m.default)
+  .sort((a, b) => a.published.localeCompare(b.published) || a.slug.localeCompare(b.slug));
+
+export const GUIDES: Guide[] = [...BASE_GUIDES, ...ARTICLES];
 
 export function getGuide(slug: string): Guide | undefined {
   return GUIDES.find((g) => g.slug === slug);

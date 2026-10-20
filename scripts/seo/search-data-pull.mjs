@@ -104,8 +104,45 @@ async function pullBing() {
   console.log(`Bing: ${queries.length} queries, ${pages.length} pages`);
 }
 
+// Bing keyword research: related searches + monthly-ish impressions for each
+// seed in scripts/seo/keyword-seeds.txt. Free volume data for picking topics.
+async function pullBingKeywords() {
+  const key = process.env.BING_WEBMASTER_API_KEY;
+  if (!key) return console.log("Bing keywords: no secret, skipped");
+  const { readFileSync } = await import("node:fs");
+  const seeds = readFileSync("scripts/seo/keyword-seeds.txt", "utf8")
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith("#"));
+  const base = "https://ssl.bing.com/webmaster/api.svc/json";
+  const range = `country=us&language=en-US&startDate=${day(35)}T00:00:00&endDate=${day(5)}T00:00:00`;
+  const ideas = new Map();
+  let errors = 0;
+  for (const seed of seeds) {
+    const url = `${base}/GetRelatedKeywords?q=${encodeURIComponent(seed)}&${range}&apikey=${key}`;
+    const r = await fetch(url);
+    if (!r.ok) {
+      errors++;
+      if (errors <= 2) console.warn(`Bing keywords "${seed}" ${r.status}: ${(await r.text()).slice(0, 200)}`);
+      continue;
+    }
+    for (const k of (await r.json()).d ?? []) {
+      const q = String(k.Query ?? "").toLowerCase().trim();
+      if (!q) continue;
+      const prev = ideas.get(q);
+      const imp = Number(k.Impressions ?? 0);
+      if (!prev || imp > prev.impressions) ideas.set(q, { query: q, impressions: imp, broadImpressions: Number(k.BroadImpressions ?? 0), seed });
+    }
+    await new Promise((res) => setTimeout(res, 300));
+  }
+  const list = [...ideas.values()].sort((a, b) => b.impressions - a.impressions);
+  writeFileSync(`${OUT}/keyword-ideas.json`, JSON.stringify({ source: "Bing Webmaster GetRelatedKeywords (US, last ~30 days)", pulledAt: new Date().toISOString(), seeds: seeds.length, ideas: list }, null, 1));
+  console.log(`Bing keywords: ${list.length} ideas from ${seeds.length} seeds (${errors} errors)`);
+  if (errors === seeds.length) throw new Error("every keyword request failed");
+}
+
 let failed = false;
-for (const [name, fn] of [["GSC", pullGsc], ["Bing", pullBing]]) {
+for (const [name, fn] of [["GSC", pullGsc], ["Bing", pullBing], ["Bing keywords", pullBingKeywords]]) {
   try {
     await fn();
   } catch (e) {

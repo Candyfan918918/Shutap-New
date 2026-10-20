@@ -15,11 +15,11 @@ const newest = (dates: (string | undefined)[]) => dates.filter(Boolean).sort().a
 export function getCoreEntries(): SitemapEntry[] {
   return [
   { path: "/", lastmod: todayPacific(), changefreq: "daily", priority: "1.0" },
-  { path: "/guides", lastmod: newest(GUIDES.map((g) => g.published)), changefreq: "weekly", priority: "0.9" },
+  { path: "/guides", lastmod: newest(GUIDES.map((g) => g.updated ?? g.published)), changefreq: "weekly", priority: "0.9" },
   { path: "/ai-joke-generator", lastmod: "2026-10-18", changefreq: "monthly", priority: "0.9" },
   ...GUIDES.map((g): SitemapEntry => ({
     path: guidePath(g.slug),
-    lastmod: g.published,
+    lastmod: g.updated ?? g.published,
     changefreq: "monthly",
     priority: g.kind === "tool" ? "0.8" : "0.7",
   })),

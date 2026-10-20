@@ -1,0 +1,24 @@
+# One seed per line. The daily pull asks Bing for related searches + volume.
+# The article agent may append new seeds (one per line) when a topic area runs dry.
+how to be funny
+how to write a joke
+how to write a punchline
+stand up comedy tips
+open mic tips
+comedy writing
+storytime ideas
+funny tiktok ideas
+funny pov ideas
+comedy skit ideas
+funny video ideas
+roast jokes
+self deprecating humor
+how to tell a story
+funny captions
+dry humor
+deadpan humor
+comedy timing
+joke structure
+how to start stand up comedy
+funny work stories
+funny dating stories
