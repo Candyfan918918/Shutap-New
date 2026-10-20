@@ -1,6 +1,6 @@
 {
  "site": "https://shutap.com/",
- "pulledAt": "2026-10-20T19:25:24.992Z",
+ "pulledAt": "2026-10-20T19:31:16.254Z",
  "queries": [
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -104,11 +104,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
+   "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1792108800000)/",
    "Impressions": 1,
-   "Query": "+bit joke"
+   "Query": "shutap spellinh"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -122,11 +122,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 2,
+   "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1792108800000)/",
    "Impressions": 1,
-   "Query": "shutap spellinh"
+   "Query": "+bit joke"
   }
  ],
  "pages": [
@@ -142,20 +142,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1784851200000)/",
-   "Impressions": 1,
-   "Query": "https://shutap.com/welcome"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 1,
    "Clicks": 0,
    "Date": "/Date(1784851200000)/",
    "Impressions": 1,
    "Query": "https://shutap.com/"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1784851200000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/welcome"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -205,20 +205,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1789084800000)/",
-   "Impressions": 1,
-   "Query": "https://shutap.com/about"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 1,
    "Clicks": 0,
    "Date": "/Date(1789084800000)/",
    "Impressions": 1,
    "Query": "https://shutap.com/"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1789084800000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/about"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -241,20 +241,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1791504000000)/",
-   "Impressions": 1,
-   "Query": "https://shutap.com/relationships"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 4,
    "Clicks": 0,
    "Date": "/Date(1791504000000)/",
    "Impressions": 1,
    "Query": "https://shutap.com/about"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1791504000000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/relationships"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
