@@ -3,7 +3,7 @@ import { ogImageMeta } from "@/lib/seo/meta";
 import { ContentPage } from "@/components/seo/ContentPage";
 import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
-import { GUIDES, guidePath } from "@/lib/seo/guides";
+import { GUIDES, GUIDE_TOPICS, guidePath, guidesInTopic, topicPath } from "@/lib/seo/guides";
 
 const PATH = "/guides";
 const TITLE = "Guides & Tools for Writing Funnier Videos and Sets | Shutap";
@@ -18,6 +18,22 @@ const toItems = (kind: "tool" | "guide" | "business") =>
     label: g.h1,
     blurb: g.blurb,
   }));
+
+// Guides grouped by topic: the newest few per topic, then a link to the topic
+// hub that lists all of them. Stays readable however many articles exist.
+const PER_TOPIC = 5;
+const topicGroups = () =>
+  GUIDE_TOPICS.map((t) => ({ t, list: guidesInTopic(t.id) }))
+    .filter((x) => x.list.length > 0)
+    .map(({ t, list }) => ({
+      heading: t.label,
+      items: [
+        ...list.slice(0, PER_TOPIC).map((g) => ({ href: guidePath(g.slug), label: g.h1, blurb: g.blurb })),
+        { href: topicPath(t.id), label: `All ${t.label.toLowerCase()} guides (${list.length}) →`, blurb: t.description },
+      ],
+    }));
+const untopicGuides = () =>
+  GUIDES.filter((g) => g.kind === "guide" && !g.topic).map((g) => ({ href: guidePath(g.slug), label: g.h1, blurb: g.blurb }));
 
 export const Route = createFileRoute("/guides/")({
   head: () => ({
@@ -67,7 +83,8 @@ export const Route = createFileRoute("/guides/")({
           { href: "/ai-joke-generator", label: "AI joke generator", blurb: "Turn your own story into a complete comedy bit: hook, setup, tags and button — not random one-liners." },
           ...toItems("tool"),
         ] },
-        { heading: "Guides", items: toItems("guide") },
+        ...topicGroups(),
+        ...(untopicGuides().length ? [{ heading: "More guides", items: untopicGuides() }] : []),
         {
           heading: "Shutap Enterprise (in development)",
           items: [

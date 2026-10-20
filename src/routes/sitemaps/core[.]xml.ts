@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { renderUrlset, todayPacific, type SitemapEntry } from "@/lib/seo/sitemap";
-import { GUIDES, guidePath } from "@/lib/seo/guides";
+import { GUIDES, GUIDE_TOPICS, guidePath, guidesInTopic, topicPath } from "@/lib/seo/guides";
 import { FUNNIEST, FUNNIEST_HUB, funniestPath } from "@/lib/seo/funniest";
 
 const newest = (dates: (string | undefined)[]) => dates.filter(Boolean).sort().at(-1) as string | undefined;
@@ -17,6 +17,12 @@ export function getCoreEntries(): SitemapEntry[] {
   { path: "/", lastmod: todayPacific(), changefreq: "daily", priority: "1.0" },
   { path: "/guides", lastmod: newest(GUIDES.map((g) => g.updated ?? g.published)), changefreq: "weekly", priority: "0.9" },
   { path: "/ai-joke-generator", lastmod: "2026-10-18", changefreq: "monthly", priority: "0.9" },
+  ...GUIDE_TOPICS.filter((t) => guidesInTopic(t.id).length > 0).map((t): SitemapEntry => ({
+    path: topicPath(t.id),
+    lastmod: newest(guidesInTopic(t.id).map((g) => g.updated ?? g.published)),
+    changefreq: "weekly",
+    priority: "0.8",
+  })),
   ...GUIDES.map((g): SitemapEntry => ({
     path: guidePath(g.slug),
     lastmod: g.updated ?? g.published,
