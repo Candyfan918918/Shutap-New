@@ -3,7 +3,8 @@
 //   seo-data/gsc-latest.json   Google Search Console, last 28 days (query x page)
 //   seo-data/bing-latest.json  Bing Webmaster query stats
 // Each source is skipped quietly if its secret is missing.
-// Secrets: GSC_SERVICE_ACCOUNT (full JSON key), BING_WEBMASTER_API_KEY.
+// Google auth: GSC_ACCESS_TOKEN (minted keylessly by Workload Identity Federation in the
+// workflow) or, as a fallback, GSC_SERVICE_ACCOUNT (full JSON key). Bing: BING_WEBMASTER_API_KEY.
 // No dependencies; Node 20+.
 
 import { createSign } from "node:crypto";
@@ -56,8 +57,9 @@ async function gscQuery(token, body) {
 }
 
 async function pullGsc() {
-  if (!process.env.GSC_SERVICE_ACCOUNT) return console.log("GSC: no secret, skipped");
-  const token = await googleToken(JSON.parse(process.env.GSC_SERVICE_ACCOUNT));
+  const { GSC_ACCESS_TOKEN, GSC_SERVICE_ACCOUNT } = process.env;
+  if (!GSC_ACCESS_TOKEN && !GSC_SERVICE_ACCOUNT) return console.log("GSC: no credentials, skipped");
+  const token = GSC_ACCESS_TOKEN || (await googleToken(JSON.parse(GSC_SERVICE_ACCOUNT)));
   const range = { startDate: day(30), endDate: day(2) }; // GSC data lags ~2 days
   const queryPage = await gscQuery(token, { ...range, dimensions: ["query", "page"], rowLimit: 5000 });
   const pages = await gscQuery(token, { ...range, dimensions: ["page"], rowLimit: 1000 });
