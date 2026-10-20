@@ -28,6 +28,9 @@ export const Route = createFileRoute("/guides/$slug")({
             description: g.description,
             url,
             datePublished: g.published,
+            dateModified: g.updated ?? g.published,
+            ...(g.keyword ? { keywords: g.keyword } : {}),
+            ...(g.sources?.length ? { citation: g.sources.map((s) => s.url) } : {}),
             author: { "@type": "Organization", name: "Shutap", url: SITE_URL },
             publisher: { "@type": "Organization", name: "Shutap", url: SITE_URL },
           }
@@ -62,6 +65,22 @@ export const Route = createFileRoute("/guides/$slug")({
       links: [{ rel: "canonical", href: url }],
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(jsonLd) },
+        ...(g.faq?.length
+          ? [
+              {
+                type: "application/ld+json",
+                children: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  mainEntity: g.faq.map((f) => ({
+                    "@type": "Question",
+                    name: f.q,
+                    acceptedAnswer: { "@type": "Answer", text: f.a },
+                  })),
+                }),
+              },
+            ]
+          : []),
         breadcrumbScript([
           { name: "Guides", path: "/guides" },
           { name: g.h1, path },
@@ -98,7 +117,50 @@ function GuideRoute() {
       capsule={g.capsule}
       sections={g.sections}
       cta={g.cta}
+      children={<GuideExtras faq={g.faq} sources={g.sources} />}
       others={[...related, { href: "/guides", label: "All guides" }, { href: "/funniest", label: "The funniest" }, { href: "/business", label: "Shutap Enterprise" }, { href: "/pricing", label: "Pricing" }]}
     />
+  );
+}
+
+const H2 = {
+  fontFamily: "'Sora', system-ui, sans-serif",
+  fontSize: "clamp(20px, 2.6vw, 24px)",
+  fontWeight: 600,
+  letterSpacing: "-0.02em",
+  margin: "0 0 12px",
+  color: "#0b080f",
+} as const;
+
+function GuideExtras({ faq, sources }: { faq?: { q: string; a: string }[]; sources?: { label: string; url: string }[] }) {
+  if (!faq?.length && !sources?.length) return null;
+  return (
+    <>
+      {faq?.length ? (
+        <section style={{ marginBottom: 36 }}>
+          <h2 style={H2}>Questions people ask</h2>
+          {faq.map((f) => (
+            <div key={f.q} style={{ marginBottom: 18 }}>
+              <h3 style={{ fontSize: 17, fontWeight: 600, margin: "0 0 4px", color: "#0b080f" }}>{f.q}</h3>
+              <p style={{ fontSize: 17, margin: 0, color: "#0b080f" }}>{f.a}</p>
+            </div>
+          ))}
+        </section>
+      ) : null}
+      {sources?.length ? (
+        <section style={{ marginBottom: 36 }}>
+          <h2 style={{ ...H2, fontSize: 18 }}>Sources</h2>
+          <ul style={{ margin: 0, paddingLeft: 20, fontSize: 15, color: "#443c42" }}>
+            {sources.map((s) => (
+              <li key={s.url}>
+                <a href={s.url} rel="noopener" target="_blank" style={{ color: "#443c42" }}>
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+    </>
   );
 }
