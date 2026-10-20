@@ -1,0 +1,31 @@
+name: AI crawler readability (SSR check)
+
+# ChatGPT's and Claude's crawlers do not run JavaScript. This fails if a public
+# page stops being server-rendered, or a private client-only route is left
+# crawlable. See scripts/seo/ssr-check.mjs.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/routes/**"
+      - "public/robots.txt"
+      - "scripts/seo/ssr-check.mjs"
+  schedule:
+    - cron: "47 15 * * *" # 08:47 Pacific (PDT), after the daily pages publish
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Static check (routes vs robots.txt)
+        run: node scripts/seo/ssr-check.mjs
+      - name: Live check (fetch pages as OAI-SearchBot)
+        if: github.event_name != 'push'
+        run: node scripts/seo/ssr-check.mjs --live

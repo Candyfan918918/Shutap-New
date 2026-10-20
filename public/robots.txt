@@ -4,14 +4,19 @@
 # blocked: they carry a noindex tag, and crawlers must be able to fetch a page
 # to see it. Do not add them here.
 # Verify current user-agent strings periodically; the list shifts.
+# Search/citation bots that decide whether AI assistants can cite us:
+# OAI-SearchBot + ChatGPT-User (ChatGPT), Claude-SearchBot + Claude-User (Claude),
+# Googlebot + Google-Extended (Gemini), PerplexityBot, Bingbot (Copilot, ChatGPT search).
+# Every route below with `ssr: false` must stay disallowed here;
+# scripts/seo/ssr-check.mjs enforces that on every push.
 
 User-agent: *
 User-agent: GPTBot
 User-agent: OAI-SearchBot
 User-agent: ChatGPT-User
 User-agent: ClaudeBot
-User-agent: Claude-Web
-User-agent: anthropic-ai
+User-agent: Claude-SearchBot
+User-agent: Claude-User
 User-agent: PerplexityBot
 User-agent: Perplexity-User
 User-agent: Google-Extended
@@ -24,6 +29,8 @@ User-agent: Bytespider
 User-agent: Amazonbot
 User-agent: cohere-ai
 User-agent: Meta-ExternalAgent
+User-agent: meta-webindexer
+User-agent: MistralAI-User
 Allow: /
 Disallow: /api/
 Disallow: /auth
@@ -39,6 +46,8 @@ Disallow: /admin
 Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /lovable/
+Disallow: /.lovable/
+Disallow: /checkin
 Disallow: /report
 
 Sitemap: https://shutap.com/sitemap.xml
