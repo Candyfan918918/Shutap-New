@@ -1,5 +1,5 @@
 // Shared footer for info/legal pages. Link order matches DocLayout's doc-nav.
-import { FazierBadge } from './FazierBadge'
+import { LaunchBadges } from './LaunchBadges'
 
 const INFO_LINKS: { href: string; label: string }[] = [
   { href: '/terms', label: 'terms' },
@@ -71,7 +71,7 @@ export function SiteFooter() {
           >
             SHUTAP. Say it funnier. · 18+ · pseudonymous · not therapy or advice.
           </div>
-          <FazierBadge align="flex-end" />
+          <LaunchBadges align="flex-end" />
         </div>
       </div>
       <style>{`
