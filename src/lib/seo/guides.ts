@@ -22,6 +22,134 @@ export interface GuideSource {
   url: string;
 }
 
+/** Topic clusters. Fixed list: add a topic here before an article uses it. */
+export type GuideTopic =
+  | "how-to-be-funny"
+  | "humor-techniques"
+  | "writing-jokes"
+  | "types-of-humor"
+  | "stand-up"
+  | "storytime-and-pov"
+  | "skits-and-sketches"
+  | "roasts"
+  | "jokes-for-occasions"
+  | "finding-ideas"
+  | "growing-views"
+  | "watch-time"
+  | "comedy-creators"
+  | "using-shutap";
+
+export interface GuideTopicInfo {
+  id: GuideTopic;
+  label: string;
+  /** <title> for the topic hub. Keep under ~60 characters. */
+  title: string;
+  description: string;
+  /** Opening paragraph on the hub: what this topic covers. */
+  intro: string;
+}
+
+export const GUIDE_TOPICS: GuideTopicInfo[] = [
+  {
+    id: "how-to-be-funny",
+    label: "How to be funny",
+    title: "How to Be Funny: Practical Guides With Examples | Shutap",
+    description: "How to be funnier in conversation, at work, on dates, in texts and on camera, with habits you can practice and original example lines.",
+    intro: "Being funny is a skill, not a personality type. These guides break it into things you can practice: noticing specifics, timing, saying less, and knowing the room.",
+  },
+  {
+    id: "humor-techniques",
+    label: "Humor techniques",
+    title: "Comedy Techniques: Rule of Three, Callbacks & More | Shutap",
+    description: "The named techniques comedians use, from the rule of three, callbacks and misdirection to fake precision and escalation, with original examples.",
+    intro: "The named moves behind most laughs: misdirection, the rule of three, callbacks, fake precision, escalation, the object given a life, and more. One technique per guide, each with original examples you can copy the shape of.",
+  },
+  {
+    id: "writing-jokes",
+    label: "Writing jokes",
+    title: "How to Write Jokes: Setups, Punchlines & Tags | Shutap",
+    description: "Guides to writing jokes that land: premises, setups, punchlines, tags, buttons, rewrites and the structures comedians use.",
+    intro: "How a joke is built and how to write one on purpose: finding the premise, writing a setup that points the wrong way, landing the punchline, then tagging it and ending on a button.",
+  },
+  {
+    id: "stand-up",
+    label: "Stand-up & open mics",
+    title: "Stand-Up Comedy Guides: Writing, Open Mics & Sets | Shutap",
+    description: "Guides for stand-up comedians: writing your first five minutes, open mics, building a set, stage time and working a room.",
+    intro: "From the first open mic to a tight set: how to write material from your own life, how to structure five minutes, and what to do with the bits that die.",
+  },
+  {
+    id: "storytime-and-pov",
+    label: "Storytime & POV videos",
+    title: "Storytime & POV Video Guides for Creators | Shutap",
+    description: "How to turn real stories into storytime and POV videos: hooks, pacing, length, structure and endings that get rewatched.",
+    intro: "How to take something that actually happened and tell it to camera: the hook in the first two seconds, the order of the beats, how long it should run, and the last line.",
+  },
+  {
+    id: "skits-and-sketches",
+    label: "Skits & sketches",
+    title: "Comedy Skit & Sketch Writing Guides | Shutap",
+    description: "How to write comedy skits and sketches: premises, characters, escalation, playing every part yourself and shooting it.",
+    intro: "Skits and sketches: finding the game of the scene, escalating it, writing for one person playing every part, and laying it out shot by shot.",
+  },
+  {
+    id: "types-of-humor",
+    label: "Types of humor",
+    title: "Types of Humor Explained: Dry, Dark, Deadpan & More | Shutap",
+    description: "Dry, dark, deadpan, sarcastic, absurd and self-deprecating humor: what each one is, how it works, and how to write it.",
+    intro: "The registers of funny and how each one works: dry, deadpan, dark, sarcastic, absurd, observational and self-deprecating, with original examples of each.",
+  },
+  {
+    id: "jokes-for-occasions",
+    label: "Jokes for occasions",
+    title: "Funny Lines for Work, Toasts, Birthdays & Captions | Shutap",
+    description: "How to be funny in a toast, a work email, a birthday card, a caption or a presentation, with original example lines.",
+    intro: "Being funny when it has to fit a moment: toasts, speeches, work emails, captions, cards and presentations. What lands, what to avoid, and original lines to start from.",
+  },
+  {
+    id: "roasts",
+    label: "Roasts",
+    title: "How to Write a Roast: Roast Jokes & Structure | Shutap",
+    description: "How to write a roast that gets laughs without losing the room: targets, structure, punching at choices not people, and closers.",
+    intro: "Roasts: picking what to aim at, keeping it about choices and situations rather than things people cannot change, structuring the set, and ending warm.",
+  },
+  {
+    id: "finding-ideas",
+    label: "Finding ideas",
+    title: "Comedy Video Ideas: How to Find Topics Every Day | Shutap",
+    description: "Where comedy ideas come from and how to find a topic to post every day: your own life, trends, notes habits and prompts.",
+    intro: "Never staring at a blank page: where comedy material actually comes from, how to catch it before you forget it, and how to turn a trend into something only you would post.",
+  },
+  {
+    id: "growing-views",
+    label: "Growing views",
+    title: "How to Get More Views on Comedy Videos | Shutap",
+    description: "How comedy creators grow views on TikTok, Reels and YouTube Shorts: hooks, formats, posting cadence, series and what the algorithms reward.",
+    intro: "Getting comedy in front of more people: the first two seconds, formats you can repeat, series that bring viewers back, posting cadence, and reading what the numbers say.",
+  },
+  {
+    id: "watch-time",
+    label: "Watch time & completion",
+    title: "Improve Watch Time & Completion Rate on Shorts | Shutap",
+    description: "How to keep viewers watching to the end of a comedy video: pacing, cutting, loops, payoffs and the beats where people swipe away.",
+    intro: "Keeping people to the last second: where viewers swipe away, how to cut dead air, pacing a bit for short video, ending on a button, and loops that get rewatched.",
+  },
+  {
+    id: "comedy-creators",
+    label: "Life as a comedy creator",
+    title: "Guides for Comedy Creators: Voice, Habits & Brand Deals | Shutap",
+    description: "For people making comedy online: finding your voice, writing habits, burnout-proof schedules, collaborations and working with brands.",
+    intro: "The work around the work: finding a voice people recognize, writing habits that survive a busy week, collaborating with other creators, and working with brands without losing the funny.",
+  },
+  {
+    id: "using-shutap",
+    label: "Using Shutap",
+    title: "How to Use Shutap: Workflows for Creators & Comics | Shutap",
+    description: "How to use Shutap as a storytime writer, a stand-up drafting partner, a skit planner, a caption writer and more, step by step.",
+    intro: "Practical workflows: how to use Shutap as a storytime script writer, a first-draft partner for stand-up, a skit planner, a punch-up pass, and more.",
+  },
+];
+
 export interface Guide {
   slug: string;
   kind: GuideKind;
@@ -42,6 +170,8 @@ export interface Guide {
   published: string;
   /** ISO date of the last substantive edit. */
   updated?: string;
+  /** Topic cluster (required for daily articles). */
+  topic?: GuideTopic;
   /** Search query this page targets (daily articles). One page per query. */
   keyword?: string;
   /** Questions people also ask, answered in 1-3 sentences. Rendered + FAQPage schema. */
@@ -815,7 +945,31 @@ const ARTICLES: Guide[] = Object.values(
   .map((m) => m.default)
   .sort((a, b) => a.published.localeCompare(b.published) || a.slug.localeCompare(b.slug));
 
-export const GUIDES: Guide[] = [...BASE_GUIDES, ...ARTICLES];
+// Topics for the hand-written guides (kept here so their objects stay untouched).
+const BASE_TOPICS: Record<string, GuideTopic> = {
+  "how-to-turn-a-story-into-a-bit": "storytime-and-pov",
+  "how-long-should-a-tiktok-bit-be": "storytime-and-pov",
+  "how-to-write-comedy-tags": "writing-jokes",
+};
+
+export const GUIDES: Guide[] = [
+  ...BASE_GUIDES.map((g) => (BASE_TOPICS[g.slug] && !g.topic ? { ...g, topic: BASE_TOPICS[g.slug] } : g)),
+  ...ARTICLES,
+];
+
+export function getTopic(id: string): GuideTopicInfo | undefined {
+  return GUIDE_TOPICS.find((t) => t.id === id);
+}
+
+export function topicPath(id: GuideTopic): string {
+  return `/guides/topic/${id}`;
+}
+
+export function guidesInTopic(id: GuideTopic): Guide[] {
+  return GUIDES.filter((g) => g.topic === id).sort(
+    (a, b) => (b.updated ?? b.published).localeCompare(a.updated ?? a.published) || a.h1.localeCompare(b.h1),
+  );
+}
 
 export function getGuide(slug: string): Guide | undefined {
   return GUIDES.find((g) => g.slug === slug);

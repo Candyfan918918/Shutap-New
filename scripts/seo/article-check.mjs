@@ -30,10 +30,12 @@ if (!existsSync(file)) {
 const g = (await import(pathToFileURL(file).href)).default;
 
 // ---------- shape ----------
-const req = ["slug", "kind", "title", "h1", "description", "capsule", "blurb", "sections", "related", "cta", "published", "keyword", "faq"];
+const TOPICS = [...readFileSync("src/lib/seo/guides.ts", "utf8").matchAll(/^\s{4}id: "([a-z-]+)",$/gm)].map((m) => m[1]);
+const req = ["slug", "kind", "topic", "title", "h1", "description", "capsule", "blurb", "sections", "related", "cta", "published", "keyword", "faq"];
 for (const k of req) if (g?.[k] === undefined || g[k] === "") fail(`missing field: ${k}`);
 if (g.slug !== slug) fail(`slug field "${g.slug}" does not match file name "${slug}"`);
 if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) fail("slug must be lowercase-hyphenated");
+if (g.topic && !TOPICS.includes(g.topic)) fail(`topic "${g.topic}" is not one of: ${TOPICS.join(", ")}`);
 if (g.kind !== "guide") fail(`kind must be "guide" (got "${g.kind}")`);
 
 const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Los_Angeles" }).format(new Date());

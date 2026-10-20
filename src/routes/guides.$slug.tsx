@@ -4,7 +4,7 @@ import { ContentPage } from "@/components/seo/ContentPage";
 import { SeoPage } from "@/components/seo/SeoPage";
 import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
-import { GUIDES, getGuide, guidePath } from "@/lib/seo/guides";
+import { GUIDES, getGuide, getTopic, guidePath, topicPath } from "@/lib/seo/guides";
 
 export const Route = createFileRoute("/guides/$slug")({
   loader: ({ params }) => {
@@ -83,6 +83,7 @@ export const Route = createFileRoute("/guides/$slug")({
           : []),
         breadcrumbScript([
           { name: "Guides", path: "/guides" },
+          ...(g.topic ? [{ name: getTopic(g.topic)?.label ?? g.topic, path: topicPath(g.topic) }] : []),
           { name: g.h1, path },
         ]),
       ],
@@ -103,6 +104,7 @@ function GuideRoute() {
   const { slug } = Route.useParams();
   const g = getGuide(slug);
   if (!g) return null;
+  const topic = g.topic ? getTopic(g.topic) : undefined;
   const related = g.related
     .map((s) => GUIDES.find((x) => x.slug === s))
     .filter((x): x is NonNullable<typeof x> => !!x)
@@ -111,6 +113,7 @@ function GuideRoute() {
     <ContentPage
       breadcrumbs={[
         { name: "Guides", path: "/guides" },
+        ...(topic ? [{ name: topic.label, path: topicPath(topic.id) }] : []),
         { name: g.h1, path: guidePath(g.slug) },
       ]}
       h1={g.h1}
@@ -118,7 +121,7 @@ function GuideRoute() {
       sections={g.sections}
       cta={g.cta}
       children={<GuideExtras faq={g.faq} sources={g.sources} />}
-      others={[...related, { href: "/guides", label: "All guides" }, { href: "/funniest", label: "The funniest" }, { href: "/business", label: "Shutap Enterprise" }, { href: "/pricing", label: "Pricing" }]}
+      others={[...related, ...(topic ? [{ href: topicPath(topic.id), label: `More on ${topic.label.toLowerCase()}` }] : []), { href: "/guides", label: "All guides" }, { href: "/funniest", label: "The funniest" }, { href: "/business", label: "Shutap Enterprise" }, { href: "/pricing", label: "Pricing" }]}
     />
   );
 }
