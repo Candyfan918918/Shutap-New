@@ -314,6 +314,33 @@ export function BitSurface() {
     })
   }
 
+  /* A bit is shown on "/" itself, so the logo, "write" and any other link to
+     the homepage point at the page already open and the router does nothing.
+     Treat such a click as "write another": back to an empty box. A bit still
+     being written is left alone; it lands when it's done. */
+  const phaseRef = useRef(phase)
+  phaseRef.current = phase
+  const writeAnotherRef = useRef(writeAnother)
+  writeAnotherRef.current = writeAnother
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+      const a = (e.target as Element | null)?.closest?.('a')
+      if (!a || (a.target && a.target !== '_self')) return
+      let url: URL
+      try { url = new URL(a.href, window.location.href) } catch { return }
+      if (url.origin !== window.location.origin || url.pathname !== '/' || url.search || url.hash) return
+      if (window.location.pathname !== '/') return
+      if (phaseRef.current === 'write' || phaseRef.current === 'writing') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return
+      }
+      writeAnotherRef.current()
+    }
+    document.addEventListener('click', onClick)
+    return () => document.removeEventListener('click', onClick)
+  }, [])
+
   const step = Math.min(STEPS.length - 1, Math.floor(elapsed / 2.5))
   const left = usage ? Math.max(0, usage.cap - usage.used) : null
 
