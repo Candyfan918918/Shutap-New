@@ -281,7 +281,7 @@ async function writeCore(
     writer_model: written.writerModel,
     judge_model: written.judgeModel,
     judge_why: written.judgeWhy,
-    timings: { ...timings, lab, rejected: written.rejected },
+    timings: { ...timings, lab, rejected: written.rejected, attempts: written.attempts },
   } as never)
   if (error) {
     if (!lab) await refundStory(supabaseAdmin, id.subjectKey, day, bitId)
@@ -294,6 +294,7 @@ async function writeCore(
     lab,
     candidates: written.ranked.length,
     rejected: written.rejected,
+    attempts: written.attempts,
     timings,
   })
 

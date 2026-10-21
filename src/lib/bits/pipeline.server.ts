@@ -10,7 +10,7 @@
 // Deterministic rules run before the judge, so a bit is still safe when the
 // judge is down: then the first bit that passes wins. Every prompt lives in
 // src/lib/jokes/prompts.server.ts.
-import { callAgent, tryParseJson } from '@/lib/agents/gateway'
+import { DEFAULT_MODEL, callAgent, tryParseJson } from '@/lib/agents/gateway'
 import {
   BIT_AUDIENCE,
   BIT_HEAT,
@@ -52,16 +52,35 @@ export { BIT_PROMPT_VERSION }
 /* ── budgets ──
    The target is a bit in under ten seconds end to end. Each stage gets a
    wall-clock cap, tunable with BIT_*_MS; past it the ladder moves on: the
-   writer without premises, the first passing bit without a judge. */
+   writer without premises, the first passing bit without a judge.
+
+   The writer is HEDGED (Oct 21 2026): one model with a hard cap and serial
+   retries of the same call returned nothing for five days when that model
+   ran slow (every attempt hit the cap, ~50s, then an error). Now the primary
+   writer starts at once; if it has not answered by BIT_HEDGE_MS, a backup
+   writer on a faster model starts beside it, and the first usable answer
+   wins. A slow model costs seconds, never the bit. */
 function budgetMs(name: string, fallback: number): number {
   const n = Number(process.env[name] ?? '')
   return Number.isFinite(n) && n > 0 ? n : fallback
 }
 export const BIT_BUDGET = {
   premises: () => budgetMs('BIT_PREMISE_MS', 7_000),
-  write: () => budgetMs('BIT_WRITE_MS', 15_000),
+  /** primary writer's own cap; it keeps running while the backup races it */
+  write: () => budgetMs('BIT_WRITE_MS', 30_000),
+  /** when the backup writer joins the race */
+  hedge: () => budgetMs('BIT_HEDGE_MS', 9_000),
+  /** backup writer's cap, from the moment it starts */
+  backup: () => budgetMs('BIT_BACKUP_MS', 22_000),
   judge: () => budgetMs('BIT_JUDGE_MS', 6_000),
-  vary: () => budgetMs('BIT_VARY_MS', 12_000),
+  vary: () => budgetMs('BIT_VARY_MS', 15_000),
+}
+
+/** The backup writer: a different, faster model than the primary. Falls back
+ *  to the default model when the primary is set to something else. */
+export function backupWriterModel(): string {
+  const wanted = (process.env['BIT_BACKUP_MODEL'] ?? '').trim() || 'google/gemini-2.5-flash-lite'
+  return wanted === writerModel() ? DEFAULT_MODEL : wanted
 }
 
 /* ── controls → prompt text ── */
@@ -158,21 +177,25 @@ export function isSafetyFailure(rule: string): boolean {
 
 /* ── stage 2 · the bit pass ── */
 
+export type BitPass = { bits: BitDraft[]; altTags: string[]; angles: string[]; model: string; error?: string }
+
 export async function runBitPass(
   story: string,
   premises: Premise[],
   controls: BitControls,
-): Promise<{ bits: BitDraft[]; altTags: string[]; angles: string[]; model: string; error?: string }> {
+  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal } = {},
+): Promise<BitPass> {
   const prompt = fill(BIT_PROMPT, {
     SITUATION: story.slice(0, 2000),
     PREMISES: formatPremisesForBit(premises),
     ...controlVars(controls),
   })
   const res = await callAgent({
-    model: writerModel(),
+    model: opts.model ?? writerModel(),
     temperature: 1.0,
     maxTokens: 4000,
-    timeoutMs: BIT_BUDGET.write(),
+    timeoutMs: opts.timeoutMs ?? BIT_BUDGET.write(),
+    signal: opts.signal,
     messages: [{ role: 'user', content: prompt }],
   })
   if (res.error) return { bits: [], altTags: [], angles: [], model: res.model, error: res.error }
@@ -240,10 +263,92 @@ export async function runBitJudge(story: string, controls: BitControls, bits: Bi
   return { order, why: typeof parsed.why === 'string' ? parsed.why.trim().slice(0, 300) : null, model }
 }
 
+/* ── the hedged writer ── */
+
+export type WriterAttempt = { model: string; leg: 'primary' | 'backup' | 'last'; ms: number; bits: number; usable: boolean; error: string | null }
+
+type Leg = { model: string; leg: WriterAttempt['leg']; timeoutMs: number }
+
+/**
+ * Runs the primary writer; if it has not produced a usable answer within
+ * `hedgeMs`, or fails before then, starts the backup beside it. The first
+ * leg whose answer `usable` accepts wins and the other is cancelled. When
+ * both legs come back unusable quickly, one last attempt runs on the backup
+ * model, provided there is still time inside `deadlineMs`.
+ *
+ * `run` is injected so the race can be tested without a gateway.
+ */
+export async function raceWriters<T>(opts: {
+  primary: Leg
+  backup: Leg
+  hedgeMs: number
+  deadlineMs: number
+  run: (leg: Leg, signal: AbortSignal) => Promise<T & { bits: unknown[]; error?: string }>
+  usable: (result: T & { bits: unknown[] }) => boolean
+}): Promise<{ winner: (T & { bits: unknown[]; error?: string }) | null; last: (T & { bits: unknown[]; error?: string }) | null; attempts: WriterAttempt[] }> {
+  const t0 = Date.now()
+  const attempts: WriterAttempt[] = []
+  type R = T & { bits: unknown[]; error?: string }
+  let last: R | null = null
+
+  const start = (leg: Leg) => {
+    const ctl = new AbortController()
+    const began = Date.now()
+    const done = opts
+      .run(leg, ctl.signal)
+      .catch((e): R => ({ bits: [], error: e instanceof Error ? e.message : 'threw' }) as unknown as R)
+      .then((r) => {
+        const ok = !ctl.signal.aborted && opts.usable(r)
+        const cancelled = ctl.signal.aborted
+        attempts.push({ model: leg.model, leg: leg.leg, ms: Date.now() - began, bits: r.bits.length, usable: ok, error: cancelled ? 'cancelled (lost the race)' : r.error ?? null })
+        if (!cancelled) last = r
+        return { r, ok }
+      })
+    return { ctl, done }
+  }
+
+  const a = start(opts.primary)
+  // The backup joins when the primary is slow OR fails early.
+  let hedgeTimer: ReturnType<typeof setTimeout> | undefined
+  const hedge = await Promise.race([
+    a.done.then((x) => ({ kind: 'primary' as const, ...x })),
+    new Promise<{ kind: 'hedge' }>((res) => {
+      hedgeTimer = setTimeout(() => res({ kind: 'hedge' }), opts.hedgeMs)
+    }),
+  ])
+  clearTimeout(hedgeTimer)
+  if (hedge.kind === 'primary' && hedge.ok) return { winner: hedge.r, last, attempts }
+
+  const b = start(opts.backup)
+  const legs = hedge.kind === 'primary' ? [b] : [a, b]
+  const winner = await new Promise<R | null>((resolve) => {
+    let pending = legs.length
+    for (const leg of legs) {
+      void leg.done.then(({ r, ok }) => {
+        if (ok) {
+          for (const other of legs) if (other !== leg) other.ctl.abort()
+          resolve(r)
+        } else if (--pending === 0) resolve(null)
+      })
+    }
+  })
+  if (winner) return { winner, last, attempts }
+
+  // Both legs answered but nothing usable (bad JSON, every bit refused).
+  // One more try on the backup, only if it fits inside the deadline.
+  const left = opts.deadlineMs - (Date.now() - t0)
+  if (left > 6_000) {
+    const c = start({ ...opts.backup, leg: 'last', timeoutMs: Math.min(opts.backup.timeoutMs, left) })
+    const { r, ok } = await c.done
+    if (ok) return { winner: r, last, attempts }
+  }
+  return { winner: null, last, attempts }
+}
+
 /* ── the whole run ── */
 
 /** Why a run returned nothing, for the failure log (no story text). */
-export type BitFailure = { rejected: { hook: string; rule: string }[]; error: string | null }
+export type BitFailure = { rejected: { hook: string; rule: string }[]; error: string | null; attempts?: WriterAttempt[] }
 
 export type WrittenBit = {
   /** best first; [0] is the bit the user sees */
@@ -256,6 +361,7 @@ export type WrittenBit = {
   promptVersion: string
   timings: Record<string, number>
   rejected: { hook: string; rule: string }[]
+  attempts: WriterAttempt[]
 }
 
 /** Premises are passed in when they were started early (beside the Guard). */
@@ -271,37 +377,44 @@ export async function writeBitFromStory(
   const premises = premisesPromise ? await premisesPromise : premisePassOn() ? await startPremises(story) : []
   const t1 = Date.now()
 
-  let pass = await runBitPass(story, premises, controls)
-  // One retry when the writer failed outright (timeout, unparseable).
-  if (!pass.bits.length) pass = await runBitPass(story, premises, controls)
-  const t2 = Date.now()
-
   const rejected: { hook: string; rule: string }[] = []
-  const judge = (bits: BitDraft[]) => {
+  const sortBits = (bits: BitDraft[]) => {
     const ok: BitDraft[] = []
     const craftOnly: BitDraft[] = []
     for (const b of bits) {
       const f = bitFailure(b, story, controls)
       if (!f) ok.push(b)
-      else {
-        rejected.push({ hook: b.hook, rule: f })
-        if (!isSafetyFailure(f)) craftOnly.push(b)
-      }
+      else if (!isSafetyFailure(f)) craftOnly.push(b)
     }
     return { ok, craftOnly }
   }
-  let sorted = judge(pass.bits)
-  // Nothing safe to show at all: write once more before giving up.
-  if (!sorted.ok.length && !sorted.craftOnly.length) {
-    pass = await runBitPass(story, premises, controls)
-    sorted = judge(pass.bits)
+  // A pass is usable when at least one bit is safe to show (a craft-only
+  // miss still counts: it is shown rather than an error).
+  const race = await raceWriters<BitPass>({
+    primary: { model: writerModel(), leg: 'primary', timeoutMs: BIT_BUDGET.write() },
+    backup: { model: backupWriterModel(), leg: 'backup', timeoutMs: BIT_BUDGET.backup() },
+    hedgeMs: BIT_BUDGET.hedge(),
+    deadlineMs: BIT_BUDGET.write() + 5_000,
+    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal }),
+    usable: (p) => {
+      const s = sortBits(p.bits as BitDraft[])
+      return s.ok.length + s.craftOnly.length > 0
+    },
+  })
+  const t2 = Date.now()
+  const pass = (race.winner ?? race.last ?? { bits: [], altTags: [], angles: [], model: writerModel(), error: 'no attempt' }) as BitPass
+  for (const b of pass.bits) {
+    const f = bitFailure(b, story, controls)
+    if (f) rejected.push({ hook: b.hook, rule: f })
   }
+  const sorted = race.winner ? sortBits(pass.bits) : { ok: [], craftOnly: [] }
   // Only craft misses (too long, a restatement, a soft landing): show the
   // shortest of them rather than an error. Safety misses are never shown.
   const passing = sorted.ok.length ? sorted.ok : [...sorted.craftOnly].sort((a, b) => bitWords(a) - bitWords(b))
   if (!passing.length) {
-    console.warn('[bit] nothing passed the rules', { rejected, error: pass.error })
-    if (sink) sink.failure = { rejected, error: pass.error ?? null }
+    const error = race.attempts.map((a) => `${a.leg}:${a.model}:${a.ms}ms:${a.error ?? (a.usable ? 'ok' : `${a.bits} bits, none usable`)}`).join(' | ') || pass.error || null
+    console.warn('[bit] no usable bit', { rejected, attempts: race.attempts })
+    if (sink) sink.failure = { rejected, error, attempts: race.attempts }
     return null
   }
 
@@ -327,6 +440,7 @@ export async function writeBitFromStory(
     promptVersion: BIT_PROMPT_VERSION,
     timings: { premises_ms: t1 - t0, write_ms: t2 - t1, judge_ms: t3 - t2 },
     rejected,
+    attempts: race.attempts,
   }
 }
 
@@ -355,7 +469,7 @@ export async function varyBitDraft(
   const cv = controlVars(controls)
   for (let attempt = 0; attempt < 2; attempt++) {
     const res = await callAgent({
-      model: writerModel(),
+      model: attempt === 0 ? writerModel() : backupWriterModel(),
       temperature: 1.0,
       maxTokens: 2000,
       timeoutMs: BIT_BUDGET.vary(),
@@ -399,7 +513,7 @@ function bitAsText(b: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>): str
 async function layout<T>(template: string, story: string, bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>, parse: (raw: unknown) => T | null): Promise<T | null> {
   for (let attempt = 0; attempt < 2; attempt++) {
     const res = await callAgent({
-      model: writerModel(),
+      model: attempt === 0 ? writerModel() : backupWriterModel(),
       temperature: 0.7,
       maxTokens: 2500,
       timeoutMs: BIT_BUDGET.vary(),
@@ -454,7 +568,7 @@ export async function writeCaption(
 ): Promise<BitCaption | null> {
   for (let attempt = 0; attempt < 2; attempt++) {
     const res = await callAgent({
-      model: writerModel(),
+      model: attempt === 0 ? writerModel() : backupWriterModel(),
       temperature: 0.9,
       maxTokens: 600,
       timeoutMs: BIT_BUDGET.vary(),

@@ -38,6 +38,8 @@ export async function callAgent(opts: {
    *  reported as an error, so a caller with a floor can use the floor
    *  instead of holding a card on its edge forever. */
   timeoutMs?: number
+  /** Cancels the call from outside, e.g. the losing leg of a hedged race. */
+  signal?: AbortSignal
 }): Promise<{ text: string; error?: string; model: string }> {
   const maxTokens = Math.min(Math.max(opts.maxTokens ?? 1500, 64), 4096)
   // Default to Flash: 2.5-Pro spends hidden reasoning tokens against
@@ -46,8 +48,11 @@ export async function callAgent(opts: {
   const modelId = opts.model || process.env.LOVABLE_AI_MODEL || DEFAULT_MODEL
   const lovableKey = process.env.LOVABLE_API_KEY
   if (!lovableKey) return { text: '', error: 'no AI key', model: modelId }
-  const controller = opts.timeoutMs ? new AbortController() : null
-  const timer = controller ? setTimeout(() => controller.abort(), opts.timeoutMs) : null
+  const controller = opts.timeoutMs || opts.signal ? new AbortController() : null
+  const timer = controller && opts.timeoutMs ? setTimeout(() => controller.abort(), opts.timeoutMs) : null
+  const onOuterAbort = () => controller?.abort()
+  if (opts.signal?.aborted) return { text: '', error: 'cancelled', model: modelId }
+  opts.signal?.addEventListener('abort', onOuterAbort, { once: true })
   try {
     const gateway = createLovableAiGatewayProvider(lovableKey)
     const result = await generateText({
@@ -66,7 +71,9 @@ export async function callAgent(opts: {
     return { text: result.text, model: modelId }
   } catch (err) {
     const aborted = controller?.signal.aborted
-    const message = aborted
+    const message = opts.signal?.aborted
+      ? 'cancelled'
+      : aborted
       ? `timed out after ${opts.timeoutMs}ms`
       : err instanceof Error
         ? err.message
@@ -74,6 +81,7 @@ export async function callAgent(opts: {
     return { text: '', error: message, model: modelId }
   } finally {
     if (timer) clearTimeout(timer)
+    opts.signal?.removeEventListener('abort', onOuterAbort)
   }
 }
 
