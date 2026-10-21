@@ -34,7 +34,6 @@ export function useCurrentAlias(): {
       return
     }
     setUserId(uid)
-    setReady(true)
     try {
       const { getMyAlias } = await import('@/lib/alias.functions')
       const row = await getMyAlias()
@@ -42,8 +41,14 @@ export function useCurrentAlias(): {
         const next: Alias = { name: (row as { display_name?: string }).display_name, emoji: (row as { emoji?: string }).emoji }
         setAlias(next)
         try { localStorage.setItem('shutap_alias', JSON.stringify(next)) } catch { /* noop */ }
+      } else {
+        // Signed in but never picked a name: no alias, so the header offers
+        // "join →" to finish setup instead of an inert placeholder.
+        setAlias(null)
+        try { localStorage.removeItem('shutap_alias') } catch { /* noop */ }
       }
     } catch { /* offline / no bearer — keep cache */ }
+    setReady(true)
   }
 
   useEffect(() => {
