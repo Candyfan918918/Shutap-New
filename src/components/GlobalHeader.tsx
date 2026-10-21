@@ -75,7 +75,7 @@ export function GlobalHeader() {
   const [variant, setVariant] = useState<Variant>(routeVariant)
   const dark = variant === 'dark'
   const navigate = useNavigate()
-  const { alias, userId, ready } = useCurrentAlias()
+  const { alias, ready } = useCurrentAlias()
   const admin = useIsAdmin()
   const [menuOpen, setMenuOpen] = useState(false)
   const areaRef = useRef<HTMLDivElement>(null)
