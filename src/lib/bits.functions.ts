@@ -258,6 +258,16 @@ async function writeCore(
       .insert({ user_id: id.userId, controls, rejected: sink.failure?.rejected ?? [], error: sink.failure?.error ?? null, lab, ms: Date.now() - started } as never)
       .then(() => null, () => null)
     if (!lab) await refundStory(supabaseAdmin, id.subjectKey, day, bitId)
+    if (!lab) {
+      const { alertBitFailure } = await import('./bits/alert.server')
+      await alertBitFailure('user_write_failed', {
+        controls,
+        signed_in: !!id.userId,
+        ms: Date.now() - started,
+        error: sink.failure?.error ?? null,
+        rejected: sink.failure?.rejected?.map((r) => r.rule) ?? [],
+      })
+    }
     return { status: 'failed', tier: id.tier, usage }
   }
   const timings = {
@@ -340,8 +350,18 @@ export const writeBit = createServerFn({ method: 'POST' })
     z.object({ story: z.string().min(1).max(4000), controls: ControlsSchema, ...Ctx }).parse(d),
   )
   .handler(async ({ data }): Promise<WriteBitResult> => {
-    const { lab: _lab, ...result } = await writeCore(data.story, data.controls as Partial<BitControls> | undefined, data.anon_session_id ?? null, false)
-    return result as WriteBitResult
+    try {
+      const { lab: _lab, ...result } = await writeCore(data.story, data.controls as Partial<BitControls> | undefined, data.anon_session_id ?? null, false)
+      if (result.status === 'no_session') {
+        const { alertBitFailure } = await import('./bits/alert.server')
+        await alertBitFailure('user_write_failed', { error: 'no_session (visitor has no account and no guest session)' })
+      }
+      return result as WriteBitResult
+    } catch (e) {
+      const { alertBitFailure } = await import('./bits/alert.server')
+      await alertBitFailure('user_write_failed', { error: `threw: ${e instanceof Error ? e.message : String(e)}` })
+      throw e
+    }
   })
 
 /** Admin only: the same run, uncharged, with every candidate and timing. */

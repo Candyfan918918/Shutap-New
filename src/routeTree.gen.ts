@@ -82,6 +82,7 @@ import { Route as AuthenticatedAdminRelateRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedCheckinIdRouteImport } from './routes/_authenticated/checkin.$id'
 import { Route as ApiFeedbackEventsRouteImport } from './routes/api/feedback/events'
+import { Route as ApiPublicBitHealthRouteImport } from './routes/api/public/bit-health'
 import { Route as ApiPublicJokeCardRouteImport } from './routes/api/public/joke-card'
 import { Route as GuidesTopicTopicRouteImport } from './routes/guides.topic.$topic'
 import { Route as StoryPillarSlugRouteImport } from './routes/story.$pillar.$slug'
@@ -464,6 +465,11 @@ const ApiFeedbackEventsRoute = ApiFeedbackEventsRouteImport.update({
   path: '/api/feedback/events',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicBitHealthRoute = ApiPublicBitHealthRouteImport.update({
+  id: '/api/public/bit-health',
+  path: '/api/public/bit-health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicJokeCardRoute = ApiPublicJokeCardRouteImport.update({
   id: '/api/public/joke-card',
   path: '/api/public/joke-card',
@@ -588,6 +594,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/checkin/$id': typeof AuthenticatedCheckinIdRoute
   '/api/feedback/events': typeof ApiFeedbackEventsRoute
+  '/api/public/bit-health': typeof ApiPublicBitHealthRoute
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
@@ -671,6 +678,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/checkin/$id': typeof AuthenticatedCheckinIdRoute
   '/api/feedback/events': typeof ApiFeedbackEventsRoute
+  '/api/public/bit-health': typeof ApiPublicBitHealthRoute
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
@@ -756,6 +764,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/checkin/$id': typeof AuthenticatedCheckinIdRoute
   '/api/feedback/events': typeof ApiFeedbackEventsRoute
+  '/api/public/bit-health': typeof ApiPublicBitHealthRoute
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
@@ -841,6 +850,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/checkin/$id'
     | '/api/feedback/events'
+    | '/api/public/bit-health'
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
@@ -924,6 +934,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/checkin/$id'
     | '/api/feedback/events'
+    | '/api/public/bit-health'
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
@@ -1008,6 +1019,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/users'
     | '/_authenticated/checkin/$id'
     | '/api/feedback/events'
+    | '/api/public/bit-health'
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
@@ -1084,6 +1096,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiFeedbackEventsRoute: typeof ApiFeedbackEventsRoute
+  ApiPublicBitHealthRoute: typeof ApiPublicBitHealthRoute
   ApiPublicJokeCardRoute: typeof ApiPublicJokeCardRoute
   GuidesTopicTopicRoute: typeof GuidesTopicTopicRoute
   StoryPillarSlugRoute: typeof StoryPillarSlugRoute
@@ -1607,6 +1620,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiFeedbackEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/bit-health': {
+      id: '/api/public/bit-health'
+      path: '/api/public/bit-health'
+      fullPath: '/api/public/bit-health'
+      preLoaderRoute: typeof ApiPublicBitHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/joke-card': {
       id: '/api/public/joke-card'
       path: '/api/public/joke-card'
@@ -1786,6 +1806,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiFeedbackEventsRoute: ApiFeedbackEventsRoute,
+  ApiPublicBitHealthRoute: ApiPublicBitHealthRoute,
   ApiPublicJokeCardRoute: ApiPublicJokeCardRoute,
   GuidesTopicTopicRoute: GuidesTopicTopicRoute,
   StoryPillarSlugRoute: StoryPillarSlugRoute,
