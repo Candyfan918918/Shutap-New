@@ -143,6 +143,11 @@ export function BitSurface() {
   const ctx = useCallback(() => ({ anon_session_id: anonSessionId() }), [])
   const version: BitVersion | null = bit ? (bit.versions.find((v) => v.id === currentId) ?? bit.versions[0] ?? null) : null
 
+  const phaseRef = useRef(phase)
+  phaseRef.current = phase
+  /** the version Mix your own was opened on; fixed for the whole mix */
+  const [mixFromId, setMixFromId] = useState<string | null>(null)
+
   const say = useCallback((m: string) => {
     setToast(m)
     window.setTimeout(() => setToast(null), 3200)
@@ -150,13 +155,24 @@ export function BitSurface() {
 
   function addVersion(v: BitVersion) {
     setBit((b) => (b ? { ...b, versions: [...b.versions, v] } : b))
-    setCurrentId(v.id)
+    // A hotter/tighter/escalate can land after the visitor has moved on (to
+    // Mix your own, a scene...). Switching the bit then changes what they are
+    // working on under their thumb, so it waits in the versions row instead.
+    if (phaseRef.current === 'bit') setCurrentId(v.id)
+    else say(`${v.kind} version ready · it's in your versions`)
     jokeTrack('version_made', tier, { kind: v.kind })
+  }
+
+  /* One scroll per screen change. The old pattern (smooth scroll to the top,
+     then a heading .focus() that scrolls again) made the page bounce on
+     phones; focus now never scrolls (preventScroll). */
+  function toTop() {
+    requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
   }
 
   function backToBit() {
     setPhase('bit')
-    requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+    toTop()
   }
 
   /* draft + controls survive a reload */
@@ -318,8 +334,6 @@ export function BitSurface() {
      the homepage point at the page already open and the router does nothing.
      Treat such a click as "write another": back to an empty box. A bit still
      being written is left alone; it lands when it's done. */
-  const phaseRef = useRef(phase)
-  phaseRef.current = phase
   const writeAnotherRef = useRef(writeAnother)
   writeAnotherRef.current = writeAnother
   useEffect(() => {
@@ -479,12 +493,21 @@ export function BitSurface() {
                 <p className="bt-v">{version.setup}</p>
               </div>
               {version.tags.map((t, i) => (
-                <div key={i} className={`bt-slot${bit.locked ? ' locked' : ''}${i === 0 && version.kind === 'tag_swap' ? ' new' : ''}`}>
+                <div
+                  key={i}
+                  className={`bt-slot${bit.locked ? ' locked' : ''}${i === 0 && version.kind === 'tag_swap' ? ' new' : ''}`}
+                  onClick={bit.locked ? () => setSheet('signin') : undefined}
+                  style={bit.locked ? { cursor: 'pointer' } : undefined}
+                >
                   <span className={`bt-lbl${i === 0 && version.kind === 'tag_swap' ? ' r' : ''}`}>tag {i + 1}{i === 0 && version.kind === 'tag_swap' ? ' · swapped' : ''}</span>
                   <p className="bt-v" aria-hidden={bit.locked || undefined}>{t}</p>
                 </div>
               ))}
-              <div className={`bt-slot${bit.locked ? ' locked' : ''}`}>
+              <div
+                className={`bt-slot${bit.locked ? ' locked' : ''}`}
+                onClick={bit.locked ? () => setSheet('signin') : undefined}
+                style={bit.locked ? { cursor: 'pointer' } : undefined}
+              >
                 <span className="bt-lbl r">button</span>
                 <p className="bt-v" style={{ fontWeight: 400 }} aria-hidden={bit.locked || undefined}>{version.button}</p>
               </div>
@@ -515,7 +538,7 @@ export function BitSurface() {
                     if (bit.locked) return setSheet('signin')
                     setPhase(k)
                     jokeTrack(`${k}_opened`, tier, { kind: version.kind })
-                    requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+                    toTop()
                   }}
                 >
                   <ActionIcon name={k} />
@@ -545,8 +568,9 @@ export function BitSurface() {
                 onSelect={(id) => setCurrentId(id)}
                 onAdd={addVersion}
                 onMix={() => {
+                  setMixFromId(version.id)
                   setPhase('mix')
-                  requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+                  toTop()
                 }}
                 say={say}
               />
@@ -566,7 +590,7 @@ export function BitSurface() {
         <div className="bt-col" style={{ marginTop: 0 }}>
           <MixYourOwn
             bit={bit}
-            from={version}
+            from={bit.versions.find((v) => v.id === mixFromId) ?? version}
             onSaved={(v) => {
               setBit((b) => (b ? { ...b, versions: [...b.versions, v] } : b))
               setCurrentId(v.id)

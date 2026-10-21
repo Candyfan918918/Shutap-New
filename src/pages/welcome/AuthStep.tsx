@@ -79,7 +79,17 @@ export function AuthStep() {
     if (!/^\d{6}$/.test(token)) { setMsg({ kind: 'err', text: 'enter the 6-digit code from the email' }); return }
     setBusy(true); setMsg(null)
     try {
-      const { data, error } = await supabase.auth.verifyOtp({ email: email.trim(), token, type: 'email' })
+      // A brand-new address gets a sign-up token, a returning one a sign-in
+      // token, and which type verifies the code depends on that. Try each;
+      // a failed try uses nothing up, only the right one signs in.
+      let data: Awaited<ReturnType<typeof supabase.auth.verifyOtp>>['data'] = { user: null, session: null }
+      let error: Awaited<ReturnType<typeof supabase.auth.verifyOtp>>['error'] = null
+      for (const type of ['email', 'signup', 'magiclink'] as const) {
+        const r = await supabase.auth.verifyOtp({ email: email.trim(), token, type })
+        data = r.data
+        error = r.error
+        if (!error) break
+      }
       if (error) {
         setMsg({ kind: 'err', text: error.message })
         track('sign_in_failed', { method: 'email_code', reason: error.message })

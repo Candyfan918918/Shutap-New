@@ -72,8 +72,18 @@ export function MixYourOwn({
     }
   }, [bit.id, options])
 
+  // Focus moves to the new question for screen readers, without scrolling
+  // (a focus scroll on top of the page's own scroll made phones bounce). The
+  // page scrolls only when the question is off-screen, and only once.
+  const firstRender = useRef(true)
   useEffect(() => {
-    headRef.current?.focus()
+    headRef.current?.focus({ preventScroll: true })
+    if (firstRender.current) {
+      firstRender.current = false
+      return
+    }
+    const top = headRef.current?.getBoundingClientRect().top ?? 0
+    if (top < 70) window.scrollBy({ top: top - 90, behavior: 'smooth' })
   }, [step, result])
 
   const part = PARTS[step]!
