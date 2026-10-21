@@ -75,7 +75,7 @@ export function GlobalHeader() {
   const [variant, setVariant] = useState<Variant>(routeVariant)
   const dark = variant === 'dark'
   const navigate = useNavigate()
-  const { alias, userId, ready } = useCurrentAlias()
+  const { alias, ready } = useCurrentAlias()
   const admin = useIsAdmin()
   const [menuOpen, setMenuOpen] = useState(false)
   const areaRef = useRef<HTMLDivElement>(null)
@@ -310,7 +310,7 @@ export function GlobalHeader() {
                   </div>
                 )}
               </>
-            ) : isWelcome || !ready || userId ? (
+            ) : isWelcome || !ready ? (
               // Until we know who is here (and while a signed-in person's
               // name loads) hold the space with a quiet circle, so the
               // "sign in" pill never flashes before the avatar appears.
