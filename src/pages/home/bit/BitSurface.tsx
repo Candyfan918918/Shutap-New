@@ -323,8 +323,10 @@ export function BitSurface() {
   const writeAnotherRef = useRef(writeAnother)
   writeAnotherRef.current = writeAnother
   useEffect(() => {
+    // Capture phase: the router's <Link> calls preventDefault in its own
+    // handler, so a bubbling listener would see every link click as handled.
     const onClick = (e: MouseEvent) => {
-      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
       const a = (e.target as Element | null)?.closest?.('a')
       if (!a || (a.target && a.target !== '_self')) return
       let url: URL
@@ -337,8 +339,8 @@ export function BitSurface() {
       }
       writeAnotherRef.current()
     }
-    document.addEventListener('click', onClick)
-    return () => document.removeEventListener('click', onClick)
+    document.addEventListener('click', onClick, true)
+    return () => document.removeEventListener('click', onClick, true)
   }, [])
 
   const step = Math.min(STEPS.length - 1, Math.floor(elapsed / 2.5))
