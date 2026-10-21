@@ -49,6 +49,9 @@ function ErrorComponent({ error, reset }: { error: unknown; reset: () => void })
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    void import("@/lib/posthog").then((m) =>
+      m.phCaptureException(error, { boundary: "tanstack_root_error_component" }),
+    );
   }, [error]);
 
   return (

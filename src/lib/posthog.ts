@@ -34,6 +34,9 @@ export function initPostHog(): Promise<void> {
         capture_pageleave: true,
         persistence: 'localStorage+cookie',
         autocapture: false,
+        // Error tracking: uncaught errors and unhandled promise rejections
+        // become $exception events, grouped into issues in PostHog.
+        capture_exceptions: true,
       })
       _ph = mod.default
       console.log('PostHog initialized')
@@ -56,6 +59,19 @@ export async function phCapture(
     // standard `$pageview` event. The app's own `page_view` is renamed here;
     // PostHog fills in the URL, referrer and UTM properties itself.
     _ph?.capture(name === 'page_view' ? '$pageview' : name, props)
+  } catch { /* noop */ }
+}
+
+// For errors the app catches itself (error boundaries, failed requests) —
+// those never reach the global handlers, so they're sent explicitly.
+export async function phCaptureException(
+  error: unknown,
+  props: Record<string, unknown> = {},
+): Promise<void> {
+  if (typeof window === 'undefined') return
+  try {
+    await initPostHog()
+    _ph?.captureException(error, props)
   } catch { /* noop */ }
 }
 
