@@ -13,7 +13,7 @@ export function HomeFooter() {
 import type { NewestRoom } from '@/lib/newest-rooms.functions'
 import type { DailyIdea } from '@/lib/daily-idea.functions'
 
-export function HomePage({ openRoomsCount = 0, newestRooms = [], dailyIdea = null }: { openRoomsCount?: number; newestRooms?: NewestRoom[]; dailyIdea?: DailyIdea | null } = {}) {
+export function HomePage({ openRoomsCount = 0, newestRooms = [], dailyIdea = null }: { openRoomsCount?: number; newestRooms?: NewestRoom[]; dailyIdea?: DailyIdea | null | Promise<DailyIdea | null> } = {}) {
   const navigate = useNavigate()
 
   // Old links: /#spill and /#scan now land on the write box. /#mirror goes

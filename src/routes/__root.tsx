@@ -18,6 +18,7 @@ import newsreaderItalicWoff2 from "@fontsource/newsreader/files/newsreader-latin
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { GlobalHeader } from "@/components/GlobalHeader";
 import { WaveDots } from "@/components/motion/WaveDots";
+import { NavProgress } from "@/components/NavProgress";
 
 import { useNavigate } from "@/compat/router";
 
@@ -234,6 +235,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <NavProgress />
       <WaveDots />
       <GlobalHeader />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}

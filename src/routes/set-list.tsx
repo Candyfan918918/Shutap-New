@@ -1,5 +1,5 @@
 import { pageMeta } from '@/lib/seo/page-meta'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { listMyBits, type SetListItem } from '@/lib/bits.functions'
@@ -28,6 +28,7 @@ function when(iso: string): string {
 
 function SetListPage() {
   const list = useServerFn(listMyBits)
+  const navigate = useNavigate()
   const [state, setState] = useState<{ tier: BitTier; bits: SetListItem[]; usage: BitUsage } | null>(null)
   const [failed, setFailed] = useState(false)
 
@@ -87,7 +88,19 @@ function SetListPage() {
               </div>
             ) : (
               state.bits.map((b) => (
-                <a key={b.id} href={`/?bit=${b.id}`} className="fd-post" style={{ textDecoration: 'none', color: 'inherit', gap: 6 }}>
+                <a
+                  key={b.id}
+                  href={`/?bit=${b.id}`}
+                  className="fd-post"
+                  style={{ textDecoration: 'none', color: 'inherit', gap: 6 }}
+                  // Open in-app, not a full reload of the site (kept as a
+                  // real link so new-tab and copy-link still work).
+                  onClick={(e) => {
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+                    e.preventDefault()
+                    void navigate({ href: `/?bit=${b.id}` })
+                  }}
+                >
                   <div className="fd-between" style={{ alignItems: 'flex-start' }}>
                     <span className="fd-hook" style={{ fontSize: 19 }}>{b.hook || 'untitled bit'}</span>
                     <span className="fd-pill" style={{ flex: 'none' }}>

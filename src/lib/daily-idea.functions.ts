@@ -57,7 +57,15 @@ export const listDailyIdea = createServerFn({ method: 'GET' }).handler(async ():
     const idea = data as unknown as DailyIdea
     if (idea.signals?.topics?.length) {
       const { readWikiInterest } = await import('./wiki-interest.server')
-      idea.signals = { ...idea.signals, topics: await Promise.all(idea.signals.topics.map(async (topic) => ({ ...topic, interest: topic.wiki ? await readWikiInterest(topic.wiki).catch(() => null) : null }))) }
+      // Wikipedia gets 1.5s in total; a topic still waiting shows without
+      // its interest line rather than holding the section (it stays cached,
+      // so the next view usually has it).
+      const capped = (wiki: string) =>
+        Promise.race([
+          readWikiInterest(wiki).catch(() => null),
+          new Promise<null>((res) => setTimeout(() => res(null), 1500)),
+        ])
+      idea.signals = { ...idea.signals, topics: await Promise.all(idea.signals.topics.map(async (topic) => ({ ...topic, interest: topic.wiki ? await capped(topic.wiki) : null }))) }
     }
     return idea
   } catch {

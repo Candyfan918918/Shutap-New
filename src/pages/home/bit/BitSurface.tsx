@@ -131,6 +131,8 @@ export function BitSurface() {
   const [error, setError] = useState<string | null>(null)
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
+  /** a bit from the set list is on its way in: show that, not an empty box */
+  const [opening, setOpening] = useState(false)
   const [prompter, setPrompter] = useState<BitVersion | null>(null)
   const [downloadOpen, setDownloadOpen] = useState(false)
   const [postOpen, setPostOpen] = useState(false)
@@ -213,6 +215,7 @@ export function BitSurface() {
     if (!id || !/^[0-9a-f-]{36}$/i.test(id) || readPending()) return
     // The link opens the bit once; a refresh afterwards lands on a clean box.
     window.history.replaceState(window.history.state, '', '/')
+    setOpening(true)
     try {
       const r = await fetchBit({ data: { bit_id: id, ...ctx() } })
       // Never swap an old bit over a story the visitor has started typing.
@@ -222,10 +225,13 @@ export function BitSurface() {
         setPhase('bit')
       }
     } catch { /* not theirs, or gone: stay on the box */ }
+    finally { setOpening(false) }
   }, [fetchBit, ctx])
 
   useEffect(() => {
-    void refresh().then(() => restore()).then(() => openFromLink())
+    // The linked bit opens at once, beside the account check, not after it.
+    void refresh().then(() => restore())
+    void openFromLink()
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user.is_anonymous !== true) void restore()
     })
@@ -314,7 +320,12 @@ export function BitSurface() {
   return (
     <section className="bt" aria-label="Write a bit">
       <div className="bt-col" ref={topRef} style={{ scrollMarginTop: 84 }}>
-        {phase === 'write' && (
+        {phase === 'write' && opening && (
+          <div className="bt-hero" aria-live="polite">
+            <p className="bt-sub">opening your bit…</p>
+          </div>
+        )}
+        {phase === 'write' && !opening && (
           <>
             <div className="bt-hero">
               <h1 className="bt-h1">
