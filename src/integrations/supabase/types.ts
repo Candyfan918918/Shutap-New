@@ -134,6 +134,27 @@ export type Database = {
         }
         Relationships: []
       }
+      bit_alerts: {
+        Row: {
+          created_at: string
+          detail: string | null
+          id: number
+          kind: string
+        }
+        Insert: {
+          created_at?: string
+          detail?: string | null
+          id?: number
+          kind: string
+        }
+        Update: {
+          created_at?: string
+          detail?: string | null
+          id?: number
+          kind?: string
+        }
+        Relationships: []
+      }
       bit_failures: {
         Row: {
           controls: Json | null
@@ -164,6 +185,36 @@ export type Database = {
           ms?: number | null
           rejected?: Json
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      bit_health: {
+        Row: {
+          created_at: string
+          detail: Json | null
+          id: number
+          model: string | null
+          ms: number
+          ok: boolean
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          detail?: Json | null
+          id?: number
+          model?: string | null
+          ms: number
+          ok: boolean
+          source: string
+        }
+        Update: {
+          created_at?: string
+          detail?: Json | null
+          id?: number
+          model?: string | null
+          ms?: number
+          ok?: boolean
+          source?: string
         }
         Relationships: []
       }
