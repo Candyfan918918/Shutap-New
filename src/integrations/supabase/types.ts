@@ -49,12 +49,12 @@ export type Database = {
           birth_month: number
           birth_year: number
           created_at?: string
-          creature: string
+          creature?: string
           display_name: string
           email_suppressed?: boolean
-          emoji: string
-          emotion: string
-          nation: string
+          emoji?: string
+          emotion?: string
+          nation?: string
           notif_email?: string | null
           notif_email_opt_in?: boolean
           reengagement_email_sent_at?: string | null
