@@ -133,6 +133,9 @@ export function SubscribePage() {
   const [picking, setPicking] = useState(() => !search.get('plan'))
   const plan = PLANS[planKey]
   const [err, setErr] = useState<string | null>(null)
+  /** Stripe's own words for a setup error, in small print under the plain
+   *  message, so the cause can be read and fixed. */
+  const [errDetail, setErrDetail] = useState<string | null>(null)
 
   const [authed, setAuthed] = useState<boolean | null>(null)
   const [checked, setChecked] = useState(false)
@@ -266,6 +269,7 @@ export function SubscribePage() {
       const setup = /tax|head office|price not found|no such price|api key|not configured/i.test(raw)
       if (setup) console.error('[checkout] setup error', raw)
       setErr(setup ? "Checkout isn't available right now. Your card wasn't charged. Try again later." : raw)
+      setErrDetail(setup ? raw : null)
       throw e
     }
   }
@@ -427,6 +431,9 @@ export function SubscribePage() {
               {err ? (
                 <div style={{ background: 'rgba(23,19,26,.08)', border: '1px solid rgba(23,19,26,.35)', borderRadius: 12, padding: 14, color: DEEP_ACCENT, fontSize: 13.5 }}>
                   {err}
+                  {errDetail && (
+                    <div style={{ marginTop: 8, fontSize: 11.5, lineHeight: 1.45, color: MUTED, wordBreak: 'break-word' }}>details: {errDetail}</div>
+                  )}
                 </div>
               ) : !authed ? (
                 /* the sign-in, in the slot checkout takes once they have one —
