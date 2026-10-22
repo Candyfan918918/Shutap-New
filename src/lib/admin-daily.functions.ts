@@ -6,6 +6,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { PACIFIC_TZ, pacificDay, pacificMidnight, shiftDay } from './pacific-day'
+import { PAYWALL_EVENTS, aggregatePaywall, type PaywallEventRow, type PaywallReport } from './paywall-report'
 
 const TZ = PACIFIC_TZ
 const DAY = 24 * 3600 * 1000
@@ -59,6 +60,8 @@ export interface DailyReport {
   top_makers: TopMaker[]
   guests: { bits_day: number; bits_total: number }
   hidden: { admins: number; no_email: number }
+  /** sign-in prompt at bit 2 → paywall → plan → checkout → paid, unique people */
+  paywall: PaywallReport
 }
 
 export const adminDailyReport = createServerFn({ method: 'POST' })
@@ -82,7 +85,7 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
     type Bit = { id: string; user_id: string | null; created_at: string }
     type Visit = { user_id: string | null; session_id: string | null; started_at: string }
 
-    const [profiles, roles, noEmail, bits, rewritesDay, visitsDay] = await Promise.all([
+    const [profiles, roles, noEmail, bits, rewritesDay, visitsDay, paywallRows] = await Promise.all([
       fetchAll<Profile>((f, t) => db.from('profiles')
         .select('user_id, email, full_name, first_name, last_name, signup_at')
         .eq('is_anonymous', false).not('email', 'is', null).neq('email', '').order('user_id').range(f, t)),
@@ -93,6 +96,8 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
         .gte('created_at', iso(start)).lt('created_at', iso(end)).order('created_at').range(f, t)),
       fetchAll<Visit>((f, t) => db.from('visits_classified').select('user_id, session_id, started_at').eq('is_bot', false)
         .gte('started_at', iso(start)).lt('started_at', iso(end)).order('started_at').range(f, t)),
+      fetchAll<PaywallEventRow>((f, t) => db.from('events').select('name, user_id, session_id, properties')
+        .in('name', [...PAYWALL_EVENTS]).gte('ts', iso(start)).lt('ts', iso(end)).order('ts').range(f, t)),
     ])
 
     const admins = new Set(roles.map((r) => r.user_id))
@@ -203,5 +208,8 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
       top_makers: topMakers,
       guests: { bits_day: guestDay, bits_total: guestTotal },
       hidden: { admins: admins.size, no_email: noEmail.count ?? 0 },
+      // Accounts count when they're a real person (not an admin, has an
+      // email); guests count by browser session.
+      paywall: aggregatePaywall(paywallRows, (uid) => isPerson(uid)),
     }
   })
