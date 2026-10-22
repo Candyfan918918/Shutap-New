@@ -21,7 +21,13 @@ const inputSchema = z.object({
   data: z.record(z.string(), z.string().max(200).nullable()).optional(),
 })
 
-export type SendMagicLinkResult = { ok: true } | { ok: false; error: string }
+/** `stage` says where it failed. 'generate': no code exists yet, so the
+ *  client may fall back to Supabase's own email. 'send': a code was already
+ *  minted (and the email may still arrive), so a fallback would mint a second
+ *  code and void the first one — the client must not fall back. */
+export type SendMagicLinkResult =
+  | { ok: true }
+  | { ok: false; error: string; stage: 'throttle' | 'generate' | 'send' }
 
 // Light per-instance throttle — Supabase rate-limits `signInWithOtp` for us,
 // but a public server function gets nothing for free. Per address and per
@@ -58,7 +64,7 @@ export const sendMagicLink = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<SendMagicLinkResult> => {
     const email = data.email.toLowerCase()
     if (throttled(`email:${email}`, PER_EMAIL) || throttled(`ip:${callerIp()}`, PER_IP)) {
-      return { ok: false, error: 'rate_limited' }
+      return { ok: false, error: 'rate_limited', stage: 'throttle' }
     }
 
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
@@ -75,24 +81,30 @@ export const sendMagicLink = createServerFn({ method: 'POST' })
         ...(data.data ? { data: data.data } : {}),
       },
     })
-    if (error || !link?.properties?.action_link) {
+    if (error || !link?.properties?.email_otp) {
       console.warn('[sendMagicLink] generateLink failed', error?.message)
-      return { ok: false, error: error?.message ?? 'generate_link_failed' }
+      return { ok: false, error: error?.message ?? 'generate_link_failed', stage: 'generate' }
     }
 
-    const res = await sendEmail(
-      'hello',
-      'magic_link',
-      {
-        magic_link: link.properties.action_link,
-        code: link.properties.email_otp,
-        deep_link: data.redirectTo ?? 'https://shutap.com',
-      },
-      email,
-    )
+    // Code only — the action link is never mailed. It shares the code's
+    // token, so opening it (by a person or a mail scanner) used the code up.
+    let res: { ok: boolean; error?: string }
+    try {
+      res = await sendEmail(
+        'hello',
+        'magic_link',
+        {
+          code: link.properties.email_otp,
+          deep_link: 'https://shutap.com/welcome?method=email',
+        },
+        email,
+      )
+    } catch (e) {
+      res = { ok: false, error: e instanceof Error ? e.message : 'send_threw' }
+    }
     if (!res.ok) {
       console.warn('[sendMagicLink] send failed', res.error)
-      return { ok: false, error: res.error ?? 'send_failed' }
+      return { ok: false, error: res.error ?? 'send_failed', stage: 'send' }
     }
     return { ok: true }
   })

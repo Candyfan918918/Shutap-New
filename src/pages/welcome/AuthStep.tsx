@@ -1,13 +1,15 @@
 /* Auth step: OAuth (Google/Apple) + magic-link email. Imported eagerly so
  * first paint of /welcome doesn't Suspense. Does NOT advance step itself —
  * parent's onAuthStateChange picks up SIGNED_IN and drives the flow. */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouterState } from '@tanstack/react-router'
 import { Words } from '@/components/motion'
 import { supabase } from '@/integrations/supabase/client'
 import { sendMagicLink } from '@/lib/magic-link.functions'
 import { startOAuth } from '@/lib/oauth-signin'
 import { EyeMark, oauthBtn, ACCENT, TEXT, SOFT, MUTED, type Msg } from './shared'
+
+const RESEND_COOLDOWN_MS = 60_000
 
 function splitName(raw: string): { first_name: string; last_name: string | null; full_name: string } {
   const full = raw.trim().replace(/\s+/g, ' ')
@@ -29,6 +31,10 @@ export function AuthStep() {
   const [code, setCode] = useState('')
   const [msg, setMsg] = useState<Msg>(null)
   const [busy, setBusy] = useState(false)
+  const [codeSentAt, setCodeSentAt] = useState<number | null>(null)
+  const [resends, setResends] = useState(0)
+  const [cooldownUntil, setCooldownUntil] = useState(0)
+  const [tick, setTick] = useState(0)
 
   const track = (name: string, props: Record<string, unknown> = {}) => {
     void import('@/lib/tracking').then((m) => m.trackEvent(name, props)).catch(() => {})
@@ -45,22 +51,59 @@ export function AuthStep() {
     void runOAuth(provider).finally(() => setBusy(false))
   }
 
-  const doEmail = async () => {
+  // The address exactly as the code was minted for: the server lowercases it,
+  // so verification must use the same form or the code reads as invalid.
+  const normEmail = () => email.trim().toLowerCase()
+  const secondsSinceSent = () => (codeSentAt ? Math.round((Date.now() - codeSentAt) / 1000) : null)
+
+  // A new code voids the one before it, so a fresh send is held for a minute
+  // and the screen always says which code to use.
+  useEffect(() => {
+    if (cooldownUntil <= Date.now()) return
+    const t = window.setInterval(() => {
+      setTick((n) => n + 1)
+      if (Date.now() >= cooldownUntil) window.clearInterval(t)
+    }, 1000)
+    return () => window.clearInterval(t)
+  }, [cooldownUntil])
+  const cooldownLeft = Math.max(0, Math.ceil((cooldownUntil - Date.now()) / 1000))
+  void tick
+
+  const doEmail = async (resend = false) => {
     const nameTrim = name.trim().replace(/\s+/g, ' ')
-    const v = email.trim()
+    const v = normEmail()
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { setMsg({ kind: 'err', text: 'enter a valid email' }); return }
+    if (resend && Date.now() < cooldownUntil) return
     setBusy(true); setMsg(null)
-    track('sign_in_started', { method: 'email' })
+    track('sign_in_started', { method: 'email', resend })
     try {
       const emailRedirectTo = window.location.origin + '/welcome'
       const parts = nameTrim ? splitName(nameTrim) : undefined
-      // Branded link + code from hello@shutap.com; Supabase's stock email is
-      // only the fallback when that path is unavailable.
-      const branded = await sendMagicLink({ data: { email: v, redirectTo: emailRedirectTo, ...(parts ? { data: parts } : {}) } }).catch(() => null)
-      if (!branded?.ok) {
-        if (branded?.error === 'rate_limited') {
-          setMsg({ kind: 'err', text: 'too many links in a row — give the last one a minute.' })
+      // Branded code from hello@shutap.com; Supabase's stock email is only the
+      // fallback when no code could be minted at all (stage 'generate').
+      let branded: Awaited<ReturnType<typeof sendMagicLink>> | null
+      try {
+        branded = await sendMagicLink({ data: { email: v, redirectTo: emailRedirectTo, ...(parts ? { data: parts } : {}) } })
+      } catch {
+        branded = null
+      }
+      if (!branded) {
+        // The request itself failed; a code may or may not exist. Sending a
+        // second one would void the first, so ask for a retry instead.
+        setMsg({ kind: 'err', text: "couldn't send the email. try again in a minute." })
+        track('sign_in_failed', { method: 'email', reason: 'request_failed' })
+        return
+      }
+      if (!branded.ok) {
+        if (branded.stage === 'throttle') {
+          setMsg({ kind: 'err', text: 'too many codes in a row. give the last one a minute.' })
           track('sign_in_failed', { method: 'email', reason: 'rate_limited' })
+          return
+        }
+        if (branded.stage === 'send') {
+          // A code was minted; the email may still arrive. No second code.
+          setMsg({ kind: 'err', text: "couldn't send the email. try again in a minute." })
+          track('sign_in_failed', { method: 'email', reason: `send: ${branded.error}` })
           return
         }
         const { error: otpErr } = await supabase.auth.signInWithOtp({ email: v, options: { emailRedirectTo, shouldCreateUser: true, ...(parts ? { data: parts } : {}) } })
@@ -70,9 +113,19 @@ export function AuthStep() {
           return
         }
       }
+      const nextResends = resend ? resends + 1 : 0
+      setResends(nextResends)
+      setCode('')
+      setCodeSentAt(Date.now())
+      setCooldownUntil(Date.now() + RESEND_COOLDOWN_MS)
       setEmailPhase('code')
-      setMsg({ kind: 'ok', text: 'we emailed you a sign-in code. not in your inbox in a minute? check junk or spam.' })
-      track('sign_in_code_sent', { method: 'email' })
+      setMsg({
+        kind: 'ok',
+        text: resend
+          ? 'we sent a new code. use the newest one.'
+          : 'we emailed you a sign-in code. not in your inbox in a minute? check junk or spam.',
+      })
+      track('sign_in_code_sent', { method: 'email', resend, resends: nextResends })
     } catch (e) {
       const text = e instanceof Error ? e.message : 'sign-in failed'
       setMsg({ kind: 'err', text })
@@ -88,22 +141,31 @@ export function AuthStep() {
     if (!/^\d{6,10}$/.test(token)) { setMsg({ kind: 'err', text: 'enter the code from the email' }); return }
     setBusy(true); setMsg(null)
     try {
-      // A brand-new address gets a sign-up token, a returning one a sign-in
-      // token, and which type verifies the code depends on that. Try each;
-      // a failed try uses nothing up, only the right one signs in.
+      // 'email' verifies both new and returning addresses. The older types are
+      // a fallback only. A failed try uses nothing up. If all fail, the FIRST
+      // error is the real one — the later ones are just "wrong type".
       let data: Awaited<ReturnType<typeof supabase.auth.verifyOtp>>['data'] = { user: null, session: null }
-      let error: Awaited<ReturnType<typeof supabase.auth.verifyOtp>>['error'] = null
+      let firstError: Awaited<ReturnType<typeof supabase.auth.verifyOtp>>['error'] = null
+      let typeUsed: string | null = null
       for (const type of ['email', 'signup', 'magiclink'] as const) {
-        const r = await supabase.auth.verifyOtp({ email: email.trim(), token, type })
-        data = r.data
-        error = r.error
-        if (!error) break
+        const r = await supabase.auth.verifyOtp({ email: normEmail(), token, type })
+        if (!r.error) {
+          data = r.data
+          typeUsed = type
+          break
+        }
+        if (!firstError) firstError = r.error
       }
-      if (error) {
-        setMsg({ kind: 'err', text: error.message })
-        track('sign_in_failed', { method: 'email_code', reason: error.message })
+      if (!typeUsed) {
+        const reason = firstError?.message ?? 'verify_failed'
+        setMsg({
+          kind: 'err',
+          text: resends > 0 ? "that code didn't work. use the newest email." : "that code didn't work. check it, or send a new one.",
+        })
+        track('sign_in_failed', { method: 'email_code', reason, seconds_since_code_sent: secondsSinceSent(), resends })
         return
       }
+      track('sign_in_succeeded', { method: 'email_code', type_used: typeUsed, seconds_since_code_sent: secondsSinceSent(), resends })
       const meta = (data.user?.user_metadata ?? {}) as Record<string, unknown>
       const hasName = typeof meta.first_name === 'string' && meta.first_name.trim().length > 0
         || typeof meta.full_name === 'string' && (meta.full_name as string).trim().length > 0
@@ -155,11 +217,11 @@ export function AuthStep() {
                 placeholder="your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && doEmail()}
+                onKeyDown={(e) => { if (e.key === 'Enter') void doEmail() }}
                 style={{ flex: 1, background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.14)', borderRadius: 12, padding: '13px 15px', color: TEXT, fontFamily: "'Sora',sans-serif", fontSize: 15, outline: 'none' }}
               />
               <button
-                onClick={doEmail}
+                onClick={() => void doEmail()}
                 disabled={busy}
                 style={{ padding: '13px 18px', background: ACCENT, border: 'none', borderRadius: 12, color: '#fff', fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: 14, cursor: 'pointer', whiteSpace: 'nowrap' }}
               >go →</button>
@@ -191,7 +253,13 @@ export function AuthStep() {
             </div>
             <button
               type="button"
-              onClick={() => { setCode(''); setEmailPhase('input'); setMsg(null) }}
+              onClick={() => void doEmail(true)}
+              disabled={busy || cooldownLeft > 0}
+              style={{ background: 'transparent', border: 0, color: MUTED, fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 13, cursor: busy || cooldownLeft > 0 ? 'default' : 'pointer', textDecoration: cooldownLeft > 0 ? 'none' : 'underline', opacity: cooldownLeft > 0 ? 0.6 : 1 }}
+            >{cooldownLeft > 0 ? `send a new code in ${cooldownLeft}s` : 'send a new code'}</button>
+            <button
+              type="button"
+              onClick={() => { setCode(''); setEmailPhase('input'); setMsg(null); setResends(0); setCodeSentAt(null) }}
               style={{ background: 'transparent', border: 0, color: MUTED, fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 13, cursor: 'pointer', textDecoration: 'underline' }}
             >use a different email</button>
           </div>
