@@ -41,7 +41,9 @@ function DisclaimerPage() {
         Samaritans on 116 123 (UK and Ireland), or go to findahelpline.com. 18+ only.
       </p>
       <p>
-        Jokes are written by AI and may be inaccurate, unfunny or offensive. The Mirror reads back
+        Jokes are written by AI and may be inaccurate, unfunny or offensive. Shutap&rsquo;s writing
+        is guided by an in-house joke dataset written, selected and rated by the Shutap team, never
+        by your content. The Mirror reads back
         what keeps coming up in what you write. It observes; it does not assess, diagnose or
         advise. Paid plans remove the watermark; Basic allows more bits a day and Pro adds the
         Mirror. No plan buys advice or treatment. Daily limits are cost controls and may change.

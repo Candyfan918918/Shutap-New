@@ -118,7 +118,9 @@ function PrivacyPage() {
       <p>
         No one at Shutap reads your private stories or bits as part of running the service. We open
         private content only to fix a problem you report to us, to act on a safety concern, or when
-        the law requires it. Your stories and bits are never added to the Shutap joke dataset.
+        the law requires it. Your stories and bits are never added to the Shutap joke dataset,
+        which the Shutap team writes, selects and rates in-house, and Shutap never uses them to
+        train or tune AI models.
       </p>
 
       <h3>5. AI processing</h3>

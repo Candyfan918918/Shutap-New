@@ -30,7 +30,7 @@ const VALUE = [
   },
   {
     h: 'A dataset built by hand',
-    b: 'Behind the writing is a dataset the Shutap team writes in-house, pairing everyday situations with jokes, tagged by technique, voice and heat. None of it comes from users. It is the foundation for how Shutap finds what is funny.',
+    b: 'Behind the writing is an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and heat. None of it comes from users. It is the foundation for how Shutap finds what is funny.',
   },
   {
     h: 'Your people stay in charge',

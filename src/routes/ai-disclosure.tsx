@@ -106,11 +106,19 @@ function AiDisclosurePage() {
         Shutap, and AI can produce a line close to an existing joke by accident, so check anything
         you rely on commercially.
       </p>
+      <h3>Your content stays yours</h3>
       <p>
-        <b>We don&rsquo;t use your content to train AI models, and your stories and bits are never
-        added to the Shutap joke dataset.</b> That dataset is written or selected, and rated, by
-        the Shutap team.
-        How your text is handled is set out in the{' '}
+        <b>No one at Shutap reads your private bits as part of running the service, Shutap never
+        uses your stories or bits to train AI models, and they are never added to the Shutap joke
+        dataset.</b> We open private content only to fix a problem you report, to act on a safety
+        concern, or when the law requires it. Bits you post to a room are public.
+      </p>
+      <h3>Our own jokes</h3>
+      <p>
+        The Shutap joke dataset is in-house: the Shutap team writes, selects and rates its own
+        jokes, pairing everyday situations with jokes tagged by technique, voice and heat. It is
+        what guides how Shutap writes, and it is the only joke material Shutap uses to train or
+        tune AI models. How your text is handled is set out in the{' '}
         <a href="/privacy">Privacy Policy</a>.
       </p>
       <p>

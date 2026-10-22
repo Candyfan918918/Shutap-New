@@ -89,8 +89,10 @@ function TermsPage() {
       <p>
         You own what you write and post. To run Shutap, you give us a non-exclusive, worldwide,
         royalty-free license to store, process, de-identify, host, display and distribute your
-        content on Shutap. We may also use de-identified content in aggregate to operate and
-        improve the service. The license for a post ends when you delete it, except for copies we
+        content on Shutap. We may also use de-identified content in aggregate, such as usage
+        statistics, to operate and improve the service. We never use your content to train or tune
+        AI models, and we never add it to the Shutap joke dataset, which the Shutap team writes,
+        selects and rates in-house. The license for a post ends when you delete it, except for copies we
         must keep by law and copies others already downloaded or shared.
       </p>
       <p>

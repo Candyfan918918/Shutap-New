@@ -29,7 +29,7 @@ const ITEMS: Item[] = [
   {
     href: "/privacy",
     label: "Privacy Policy",
-    sub: "details scrubbed before storage, a pseudonym instead of your name, no sale of your data.",
+    sub: "details scrubbed before storage, bits private until you post, no sale of your data, never used to train AI.",
   },
   {
     href: "/guidelines",
@@ -54,7 +54,7 @@ const ITEMS: Item[] = [
   {
     href: "/ai-disclosure",
     label: "AI disclosure",
-    sub: "what writes your jokes, and that it can be wrong.",
+    sub: "what writes your jokes, our in-house joke dataset, and what we never do with your content.",
   },
   {
     href: "/disclaimer",

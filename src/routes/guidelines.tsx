@@ -62,8 +62,8 @@ function GuidelinesPage() {
             browser to get around it.
           </li>
           <li>
-            See something that breaks these rules? <b>Report it.</b> When three different people
-            report a post, it&rsquo;s hidden until we review it.
+            See something that breaks these rules? <b>Report it.</b> When a post gets three
+            reports, it&rsquo;s hidden until we review it.
           </li>
         </ul>
       </div>
