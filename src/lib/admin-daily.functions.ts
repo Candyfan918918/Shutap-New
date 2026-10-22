@@ -5,8 +5,9 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
+import { PACIFIC_TZ, pacificDay, pacificMidnight, shiftDay } from './pacific-day'
 
-const TZ = 'America/Los_Angeles'
+const TZ = PACIFIC_TZ
 const DAY = 24 * 3600 * 1000
 
 async function assertAdmin(ctx: unknown): Promise<void> {
@@ -28,28 +29,11 @@ async function fetchAll<T>(build: (from: number, to: number) => PromiseLike<{ da
   return out
 }
 
-const dayFmt = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' })
-const dayKey = (ms: number) => dayFmt.format(new Date(ms))
-const partsFmt = new Intl.DateTimeFormat('en-US', {
-  timeZone: TZ, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit',
-})
-
-/** The UTC instant of midnight in Los Angeles on the given YYYY-MM-DD. */
-function laMidnight(key: string): number {
-  const [y, m, d] = key.split('-').map(Number) as [number, number, number]
-  const guess = Date.UTC(y, m - 1, d)
-  let start = guess
-  for (let i = 0; i < 2; i++) {
-    const p = Object.fromEntries(partsFmt.formatToParts(new Date(start)).map((x) => [x.type, x.value]))
-    const shown = Date.UTC(+p.year!, +p.month! - 1, +p.day!, +p.hour! % 24, +p.minute!, +p.second!)
-    start += guess - shown
-  }
-  return start
-}
-const shiftKey = (key: string, days: number) => {
-  const [y, m, d] = key.split('-').map(Number) as [number, number, number]
-  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10)
-}
+// Shared with the daily bit limits, so the report and the limits agree on
+// where a day starts and ends.
+const dayKey = (ms: number) => pacificDay(ms)
+const laMidnight = pacificMidnight
+const shiftKey = shiftDay
 
 const pct = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 1000) / 10 : null)
 

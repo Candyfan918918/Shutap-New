@@ -3,8 +3,12 @@
  *   write    the box and four controls (audience, voice, length, heat)
  *   writing  the story, four steps and a bar while the server works
  *   bit      hook, setup, tags, button, one line on why it works, the
- *            action row. A guest reads the hook and setup; the tags and the
- *            button arrive masked from the server and sit behind sign-in.
+ *            action row. Everyone sees the whole bit, guests included.
+ *
+ * New bits a day: guest 1 · free 2 (counting the guest bit) · basic 5 · pro.
+ * At the limit, "write" opens the next step instead: a guest gets the
+ * sign-in sheet (the story is kept and written right after sign-in), a
+ * free account the plans, Pro the fair-use note.
  *
  * Crisis outranks all of it: no bit, no gate, no paywall, the help lines.
  * The server owns the tier, the budget and the text; nothing here can
@@ -24,6 +28,8 @@ import {
   type BitTier,
   type BitUsage,
   type BitVersion,
+  atCap,
+  isPaidTier,
 } from '@/lib/bits/shared'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth } from '@/lib/oauth-signin'
@@ -42,6 +48,10 @@ const AUTOSTART_KEY = 'shutap_bit_autostart'
 const CONTROLS_KEY = 'shutap_bit_controls'
 const PENDING_KEY = 'shutap_bit_pending'
 const PENDING_TTL = 60 * 60 * 1000
+/** A guest's second bit, held across sign-in (localStorage: the email flow
+ *  can come back in another tab) and written once, right after it. */
+const PENDING_WRITE_KEY = 'shutap_pending_write'
+const PENDING_WRITE_TTL = 30 * 60 * 1000
 
 type ShownBit = Bit & { locked: boolean }
 type Phase = 'write' | 'writing' | 'bit' | 'mix' | 'scene' | 'screenplay' | 'crisis'
@@ -75,6 +85,49 @@ function readPending(): { bit_id: string; anon: string } | null {
 }
 function clearPending() {
   try { localStorage.removeItem(PENDING_KEY) } catch { /* noop */ }
+}
+
+type PendingWrite = { story: string; controls: BitControls; write_id: string; anon: string }
+function writePendingWrite(p: PendingWrite) {
+  try {
+    localStorage.setItem(PENDING_WRITE_KEY, JSON.stringify({ ...p, at: Date.now() }))
+  } catch { /* noop */ }
+}
+function readPendingWrite(): PendingWrite | null {
+  try {
+    const raw = localStorage.getItem(PENDING_WRITE_KEY)
+    if (!raw) return null
+    const p = JSON.parse(raw) as Partial<PendingWrite> & { at?: number }
+    if (
+      typeof p?.story !== 'string' ||
+      !p.story.trim() ||
+      typeof p.write_id !== 'string' ||
+      typeof p.anon !== 'string' ||
+      typeof p.at !== 'number' ||
+      Date.now() - p.at > PENDING_WRITE_TTL
+    ) {
+      localStorage.removeItem(PENDING_WRITE_KEY)
+      return null
+    }
+    return { story: p.story, controls: { ...DEFAULT_CONTROLS, ...(p.controls ?? {}) }, write_id: p.write_id, anon: p.anon }
+  } catch {
+    return null
+  }
+}
+function clearPendingWrite() {
+  try { localStorage.removeItem(PENDING_WRITE_KEY) } catch { /* noop */ }
+}
+
+function newWriteId(): string {
+  try {
+    return crypto.randomUUID()
+  } catch {
+    // Older browsers: a v4-shaped id from Math.random is enough for this.
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0
+      return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
+    })
+  }
 }
 
 function readControls(): BitControls {
@@ -139,7 +192,9 @@ export function BitSurface() {
   const [usage, setUsage] = useState<BitUsage | null>(null)
   const [bit, setBit] = useState<ShownBit | null>(null)
   const [notice, setNotice] = useState<Notice | null>(null)
-  const [sheet, setSheet] = useState<null | 'signin' | 'limit' | 'rate'>(null)
+  /** signin: a feature that needs an account · signin_write: a guest's
+   *  second bit · limit: the day's bits are used · fair: Pro's fair-use cap */
+  const [sheet, setSheet] = useState<null | 'signin' | 'signin_write' | 'limit' | 'rate' | 'fair'>(null)
   const [error, setError] = useState<string | null>(null)
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
@@ -151,6 +206,11 @@ export function BitSurface() {
   const topRef = useRef<HTMLDivElement | null>(null)
   const restoring = useRef(false)
   const typed = useRef(false)
+  const writingRef = useRef(false)
+  // restore() runs from effects set up on first render; it reaches the
+  // current onWrite (with current state) through this ref.
+  const onWriteRef = useRef(onWrite)
+  onWriteRef.current = onWrite
 
   const ctx = useCallback(() => ({ anon_session_id: anonSessionId() }), [])
   const version: BitVersion | null = bit ? (bit.versions.find((v) => v.id === currentId) ?? bit.versions[0] ?? null) : null
@@ -240,25 +300,41 @@ export function BitSurface() {
     }
   }, [whoami, ctx])
 
-  /* After sign-in: the guest's bits become theirs, and the bit they were
-     reading comes back unlocked. Runs once per return. */
+  /* After sign-in: the guest's bits become theirs (and today's guest bit
+     counts toward the account's day). Then either the story they were about
+     to write is written, once, or the bit they were reading comes back.
+     Runs once per return. */
   const restore = useCallback(async () => {
     if (restoring.current) return
+    const pending = readPendingWrite()
     const note = readPending()
-    if (!note) return
+    if (!pending && !note) return
     if (!(await hasRealSession(12))) return
     restoring.current = true
     try {
-      await claim({ data: { anon_session_id: note.anon } })
+      const anon = pending?.anon ?? note?.anon
+      if (anon) await claim({ data: { anon_session_id: anon } })
+      // Cleared before writing, so a second run can never write it again.
+      // The write id is reused, so even a doubled call makes one bit.
+      clearPendingWrite()
       clearPending()
       clearAnonSessionId()
       const t = await refresh()
+      if (pending) {
+        typed.current = true
+        setStory(pending.story)
+        setControls(pending.controls)
+        jokeTrack('bit_after_signin', t, {})
+        await onWriteRef.current({ text: pending.story, controls: pending.controls, writeId: pending.write_id, fromSignIn: true })
+        return
+      }
+      if (!note) return
       const r = await fetchBit({ data: { bit_id: note.bit_id, ...ctx() } })
       if (r.bit) {
         setBit(r.bit)
         setCurrentId(r.bit.versions[0]?.id ?? null)
         setPhase('bit')
-        jokeTrack('bit_unlocked', t, {})
+        jokeTrack('bit_reopened', t, {})
         requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       }
     } catch {
@@ -269,7 +345,7 @@ export function BitSurface() {
   /* /?bit=<id> reopens a bit from the set list (or a reload). */
   const openFromLink = useCallback(async () => {
     const id = new URLSearchParams(window.location.search).get('bit')
-    if (!id || !/^[0-9a-f-]{36}$/i.test(id) || readPending()) return
+    if (!id || !/^[0-9a-f-]{36}$/i.test(id) || readPending() || readPendingWrite()) return
     // The link opens the bit once; a refresh afterwards lands on a clean box.
     window.history.replaceState(window.history.state, '', '/')
     setOpening(true)
@@ -311,26 +387,56 @@ export function BitSurface() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [story, phase, opening])
 
-  /* The sign-in page's code is fetched as soon as the lock shows, so the email
-     button opens it instantly. */
+  /* A guest's sign-in page is fetched ahead, so the email button opens it
+     instantly when the sheet asks for it. */
   useEffect(() => {
-    if (!bit?.locked) return
+    if (tier !== 'guest' || !bit) return
     void router.preloadRoute({ to: '/welcome' }).catch(() => {})
     void import('@/pages/welcome/AuthStep').catch(() => {})
-  }, [bit?.locked, router])
+  }, [tier, bit, router])
 
-  async function onWrite() {
-    const text = story.trim()
-    if (!text || phase === 'writing') return
-    setError(null)
-    if (usage && usage.used >= usage.cap) {
-      setSheet('limit')
+  /** What the day's limit opens, by tier. The server decides the tier. */
+  function showLimit(t: BitTier) {
+    if (t === 'guest') {
+      setSheet('signin_write')
+      jokeTrack('signin_sheet_opened', t, { from: 'bit_2' })
       return
     }
+    setSheet(t === 'pro' ? 'fair' : 'limit')
+  }
+
+  type WriteOpts = { text?: string; controls?: BitControls; writeId?: string; fromSignIn?: boolean }
+
+  /** One write at a time: a double tap (or the sign-in return racing a tap)
+   *  must not start two bits. */
+  async function onWrite(opts?: WriteOpts) {
+    if (writingRef.current) return
+    writingRef.current = true
+    try {
+      await writeOnce(opts)
+    } finally {
+      writingRef.current = false
+    }
+  }
+
+  async function writeOnce(opts?: WriteOpts) {
+    const text = (opts?.text ?? story).trim()
+    const ctl = opts?.controls ?? controls
+    if (!text || phaseRef.current === 'writing') return
+    setError(null)
+    // Right after sign-in the tier and count in state are stale; the server
+    // checks the limit either way.
+    if (!opts?.fromSignIn && atCap(usage)) {
+      showLimit(tier)
+      return
+    }
+    // One id per press of "write", reused by the silent retry below, so a
+    // retry of a write that landed returns the same bit and costs nothing.
+    const writeId = opts?.writeId ?? newWriteId()
     setPhase('writing')
     setNotice(null)
     requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
-    jokeTrack('bit_submitted', tier, { audience: controls.audience, voice: controls.voice, length: controls.length, heat: controls.heat })
+    jokeTrack('bit_submitted', tier, { audience: ctl.audience, voice: ctl.voice, length: ctl.length, heat: ctl.heat, after_signin: !!opts?.fromSignIn })
     // One silent retry before the visitor ever sees an error: a slow model or
     // a dropped request costs a few seconds, not the bit.
     // A time limit on every try (Oct 22 2026): phones sat on "writing…" for
@@ -346,7 +452,7 @@ export function BitSurface() {
       let timer: number | undefined
       try {
         res = await Promise.race([
-          write({ data: { story: text, controls, ...ctx() } }),
+          write({ data: { story: text, controls: ctl, write_id: writeId, ...ctx() } }),
           new Promise<never>((_, reject) => {
             timer = window.setTimeout(() => reject(new Error('timeout')), WRITE_TIME_LIMIT_MS)
           }),
@@ -384,8 +490,10 @@ export function BitSurface() {
     }
     if (res.status === 'limited') {
       setPhase('write')
+      setTier(res.tier)
       setUsage(res.usage)
-      setSheet(res.reason === 'daily' ? 'limit' : 'rate')
+      if (res.reason === 'daily') showLimit(res.tier)
+      else setSheet('rate')
       jokeTrack('limit_shown', res.tier, { reason: res.reason })
       return
     }
@@ -405,10 +513,10 @@ export function BitSurface() {
     jokeTrack('bit_written', res.tier, { ms: res.ms, seconds: res.bit.versions[0]?.est_seconds ?? null })
   }
 
-  /* The gate. A guest sees the hook, setup and first tag; the rest unlock on
-     sign-in. Google starts straight from the bit (no stop on the sign-in
-     page); "email or Apple" goes to /welcome for the other methods. Either
-     way /welcome finishes age and alias and brings the bit back unlocked. */
+  /* The gate, for what needs an account: scene, screenplay, posting, and a
+     guest's second bit. Google and Apple go straight to the provider; email
+     goes to the email form. Either way the visitor comes back to "/" and the
+     bit (or the story they were about to write) comes back with them. */
   function openSignin(from: string) {
     setSheet('signin')
     jokeTrack('signin_sheet_opened', tier, { from })
@@ -420,8 +528,15 @@ export function BitSurface() {
   }
 
   async function signInForBit(method: 'google' | 'apple' | 'email', from: string) {
-    if (!bit) return
-    writePending(bit.id, anonSessionId())
+    if (from === 'bit_2') {
+      // The guest's second bit: keep the story, write it right after sign-in.
+      const text = story.trim()
+      if (!text) return
+      writePendingWrite({ story: text, controls, write_id: newWriteId(), anon: anonSessionId() })
+    } else {
+      if (!bit) return
+      writePending(bit.id, anonSessionId())
+    }
     try { sessionStorage.setItem('shutap_returnTo', '/') } catch { /* noop */ }
     setDurableReturn('/')
     jokeTrack('signin_clicked', tier, { method, from })
@@ -477,7 +592,8 @@ export function BitSurface() {
   }, [])
 
   const step = Math.min(STEPS.length - 1, Math.floor(elapsed / 2.5))
-  const left = usage ? Math.max(0, usage.cap - usage.used) : null
+  // Pro has no cap shown (null), so no count.
+  const left = usage && usage.cap !== null ? Math.max(0, usage.cap - usage.used) : null
 
   return (
     <section className="bt" aria-label="Write a bit">
@@ -532,7 +648,7 @@ export function BitSurface() {
               </p>
             )}
             <p className="bt-note" style={{ textAlign: 'center' }}>
-              {tier === 'guest' ? 'no account needed · ' : left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
+              {tier === 'guest' ? 'no account needed · ' : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
               names removed before anything is saved
             </p>
           </>
@@ -612,48 +728,22 @@ export function BitSurface() {
                 <span className="bt-lbl">setup</span>
                 <p className="bt-v">{version.setup}</p>
               </div>
-              {version.tags.map((t, i) => {
-                const tagLocked = bit.locked && i > 0
-                return (
-                  <div
-                    key={i}
-                    className={`bt-slot${tagLocked ? ' locked' : ''}${i === 0 && version.kind === 'tag_swap' ? ' new' : ''}`}
-                    onClick={tagLocked ? () => openSignin('tag') : undefined}
-                    style={tagLocked ? { cursor: 'pointer' } : undefined}
-                  >
-                    <span className={`bt-lbl${i === 0 && version.kind === 'tag_swap' ? ' r' : ''}`}>tag {i + 1}{i === 0 && version.kind === 'tag_swap' ? ' · swapped' : ''}</span>
-                    <p className="bt-v" aria-hidden={tagLocked || undefined}>{t}</p>
-                  </div>
-                )
-              })}
-              <div
-                className={`bt-slot${bit.locked ? ' locked' : ''}`}
-                onClick={bit.locked ? () => openSignin('button') : undefined}
-                style={bit.locked ? { cursor: 'pointer' } : undefined}
-              >
-                <span className="bt-lbl r">button</span>
-                <p className="bt-v" style={{ fontWeight: 400 }} aria-hidden={bit.locked || undefined}>{version.button}</p>
-              </div>
-              {bit.locked && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
-                  <p className="bt-note" style={{ textAlign: 'center' }}>The rest of the tags and the button are under here. Free.</p>
-                  <GoogleButton onClick={() => void signInForBit('google', 'inline')} />
-                  <button className="bt-btn ghost block" onClick={() => void signInForBit('apple', 'inline')}>
-                    continue with Apple
-                  </button>
-                  <button className="bt-btn ghost block" onClick={() => void signInForBit('email', 'inline')}>
-                    continue with email
-                  </button>
-                  <p className="bt-note" style={{ textAlign: 'center' }}>18+ only · by continuing you confirm you're 18+ and agree to the terms and privacy policy</p>
+              {version.tags.map((t, i) => (
+                <div key={i} className={`bt-slot${i === 0 && version.kind === 'tag_swap' ? ' new' : ''}`}>
+                  <span className={`bt-lbl${i === 0 && version.kind === 'tag_swap' ? ' r' : ''}`}>tag {i + 1}{i === 0 && version.kind === 'tag_swap' ? ' · swapped' : ''}</span>
+                  <p className="bt-v">{t}</p>
                 </div>
-              )}
+              ))}
+              <div className="bt-slot">
+                <span className="bt-lbl r">button</span>
+                <p className="bt-v" style={{ fontWeight: 400 }}>{version.button}</p>
+              </div>
             </article>
 
             <div className="bt-acts" role="group" aria-label="Use the bit">
               <button
                 className="bt-act"
                 onClick={() => {
-                  if (bit.locked) return openSignin('prompter')
                   setPrompter(version)
                   jokeTrack('prompter_opened', tier, { kind: version.kind })
                 }}
@@ -666,7 +756,8 @@ export function BitSurface() {
                   key={k}
                   className="bt-act"
                   onClick={() => {
-                    if (bit.locked) return openSignin(k)
+                    // Scene and screenplay are written on request: account only.
+                    if (tier === 'guest') return openSignin(k)
                     setPhase(k)
                     jokeTrack(`${k}_opened`, tier, { kind: version.kind })
                     toTop()
@@ -683,7 +774,7 @@ export function BitSurface() {
               <button
                 className="bt-act"
                 onClick={() => {
-                  if (bit.locked) return openSignin('post')
+                  if (tier === 'guest') return openSignin('post')
                   setPostOpen(true)
                 }}
               >
@@ -692,26 +783,24 @@ export function BitSurface() {
               </button>
             </div>
 
-            {!bit.locked && (
-              <Versions
-                bit={bit}
-                current={version}
-                onSelect={(id) => setCurrentId(id)}
-                onAdd={addVersion}
-                onMix={() => {
-                  setMixFromId(version.id)
-                  setPhase('mix')
-                  toTop()
-                }}
-                say={say}
-              />
-            )}
+            <Versions
+              bit={bit}
+              current={version}
+              onSelect={(id) => setCurrentId(id)}
+              onAdd={addVersion}
+              onMix={() => {
+                setMixFromId(version.id)
+                setPhase('mix')
+                toTop()
+              }}
+              say={say}
+            />
 
             <div className="bt-row">
               <button className="bt-btn ghost" onClick={writeAnother}>
                 write another
               </button>
-              {!bit.locked && <span className="bt-note">kept to your set list</span>}
+              {tier !== 'guest' && <span className="bt-note">kept to your set list</span>}
             </div>
           </>
         )}
@@ -741,7 +830,7 @@ export function BitSurface() {
           {phase === 'scene' ? (
             <SceneView bitId={bit.id} version={version} onBack={backToBit} onPrompter={() => setPrompter(version)} say={say} />
           ) : (
-            <ScreenplayView bitId={bit.id} version={version} onBack={backToBit} say={say} watermark={tier !== 'paying'} />
+            <ScreenplayView bitId={bit.id} version={version} onBack={backToBit} say={say} watermark={!isPaidTier(tier)} />
           )}
         </div>
       )}
@@ -751,7 +840,7 @@ export function BitSurface() {
       )}
 
       {downloadOpen && bit && version && (
-        <DownloadSheet bitId={bit.id} version={version} tier={tier} locked={bit.locked} onClose={() => setDownloadOpen(false)} say={say} />
+        <DownloadSheet bitId={bit.id} version={version} tier={tier} onClose={() => setDownloadOpen(false)} say={say} />
       )}
 
       {prompter && <Prompter bit={prompter} onClose={() => setPrompter(null)} />}
@@ -767,23 +856,23 @@ export function BitSurface() {
           className="bt-scrim"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
-              if (sheet === 'signin') dismissSignin()
+              if (sheet === 'signin' || sheet === 'signin_write') dismissSignin()
               else setSheet(null)
             }
           }}
         >
           <div className="bt-sheet" role="dialog" aria-modal="true" aria-labelledby="bit-sheet-title">
-            {sheet === 'signin' && (
+            {(sheet === 'signin' || sheet === 'signin_write') && (
               <>
-                <h3 id="bit-sheet-title">The punchline's under here.</h3>
+                <h3 id="bit-sheet-title">{sheet === 'signin_write' ? 'Sign in to write this one.' : 'Sign in to use this.'}</h3>
                 <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  Free. One tap with Google or Apple.
+                  {sheet === 'signin_write' ? 'Free. Your story stays in the box.' : 'Free. One tap with Google or Apple.'}
                 </p>
-                <GoogleButton onClick={() => void signInForBit('google', 'sheet')} />
-                <button className="bt-btn ghost block" onClick={() => void signInForBit('apple', 'sheet')}>
+                <GoogleButton onClick={() => void signInForBit('google', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />
+                <button className="bt-btn ghost block" onClick={() => void signInForBit('apple', sheet === 'signin_write' ? 'bit_2' : 'sheet')}>
                   continue with Apple
                 </button>
-                <button className="bt-btn ghost block" onClick={() => void signInForBit('email', 'sheet')}>
+                <button className="bt-btn ghost block" onClick={() => void signInForBit('email', sheet === 'signin_write' ? 'bit_2' : 'sheet')}>
                   continue with email
                 </button>
                 <button className="bt-btn ghost block" onClick={dismissSignin}>
@@ -794,10 +883,19 @@ export function BitSurface() {
             )}
             {sheet === 'limit' && (
               <>
-                <h3 id="bit-sheet-title">That's {WORDS[usage?.cap ?? 5] ?? usage?.cap} for today.</h3>
+                <h3 id="bit-sheet-title">That's {WORDS[usage?.cap ?? 0] ?? usage?.cap} for today.</h3>
                 <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  Resets {resetLabel(usage?.resets_at)}. Your story stays in the box. Shutap+ doesn't add more; it removes the watermark.
+                  Resets {resetLabel(usage?.resets_at)}. Your story stays in the box.
                 </p>
+                <button className="bt-btn block" onClick={() => setSheet(null)}>
+                  ok
+                </button>
+              </>
+            )}
+            {sheet === 'fair' && (
+              <>
+                <h3 id="bit-sheet-title">That's a lot of bits for one day.</h3>
+                <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>More at midnight Pacific. Your story stays in the box.</p>
                 <button className="bt-btn block" onClick={() => setSheet(null)}>
                   ok
                 </button>

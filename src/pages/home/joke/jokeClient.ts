@@ -3,6 +3,7 @@
 // happens here is only rasterising, packaging and handing the file over.
 import { phCapture } from '@/lib/posthog'
 import type { JokeTier } from '@/lib/jokes/deck'
+import type { BitTier } from '@/lib/bits/shared'
 // The card's faces, as files: the same woff2 the page itself loads. An SVG
 // drawn into a canvas is a closed document — it cannot reach the page's fonts
 // or fetch its own — so these are inlined into it before it is drawn.
@@ -41,7 +42,7 @@ export function clearAnonSessionId(): void {
 }
 
 /** Every joke event carries the tier. Situation text never rides along. */
-export function jokeTrack(name: string, tier: JokeTier, props: Record<string, unknown> = {}): void {
+export function jokeTrack(name: string, tier: JokeTier | BitTier, props: Record<string, unknown> = {}): void {
   void phCapture(name, { ...props, tier })
 }
 

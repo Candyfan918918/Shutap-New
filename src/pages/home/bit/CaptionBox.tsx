@@ -10,18 +10,18 @@ export function CaptionBox({
   bitId,
   versionId,
   tier,
-  locked,
   say,
 }: {
   bitId: string
   versionId: string
   tier: BitTier
-  locked: boolean
   say: (m: string) => void
 }) {
   const fn = useServerFn(getCaption)
   const fnRef = useRef(fn)
   fnRef.current = fn
+  // Captions are written on request, so they need an account.
+  const locked = tier === 'guest'
   const [state, setState] = useState<{ caption: string; hashtags: string[] } | 'loading' | 'error' | null>(null)
 
   useEffect(() => {
