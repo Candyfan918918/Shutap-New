@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { createClient } from '@supabase/supabase-js';
-import { type StripeEnv, verifyWebhook } from '@/lib/stripe.server';
+import { type StripeEnv, createStripeClient, verifyWebhook } from '@/lib/stripe.server';
 import { formatEmailDate, formatStripeAmount, sendBillingEmail } from '@/lib/email/billing.server';
 import { planByPriceId, planFromPriceId, productIdForPrice } from '@/lib/pricing';
 
@@ -116,6 +116,33 @@ async function maybeSendCancellationEmail(
 // trial-start invoice must NOT send a receipt) on mirror subscriptions.
 // Idempotent via billing_emails (dedupe on invoice id), so Stripe webhook
 // retries and event replays never double-send.
+/** The subscription an invoice belongs to, across Stripe API versions
+ *  (dahlia moved it under invoice.parent). */
+function subscriptionIdOf(invoice: any): string | null {
+  const line = invoice?.lines?.data?.[0];
+  return (
+    invoice?.subscription ||
+    invoice?.parent?.subscription_details?.subscription ||
+    line?.parent?.subscription_item_details?.subscription ||
+    line?.subscription ||
+    null
+  );
+}
+
+/** Stripe doesn't promise event order, so an older subscription.updated can
+ *  arrive after a newer one (e.g. right after an upgrade to Pro). Read the
+ *  subscription as it is now and record that; fall back to the event's copy
+ *  if Stripe can't be reached. */
+async function latest(sub: any, env: StripeEnv): Promise<any> {
+  try {
+    const fresh = await createStripeClient(env).subscriptions.retrieve(sub.id);
+    return { ...fresh, metadata: { ...(sub.metadata ?? {}), ...(fresh.metadata ?? {}) } };
+  } catch (e) {
+    console.error('[stripe webhook] could not re-read subscription; using event copy', { id: sub?.id, e });
+    return sub;
+  }
+}
+
 async function handleInvoicePaid(invoice: any, env: StripeEnv) {
   if (!invoice?.id || !(invoice.amount_paid > 0)) return;
   const line = invoice.lines?.data?.[0];
@@ -149,7 +176,9 @@ async function handleInvoicePaid(invoice: any, env: StripeEnv) {
     dedupeKey: invoice.id,
     userId: row.user_id,
     vars: {
-      plan_name: planNameFor(row.price_id),
+      // An upgrade invoice can land before the row says Pro: the only
+      // upgrade on offer is Basic → Pro.
+      plan_name: invoice.billing_reason === 'subscription_update' ? 'Pro' : planNameFor(row.price_id),
       amount,
       plan_interval: interval === 'year' ? 'annual' : 'monthly',
       period_range: periodRange,
@@ -245,7 +274,7 @@ async function handleDeleted(sub: any, env: StripeEnv) {
 async function handleInvoicePaymentFailed(invoice: any, env: StripeEnv) {
   // Dunning: reflect payment failure promptly so the UI can warn the user
   // instead of waiting for the downstream customer.subscription.updated event.
-  const subId = invoice.subscription;
+  const subId = subscriptionIdOf(invoice);
   if (!subId) return;
   const { error, count } = await getSupabase().from('subscriptions').update({
     status: 'past_due',
@@ -268,9 +297,9 @@ export const Route = createFileRoute('/api/public/payments/webhook')({
           const event = await verifyWebhook(request, env);
           switch (event.type) {
             case 'customer.subscription.created':
-              await handleCreated(event.data.object, env); break;
+              await handleCreated(await latest(event.data.object, env), env); break;
             case 'customer.subscription.updated':
-              await handleUpdated(event.data.object, env); break;
+              await handleUpdated(await latest(event.data.object, env), env); break;
             case 'customer.subscription.deleted':
               await handleDeleted(event.data.object, env); break;
             case 'invoice.paid':

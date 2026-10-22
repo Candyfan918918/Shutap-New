@@ -69,6 +69,13 @@ export const createMirrorCheckout = createServerFn({ method: 'POST' })
       if (!prices.data.length) throw new Error('Price not found');
       const stripePrice = prices.data[0];
       const customerId = await resolveOrCreateCustomer(stripe, { email: user?.email ?? undefined, userId });
+      // The database learns about a subscription from the webhook, a moment
+      // after payment. Ask Stripe too, so a second tab (or coming straight
+      // back to /subscribe) can't start a second subscription.
+      const live = await stripe.subscriptions.list({ customer: customerId, status: 'all', limit: 20 });
+      if (live.data.some((x) => ['active', 'trialing', 'past_due', 'incomplete', 'unpaid'].includes(x.status))) {
+        return { error: 'already_subscribed' };
+      }
 
       const session = await stripe.checkout.sessions.create({
         line_items: [{ price: stripePrice.id, quantity: 1 }],

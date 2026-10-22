@@ -164,7 +164,9 @@ export function SubscribePage() {
       try {
         const s = await fetchStatus({ data: { environment: getStripeEnvironment() } })
         if (done) return
-        if (s?.isActive) {
+        // A cancelled plan still inside its paid period isn't "already
+        // subscribed": it won't renew, so checkout stays open.
+        if (s?.isActive && s.status !== 'canceled') {
           setAlreadySubbed(true)
           setCurrentPlan(planByPriceId(s.priceId)?.tier ?? 'basic')
         }
@@ -193,7 +195,13 @@ export function SubscribePage() {
     setErr(null)
     try {
       const r = await changePlanFn({ data: { environment: getStripeEnvironment() } })
-      if (!r.ok) throw new Error(r.error === 'plan_cancelling' ? 'Your Basic plan is set to end. Resume it from billing first.' : r.error)
+      if (!r.ok && r.error === 'no_basic_plan') {
+        // Nothing to move from: open a normal Pro checkout instead.
+        setAlreadySubbed(false)
+        setPlanKey('pro')
+        return
+      }
+      if (!r.ok) throw new Error(r.error === 'plan_cancelling' ? 'Your Basic plan is set to end. Resume it from billing first.' : "Couldn't switch you to Pro. You're still on Basic.")
       setCurrentPlan('pro')
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Couldn't switch you to Pro.")
