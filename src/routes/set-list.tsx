@@ -23,7 +23,7 @@ function when(iso: string): string {
   const y = new Date(Date.now() - 86400e3)
   if (d.toDateString() === today.toDateString()) return 'today'
   if (d.toDateString() === y.toDateString()) return 'yesterday'
-  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
 function SetListPage() {

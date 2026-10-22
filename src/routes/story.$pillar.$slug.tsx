@@ -144,7 +144,7 @@ function StoryPage() {
             {storyQueryTitle(row)}
           </h1>
           <p className="text-xs text-muted-foreground">
-            Posted {new Date(row.created_at).toLocaleDateString()}
+            Posted {new Date(row.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
           </p>
         </header>
 

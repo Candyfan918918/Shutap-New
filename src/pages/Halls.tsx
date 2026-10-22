@@ -241,7 +241,7 @@ export function HallOfFamePageNative() {
                     <span style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 12, color: '#6f666c' }}>{r.alias}</span>
                     <span style={{ fontSize: 11, color: '#6f666c' }}>·</span>
                     <span style={{ fontSize: 12, color: '#6f666c', fontFamily: "'Newsreader',serif", fontStyle: 'italic' }}>
-                      <b style={{ color: '#17131a', fontStyle: 'normal' }}>{r.same.toLocaleString()}</b> said 'omg same'
+                      <b style={{ color: '#17131a', fontStyle: 'normal' }}>{r.same.toLocaleString('en-US')}</b> said 'omg same'
                     </span>
                     <span style={{ fontSize: 11, color: '#6f666c' }}>·</span>
                     <span style={{ fontSize: 11.5, color: '#6f666c', fontFamily: "'Newsreader',serif", fontStyle: 'italic' }}>rested {r.restedDaysAgo}d ago</span>

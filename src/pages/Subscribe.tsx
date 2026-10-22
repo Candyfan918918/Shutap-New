@@ -232,7 +232,7 @@ export function SubscribePage() {
         setPlanKey('pro')
         return
       }
-      if (!r.ok) throw new Error(r.error === 'plan_cancelling' ? 'Your Basic plan is set to end. Resume it from billing first.' : "Couldn't switch you to Pro. You're still on Basic.")
+      if (!r.ok) throw new Error(r.error === 'plan_cancelling' ? 'Your Basic plan is set to end. Tap "keep my plan" on your profile first.' : "Couldn't switch you to Pro. You're still on Basic.")
       setCurrentPlan('pro')
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Couldn't switch you to Pro.")
@@ -321,7 +321,7 @@ export function SubscribePage() {
             </div>
             <div style={{ color: MUTED, fontSize: 14, lineHeight: 1.55 }}>
               {currentPlan === 'pro'
-                ? 'manage your plan, update your payment method, or cancel from the billing portal.'
+                ? 'cancel or change your card from your profile.'
                 : `Pro is ${usd(PLANS.pro.amount)}/mo: unlimited bits and the Mirror. the difference for this month is charged now.`}
             </div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
