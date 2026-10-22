@@ -22,7 +22,9 @@ export function TryItBox({ page, heading = 'Try it on your own story' }: { page:
     void import('@/lib/tracking')
       .then((m) => m.trackEvent('seo_cta_clicked', { page, chars: text.length }))
       .catch(() => {})
-    void navigate({ to: '/' })
+    // The story rides on the navigation (history state) so it arrives even
+    // where page storage is blocked; storage above is only a backup.
+    void navigate({ to: '/', state: { shutapStory: text, shutapAutostart: true } as never })
   }
 
   return (

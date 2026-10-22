@@ -188,18 +188,33 @@ export function BitSurface() {
      straight away, so the reader never retypes it. */
   const autostartRef = useRef(false)
   useEffect(() => {
+    // 1 · a story handed over from a guide or funniest page rides on the
+    //     navigation itself (history state), so it arrives even where page
+    //     storage is blocked (e.g. inside an embedded preview).
+    let handed = ''
     try {
-      // Text typed before the app finished loading is already in state (see
-      // useState above); a draft from earlier in this tab is kept if longer.
-      // The box must never be reset to empty under someone who is typing.
-      const onScreen = (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.value ?? ''
-      const saved = sessionStorage.getItem(DRAFT_KEY) ?? ''
-      const keep = onScreen.length >= saved.length ? onScreen : saved
-      if (keep) typed.current = true
-      setStory(keep)
-      autostartRef.current = sessionStorage.getItem(AUTOSTART_KEY) === '1'
-      sessionStorage.removeItem(AUTOSTART_KEY)
+      const hs = (window.history.state ?? {}) as { shutapStory?: unknown; shutapAutostart?: unknown }
+      if (typeof hs.shutapStory === 'string' && hs.shutapStory.trim()) {
+        handed = hs.shutapStory
+        autostartRef.current = hs.shutapAutostart === true
+        // Consume it, so a reload doesn't write the same story again.
+        window.history.replaceState({ ...hs, shutapStory: null, shutapAutostart: null }, '')
+      }
     } catch { /* noop */ }
+    // 2 · text typed before the app finished loading is already in state
+    //     (see useState above) and on screen.
+    const onScreen = (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.value ?? ''
+    // 3 · the draft saved in this tab (and the storage copy of a hand-over).
+    let saved = ''
+    try {
+      saved = sessionStorage.getItem(DRAFT_KEY) ?? ''
+      if (!handed && sessionStorage.getItem(AUTOSTART_KEY) === '1') autostartRef.current = true
+      sessionStorage.removeItem(AUTOSTART_KEY)
+    } catch { /* storage blocked: the other sources still apply */ }
+    // The box must never be reset to empty under someone who is typing.
+    const keep = handed || (onScreen.length >= saved.length ? onScreen : saved)
+    if (keep) typed.current = true
+    setStory(keep)
     setControls(readControls())
   }, [])
   useEffect(() => {
