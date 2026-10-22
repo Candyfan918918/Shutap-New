@@ -85,7 +85,7 @@ function AdminFeedbackPage() {
                 {data.questions.map((q, i) => (
                   <li key={i} style={{ borderTop: i === 0 ? 'none' : '.5px solid rgba(11,8,15,.06)', paddingTop: 10 }}>
                     <div style={{ fontSize: 13, color: '#100c14' }}>{q.text}</div>
-                    <div style={{ fontSize: 11, color: '#6f666c', marginTop: 2 }}>{q.page || '—'} · {new Date(q.t).toLocaleString()}</div>
+                    <div style={{ fontSize: 11, color: '#6f666c', marginTop: 2 }}>{q.page || '—'} · {new Date(q.t).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}</div>
                   </li>
                 ))}
               </ul>

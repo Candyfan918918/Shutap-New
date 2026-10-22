@@ -11,7 +11,7 @@ const MID = '#443c42'
 function fmtDate(d: string | null | undefined): string {
   if (!d) return '—'
   try {
-    return new Date(d).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })
+    return new Date(d).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })
   } catch { return '—' }
 }
 const n = (v: number | null | undefined, suffix = '') => (v == null ? '—' : `${v}${suffix}`)

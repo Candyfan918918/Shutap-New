@@ -64,7 +64,7 @@ function AdminEventsPage() {
             <tbody>
               {rows.map((r) => (
                 <tr key={r.id} style={{ borderTop: '.5px solid rgba(11,8,15,.05)' }}>
-                  <td style={td}>{new Date(r.ts).toLocaleString()}</td>
+                  <td style={td}>{new Date(r.ts).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}</td>
                   <td style={{ ...td, fontWeight: 600 }}>{r.name}</td>
                   <td style={{ ...td, fontFamily: 'monospace', fontSize: 11 }}>{r.user_id || '—'}</td>
                   <td style={{ ...td, fontFamily: 'monospace', fontSize: 11, maxWidth: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{JSON.stringify(r.properties)}</td>
