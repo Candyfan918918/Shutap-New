@@ -75,7 +75,11 @@ export function GlobalHeader() {
   const [variant, setVariant] = useState<Variant>(routeVariant)
   const dark = variant === 'dark'
   const navigate = useNavigate()
-  const { alias, ready } = useCurrentAlias()
+  const { alias: aliasRow, userId, ready } = useCurrentAlias()
+  // Signed in is decided by the session, not by whether the name has loaded:
+  // a fresh account's name is minted a moment after sign-in, and the header
+  // must never say "sign in" to someone who already is.
+  const alias = aliasRow ?? (userId ? { name: '', emoji: '' } : null)
   const admin = useIsAdmin()
   const [menuOpen, setMenuOpen] = useState(false)
   const areaRef = useRef<HTMLDivElement>(null)
@@ -288,7 +292,7 @@ export function GlobalHeader() {
                       zIndex: 70,
                     }}
                   >
-                    <div style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name}</div>
+                    <div style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name || 'signed in'}</div>
                     {slug ? <Link to="/u/$pseudonym" params={{ pseudonym: slug }} style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link> : null}
                     <Link to="/rooms" search={{ tab: 'saved' }} style={menuItem} onClick={() => setMenuOpen(false)}>saved</Link>
                     <Link to="/set-list" style={menuItem} onClick={() => setMenuOpen(false)}>set list</Link>

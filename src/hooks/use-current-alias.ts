@@ -36,7 +36,12 @@ export function useCurrentAlias(): {
     setUserId(uid)
     try {
       const { getMyAlias } = await import('@/lib/alias.functions')
-      const row = await getMyAlias()
+      // Right after the OAuth round trip the bearer may not be attached yet;
+      // one retry instead of falling back to "signed out" chrome.
+      const row = await getMyAlias().catch(async () => {
+        await new Promise((r) => setTimeout(r, 800))
+        return getMyAlias()
+      })
       if (row) {
         const next: Alias = { name: (row as { display_name?: string }).display_name, emoji: (row as { emoji?: string }).emoji }
         setAlias(next)
@@ -58,13 +63,19 @@ export function useCurrentAlias(): {
       if (r) { setAlias(JSON.parse(r) as Alias); setReady(true) }
     } catch { /* noop */ }
     void refresh()
+    // A name minted after sign-in (on /welcome) lands here without a reload.
+    const onAlias = (e: Event) => {
+      const next = (e as CustomEvent<Alias>).detail
+      if (mounted && next?.name) { setAlias(next); setReady(true) }
+    }
+    window.addEventListener('shutap:alias', onAlias)
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (!mounted) return
       if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
         void refresh()
       }
     })
-    return () => { mounted = false; sub.subscription.unsubscribe() }
+    return () => { mounted = false; window.removeEventListener('shutap:alias', onAlias); sub.subscription.unsubscribe() }
   }, [])
 
   return { alias, userId, refresh, ready }

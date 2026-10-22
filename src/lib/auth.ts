@@ -20,6 +20,9 @@ export function setAlias(alias: Alias): void {
   try {
     localStorage.setItem(ALIAS_KEY, JSON.stringify(alias))
   } catch { /* noop */ }
+  // The header lives in the root layout and never remounts on a client-side
+  // navigation; tell it a name now exists (e.g. minted right after sign-in).
+  try { window.dispatchEvent(new CustomEvent('shutap:alias', { detail: alias })) } catch { /* noop */ }
 }
 
 /** Unified sign-out: kills the real Supabase session AND clears every
