@@ -42,7 +42,7 @@ function AdminEventsPage() {
   return (
     <AdminShell title="events">
       <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="event name (e.g. spill_created)" style={inp} />
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="event name (e.g. sign_in_completed)" style={inp} />
         <input value={userId} onChange={(e) => setUserId(e.target.value)} placeholder="user id (uuid)" style={inp} />
       </div>
       {err && <div style={{ color: '#17131a', marginBottom: 12 }}>{err}</div>}

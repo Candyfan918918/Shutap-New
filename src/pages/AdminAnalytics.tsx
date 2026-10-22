@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { adminAnalytics, adminGrowth, adminAcquisition, type GrowthPayload, type GrowthBlock, type AcquisitionPayload } from '@/lib/admin.functions'
 import { AdminShell } from '@/components/AdminShell'
+import { AdminProductSection } from '@/pages/AdminProduct'
 
 type Analytics = Awaited<ReturnType<typeof adminAnalytics>>
 
@@ -71,9 +72,11 @@ export function AdminAnalyticsPage() {
 
   return (
     <AdminShell
-      title="analytics"
+      title="dashboard"
       subtitle={data ? `as of ${fmt(data.generated_at)}` : undefined}
     >
+      <AdminProductSection />
+      <h2 style={{ ...sectionH2, marginTop: 8 }}>traffic</h2>
       {err && <div style={{ color: '#17131a', marginBottom: 12 }}>{err}</div>}
       {!data || !visits ? (
         <div style={{ color: '#443c42' }}>loading…</div>
@@ -124,20 +127,6 @@ export function AdminAnalyticsPage() {
               </div>
             </section>
           )}
-
-          {/* Users KPI cards */}
-          <section style={{ marginBottom: 24 }}>
-            <h2 style={sectionH2}>users · humans only</h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-              <Card label="real users" value={data.users.total_real} />
-              <Card label="new · 7d" value={data.users.new_7d} />
-              <Card label="new · 30d" value={data.users.new_30d} />
-              <Card label="dau" value={data.activity.dau} sub="unique · 24h" />
-              <Card label="wau" value={data.activity.wau} sub="unique · 7d" />
-              <Card label="mau" value={data.activity.mau} sub="unique · 30d" />
-              <Card label="guest→sign_up" value={data.users.guest_converted} />
-            </div>
-          </section>
 
           {/* Visits KPI cards */}
           <section style={{ marginBottom: 24 }}>
@@ -196,12 +185,6 @@ export function AdminAnalyticsPage() {
             </div>
           </section>
 
-          <section style={{ marginBottom: 24 }}>
-            <div style={panel}>
-              <h2 style={sectionH2}>recent sign-ins</h2>
-              <RecentTable rows={data.recent_signins} />
-            </div>
-          </section>
         </>
       )}
     </AdminShell>
@@ -350,32 +333,6 @@ function EventsTable({ rows }: { rows: Array<{ name: string; d7: number; d30: nu
             <td style={td}>{r.name}</td>
             <td style={{ ...td, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{r.d7}</td>
             <td style={{ ...td, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{r.d30}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )
-}
-
-function RecentTable({ rows }: { rows: Analytics['recent_signins'] }) {
-  if (rows.length === 0) return <div style={empty}>no recent sign-ins</div>
-  return (
-    <table style={table}>
-      <thead>
-        <tr style={{ background: '#ffffff', textAlign: 'left', color: '#443c42' }}>
-          <th style={th}>user</th>
-          <th style={th}>email</th>
-          <th style={th}>provider</th>
-          <th style={th}>when</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((r) => (
-          <tr key={r.user_id} style={tr}>
-            <td style={td}>{r.full_name || `${r.first_name ?? ''} ${r.last_name ?? ''}`.trim() || '—'}</td>
-            <td style={td}>{r.email || '—'}</td>
-            <td style={td}>{r.provider || '—'}</td>
-            <td style={td}>{fmt(r.last_login_at)}</td>
           </tr>
         ))}
       </tbody>

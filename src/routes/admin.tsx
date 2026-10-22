@@ -5,7 +5,7 @@ import { amIAdmin } from '@/lib/admin.functions'
 
 export const Route = createFileRoute('/admin')({
   ssr: false,
-  head: () => ({ meta: [...pageMeta("Admin · Analytics — Shutap", "Review Shutap activity and analytics in the private administration area.", "/admin"), { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta("Admin · Dashboard — Shutap", "Review Shutap bits, users and activity in the private administration area.", "/admin"), { name: 'robots', content: 'noindex' }] }),
   beforeLoad: async () => {
     try {
       const ok = await amIAdmin()
