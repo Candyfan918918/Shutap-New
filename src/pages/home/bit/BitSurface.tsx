@@ -39,9 +39,6 @@ import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
 const AUTOSTART_KEY = 'shutap_bit_autostart'
-const EARLY_DRAFT_SCRIPT =
-  "(function(){var t=document.getElementById('bit-story');if(!t||window.__shutapEarlyDraft)return;window.__shutapEarlyDraft=1;" +
-  "t.addEventListener('input',function(){try{sessionStorage.setItem('shutap_bit_draft',t.value)}catch(_){}})})();"
 const CONTROLS_KEY = 'shutap_bit_controls'
 const PENDING_KEY = 'shutap_bit_pending'
 const PENDING_TTL = 60 * 60 * 1000
@@ -125,7 +122,12 @@ export function BitSurface() {
   const claim = useServerFn(claimGuestBits)
   const whoami = useServerFn(listMyBits)
 
-  const [story, setStory] = useState('')
+  // Start from whatever is already in the server-rendered box: a visitor can
+  // type before the app loads, and an empty start value made React clear the
+  // box under them the moment it took over (the "flash").
+  const [story, setStory] = useState(() =>
+    typeof document === 'undefined' ? '' : ((document.getElementById('bit-story') as HTMLTextAreaElement | null)?.value ?? ''),
+  )
   const [controls, setControls] = useState<BitControls>(DEFAULT_CONTROLS)
   const [phase, setPhase] = useState<Phase>('write')
   const [elapsed, setElapsed] = useState(0)
@@ -187,9 +189,9 @@ export function BitSurface() {
   const autostartRef = useRef(false)
   useEffect(() => {
     try {
-      // Text typed before the app finished loading is on the screen (and, via
-      // the inline script in the home route, in the draft). Keep it: the box
-      // must never be reset to empty under someone who is typing.
+      // Text typed before the app finished loading is already in state (see
+      // useState above); a draft from earlier in this tab is kept if longer.
+      // The box must never be reset to empty under someone who is typing.
       const onScreen = (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.value ?? ''
       const saved = sessionStorage.getItem(DRAFT_KEY) ?? ''
       const keep = onScreen.length >= saved.length ? onScreen : saved
@@ -450,6 +452,7 @@ export function BitSurface() {
             <div className="bt-box">
               <label htmlFor="bit-story" className="bt-lbl">your story</label>
               <textarea
+                suppressHydrationWarning
                 id="bit-story"
                 placeholder="write your story…"
                 value={story}
@@ -459,10 +462,6 @@ export function BitSurface() {
                   if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void onWrite()
                 }}
               />
-              {/* Runs in the server-rendered page, before the app loads: copies
-                  what's typed into the box to the draft, so the box doesn't come
-                  back empty when the app takes it over. */}
-              <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: EARLY_DRAFT_SCRIPT }} />
               <div className="bt-ctl">
                 <Choice label="audience" options={AUDIENCES} value={controls.audience} onPick={(v) => setControls((c) => ({ ...c, audience: v }))} />
                 <Choice label="voice" options={VOICES} value={controls.voice} onPick={(v) => setControls((c) => ({ ...c, voice: v }))} />
