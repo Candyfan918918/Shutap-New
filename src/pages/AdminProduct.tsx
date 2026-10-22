@@ -2,7 +2,7 @@
 // free vs paying, engagement, and a per-user table.
 import { useEffect, useMemo, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
-import { adminProductMetrics, type ProductMetrics, type ProductUserRow } from '@/lib/admin-product.functions'
+import { adminProductMetrics, type ProductMetrics, type ProductUserRow, type RetentionBlock, type RetentionPoint } from '@/lib/admin-product.functions'
 
 const INK = '#0b080f'
 const DIM = '#6f666c'
@@ -48,6 +48,76 @@ function Series({ title, rows, unit }: { title: string; rows: Array<{ date: stri
         <span>{rows[0]?.date}</span><span>{rows[rows.length - 1]?.date}</span>
       </div>
     </div>
+  )
+}
+
+function RetTile({ label, p }: { label: string; p: RetentionPoint }) {
+  return (
+    <Tile
+      label={label}
+      value={p.eligible === 0 ? '—' : n(p.pct, '%')}
+      sub={p.eligible === 0 ? 'no cohort old enough yet' : `${p.retained} of ${p.eligible} · ${n(p.pct_or_later, '%')} that day or later`}
+    />
+  )
+}
+
+function Retention({ any, made }: { any: RetentionBlock; made: RetentionBlock }) {
+  const [basis, setBasis] = useState<'any' | 'made'>('any')
+  const r = basis === 'any' ? any : made
+  const weeks = r.cohorts[0]?.cells.length ?? 0
+  return (
+    <>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap', margin: '18px 0 10px' }}>
+        <h3 style={{ ...groupH, margin: 0 }}>retention · signed-in users, by sign-up day</h3>
+        <div style={{ marginLeft: 'auto', display: 'inline-flex', background: '#fff', border: '.5px solid rgba(11,8,15,.12)', borderRadius: 999, padding: 3 }}>
+          {([['any', 'came back'], ['made', 'made a bit']] as const).map(([k, label]) => (
+            <button
+              key={k}
+              onClick={() => setBasis(k)}
+              style={{ padding: '5px 12px', borderRadius: 999, border: 0, cursor: 'pointer', fontFamily: "'Sora',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', background: basis === k ? '#17131a' : 'transparent', color: basis === k ? '#fff' : MID }}
+            >{label}</button>
+          ))}
+        </div>
+      </div>
+      <div style={grid}>
+        <RetTile label="d1 retention" p={r.d1} />
+        <RetTile label="d7 retention" p={r.d7} />
+        <RetTile label="d30 retention" p={r.d30} />
+      </div>
+      <div style={{ ...panel, marginTop: 12 }}>
+        <h3 style={{ ...panelH3, marginBottom: 10 }}>weekly cohorts · % back in week n after sign-up</h3>
+        {r.cohorts.length === 0 ? (
+          <div style={empty}>no sign-ups yet</div>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table style={table}>
+              <thead>
+                <tr style={{ textAlign: 'left', color: MID }}>
+                  <th style={th}>week of</th>
+                  <th style={{ ...th, textAlign: 'right' }}>users</th>
+                  {Array.from({ length: weeks }, (_, k) => <th key={k} style={{ ...th, textAlign: 'center' }}>w{k}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {r.cohorts.map((c) => (
+                  <tr key={c.week_start} style={tr}>
+                    <td style={td}>{c.week_start}</td>
+                    <td style={num}>{c.size}</td>
+                    {c.cells.map((cell, k) => (
+                      <td
+                        key={k}
+                        title={cell ? `${cell.retained} of ${c.size}` : 'not reached yet'}
+                        style={{ ...td, textAlign: 'center', fontVariantNumeric: 'tabular-nums', background: cell ? `rgba(23,19,26,${0.06 + (cell.pct / 100) * 0.8})` : 'transparent', color: cell && cell.pct >= 50 ? '#fff' : INK }}
+                      >{cell ? `${Math.round(cell.pct)}%` : ''}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </>
   )
 }
 
@@ -222,6 +292,8 @@ export function AdminProductSection() {
             <Tile label="bits per mau user" value={n(m.engagement.bits_per_active_user_30d)} sub="signed-in bits · 30d" />
           </div>
 
+          <Retention any={m.retention.any} made={m.retention.made_a_bit} />
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 16, margin: '20px 0 16px' }}>
             <Series title="bits per day" rows={m.bits.series30d} unit="bits" />
             <Series title="active signed-in users per day" rows={m.activity.series30d} unit="user-days" />
@@ -230,6 +302,7 @@ export function AdminProductSection() {
           <UserTable rows={m.user_rows} />
 
           <p style={{ fontSize: 11, color: DIM, marginTop: 10, lineHeight: 1.6 }}>
+            Retention: dN = share of users who signed up on day 0 and were back on exactly day N (only users who signed up at least N days ago count); "that day or later" counts anyone back on day N or after. Weekly cohorts use Monday-start weeks; w0 is the sign-up week. "Came back" = any activity; "made a bit" = wrote or rewrote a bit.
             A run = one press of write or rewrite: a new bit, a rewrite, or an attempt that failed. Today = today in {m.timezone}.
             Active = a signed-in user who wrote a bit, rewrote one, fired an event or opened a visit. Days are {m.timezone} calendar days; dau / wau / mau are the last 24h / 7d / 30d.
             Paying = live Stripe subscription that is active or past due; sandbox subscriptions ({m.users.sandbox_subs}) are not counted.
