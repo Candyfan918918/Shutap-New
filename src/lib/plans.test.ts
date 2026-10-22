@@ -43,7 +43,8 @@ test('active rows', () => {
   assert.equal(rowIsActive({ status: 'active', current_period_end: future }, NOW), true)
   assert.equal(rowIsActive({ status: 'active', current_period_end: past }, NOW), false)
   assert.equal(rowIsActive({ status: 'past_due', current_period_end: past }, NOW), true)
-  assert.equal(rowIsActive({ status: 'canceled', current_period_end: future }, NOW), true)
+  // 'canceled' means it ended, even when cancelled immediately mid-period
+  assert.equal(rowIsActive({ status: 'canceled', current_period_end: future }, NOW), false)
   assert.equal(rowIsActive({ status: 'canceled', current_period_end: past }, NOW), false)
   assert.equal(rowIsActive({ status: 'incomplete', current_period_end: future }, NOW), false)
 })

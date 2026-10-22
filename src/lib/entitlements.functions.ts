@@ -51,6 +51,7 @@ export const getMirrorEntitlement = createServerFn({ method: 'GET' })
     if (row.status === 'past_due') {
       return { entitled: true, demoAccount: false, reason: 'past_due' }
     }
-    // Cancel-at-period-end: access until the period actually ends.
-    return { entitled: true, demoAccount: false, reason: 'grace_period' }
+    // rowIsActive never passes a 'canceled' row (the plan has ended); a
+    // cancel-at-period-end plan is still 'active' and returned above.
+    return { entitled: false, demoAccount: false, reason: 'no_subscription' }
   })

@@ -297,7 +297,8 @@ function BillingCard({
   if (billing === undefined) {
     return <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', color: '#6f666c' }}>loading…</div>
   }
-  if (billing === null) {
+  // A plan that has ended (cancelled, or never paid) shows as free.
+  if (billing === null || !billing.isActive) {
     return (
       <div style={{ background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
         <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 15, color: '#0b080f' }}>
@@ -316,11 +317,10 @@ function BillingCard({
     : billing.status === 'active' && billing.cancelAtPeriodEnd ? 'canceling'
     : billing.status === 'active' ? 'active'
     : billing.status === 'past_due' ? 'payment failed'
-    : billing.status === 'canceled' && billing.isActive ? 'canceled (grace period)'
     : billing.status
   const statusColor =
     billing.status === 'past_due' ? '#b3261e'
-    : billing.cancelAtPeriodEnd || billing.status === 'canceled' ? '#6f666c'
+    : billing.cancelAtPeriodEnd ? '#6f666c'
     : '#17131a'
   return (
     <div style={{ background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -335,7 +335,7 @@ function BillingCard({
       {endStr && (
         <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13.5, color: '#443c42' }}>
           {billing.status === 'trialing' ? `trial ends ${endStr}`
-            : billing.cancelAtPeriodEnd || billing.status === 'canceled' ? `access ends ${endStr}`
+            : billing.cancelAtPeriodEnd ? `access ends ${endStr}`
             : billing.status === 'past_due' ? `payment retrying · access until ${endStr}`
             : `renews ${endStr}`}
         </div>
