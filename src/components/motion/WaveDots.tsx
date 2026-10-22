@@ -44,7 +44,7 @@ export function WaveDots() {
       canvas.height = Math.round(h * dpr)
       canvas.style.width = `${w}px`
       canvas.style.height = `${h}px`
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.setTransform(canvas.width / w, 0, 0, canvas.height / h, 0, 0)
     }
     resize()
 
@@ -62,7 +62,12 @@ export function WaveDots() {
       if (window.innerWidth !== w || window.innerHeight !== h) resize()
       const sy = window.scrollY
       const yOff = -(sy % PITCH)
-      ctx.clearRect(0, 0, w, h)
+      // Clear in device pixels, not CSS pixels: at a fractional screen scale
+      // (Windows at 125%/150%) a CSS-pixel clear can miss strips, and the
+      // dots from earlier frames stay behind as pink streaks.
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.setTransform(canvas.width / w, 0, 0, canvas.height / h, 0, 0)
       const paths: Path2D[] = Array.from({ length: BUCKETS }, () => new Path2D())
       for (let y = yOff - PITCH; y < h + PITCH; y += PITCH) {
         const docY = y + sy
@@ -106,7 +111,10 @@ export function WaveDots() {
     <canvas
       ref={ref}
       aria-hidden
-      style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none' }}
+      // Its own compositor layer, so the browser repaints the whole canvas
+      // every frame instead of patching tiles (stale tiles showed as streaks
+      // under the blurred header on Windows Chrome/Edge).
+      style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none', transform: 'translateZ(0)', contain: 'strict' }}
     />
   )
 }

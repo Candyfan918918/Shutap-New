@@ -110,6 +110,9 @@ export function GlobalHeader() {
 
   // Adapt header chrome to whatever section is currently under it.
   useEffect(() => {
+    // Reset first, even on the homepage: coming from /welcome (dark) to "/"
+    // used to keep the black header, because the homepage skips sampling.
+    setVariant(routeVariant)
     if (isHome) return
     let raf = 0
     const sample = () => {
