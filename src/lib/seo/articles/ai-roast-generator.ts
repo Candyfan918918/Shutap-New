@@ -53,7 +53,7 @@ const guide: Guide = {
     },
     {
       q: "Is there a free AI roast generator?",
-      a: "Yes. AIFreeBox's AI Roast Generator says it's free with no sign-up, most iOS roast apps have limited free roasts, ChatGPT and Claude have free plans, and Shutap's first bit needs no account.",
+      a: "Yes. AIFreeBox's AI Roast Generator says it's free with no sign-up, most iOS roast apps have limited free roasts, ChatGPT and Claude have free plans, and Shutap's first bit needs no account, with 2 a day free once you sign in.",
     },
     {
       q: "Can ChatGPT roast me?",

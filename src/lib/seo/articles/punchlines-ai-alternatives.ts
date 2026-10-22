@@ -53,7 +53,7 @@ const guide: Guide = {
     },
     {
       q: "Is there a free alternative to Punchlines.ai?",
-      a: "Yes. ChatGPT, Claude and Gemini all list free plans, Comedeez AI has a free plan with three AI uses a day, and Texta's comedy page says it has a free tier. Shutap's first bit needs no account.",
+      a: "Yes. ChatGPT, Claude and Gemini all list free plans, Comedeez AI has a free plan with three AI uses a day, and Texta's comedy page says it has a free tier. Shutap's first bit needs no account, with 2 a day free once you sign in.",
     },
     {
       q: "Can ChatGPT write jokes as well as Punchlines.ai?",
