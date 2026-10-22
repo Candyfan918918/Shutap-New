@@ -71,4 +71,6 @@ export interface Reaction {
 export interface Alias {
   name?: string
   emoji?: string
+  /** Profile picture (provider photo or an upload); null shows the initial. */
+  avatar?: string | null
 }

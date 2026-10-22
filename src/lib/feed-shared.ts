@@ -34,6 +34,8 @@ export type FeedPost = {
   id: string
   alias: string
   emoji: string
+  /** author's profile picture, if they have one */
+  avatar?: string | null
   slug: string
   topic: Topic | null
   joke: string
@@ -56,6 +58,7 @@ export type FeedComment = {
   id: string
   alias: string
   emoji: string
+  avatar?: string | null
   slug: string
   text: string
   created_at: string

@@ -7,7 +7,7 @@ export const BRAND = {
   tagline: "SHUTAP. Say it funnier.",
   // The entity sentence (locked) — goes in every machine-read surface.
   entitySentence:
-    "Shutap is an AI joke generator for creators. Write your story and Shutap turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or post the best one to a room. Pseudonymous. Your real name never shows.",
+    "Shutap is an AI joke generator for creators. Write your story and Shutap turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or post the best one to a room.",
   // Short variant for title tags.
   entitySentenceShort:
     "Shutap — AI joke generator for creators. Write your story, get the bit.",

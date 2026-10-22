@@ -572,7 +572,7 @@ export function BitSurface() {
                   <button className="bt-btn ghost block" onClick={() => void signInForBit('email', 'inline')}>
                     continue with email
                   </button>
-                  <p className="bt-note" style={{ textAlign: 'center' }}>18+ only · made-up name, your real one never shows · by continuing you confirm you're 18+ and agree to the terms and privacy policy</p>
+                  <p className="bt-note" style={{ textAlign: 'center' }}>18+ only · by continuing you confirm you're 18+ and agree to the terms and privacy policy</p>
                 </div>
               )}
             </article>
@@ -705,7 +705,7 @@ export function BitSurface() {
               <>
                 <h3 id="bit-sheet-title">The punchline's under here.</h3>
                 <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  Free. You get a made-up name; your real one never shows.
+                  Free. One tap with Google or Apple.
                 </p>
                 <GoogleButton onClick={() => void signInForBit('google', 'sheet')} />
                 <button className="bt-btn ghost block" onClick={() => void signInForBit('apple', 'sheet')}>

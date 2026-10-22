@@ -43,7 +43,7 @@ export function useCurrentAlias(): {
         return getMyAlias()
       })
       if (row) {
-        const next: Alias = { name: (row as { display_name?: string }).display_name, emoji: (row as { emoji?: string }).emoji }
+        const next: Alias = { name: (row as { display_name?: string }).display_name, emoji: (row as { emoji?: string }).emoji, avatar: (row as { avatar_url?: string | null }).avatar_url ?? null }
         setAlias(next)
         try { localStorage.setItem('shutap_alias', JSON.stringify(next)) } catch { /* noop */ }
       } else {

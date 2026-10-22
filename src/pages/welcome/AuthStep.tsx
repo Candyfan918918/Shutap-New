@@ -199,7 +199,7 @@ export function AuthStep() {
         )}
       </div>
       <div style={{ textAlign: 'center', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 12.5, color: MUTED }}>
-        18+ only · your real name never shows
+        18+ only
       </div>
       <div style={{ textAlign: 'center', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 12.5, color: MUTED, marginTop: 6 }}>
         by continuing you confirm you're 18+ and agree to our <a href="/terms" style={{ color: MUTED, textDecoration: 'underline' }}>terms</a> and <a href="/privacy" style={{ color: MUTED, textDecoration: 'underline' }}>privacy policy</a>

@@ -2,7 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { LEGAL_VERSION } from "@/lib/seo/legal";
-import { randomAliasParts } from "@/lib/alias.functions";
 
 const recordSchema = z.object({
   terms_version: z.string().default(LEGAL_VERSION.terms),
@@ -25,16 +24,15 @@ export const recordLegalAcceptance = createServerFn({ method: "POST" })
       .eq("user_id", context.userId)
       .maybeSingle();
     if (!existing.data) {
-      const p = randomAliasParts();
+      // Real name and photo from the provider, never a made-up alias.
+      const { data: u } = await context.supabase.auth.getUser();
+      const { realNameSeed } = await import("./profile-seed.server");
+      const p = realNameSeed(u?.user);
       const { error: insErr } = await context.supabase
         .from("aliases")
         .insert({
           user_id: context.userId,
-          emotion: p.emotion,
-          nation: p.nation,
-          creature: p.creature,
-          emoji: p.emoji,
-          display_name: p.display_name,
+          ...p,
           birth_year: 1990,
           birth_month: 1,
           birth_day: 1,

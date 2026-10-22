@@ -122,7 +122,7 @@ export const HUBS: SituationHub[] = [
       "Plenty of people say so. Shutap won't analyze it, but the situation around it is good material: the strategic early bedtime, the sudden urge to fold laundry at 10pm, the mental to-do list that never closes. Paste what happened and Shutap writes three jokes about the situation.",
     paa: [
       { q: "What angle do the jokes take?", a: "The situation: schedules, excuses, the logistics of a shared bed. Not your husband, and not you." },
-      { q: "Is it private?", a: "Yes. You use a pseudonym, names are removed before anything is saved, and nothing is public unless you post it." },
+      { q: "Is it private?", a: "Yes. Names in your story are removed before anything is saved, and nothing is public unless you post it." },
       { q: "Is this sex or relationship advice?", a: "No. Shutap writes jokes. It's not advice and not therapy." },
     ],
   },
@@ -208,7 +208,7 @@ export const HUBS: SituationHub[] = [
       "Plenty of people have. Shutap writes jokes about the situation around it: the bathroom stall that doubles as an office, the camera-off meeting, the coworker who asks \"all good?\" and keeps walking. Paste what happened and Shutap writes three jokes, aimed at the situation, never at you.",
     paa: [
       { q: "Can crying at work be funny?", a: "Later, usually. The logistics are the material: where you went, what you pretended to be doing, who almost walked in." },
-      { q: "Can my employer see this?", a: "No. You post under a pseudonym, and names, company names and places are removed before anything is saved." },
+      { q: "Can my employer see this?", a: "No. Your stories are private unless you post them, and names, company names and places are removed before anything is saved." },
       { q: "Is Shutap mental health help?", a: "No. Shutap writes jokes. It is not therapy. If you're in crisis, call or text 988 in the US or visit findahelpline.com." },
     ],
   },

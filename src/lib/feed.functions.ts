@@ -60,13 +60,15 @@ async function hydrate(db: any, rows: RoomRow[], uid: string | null): Promise<Fe
   if (!rows.length) return []
   const ids = rows.map((r) => r.id)
   const authors = Array.from(new Set(rows.map((r) => r.author_id)))
-  const [likes, comments, myLikes, mySaves, myFollows] = await Promise.all([
+  const [likes, comments, myLikes, mySaves, myFollows, authorRows] = await Promise.all([
     db.from('room_relates').select('room_id').in('room_id', ids),
     db.from('comments').select('room_id').in('room_id', ids).is('deleted_at', null),
     uid ? db.from('room_relates').select('room_id').in('room_id', ids).eq('user_id', uid) : { data: [] },
     uid ? db.from('room_saves').select('room_id').in('room_id', ids).eq('user_id', uid) : { data: [] },
     uid ? db.from('follows').select('followee_id').eq('follower_id', uid).in('followee_id', authors) : { data: [] },
+    db.from('aliases').select('user_id, avatar_url').in('user_id', authors),
   ])
+  const avatarOf = new Map<string, string | null>((authorRows.data ?? []).map((a: any) => [a.user_id, a.avatar_url ?? null]))
   const count = (list: any[] | null) => {
     const m = new Map<string, number>()
     for (const r of list ?? []) m.set(r.room_id, (m.get(r.room_id) ?? 0) + 1)
@@ -83,6 +85,7 @@ async function hydrate(db: any, rows: RoomRow[], uid: string | null): Promise<Fe
       id: r.id,
       alias: r.alias,
       emoji: r.emoji,
+      avatar: avatarOf.get(r.author_id) ?? null,
       slug: aliasSlug(r.alias),
       topic: r.topic,
       joke,
@@ -182,9 +185,9 @@ export const getPost = createServerFn({ method: 'GET' })
       .limit(200)
     const authorIds = Array.from(new Set((cs ?? []).map((c: any) => c.alias_id)))
     const { data: al } = authorIds.length
-      ? await db.from('aliases').select('user_id, display_name, emoji').in('user_id', authorIds)
+      ? await db.from('aliases').select('user_id, display_name, emoji, avatar_url').in('user_id', authorIds)
       : { data: [] }
-    const amap = new Map<string, { display_name: string; emoji: string }>(
+    const amap = new Map<string, { display_name: string; emoji: string; avatar_url?: string | null }>(
       (al ?? []).map((a: any) => [a.user_id, a]),
     )
     const comments: FeedComment[] = (cs ?? []).map((c: any) => {
@@ -193,7 +196,8 @@ export const getPost = createServerFn({ method: 'GET' })
       return {
         id: c.id,
         alias: name,
-        emoji: a?.emoji ?? '🙂',
+        emoji: a?.emoji ?? '',
+        avatar: a?.avatar_url ?? null,
         slug: aliasSlug(name),
         text: c.clean_text,
         created_at: c.created_at,
@@ -285,12 +289,13 @@ export const addComment = createServerFn({ method: 'POST' })
       const { emailOnComment } = await import('./email/events.server')
       await emailOnComment(db, { authorId: author, actorId: uid, roomId: data.room_id, text: clean })
     }
-    const { data: a } = await db.from('aliases').select('display_name, emoji').eq('user_id', uid).maybeSingle()
+    const { data: a } = await db.from('aliases').select('display_name, emoji, avatar_url').eq('user_id', uid).maybeSingle()
     const name = (a?.display_name as string) ?? 'you'
     const comment: FeedComment = {
       id: row.id,
       alias: name,
-      emoji: (a?.emoji as string) ?? '🙂',
+      emoji: (a?.emoji as string) ?? '',
+      avatar: (a?.avatar_url as string | null) ?? null,
       slug: aliasSlug(name),
       text: row.clean_text,
       created_at: row.created_at,
@@ -363,10 +368,10 @@ async function aliasBySlug(db: any, slug: string) {
   const name = slug.replace(/-/g, ' ')
   const { data } = await db
     .from('aliases')
-    .select('user_id, display_name, emoji, created_at')
+    .select('user_id, display_name, emoji, avatar_url, created_at')
     .ilike('display_name', name)
     .limit(1)
-  return (data?.[0] as { user_id: string; display_name: string; emoji: string; created_at: string } | undefined) ?? null
+  return (data?.[0] as { user_id: string; display_name: string; emoji: string; avatar_url: string | null; created_at: string } | undefined) ?? null
 }
 
 export const getProfile = createServerFn({ method: 'GET' })
@@ -389,6 +394,7 @@ export const getProfile = createServerFn({ method: 'GET' })
       profile: {
         alias: a.display_name,
         emoji: a.emoji,
+        avatar: a.avatar_url ?? null,
         slug: aliasSlug(a.display_name),
         joined: a.created_at,
         followers: followers.count ?? 0,

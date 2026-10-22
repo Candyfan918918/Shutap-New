@@ -203,7 +203,7 @@ export function RoomDetail({
         '@type': 'DiscussionForumPosting',
         headline: room.title,
         articleBody: room.body || room.clean_text || '',
-        author: { '@type': 'Person', name: room.alias, description: 'pseudonymous member of Shutap' },
+        author: { '@type': 'Person', name: room.alias, description: 'member of Shutap' },
         interactionStatistic: [
           { '@type': 'InteractionCounter', interactionType: 'https://schema.org/LikeAction', userInteractionCount: room.relates },
           { '@type': 'InteractionCounter', interactionType: 'https://schema.org/CommentAction', userInteractionCount: room.comments ? room.comments.length : 0 },

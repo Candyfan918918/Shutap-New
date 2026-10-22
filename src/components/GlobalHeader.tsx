@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useRouterState, useNavigate } from '@tanstack/react-router'
 import { rememberReturnTo, signOut as doSignOut } from '@/lib/auth'
 import { useCurrentAlias, useIsAdmin } from '@/hooks/use-current-alias'
-import { aliasSlug } from '@/lib/feed-shared'
+import { UserAvatar } from '@/components/UserAvatar'
 import { myAlias } from '@/lib/feed.functions'
 
 type Variant = 'light' | 'dark'
@@ -79,7 +79,7 @@ export function GlobalHeader() {
   // Signed in is decided by the session, not by whether the name has loaded:
   // a fresh account's name is minted a moment after sign-in, and the header
   // must never say "sign in" to someone who already is.
-  const alias = aliasRow ?? (userId ? { name: '', emoji: '' } : null)
+  const alias = aliasRow ?? (userId ? { name: '', emoji: '', avatar: null } : null)
   const admin = useIsAdmin()
   const [menuOpen, setMenuOpen] = useState(false)
   const areaRef = useRef<HTMLDivElement>(null)
@@ -153,7 +153,6 @@ export function GlobalHeader() {
   const menuBorder = dark ? '1px solid rgba(255,255,255,.10)' : '1px solid rgba(0,0,0,.10)'
   const menuDivider = dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.08)'
   const menuInk = dark ? '#ffffff' : '#111111'
-  const slug = alias?.name ? aliasSlug(alias.name) : null
 
   const navLink = (to: string, label: string) => {
     const active = to === '/' ? pathname === '/' : pathname.startsWith(to)
@@ -262,20 +261,7 @@ export function GlobalHeader() {
                     transition: '.18s',
                   }}
                 >
-                  <span
-                    style={{
-                      width: 26,
-                      height: 26,
-                      borderRadius: '50%',
-                      background: dark ? '#2a2a2a' : '#f6e9ee',
-                      display: 'grid',
-                      placeItems: 'center',
-                      fontSize: isHome ? 'var(--fs-body)' : 14,
-                      flex: 'none',
-                    }}
-                  >
-                    {alias.emoji || '🐣'}
-                  </span>
+                  <UserAvatar name={alias.name} avatar={alias.avatar} emoji={alias.emoji} size={28} dark={dark} />
                 </div>
                 {menuOpen && (
                   <div
@@ -293,11 +279,8 @@ export function GlobalHeader() {
                     }}
                   >
                     <div style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name || 'signed in'}</div>
-                    {slug ? <Link to="/u/$pseudonym" params={{ pseudonym: slug }} style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link> : null}
-                    <Link to="/rooms" search={{ tab: 'saved' }} style={menuItem} onClick={() => setMenuOpen(false)}>saved</Link>
+                    <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link>
                     <Link to="/set-list" style={menuItem} onClick={() => setMenuOpen(false)}>set list</Link>
-                    <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>account</Link>
-                    <Link to="/mirror" style={menuItem} onClick={() => setMenuOpen(false)}>the mirror</Link>
                     {admin && (
                       <Link to="/admin" style={menuItem} onClick={() => setMenuOpen(false)}>
                         admin

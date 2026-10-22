@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
+import { UserAvatar } from '@/components/UserAvatar'
 import { Link } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { rememberReturnTo } from '@/lib/auth'
@@ -294,8 +295,8 @@ export function PostCard({
     <article className="fd-post">
       <div className="fd-between">
         <div className="fd-row" style={{ minWidth: 0 }}>
-          <Link to="/u/$pseudonym" params={{ pseudonym: p.slug }} className="fd-av" style={{ textDecoration: 'none' }}>
-            {p.emoji}
+          <Link to="/u/$pseudonym" params={{ pseudonym: p.slug }} style={{ textDecoration: 'none', display: 'inline-flex' }}>
+            <UserAvatar name={p.alias} avatar={p.avatar} emoji={p.emoji} size={36} />
           </Link>
           <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
             <Link to="/u/$pseudonym" params={{ pseudonym: p.slug }} className="fd-name">

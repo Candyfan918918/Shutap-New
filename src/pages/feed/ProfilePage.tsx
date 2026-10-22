@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { UserAvatar } from '@/components/UserAvatar'
 import { Link } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { getProfile } from '@/lib/feed.functions'
@@ -50,7 +51,7 @@ export function ProfilePage({ slug }: { slug: string }) {
       <div className="fd-col">
         <div className="fd-between" style={{ alignItems: 'flex-start' }}>
           <div className="fd-row" style={{ gap: 14 }}>
-            <span className="fd-av lg">{profile.emoji}</span>
+            <UserAvatar name={profile.alias} avatar={(profile as { avatar?: string | null }).avatar} emoji={profile.emoji} size={56} />
             <div>
               <h1 className="fd-h1" style={{ fontSize: 22 }}>
                 {profile.alias}

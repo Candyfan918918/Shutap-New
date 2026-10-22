@@ -1,8 +1,7 @@
 /* Native React /welcome. Sign-in is one step:
- *   auth  →  (alias minted silently)  →  straight back to where they were.
- * There is no age or alias screen (Oct 2026): 18+ is confirmed by the line
- * under the sign-in buttons, and a new account gets a random made-up name it
- * can change later. */
+ *   auth  →  (profile created from the provider's name and photo)  →  back.
+ * There is no age or name screen (Oct 2026): 18+ is confirmed by the line
+ * under the sign-in buttons, and the name and photo can be edited on /profile. */
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 import { clearPendingAuthReturn } from '@/lib/auth-guard'
@@ -76,7 +75,7 @@ export function WelcomeNativePage() {
       } catch { /* noop */ }
       if (firstCompletion) void import('@/lib/tracking').then((m) => m.trackEvent('sign_in_completed', {})).catch(() => {})
       // Lazy-import server-fn modules so cold /welcome doesn't ship them.
-      const [{ recordLegalAcceptance }, { getMyAlias, upsertMyAlias, randomAliasParts }] = await Promise.all([
+      const [{ recordLegalAcceptance }, { getMyAlias }] = await Promise.all([
         import('@/lib/legal.functions'),
         import('@/lib/alias.functions'),
       ])
@@ -112,33 +111,34 @@ export function WelcomeNativePage() {
           }
           setExistingAlias(a)
           setFinalAlias(a)
+          void import('@/lib/auth').then((m) => m.setAlias({ name: a.display_name, emoji: a.emoji, avatar: (existing as { avatar_url?: string | null }).avatar_url ?? null }))
           setStep('welcome')
         } else {
-          // New account: mint a random made-up name without asking.
-          const parts = randomAliasParts()
-          type Saved = { display_name?: string; emoji?: string } | null
-          let saved: Saved = null
+          // New account: the profile is created from the real name and
+          // picture the sign-in provider shared. No made-up name.
+          const { ensureMyProfile } = await import('@/lib/alias.functions')
+          type P = { display_name: string; emoji: string; avatar_url: string | null } | null
+          let saved: P = null
           try {
-            saved = (await upsertMyAlias({ data: parts })) as unknown as Saved
+            saved = (await ensureMyProfile()) as P
           } catch {
             await new Promise((r) => setTimeout(r, 600))
-            saved = (await upsertMyAlias({ data: parts }).catch(() => null)) as unknown as Saved
+            saved = (await ensureMyProfile().catch(() => null)) as P
           }
           if (cancelled) return
           if (!saved) {
-            setAuthError('signed in, but saving your name failed — try once more')
+            setAuthError('signed in, but creating your profile failed — try once more')
             setStep('auth')
             return
           }
-          const a: AliasResult = { ...parts, display_name: saved.display_name ?? parts.display_name, emoji: saved.emoji ?? parts.emoji }
+          const a: AliasResult = { emotion: '', nation: '', creature: '', emoji: saved.emoji ?? '', display_name: saved.display_name }
           const [{ setAlias }, tracking, welcome] = await Promise.all([
             import('@/lib/auth'),
             import('@/lib/tracking').catch(() => null),
             import('@/lib/welcome-email.functions').catch(() => null),
           ])
-          setAlias({ name: a.display_name, emoji: a.emoji })
-          void tracking?.trackEvent('alias_minted', { display_name: a.display_name, auto: true })
-          void tracking?.trackEvent('sign_up_completed', { display_name: a.display_name })
+          setAlias({ name: a.display_name, emoji: a.emoji, avatar: saved.avatar_url })
+          void tracking?.trackEvent('sign_up_completed', { has_photo: !!saved.avatar_url })
           void welcome?.sendWelcomeEmail().catch(() => {})
           setFinalAlias(a)
           setStep('welcome')

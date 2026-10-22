@@ -20,6 +20,7 @@ export type Database = {
           accepted_privacy_version: string | null
           accepted_terms_at: string | null
           accepted_terms_version: string | null
+          avatar_url: string | null
           birth_day: number
           birth_month: number
           birth_year: number
@@ -43,6 +44,7 @@ export type Database = {
           accepted_privacy_version?: string | null
           accepted_terms_at?: string | null
           accepted_terms_version?: string | null
+          avatar_url?: string | null
           birth_day: number
           birth_month: number
           birth_year: number
@@ -66,6 +68,7 @@ export type Database = {
           accepted_privacy_version?: string | null
           accepted_terms_at?: string | null
           accepted_terms_version?: string | null
+          avatar_url?: string | null
           birth_day?: number
           birth_month?: number
           birth_year?: number

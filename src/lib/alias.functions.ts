@@ -41,11 +41,106 @@ export const getMyAlias = createServerFn({ method: 'GET' })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from('aliases')
-      .select('user_id, emotion, nation, creature, emoji, display_name, birth_year, birth_month, birth_day')
+      .select('user_id, emotion, nation, creature, emoji, display_name, avatar_url, birth_year, birth_month, birth_day')
       .eq('user_id', context.userId)
       .maybeSingle()
     if (error) throw new Error(error.message)
     return data
+  })
+
+/* ───────── real-name profiles (Oct 2026) ─────────
+ * A new account is created with the person's real name and their provider
+ * picture (Google gives one; Apple does not). No made-up name, no emoji.
+ * The aliases row stays the public identity record. */
+
+const PROFILE_COLS = 'user_id, display_name, emoji, avatar_url'
+
+/** Creates the profile for a freshly signed-in person if it doesn't exist,
+ *  from what their sign-in provider shared. Returns the profile either way. */
+export const ensureMyProfile = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .handler(async ({ context }) => {
+    const existing = await context.supabase.from('aliases').select(PROFILE_COLS).eq('user_id', context.userId).maybeSingle()
+    if (existing.data) return existing.data as { user_id: string; display_name: string; emoji: string; avatar_url: string | null }
+
+    const { data: u } = await context.supabase.auth.getUser()
+    const { realNameSeed } = await import('./profile-seed.server')
+    const seed = realNameSeed(u?.user)
+    const { data: saved, error } = await context.supabase
+      .from('aliases')
+      .insert({
+        user_id: context.userId,
+        ...seed,
+        birth_year: 1990,
+        birth_month: 1,
+        birth_day: 1,
+      } as never)
+      .select(PROFILE_COLS)
+      .single()
+    if (error) {
+      // A parallel tab may have created it a moment earlier.
+      const again = await context.supabase.from('aliases').select(PROFILE_COLS).eq('user_id', context.userId).maybeSingle()
+      if (again.data) return again.data as { user_id: string; display_name: string; emoji: string; avatar_url: string | null }
+      throw new Error(error.message)
+    }
+    return saved as { user_id: string; display_name: string; emoji: string; avatar_url: string | null }
+  })
+
+/** Edit the name shown on the profile. */
+export const updateMyProfile = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .inputValidator((d: unknown) => z.object({ display_name: z.string().trim().min(1).max(80) }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { data: saved, error } = await context.supabase
+      .from('aliases')
+      .update({ display_name: data.display_name } as never)
+      .eq('user_id', context.userId)
+      .select(PROFILE_COLS)
+      .maybeSingle()
+    if (error) throw new Error(error.message)
+    return saved as { user_id: string; display_name: string; emoji: string; avatar_url: string | null } | null
+  })
+
+const DATA_URL = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$/
+
+/** Upload a profile picture. The client resizes it first; this stores it in
+ *  the public `avatars` bucket and points the profile at it. */
+export const setMyAvatar = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .inputValidator((d: unknown) => z.object({ data_url: z.string().max(3_000_000) }).parse(d))
+  .handler(async ({ data, context }) => {
+    const m = DATA_URL.exec(data.data_url)
+    if (!m) throw new Error('unsupported image')
+    const type = m[1]!
+    const bytes = Buffer.from(m[2]!, 'base64')
+    if (bytes.length > 2_000_000) throw new Error('image too large')
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const path = `${context.userId}/avatar-${Date.now()}.${type === 'jpeg' ? 'jpg' : type}`
+    const up = await supabaseAdmin.storage.from('avatars').upload(path, bytes, { contentType: `image/${type}`, upsert: true })
+    if (up.error) throw new Error(up.error.message)
+    const url = supabaseAdmin.storage.from('avatars').getPublicUrl(path).data.publicUrl
+    const { data: saved, error } = await supabaseAdmin
+      .from('aliases')
+      .update({ avatar_url: url } as never)
+      .eq('user_id', context.userId)
+      .select(PROFILE_COLS)
+      .maybeSingle()
+    if (error) throw new Error(error.message)
+    return saved as { user_id: string; display_name: string; emoji: string; avatar_url: string | null } | null
+  })
+
+/** Remove the profile picture (falls back to the initial). */
+export const removeMyAvatar = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .handler(async ({ context }) => {
+    const { data: saved, error } = await context.supabase
+      .from('aliases')
+      .update({ avatar_url: null } as never)
+      .eq('user_id', context.userId)
+      .select(PROFILE_COLS)
+      .maybeSingle()
+    if (error) throw new Error(error.message)
+    return saved as { user_id: string; display_name: string; emoji: string; avatar_url: string | null } | null
   })
 
 /** Upsert alias for the authenticated user. If no row exists, one is created
@@ -146,7 +241,7 @@ export const resolveAliases = createServerFn({ method: 'POST' })
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
     const { data: rows, error } = await supabaseAdmin
       .from('aliases')
-      .select('user_id, display_name, emoji')
+      .select('user_id, display_name, emoji, avatar_url')
       .in('user_id', data.userIds)
     if (error) return {} as Record<string, { display_name: string; emoji: string }>
     const out: Record<string, { display_name: string; emoji: string }> = {}
@@ -154,7 +249,8 @@ export const resolveAliases = createServerFn({ method: 'POST' })
       out[(r as { user_id: string }).user_id] = {
         display_name: (r as { display_name: string }).display_name,
         emoji: (r as { emoji: string }).emoji,
-      }
+        avatar_url: (r as { avatar_url?: string | null }).avatar_url ?? null,
+      } as { display_name: string; emoji: string }
     }
     return out
   })

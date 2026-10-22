@@ -33,7 +33,7 @@ export function Footer() {
           </a>
         </nav>
         <span className="fd-faint" data-nosnippet>
-          18+ · pseudonymous · jokes at the situation, never a person · not therapy or advice · emergency: call or text 988 (US)
+          18+ · jokes at the situation, never a person · not therapy or advice · emergency: call or text 988 (US)
         </span>
         <LaunchBadges align="center" />
       </div>

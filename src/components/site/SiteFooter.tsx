@@ -69,7 +69,7 @@ export function SiteFooter() {
               color: '#443c42',
             }}
           >
-            SHUTAP. Say it funnier. · 18+ · pseudonymous · not therapy or advice.
+            SHUTAP. Say it funnier. · 18+ · not therapy or advice.
           </div>
           <LaunchBadges align="flex-end" />
         </div>

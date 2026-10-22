@@ -1028,7 +1028,7 @@ export const claimJokeSession = createServerFn({ method: 'POST' })
     const day = await resolveDay(supabaseAdmin, userId)
     const anonKey = 'anon:' + (data.anon_session_id ?? 'unknown')
 
-    // 1 · mint the pseudonym (only if this account has none yet)
+    // 1 · create the profile (only if this account has none yet)
     const { data: existing } = await supabaseAdmin
       .from('aliases')
       .select('user_id, display_name, emoji')
@@ -1038,33 +1038,22 @@ export const claimJokeSession = createServerFn({ method: 'POST' })
     let alias = existing as { display_name: string; emoji: string } | null
     const aliasIsNew = !alias
     if (!alias) {
-      for (let attempt = 0; attempt < 40; attempt++) {
-        const [creature, emoji] = rand(ANI)
-        const emotion = rand(ADJ), nation = rand(NAT)
-        const display_name = `${emotion} ${nation} ${creature}`
-        const { data: taken } = await supabaseAdmin
-          .from('aliases')
-          .select('user_id')
-          .eq('display_name', display_name)
-          .maybeSingle()
-        if (taken) continue
-        const { error } = await supabaseAdmin.from('aliases').insert({
-          user_id: userId,
-          emotion,
-          nation,
-          creature,
-          emoji,
-          display_name,
-          birth_year: 1990,
-          birth_month: 1,
-          birth_day: 1,
-          accepted_terms_version: data.terms_version ?? LEGAL_VERSION.terms,
-          accepted_terms_at: new Date().toISOString(),
-          accepted_privacy_version: data.terms_version ?? LEGAL_VERSION.terms,
-          accepted_privacy_at: new Date().toISOString(),
-        } as never)
-        if (!error) { alias = { display_name, emoji }; break }
-      }
+      // Real name and photo from the provider (Oct 2026), never a made-up alias.
+      const { data: au } = await supabaseAdmin.auth.admin.getUserById(userId)
+      const { realNameSeed } = await import('./profile-seed.server')
+      const seed = realNameSeed(au?.user)
+      const { error } = await supabaseAdmin.from('aliases').insert({
+        user_id: userId,
+        ...seed,
+        birth_year: 1990,
+        birth_month: 1,
+        birth_day: 1,
+        accepted_terms_version: data.terms_version ?? LEGAL_VERSION.terms,
+        accepted_terms_at: new Date().toISOString(),
+        accepted_privacy_version: data.terms_version ?? LEGAL_VERSION.terms,
+        accepted_privacy_at: new Date().toISOString(),
+      } as never)
+      if (!error) alias = { display_name: seed.display_name, emoji: seed.emoji }
     } else {
       await supabaseAdmin
         .from('aliases')

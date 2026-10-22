@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { UserAvatar } from '@/components/UserAvatar'
 import { Link } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { addComment, deleteComment, getPost } from '@/lib/feed.functions'
@@ -112,8 +113,8 @@ export function PostPage({ id }: { id: string }) {
           {comments.length === 0 ? <p className="fd-faint">No comments yet.</p> : null}
           {comments.map((c) => (
             <div key={c.id} className="fd-comment">
-              <Link to="/u/$pseudonym" params={{ pseudonym: c.slug }} className="fd-av" style={{ width: 30, height: 30, fontSize: 15, textDecoration: 'none' }}>
-                {c.emoji}
+              <Link to="/u/$pseudonym" params={{ pseudonym: c.slug }} style={{ textDecoration: 'none', display: 'inline-flex' }}>
+                <UserAvatar name={c.alias} avatar={c.avatar} emoji={c.emoji} size={30} />
               </Link>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div className="fd-between">
