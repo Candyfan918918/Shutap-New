@@ -117,7 +117,14 @@ export function WelcomeNativePage() {
       advanced = true
       signedInRef.current = true
       setChecking(true)
-      void import('@/lib/tracking').then((m) => m.trackEvent('sign_in_completed', {})).catch(() => {})
+      // Once per tab session: effects can mount twice and SIGNED_IN can fire
+      // after the code exchange, which used to double-count completions.
+      let firstCompletion = true
+      try {
+        firstCompletion = sessionStorage.getItem('shutap_signin_tracked') !== '1'
+        sessionStorage.setItem('shutap_signin_tracked', '1')
+      } catch { /* noop */ }
+      if (firstCompletion) void import('@/lib/tracking').then((m) => m.trackEvent('sign_in_completed', {})).catch(() => {})
       // Lazy-import server-fn modules so cold /welcome doesn't ship them.
       const [{ recordLegalAcceptance }, { getMyAlias }] = await Promise.all([
         import('@/lib/legal.functions'),

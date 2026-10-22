@@ -80,6 +80,7 @@ function TopicRoute() {
   const otherTopics = GUIDE_TOPICS.filter((x) => x.id !== t.id && guidesInTopic(x.id).length > 0);
   return (
     <ContentPage
+      tryIt={`guides/topic/${t.id}`}
       breadcrumbs={[
         { name: "Guides", path: "/guides" },
         { name: t.label, path: topicPath(t.id) },

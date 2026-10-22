@@ -26,6 +26,7 @@ import {
   type BitVersion,
 } from '@/lib/bits/shared'
 import { setDurableReturn } from '@/lib/auth-guard'
+import { startOAuth } from '@/lib/oauth-signin'
 import { anonSessionId, clearAnonSessionId, jokeTrack } from '../joke/jokeClient'
 import { ActionIcon } from './icons'
 import { Versions } from './Versions'
@@ -37,6 +38,7 @@ import { PostSheet } from './PostSheet'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
+const AUTOSTART_KEY = 'shutap_bit_autostart'
 const CONTROLS_KEY = 'shutap_bit_controls'
 const PENDING_KEY = 'shutap_bit_pending'
 const PENDING_TTL = 60 * 60 * 1000
@@ -175,9 +177,16 @@ export function BitSurface() {
     toTop()
   }
 
-  /* draft + controls survive a reload */
+  /* draft + controls survive a reload. A story typed into the writer on a
+     guide or funniest page arrives with an autostart flag and is written
+     straight away, so the reader never retypes it. */
+  const autostartRef = useRef(false)
   useEffect(() => {
-    try { setStory(sessionStorage.getItem(DRAFT_KEY) ?? '') } catch { /* noop */ }
+    try {
+      setStory(sessionStorage.getItem(DRAFT_KEY) ?? '')
+      autostartRef.current = sessionStorage.getItem(AUTOSTART_KEY) === '1'
+      sessionStorage.removeItem(AUTOSTART_KEY)
+    } catch { /* noop */ }
     setControls(readControls())
   }, [])
   useEffect(() => {
@@ -262,6 +271,14 @@ export function BitSurface() {
     return () => window.clearInterval(t)
   }, [phase])
 
+  useEffect(() => {
+    if (!autostartRef.current || phase !== 'write' || opening || !story.trim()) return
+    autostartRef.current = false
+    void onWrite()
+    // onWrite reads the current story and controls; run once when they land
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [story, phase, opening])
+
   async function onWrite() {
     const text = story.trim()
     if (!text || phase === 'writing') return
@@ -274,10 +291,19 @@ export function BitSurface() {
     setNotice(null)
     requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
     jokeTrack('bit_submitted', tier, { audience: controls.audience, voice: controls.voice, length: controls.length, heat: controls.heat })
-    let res: WriteBitResult
-    try {
-      res = await write({ data: { story: text, controls, ...ctx() } })
-    } catch {
+    // One silent retry before the visitor ever sees an error: a slow model or
+    // a dropped request costs a few seconds, not the bit.
+    let res: WriteBitResult | null = null
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        res = await write({ data: { story: text, controls, ...ctx() } })
+      } catch {
+        res = null
+      }
+      if (res && res.status !== 'failed' && res.status !== 'no_session') break
+      jokeTrack('bit_write_failed', tier, { attempt, reason: res ? res.status : 'threw' })
+    }
+    if (!res) {
       setPhase('write')
       setError("Couldn't write that one. Try again; it didn't count.")
       return
@@ -310,12 +336,31 @@ export function BitSurface() {
     jokeTrack('bit_written', res.tier, { ms: res.ms, seconds: res.bit.versions[0]?.est_seconds ?? null })
   }
 
-  function signInForBit() {
+  /* The gate. A guest sees the hook, setup and first tag; the rest unlock on
+     sign-in. Google starts straight from the bit (no stop on the sign-in
+     page); "email or Apple" goes to /welcome for the other methods. Either
+     way /welcome finishes age and alias and brings the bit back unlocked. */
+  function openSignin(from: string) {
+    setSheet('signin')
+    jokeTrack('signin_sheet_opened', tier, { from })
+  }
+
+  function dismissSignin() {
+    setSheet(null)
+    jokeTrack('signin_dismissed', tier, {})
+  }
+
+  async function signInForBit(method: 'google' | 'other', from: string) {
     if (!bit) return
     writePending(bit.id, anonSessionId())
     try { sessionStorage.setItem('shutap_returnTo', '/') } catch { /* noop */ }
     setDurableReturn('/')
-    jokeTrack('alias_gate_shown', tier, { trigger: 'bit_locked' })
+    jokeTrack('signin_clicked', tier, { method, from })
+    if (method === 'google') {
+      const err = await startOAuth('google')
+      if (!err) return
+      say(err)
+    }
     void navigate({ to: '/welcome' })
   }
 
@@ -492,29 +537,37 @@ export function BitSurface() {
                 <span className="bt-lbl">setup</span>
                 <p className="bt-v">{version.setup}</p>
               </div>
-              {version.tags.map((t, i) => (
-                <div
-                  key={i}
-                  className={`bt-slot${bit.locked ? ' locked' : ''}${i === 0 && version.kind === 'tag_swap' ? ' new' : ''}`}
-                  onClick={bit.locked ? () => setSheet('signin') : undefined}
-                  style={bit.locked ? { cursor: 'pointer' } : undefined}
-                >
-                  <span className={`bt-lbl${i === 0 && version.kind === 'tag_swap' ? ' r' : ''}`}>tag {i + 1}{i === 0 && version.kind === 'tag_swap' ? ' · swapped' : ''}</span>
-                  <p className="bt-v" aria-hidden={bit.locked || undefined}>{t}</p>
-                </div>
-              ))}
+              {version.tags.map((t, i) => {
+                const tagLocked = bit.locked && i > 0
+                return (
+                  <div
+                    key={i}
+                    className={`bt-slot${tagLocked ? ' locked' : ''}${i === 0 && version.kind === 'tag_swap' ? ' new' : ''}`}
+                    onClick={tagLocked ? () => openSignin('tag') : undefined}
+                    style={tagLocked ? { cursor: 'pointer' } : undefined}
+                  >
+                    <span className={`bt-lbl${i === 0 && version.kind === 'tag_swap' ? ' r' : ''}`}>tag {i + 1}{i === 0 && version.kind === 'tag_swap' ? ' · swapped' : ''}</span>
+                    <p className="bt-v" aria-hidden={tagLocked || undefined}>{t}</p>
+                  </div>
+                )
+              })}
               <div
                 className={`bt-slot${bit.locked ? ' locked' : ''}`}
-                onClick={bit.locked ? () => setSheet('signin') : undefined}
+                onClick={bit.locked ? () => openSignin('button') : undefined}
                 style={bit.locked ? { cursor: 'pointer' } : undefined}
               >
                 <span className="bt-lbl r">button</span>
                 <p className="bt-v" style={{ fontWeight: 400 }} aria-hidden={bit.locked || undefined}>{version.button}</p>
               </div>
               {bit.locked && (
-                <button className="bt-btn block" style={{ marginTop: 8 }} onClick={() => setSheet('signin')}>
-                  sign in free to see the tags and button
-                </button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
+                  <p className="bt-note" style={{ textAlign: 'center' }}>The rest of the tags and the button are under here. Free.</p>
+                  <GoogleButton onClick={() => void signInForBit('google', 'inline')} />
+                  <button className="bt-btn ghost block" onClick={() => void signInForBit('other', 'inline')}>
+                    email or Apple
+                  </button>
+                  <p className="bt-note" style={{ textAlign: 'center' }}>18+ · made-up name, your real one never shows · by continuing you agree to the terms and privacy policy</p>
+                </div>
               )}
             </article>
 
@@ -522,7 +575,7 @@ export function BitSurface() {
               <button
                 className="bt-act"
                 onClick={() => {
-                  if (bit.locked) return setSheet('signin')
+                  if (bit.locked) return openSignin('prompter')
                   setPrompter(version)
                   jokeTrack('prompter_opened', tier, { kind: version.kind })
                 }}
@@ -535,7 +588,7 @@ export function BitSurface() {
                   key={k}
                   className="bt-act"
                   onClick={() => {
-                    if (bit.locked) return setSheet('signin')
+                    if (bit.locked) return openSignin(k)
                     setPhase(k)
                     jokeTrack(`${k}_opened`, tier, { kind: version.kind })
                     toTop()
@@ -552,7 +605,7 @@ export function BitSurface() {
               <button
                 className="bt-act"
                 onClick={() => {
-                  if (bit.locked) return setSheet('signin')
+                  if (bit.locked) return openSignin('post')
                   setPostOpen(true)
                 }}
               >
@@ -635,20 +688,24 @@ export function BitSurface() {
         <div
           className="bt-scrim"
           onClick={(e) => {
-            if (e.target === e.currentTarget) setSheet(null)
+            if (e.target === e.currentTarget) {
+              if (sheet === 'signin') dismissSignin()
+              else setSheet(null)
+            }
           }}
         >
           <div className="bt-sheet" role="dialog" aria-modal="true" aria-labelledby="bit-sheet-title">
             {sheet === 'signin' && (
               <>
-                <h3 id="bit-sheet-title">Keep this bit.</h3>
+                <h3 id="bit-sheet-title">The punchline's under here.</h3>
                 <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  Free. You get a made-up name; your real one never shows. The tags and button are waiting.
+                  Free. You get a made-up name; your real one never shows.
                 </p>
-                <button className="bt-btn block" onClick={signInForBit}>
-                  sign in free
+                <GoogleButton onClick={() => void signInForBit('google', 'sheet')} />
+                <button className="bt-btn ghost block" onClick={() => void signInForBit('other', 'sheet')}>
+                  email or Apple
                 </button>
-                <button className="bt-btn ghost block" onClick={() => setSheet(null)}>
+                <button className="bt-btn ghost block" onClick={dismissSignin}>
                   not now
                 </button>
                 <p className="bt-note" style={{ textAlign: 'center' }}>18+ · by continuing you agree to the terms and privacy policy</p>
@@ -705,5 +762,16 @@ function Choice<T extends string>({
         ))}
       </div>
     </fieldset>
+  )
+}
+
+function GoogleButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button className="bt-btn block" onClick={onClick}>
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#fff" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82zM12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24zM5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09zM12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z" />
+      </svg>
+      continue with Google
+    </button>
   )
 }

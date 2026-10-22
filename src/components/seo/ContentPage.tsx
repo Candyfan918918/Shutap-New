@@ -3,6 +3,7 @@ import { LaunchBadges } from "@/components/site/LaunchBadges";
 import { Link } from "@tanstack/react-router";
 import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
+import { TryItBox } from '@/components/seo/TryItBox'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
 
 type Section = { heading: string; body: string };
@@ -19,6 +20,7 @@ export function ContentPage({
   cta,
   linkGroups,
   children,
+  tryIt,
 }: {
   breadcrumbs?: Crumb[];
   h1: string;
@@ -30,6 +32,8 @@ export function ContentPage({
   linkGroups?: LinkGroup[];
   /** Custom content rendered after sections, before link groups. */
   children?: ReactNode;
+  /** Page id for the inline writer at the foot of the page; omit for no writer. */
+  tryIt?: string;
 }) {
   return (
     <main
@@ -190,6 +194,8 @@ export function ContentPage({
             ))}
           </nav>
         )}
+
+        {tryIt && <TryItBox page={tryIt} />}
 
         <p style={{ marginTop: 40, fontSize: 15 }}>
           <Link

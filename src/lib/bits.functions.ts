@@ -99,7 +99,8 @@ function toVersion(v: VersionRow, locked: boolean): BitVersion {
     kind: v.kind,
     hook: v.hook,
     setup: v.setup,
-    tags: locked ? v.tags.map(mask) : v.tags,
+    // A guest sees the first tag so the payoff is proven; the rest stay masked.
+    tags: locked ? v.tags.map((t, i) => (i === 0 ? t : mask(t))) : v.tags,
     button: locked ? mask(v.button) : v.button,
     why: locked ? '' : (v.why ?? ''),
     est_seconds: v.est_seconds,

@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { LaunchBadges } from "@/components/site/LaunchBadges";
 import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
+import { TryItBox } from '@/components/seo/TryItBox'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
 import type { FunniestEntry, FunniestSource } from '@/lib/seo/funniest'
 
@@ -209,23 +210,7 @@ export function FunniestPage({
           </section>
         )}
 
-        <p style={{ margin: '8px 0 36px' }}>
-          <Link
-            to="/"
-            style={{
-              display: 'inline-block',
-              background: BRAND,
-              color: '#ffffff',
-              textDecoration: 'none',
-              fontWeight: 600,
-              fontSize: 17,
-              padding: '14px 24px',
-              borderRadius: 999,
-            }}
-          >
-            Try these techniques on your own story →
-          </Link>
-        </p>
+        <TryItBox page={`funniest/${entry.slug}`} heading="Try these techniques on your own story" />
 
         <section style={{ marginBottom: 32 }}>
           <h2 style={{ ...h2Style, fontSize: 18 }}>Sources</h2>

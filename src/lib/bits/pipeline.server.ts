@@ -69,7 +69,7 @@ export const BIT_BUDGET = {
   /** primary writer's own cap; it keeps running while the backup races it */
   write: () => budgetMs('BIT_WRITE_MS', 30_000),
   /** when the backup writer joins the race */
-  hedge: () => budgetMs('BIT_HEDGE_MS', 9_000),
+  hedge: () => budgetMs('BIT_HEDGE_MS', 3_000),
   /** backup writer's cap, from the moment it starts */
   backup: () => budgetMs('BIT_BACKUP_MS', 22_000),
   judge: () => budgetMs('BIT_JUDGE_MS', 6_000),

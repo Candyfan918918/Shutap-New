@@ -111,6 +111,7 @@ function GuideRoute() {
     .map((x) => ({ href: guidePath(x.slug), label: x.h1 }));
   return (
     <ContentPage
+      tryIt={`guides/${slug}`}
       breadcrumbs={[
         { name: "Guides", path: "/guides" },
         ...(topic ? [{ name: topic.label, path: topicPath(topic.id) }] : []),

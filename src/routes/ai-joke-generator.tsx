@@ -29,6 +29,7 @@ export const Route = createFileRoute('/ai-joke-generator')({
 function AIJokeGeneratorPage() {
   return (
     <ContentPage
+      tryIt="ai-joke-generator"
       breadcrumbs={[{ name: 'AI joke generator', path: PATH }]}
       h1="AI joke generator: turn your story into a bit"
       capsule="Shutap turns your story into a complete comedy bit — hook, setup, tags and button. Start with what happened to you, not a request for a random joke. The result is material for a video or the stage, built around the details that make your story yours."

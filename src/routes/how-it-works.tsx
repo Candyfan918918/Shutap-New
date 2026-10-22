@@ -72,6 +72,7 @@ export const Route = createFileRoute("/how-it-works")({
   }),
   component: () => (
     <ContentPage
+      tryIt="how-it-works"
       breadcrumbs={[{ name: "How it works", path: PATH }]}
       h1="How the AI joke generator works"
       capsule={CAPSULE}
