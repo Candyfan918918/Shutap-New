@@ -10,7 +10,7 @@
  * The server owns the tier, the budget and the text; nothing here can
  * unlock what it did not send. */
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { supabase } from '@/integrations/supabase/client'
 import { claimGuestBits, getBit, listMyBits, writeBit, type WriteBitResult } from '@/lib/bits.functions'
@@ -116,6 +116,7 @@ const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'e
 
 export function BitSurface() {
   const navigate = useNavigate()
+  const router = useRouter()
   const write = useServerFn(writeBit)
   const fetchBit = useServerFn(getBit)
   const claim = useServerFn(claimGuestBits)
@@ -279,6 +280,14 @@ export function BitSurface() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [story, phase, opening])
 
+  /* The sign-in page's code is fetched as soon as the lock shows, so the email
+     button opens it instantly. */
+  useEffect(() => {
+    if (!bit?.locked) return
+    void router.preloadRoute({ to: '/welcome' }).catch(() => {})
+    void import('@/pages/welcome/AuthStep').catch(() => {})
+  }, [bit?.locked, router])
+
   async function onWrite() {
     const text = story.trim()
     if (!text || phase === 'writing') return
@@ -364,7 +373,9 @@ export function BitSurface() {
       say(err)
       return
     }
-    window.location.assign('/welcome?method=email')
+    // In-app navigation: a full page load of /welcome (client-only) showed a
+    // blank screen while the whole app downloaded again.
+    void navigate({ to: '/welcome', search: { method: 'email' } as never })
   }
 
   function writeAnother() {

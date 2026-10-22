@@ -2,6 +2,7 @@
  * first paint of /welcome doesn't Suspense. Does NOT advance step itself —
  * parent's onAuthStateChange picks up SIGNED_IN and drives the flow. */
 import { useState } from 'react'
+import { useRouterState } from '@tanstack/react-router'
 import { Words } from '@/components/motion'
 import { supabase } from '@/integrations/supabase/client'
 import { sendMagicLink } from '@/lib/magic-link.functions'
@@ -21,7 +22,8 @@ export function AuthStep() {
   const name = ''
   // /welcome?method=email comes from an "email" button elsewhere: show only
   // the email form, never a second provider chooser.
-  const emailOnly = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('method') === 'email'
+  const search = useRouterState({ select: (st) => st.location.search as Record<string, unknown> })
+  const emailOnly = search?.method === 'email'
   const [email, setEmail] = useState('')
   const [emailPhase, setEmailPhase] = useState<'input' | 'code'>('input')
   const [code, setCode] = useState('')
