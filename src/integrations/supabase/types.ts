@@ -221,6 +221,30 @@ export type Database = {
         }
         Relationships: []
       }
+      bit_usage: {
+        Row: {
+          bit_ids: string[]
+          day: string
+          subject_key: string
+          updated_at: string
+          used: number
+        }
+        Insert: {
+          bit_ids?: string[]
+          day: string
+          subject_key: string
+          updated_at?: string
+          used?: number
+        }
+        Update: {
+          bit_ids?: string[]
+          day?: string
+          subject_key?: string
+          updated_at?: string
+          used?: number
+        }
+        Relationships: []
+      }
       bit_versions: {
         Row: {
           bit_id: string
@@ -2054,6 +2078,22 @@ export type Database = {
           emoji: string
           user_id: string
         }[]
+      }
+      bit_charge: {
+        Args: { p_bit: string; p_cap: number; p_day: string; p_subject: string }
+        Returns: number
+      }
+      bit_merge_guest: {
+        Args: { p_day: string; p_guest: string; p_user: string }
+        Returns: number
+      }
+      bit_refund: {
+        Args: { p_bit: string; p_day: string; p_subject: string }
+        Returns: undefined
+      }
+      bit_refund_unless_stored: {
+        Args: { p_bit: string; p_day: string; p_subject: string }
+        Returns: undefined
       }
       cancel_pending_checkins: {
         Args: { _situation_id: string }
