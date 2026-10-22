@@ -4,6 +4,6 @@ import { SubscribePage } from '@/pages/Subscribe'
 
 export const Route = createFileRoute('/subscribe')({
   ssr: false,
-  head: () => ({ meta: [...pageMeta("Subscribe — Shutap", "Choose a Shutap+ subscription and continue to checkout.", "/subscribe")] }),
+  head: () => ({ meta: [...pageMeta("Subscribe — Shutap", "Choose Basic or Pro and continue to checkout.", "/subscribe")] }),
   component: SubscribePage,
 })

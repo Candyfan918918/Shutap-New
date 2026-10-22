@@ -9,7 +9,7 @@
 //
 // Guest and free pictures carry the heavy mark: SHUTAP.COM tiled corner to
 // corner at an angle under the words, and a solid rose band across the
-// bottom. Shutap+ pictures are clean.
+// bottom. Basic and Pro pictures are clean.
 
 export const ART_W = 1080
 export const ART_H = 1920

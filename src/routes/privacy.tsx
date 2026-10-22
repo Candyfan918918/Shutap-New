@@ -65,7 +65,7 @@ function PrivacyPage() {
           reply to you. They are not added to your account or to our dataset.
         </li>
         <li>
-          <b>Billing:</b> Shutap+ payments are handled by Stripe. We keep your plan status and
+          <b>Billing:</b> Basic and Pro payments are handled by Stripe. We keep your plan status and
           receipts, not your full card number.
         </li>
         <li>
@@ -79,7 +79,7 @@ function PrivacyPage() {
       <h3>3. How we use it</h3>
       <p>
         To write your jokes; to run rooms; to enforce limits; to run the crisis check; to provide
-        the Mirror for Shutap+ members (a private read-back built from what you write while signed
+        the Mirror for Pro members (a private read-back built from what you write while signed
         in); to bill you; to keep the service safe; to improve it using aggregated, de-identified
         data; and to comply with the law.
       </p>

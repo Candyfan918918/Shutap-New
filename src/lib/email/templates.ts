@@ -229,13 +229,13 @@ see the post: ${v.cta_url ?? v.deep_link ?? ''}`,
     id: 'mirror_receipt',
     identity: 'hello',
     emailClass: 'transactional',
-    subject: (v) => `your Shutap+ receipt — ${v.amount ?? ''}`.trim(),
+    subject: (v) => `your Shutap ${v.plan_name ?? ''} receipt — ${v.amount ?? ''}`.replace(/\s+/g, ' ').trim(),
     preview: () => 'payment received. thanks.',
     cta: 'view invoice',
     htmlDesign: mirrorReceiptHtml,
     buildBodyText: (v) => `${g(v)}
 
-payment received: ${v.amount ?? ''} for Shutap+ (${v.plan_interval ?? ''}), covering ${v.period_range ?? ''}. tax included where it applies.
+payment received: ${v.amount ?? ''} for Shutap ${v.plan_name ?? ''} (${v.plan_interval ?? ''}), covering ${v.period_range ?? ''}. tax included where it applies.
 
 view your invoice: ${v.invoice_url ?? ''}`,
   },
@@ -244,13 +244,13 @@ view your invoice: ${v.invoice_url ?? ''}`,
     id: 'mirror_cancelled',
     identity: 'hello',
     emailClass: 'transactional',
-    subject: (v) => `cancelled. Shutap+ stays on until ${v.access_until ?? 'the end of your period'}`,
+    subject: (v) => `cancelled. ${v.plan_name ?? 'your plan'} stays on until ${v.access_until ?? 'the end of your period'}`,
     preview: () => 'no more charges. your jokes stay yours.',
-    cta: 'resume Shutap+',
+    cta: 'resume your plan',
     htmlDesign: mirrorCancelledHtml,
     buildBodyText: (v) => `${g(v)}
 
-you've cancelled. Shutap+ stays on until ${v.access_until ?? 'the end of your billing period'}, with no more charges after that. your jokes stay in your set list, and writing jokes stays free.
+you've cancelled. ${v.plan_name ?? 'your plan'} stays on until ${v.access_until ?? 'the end of your billing period'}, with no more charges after that. your jokes stay in your set list, and writing jokes stays free.
 
 changed your mind? resume anytime: ${v.resume_url ?? 'https://shutap.com/subscribe'}`,
   },

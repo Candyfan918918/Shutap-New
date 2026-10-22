@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { createClient } from '@supabase/supabase-js';
 import { type StripeEnv, verifyWebhook } from '@/lib/stripe.server';
 import { formatEmailDate, formatStripeAmount, sendBillingEmail } from '@/lib/email/billing.server';
+import { planByPriceId, planFromPriceId, productIdForPrice } from '@/lib/pricing';
 
 const APP_ORIGIN = 'https://shutap.com';
 
@@ -16,10 +17,24 @@ function getSupabase(): any {
 function priceIdFrom(item: any): string {
   return item?.price?.lookup_key || item?.price?.metadata?.lovable_external_id || item?.price?.id;
 }
-function productIdFrom(item: any): string {
-  const p = item?.price?.product;
-  return typeof p === 'string' ? p : p?.metadata?.lovable_external_id || p?.id || '';
+/** What the row records as the product, decided by the plan the price buys:
+ *  Pro prices (mirror_monthly / mirror_annual) are 'mirror' — the Mirror and
+ *  has_active_mirror key on that — and Basic is 'basic'. An unknown price is
+ *  treated as Basic so it can never unlock the Mirror by accident. */
+function productIdFor(item: any): 'mirror' | 'basic' {
+  const priceId = priceIdFrom(item);
+  if (!planByPriceId(priceId)) {
+    console.error('[stripe webhook] unknown price on a subscription; recorded as basic', { price: priceId });
+  }
+  return productIdForPrice(priceId);
 }
+
+/** The plan's name for billing emails. Every billing email carries it. */
+function planNameFor(priceId: string | null | undefined): string {
+  return planFromPriceId(priceId) === 'pro' ? 'Pro' : 'Basic';
+}
+
+const PAID_PRODUCTS = ['mirror', 'basic'];
 
 async function handleCreated(sub: any, env: StripeEnv) {
   const userId = sub.metadata?.userId;
@@ -42,7 +57,7 @@ async function handleCreated(sub: any, env: StripeEnv) {
     user_id: userId,
     stripe_subscription_id: sub.id,
     stripe_customer_id: sub.customer,
-    product_id: productIdFrom(item) === 'mirror' ? 'mirror' : (item?.price?.product?.metadata?.lovable_external_id || 'mirror'),
+    product_id: productIdFor(item),
     price_id: priceIdFrom(item),
     status: sub.status,
     current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
@@ -73,10 +88,10 @@ async function handleCreated(sub: any, env: StripeEnv) {
 async function maybeSendCancellationEmail(
   sub: any,
   env: StripeEnv,
-  prev: { user_id?: string; product_id?: string; cancel_at_period_end?: boolean; current_period_end?: string | null } | null,
+  prev: { user_id?: string; product_id?: string; price_id?: string | null; cancel_at_period_end?: boolean; current_period_end?: string | null } | null,
   periodEndIso: string | null,
 ) {
-  if (!prev || prev.product_id !== 'mirror') return;
+  if (!prev || !PAID_PRODUCTS.includes(prev.product_id ?? '')) return;
   const userId = (sub.metadata?.userId as string | undefined) ?? prev.user_id;
   if (!userId) return;
   // Normalize to a canonical ISO string — Postgres returns "+00:00" offsets
@@ -89,6 +104,7 @@ async function maybeSendCancellationEmail(
     dedupeKey: `${sub.id}:${accessUntilIso ?? 'unknown-period-end'}`,
     userId,
     vars: {
+      plan_name: planNameFor(prev.price_id ?? priceIdFrom(sub.items?.data?.[0])),
       access_until: accessUntil,
       resume_url: `${APP_ORIGIN}/subscribe`,
       deep_link: `${APP_ORIGIN}/subscribe`,
@@ -115,7 +131,7 @@ async function handleInvoicePaid(invoice: any, env: StripeEnv) {
     .eq('stripe_subscription_id', subId)
     .eq('environment', env)
     .maybeSingle();
-  if (!row || row.product_id !== 'mirror') return;
+  if (!row || !PAID_PRODUCTS.includes(row.product_id)) return;
 
   const interval: string =
     line?.price?.recurring?.interval ?? line?.plan?.interval ??
@@ -133,6 +149,7 @@ async function handleInvoicePaid(invoice: any, env: StripeEnv) {
     dedupeKey: invoice.id,
     userId: row.user_id,
     vars: {
+      plan_name: planNameFor(row.price_id),
       amount,
       plan_interval: interval === 'year' ? 'annual' : 'monthly',
       period_range: periodRange,
@@ -152,7 +169,7 @@ async function handleUpdated(sub: any, env: StripeEnv) {
   // false → true transition can be detected (portal cancels included).
   const { data: prevRow } = await getSupabase()
     .from('subscriptions')
-    .select('user_id, product_id, cancel_at_period_end, current_period_end')
+    .select('user_id, product_id, price_id, cancel_at_period_end, current_period_end')
     .eq('stripe_subscription_id', sub.id)
     .eq('environment', env)
     .maybeSingle();
@@ -175,7 +192,7 @@ async function handleUpdated(sub: any, env: StripeEnv) {
       user_id: userId,
       stripe_subscription_id: sub.id,
       stripe_customer_id: sub.customer,
-      product_id: productIdFrom(item) === 'mirror' ? 'mirror' : (item?.price?.product?.metadata?.lovable_external_id || 'mirror'),
+      product_id: productIdFor(item),
       price_id: priceIdFrom(item),
       status: sub.status,
       current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
@@ -191,6 +208,7 @@ async function handleUpdated(sub: any, env: StripeEnv) {
   const { error, count } = await getSupabase().from('subscriptions').update({
     status: sub.status,
     price_id: priceIdFrom(item),
+    product_id: productIdFor(item),
     current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
     current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
     cancel_at_period_end: sub.cancel_at_period_end ?? false,
@@ -203,7 +221,7 @@ async function handleUpdated(sub: any, env: StripeEnv) {
 async function handleDeleted(sub: any, env: StripeEnv) {
   const { data: prevRow } = await getSupabase()
     .from('subscriptions')
-    .select('user_id, product_id, cancel_at_period_end, current_period_end')
+    .select('user_id, product_id, price_id, cancel_at_period_end, current_period_end')
     .eq('stripe_subscription_id', sub.id)
     .eq('environment', env)
     .maybeSingle();

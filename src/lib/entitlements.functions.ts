@@ -1,13 +1,15 @@
 // Server-side entitlement checks. The client NEVER decides Mirror access —
-// it asks this endpoint. Every signed-in user needs an active/trialing row
-// in `subscriptions` (or a canceled row still inside its paid period);
-// anonymous users are never entitled. No account is special-cased.
+// it asks this endpoint. The Mirror is Pro only: a signed-in user needs an
+// active/trialing/past_due Pro row (or a cancelled one still inside its paid
+// period). Basic never opens it. Anonymous users are never entitled. No
+// account is special-cased.
 //
 // IMPORTANT: reads MUST filter by `environment` — sandbox and live rows
 // coexist in the same table and default to 'sandbox'. Without the filter,
 // a sandbox subscriber appears entitled in live and vice versa.
 import { createServerFn } from '@tanstack/react-start'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
+import { rowIsActive, rowPlan } from './plan.server'
 
 export type MirrorEntitlement = {
   entitled: boolean
@@ -30,30 +32,25 @@ export const getMirrorEntitlement = createServerFn({ method: 'GET' })
     if (claims?.is_anonymous) {
       return { entitled: false, demoAccount: false, reason: 'anonymous' }
     }
-    const now = new Date().toISOString()
     const { data: rows } = await context.supabase
       .from('subscriptions')
-      .select('status,current_period_end')
+      .select('status,current_period_end,price_id,product_id')
       .eq('user_id', context.userId)
       .eq('environment', data.environment)
       .in('status', ['active', 'trialing', 'past_due', 'canceled'])
       .order('current_period_end', { ascending: false })
-      .limit(1)
-    const row = rows?.[0]
+      .limit(20)
+    // Pro rows only, latest period first.
+    const row = (rows ?? []).find((r) => rowPlan(r) === 'pro' && rowIsActive(r))
     if (!row) return { entitled: false, demoAccount: false, reason: 'no_subscription' }
-    const withinPeriod = !row.current_period_end || row.current_period_end > now
-    if ((row.status === 'active' || row.status === 'trialing') && withinPeriod) {
+    if (row.status === 'active' || row.status === 'trialing') {
       return { entitled: true, demoAccount: false, reason: 'active_subscription' }
     }
-    // Dunning: Stripe is still retrying. Retain access by status alone while
-    // Stripe retries; the subscription.deleted webhook downgrades to canceled
-    // and revokes access at final failure, not by the period clock.
+    // Dunning: Stripe is still retrying. Access stays while it retries; the
+    // subscription.deleted webhook downgrades to canceled at final failure.
     if (row.status === 'past_due') {
       return { entitled: true, demoAccount: false, reason: 'past_due' }
     }
-    // Cancel-at-period-end: retain access until the period actually ends.
-    if (row.status === 'canceled' && row.current_period_end && row.current_period_end > now) {
-      return { entitled: true, demoAccount: false, reason: 'grace_period' }
-    }
-    return { entitled: false, demoAccount: false, reason: 'no_subscription' }
+    // Cancel-at-period-end: access until the period actually ends.
+    return { entitled: true, demoAccount: false, reason: 'grace_period' }
   })

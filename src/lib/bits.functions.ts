@@ -18,6 +18,7 @@ import { z } from 'zod'
 import { hasContactDetails, runScrub } from './agents/scrubber.functions'
 import { runClassifyCrisis } from './agents/guard.functions'
 import { requestAnonId, resolveJokeIdentity, type JokeIdentity } from './jokes/session.server'
+import { activePlan } from './plan.server'
 import { heatFor, varyBitDraft, writeBitFromStory, type BitFailure } from './bits/pipeline.server'
 import { NO_CAP, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
 import {
@@ -57,11 +58,16 @@ async function adminDb(): Promise<any> {
   return supabaseAdmin
 }
 
-/** The caller's tier for bits. Until the Basic plan ships, any active
- *  subscription is Pro. */
-function bitTier(id: JokeIdentity): BitTier {
+/** Guest or account, for the per-network layer (no database read). */
+function guestOrAccount(id: JokeIdentity): BitTier {
+  return id.userId ? 'free' : 'guest'
+}
+
+/** The caller's tier for bits, from their subscription rows: Basic or Pro
+ *  by the price they pay. A read error counts as free, never as paid. */
+async function resolveTier(admin: any, id: JokeIdentity): Promise<BitTier> {
   if (!id.userId) return 'guest'
-  return id.tier === 'paying' ? 'pro' : 'free'
+  return (await activePlan(admin, id.userId)) ?? 'free'
 }
 
 /** After sign-in, count the guest bits this browser wrote today toward the
@@ -237,7 +243,7 @@ async function writeCore(
   const started = Date.now()
   const supabaseAdmin = await adminDb()
   const id = await resolveJokeIdentity(anonSessionId)
-  const tier = bitTier(id)
+  const tier = await resolveTier(supabaseAdmin, id)
   const anon = anonKey(id)
   if (!id.userId && !anon) return { status: 'no_session' }
 
@@ -543,7 +549,7 @@ export const varyBit = createServerFn({ method: 'POST' })
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
     if (versions.length >= MAX_VERSIONS) return { ok: false, reason: 'too_many' }
-    if ((await chargeNetwork(supabaseAdmin, bitTier(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+    if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
 
     const from = versions.find((v) => v.id === data.from_version_id) ?? versions[0]
     if (!from) return { ok: false, reason: 'not_found' }
@@ -602,8 +608,9 @@ export const getBit = createServerFn({ method: 'POST' })
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
-    if (!row) return { bit: null, tier: bitTier(id) }
-    return { bit: toBit(row, await loadVersions(supabaseAdmin, row.id)), tier: bitTier(id) }
+    const tier = await resolveTier(supabaseAdmin, id)
+    if (!row) return { bit: null, tier }
+    return { bit: toBit(row, await loadVersions(supabaseAdmin, row.id)), tier }
   })
 
 export type SetListItem = { id: string; hook: string; audience: string; versions: number; created_at: string }
@@ -614,7 +621,7 @@ export const listMyBits = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<{ tier: BitTier; bits: SetListItem[]; usage: BitUsage }> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
-    const tier = bitTier(id)
+    const tier = await resolveTier(supabaseAdmin, id)
     const { day, resetsAt } = today()
     // Right after sign-in, the count already includes the guest bit.
     await mergeGuestToday(supabaseAdmin, id, data.anon_session_id ?? null, day)
@@ -770,7 +777,7 @@ async function layoutFor<T>(
     .maybeSingle()
   if (!v) return { ok: false, reason: 'not_found' }
   if (v[kind]) return { ok: true, data: v[kind] as T }
-  if ((await chargeNetwork(supabaseAdmin, bitTier(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+  if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
   const { writeScene, writeScreenplay } = await import('./bits/pipeline.server')
   const made = kind === 'scene' ? await writeScene(row.story_clean, v) : await writeScreenplay(row.story_clean, v)
   if (!made) return { ok: false, reason: 'failed' }
@@ -814,7 +821,7 @@ export const exportBit = createServerFn({ method: 'POST' })
       .maybeSingle()
     if (!v) return { ok: false, reason: 'not_found' }
     const { renderBitSvg, artFilename } = await import('./bits/art')
-    const tier = bitTier(id)
+    const tier = await resolveTier(supabaseAdmin, id)
     const watermarked = !isPaidTier(tier)
     const svg = renderBitSvg({ ...v, format: data.format, locked: false, watermark: watermarked })
     return { ok: true, svg, filename: artFilename(v.hook, data.format), watermarked, tier }
@@ -963,7 +970,7 @@ export const getCaption = createServerFn({ method: 'POST' })
       .maybeSingle()
     if (!v) return { ok: false, reason: 'not_found' }
     if (v.caption?.caption) return { ok: true, caption: v.caption.caption, hashtags: v.caption.hashtags ?? [] }
-    if ((await chargeNetwork(supabaseAdmin, bitTier(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+    if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
     const { writeCaption } = await import('./bits/pipeline.server')
     const made = await writeCaption(row.story_clean, v, (row.controls as BitControls)?.audience ?? 'social')
     if (!made) return { ok: false, reason: 'failed' }

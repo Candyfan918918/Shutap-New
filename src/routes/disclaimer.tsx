@@ -43,9 +43,8 @@ function DisclaimerPage() {
       <p>
         Jokes are written by AI and may be inaccurate, unfunny or offensive. The Mirror reads back
         what keeps coming up in what you write. It observes; it does not assess, diagnose or
-        advise. Shutap+ removes the watermark and adds the Mirror. It does not buy advice,
-        treatment or more jokes. Daily limits (five stories a day for everyone) are cost controls
-        and may change.
+        advise. Paid plans remove the watermark; Basic allows more bits a day and Pro adds the
+        Mirror. No plan buys advice or treatment. Daily limits are cost controls and may change.
       </p>
 
       <h3>Short version</h3>

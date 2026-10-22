@@ -4,11 +4,10 @@
  * files are clean. Everyone's file carries the whole bit. On a phone the file goes to the share sheet (save to Photos,
  * straight into TikTok); elsewhere it downloads. */
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { exportBit } from '@/lib/bits.functions'
 import { isPaidTier, type BitTier, type BitVersion } from '@/lib/bits/shared'
-import { PLAN_TO_PRICE, usd } from '@/lib/pricing'
+import { PLANS, usd } from '@/lib/pricing'
 import { anonSessionId, canShareFiles, isShareAbort, jokeTrack, saveBlob, svgToPng } from '../joke/jokeClient'
 import { scriptPdf } from './screenplay-pdf'
 import { CaptionBox } from './CaptionBox'
@@ -27,15 +26,17 @@ export function DownloadSheet({
   version,
   tier,
   onClose,
+  onUpgrade,
   say,
 }: {
   bitId: string
   version: BitVersion
   tier: BitTier
   onClose: () => void
+  /** opens the plans (Basic and Pro) in place of this sheet */
+  onUpgrade: () => void
   say: (m: string) => void
 }) {
-  const navigate = useNavigate()
   const exportFn = useServerFn(exportBit)
   const exportRef = useRef(exportFn)
   exportRef.current = exportFn
@@ -141,10 +142,10 @@ export function DownloadSheet({
             className="bt-btn ghost block"
             onClick={() => {
               jokeTrack('upgrade_shown', tier, { after: 'download' })
-              void navigate({ to: '/pricing' })
+              onUpgrade()
             }}
           >
-            remove the watermark · {usd(PLAN_TO_PRICE.monthly.amount)}/mo
+            remove the watermark · from {usd(PLANS.basic.amount)}/mo
           </button>
         )}
       </div>
