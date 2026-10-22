@@ -8,6 +8,9 @@ export type AgentMessage = { role: 'user' | 'assistant'; content: string }
 /** Default model for every agent that does not name its own. */
 export const DEFAULT_MODEL = 'google/gemini-2.5-flash'
 
+/** A fast model for the second try when the first one is slow. */
+export const FAST_MODEL = 'google/gemini-2.5-flash-lite'
+
 /** Reasoning-first models reject a sampling temperature outright; sending one
  *  fails the whole call rather than being ignored. */
 function acceptsTemperature(modelId: string): boolean {
@@ -102,4 +105,22 @@ export function tryParseJson<T>(text: string): T | null {
     }
     return null
   }
+}
+
+/**
+ * One try with a time limit, then a second try on the fast model. For steps
+ * that sit in front of the writer (scrubber, guard): with no time limit a slow
+ * gateway held a visitor's story on "writing…" until they gave up, and nothing
+ * was logged because the request never finished.
+ */
+export async function callAgentBounded(
+  opts: Parameters<typeof callAgent>[0],
+  timeoutMs: number,
+): Promise<{ text: string; error?: string; model: string }> {
+  const first = await callAgent({ ...opts, timeoutMs })
+  if (!first.error) return first
+  const second = await callAgent({ ...opts, model: FAST_MODEL, timeoutMs })
+  if (!second.error) return second
+  console.warn('[agent] both tries failed', { first: first.error, second: second.error })
+  return { ...second, error: `${first.error} / ${second.error}` }
 }

@@ -77,12 +77,14 @@ export function ContentPage({
             border: "1px solid rgba(11,8,15,.10)",
             borderRadius: 18,
             padding: "24px 26px",
-            margin: "0 0 48px",
+            margin: tryIt ? "0 0 20px" : "0 0 48px",
             boxShadow: "0 12px 30px -24px rgba(20,16,22,.3)",
           }}
         >
           {capsule}
         </p>
+
+        {tryIt && <TryItBox page={tryIt} position="top" heading="Write your own bit" />}
 
         {sections.map((s) => (
           <section key={s.heading} style={{ marginBottom: 36 }}>

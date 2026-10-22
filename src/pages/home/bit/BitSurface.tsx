@@ -47,6 +47,10 @@ type ShownBit = Bit & { locked: boolean }
 type Phase = 'write' | 'writing' | 'bit' | 'mix' | 'scene' | 'screenplay' | 'crisis'
 type Notice = { text: string; swaps: string[] }
 
+/** Longest a visitor waits on one try. The server's own limits add up to
+ *  about 50s in the worst case (scrub + writer race); a normal bit is 10-20s. */
+const WRITE_TIME_LIMIT_MS = 60_000
+
 const STEPS = ['reading it · names removed', 'finding the angle', 'writing four, ranking them', 'timing it at talking pace']
 
 /* ── the note left before sign-in, so the bit comes back after it ── */
@@ -329,19 +333,48 @@ export function BitSurface() {
     jokeTrack('bit_submitted', tier, { audience: controls.audience, voice: controls.voice, length: controls.length, heat: controls.heat })
     // One silent retry before the visitor ever sees an error: a slow model or
     // a dropped request costs a few seconds, not the bit.
+    // A time limit on every try (Oct 22 2026): phones sat on "writing…" for
+    // up to two minutes when a request hung, and only gave up when the
+    // visitor left. Past the limit the visitor gets the try-again message
+    // and the failure is logged with why. A timed-out try is not retried —
+    // that would double the wait; quick failures still get one silent retry.
+    const started = performance.now()
     let res: WriteBitResult | null = null
     for (let attempt = 1; attempt <= 2; attempt++) {
+      const t0 = performance.now()
+      let reason = ''
+      let timer: number | undefined
       try {
-        res = await write({ data: { story: text, controls, ...ctx() } })
-      } catch {
+        res = await Promise.race([
+          write({ data: { story: text, controls, ...ctx() } }),
+          new Promise<never>((_, reject) => {
+            timer = window.setTimeout(() => reject(new Error('timeout')), WRITE_TIME_LIMIT_MS)
+          }),
+        ])
+      } catch (e) {
         res = null
+        const msg = e instanceof Error ? e.message : String(e)
+        reason = msg === 'timeout' ? 'timeout' : `threw: ${msg.slice(0, 120)}`
+      } finally {
+        window.clearTimeout(timer)
       }
       if (res && res.status !== 'failed' && res.status !== 'no_session') break
-      jokeTrack('bit_write_failed', tier, { attempt, reason: res ? res.status : 'threw' })
+      jokeTrack('bit_write_failed', tier, {
+        attempt,
+        reason: res ? res.status : reason,
+        ms: Math.round(performance.now() - t0),
+        hidden: document.visibilityState === 'hidden',
+        online: navigator.onLine,
+      })
+      if (reason === 'timeout') break
     }
     if (!res) {
       setPhase('write')
-      setError("Couldn't write that one. Try again; it didn't count.")
+      setError(
+        performance.now() - started >= WRITE_TIME_LIMIT_MS
+          ? "That one took too long. Try again; it didn't count."
+          : "Couldn't write that one. Try again; it didn't count.",
+      )
       return
     }
     if (res.status === 'crisis') {

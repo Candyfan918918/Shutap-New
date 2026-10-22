@@ -2,7 +2,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { z } from 'zod'
-import { callAgent, tryParseJson } from './gateway'
+import { callAgent, callAgentBounded, tryParseJson } from './gateway'
 
 export type CrisisResult = {
   crisis: boolean
@@ -46,11 +46,11 @@ export async function runClassifyCrisis(cleanText: string): Promise<CrisisResult
   const hard = keywordCrisis(text)
   if (hard) return hard
 
-  const llm = await callAgent({
+  const llm = await callAgentBounded({
     system: GUARD_PROMPT,
     messages: [{ role: 'user', content: text }],
     maxTokens: 80,
-  })
+  }, 5_000)
   const parsed = tryParseJson<CrisisResult>(llm.text)
   if (parsed && typeof parsed.crisis === 'boolean') return parsed
   // graceful no-flag if AI offline

@@ -8,7 +8,17 @@ import { useNavigate } from '@tanstack/react-router'
 const DRAFT_KEY = 'shutap_bit_draft'
 const AUTOSTART_KEY = 'shutap_bit_autostart'
 
-export function TryItBox({ page, heading = 'Try it on your own story' }: { page: string; heading?: string }) {
+export function TryItBox({
+  page,
+  heading = 'Try it on your own story',
+  position = 'bottom',
+}: {
+  page: string
+  heading?: string
+  /** 'top' sits right under the page's opening answer (Oct 22 2026: Google
+   *  visitors write more than anyone, so the box goes where they land). */
+  position?: 'top' | 'bottom'
+}) {
   const navigate = useNavigate()
   const [story, setStory] = useState('')
   const text = story.trim()
@@ -20,7 +30,7 @@ export function TryItBox({ page, heading = 'Try it on your own story' }: { page:
       sessionStorage.setItem(AUTOSTART_KEY, '1')
     } catch { /* noop */ }
     void import('@/lib/tracking')
-      .then((m) => m.trackEvent('seo_cta_clicked', { page, chars: text.length }))
+      .then((m) => m.trackEvent('seo_cta_clicked', { page, position, chars: text.length }))
       .catch(() => {})
     // The story rides on the navigation (history state) so it arrives even
     // where page storage is blocked; storage above is only a backup.
@@ -31,7 +41,7 @@ export function TryItBox({ page, heading = 'Try it on your own story' }: { page:
     <section
       aria-label="Write a bit"
       style={{
-        margin: '8px 0 36px',
+        margin: position === 'top' ? '0 0 44px' : '8px 0 36px',
         padding: 20,
         borderRadius: 18,
         background: '#ffffff',
@@ -47,7 +57,7 @@ export function TryItBox({ page, heading = 'Try it on your own story' }: { page:
         onKeyDown={(e) => {
           if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) go()
         }}
-        rows={4}
+        rows={position === 'top' ? 3 : 4}
         maxLength={4000}
         placeholder="what happened? the meeting, the date, the group chat… tell it like you'd tell a friend"
         style={{

@@ -5,7 +5,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { z } from 'zod'
-import { callAgent, tryParseJson } from './gateway'
+import { callAgent, callAgentBounded, tryParseJson } from './gateway'
 
 export type ScrubReplacement = {
   detected_type: 'name' | 'address' | 'location' | 'phone' | 'email' | 'url'
@@ -73,11 +73,11 @@ export async function runScrub(raw: string): Promise<ScrubResult> {
   const first = regexScrub(clamped)
 
   // Step 2: LLM pass for names + locations
-  const llm = await callAgent({
+  const llm = await callAgentBounded({
     system: SCRUBBER_PROMPT,
     messages: [{ role: 'user', content: first.text }],
     maxTokens: 800,
-  })
+  }, 6_000)
 
   const parsed = tryParseJson<ScrubResult>(llm.text)
   // Guard: LLM must not erase non-empty input. An empty/whitespace-only
