@@ -62,9 +62,13 @@ export function isPaidTier(tier: BitTier): boolean {
 }
 
 /** True when this tier has no new bits left today. Pro (no cap shown) never
- *  blocks here; the server enforces its fair-use cap. */
-export function atCap(u: BitUsage | null | undefined): boolean {
-  return !!u && u.cap !== null && u.used >= u.cap
+ *  blocks here; the server enforces its fair-use cap. A count from before
+ *  the last Pacific midnight is stale: a tab left open overnight must not
+ *  stay blocked (the server checks again either way). */
+export function atCap(u: BitUsage | null | undefined, now = Date.now()): boolean {
+  if (!u || u.cap === null || u.used < u.cap) return false
+  const resets = Date.parse(u.resets_at)
+  return !(Number.isFinite(resets) && now >= resets)
 }
 
 export function wordCount(text: string): number {

@@ -187,6 +187,20 @@ async function insertVersion(
 
 /* ───────────────────────── write a bit ───────────────────────── */
 
+/** A bit has landed once its row AND its first version exist. Another copy
+ *  of the same press may have saved the row a moment before its version, so
+ *  this waits briefly for the version before giving up. */
+async function landedBit(admin: any, bitId: string, id: JokeIdentity): Promise<{ row: BitRow; versions: VersionRow[] } | null> {
+  const row = await loadOwnedBit(admin, bitId, id)
+  if (!row) return null
+  for (let i = 0; i < 6; i++) {
+    const versions = await loadVersions(admin, row.id)
+    if (versions.length) return { row, versions }
+    await new Promise((r) => setTimeout(r, 300))
+  }
+  return null
+}
+
 export type WriteBitResult =
   | { status: 'crisis' }
   | { status: 'limited'; reason: 'daily' | 'rate_limited'; tier: BitTier; usage: BitUsage }
@@ -231,18 +245,20 @@ async function writeCore(
   const subject = id.subjectKey
   const usageNow = async () => usageView(tier, await readUsed(supabaseAdmin, subject, day).catch(() => 0), resetsAt)
 
-  // A press of "write" carries one id, reused on the client's silent retry.
-  // If that bit already exists, this is the retry of a write that landed:
-  // hand the same bit back, charge nothing.
+  // A press of "write" carries one id, reused on the client's silent retry
+  // and when the sign-in return replays it. If that bit already exists, this
+  // is a copy of a write that landed (or is landing): hand the same bit back,
+  // charge nothing.
   let bitId = writeId ?? crypto.randomUUID()
   if (!lab && writeId) {
     const { data: taken } = await supabaseAdmin.from('bits').select('id').eq('id', writeId).maybeSingle()
     if (taken) {
-      const mine = await loadOwnedBit(supabaseAdmin, writeId, id)
-      if (mine) {
+      if (await loadOwnedBit(supabaseAdmin, writeId, id)) {
+        const landed = await landedBit(supabaseAdmin, writeId, id)
+        if (!landed) return { status: 'failed', tier, usage: await usageNow() }
         return {
           status: 'ok',
-          bit: toBit(mine, await loadVersions(supabaseAdmin, mine.id)),
+          bit: toBit(landed.row, landed.versions),
           tier,
           usage: await usageNow(),
           notice: '',
@@ -252,6 +268,13 @@ async function writeCore(
       }
       bitId = crypto.randomUUID() // someone else's id: never reuse it
     }
+  }
+
+  /** Give the budget back — unless a bit with this id is stored, which means
+   *  another copy of the same press landed and its charge must stand. */
+  const refundIfNotLanded = async () => {
+    const { data: stored } = await supabaseAdmin.from('bits').select('id').eq('id', bitId).maybeSingle()
+    if (!stored) await refundBit(supabaseAdmin, subject, day, bitId)
   }
 
   // After sign-in, this browser's guest bit today counts toward the account.
@@ -270,7 +293,7 @@ async function writeCore(
     }
     if (used === -1) return { status: 'limited', reason: 'daily', tier, usage: await usageNow() }
     if ((await chargeNetwork(supabaseAdmin, tier, day, 3)) === 'limited') {
-      await refundBit(supabaseAdmin, subject, day, bitId)
+      await refundIfNotLanded()
       return { status: 'limited', reason: 'rate_limited', tier, usage: await usageNow() }
     }
   }
@@ -354,12 +377,12 @@ async function writeCore(
       // Two copies of the same press raced and the other one saved first:
       // its bit is this press's bit, and its charge stands.
       if ((error as { code?: string }).code === '23505') {
-        const mine = await loadOwnedBit(supabaseAdmin, bitId, id)
-        if (mine) {
+        const landed = await landedBit(supabaseAdmin, bitId, id)
+        if (landed) {
           kept = true
           return {
             status: 'ok',
-            bit: toBit(mine, await loadVersions(supabaseAdmin, mine.id)),
+            bit: toBit(landed.row, landed.versions),
             tier,
             usage: await usageNow(),
             notice: '',
@@ -370,8 +393,24 @@ async function writeCore(
       }
       throw new Error(error.message)
     }
-    const original = await insertVersion(supabaseAdmin, bitId, 'original', best, controls.heat)
+    let original: VersionRow
+    try {
+      original = await insertVersion(supabaseAdmin, bitId, 'original', best, controls.heat)
+    } catch (e) {
+      // A row without its version would read as a blank bit: take it back out.
+      await supabaseAdmin.from('bits').delete().eq('id', bitId).then(() => null, () => null)
+      throw e
+    }
     kept = true
+    // The charge stands for a stored bit. If a failing copy of the same press
+    // gave it back in the meantime, this takes it again (a no-op otherwise).
+    if (!lab) {
+      try {
+        await chargeBit(supabaseAdmin, subject, day, capFor(tier), bitId)
+      } catch (e) {
+        console.error('[bit] re-charge after store failed', e instanceof Error ? e.message : e)
+      }
+    }
     console.log('[bit] written', {
       bit_id: bitId,
       tier,
@@ -418,12 +457,12 @@ async function writeCore(
         : {}),
     }
   } finally {
-    if (!lab && !kept) await refundBit(supabaseAdmin, subject, day, bitId)
+    if (!lab && !kept) await refundIfNotLanded()
   }
 
   /** The count after this write's refund, for the "didn't count" message. */
   async function refundedUsage(): Promise<BitUsage> {
-    await refundBit(supabaseAdmin, subject, day, bitId)
+    await refundIfNotLanded()
     return usageNow()
   }
 }
@@ -898,8 +937,8 @@ export type CaptionResult =
   | { ok: false; reason: 'sign_in' | 'not_found' | 'rate_limited' | 'failed' }
 
 /** The text under the video: a teaser caption and 5–8 hashtags, written on
- *  first ask and cached on the version. Signed in only: a guest's tags and
- *  button are not theirs yet, and the caption is written from them. */
+ *  first ask and cached on the version. Signed in only: it's a model call
+ *  written on request, like the scene and screenplay. */
 export const getCaption = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => LayoutInput.parse(d))
   .handler(async ({ data }): Promise<CaptionResult> => {

@@ -94,3 +94,9 @@ test('the network layer never limits an account', async () => {
   const db = { from: () => { throw new Error('should not be read') } }
   for (const t of ['free', 'basic', 'pro'] as const) assert.equal(await chargeNetwork(db, t, '2026-10-22', 3), 'ok')
 })
+
+test('a count from before midnight Pacific no longer blocks', () => {
+  const u = usageView('free', 2, '2026-10-23T07:00:00.000Z')
+  assert.equal(atCap(u, Date.parse('2026-10-23T06:59:00Z')), true)
+  assert.equal(atCap(u, Date.parse('2026-10-23T07:00:00Z')), false)
+})

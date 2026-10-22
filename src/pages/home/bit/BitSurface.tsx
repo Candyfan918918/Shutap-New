@@ -33,7 +33,7 @@ import {
 } from '@/lib/bits/shared'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth } from '@/lib/oauth-signin'
-import { anonSessionId, clearAnonSessionId, jokeTrack } from '../joke/jokeClient'
+import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 import { ActionIcon } from './icons'
 import { Versions } from './Versions'
 import { MixYourOwn } from './MixYourOwn'
@@ -207,6 +207,10 @@ export function BitSurface() {
   const restoring = useRef(false)
   const typed = useRef(false)
   const writingRef = useRef(false)
+  /** A write whose outcome is unknown (timed out, connection dropped): the
+   *  next press with the same story reuses its id, so if it did land, the
+   *  same bit comes back and nothing is charged twice. */
+  const unsureWrite = useRef<{ key: string; id: string } | null>(null)
   // restore() runs from effects set up on first render; it reaches the
   // current onWrite (with current state) through this ref.
   const onWriteRef = useRef(onWrite)
@@ -309,16 +313,22 @@ export function BitSurface() {
     const pending = readPendingWrite()
     const note = readPending()
     if (!pending && !note) return
-    if (!(await hasRealSession(12))) return
+    // Claimed before the first wait, so a second call (load + SIGNED_IN)
+    // can't run alongside this one.
     restoring.current = true
+    if (!(await hasRealSession(12))) {
+      restoring.current = false
+      return
+    }
     try {
       const anon = pending?.anon ?? note?.anon
       if (anon) await claim({ data: { anon_session_id: anon } })
       // Cleared before writing, so a second run can never write it again.
-      // The write id is reused, so even a doubled call makes one bit.
+      // The write id is reused, so even a doubled call (another tab) makes
+      // one bit. The browser keeps its guest id: signing out later must not
+      // hand back a fresh guest bit.
       clearPendingWrite()
       clearPending()
-      clearAnonSessionId()
       const t = await refresh()
       if (pending) {
         typed.current = true
@@ -432,7 +442,9 @@ export function BitSurface() {
     }
     // One id per press of "write", reused by the silent retry below, so a
     // retry of a write that landed returns the same bit and costs nothing.
-    const writeId = opts?.writeId ?? newWriteId()
+    const key = JSON.stringify([text, ctl])
+    const writeId = opts?.writeId ?? (unsureWrite.current?.key === key ? unsureWrite.current.id : newWriteId())
+    unsureWrite.current = null
     setPhase('writing')
     setNotice(null)
     requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
@@ -475,11 +487,14 @@ export function BitSurface() {
       if (reason === 'timeout') break
     }
     if (!res) {
+      // The server may still have written it. Pressing write again with the
+      // same story reuses this id: a landed bit comes back, uncharged twice.
+      unsureWrite.current = { key, id: writeId }
       setPhase('write')
       setError(
         performance.now() - started >= WRITE_TIME_LIMIT_MS
-          ? "That one took too long. Try again; it didn't count."
-          : "Couldn't write that one. Try again; it didn't count.",
+          ? 'That one took too long. Press write to try again.'
+          : "Couldn't reach Shutap. Press write to try again.",
       )
       return
     }
