@@ -101,7 +101,7 @@ function LegalHub() {
       subline="every policy, in one place."
     >
       <p>
-        shutap is 18+, pseudonymous, and for entertainment only. it&rsquo;s not a medical or legal
+        shutap is 18+ and for entertainment only. it&rsquo;s not a medical or legal
         service. pick the page you need.
       </p>
       <div style={{ display: "flex", flexDirection: "column", gap: 10, margin: "20px 0 4px" }}>
