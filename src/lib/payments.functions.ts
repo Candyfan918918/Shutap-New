@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
 import { requireRealUser } from './require-real-user';
 import { type StripeEnv, createStripeClient, getStripeErrorMessage } from '@/lib/stripe.server';
-import { PLANS, isCheckoutPriceId, planFromPriceId } from '@/lib/pricing';
+import { PLANS, isCheckoutPriceId, planFromPriceId, productIdForPrice } from '@/lib/pricing';
 import { bestPlan, rowIsActive } from '@/lib/plan.server';
 
 type CheckoutResult = { clientSecret: string } | { error: string };
@@ -146,12 +146,12 @@ export const setPlanCancellation = createServerFn({ method: 'POST' })
     const { userId, supabase } = context;
     const { data: rows } = await supabase
       .from('subscriptions')
-      .select('stripe_subscription_id, status, current_period_end')
+      .select('stripe_subscription_id, status, current_period_end, price_id')
       .eq('user_id', userId)
       .eq('environment', data.environment)
       .in('status', ['active', 'trialing', 'past_due'])
       .order('current_period_end', { ascending: false });
-    const live = ((rows ?? []) as { stripe_subscription_id: string; status: string; current_period_end: string | null }[]).filter((r) => rowIsActive(r));
+    const live = ((rows ?? []) as { stripe_subscription_id: string; status: string; current_period_end: string | null; price_id: string | null }[]).filter((r) => rowIsActive(r));
     if (!live.length) return { ok: false, error: 'no_plan' };
     try {
       const stripe = createStripeClient(data.environment);
@@ -173,6 +173,13 @@ export const setPlanCancellation = createServerFn({ method: 'POST' })
           .eq('environment', data.environment);
         if (upErr) console.error('[setPlanCancellation] row update failed; the webhook will record it', upErr.message);
         last = { cancel_at_period_end: updated.cancel_at_period_end ?? data.cancel, end };
+        // The confirmation email goes out here: the row above already says
+        // cancelling, so the webhook won't see the change. Same dedupe key as
+        // the webhook's, so it is never sent twice.
+        if (data.cancel && updated.cancel_at_period_end) {
+          const { maybeSendCancellationEmail } = await import('@/lib/billing-notices.server');
+          await maybeSendCancellationEmail(updated, data.environment, { user_id: userId, product_id: productIdForPrice(r.price_id), price_id: r.price_id, cancel_at_period_end: false, current_period_end: r.current_period_end }, end);
+        }
       }
       return { ok: true, cancelAtPeriodEnd: last!.cancel_at_period_end, currentPeriodEnd: last!.end };
     } catch (error) {
