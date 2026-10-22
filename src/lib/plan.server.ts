@@ -1,7 +1,10 @@
 // Which paid plan a person is on, read from their subscription rows.
 // Server only. active and trialing count while the period runs; past_due
 // keeps access while Stripe retries (the subscription.deleted webhook ends it
-// at final failure); a cancelled plan counts until its period ends.
+// at final failure). A plan cancelled to end at the period end stays
+// 'active' (cancel_at_period_end) until then; Stripe only marks it 'canceled'
+// once it has actually ended, so 'canceled' never counts — including an
+// immediate cancel whose old period end is still in the future.
 import { planFromPriceId, type PaidPlan } from './pricing'
 
 export type PlanEnv = 'sandbox' | 'live'
@@ -17,7 +20,6 @@ export function rowIsActive(r: Pick<SubRow, 'status' | 'current_period_end'>, no
   const end = r.current_period_end ? Date.parse(r.current_period_end) : null
   if (r.status === 'past_due') return true
   if (r.status === 'active' || r.status === 'trialing') return end === null || end > now
-  if (r.status === 'canceled') return end !== null && end > now
   return false
 }
 

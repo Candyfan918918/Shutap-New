@@ -36,9 +36,9 @@ export const getMyBillingStatus = createServerFn({ method: 'GET' })
     const endMs = row.current_period_end ? new Date(row.current_period_end as string).getTime() : null
     const withinPeriod = !endMs || endMs > now
     const s = row.status as string
-    const isActive =
-      ((s === 'active' || s === 'trialing' || s === 'past_due') && withinPeriod) ||
-      (s === 'canceled' && !!endMs && endMs > now)
+    // 'canceled' means the plan has ended (Stripe keeps a cancel-at-period-
+    // end plan 'active' until then), whatever the old period end says.
+    const isActive = (s === 'active' || s === 'trialing' || s === 'past_due') && withinPeriod
     return {
       status: s,
       priceId: (row.price_id as string) ?? null,

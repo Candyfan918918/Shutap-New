@@ -324,8 +324,12 @@ async function handleDeleted(sub: any, env: StripeEnv) {
     .eq('environment', env)
     .maybeSingle();
 
+  // Access ends when the subscription ended (an immediate cancel ends it
+  // now, not at the old renewal date).
+  const endedIso = sub.ended_at ? new Date(sub.ended_at * 1000).toISOString() : null
   const { error, count } = await getSupabase().from('subscriptions').update({
     status: 'canceled',
+    ...(endedIso ? { current_period_end: endedIso } : {}),
     updated_at: new Date().toISOString(),
   }, { count: 'exact' }).eq('stripe_subscription_id', sub.id).eq('environment', env);
   if (error) console.error('[stripe webhook] subscriptions update failed on deleted:', error, { subscription_id: sub.id, env });
