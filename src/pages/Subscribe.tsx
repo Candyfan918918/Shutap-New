@@ -128,6 +128,9 @@ export function SubscribePage() {
   // the session so it survives the sign-in round trip before checkout.
   const from = paywallFrom(search.get('from'))
   const [planKey, setPlanKey] = useState<PlanKey>(initialPlan)
+  // A plan already chosen (on the paywall or /pricing) goes straight to
+  // checkout; the two plans only show again on "change plan".
+  const [picking, setPicking] = useState(() => !search.get('plan'))
   const plan = PLANS[planKey]
   const [err, setErr] = useState<string | null>(null)
 
@@ -257,8 +260,12 @@ export function SubscribePage() {
       void trackEvent('checkout_started', { plan: plan.tier, price: plan.priceId, where: from })
       return result.clientSecret
     } catch (e) {
-      const msg = e instanceof Error ? e.message : 'Could not start checkout'
-      setErr(msg)
+      const raw = e instanceof Error ? e.message : 'Could not start checkout'
+      // Stripe setup errors (tax settings, a missing price) mean nothing to a
+      // buyer: say checkout is down, keep the detail in the console.
+      const setup = /tax|head office|price not found|no such price|api key|not configured/i.test(raw)
+      if (setup) console.error('[checkout] setup error', raw)
+      setErr(setup ? "Checkout isn't available right now. Your card wasn't charged. Try again later." : raw)
       throw e
     }
   }
@@ -286,10 +293,14 @@ export function SubscribePage() {
         <div style={fadeUp()}>
           <img src={eyeMascot} alt="" style={{ width: 38, height: 38, marginBottom: 14, display: 'block' }} />
           <h1 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: 30, lineHeight: 1.15, letterSpacing: '-.04em', margin: '0 0 10px', color: INK }}>
-            Pick a plan.
+            {picking ? 'Pick a plan.' : `Shutap ${plan.name}`}
           </h1>
           <p style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.55, color: MUTED, margin: '0 0 22px', maxWidth: '38ch' }}>
-            No watermark on either. Pro adds unlimited bits and the Mirror.
+            {picking
+              ? 'No watermark on either. Pro adds unlimited bits and the Mirror.'
+              : plan.tier === 'pro'
+                ? 'As many bits as you want, no watermark, and the Mirror.'
+                : 'Five new bits a day and no watermark.'}
           </p>
           {cameFromDeck ? (
             <p style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 14, lineHeight: 1.5, color: MUTED, margin: '-10px 0 22px', maxWidth: '38ch' }}>
@@ -337,7 +348,21 @@ export function SubscribePage() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {!picking && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, border: `1px solid ${HAIRLINE}`, borderRadius: 14, padding: '12px 16px', marginBottom: 22, ...fadeUp(0.1) }}>
+                <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 14, fontWeight: 700, color: INK }}>
+                  {plan.name} <span style={{ fontWeight: 500, color: MUTED }}>{usd(plan.amount)}/{plan.interval === 'year' ? 'year' : 'month'}</span>
+                </span>
+                <button
+                  onClick={() => setPicking(true)}
+                  style={{ background: 'transparent', border: 'none', padding: 0, color: ACCENT, fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: 13, cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  change plan
+                </button>
+              </div>
+            )}
             {/* plan cards */}
+            {picking && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24, ...fadeUp(0.1) }}>
               {/* Pro — featured */}
               <div role="button" tabIndex={0} onClick={() => selectPlan('pro')} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') selectPlan('pro') }} style={planCardStyle(planKey === 'pro', true)}>
@@ -370,6 +395,7 @@ export function SubscribePage() {
                 </div>
               </div>
             </div>
+            )}
 
             {/* billing, plainly */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 28, ...fadeUp(0.14) }}>
