@@ -52,6 +52,25 @@ export interface ProductUserRow {
   is_admin: boolean
 }
 
+export interface RetentionPoint {
+  retained: number
+  eligible: number
+  pct: number | null
+  retained_or_later: number
+  pct_or_later: number | null
+}
+export interface RetentionCohort {
+  week_start: string
+  size: number
+  cells: Array<{ retained: number; pct: number } | null>
+}
+export interface RetentionBlock {
+  d1: RetentionPoint
+  d7: RetentionPoint
+  d30: RetentionPoint
+  cohorts: RetentionCohort[]
+}
+
 export interface ProductMetrics {
   generated_at: string
   timezone: string
@@ -112,6 +131,7 @@ export interface ProductMetrics {
     bits_per_active_user_30d: number | null
     median_bits_per_maker: number | null
   }
+  retention: { any: RetentionBlock; made_a_bit: RetentionBlock }
   user_rows: ProductUserRow[]
 }
 
@@ -139,20 +159,29 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
     type Fail = { user_id: string | null; created_at: string }
     type Sub = { user_id: string; status: string; environment: string; cancel_at_period_end: boolean | null }
 
-    const [profiles, bits, versions, events, visits, subs, roles, failures7, posted, fails] = await Promise.all([
+    const [profiles, bits, versions, subs, roles, failures7, posted, fails] = await Promise.all([
       fetchAll<Profile>((f, t) => db.from('profiles')
         .select('user_id, email, full_name, first_name, last_name, provider, signup_at, last_login_at, login_count')
         .eq('is_anonymous', false).order('user_id').range(f, t)),
       fetchAll<Bit>((f, t) => db.from('bits').select('id, user_id, created_at').order('created_at').range(f, t)),
       fetchAll<Version>((f, t) => db.from('bit_versions').select('bit_id, kind, created_at').order('created_at').range(f, t)),
-      fetchAll<Ev>((f, t) => db.from('events').select('user_id, ts').not('user_id', 'is', null).gte('ts', iso(t30)).order('ts').range(f, t)),
-      fetchAll<Visit>((f, t) => db.from('visits').select('user_id, started_at').not('user_id', 'is', null).gte('started_at', iso(t30)).order('started_at').range(f, t)),
       fetchAll<Sub>((f, t) => db.from('subscriptions').select('user_id, status, environment, cancel_at_period_end').order('user_id').range(f, t)),
       fetchAll<{ user_id: string }>((f, t) => db.from('user_roles').select('user_id').eq('role', 'admin').order('user_id').range(f, t)),
       db.from('bit_failures').select('id', { count: 'exact', head: true }).gte('created_at', iso(t7)),
       db.from('rooms').select('id', { count: 'exact', head: true }).not('bit_version_id', 'is', null).eq('hidden', false),
       fetchAll<Fail>((f, t) => db.from('bit_failures').select('user_id, created_at').eq('lab', false).order('created_at').range(f, t)),
     ])
+
+    // Events and visits, all time, for signed-in accounts only (anonymous traffic is far larger and irrelevant here).
+    const personIds = profiles.map((p) => p.user_id)
+    const chunks: string[][] = []
+    for (let i = 0; i < personIds.length; i += 100) chunks.push(personIds.slice(i, i + 100))
+    const [evChunks, visitChunks] = await Promise.all([
+      Promise.all(chunks.map((ids) => fetchAll<Ev>((f, t) => db.from('events').select('user_id, ts').in('user_id', ids).order('ts').range(f, t)))),
+      Promise.all(chunks.map((ids) => fetchAll<Visit>((f, t) => db.from('visits').select('user_id, started_at').in('user_id', ids).order('started_at').range(f, t)))),
+    ])
+    const events = evChunks.flat()
+    const visits = visitChunks.flat()
 
     const adminIds = new Set(roles.map((r) => r.user_id))
     const excludeAdmins = !data.include_admins
@@ -206,6 +235,70 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
     for (const set of activeDays.values()) for (const d of set) if (d in dauByDay) dauByDay[d]++
     const bitsByDay: Record<string, number> = Object.fromEntries(days.map((d) => [d, 0]))
     for (const b of bitsCounted) { const d = dayKey(ts(b.created_at)); if (d in bitsByDay) bitsByDay[d]++ }
+
+    // ---- retention: signup-day cohorts, Pacific calendar days ----
+    const idx = (key: string) => Math.round(Date.UTC(+key.slice(0, 4), +key.slice(5, 7) - 1, +key.slice(8, 10)) / DAY)
+    const keyOfIdx = (i: number) => new Date(i * DAY).toISOString().slice(0, 10)
+    const todayIdx = idx(dayKey(now))
+    const anyDays = new Map<string, Set<number>>()
+    const madeDays = new Map<string, Set<number>>()
+    const mark = (m: Map<string, Set<number>>, uid: string | null | undefined, when: string) => {
+      if (!isPerson(uid)) return
+      let set = m.get(uid)
+      if (!set) { set = new Set(); m.set(uid, set) }
+      set.add(idx(dayKey(ts(when))))
+    }
+    for (const b of bitsCounted) { mark(anyDays, b.user_id, b.created_at); mark(madeDays, b.user_id, b.created_at) }
+    for (const v of rewritesCounted) { const o = bitOwner.get(v.bit_id); mark(anyDays, o, v.created_at); mark(madeDays, o, v.created_at) }
+    for (const e of events) mark(anyDays, e.user_id, e.ts)
+    for (const v of visits) mark(anyDays, v.user_id, v.started_at)
+
+    const signupIdx = new Map<string, number>()
+    for (const p of people) if (p.signup_at) signupIdx.set(p.user_id, idx(dayKey(ts(p.signup_at))))
+    // Monday-start weeks.
+    const weekOf = (i: number) => i - ((new Date(i * DAY).getUTCDay() + 6) % 7)
+    const WEEKS = 9
+
+    const retentionFor = (days: Map<string, Set<number>>): RetentionBlock => {
+      const point = (n: number): RetentionPoint => {
+        let eligible = 0, retained = 0, later = 0
+        for (const [uid, s0] of signupIdx) {
+          if (s0 + n > todayIdx) continue
+          eligible++
+          const set = days.get(uid)
+          if (!set) continue
+          if (set.has(s0 + n)) retained++
+          for (const d of set) if (d >= s0 + n) { later++; break }
+        }
+        return { retained, eligible, pct: pct(retained, eligible), retained_or_later: later, pct_or_later: pct(later, eligible) }
+      }
+      const byWeek = new Map<number, string[]>()
+      for (const [uid, s0] of signupIdx) {
+        const w = weekOf(s0)
+        byWeek.set(w, [...(byWeek.get(w) ?? []), uid])
+      }
+      const thisWeek = weekOf(todayIdx)
+      const cohorts: RetentionCohort[] = [...byWeek.entries()]
+        .sort((a, b) => b[0] - a[0])
+        .slice(0, 12)
+        .map(([w, uids]) => ({
+          week_start: keyOfIdx(w),
+          size: uids.length,
+          cells: Array.from({ length: WEEKS }, (_, k) => {
+            const start = w + k * 7
+            if (start > thisWeek) return null
+            let r = 0
+            for (const uid of uids) {
+              const set = days.get(uid)
+              if (!set) continue
+              for (const d of set) if (d >= start && d < start + 7) { r++; break }
+            }
+            return { retained: r, pct: pct(r, uids.length) ?? 0 }
+          }),
+        }))
+      return { d1: point(1), d7: point(7), d30: point(30), cohorts }
+    }
+    const retention = { any: retentionFor(anyDays), made_a_bit: retentionFor(madeDays) }
 
     // ---- runs: every press of write or rewrite (new bit, rewrite, or a failed attempt) ----
     const today = dayKey(now)
@@ -361,6 +454,7 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
         bits_per_active_user_30d: ratio(bits30Signed, mau),
         median_bits_per_maker: median,
       },
+      retention,
       user_rows: userRows,
     }
   })
