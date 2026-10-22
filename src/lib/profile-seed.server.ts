@@ -13,6 +13,8 @@ function str(v: unknown): string | null {
 }
 
 function nameFromEmail(email: string | null | undefined): string | null {
+  // Apple's "hide my email" relay address is random letters, not a name.
+  if (!email || /privaterelay\.appleid\.com$/i.test(email)) return null
   const local = email?.split('@')[0]?.replace(/[._+-]+/g, ' ').replace(/\d+/g, ' ').trim()
   if (!local) return null
   return local
