@@ -84,7 +84,7 @@ export function ContentPage({
           {capsule}
         </p>
 
-        {tryIt && <TryItBox page={tryIt} position="top" heading="Write your own bit" />}
+        {tryIt && <TryItBox page={tryIt} position="top" />}
 
         {sections.map((s) => (
           <section key={s.heading} style={{ marginBottom: 36 }}>

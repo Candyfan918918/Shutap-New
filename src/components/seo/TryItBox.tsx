@@ -1,40 +1,25 @@
-/* The writer at the bottom of an article or funniest page. A reader types
- * their own story here and lands on the homepage with the bit already being
- * written, instead of reading a link and starting over in an empty box.
- * The box starts empty; the placeholder carries the priming. */
-import { useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-
-const DRAFT_KEY = 'shutap_bit_draft'
-const AUTOSTART_KEY = 'shutap_bit_autostart'
+/* The call to action on guide and funniest pages: a banner that sends the
+ * reader to the homepage writer, with the story box focused.
+ *
+ * Oct 22 2026: this used to be a text box that carried the reader's story
+ * over to the homepage, but the hand-off did not reliably arrive and the box
+ * looked like it did nothing. A plain link always works. */
+import { Link } from '@tanstack/react-router'
 
 export function TryItBox({
   page,
-  heading = 'Try it on your own story',
+  heading = 'Turn your own story into a bit',
   position = 'bottom',
 }: {
   page: string
   heading?: string
-  /** 'top' sits right under the page's opening answer (Oct 22 2026: Google
-   *  visitors write more than anyone, so the box goes where they land). */
+  /** where on the page the banner sits; sent with the click event */
   position?: 'top' | 'bottom'
 }) {
-  const navigate = useNavigate()
-  const [story, setStory] = useState('')
-  const text = story.trim()
-
-  const go = () => {
-    if (!text) return
-    try {
-      sessionStorage.setItem(DRAFT_KEY, text)
-      sessionStorage.setItem(AUTOSTART_KEY, '1')
-    } catch { /* noop */ }
+  const track = () => {
     void import('@/lib/tracking')
-      .then((m) => m.trackEvent('seo_cta_clicked', { page, position, chars: text.length }))
+      .then((m) => m.trackEvent('seo_cta_clicked', { page, position, kind: 'banner' }))
       .catch(() => {})
-    // The story rides on the navigation (history state) so it arrives even
-    // where page storage is blocked; storage above is only a backup.
-    void navigate({ to: '/', state: { shutapStory: text, shutapAutostart: true } as never })
   }
 
   return (
@@ -42,56 +27,41 @@ export function TryItBox({
       aria-label="Write a bit"
       style={{
         margin: position === 'top' ? '0 0 44px' : '8px 0 36px',
-        padding: 20,
+        padding: '20px 22px',
         borderRadius: 18,
         background: '#ffffff',
         border: '1px solid rgba(11,8,15,.10)',
-        display: 'grid',
-        gap: 12,
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 14,
       }}
     >
-      <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#17131a' }}>{heading}</h2>
-      <textarea
-        value={story}
-        onChange={(e) => setStory(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) go()
-        }}
-        rows={position === 'top' ? 3 : 4}
-        maxLength={4000}
-        placeholder="what happened? the meeting, the date, the group chat… tell it like you'd tell a friend"
+      <div style={{ display: 'grid', gap: 4, minWidth: 0, flex: '1 1 220px' }}>
+        <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#17131a', lineHeight: 1.3 }}>{heading}</h2>
+        <p style={{ margin: 0, fontSize: 15, color: '#443c42', lineHeight: 1.45 }}>
+          Write what happened. Get a bit: hook, setup, tags and button.
+        </p>
+      </div>
+      <Link
+        to="/"
+        hash="joke"
+        onClick={track}
         style={{
-          width: '100%',
-          boxSizing: 'border-box',
-          resize: 'vertical',
-          padding: 14,
-          borderRadius: 12,
-          border: '1px solid rgba(11,8,15,.18)',
-          font: 'inherit',
-          fontSize: 16,
-          color: '#17131a',
-          background: '#fff',
-        }}
-      />
-      <button
-        type="button"
-        onClick={go}
-        disabled={!text}
-        style={{
-          justifySelf: 'start',
+          flex: '0 0 auto',
           background: '#b8456b',
           color: '#ffffff',
-          border: 0,
+          textDecoration: 'none',
           fontWeight: 600,
           fontSize: 17,
-          padding: '12px 24px',
+          padding: '12px 22px',
           borderRadius: 999,
-          cursor: text ? 'pointer' : 'default',
-          opacity: text ? 1 : 0.5,
+          whiteSpace: 'nowrap',
         }}
       >
-        write the bit →
-      </button>
+        Create your free joke now →
+      </Link>
     </section>
   )
 }

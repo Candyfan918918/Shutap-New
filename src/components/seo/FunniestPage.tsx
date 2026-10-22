@@ -127,7 +127,7 @@ export function FunniestPage({
           </p>
         </div>
 
-        <TryItBox page={`funniest/${entry.slug}`} position="top" heading="Write your own bit" />
+        <TryItBox page={`funniest/${entry.slug}`} position="top" />
 
         <p style={{ fontSize: 17, margin: '0 0 48px' }}>{entry.capsule}</p>
 
