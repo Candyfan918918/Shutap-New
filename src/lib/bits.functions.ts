@@ -19,7 +19,7 @@ import { hasContactDetails, runScrub } from './agents/scrubber.functions'
 import { runClassifyCrisis } from './agents/guard.functions'
 import { requestAnonId, resolveJokeIdentity, type JokeIdentity } from './jokes/session.server'
 import { heatFor, varyBitDraft, writeBitFromStory, type BitFailure } from './bits/pipeline.server'
-import { capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, today, usageView } from './bits/usage.server'
+import { NO_CAP, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
 import {
   AUDIENCES,
   DEFAULT_CONTROLS,
@@ -271,11 +271,9 @@ async function writeCore(
   }
 
   /** Give the budget back — unless a bit with this id is stored, which means
-   *  another copy of the same press landed and its charge must stand. */
-  const refundIfNotLanded = async () => {
-    const { data: stored } = await supabaseAdmin.from('bits').select('id').eq('id', bitId).maybeSingle()
-    if (!stored) await refundBit(supabaseAdmin, subject, day, bitId)
-  }
+   *  another copy of the same press landed and its charge must stand. One
+   *  statement in the database, so the check can't go stale. */
+  const refundIfNotLanded = () => refundBitUnlessStored(supabaseAdmin, subject, day, bitId)
 
   // After sign-in, this browser's guest bit today counts toward the account.
   await mergeGuestToday(supabaseAdmin, id, anonSessionId, day)
@@ -398,7 +396,16 @@ async function writeCore(
       original = await insertVersion(supabaseAdmin, bitId, 'original', best, controls.heat)
     } catch (e) {
       // A row without its version would read as a blank bit: take it back out.
-      await supabaseAdmin.from('bits').delete().eq('id', bitId).then(() => null, () => null)
+      const { error: delErr } = await supabaseAdmin.from('bits').delete().eq('id', bitId).then(
+        (r: { error: { message: string } | null }) => r,
+        (err: unknown) => ({ error: { message: err instanceof Error ? err.message : String(err) } }),
+      )
+      if (delErr) {
+        // The empty row stays, so the stored-bit check would keep the charge
+        // for nothing: give it back directly.
+        console.error('[bit] could not remove a bit without its version', delErr.message)
+        await refundBit(supabaseAdmin, subject, day, bitId)
+      }
       throw e
     }
     kept = true
@@ -406,7 +413,8 @@ async function writeCore(
     // gave it back in the meantime, this takes it again (a no-op otherwise).
     if (!lab) {
       try {
-        await chargeBit(supabaseAdmin, subject, day, capFor(tier), bitId)
+        // No cap here: the bit is already written, so it always counts.
+        await chargeBit(supabaseAdmin, subject, day, NO_CAP, bitId)
       } catch (e) {
         console.error('[bit] re-charge after store failed', e instanceof Error ? e.message : e)
       }

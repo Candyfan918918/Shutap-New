@@ -458,6 +458,9 @@ export function BitSurface() {
     // that would double the wait; quick failures still get one silent retry.
     const started = performance.now()
     let res: WriteBitResult | null = null
+    // Set when a try ended without an answer (timeout, dropped connection):
+    // that try may still land on the server.
+    let unsure = false
     for (let attempt = 1; attempt <= 2; attempt++) {
       const t0 = performance.now()
       let reason = ''
@@ -473,6 +476,7 @@ export function BitSurface() {
         res = null
         const msg = e instanceof Error ? e.message : String(e)
         reason = msg === 'timeout' ? 'timeout' : `threw: ${msg.slice(0, 120)}`
+        unsure = true
       } finally {
         window.clearTimeout(timer)
       }
@@ -514,7 +518,13 @@ export function BitSurface() {
     }
     if (res.status === 'no_session' || res.status === 'failed') {
       setPhase('write')
-      setError("Couldn't write that one. Try again; it didn't count.")
+      if (unsure) {
+        // An earlier try may still land: same id on the next press.
+        unsureWrite.current = { key, id: writeId }
+        setError("Couldn't write that one. Press write to try again.")
+      } else {
+        setError("Couldn't write that one. Try again; it didn't count.")
+      }
       return
     }
     setTier(res.tier)

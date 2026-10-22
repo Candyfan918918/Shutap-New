@@ -68,6 +68,21 @@ export async function refundBit(admin: any, subjectKey: string, day: string, bit
   }
 }
 
+/** Give one bit back only if no bit with that id is stored — the check and
+ *  the refund are one statement, so a copy of the same press that saved
+ *  keeps its charge. Never throws. */
+export async function refundBitUnlessStored(admin: any, subjectKey: string, day: string, bitId: string): Promise<void> {
+  try {
+    const { error } = await admin.rpc('bit_refund_unless_stored', { p_subject: subjectKey, p_day: day, p_bit: bitId })
+    if (error) console.error('[bits] refund failed', error.message)
+  } catch (e) {
+    console.error('[bits] refund threw', e instanceof Error ? e.message : e)
+  }
+}
+
+/** A stored bit always counts, even past the cap (it's already written). */
+export const NO_CAP = 2147483647
+
 /** After sign-in: this browser's guest bits today count toward the account.
  *  Safe to repeat. Returns the account's count for today. */
 export async function mergeGuestUsage(admin: any, userId: string, anonId: string, day: string): Promise<number> {
