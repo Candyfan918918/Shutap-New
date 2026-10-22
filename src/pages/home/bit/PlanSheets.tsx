@@ -123,7 +123,7 @@ export function PaywallBody({
 }
 
 const UPGRADE_FAIL: Record<string, string> = {
-  plan_cancelling: 'Your Basic plan is set to end. Resume it from your profile first.',
+  plan_cancelling: 'Your Basic plan is set to end. Tap "keep my plan" on your profile first.',
 }
 
 export function UpgradeBody({

@@ -81,6 +81,8 @@ export const createMirrorCheckout = createServerFn({ method: 'POST' })
         line_items: [{ price: stripePrice.id, quantity: 1 }],
         mode: 'subscription',
         ui_mode: 'embedded_page',
+        // Always English, whatever the browser's language.
+        locale: 'en',
         return_url: data.returnUrl,
         customer: customerId,
         // Tax on every checkout, test and live alike, so a test purchase runs
@@ -120,10 +122,61 @@ export const createMirrorPortal = createServerFn({ method: 'POST' })
       const portal = await stripe.billingPortal.sessions.create({
         customer: sub.stripe_customer_id as string,
         return_url: data.returnUrl,
+        locale: 'en',
       });
       return { url: portal.url };
     } catch (error) {
       return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+export type CancelResult = { ok: true; cancelAtPeriodEnd: boolean; currentPeriodEnd: string | null } | { ok: false; error: string };
+
+/** Cancel (or undo cancelling) the person's plan from the site, no Stripe
+ *  page needed. Cancelling stops renewal: the plan runs to the end of the
+ *  period already paid for, then they're on free. No refund is issued here. */
+export const setPlanCancellation = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .inputValidator((data: { environment: StripeEnv; cancel: boolean }) => {
+    if (data?.environment !== 'sandbox' && data?.environment !== 'live') throw new Error('Invalid environment');
+    if (typeof data.cancel !== 'boolean') throw new Error('Invalid request');
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<CancelResult> => {
+    const { userId, supabase } = context;
+    const { data: rows } = await supabase
+      .from('subscriptions')
+      .select('stripe_subscription_id, status, current_period_end')
+      .eq('user_id', userId)
+      .eq('environment', data.environment)
+      .in('status', ['active', 'trialing', 'past_due'])
+      .order('current_period_end', { ascending: false });
+    const live = ((rows ?? []) as { stripe_subscription_id: string; status: string; current_period_end: string | null }[]).filter((r) => rowIsActive(r));
+    if (!live.length) return { ok: false, error: 'no_plan' };
+    try {
+      const stripe = createStripeClient(data.environment);
+      let last: { cancel_at_period_end: boolean; end: string | null } | null = null;
+      // Normally one plan; if there were ever two, each gets the same answer.
+      for (const r of live) {
+        const updated = await stripe.subscriptions.update(r.stripe_subscription_id, { cancel_at_period_end: data.cancel });
+        const item = updated.items.data[0] as (typeof updated.items.data)[number] & { current_period_end?: number };
+        const periodEnd = item?.current_period_end ?? (updated as unknown as { current_period_end?: number }).current_period_end;
+        const end = periodEnd ? new Date(periodEnd * 1000).toISOString() : r.current_period_end;
+        // Record it now so the profile is right on reload; the webhook writes
+        // the same fields again.
+        const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generated types lack this table
+        const { error: upErr } = await (supabaseAdmin as any)
+          .from('subscriptions')
+          .update({ cancel_at_period_end: updated.cancel_at_period_end ?? data.cancel, status: updated.status, current_period_end: end, updated_at: new Date().toISOString() })
+          .eq('stripe_subscription_id', updated.id)
+          .eq('environment', data.environment);
+        if (upErr) console.error('[setPlanCancellation] row update failed; the webhook will record it', upErr.message);
+        last = { cancel_at_period_end: updated.cancel_at_period_end ?? data.cancel, end };
+      }
+      return { ok: true, cancelAtPeriodEnd: last!.cancel_at_period_end, currentPeriodEnd: last!.end };
+    } catch (error) {
+      return { ok: false, error: getStripeErrorMessage(error) };
     }
   });
 

@@ -11,7 +11,7 @@ import { UserAvatar } from '@/components/UserAvatar'
 import { ensureMyProfile, updateMyProfile, setMyAvatar, removeMyAvatar } from '@/lib/alias.functions'
 import { getMyBillingStatus, type BillingStatus } from '@/lib/billing.functions'
 import { planByPriceId, usd } from '@/lib/pricing'
-import { createMirrorPortal } from '@/lib/payments.functions'
+import { createMirrorPortal, setPlanCancellation } from '@/lib/payments.functions'
 import { deleteMyAccount } from '@/lib/account.functions'
 import { getStripeEnvironment } from '@/lib/stripe'
 import { setAlias, signOut as unifiedSignOut } from '@/lib/auth'
@@ -63,6 +63,7 @@ export function ProfilePage() {
   const clearAvatar = useServerFn(removeMyAvatar)
   const fetchBilling = useServerFn(getMyBillingStatus)
   const openPortalFn = useServerFn(createMirrorPortal)
+  const setCancelFn = useServerFn(setPlanCancellation)
   const deleteAccountFn = useServerFn(deleteMyAccount)
 
   const [profile, setProfile] = useState<Profile | null>(null)
@@ -137,6 +138,20 @@ export function ProfilePage() {
     } catch (e) {
       toast(e instanceof Error ? e.message : "couldn't open billing.")
       setPortalBusy(false)
+    }
+  }
+
+  /** Cancel (true) or keep (false) the plan. Returns an error message, or
+   *  null when it worked. */
+  async function changeCancellation(cancel: boolean): Promise<string | null> {
+    try {
+      const r = await setCancelFn({ data: { environment: getStripeEnvironment(), cancel } })
+      if (!r.ok) return r.error === 'no_plan' ? "There's no active plan on this account." : "Couldn't change your plan. Nothing was changed; try again in a minute."
+      setBilling((b) => (b ? { ...b, cancelAtPeriodEnd: r.cancelAtPeriodEnd, currentPeriodEnd: r.currentPeriodEnd ?? b.currentPeriodEnd } : b))
+      toast(cancel ? 'cancelled. no more charges.' : 'your plan will renew.')
+      return null
+    } catch {
+      return "Couldn't change your plan. Nothing was changed; try again in a minute."
     }
   }
 
@@ -219,7 +234,7 @@ export function ProfilePage() {
         {/* plan */}
         <div style={{ marginTop: 28 }}>
           <div style={label}>plan</div>
-          <BillingCard billing={billing} onOpenPortal={openPortal} portalBusy={portalBusy} navigate={navigate} />
+          <BillingCard billing={billing} onOpenPortal={openPortal} portalBusy={portalBusy} navigate={navigate} onCancellation={changeCancellation} />
         </div>
 
         <div style={{ marginTop: 24, display: 'flex', gap: 20, flexWrap: 'wrap' }}>
@@ -288,12 +303,25 @@ function BillingCard({
   onOpenPortal,
   portalBusy,
   navigate,
+  onCancellation,
 }: {
   billing: BillingStatus | undefined
   onOpenPortal: () => void
   portalBusy: boolean
   navigate: (path: string) => void
+  onCancellation: (cancel: boolean) => Promise<string | null>
 }) {
+  const [confirming, setConfirming] = useState(false)
+  const [changing, setChanging] = useState(false)
+  const [changeErr, setChangeErr] = useState<string | null>(null)
+  async function change(cancel: boolean) {
+    setChanging(true)
+    setChangeErr(null)
+    const err = await onCancellation(cancel)
+    setChanging(false)
+    setChangeErr(err)
+    if (!err) setConfirming(false)
+  }
   if (billing === undefined) {
     return <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', color: '#6f666c' }}>loading…</div>
   }
@@ -311,7 +339,7 @@ function BillingCard({
     )
   }
   const end = billing.currentPeriodEnd ? new Date(billing.currentPeriodEnd) : null
-  const endStr = end ? end.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : null
+  const endStr = end ? end.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : null
   const statusLabel =
     billing.status === 'trialing' ? 'trialing'
     : billing.status === 'active' && billing.cancelAtPeriodEnd ? 'canceling'
@@ -340,10 +368,34 @@ function BillingCard({
             : `renews ${endStr}`}
         </div>
       )}
-      <div>
+      {confirming ? (
+        <div style={{ borderTop: '.5px solid rgba(11,8,15,.08)', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ fontFamily: 'Sora,sans-serif', fontSize: 14, color: '#0b080f', lineHeight: 1.5 }}>
+            Cancel {planByPriceId(billing.priceId)?.name ?? 'your plan'}? You won't be charged again.
+            {endStr ? ` You keep it until ${endStr}, then you're on free.` : " You'll be on free when this period ends."}
+          </div>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <button disabled={changing} onClick={() => void change(true)} style={btn('#b8456b')}>{changing ? 'cancelling…' : 'yes, cancel'}</button>
+            <button disabled={changing} onClick={() => { setConfirming(false); setChangeErr(null) }} style={btn('#6f666c')}>keep my plan</button>
+          </div>
+        </div>
+      ) : null}
+      {changeErr && (
+        <div role="alert" style={{ fontFamily: 'Sora,sans-serif', fontSize: 13, color: '#b3261e' }}>{changeErr}</div>
+      )}
+      <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+        {billing.cancelAtPeriodEnd ? (
+          <button onClick={() => void change(false)} disabled={changing} style={wineLink}>
+            {changing ? 'saving…' : 'keep my plan →'}
+          </button>
+        ) : !confirming ? (
+          <button onClick={() => { setConfirming(true); setChangeErr(null) }} style={wineLink}>
+            cancel plan →
+          </button>
+        ) : null}
         {billing.hasCustomer && (
           <button onClick={onOpenPortal} disabled={portalBusy} style={wineLink}>
-            {portalBusy ? 'opening…' : 'manage →'}
+            {portalBusy ? 'opening…' : 'card and receipts →'}
           </button>
         )}
       </div>
