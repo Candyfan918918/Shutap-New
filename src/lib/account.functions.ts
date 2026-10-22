@@ -40,6 +40,9 @@ export const deleteMyAccount = createServerFn({ method: 'POST' })
           }
         }
       }
+      // Uploaded profile pictures are files, not rows: remove them first.
+      const { removeAvatarFiles } = await import('./avatar-files.server')
+      await removeAvatarFiles(userId)
       // Auth Admin delete cascades to every user-owned row through FKs.
       const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
       const { error } = await supabaseAdmin.auth.admin.deleteUser(userId)

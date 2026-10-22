@@ -20,7 +20,12 @@ export const Route = createFileRoute('/bit-lab')({
       throw notFound()
     }
   },
-  component: BitLab,
+  // Session replay hides all text on this page.
+  component: () => (
+    <div data-ph-private style={{ display: 'contents' }}>
+      <BitLab />
+    </div>
+  ),
 })
 
 const SAMPLES = [

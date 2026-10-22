@@ -115,7 +115,7 @@ export function DownloadSheet({
         <div className="bt-dl-prev" aria-live="polite">
           {busy && <span className="bt-note">drawing it…</span>}
           {error && <span className="bt-note" style={{ color: 'var(--rose-ink)' }}>Couldn't draw that one. Try again.</span>}
-          {ready && format !== 'pdf' && <img src={ready.url} alt={`Preview: ${version.hook}`} />}
+          {ready && format !== 'pdf' && <img className="ph-no-capture" src={ready.url} alt="Preview of your bit" />}
           {ready && format === 'pdf' && (
             <div className="bt-dl-pdf">
               <b>script PDF</b>

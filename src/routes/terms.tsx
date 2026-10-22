@@ -78,7 +78,8 @@ function TermsPage() {
       <p>
         Your profile shows the name and picture your Google or Apple sign-in shares, or, if you
         sign in with email, a name made from your email address. You can change both in your
-        profile, and your posts appear under them. We can&rsquo;t promise anonymity against valid
+        profile. New posts appear under your current name; posts you have already made keep the
+        name they were posted under. We can&rsquo;t promise anonymity against valid
         legal process, and we may disclose information when the law
         requires it (see the Privacy Policy). You are responsible for what happens under your
         account.
@@ -105,8 +106,9 @@ function TermsPage() {
       <h3>7. Rooms and public posts</h3>
       <p>
         Rooms are public topic feeds. When you post a joke to a room, anyone can see it under your
-        profile name and picture, and people can like, comment on, save, report and follow. Jokes you don&rsquo;t
-        post stay private. You can delete your posts and comments at any time. We can&rsquo;t
+        profile name and picture, along with the cleaned story behind it on its own page, and
+        people can like, comment on, save, report and follow. Jokes you don&rsquo;t
+        post stay private. You can delete your posts and comments at any time, which also takes down the post&rsquo;s story page. We can&rsquo;t
         recall copies others have already downloaded or shared.
       </p>
 

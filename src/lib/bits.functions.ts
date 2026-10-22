@@ -340,7 +340,7 @@ async function writeCore(
       // candidate, and any gateway error. Enough to see why, nothing to read.
       await supabaseAdmin
         .from('bit_failures')
-        .insert({ user_id: id.userId, controls, rejected: sink.failure?.rejected ?? [], error: sink.failure?.error ?? null, lab, ms: Date.now() - started } as never)
+        .insert({ user_id: id.userId, controls, rejected: (sink.failure?.rejected ?? []).map((r) => ({ rule: r.rule })), error: sink.failure?.error ?? null, lab, ms: Date.now() - started } as never)
         .then(() => null, () => null)
       if (!lab) {
         const { alertBitFailure } = await import('./bits/alert.server')
@@ -375,7 +375,7 @@ async function writeCore(
       writer_model: written.writerModel,
       judge_model: written.judgeModel,
       judge_why: written.judgeWhy,
-      timings: { ...timings, lab, rejected: written.rejected, attempts: written.attempts },
+      timings: { ...timings, lab, rejected: written.rejected.map((r) => r.rule), attempts: written.attempts },
     } as never)
     if (error) {
       // Two copies of the same press raced and the other one saved first:
@@ -430,7 +430,7 @@ async function writeCore(
       tier,
       lab,
       candidates: written.ranked.length,
-      rejected: written.rejected,
+      rejected: written.rejected.map((r) => r.rule),
       attempts: written.attempts,
       timings,
     })

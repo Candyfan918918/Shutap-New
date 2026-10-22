@@ -323,6 +323,8 @@ export const deletePost = createServerFn({ method: 'POST' })
     const uid = await mustMe()
     const db = await admin()
     await db.from('rooms').update({ hidden: true }).eq('id', data.room_id).eq('author_id', uid)
+    // The post's story page (/story/...) comes down with it.
+    await db.from('situations').update({ is_public: false, deleted_at: new Date().toISOString() } as never).eq('room_id', data.room_id).eq('alias_id', uid)
     await db.from('joke_cards').update({ room_id: null }).eq('room_id', data.room_id).eq('user_id', uid)
     return { ok: true }
   })
@@ -357,7 +359,10 @@ export const reportPost = createServerFn({ method: 'POST' })
         .is('comment_id', null)
         .is('resolved_at', null)
       const people = new Set((rs ?? []).map((r: any) => r.reporter_id ?? Math.random()))
-      if (people.size >= HIDE_AT_REPORTS) await db.from('rooms').update({ hidden: true }).eq('id', data.room_id)
+      if (people.size >= HIDE_AT_REPORTS) {
+        await db.from('rooms').update({ hidden: true }).eq('id', data.room_id)
+        await db.from('situations').update({ is_public: false } as never).eq('room_id', data.room_id)
+      }
     }
     return { ok: true }
   })

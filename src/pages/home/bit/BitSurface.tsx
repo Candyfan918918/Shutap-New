@@ -688,7 +688,7 @@ export function BitSurface() {
         {phase === 'writing' && (
           <div className="bt-card" style={{ display: 'flex', flexDirection: 'column', gap: 18, padding: 22, marginTop: 'clamp(8px, 4vh, 40px)' }}>
             <span className="bt-lbl r">writing your bit</span>
-            <p style={{ margin: 0, fontFamily: 'var(--news)', fontSize: 'var(--fs-body)', lineHeight: 1.45, color: 'var(--muted)', whiteSpace: 'pre-wrap' }}>
+            <p data-ph-private style={{ margin: 0, fontFamily: 'var(--news)', fontSize: 'var(--fs-body)', lineHeight: 1.45, color: 'var(--muted)', whiteSpace: 'pre-wrap' }}>
               {story.trim().slice(0, 600)}
             </p>
             <div className="bt-steps" aria-live="polite">

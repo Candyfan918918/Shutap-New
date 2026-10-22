@@ -157,7 +157,7 @@ function PreferencesRoute() {
               margin: '0 0 28px',
             }}
           >
-            for {state.email}
+            <span data-ph-private>for {state.email}</span>
           </p>
         ) : (
           <p

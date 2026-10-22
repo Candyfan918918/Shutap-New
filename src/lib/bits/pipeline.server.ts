@@ -413,7 +413,7 @@ export async function writeBitFromStory(
   const passing = sorted.ok.length ? sorted.ok : [...sorted.craftOnly].sort((a, b) => bitWords(a) - bitWords(b))
   if (!passing.length) {
     const error = race.attempts.map((a) => `${a.leg}:${a.model}:${a.ms}ms:${a.error ?? (a.usable ? 'ok' : `${a.bits} bits, none usable`)}`).join(' | ') || pass.error || null
-    console.warn('[bit] no usable bit', { rejected, attempts: race.attempts })
+    console.warn('[bit] no usable bit', { rejected: rejected.map((r) => r.rule), attempts: race.attempts })
     if (sink) sink.failure = { rejected, error, attempts: race.attempts }
     return null
   }

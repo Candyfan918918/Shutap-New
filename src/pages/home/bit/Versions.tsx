@@ -126,7 +126,7 @@ export function Versions({
       </section>
 
       {bit.alt_tags.length > 0 && (
-        <section style={{ display: 'flex', flexDirection: 'column', gap: 8 }} aria-label="Spare tags">
+        <section data-ph-private style={{ display: 'flex', flexDirection: 'column', gap: 8 }} aria-label="Spare tags">
           <span className="bt-lbl">{bit.alt_tags.length} more tags · tap to swap into tag 1</span>
           {bit.alt_tags.map((t, i) => (
             <button

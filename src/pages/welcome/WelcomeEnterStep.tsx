@@ -88,9 +88,11 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
     <div className="wstep" style={{ display: 'flex', flexDirection: 'column', gap: 24, textAlign: 'center' }}>
       <EyeMark />
       <div>
-        <Words as="div" key={displayName} style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 26, color: '#e2dde0', marginBottom: 10 }}>
-          welcome, {displayName}
-        </Words>
+        <div data-ph-private>
+          <Words as="div" key={displayName} style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 26, color: '#e2dde0', marginBottom: 10 }}>
+            welcome, {displayName}
+          </Words>
+        </div>
         <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 16, lineHeight: 1.6, color: SOFT, maxWidth: '34ch', margin: '0 auto' }}>
           you're in. your jokes are saved to your set list.
         </div>

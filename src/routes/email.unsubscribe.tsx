@@ -118,7 +118,7 @@ function UnsubscribeRoute() {
             </p>
             {state.email ? (
               <p style={{ color: '#6f666c', fontSize: 12.5, margin: '0 0 26px' }}>
-                for {state.email}
+                <span data-ph-private>for {state.email}</span>
               </p>
             ) : null}
             <Link

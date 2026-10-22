@@ -119,6 +119,8 @@ export const setMyAvatar = createServerFn({ method: 'POST' })
     const up = await supabaseAdmin.storage.from('avatars').upload(path, bytes, { contentType: `image/${type}`, upsert: true })
     if (up.error) throw new Error(up.error.message)
     const url = supabaseAdmin.storage.from('avatars').getPublicUrl(path).data.publicUrl
+    const { removeAvatarFiles } = await import('./avatar-files.server')
+    await removeAvatarFiles(context.userId, path)
     const { data: saved, error } = await supabaseAdmin
       .from('aliases')
       .update({ avatar_url: url } as never)
@@ -140,6 +142,8 @@ export const removeMyAvatar = createServerFn({ method: 'POST' })
       .select(PROFILE_COLS)
       .maybeSingle()
     if (error) throw new Error(error.message)
+    const { removeAvatarFiles } = await import('./avatar-files.server')
+    await removeAvatarFiles(context.userId)
     return saved as { user_id: string; display_name: string; emoji: string; avatar_url: string | null } | null
   })
 
