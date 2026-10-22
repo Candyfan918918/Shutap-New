@@ -129,7 +129,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             price: "0",
             priceCurrency: "USD",
             description:
-              "Free to use. Shutap+ is $7.99/month or $49.99/year.",
+              "Free to use. Basic is $1.99/month; Pro is $7.99/month.",
           },
         }),
       },

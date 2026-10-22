@@ -58,8 +58,8 @@ function GuidelinesPage() {
           <li>No spam, impersonation or scraping.</li>
           <li>Nothing illegal.</li>
           <li>
-            Five stories a day is the limit for everyone. Don&rsquo;t make extra accounts to get
-            around it.
+            Each plan has a daily limit on new bits. Don&rsquo;t make extra accounts or clear your
+            browser to get around it.
           </li>
           <li>
             See something that breaks these rules? <b>Report it.</b> When three different people

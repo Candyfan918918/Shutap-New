@@ -41,6 +41,7 @@ import { Prompter } from './Prompter'
 import { SceneView, ScreenplayView } from './Layouts'
 import { DownloadSheet } from './DownloadSheet'
 import { PostSheet } from './PostSheet'
+import { PaywallBody, UpgradeBody, type PaywallWhere } from './PlanSheets'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
@@ -147,28 +148,6 @@ async function hasRealSession(tries = 1): Promise<boolean> {
   return false
 }
 
-function resetLabel(iso: string | undefined): string {
-  const t = iso ? Date.parse(iso) : NaN
-  if (!Number.isFinite(t)) return 'tomorrow'
-  const d = new Date(t)
-  const time = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
-  return d.toDateString() === new Date().toDateString() ? `at ${time}` : `tomorrow at ${time}`
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
 
 export function BitSurface() {
@@ -193,8 +172,10 @@ export function BitSurface() {
   const [bit, setBit] = useState<ShownBit | null>(null)
   const [notice, setNotice] = useState<Notice | null>(null)
   /** signin: a feature that needs an account · signin_write: a guest's
-   *  second bit · limit: the day's bits are used · fair: Pro's fair-use cap */
-  const [sheet, setSheet] = useState<null | 'signin' | 'signin_write' | 'limit' | 'rate' | 'fair'>(null)
+   *  second bit · paywall: Basic and Pro (free at its limit, or removing the
+   *  watermark) · upgrade: Basic at its limit · fair: Pro's fair-use cap */
+  const [sheet, setSheet] = useState<null | 'signin' | 'signin_write' | 'paywall' | 'upgrade' | 'rate' | 'fair'>(null)
+  const [paywallWhere, setPaywallWhere] = useState<PaywallWhere>('bit_3')
   const [error, setError] = useState<string | null>(null)
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
@@ -412,7 +393,23 @@ export function BitSurface() {
       jokeTrack('signin_sheet_opened', t, { from: 'bit_2' })
       return
     }
-    setSheet(t === 'pro' ? 'fair' : 'limit')
+    if (t === 'pro') return setSheet('fair')
+    if (t === 'basic') return openPaywall('daily_limit')
+    openPaywall('bit_3')
+  }
+
+  /** The plans. 'daily_limit' is a Basic account at its limit: the Pro
+   *  upgrade on the same subscription rather than a second checkout. */
+  function openPaywall(where: PaywallWhere) {
+    setPaywallWhere(where)
+    setSheet(where === 'daily_limit' ? 'upgrade' : 'paywall')
+    jokeTrack('paywall_opened', tier, { where })
+  }
+
+  async function onUpgraded() {
+    setSheet(null)
+    await refresh()
+    say("You're on Pro. Write as many as you want.")
   }
 
   type WriteOpts = { text?: string; controls?: BitControls; writeId?: string; fromSignIn?: boolean }
@@ -865,7 +862,14 @@ export function BitSurface() {
       )}
 
       {downloadOpen && bit && version && (
-        <DownloadSheet bitId={bit.id} version={version} tier={tier} onClose={() => setDownloadOpen(false)} say={say} />
+        <DownloadSheet bitId={bit.id} version={version} tier={tier}
+          onClose={() => setDownloadOpen(false)}
+          onUpgrade={() => {
+            setDownloadOpen(false)
+            openPaywall('download')
+          }}
+          say={say}
+        />
       )}
 
       {prompter && <Prompter bit={prompter} onClose={() => setPrompter(null)} />}
@@ -906,17 +910,14 @@ export function BitSurface() {
                 <p className="bt-note" style={{ textAlign: 'center' }}>by continuing you confirm you're 18+ and agree to the terms and privacy policy</p>
               </>
             )}
-            {sheet === 'limit' && (
-              <>
-                <h3 id="bit-sheet-title">That's {WORDS[usage?.cap ?? 0] ?? usage?.cap} for today.</h3>
-                <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  Resets {resetLabel(usage?.resets_at)}. Your story stays in the box.
-                </p>
-                <button className="bt-btn block" onClick={() => setSheet(null)}>
-                  ok
-                </button>
-              </>
+            {sheet === 'paywall' && (
+              <PaywallBody
+                where={paywallWhere}
+                onPick={(plan) => jokeTrack('plan_picked', tier, { plan, where: paywallWhere })}
+                onClose={() => setSheet(null)}
+              />
             )}
+            {sheet === 'upgrade' && <UpgradeBody onUpgraded={() => void onUpgraded()} onClose={() => setSheet(null)} />}
             {sheet === 'fair' && (
               <>
                 <h3 id="bit-sheet-title">That's a lot of bits for one day.</h3>

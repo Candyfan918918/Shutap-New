@@ -6,7 +6,7 @@ import { SITE_URL } from '@/lib/site'
 const URL = `${SITE_URL}/terms`
 const TITLE = "Terms of Service — Shutap AI Joke Generator"
 const DESCRIPTION =
-  "Terms for using Shutap, the AI joke generator for content creators and comedians: using the jokes you generate, posting to rooms, house rules, Shutap+ billing, AI output and liability."
+  "Terms for using Shutap, the AI joke generator for content creators and comedians: using the jokes you generate, posting to rooms, house rules, Basic and Pro billing, AI output and liability."
 
 export const Route = createFileRoute('/terms')({
   head: () => ({
@@ -150,24 +150,28 @@ function TermsPage() {
 
       <h3 id="plans">12. Free use and daily limits</h3>
       <p>
-        Everyone gets <b>five stories a day</b>. A guest sees one joke from each set. Signing in is
-        free and shows all three, keeps them in your set list, and lets you download, share and
-        post them. Free downloads carry a small watermark.
+        A guest can write <b>one new bit a day</b> without an account. Signing in is free and allows
+        <b>two new bits a day</b> in total, counting any bit written as a guest that day. Basic allows
+        five a day; Pro has no daily number, within fair use. Rewrites of a bit you already have do
+        not count. Signing in keeps your bits in your set list and lets you post them. Free and
+        guest downloads carry a Shutap watermark.
       </p>
       <p>
-        Limits reset once a day in the timezone on your account (UTC for guests). Limits are a cost
+        Limits reset at midnight Pacific time (Los Angeles) for everyone. Limits are a cost
         control, not a promise. We may change, reduce or pause them, add rate limits, and refuse
         to write a set for anything our safety checks flag.
       </p>
 
-      <h3 id="refunds">13. Shutap+, billing and refunds</h3>
+      <h3 id="refunds">13. Paid plans, billing and refunds</h3>
       <p>
-        Shutap+ costs <b>US$7.99 per month or US$49.99 per year</b>, plus any taxes, billed through
-        Stripe. It removes the watermark from downloads and adds the Mirror. It does not add more
-        jokes or stories: five a day is the limit on every plan.
+        <b>Basic</b> costs <b>US$1.99 per month</b> and allows five new bits a day with no watermark
+        on downloads. <b>Pro</b> costs <b>US$7.99 per month</b> (or US$49.99 per year where offered)
+        and allows unlimited new bits within fair use, no watermark, and the Mirror. Prices are plus
+        any taxes, billed through Stripe. Moving from Basic to Pro charges the prorated difference
+        for the current period at the time you switch.
       </p>
       <p>
-        <b>There is no free trial. You are charged when you subscribe.</b> Shutap+ renews
+        <b>There is no free trial. You are charged when you subscribe.</b> A paid plan renews
         automatically each period at the price shown at checkout until you cancel. You can cancel
         anytime. You keep access until the end of the paid period, then return to the free plan.
         Your set list stays. <b>Payments already made are not refunded</b>, except where the law

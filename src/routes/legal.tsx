@@ -14,7 +14,7 @@ const ITEMS: Item[] = [
   {
     href: "/how-it-works",
     label: "How it works",
-    sub: "write your story, get the bit: teleprompter, scene, screenplay page. what\u2019s free and what Shutap+ adds.",
+    sub: "write your story, get the bit: teleprompter, scene, screenplay page. what\u2019s free and what Basic and Pro add.",
   },
   {
     href: "/faq",
@@ -24,7 +24,7 @@ const ITEMS: Item[] = [
   {
     href: "/terms",
     label: "Terms of Service",
-    sub: "what shutap is and isn\u2019t, limits, Shutap+, your posts, house rules, AI output, billing. 18+.",
+    sub: "what shutap is and isn\u2019t, limits, Basic and Pro, your posts, house rules, AI output, billing. 18+.",
   },
   {
     href: "/privacy",

@@ -3,10 +3,10 @@ import { useNavigate, useSearchParams } from '@/compat/router'
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js'
 import { useServerFn } from '@tanstack/react-start'
 import { getStripe, getStripeEnvironment } from '@/lib/stripe'
-import { createMirrorCheckout, createMirrorPortal } from '@/lib/payments.functions'
+import { changePlanToPro, createMirrorCheckout, createMirrorPortal } from '@/lib/payments.functions'
 import { trackEvent } from '@/lib/tracking'
 import { getMyBillingStatus, type BillingStatus } from '@/lib/billing.functions'
-import { PLAN_TO_PRICE, usd, type PlanKey } from '@/lib/pricing'
+import { PLANS, PLAN_LINES, planByPriceId, planKeyFromParam, usd, type PlanKey } from '@/lib/pricing'
 import { supabase } from '@/integrations/supabase/client'
 import { useNoIndex } from '@/components/NoIndex'
 import { setDurableReturn } from '@/lib/auth-guard'
@@ -15,15 +15,10 @@ import { readJokePending } from './home/joke/jokeClient'
 import eyeMascot from '@/assets/eye-mascot.svg'
 import stripeWordmark from '@/assets/stripe-wordmark.svg'
 
-// Single source of truth for mirror pricing. Every dollar figure on this page
-// and on /subscribe/return is computed from these amounts — never hardcoded
-// in JSX. Amounts are the pre-tax list prices; Stripe adds location-based tax
-// inside the embedded checkout (automatic_tax is enabled server-side).
-// The amounts themselves live in @/lib/pricing so the upgrade sheet on the
-// joke surface quotes the same number this page charges.
-const MONTHLY_TIMES_TWELVE = PLAN_TO_PRICE.monthly.amount * 12
-const ANNUAL_PER_MONTH = PLAN_TO_PRICE.annual.amount / 12
-const ANNUAL_SAVINGS_PCT = Math.round((1 - PLAN_TO_PRICE.annual.amount / MONTHLY_TIMES_TWELVE) * 100)
+// Every dollar figure on this page and on /subscribe/return comes from
+// @/lib/pricing — never hardcoded in JSX — so the paywall on the writer quotes
+// the same number this page charges. Amounts are pre-tax list prices; Stripe
+// adds location-based tax inside the embedded checkout.
 
 // Light homepage theme tokens.
 const INK = '#100c14'
@@ -78,9 +73,9 @@ function TopBar({ onBack }: { onBack: () => void }) {
   )
 }
 
-/** Annual is the plan the page leads with. It carries the tinted ground and
- *  the stronger frame whether or not it is the one currently picked, so the
- *  hierarchy reads before anyone clicks; selecting monthly outlines monthly
+/** Pro is the plan the page leads with. It carries the tinted ground and the
+ *  stronger frame whether or not it is the one currently picked, so the
+ *  hierarchy reads before anyone clicks; selecting Basic outlines Basic
  *  without ever making it look like the headline option. */
 function planCardStyle(selected: boolean, featured = false): CSSProperties {
   const border = selected
@@ -106,18 +101,22 @@ export function SubscribePage() {
   useNoIndex()
   const [search] = useSearchParams()
   const navigate = useNavigate()
-  const initialPlan = (search.get('plan') === 'monthly' ? 'monthly' : 'annual') as PlanKey
+  const initialPlan = planKeyFromParam(search.get('plan'))
   const [planKey, setPlanKey] = useState<PlanKey>(initialPlan)
-  const plan = PLAN_TO_PRICE[planKey]
+  const plan = PLANS[planKey]
   const [err, setErr] = useState<string | null>(null)
 
   const [authed, setAuthed] = useState<boolean | null>(null)
   const [checked, setChecked] = useState(false)
   const [alreadySubbed, setAlreadySubbed] = useState(false)
+  /** the plan they're already on, when they are */
+  const [currentPlan, setCurrentPlan] = useState<'basic' | 'pro' | null>(null)
   const [portalBusy, setPortalBusy] = useState(false)
+  const [upgradeBusy, setUpgradeBusy] = useState(false)
 
   const fetchStatus = useServerFn(getMyBillingStatus)
   const openPortalFn = useServerFn(createMirrorPortal)
+  const changePlanFn = useServerFn(changePlanToPro)
 
   useEffect(() => {
     // A background ANONYMOUS session is not a real account: treat it as
@@ -165,7 +164,12 @@ export function SubscribePage() {
       try {
         const s = await fetchStatus({ data: { environment: getStripeEnvironment() } })
         if (done) return
-        if (s?.isActive) setAlreadySubbed(true)
+        // A cancelled plan still inside its paid period isn't "already
+        // subscribed": it won't renew, so checkout stays open.
+        if (s?.isActive && s.status !== 'canceled') {
+          setAlreadySubbed(true)
+          setCurrentPlan(planByPriceId(s.priceId)?.tier ?? 'basic')
+        }
       } catch { /* treat as not subscribed */ }
       finally { if (!done) setChecked(true) }
     })()
@@ -186,16 +190,44 @@ export function SubscribePage() {
     }
   }
 
+  async function upgradeToPro() {
+    setUpgradeBusy(true)
+    setErr(null)
+    try {
+      const r = await changePlanFn({ data: { environment: getStripeEnvironment() } })
+      if (!r.ok && r.error === 'no_basic_plan') {
+        // Nothing to move from: open a normal Pro checkout instead.
+        setAlreadySubbed(false)
+        setPlanKey('pro')
+        return
+      }
+      if (!r.ok) throw new Error(r.error === 'plan_cancelling' ? 'Your Basic plan is set to end. Resume it from billing first.' : "Couldn't switch you to Pro. You're still on Basic.")
+      setCurrentPlan('pro')
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Couldn't switch you to Pro.")
+    } finally {
+      setUpgradeBusy(false)
+    }
+  }
+
   const fetchClientSecret = async (): Promise<string> => {
     try {
       const result = await createMirrorCheckout({
         data: {
-          priceId: plan.id,
+          priceId: plan.priceId,
           environment: getStripeEnvironment(),
           returnUrl: `${window.location.origin}/subscribe/return?session_id={CHECKOUT_SESSION_ID}`,
         },
       })
-      if ('error' in result) throw new Error(result.error)
+      if ('error' in result) {
+        // One subscription per person: show the plan they're on instead.
+        if (result.error === 'already_subscribed') {
+          const s = await fetchStatus({ data: { environment: getStripeEnvironment() } }).catch(() => null)
+          setCurrentPlan(planByPriceId(s?.priceId)?.tier ?? 'basic')
+          setAlreadySubbed(true)
+        }
+        throw new Error(result.error === 'already_subscribed' ? "You're already on a plan." : result.error)
+      }
       if (!result.clientSecret) throw new Error('No client secret returned')
       void trackEvent('checkout', { plan: planKey })
       return result.clientSecret
@@ -229,10 +261,10 @@ export function SubscribePage() {
         <div style={fadeUp()}>
           <img src={eyeMascot} alt="" style={{ width: 38, height: 38, marginBottom: 14, display: 'block' }} />
           <h1 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: 30, lineHeight: 1.15, letterSpacing: '-.04em', margin: '0 0 10px', color: INK }}>
-            Shutap+
+            Pick a plan.
           </h1>
           <p style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.55, color: MUTED, margin: '0 0 22px', maxWidth: '38ch' }}>
-            No watermark. Plus the Mirror.
+            No watermark on either. Pro adds unlimited bits and the Mirror.
           </p>
           {cameFromDeck ? (
             <p style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 14, lineHeight: 1.5, color: MUTED, margin: '-10px 0 22px', maxWidth: '38ch' }}>
@@ -241,30 +273,27 @@ export function SubscribePage() {
           ) : null}
         </div>
 
-        {/* what opens */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 28, ...fadeUp(0.06) }}>
-          {[
-            'no watermark on downloads',
-            'the Mirror: what keeps coming up in your jokes',
-            'same five stories a day as everyone'
-          ].map((line) => (
-            <div key={line} style={{ display: 'flex', alignItems: 'baseline', gap: 11 }}>
-              <span style={{ width: 6, height: 6, borderRadius: 999, background: ACCENT, flex: 'none', transform: 'translateY(-2px)' }} />
-              <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 13.5, fontWeight: 600, color: INK }}>{line}</span>
-            </div>
-          ))}
-        </div>
-
         {alreadySubbed ? (
           /* already subscribed */
           <div style={{ background: '#ffffff', border: '1px solid rgba(20,20,20,.10)', borderRadius: 18, padding: 22, display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0 10px 32px rgba(23,19,26,.08)', ...fadeUp(0.1) }}>
             <div style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 19, lineHeight: 1.4, color: INK }}>
-              you're already subscribed.
+              {currentPlan === 'pro' ? "you're on Pro." : "you're on Basic."}
             </div>
             <div style={{ color: MUTED, fontSize: 14, lineHeight: 1.55 }}>
-              manage your plan, update your payment method, or cancel from the billing portal.
+              {currentPlan === 'pro'
+                ? 'manage your plan, update your payment method, or cancel from the billing portal.'
+                : `Pro is ${usd(PLANS.pro.amount)}/mo: unlimited bits and the Mirror. the difference for this month is charged now.`}
             </div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              {currentPlan !== 'pro' && (
+                <button
+                  onClick={() => void upgradeToPro()}
+                  disabled={upgradeBusy}
+                  style={{ background: DEEP_ACCENT, color: '#fff', border: 'none', borderRadius: 999, padding: '11px 20px', fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
+                >
+                  {upgradeBusy ? 'switching…' : `go Pro · ${usd(PLANS.pro.amount)}/mo`}
+                </button>
+              )}
               <button
                 onClick={openPortal}
                 disabled={portalBusy}
@@ -273,10 +302,10 @@ export function SubscribePage() {
                 {portalBusy ? 'opening…' : 'manage billing →'}
               </button>
               <button
-                onClick={() => navigate('/mirror')}
+                onClick={() => navigate(currentPlan === 'pro' ? '/mirror' : '/')}
                 style={{ background: 'transparent', color: MUTED, border: '1px solid rgba(20,20,20,.18)', borderRadius: 999, padding: '11px 20px', fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 12.5, cursor: 'pointer' }}
               >
-                go to mirror →
+                {currentPlan === 'pro' ? 'go to the mirror →' : 'write a bit →'}
               </button>
             </div>
             {err && <div style={{ color: DEEP_ACCENT, fontSize: 13 }}>{err}</div>}
@@ -285,35 +314,34 @@ export function SubscribePage() {
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {/* plan cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24, ...fadeUp(0.1) }}>
-              {/* annual — featured */}
-              <div role="button" tabIndex={0} onClick={() => selectPlan('annual')} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') selectPlan('annual') }} style={planCardStyle(planKey === 'annual', true)}>
+              {/* Pro — featured */}
+              <div role="button" tabIndex={0} onClick={() => selectPlan('pro')} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') selectPlan('pro') }} style={planCardStyle(planKey === 'pro', true)}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: 14.5, color: INK }}>{PLAN_TO_PRICE.annual.label}</span>
+                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: 14.5, color: INK }}>{PLANS.pro.name}</span>
                   <span style={{ fontFamily: 'Sora, sans-serif', fontSize: 9.5, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: '#fff', background: DEEP_ACCENT, borderRadius: 999, padding: '4px 10px' }}>
-                    best value · save {ANNUAL_SAVINGS_PCT}%
+                    best deal
                   </span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6 }}>
-                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: 30, lineHeight: 1, color: INK }}>{usd(PLAN_TO_PRICE.annual.amount)}</span>
-                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 400, fontSize: 14, color: MUTED }}>/year</span>
-                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 14, color: '#afafaf', textDecoration: 'line-through' }}>{usd(MONTHLY_TIMES_TWELVE)}</span>
-                </div>
-                <div style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 13.5, color: MUTED }}>
-                  {usd(ANNUAL_PER_MONTH)}/mo
-                </div>
-              </div>
-
-              {/* monthly */}
-              <div role="button" tabIndex={0} onClick={() => selectPlan('monthly')} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') selectPlan('monthly') }} style={planCardStyle(planKey === 'monthly')}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: 14.5, color: INK }}>{PLAN_TO_PRICE.monthly.label}</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6 }}>
-                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: 24, lineHeight: 1, color: INK }}>{usd(PLAN_TO_PRICE.monthly.amount)}</span>
+                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: 30, lineHeight: 1, color: INK }}>{usd(PLANS.pro.amount)}</span>
                   <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 400, fontSize: 14, color: MUTED }}>/month</span>
                 </div>
                 <div style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 13.5, color: MUTED }}>
-                  cancel anytime
+                  {PLAN_LINES.pro.join(' · ')}
+                </div>
+              </div>
+
+              {/* Basic */}
+              <div role="button" tabIndex={0} onClick={() => selectPlan('basic')} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') selectPlan('basic') }} style={planCardStyle(planKey === 'basic')}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: 14.5, color: INK }}>{PLANS.basic.name}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6 }}>
+                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: 24, lineHeight: 1, color: INK }}>{usd(PLANS.basic.amount)}</span>
+                  <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 400, fontSize: 14, color: MUTED }}>/month</span>
+                </div>
+                <div style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 13.5, color: MUTED }}>
+                  {PLAN_LINES.basic.join(' · ')}
                 </div>
               </div>
             </div>
@@ -365,7 +393,7 @@ export function SubscribePage() {
                 </div>
               ) : (
                 <div style={{ background: '#ffffff', border: '1px solid rgba(20,20,20,.08)', borderRadius: 16, padding: '20px 18px', boxShadow: '0 14px 44px rgba(23,19,26,.10)' }}>
-                  <EmbeddedCheckoutProvider key={plan.id} stripe={getStripe()} options={{ fetchClientSecret }}>
+                  <EmbeddedCheckoutProvider key={plan.priceId} stripe={getStripe()} options={{ fetchClientSecret }}>
                     <EmbeddedCheckout />
                   </EmbeddedCheckoutProvider>
                 </div>
@@ -452,12 +480,11 @@ export function SubscribeReturnPage() {
   }
 
   // All summary values come from the real billing status row — never hardcoded.
-  const planEntry = billing?.priceId
-    ? Object.values(PLAN_TO_PRICE).find((p) => p.id === billing.priceId) ?? null
-    : null
+  const planEntry = planByPriceId(billing?.priceId)
   const planLine = planEntry
-    ? `${planEntry.label} · ${usd(planEntry.amount)}/${planEntry.interval === 'year' ? 'yr' : 'mo'}`
+    ? `${planEntry.name} · ${usd(planEntry.amount)}/${planEntry.interval === 'year' ? 'yr' : 'mo'}`
     : billing?.priceId ?? null
+  const isPro = planEntry?.tier === 'pro'
   const periodEndDate = billing?.currentPeriodEnd
     ? new Date(billing.currentPeriodEnd)
         .toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
@@ -465,14 +492,12 @@ export function SubscribeReturnPage() {
     : null
   const trialing = billing?.status === 'trialing'
 
-  const title = state === 'ok' ? 'the mirror is open.'
+  const title = state === 'ok' ? (isPro ? "you're on Pro." : "you're on Basic.")
     : state === 'checking' ? 'confirming your subscription…'
     : state === 'incomplete' ? 'we couldn\'t confirm your subscription yet.'
     : 'no checkout session found.'
   const body = state === 'ok'
-    ? (trialing
-        ? 'your trial is running — the whole portrait is yours.'
-        : 'your subscription is active — the whole portrait is yours.')
+    ? (isPro ? 'unlimited bits, no watermark, and the Mirror.' : 'five new bits a day, no watermark.')
     : state === 'checking' ? 'one moment while stripe finalizes.'
     : state === 'incomplete' ? 'if you completed payment, it should appear on your profile within a minute. otherwise, try again.'
     : 'try starting checkout again.'
@@ -526,11 +551,19 @@ export function SubscribeReturnPage() {
 
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 18 }}>
               <button
-                onClick={() => navigate('/mirror')}
+                onClick={() => navigate('/')}
                 style={{ background: ACCENT, color: '#fff', border: 'none', borderRadius: 999, padding: '12px 22px', fontFamily: 'Sora, sans-serif', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
               >
-                go to the mirror →
+                write a bit →
               </button>
+              {isPro && (
+                <button
+                  onClick={() => navigate('/mirror')}
+                  style={{ background: 'transparent', color: MUTED, border: '1px solid rgba(20,20,20,.18)', borderRadius: 999, padding: '12px 22px', fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
+                >
+                  go to the mirror →
+                </button>
+              )}
               <button
                 onClick={openPortal}
                 disabled={portalBusy}

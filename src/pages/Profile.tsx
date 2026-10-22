@@ -10,6 +10,7 @@ import { useToast } from '../components/Toast'
 import { UserAvatar } from '@/components/UserAvatar'
 import { ensureMyProfile, updateMyProfile, setMyAvatar, removeMyAvatar } from '@/lib/alias.functions'
 import { getMyBillingStatus, type BillingStatus } from '@/lib/billing.functions'
+import { planByPriceId, usd } from '@/lib/pricing'
 import { createMirrorPortal } from '@/lib/payments.functions'
 import { deleteMyAccount } from '@/lib/account.functions'
 import { getStripeEnvironment } from '@/lib/stripe'
@@ -277,8 +278,8 @@ function btn(color: string): React.CSSProperties {
 }
 
 function planLabelFor(priceId: string | null): string {
-  if (priceId === 'mirror_monthly') return 'Shutap+ monthly · $7.99/mo'
-  if (priceId === 'mirror_annual') return 'Shutap+ annual · $49.99/yr'
+  const p = planByPriceId(priceId)
+  if (p) return `${p.name} · ${usd(p.amount)}/${p.interval === 'year' ? 'yr' : 'mo'}`
   return priceId ?? 'unknown plan'
 }
 
@@ -303,7 +304,7 @@ function BillingCard({
           you're on free.
         </div>
         <div>
-          <button onClick={() => navigate('/subscribe?plan=annual')} style={btn('#17131a')}>get Shutap+ →</button>
+          <button onClick={() => navigate('/pricing')} style={btn('#17131a')}>see plans →</button>
         </div>
       </div>
     )
