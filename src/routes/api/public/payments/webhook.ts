@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { createClient } from '@supabase/supabase-js';
 import { type StripeEnv, createStripeClient, verifyWebhook } from '@/lib/stripe.server';
 import { planByPriceId, productIdForPrice } from '@/lib/pricing';
-import { handleInvoicePaid, maybeSendCancellationEmail, priceIdFrom, subscriptionIdOf } from '@/lib/billing-notices.server';
+import { accessEndSec, handleInvoicePaid, isCancelling, maybeSendCancellationEmail, priceIdFrom, subscriptionIdOf } from '@/lib/billing-notices.server';
 
 
 let _supabase: any = null;
@@ -65,7 +65,7 @@ async function handleCreated(sub: any, env: StripeEnv) {
     status: sub.status,
     current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
     current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
-    cancel_at_period_end: sub.cancel_at_period_end ?? false,
+    cancel_at_period_end: isCancelling(sub),
     environment: env,
     updated_at: new Date().toISOString(),
   }, { onConflict: 'stripe_subscription_id' });
@@ -115,11 +115,9 @@ async function handleUpdated(sub: any, env: StripeEnv) {
     .eq('stripe_subscription_id', sub.id)
     .eq('environment', env)
     .maybeSingle();
-  if (prevRow && !prevRow.cancel_at_period_end && (sub.cancel_at_period_end ?? false)) {
-    await maybeSendCancellationEmail(
-      sub, env, prevRow,
-      periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
-    );
+  if (prevRow && !prevRow.cancel_at_period_end && isCancelling(sub)) {
+    const endSec = accessEndSec(sub);
+    await maybeSendCancellationEmail(sub, env, prevRow, endSec ? new Date(endSec * 1000).toISOString() : null);
   }
 
 
@@ -139,7 +137,7 @@ async function handleUpdated(sub: any, env: StripeEnv) {
       status: sub.status,
       current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
       current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
-      cancel_at_period_end: sub.cancel_at_period_end ?? false,
+      cancel_at_period_end: isCancelling(sub),
       environment: env,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'stripe_subscription_id' });
@@ -153,7 +151,7 @@ async function handleUpdated(sub: any, env: StripeEnv) {
     product_id: productIdFor(item),
     current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
     current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
-    cancel_at_period_end: sub.cancel_at_period_end ?? false,
+    cancel_at_period_end: isCancelling(sub),
     updated_at: new Date().toISOString(),
   }, { count: 'exact' }).eq('stripe_subscription_id', sub.id).eq('environment', env);
   if (error) console.error('[stripe webhook] subscriptions update failed on updated:', error, { subscription_id: sub.id, env });

@@ -232,7 +232,7 @@ export function SubscribePage() {
         setPlanKey('pro')
         return
       }
-      if (!r.ok) throw new Error(r.error === 'plan_cancelling' ? 'Your Basic plan is set to end. Tap "keep my plan" on your profile first.' : "Couldn't switch you to Pro. You're still on Basic.")
+      if (!r.ok) throw new Error(r.error === 'plan_cancelling' ? 'Your Basic plan is set to end. Tap "Keep Basic" on your account page first.' : "Couldn't switch you to Pro. You're still on Basic.")
       setCurrentPlan('pro')
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Couldn't switch you to Pro.")

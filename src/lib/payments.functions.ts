@@ -155,29 +155,42 @@ export const setPlanCancellation = createServerFn({ method: 'POST' })
     if (!live.length) return { ok: false, error: 'no_plan' };
     try {
       const stripe = createStripeClient(data.environment);
+      const { isCancelling, accessEndSec, maybeSendCancellationEmail } = await import('@/lib/billing-notices.server');
+      const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
       let last: { cancel_at_period_end: boolean; end: string | null } | null = null;
       // Normally one plan; if there were ever two, each gets the same answer.
       for (const r of live) {
-        const updated = await stripe.subscriptions.update(r.stripe_subscription_id, { cancel_at_period_end: data.cancel });
-        const item = updated.items.data[0] as (typeof updated.items.data)[number] & { current_period_end?: number };
-        const periodEnd = item?.current_period_end ?? (updated as unknown as { current_period_end?: number }).current_period_end;
-        const end = periodEnd ? new Date(periodEnd * 1000).toISOString() : r.current_period_end;
+        const before = await stripe.subscriptions.retrieve(r.stripe_subscription_id);
+        const wasCancelling = isCancelling(before);
+        let updated = before;
+        if (data.cancel && !wasCancelling) {
+          updated = await stripe.subscriptions.update(before.id, { cancel_at_period_end: true });
+        } else if (!data.cancel && wasCancelling) {
+          // Undo either kind of cancel: the flag, or a cancel_at date set in
+          // the billing portal or Dashboard.
+          updated = await stripe.subscriptions.update(before.id, before.cancel_at && !before.cancel_at_period_end ? { cancel_at: '' } : { cancel_at_period_end: false });
+        }
+        const nowCancelling = isCancelling(updated);
+        if (nowCancelling !== data.cancel) {
+          console.error('[setPlanCancellation] Stripe did not take the change', { sub: updated.id, want: data.cancel });
+          return { ok: false, error: 'not_changed' };
+        }
+        const endSec = accessEndSec(updated);
+        const end = endSec ? new Date(endSec * 1000).toISOString() : r.current_period_end;
         // Record it now so the profile is right on reload; the webhook writes
         // the same fields again.
-        const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generated types lack this table
         const { error: upErr } = await (supabaseAdmin as any)
           .from('subscriptions')
-          .update({ cancel_at_period_end: updated.cancel_at_period_end ?? data.cancel, status: updated.status, current_period_end: end, updated_at: new Date().toISOString() })
+          .update({ cancel_at_period_end: nowCancelling, status: updated.status, current_period_end: end, updated_at: new Date().toISOString() })
           .eq('stripe_subscription_id', updated.id)
           .eq('environment', data.environment);
         if (upErr) console.error('[setPlanCancellation] row update failed; the webhook will record it', upErr.message);
-        last = { cancel_at_period_end: updated.cancel_at_period_end ?? data.cancel, end };
+        last = { cancel_at_period_end: nowCancelling, end };
         // The confirmation email goes out here: the row above already says
         // cancelling, so the webhook won't see the change. Same dedupe key as
-        // the webhook's, so it is never sent twice.
-        if (data.cancel && updated.cancel_at_period_end) {
-          const { maybeSendCancellationEmail } = await import('@/lib/billing-notices.server');
+        // the webhook's (subscription id + access end), so never sent twice.
+        if (data.cancel && !wasCancelling) {
           await maybeSendCancellationEmail(updated, data.environment, { user_id: userId, product_id: productIdForPrice(r.price_id), price_id: r.price_id, cancel_at_period_end: false, current_period_end: r.current_period_end }, end);
         }
       }
@@ -212,7 +225,7 @@ export const changePlanToPro = createServerFn({ method: 'POST' })
     try {
       const stripe = createStripeClient(data.environment);
       const sub = await stripe.subscriptions.retrieve(basic.stripe_subscription_id);
-      if (sub.cancel_at_period_end) return { ok: false, error: 'plan_cancelling' };
+      if (sub.cancel_at_period_end || sub.cancel_at) return { ok: false, error: 'plan_cancelling' };
       const item = sub.items.data[0];
       if (!item) return { ok: false, error: 'no_subscription_item' };
       const prices = await stripe.prices.list({ lookup_keys: [PLANS.pro.priceId] });

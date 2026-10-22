@@ -29,6 +29,20 @@ export function planNameFor(priceId: string | null | undefined): string {
 
 export const PAID_PRODUCTS = ['mirror', 'basic'];
 
+/** Whether a subscription is set to end. Stripe records it two ways:
+ *  cancel_at_period_end (our button, the API) or a cancel_at date (the
+ *  billing portal and the Dashboard can use this one). Both mean the same
+ *  thing to us: no more charges, access until the end date. */
+export function isCancelling(sub: any): boolean {
+  return !!(sub?.cancel_at_period_end || sub?.cancel_at);
+}
+
+/** When access ends for a cancelling subscription (unix seconds). */
+export function accessEndSec(sub: any): number | null {
+  const item = sub?.items?.data?.[0];
+  return sub?.cancel_at || item?.current_period_end || sub?.current_period_end || null;
+}
+
 // Cancellation confirmation email when cancel_at_period_end flips
 // false → true (covers cancels made in the Stripe billing portal too).
 // Idempotent via billing_emails (dedupe on subscription id + period end),
