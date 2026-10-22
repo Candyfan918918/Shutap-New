@@ -11,7 +11,7 @@ const pctText = (v: number | null) => (v == null ? '—' : `${v}%`)
 
 function prettyDay(key: string, today: boolean): string {
   const [y, m, d] = key.split('-').map(Number) as [number, number, number]
-  const label = new Date(Date.UTC(y, m - 1, d, 12)).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+  const label = new Date(Date.UTC(y, m - 1, d, 12)).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
   return today ? `today · ${label}` : label
 }
 

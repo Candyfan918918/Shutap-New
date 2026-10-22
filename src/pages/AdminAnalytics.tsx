@@ -10,7 +10,7 @@ type Analytics = Awaited<ReturnType<typeof adminAnalytics>>
 
 function fmt(d: string | null | undefined): string {
   if (!d) return '—'
-  try { return new Date(d).toLocaleString() } catch { return '—' }
+  try { return new Date(d).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) } catch { return '—' }
 }
 
 function Card({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
