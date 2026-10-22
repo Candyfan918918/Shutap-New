@@ -7,6 +7,7 @@ const HOME_QUESTIONS = [
   'What is Shutap?',
   "What is Shutap's goal?",
   'Will Shutap steal my jokes or ideas?',
+  "Does Shutap steal or plagiarize other people's jokes?",
   'Does anyone at Shutap read what I write?',
   "Isn't using AI for comedy a shortcut?",
   'Is Shutap a free joke generator?',
