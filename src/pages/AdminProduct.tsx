@@ -253,18 +253,29 @@ export function AdminProductSection() {
   return (
     <section style={{ marginBottom: 32 }}>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
-        <h2 style={{ ...sectionH2, margin: 0 }}>product</h2>
+        <h2 style={{ ...sectionH2, margin: 0 }}>retention & users</h2>
         <label style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: MID }}>
           <input type="checkbox" checked={includeAdmins} onChange={(e) => setIncludeAdmins(e.target.checked)} />
           include admin accounts
         </label>
       </div>
       {err && <div style={{ color: '#17131a', marginBottom: 12 }}>{err}</div>}
-      {m && <BigNumbers total={m.users.signed_in_total} dau={m.activity.dau} mau={m.activity.mau} />}
       {!m ? (
         !err && <div style={{ color: MID }}>loading…</div>
       ) : (
         <>
+          <Retention any={m.retention.any} made={m.retention.made_a_bit} />
+
+          <div style={{ marginTop: 16 }}>
+            <UserTable rows={m.user_rows} />
+          </div>
+
+          <details style={moreBox}>
+            <summary style={moreSummary}>more stats · runs, 30-day trends, paying, repeat use</summary>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 16, margin: '14px 0 4px' }}>
+              <Series title="bits per day" rows={m.bits.series30d} unit="bits" />
+              <Series title="active signed-in users per day" rows={m.activity.series30d} unit="user-days" />
+            </div>
           <h3 style={groupH}>runs</h3>
           <div style={grid}>
             <Tile label="runs · today" value={m.runs.today} sub={`${m.runs.today_split.signed_in} signed-in · ${m.runs.today_split.guest} guest`} />
@@ -309,14 +320,7 @@ export function AdminProductSection() {
             <Tile label="bits per mau user" value={n(m.engagement.bits_per_active_user_30d)} sub="signed-in bits · 30d" />
           </div>
 
-          <Retention any={m.retention.any} made={m.retention.made_a_bit} />
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 16, margin: '20px 0 16px' }}>
-            <Series title="bits per day" rows={m.bits.series30d} unit="bits" />
-            <Series title="active signed-in users per day" rows={m.activity.series30d} unit="user-days" />
-          </div>
-
-          <UserTable rows={m.user_rows} />
+          </details>
 
           <p style={{ fontSize: 11, color: DIM, marginTop: 10, lineHeight: 1.6 }}>
             Retention: dN = share of users who signed up on day 0 and were back on exactly day N (only users who signed up at least N days ago count); "that day or later" counts anyone back on day N or after. Weekly cohorts use Monday-start weeks; w0 is the sign-up week. "Came back" = any activity; "made a bit" = wrote or rewrote a bit.
@@ -333,6 +337,8 @@ export function AdminProductSection() {
   )
 }
 
+export const moreBox: React.CSSProperties = { marginTop: 18, background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 14, padding: '12px 16px' }
+export const moreSummary: React.CSSProperties = { cursor: 'pointer', fontFamily: "'Sora',sans-serif", fontSize: 13, fontWeight: 700, color: INK, padding: '4px 0' }
 const sectionH2: React.CSSProperties = { fontFamily: "'Sora',sans-serif", fontSize: 15, fontWeight: 700, color: INK, margin: '0 0 12px 0', letterSpacing: '.02em' }
 const groupH: React.CSSProperties = { fontFamily: "'Sora',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: DIM, margin: '18px 0 10px' }
 const panelH3: React.CSSProperties = { fontFamily: "'Sora',sans-serif", fontSize: 13, fontWeight: 700, color: INK, margin: 0, letterSpacing: '.02em' }

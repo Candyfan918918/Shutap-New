@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { adminAnalytics, adminGrowth, adminAcquisition, type GrowthPayload, type GrowthBlock, type AcquisitionPayload } from '@/lib/admin.functions'
 import { AdminShell } from '@/components/AdminShell'
-import { AdminProductSection } from '@/pages/AdminProduct'
+import { AdminProductSection, moreBox, moreSummary } from '@/pages/AdminProduct'
+import { DailyReportSection } from '@/pages/AdminDaily'
 
 type Analytics = Awaited<ReturnType<typeof adminAnalytics>>
 
@@ -75,8 +76,11 @@ export function AdminAnalyticsPage() {
       title="dashboard"
       subtitle={data ? `as of ${fmt(data.generated_at)}` : undefined}
     >
+      <DailyReportSection />
       <AdminProductSection />
-      <h2 style={{ ...sectionH2, marginTop: 8 }}>traffic</h2>
+      <details style={moreBox}>
+      <summary style={moreSummary}>traffic details · growth, sources, countries, events</summary>
+      <div style={{ height: 14 }} />
       {err && <div style={{ color: '#17131a', marginBottom: 12 }}>{err}</div>}
       {!data || !visits ? (
         <div style={{ color: '#443c42' }}>loading…</div>
@@ -187,6 +191,7 @@ export function AdminAnalyticsPage() {
 
         </>
       )}
+      </details>
     </AdminShell>
   )
 }
