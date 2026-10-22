@@ -10,7 +10,10 @@ import { useToast } from '../components/Toast'
 import { UserAvatar } from '@/components/UserAvatar'
 import { ensureMyProfile, updateMyProfile, setMyAvatar, removeMyAvatar } from '@/lib/alias.functions'
 import { getMyBillingStatus, type BillingStatus } from '@/lib/billing.functions'
-import { planByPriceId, usd } from '@/lib/pricing'
+import { PLAN_LINES, planByPriceId, usd } from '@/lib/pricing'
+import { BIT_CAPS } from '@/lib/bits/plans'
+import { Footer } from '@/components/feed/Footer'
+import '@/components/feed/feed.css'
 import { createMirrorPortal, setPlanCancellation } from '@/lib/payments.functions'
 import { deleteMyAccount } from '@/lib/account.functions'
 import { getStripeEnvironment } from '@/lib/stripe'
@@ -45,13 +48,6 @@ async function toAvatarDataUrl(file: File, size = 320): Promise<string> {
   }
 }
 
-const label: React.CSSProperties = {
-  fontFamily: 'Sora,sans-serif', fontWeight: 600, fontSize: 10.5, letterSpacing: '.16em',
-  textTransform: 'uppercase', color: '#6f666c', marginBottom: 10,
-}
-const card: React.CSSProperties = {
-  background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 14, padding: 16,
-}
 
 export function ProfilePage() {
   useNoIndex()
@@ -148,7 +144,7 @@ export function ProfilePage() {
       const r = await setCancelFn({ data: { environment: getStripeEnvironment(), cancel } })
       if (!r.ok) return r.error === 'no_plan' ? "There's no active plan on this account." : "Couldn't change your plan. Nothing was changed; try again in a minute."
       setBilling((b) => (b ? { ...b, cancelAtPeriodEnd: r.cancelAtPeriodEnd, currentPeriodEnd: r.currentPeriodEnd ?? b.currentPeriodEnd } : b))
-      toast(cancel ? 'cancelled. no more charges.' : 'your plan will renew.')
+      toast(cancel ? 'Cancelled. You won\'t be charged again.' : 'Your plan will renew.')
       return null
     } catch {
       return "Couldn't change your plan. Nothing was changed; try again in a minute."
@@ -177,125 +173,143 @@ export function ProfilePage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'transparent', color: '#0b080f' }}>
-      <main style={{ maxWidth: 560, margin: '0 auto', padding: 'clamp(40px, 8vw, 72px) 20px 80px' }}>
-        <h1 style={{ fontFamily: 'Sora,sans-serif', fontWeight: 800, fontSize: 24, letterSpacing: '-.02em', margin: '0 0 24px' }}>profile</h1>
+    <div className="fd">
+      <div className="fd-col" style={{ paddingTop: 36 }}>
+        <h1 className="fd-h1" style={{ fontSize: 28 }}>
+          Your account
+        </h1>
 
-        {/* photo + name */}
-        <section style={{ ...card, display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <UserAvatar name={profile?.display_name} avatar={profile?.avatar_url} emoji={profile?.emoji} size={72} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <button disabled={busy === 'photo' || !profile} onClick={() => fileRef.current?.click()} style={btn('#17131a')}>
-                  {busy === 'photo' ? 'uploading…' : profile?.avatar_url ? 'change photo' : 'upload photo'}
-                </button>
-                {profile?.avatar_url && (
-                  <button disabled={busy === 'photo'} onClick={onRemovePhoto} style={btn('#6f666c')}>remove</button>
-                )}
-              </div>
-              <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" hidden onChange={(e) => void onPickPhoto(e.target.files?.[0])} />
-            </div>
-          </div>
-
-          <div>
-            <div style={label}>name</div>
-            {!editing ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 18 }}>{profile?.display_name ?? '…'}</span>
-                {profile && (
-                  <button onClick={() => { setNameDraft(profile.display_name); setEditing(true) }} style={btn('#17131a')}>edit</button>
-                )}
-              </div>
-            ) : (
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {/* who */}
+        <section className="fd-post" aria-label="Profile">
+          <div className="fd-row" style={{ gap: 14, alignItems: 'center' }}>
+            <UserAvatar name={profile?.display_name} avatar={profile?.avatar_url} emoji={profile?.emoji} size={64} />
+            <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
+              {!editing ? (
+                <b style={{ fontSize: 19, fontWeight: 800, letterSpacing: '-.02em', overflowWrap: 'anywhere' }}>{profile?.display_name ?? '…'}</b>
+              ) : (
                 <input
+                  className="fd-input"
+                  aria-label="Name"
                   value={nameDraft}
                   maxLength={80}
                   autoFocus
                   onChange={(e) => setNameDraft(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') void onSaveName() }}
-                  style={{ flex: '1 1 220px', border: '.5px solid rgba(11,8,15,.2)', borderRadius: 10, padding: '9px 12px', fontFamily: 'Sora,sans-serif', fontSize: 15, background: '#fff' }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') void onSaveName()
+                    if (e.key === 'Escape') setEditing(false)
+                  }}
                 />
-                <button disabled={busy === 'name'} onClick={() => void onSaveName()} style={btn('#b8456b')}>{busy === 'name' ? 'saving…' : 'save'}</button>
-                <button disabled={busy === 'name'} onClick={() => setEditing(false)} style={btn('#6f666c')}>cancel</button>
-              </div>
-            )}
-          </div>
-
-          {email && (
-            <div>
-              <div style={label}>email</div>
-              <div style={{ fontFamily: 'Sora,sans-serif', fontSize: 14, color: '#443c42' }}>{email}</div>
+              )}
+              {email && <span className="fd-muted" style={{ overflowWrap: 'anywhere' }}>{email}</span>}
             </div>
-          )}
+          </div>
+          <div className="fd-row" style={{ flexWrap: 'wrap' }}>
+            {editing ? (
+              <>
+                <button className="fd-btn sm" disabled={busy === 'name'} onClick={() => void onSaveName()}>
+                  {busy === 'name' ? 'Saving…' : 'Save name'}
+                </button>
+                <button className="fd-btn sm ghost" disabled={busy === 'name'} onClick={() => setEditing(false)}>
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="fd-btn sm ghost"
+                  disabled={!profile}
+                  onClick={() => {
+                    if (!profile) return
+                    setNameDraft(profile.display_name)
+                    setEditing(true)
+                  }}
+                >
+                  Edit name
+                </button>
+                <button className="fd-btn sm ghost" disabled={busy === 'photo' || !profile} onClick={() => fileRef.current?.click()}>
+                  {busy === 'photo' ? 'Uploading…' : profile?.avatar_url ? 'Change photo' : 'Add photo'}
+                </button>
+                {profile?.avatar_url && (
+                  <button className="fd-link fd-muted" disabled={busy === 'photo'} onClick={onRemovePhoto} style={{ marginLeft: 4, whiteSpace: 'nowrap' }}>
+                    Remove photo
+                  </button>
+                )}
+              </>
+            )}
+            <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" hidden onChange={(e) => void onPickPhoto(e.target.files?.[0])} />
+          </div>
         </section>
 
         {/* plan */}
-        <div style={{ marginTop: 28 }}>
-          <div style={label}>plan</div>
-          <BillingCard billing={billing} onOpenPortal={openPortal} portalBusy={portalBusy} navigate={navigate} onCancellation={changeCancellation} />
-        </div>
+        <BillingCard billing={billing} onOpenPortal={openPortal} portalBusy={portalBusy} navigate={navigate} onCancellation={changeCancellation} />
 
-        <div style={{ marginTop: 24, display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-          <button onClick={() => navigate('/set-list')} style={wineLink}>your set list →</button>
-          <button onClick={signOut} style={wineLink}>sign out →</button>
-        </div>
+        {/* elsewhere */}
+        <section className="fd-post" style={{ gap: 0, padding: '4px 16px' }} aria-label="More">
+          <button className="fd-link pf-row" onClick={() => navigate('/set-list')}>
+            <span>Your set list</span>
+            <span aria-hidden className="fd-faint">→</span>
+          </button>
+          <button className="fd-link pf-row" onClick={() => void signOut()} style={{ borderTop: '1px solid var(--line)' }}>
+            <span>Sign out</span>
+            <span aria-hidden className="fd-faint">→</span>
+          </button>
+        </section>
 
         {/* delete */}
-        <div style={{ marginTop: 36, paddingTop: 22, borderTop: '.5px solid rgba(179,38,30,.16)' }}>
-          {!showDelete ? (
-            <button onClick={() => setShowDelete(true)} style={{ ...btn('#b3261e'), background: 'transparent' }}>delete account</button>
-          ) : (
-            <div style={{ background: '#fff5f5', border: '.5px solid rgba(179,38,30,.24)', borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 15, lineHeight: 1.5 }}>
-                this deletes your account, your profile, your bits, and cancels any subscription. it can't be undone.
-              </div>
-              <div style={{ fontFamily: 'Sora,sans-serif', fontSize: 11, color: '#443c42' }}>
-                type <strong>delete my account</strong> to confirm.
-              </div>
-              <input
-                value={deleteConfirm}
-                onChange={(e) => setDeleteConfirm(e.target.value)}
-                placeholder="delete my account"
-                style={{ border: '.5px solid rgba(179,38,30,.32)', borderRadius: 10, padding: '9px 12px', fontFamily: 'Sora,sans-serif', fontSize: 14, background: '#fff' }}
-              />
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <button
-                  disabled={deleteBusy || deleteConfirm !== 'delete my account'}
-                  onClick={() => void onDeleteAccount()}
-                  style={{ ...btn('#b3261e'), opacity: deleteBusy || deleteConfirm !== 'delete my account' ? 0.5 : 1 }}
-                >{deleteBusy ? 'deleting…' : 'delete permanently'}</button>
-                <button disabled={deleteBusy} onClick={() => { setShowDelete(false); setDeleteConfirm('') }} style={btn('#2b2630')}>cancel</button>
-              </div>
+        {!showDelete ? (
+          <button className="fd-link" onClick={() => setShowDelete(true)} style={{ alignSelf: 'flex-start', color: '#b3261e', fontSize: 13, fontWeight: 600, marginTop: 6 }}>
+            Delete account
+          </button>
+        ) : (
+          <section className="fd-post" style={{ borderColor: 'rgba(179,38,30,.28)' }} aria-label="Delete account">
+            <b style={{ fontSize: 15 }}>Delete your account?</b>
+            <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: 'var(--ink-2)' }}>
+              This deletes your account, your profile and your bits, and cancels any plan. It can't be undone.
+            </p>
+            <label className="fd-muted" htmlFor="pf-delete">
+              Type <b style={{ color: 'var(--ink)' }}>delete my account</b> to confirm.
+            </label>
+            <input id="pf-delete" className="fd-input" value={deleteConfirm} onChange={(e) => setDeleteConfirm(e.target.value)} placeholder="delete my account" />
+            <div className="fd-row" style={{ flexWrap: 'wrap' }}>
+              <button
+                className="fd-btn sm"
+                style={{ background: '#b3261e' }}
+                disabled={deleteBusy || deleteConfirm !== 'delete my account'}
+                onClick={() => void onDeleteAccount()}
+              >
+                {deleteBusy ? 'Deleting…' : 'Delete permanently'}
+              </button>
+              <button
+                className="fd-btn sm ghost"
+                disabled={deleteBusy}
+                onClick={() => {
+                  setShowDelete(false)
+                  setDeleteConfirm('')
+                }}
+              >
+                Keep my account
+              </button>
             </div>
-          )}
-        </div>
-      </main>
+          </section>
+        )}
+      </div>
+      <style>{`
+        .fd-link.pf-row { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 14px 0; font-weight: 600; font-size: 15px; text-align: left; }
+        .fd-link.pf-row:hover span:first-child { color: var(--rose-ink); }
+        .pf-lines { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; font-size: 14px; color: var(--ink-2); }
+        .pf-lines li { display: flex; gap: 8px; }
+        .pf-lines li::before { content: '✓'; color: var(--rose); font-weight: 800; }
+      `}</style>
+      <Footer />
       {ToastHost}
     </div>
   )
 }
 
-function btn(color: string): React.CSSProperties {
-  return {
-    padding: '6px 12px',
-    borderRadius: 999,
-    border: '.5px solid ' + color + '40',
-    background: color + '10',
-    color,
-    fontFamily: 'Sora,sans-serif',
-    fontWeight: 600,
-    fontSize: 12,
-    letterSpacing: '.02em',
-    cursor: 'pointer',
-  }
-}
-
-function planLabelFor(priceId: string | null): string {
+function planLabelFor(priceId: string | null): { name: string; price: string } {
   const p = planByPriceId(priceId)
-  if (p) return `${p.name} · ${usd(p.amount)}/${p.interval === 'year' ? 'yr' : 'mo'}`
-  return priceId ?? 'unknown plan'
+  if (p) return { name: p.name, price: `${usd(p.amount)}/${p.interval === 'year' ? 'year' : 'month'}` }
+  return { name: 'Paid plan', price: '' }
 }
 
 function BillingCard({
@@ -322,95 +336,143 @@ function BillingCard({
     setChangeErr(err)
     if (!err) setConfirming(false)
   }
-  if (billing === undefined) {
-    return <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', color: '#6f666c' }}>loading…</div>
-  }
-  // A plan that has ended (cancelled, or never paid) shows as free.
-  if (billing === null || !billing.isActive) {
-    return (
-      <div style={{ background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 15, color: '#0b080f' }}>
-          you're on free.
-        </div>
-        <div>
-          <button onClick={() => navigate('/pricing')} style={btn('#17131a')}>see plans →</button>
-        </div>
-      </div>
-    )
-  }
-  const end = billing.currentPeriodEnd ? new Date(billing.currentPeriodEnd) : null
-  const endStr = end ? end.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : null
-  const statusLabel =
-    billing.status === 'trialing' ? 'trialing'
-    : billing.status === 'active' && billing.cancelAtPeriodEnd ? 'canceling'
-    : billing.status === 'active' ? 'active'
-    : billing.status === 'past_due' ? 'payment failed'
-    : billing.status
-  const statusColor =
-    billing.status === 'past_due' ? '#b3261e'
-    : billing.cancelAtPeriodEnd ? '#6f666c'
-    : '#17131a'
-  return (
-    <div style={{ background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
-        <span style={{ fontFamily: 'Sora,sans-serif', fontWeight: 700, fontSize: 9.5, letterSpacing: '.14em', textTransform: 'uppercase', color: statusColor, background: statusColor + '18', padding: '3px 8px', borderRadius: 999 }}>
-          {statusLabel}
+
+  const head = (pill?: { text: string; quiet?: boolean; alert?: boolean }) => (
+    <div className="fd-between">
+      <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>Plan</h2>
+      {pill && (
+        <span
+          className="fd-pill"
+          style={pill.alert ? { background: '#fdecea', color: '#b3261e' } : pill.quiet ? { background: 'var(--surface)', color: 'var(--muted)' } : undefined}
+        >
+          {pill.text}
         </span>
-        <span style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 15, color: '#0b080f' }}>
-          {planLabelFor(billing.priceId)}
-        </span>
-      </div>
-      {endStr && (
-        <div style={{ fontFamily: 'Newsreader,serif', fontStyle: 'italic', fontSize: 13.5, color: '#443c42' }}>
-          {billing.status === 'trialing' ? `trial ends ${endStr}`
-            : billing.cancelAtPeriodEnd ? `access ends ${endStr}`
-            : billing.status === 'past_due' ? `payment retrying · access until ${endStr}`
-            : `renews ${endStr}`}
-        </div>
       )}
-      {confirming ? (
-        <div style={{ borderTop: '.5px solid rgba(11,8,15,.08)', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div style={{ fontFamily: 'Sora,sans-serif', fontSize: 14, color: '#0b080f', lineHeight: 1.5 }}>
-            Cancel {planByPriceId(billing.priceId)?.name ?? 'your plan'}? You won't be charged again.
-            {endStr ? ` You keep it until ${endStr}, then you're on free.` : " You'll be on free when this period ends."}
-          </div>
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            <button disabled={changing} onClick={() => void change(true)} style={btn('#b8456b')}>{changing ? 'cancelling…' : 'yes, cancel'}</button>
-            <button disabled={changing} onClick={() => { setConfirming(false); setChangeErr(null) }} style={btn('#6f666c')}>keep my plan</button>
-          </div>
-        </div>
-      ) : null}
-      {changeErr && (
-        <div role="alert" style={{ fontFamily: 'Sora,sans-serif', fontSize: 13, color: '#b3261e' }}>{changeErr}</div>
-      )}
-      <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-        {billing.cancelAtPeriodEnd ? (
-          <button onClick={() => void change(false)} disabled={changing} style={wineLink}>
-            {changing ? 'saving…' : 'keep my plan →'}
-          </button>
-        ) : !confirming ? (
-          <button onClick={() => { setConfirming(true); setChangeErr(null) }} style={wineLink}>
-            cancel plan →
-          </button>
-        ) : null}
-        {billing.hasCustomer && (
-          <button onClick={onOpenPortal} disabled={portalBusy} style={wineLink}>
-            {portalBusy ? 'opening…' : 'card and receipts →'}
-          </button>
-        )}
-      </div>
     </div>
   )
-}
 
-const wineLink: React.CSSProperties = {
-  background: 'transparent',
-  border: 'none',
-  padding: 0,
-  color: '#2b2630',
-  fontFamily: "'Newsreader',serif",
-  fontStyle: 'italic',
-  fontSize: 14,
-  cursor: 'pointer',
-  textDecoration: 'none',
+  if (billing === undefined) {
+    return (
+      <section className="fd-post" aria-label="Plan">
+        {head()}
+        <span className="fd-muted">Loading…</span>
+      </section>
+    )
+  }
+
+  // No plan, or one that has ended (cancelled, or never paid): Free.
+  if (billing === null || !billing.isActive) {
+    return (
+      <section className="fd-post" aria-label="Plan">
+        {head({ text: 'Free', quiet: true })}
+        <div>
+          <span style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-.03em' }}>Free</span>
+        </div>
+        <ul className="pf-lines">
+          <li>{BIT_CAPS.free} new bits a day</li>
+          <li>Teleprompter, scene and screenplay views</li>
+          <li>Your set list keeps every bit</li>
+        </ul>
+        <button className="fd-btn sm" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/pricing')}>
+          See plans
+        </button>
+      </section>
+    )
+  }
+
+  const end = billing.currentPeriodEnd ? new Date(billing.currentPeriodEnd) : null
+  const endStr = end ? end.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : null
+  const plan = planLabelFor(billing.priceId)
+  const paid = planByPriceId(billing.priceId)?.tier
+  const lines = paid === 'pro' || paid === 'basic' ? PLAN_LINES[paid] : []
+  const cancelling = billing.cancelAtPeriodEnd
+  const pastDue = billing.status === 'past_due'
+
+  const pill = cancelling
+    ? { text: endStr ? `Ends ${endStr}` : 'Cancelled', quiet: true }
+    : pastDue
+      ? { text: 'Payment failed', alert: true }
+      : billing.status === 'trialing'
+        ? { text: 'Trial' }
+        : { text: 'Active' }
+
+  const statusLine = cancelling
+    ? `Cancelled. You won't be charged again. You keep ${plan.name}${endStr ? ` until ${endStr}` : ' until this period ends'}, then you're on Free.`
+    : pastDue
+      ? `Your last payment didn't go through. Update your card to keep ${plan.name}.`
+      : billing.status === 'trialing'
+        ? endStr ? `Trial ends ${endStr}.` : 'Trial.'
+        : endStr ? `Renews ${endStr}.` : 'Renews monthly.'
+
+  return (
+    <section className="fd-post" aria-label="Plan">
+      {head(pill)}
+      <div>
+        <span style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-.03em' }}>{plan.name}</span>
+        {plan.price && <span className="fd-muted"> {plan.price}</span>}
+      </div>
+      {lines.length > 0 && (
+        <ul className="pf-lines">
+          {lines.map((l) => (
+            <li key={l}>{l.charAt(0).toUpperCase() + l.slice(1)}</li>
+          ))}
+        </ul>
+      )}
+      <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: pastDue ? '#b3261e' : 'var(--ink-2)' }}>{statusLine}</p>
+
+      {confirming && !cancelling && (
+        <div style={{ borderTop: '1px solid var(--line)', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <b style={{ fontSize: 15 }}>Cancel {plan.name}?</b>
+          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: 'var(--ink-2)' }}>
+            You won't be charged again.{endStr ? ` You keep ${plan.name} until ${endStr}, then you're on Free.` : " You're on Free when this period ends."}
+          </p>
+          <div className="fd-row" style={{ flexWrap: 'wrap' }}>
+            <button className="fd-btn sm" disabled={changing} onClick={() => void change(true)}>
+              {changing ? 'Cancelling…' : 'Yes, cancel'}
+            </button>
+            <button
+              className="fd-btn sm ghost"
+              disabled={changing}
+              onClick={() => {
+                setConfirming(false)
+                setChangeErr(null)
+              }}
+            >
+              Keep my plan
+            </button>
+          </div>
+        </div>
+      )}
+      {changeErr && (
+        <p role="alert" style={{ margin: 0, fontSize: 13, color: '#b3261e' }}>
+          {changeErr}
+        </p>
+      )}
+
+      {!confirming && (
+        <div className="fd-row" style={{ flexWrap: 'wrap', gap: 10 }}>
+          {cancelling ? (
+            <button className="fd-btn sm" disabled={changing} onClick={() => void change(false)}>
+              {changing ? 'Saving…' : `Keep ${plan.name}`}
+            </button>
+          ) : (
+            <button
+              className="fd-btn sm ghost"
+              onClick={() => {
+                setConfirming(true)
+                setChangeErr(null)
+              }}
+            >
+              Cancel plan
+            </button>
+          )}
+          {billing.hasCustomer && (
+            <button className="fd-btn sm ghost" disabled={portalBusy} onClick={onOpenPortal}>
+              {portalBusy ? 'Opening…' : pastDue ? 'Update card' : 'Card and receipts'}
+            </button>
+          )}
+        </div>
+      )}
+    </section>
+  )
 }
