@@ -30,7 +30,7 @@ interface Row {
   last_country: string | null
   last_city: string | null
   alias: { display_name: string; emoji: string } | null
-  stats: { spills: number; comments: number; reactions: number }
+  stats: { bits: number; rewrites: number; plan: 'paying' | 'trialing' | 'free' }
 }
 
 function fmt(d: string | null | undefined): string {
@@ -111,16 +111,16 @@ function AdminUsersPage() {
                 <Th col="first_name" label="first" />
                 <Th col="last_name" label="last" />
                 <Th col="provider" label="provider" />
-                <Th col="signup_at" label="signup" />
-                <Th col="last_login_at" label="last login" />
+                <Th col="signup_at" label="first sign-in" />
+                <Th col="last_login_at" label="last sign-in" />
                 <Th col="last_visit_at" label="last use" />
-                <Th col="login_count" label="logins" />
+                <Th col="login_count" label="sign-ins" />
                 <Th col="visit_count" label="visits" />
                 <Th col="country" label="country" />
                 <Th col="city" label="city" />
-                <Th col="spills" label="spills" />
-                <Th col="comments" label="comments" />
-                <Th col="reactions" label="reactions" />
+                <Th col="bits" label="bits" />
+                <Th col="rewrites" label="rewrites" />
+                <Th col="plan" label="plan" />
               </tr>
             </thead>
             <tbody>
@@ -137,9 +137,9 @@ function AdminUsersPage() {
                   <td style={td}>{r.visit_count}</td>
                   <td style={td}>{r.last_country || '—'}</td>
                   <td style={td}>{r.last_city || '—'}</td>
-                  <td style={td}>{r.stats.spills}</td>
-                  <td style={td}>{r.stats.comments}</td>
-                  <td style={td}>{r.stats.reactions}</td>
+                  <td style={td}>{r.stats.bits}</td>
+                  <td style={td}>{r.stats.rewrites}</td>
+                  <td style={td}>{r.stats.plan}</td>
                 </tr>
               ))}
             </tbody>

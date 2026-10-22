@@ -99,33 +99,37 @@ export const adminListUsers = createServerFn({ method: 'POST' })
     if (error) throw new Error(error.message)
     const profiles = (rows ?? []) as Array<Record<string, unknown> & { user_id: string }>
     const ids = profiles.map((p) => p.user_id)
-    const [aliasRes, statsResults] = await Promise.all([
+    const [aliasRes, bitRes, subRes] = await Promise.all([
       ids.length
         ? supabaseAdmin.from('aliases').select('user_id, display_name, emoji').in('user_id', ids)
         : Promise.resolve({ data: [] as Array<{ user_id: string; display_name: string; emoji: string }> }),
-      Promise.all(
-        ids.map((id) =>
-          supabaseAdmin.rpc('get_user_stats', { _user_id: id }).then(({ data: d }) => ({ id, d })),
-        ),
-      ),
+      ids.length
+        ? supabaseAdmin.from('bits').select('id, user_id, bit_versions(kind)').in('user_id', ids).limit(1000)
+        : Promise.resolve({ data: [] as unknown[] }),
+      ids.length
+        ? supabaseAdmin.from('subscriptions').select('user_id, status').eq('environment', 'live').in('user_id', ids)
+        : Promise.resolve({ data: [] as unknown[] }),
     ])
     const aliasMap: Record<string, { display_name: string; emoji: string }> = {}
     for (const r of (aliasRes.data ?? []) as Array<{ user_id: string; display_name: string; emoji: string }>) {
       aliasMap[r.user_id] = { display_name: r.display_name, emoji: r.emoji }
     }
-    const statsMap: Record<string, { spills: number; comments: number; reactions: number }> = {}
-    for (const s of statsResults) {
-      const row = (Array.isArray(s.d) ? s.d[0] : s.d) as { spills?: number; comments?: number; reactions?: number } | null
-      statsMap[s.id] = {
-        spills: Number(row?.spills ?? 0),
-        comments: Number(row?.comments ?? 0),
-        reactions: Number(row?.reactions ?? 0),
-      }
+    const statsMap: Record<string, { bits: number; rewrites: number; plan: 'paying' | 'trialing' | 'free' }> = {}
+    const stat = (id: string) => (statsMap[id] ??= { bits: 0, rewrites: 0, plan: 'free' })
+    for (const b of (bitRes.data ?? []) as Array<{ user_id: string; bit_versions: Array<{ kind: string }> | null }>) {
+      const st = stat(b.user_id)
+      st.bits++
+      st.rewrites += (b.bit_versions ?? []).filter((v) => v.kind !== 'original').length
+    }
+    for (const sub of (subRes.data ?? []) as Array<{ user_id: string; status: string }>) {
+      const st = stat(sub.user_id)
+      if (sub.status === 'active' || sub.status === 'past_due') st.plan = 'paying'
+      else if (sub.status === 'trialing' && st.plan === 'free') st.plan = 'trialing'
     }
     return profiles.map((p) => ({
       ...p,
       alias: aliasMap[p.user_id] ?? null,
-      stats: statsMap[p.user_id] ?? { spills: 0, comments: 0, reactions: 0 },
+      stats: statsMap[p.user_id] ?? { bits: 0, rewrites: 0, plan: 'free' as const },
     }))
   })
 
@@ -703,66 +707,3 @@ export const adminAcquisition = createServerFn({ method: 'POST' })
       captured_utm_count: capturedUtm,
     }
   })
-
-// ---------- product KPIs (for /admin overview) ----------
-
-export interface ProductKpis {
-  spills_24h: number
-  spills_7d: number
-  scans_24h: number
-  scans_7d: number
-  comments_24h: number
-  comments_7d: number
-  crisis_flags_7d: number
-  mirror_subs_active: number
-  mirror_subs_trialing: number
-}
-
-export const adminProductKpis = createServerFn({ method: 'POST' })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({}).parse(d ?? {}))
-  .handler(async ({ context }): Promise<ProductKpis> => {
-    await assertAdmin(context)
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
-    const now = Date.now()
-    const iso = (ms: number) => new Date(ms).toISOString()
-    const d1 = iso(now - 24 * 3600 * 1000)
-    const d7 = iso(now - 7 * 24 * 3600 * 1000)
-
-    const [
-      spills24, spills7, scans24, scans7, comm24, comm7, crisis7, subsActive, subsTrialing,
-    ] = await Promise.all([
-      supabaseAdmin.from('situations').select('id', { count: 'exact', head: true })
-        .eq('is_seed', false).is('deleted_at', null).gte('created_at', d1),
-      supabaseAdmin.from('situations').select('id', { count: 'exact', head: true })
-        .eq('is_seed', false).is('deleted_at', null).gte('created_at', d7),
-      supabaseAdmin.from('situations').select('id', { count: 'exact', head: true })
-        .eq('is_seed', false).is('deleted_at', null).not('initial_scan', 'is', null).gte('created_at', d1),
-      supabaseAdmin.from('situations').select('id', { count: 'exact', head: true })
-        .eq('is_seed', false).is('deleted_at', null).not('initial_scan', 'is', null).gte('created_at', d7),
-      supabaseAdmin.from('comments').select('id', { count: 'exact', head: true })
-        .eq('is_companion', false).is('deleted_at', null).gte('created_at', d1),
-      supabaseAdmin.from('comments').select('id', { count: 'exact', head: true })
-        .eq('is_companion', false).is('deleted_at', null).gte('created_at', d7),
-      supabaseAdmin.from('situations').select('id', { count: 'exact', head: true })
-        .eq('crisis_flag', true).gte('created_at', d7),
-      supabaseAdmin.from('subscriptions').select('id', { count: 'exact', head: true })
-        .eq('status', 'active'),
-      supabaseAdmin.from('subscriptions').select('id', { count: 'exact', head: true })
-        .eq('status', 'trialing'),
-    ])
-
-    return {
-      spills_24h: spills24.count ?? 0,
-      spills_7d: spills7.count ?? 0,
-      scans_24h: scans24.count ?? 0,
-      scans_7d: scans7.count ?? 0,
-      comments_24h: comm24.count ?? 0,
-      comments_7d: comm7.count ?? 0,
-      crisis_flags_7d: crisis7.count ?? 0,
-      mirror_subs_active: subsActive.count ?? 0,
-      mirror_subs_trialing: subsTrialing.count ?? 0,
-    }
-  })
-
-
