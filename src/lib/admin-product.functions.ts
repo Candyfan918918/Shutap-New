@@ -46,6 +46,8 @@ export interface ProductUserRow {
   rewrites: number
   last_bit_at: string | null
   active_days_30d: number
+  runs_today: number
+  runs_total: number
   plan: PlanLabel
   is_admin: boolean
 }
@@ -54,6 +56,13 @@ export interface ProductMetrics {
   generated_at: string
   timezone: string
   excluded_admins: number
+  runs: {
+    today: number
+    total: number
+    users_today: number
+    today_split: { bits: number; rewrites: number; failed: number; signed_in: number; guest: number }
+    total_split: { bits: number; rewrites: number; failed: number; signed_in: number; guest: number }
+  }
   bits: {
     total: number
     d1: number
@@ -127,9 +136,10 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
     type Version = { bit_id: string; kind: string; created_at: string }
     type Ev = { user_id: string | null; ts: string }
     type Visit = { user_id: string | null; started_at: string }
+    type Fail = { user_id: string | null; created_at: string }
     type Sub = { user_id: string; status: string; environment: string; cancel_at_period_end: boolean | null }
 
-    const [profiles, bits, versions, events, visits, subs, roles, failures7, posted] = await Promise.all([
+    const [profiles, bits, versions, events, visits, subs, roles, failures7, posted, fails] = await Promise.all([
       fetchAll<Profile>((f, t) => db.from('profiles')
         .select('user_id, email, full_name, first_name, last_name, provider, signup_at, last_login_at, login_count')
         .eq('is_anonymous', false).order('user_id').range(f, t)),
@@ -141,6 +151,7 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
       fetchAll<{ user_id: string }>((f, t) => db.from('user_roles').select('user_id').eq('role', 'admin').order('user_id').range(f, t)),
       db.from('bit_failures').select('id', { count: 'exact', head: true }).gte('created_at', iso(t7)),
       db.from('rooms').select('id', { count: 'exact', head: true }).not('bit_version_id', 'is', null).eq('hidden', false),
+      fetchAll<Fail>((f, t) => db.from('bit_failures').select('user_id, created_at').eq('lab', false).order('created_at').range(f, t)),
     ])
 
     const adminIds = new Set(roles.map((r) => r.user_id))
@@ -195,6 +206,31 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
     for (const set of activeDays.values()) for (const d of set) if (d in dauByDay) dauByDay[d]++
     const bitsByDay: Record<string, number> = Object.fromEntries(days.map((d) => [d, 0]))
     for (const b of bitsCounted) { const d = dayKey(ts(b.created_at)); if (d in bitsByDay) bitsByDay[d]++ }
+
+    // ---- runs: every press of write or rewrite (new bit, rewrite, or a failed attempt) ----
+    const today = dayKey(now)
+    const isToday = (s: string) => dayKey(ts(s)) === today
+    const failsCounted = fails.filter((f) => !f.user_id || counted(f.user_id))
+    type Run = { uid: string | null; at: string; kind: 'bits' | 'rewrites' | 'failed' }
+    const runs: Run[] = [
+      ...bitsCounted.map((b) => ({ uid: b.user_id, at: b.created_at, kind: 'bits' as const })),
+      ...rewritesCounted.map((v) => ({ uid: bitOwner.get(v.bit_id) ?? null, at: v.created_at, kind: 'rewrites' as const })),
+      ...failsCounted.map((f) => ({ uid: f.user_id, at: f.created_at, kind: 'failed' as const })),
+    ]
+    const split = (rs: Run[]) => {
+      const o = { bits: 0, rewrites: 0, failed: 0, signed_in: 0, guest: 0 }
+      for (const r of rs) { o[r.kind]++; if (isPerson(r.uid)) o.signed_in++; else o.guest++ }
+      return o
+    }
+    const runsToday = runs.filter((r) => isToday(r.at))
+    const runsPerUser = new Map<string, { today: number; total: number }>()
+    for (const r of runs) {
+      if (!isPerson(r.uid)) continue
+      const cur = runsPerUser.get(r.uid) ?? { today: 0, total: 0 }
+      cur.total++
+      if (isToday(r.at)) cur.today++
+      runsPerUser.set(r.uid, cur)
+    }
 
     // ---- per-user ----
     const bitsPerUser = new Map<string, { n: number; last: string | null }>()
@@ -258,6 +294,8 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
         rewrites: rewritesPerUser.get(p.user_id) ?? 0,
         last_bit_at: bitsPerUser.get(p.user_id)?.last ?? null,
         active_days_30d: activeDays.get(p.user_id)?.size ?? 0,
+        runs_today: runsPerUser.get(p.user_id)?.today ?? 0,
+        runs_total: runsPerUser.get(p.user_id)?.total ?? 0,
         plan: planOf.get(p.user_id) ?? 'free',
         is_admin: adminIds.has(p.user_id),
       }))
@@ -267,6 +305,13 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
       generated_at: iso(now),
       timezone: TZ,
       excluded_admins: excludeAdmins ? adminIds.size : 0,
+      runs: {
+        today: runsToday.length,
+        total: runs.length,
+        users_today: new Set(runsToday.filter((r) => isPerson(r.uid)).map((r) => r.uid)).size,
+        today_split: split(runsToday),
+        total_split: split(runs),
+      },
       bits: {
         total: bitsCounted.length,
         d1: bitsCounted.filter((b) => inWin(b.created_at, t1)).length,
