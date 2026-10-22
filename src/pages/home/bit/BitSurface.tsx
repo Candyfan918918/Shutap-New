@@ -184,7 +184,14 @@ export function BitSurface() {
   const autostartRef = useRef(false)
   useEffect(() => {
     try {
-      setStory(sessionStorage.getItem(DRAFT_KEY) ?? '')
+      // Text typed before the app finished loading is on the screen (and, via
+      // the inline script in the home route, in the draft). Keep it: the box
+      // must never be reset to empty under someone who is typing.
+      const onScreen = (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.value ?? ''
+      const saved = sessionStorage.getItem(DRAFT_KEY) ?? ''
+      const keep = onScreen.length >= saved.length ? onScreen : saved
+      if (keep) typed.current = true
+      setStory(keep)
       autostartRef.current = sessionStorage.getItem(AUTOSTART_KEY) === '1'
       sessionStorage.removeItem(AUTOSTART_KEY)
     } catch { /* noop */ }
