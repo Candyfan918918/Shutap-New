@@ -34,12 +34,16 @@ export function initPostHog(): Promise<void> {
         capture_pageleave: true,
         persistence: 'localStorage+cookie',
         autocapture: false,
-        // Session replay records clicks and page flow only. Every input and
-        // every piece of on-screen text is masked, so a replay never shows a
-        // story, a bit or a name. The privacy policy (§2, §5a) promises this.
+        // Session replay shows Shutap's own pages (menus, buttons, site copy)
+        // but never a person's content: every input is masked, every element
+        // tagged data-ph-private (bits, the scrub notice, sheets, prompter,
+        // set list, Mirror, profile, admin, names) has its text masked, and
+        // .ph-no-capture (profile pictures) is not recorded at all. The
+        // privacy policy §2 promises this; tag any new surface that shows a
+        // story, a bit, a name or an email.
         session_recording: {
           maskAllInputs: true,
-          maskTextSelector: '*',
+          maskTextSelector: '[data-ph-private]',
         },
         // Error tracking: uncaught errors and unhandled promise rejections
         // become $exception events, grouped into issues in PostHog.

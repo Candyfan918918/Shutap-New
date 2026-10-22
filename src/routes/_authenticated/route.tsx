@@ -50,5 +50,10 @@ export const Route = createFileRoute('/_authenticated')({
       loading…
     </div>
   ),
-  component: () => <Outlet />,
+  // Session replay hides all text on these pages (profile, check-ins, admin).
+  component: () => (
+    <div data-ph-private style={{ display: 'contents' }}>
+      <Outlet />
+    </div>
+  ),
 })

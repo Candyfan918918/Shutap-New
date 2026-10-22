@@ -30,7 +30,7 @@ export function UserAvatar({
   }
   if (avatar) {
     return (
-      <span style={base}>
+      <span style={base} className="ph-no-capture">
         <img
           src={avatar}
           alt=""
@@ -44,5 +44,5 @@ export function UserAvatar({
   }
   if (emoji) return <span style={{ ...base, fontSize: Math.round(size * 0.55) }}>{emoji}</span>
   const initial = (name ?? '').trim().charAt(0).toUpperCase() || '·'
-  return <span style={base} aria-hidden>{initial}</span>
+  return <span style={base} aria-hidden data-ph-private>{initial}</span>
 }

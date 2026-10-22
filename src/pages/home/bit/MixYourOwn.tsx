@@ -143,7 +143,7 @@ export function MixYourOwn({
 
   if (result) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div data-ph-private style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div className="bt-bar" aria-hidden="true">
           <i className="done" />
           <i className="done" />
@@ -190,7 +190,7 @@ export function MixYourOwn({
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div data-ph-private style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div className="bt-between">
         <button className="bt-btn ghost sm" onClick={back}>
           ← {step === 0 ? 'back to the bit' : 'back'}

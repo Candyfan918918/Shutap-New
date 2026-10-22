@@ -147,7 +147,7 @@ export function Prompter({ bit, onClose }: { bit: Pick<BitDraft, 'hook' | 'setup
     state === 'rolling' ? 'pause' : state === 'paused' ? 'resume' : state === 'done' ? 'again' : state === 'counting' ? '…' : 'start'
 
   return createPortal(
-    <div className="bt-stage" role="dialog" aria-modal="true" aria-label="Teleprompter">
+    <div data-ph-private className="bt-stage" role="dialog" aria-modal="true" aria-label="Teleprompter">
       <div className="bt-between">
         <span className="bt-lbl" style={{ color: '#b9a7ae' }}>
           teleprompter · ~{Math.round(words / speed)}s at this pace

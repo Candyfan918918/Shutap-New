@@ -14,7 +14,12 @@ export const Route = createFileRoute('/admin')({
       throw notFound()
     }
   },
-  component: AdminAnalyticsPage,
+  // Session replay hides all text on this page.
+  component: () => (
+    <div data-ph-private style={{ display: 'contents' }}>
+      <AdminAnalyticsPage />
+    </div>
+  ),
   notFoundComponent: () => (
     <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#ffffff', color: '#0b080f', fontFamily: 'Sora,sans-serif' }}>
       <div style={{ textAlign: 'center' }}>

@@ -56,7 +56,7 @@ export function PostSheet({
   }
 
   return (
-    <div
+    <div data-ph-private
       className="bt-scrim"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()

@@ -281,7 +281,7 @@ export function GlobalHeader() {
                       zIndex: 70,
                     }}
                   >
-                    <div style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name || 'signed in'}</div>
+                    <div data-ph-private style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name || 'signed in'}</div>
                     <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link>
                     <Link to="/set-list" style={menuItem} onClick={() => setMenuOpen(false)}>set list</Link>
                     {admin && (

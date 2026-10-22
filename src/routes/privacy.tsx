@@ -80,10 +80,11 @@ function PrivacyPage() {
           linked to your account ID, email and name.
         </li>
         <li>
-          <b>Session replay (PostHog):</b> recordings of clicks, scrolling and page movement, used
-          to find and fix problems. Every text field and all text on the screen are hidden in these
-          recordings, so a replay does not show your stories or your bits. Replays are kept for 30
-          days.
+          <b>Session replay (PostHog):</b> recordings of clicks, scrolling and the pages you move
+          through, used to find and fix problems. Replays show Shutap&rsquo;s own pages, menus and
+          buttons. Everything you type, the text of your stories and bits, your set list, Mirror
+          and profile, and your name are hidden, and profile pictures are not recorded. Replays are
+          kept for 30 days.
         </li>
         <li>
           <b>Technical:</b> standard device and log data.

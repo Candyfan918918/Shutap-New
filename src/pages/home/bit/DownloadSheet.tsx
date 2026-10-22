@@ -99,7 +99,7 @@ export function DownloadSheet({
     paid ? `${tier === 'pro' ? 'Pro' : 'Basic'} · clean, no watermark` : tier === 'guest' ? 'guest download · Shutap watermark' : 'free download · Shutap watermark'
 
   return (
-    <div
+    <div data-ph-private
       className="bt-scrim"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()

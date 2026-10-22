@@ -728,7 +728,7 @@ export function BitSurface() {
         {phase === 'bit' && bit && version && (
           <>
             {notice && (
-              <div className="bt-notice">
+              <div className="bt-notice" data-ph-private>
                 <div className="bt-between">
                   <span className="bt-lbl r">before we saved it</span>
                   <button className="bt-btn ghost sm" onClick={() => setNotice(null)}>
@@ -750,7 +750,7 @@ export function BitSurface() {
               the bit · ~{version.est_seconds}s · heat {version.heat} · {bit.controls.audience}
             </span>
 
-            <article className="bt-card" aria-label="The bit" style={{ paddingTop: 8 }}>
+            <article className="bt-card" aria-label="The bit" data-ph-private style={{ paddingTop: 8 }}>
               <div className="bt-slot">
                 <span className="bt-lbl r">hook · on screen, first 2 seconds</span>
                 <p className="bt-v hook">{version.hook}</p>

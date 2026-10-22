@@ -66,7 +66,7 @@ function Top({ title, meta, onBack }: { title: string; meta: string; onBack: () 
 function Waiting({ load, what, retry }: { load: Load<unknown>; what: string; retry: () => void }) {
   if (load.state === 'loading')
     return (
-      <div className="bt-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div data-ph-private className="bt-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <span className="bt-lbl r">laying out the {what}</span>
         <div className="bt-bar" aria-hidden="true">
           <i className="on" />
@@ -78,7 +78,7 @@ function Waiting({ load, what, retry }: { load: Load<unknown>; what: string; ret
     )
   if (load.state === 'error')
     return (
-      <div className="bt-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div data-ph-private className="bt-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <p role="alert" style={{ margin: 0 }}>{load.message}</p>
         <button className="bt-btn ghost sm" style={{ alignSelf: 'flex-start' }} onClick={retry}>
           try again
@@ -113,7 +113,7 @@ export function SceneView({
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div data-ph-private style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <Top title="Scene" meta={`scene · pov · ~${version.est_seconds}s`} onBack={onBack} />
       <Waiting load={load} what="scene" retry={() => setNonce((n) => n + 1)} />
       {load.state === 'ok' && (
@@ -191,7 +191,7 @@ export function ScreenplayView({
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div data-ph-private style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <Top title="Screenplay page" meta="screenplay page" onBack={onBack} />
       <Waiting load={load} what="screenplay page" retry={() => setNonce((n) => n + 1)} />
       {load.state === 'ok' && (

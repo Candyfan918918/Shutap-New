@@ -12,7 +12,12 @@ import '@/components/feed/feed.css'
 export const Route = createFileRoute('/set-list')({
   ssr: false,
   head: () => ({ meta: [...pageMeta("Your set list — Shutap", "Revisit your saved comedy bits and their versions, or start writing a new story.", "/set-list"), { name: 'robots', content: 'noindex' }] }),
-  component: SetListPage,
+  // Session replay hides all text on this page.
+  component: () => (
+    <div data-ph-private style={{ display: 'contents' }}>
+      <SetListPage />
+    </div>
+  ),
 })
 
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']

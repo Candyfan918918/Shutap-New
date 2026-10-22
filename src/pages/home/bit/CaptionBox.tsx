@@ -48,7 +48,7 @@ export function CaptionBox({
 
   if (locked) {
     return (
-      <div className="bt-cap">
+      <div data-ph-private className="bt-cap">
         <span className="bt-lbl">caption + hashtags</span>
         <p className="bt-note">Sign in free to get a caption and hashtags for this bit.</p>
       </div>
@@ -56,7 +56,7 @@ export function CaptionBox({
   }
 
   return (
-    <div className="bt-cap" aria-live="polite">
+    <div data-ph-private className="bt-cap" aria-live="polite">
       <span className="bt-lbl">caption + hashtags</span>
       {state === 'loading' && <p className="bt-note">writing the caption…</p>}
       {state === 'error' && <p className="bt-note">Couldn't write a caption this time.</p>}

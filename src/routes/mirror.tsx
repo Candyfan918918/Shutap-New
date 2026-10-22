@@ -23,5 +23,10 @@ export const Route = createFileRoute('/mirror')({
       { name: 'robots', content: 'noindex' },
     ],
   }),
-  component: MirrorPage,
+  // Session replay hides all text on this page.
+  component: () => (
+    <div data-ph-private style={{ display: 'contents' }}>
+      <MirrorPage />
+    </div>
+  ),
 })
