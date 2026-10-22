@@ -39,6 +39,9 @@ import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
 const AUTOSTART_KEY = 'shutap_bit_autostart'
+const EARLY_DRAFT_SCRIPT =
+  "(function(){var t=document.getElementById('bit-story');if(!t||window.__shutapEarlyDraft)return;window.__shutapEarlyDraft=1;" +
+  "t.addEventListener('input',function(){try{sessionStorage.setItem('shutap_bit_draft',t.value)}catch(_){}})})();"
 const CONTROLS_KEY = 'shutap_bit_controls'
 const PENDING_KEY = 'shutap_bit_pending'
 const PENDING_TTL = 60 * 60 * 1000
@@ -456,6 +459,10 @@ export function BitSurface() {
                   if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void onWrite()
                 }}
               />
+              {/* Runs in the server-rendered page, before the app loads: copies
+                  what's typed into the box to the draft, so the box doesn't come
+                  back empty when the app takes it over. */}
+              <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: EARLY_DRAFT_SCRIPT }} />
               <div className="bt-ctl">
                 <Choice label="audience" options={AUDIENCES} value={controls.audience} onPick={(v) => setControls((c) => ({ ...c, audience: v }))} />
                 <Choice label="voice" options={VOICES} value={controls.voice} onPick={(v) => setControls((c) => ({ ...c, voice: v }))} />

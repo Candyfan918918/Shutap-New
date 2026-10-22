@@ -42,13 +42,6 @@ export const Route = createFileRoute('/')({
       { rel: "canonical", href: HOME_URL },
     ],
     scripts: [
-      // Runs before the app loads: whatever a visitor types into the story
-      // box in the first seconds is copied to the draft, so the box doesn't
-      // come back empty once the app takes it over.
-      {
-        children:
-          "document.addEventListener('input',function(e){var t=e.target;if(t&&t.id==='bit-story'){try{sessionStorage.setItem('shutap_bit_draft',t.value)}catch(_){}}},true);",
-      },
       {
         type: "application/ld+json",
         children: JSON.stringify({
