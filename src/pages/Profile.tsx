@@ -10,11 +10,11 @@ import { useToast } from '../components/Toast'
 import { UserAvatar } from '@/components/UserAvatar'
 import { ensureMyProfile, updateMyProfile, setMyAvatar, removeMyAvatar } from '@/lib/alias.functions'
 import { getMyBillingStatus, type BillingStatus } from '@/lib/billing.functions'
-import { PLAN_LINES, planByPriceId, usd } from '@/lib/pricing'
+import { PLANS, PLAN_LINES, planByPriceId, usd } from '@/lib/pricing'
 import { BIT_CAPS } from '@/lib/bits/plans'
 import { Footer } from '@/components/feed/Footer'
 import '@/components/feed/feed.css'
-import { createMirrorPortal, setPlanCancellation } from '@/lib/payments.functions'
+import { changePlanToPro, createMirrorPortal, setPlanCancellation } from '@/lib/payments.functions'
 import { deleteMyAccount } from '@/lib/account.functions'
 import { getStripeEnvironment } from '@/lib/stripe'
 import { setAlias, signOut as unifiedSignOut } from '@/lib/auth'
@@ -60,6 +60,7 @@ export function ProfilePage() {
   const fetchBilling = useServerFn(getMyBillingStatus)
   const openPortalFn = useServerFn(createMirrorPortal)
   const setCancelFn = useServerFn(setPlanCancellation)
+  const upgradeFn = useServerFn(changePlanToPro)
   const deleteAccountFn = useServerFn(deleteMyAccount)
 
   const [profile, setProfile] = useState<Profile | null>(null)
@@ -148,6 +149,27 @@ export function ProfilePage() {
       return null
     } catch {
       return "Couldn't change your plan. Nothing was changed; try again in a minute."
+    }
+  }
+
+  /** Basic -> Pro: Stripe charges the difference now. Returns an error
+   *  message, or null when it worked. */
+  async function upgrade(): Promise<string | null> {
+    try {
+      const r = await upgradeFn({ data: { environment: getStripeEnvironment() } })
+      if (!r.ok) {
+        if (r.error === 'no_basic_plan') {
+          navigate('/subscribe?plan=pro')
+          return null
+        }
+        return "Couldn't upgrade you. Your card wasn't charged for Pro; you're still on Basic."
+      }
+      const b = await fetchBilling({ data: { environment: getStripeEnvironment() } })
+      setBilling(b as BillingStatus)
+      toast("You're on Pro.")
+      return null
+    } catch {
+      return "Couldn't upgrade you. Try again in a minute."
     }
   }
 
@@ -241,7 +263,7 @@ export function ProfilePage() {
         </section>
 
         {/* plan */}
-        <BillingCard billing={billing} onOpenPortal={openPortal} portalBusy={portalBusy} navigate={navigate} onCancellation={changeCancellation} />
+        <BillingCard billing={billing} onOpenPortal={openPortal} portalBusy={portalBusy} navigate={navigate} onCancellation={changeCancellation} onUpgrade={upgrade} />
 
         {/* elsewhere */}
         <section className="fd-post" style={{ gap: 0, padding: '4px 16px' }} aria-label="More">
@@ -318,14 +340,17 @@ function BillingCard({
   portalBusy,
   navigate,
   onCancellation,
+  onUpgrade,
 }: {
   billing: BillingStatus | undefined
   onOpenPortal: () => void
   portalBusy: boolean
   navigate: (path: string) => void
   onCancellation: (cancel: boolean) => Promise<string | null>
+  onUpgrade: () => Promise<string | null>
 }) {
   const [confirming, setConfirming] = useState(false)
+  const [upgrading, setUpgrading] = useState<'ask' | 'busy' | null>(null)
   const [changing, setChanging] = useState(false)
   const [changeErr, setChangeErr] = useState<string | null>(null)
   async function change(cancel: boolean) {
@@ -427,8 +452,8 @@ function BillingCard({
             You won't be charged again.{endStr ? ` You keep ${plan.name} until ${endStr}, then you're on Free.` : " You're on Free when this period ends."}
           </p>
           <div className="fd-row" style={{ flexWrap: 'wrap' }}>
-            <button className="fd-btn sm" disabled={changing} onClick={() => void change(true)}>
-              {changing ? 'Cancelling…' : 'Yes, cancel'}
+            <button className="fd-btn sm" style={{ background: '#b3261e' }} disabled={changing} onClick={() => void change(true)}>
+              {changing ? 'Cancelling…' : `Cancel ${plan.name}`}
             </button>
             <button
               className="fd-btn sm ghost"
@@ -438,7 +463,41 @@ function BillingCard({
                 setChangeErr(null)
               }}
             >
-              Keep my plan
+              Go back
+            </button>
+          </div>
+        </div>
+      )}
+      {upgrading && (
+        <div style={{ borderTop: '1px solid var(--line)', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <b style={{ fontSize: 15 }}>Upgrade to Pro?</b>
+          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: 'var(--ink-2)' }}>
+            {usd(PLANS.pro.amount)}/month for unlimited bits and the Mirror. The difference for the rest of this month is charged now, to the card you pay with.
+            {cancelling ? ' This also undoes your cancellation.' : ''}
+          </p>
+          <div className="fd-row" style={{ flexWrap: 'wrap' }}>
+            <button
+              className="fd-btn sm"
+              disabled={upgrading === 'busy'}
+              onClick={async () => {
+                setUpgrading('busy')
+                setChangeErr(null)
+                const err = await onUpgrade()
+                setChangeErr(err)
+                setUpgrading(err ? 'ask' : null)
+              }}
+            >
+              {upgrading === 'busy' ? 'Upgrading…' : 'Pay and upgrade'}
+            </button>
+            <button
+              className="fd-btn sm ghost"
+              disabled={upgrading === 'busy'}
+              onClick={() => {
+                setUpgrading(null)
+                setChangeErr(null)
+              }}
+            >
+              Go back
             </button>
           </div>
         </div>
@@ -449,11 +508,22 @@ function BillingCard({
         </p>
       )}
 
-      {!confirming && (
+      {!confirming && !upgrading && (
         <div className="fd-row" style={{ flexWrap: 'wrap', gap: 10 }}>
+          {paid === 'basic' && !pastDue && (
+            <button
+              className="fd-btn sm"
+              onClick={() => {
+                setUpgrading('ask')
+                setChangeErr(null)
+              }}
+            >
+              Upgrade to Pro · {usd(PLANS.pro.amount)}/mo
+            </button>
+          )}
           {cancelling ? (
-            <button className="fd-btn sm" disabled={changing} onClick={() => void change(false)}>
-              {changing ? 'Saving…' : `Keep ${plan.name}`}
+            <button className="fd-btn sm ghost" disabled={changing} onClick={() => void change(false)}>
+              {changing ? 'Saving…' : "Don't cancel"}
             </button>
           ) : (
             <button
@@ -466,12 +536,12 @@ function BillingCard({
               Cancel plan
             </button>
           )}
-          {billing.hasCustomer && (
-            <button className="fd-btn sm ghost" disabled={portalBusy} onClick={onOpenPortal}>
-              {portalBusy ? 'Opening…' : pastDue ? 'Update card' : 'Card and receipts'}
-            </button>
-          )}
         </div>
+      )}
+      {billing.hasCustomer && !confirming && !upgrading && (
+        <button className="fd-link fd-muted" disabled={portalBusy} onClick={onOpenPortal} style={{ alignSelf: 'flex-start', whiteSpace: 'nowrap' }}>
+          {portalBusy ? 'Opening…' : pastDue ? 'Update card →' : 'Card and receipts →'}
+        </button>
       )}
     </section>
   )

@@ -225,17 +225,20 @@ export const changePlanToPro = createServerFn({ method: 'POST' })
     try {
       const stripe = createStripeClient(data.environment);
       const sub = await stripe.subscriptions.retrieve(basic.stripe_subscription_id);
-      if (sub.cancel_at_period_end || sub.cancel_at) return { ok: false, error: 'plan_cancelling' };
       const item = sub.items.data[0];
       if (!item) return { ok: false, error: 'no_subscription_item' };
       const prices = await stripe.prices.list({ lookup_keys: [PLANS.pro.priceId] });
       const proPrice = prices.data[0];
       if (!proPrice) return { ok: false, error: 'Price not found' };
+      // Upgrading means staying: a Basic plan that was set to end is
+      // un-cancelled as part of the same change.
+      const undoCancel = sub.cancel_at_period_end ? { cancel_at_period_end: false } : sub.cancel_at ? { cancel_at: '' as const } : {};
       const updated = await stripe.subscriptions.update(sub.id, {
         items: [{ id: item.id, price: proPrice.id }],
         proration_behavior: 'always_invoice',
         payment_behavior: 'error_if_incomplete',
         metadata: { ...(sub.metadata ?? {}), userId },
+        ...undoCancel,
       });
       // Record it now, so Pro is on before the webhook lands. The webhook
       // writes the same row again (upsert on the subscription id).
@@ -252,7 +255,7 @@ export const changePlanToPro = createServerFn({ method: 'POST' })
         status: updated.status,
         current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
         current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
-        cancel_at_period_end: updated.cancel_at_period_end ?? false,
+        cancel_at_period_end: !!(updated.cancel_at_period_end || updated.cancel_at),
         environment: data.environment,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'stripe_subscription_id' });
