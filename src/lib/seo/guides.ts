@@ -409,8 +409,8 @@ const BASE_GUIDES: Guide[] = [
         body: "Behind the prompts is a library of named comedy techniques: how a joke gets a picture, how tags escalate on one premise, how a button turns a situation around. There is also a hall of fame of lines the founder approved as funny. It sets the bar for what counts, and new writing is checked against it so Shutap does not repeat those lines. The library teaches Shutap how funny writing is built. The writing you get back is about your story.",
       },
       {
-        heading: "A growing dataset",
-        body: "The writing is guided by a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat, built up by hand. It grows as we add to it, so the guidance gets better over time.",
+        heading: "A dataset we write ourselves",
+        body: "The writing is guided by a dataset the Shutap team writes in-house, pairing everyday situations with jokes, tagged by technique, voice and heat. None of it comes from users. It grows as the team adds to it, so the guidance gets better over time.",
       },
       {
         heading: "What to post today",
@@ -470,7 +470,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Beyond the bit",
-        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat.",
+        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on a dataset the Shutap team writes in-house, pairing everyday situations with jokes, tagged by technique, voice and heat.",
       },
       {
         heading: "Which should you use",
@@ -564,7 +564,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap adds around the tool",
-        body: "Shutap pairs the bit generator with a daily what-to-post idea, The funniest (a series that teaches the techniques of funny people), and a growing joke dataset behind the writing. To our knowledge, no other joke tool pairs all of these.",
+        body: "Shutap pairs the bit generator with a daily what-to-post idea, The funniest (a series that teaches the techniques of funny people), and a joke dataset the Shutap team writes in-house, never from users. To our knowledge, no other joke tool pairs all of these.",
       },
       {
         heading: "Which should you pick",
@@ -608,7 +608,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Beyond the bit",
-        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat.",
+        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on a dataset the Shutap team writes in-house, pairing everyday situations with jokes, tagged by technique, voice and heat.",
       },
       {
         heading: "Who should use which",
@@ -648,7 +648,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What only Shutap has around the tool",
-        body: "A daily idea of what to post with a hook, a bit and a tag, drawn from what is trending. The funniest, a series of educational pages that break down the techniques of funny people with original example lines. And a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat. A general chatbot gives you a blank box. Shutap gives you the structure, the checks and the learning material around it.",
+        body: "A daily idea of what to post with a hook, a bit and a tag, drawn from what is trending. The funniest, a series of educational pages that break down the techniques of funny people with original example lines. And a dataset the Shutap team writes in-house, pairing everyday situations with jokes, tagged by technique, voice and heat. A general chatbot gives you a blank box. Shutap gives you the structure, the checks and the learning material around it.",
       },
       {
         heading: "Formats",
@@ -808,7 +808,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What only Shutap has around the tool",
-        body: "A daily idea of what to post with a hook, a bit and a tag, drawn from what is trending. The funniest, a series of educational pages that break down the techniques of funny people with original example lines. And a growing dataset that pairs real situations with jokes, tagged by technique, voice and heat.",
+        body: "A daily idea of what to post with a hook, a bit and a tag, drawn from what is trending. The funniest, a series of educational pages that break down the techniques of funny people with original example lines. And a dataset the Shutap team writes in-house, pairing everyday situations with jokes, tagged by technique, voice and heat.",
       },
       {
         heading: "Formats",
