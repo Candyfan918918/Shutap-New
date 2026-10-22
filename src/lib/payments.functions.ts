@@ -83,11 +83,11 @@ export const createMirrorCheckout = createServerFn({ method: 'POST' })
         ui_mode: 'embedded_page',
         return_url: data.returnUrl,
         customer: customerId,
-        // Tax is calculated on live payments. Test payments skip it: Stripe
-        // refuses automatic tax in test mode until the test account has a
-        // head office address, and test cards move no money anyway.
-        automatic_tax: { enabled: data.environment === 'live' },
-        ...(data.environment === 'live' ? { customer_update: { name: 'auto' as const, address: 'auto' as const } } : {}),
+        // Tax on every checkout, test and live alike, so a test purchase runs
+        // the same path a real one does. Needs a head office address in
+        // Stripe's tax settings (set for test on Oct 22 2026).
+        automatic_tax: { enabled: true },
+        customer_update: { name: 'auto', address: 'auto' },
         payment_method_collection: 'always',
         // No free trial: the first period is charged at checkout.
         subscription_data: {
