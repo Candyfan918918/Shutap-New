@@ -90,7 +90,7 @@ export const adminListUsers = createServerFn({ method: 'POST' })
       .select('user_id, email, first_name, last_name, full_name, avatar_url, provider, is_anonymous, signup_at, first_visit_at, last_visit_at, last_login_at, login_count, visit_count, last_country, last_city')
       .order(sort, { ascending, nullsFirst: false })
       .limit(limit)
-    if (!data.include_anonymous) query = query.eq('is_anonymous', false)
+    if (!data.include_anonymous) query = query.eq('is_anonymous', false).not('email', 'is', null).neq('email', '')
     if (data.q?.trim()) {
       const q = data.q.trim().replace(/[,%]/g, '')
       query = query.or(`email.ilike.%${q}%,full_name.ilike.%${q}%,first_name.ilike.%${q}%,last_name.ilike.%${q}%`)

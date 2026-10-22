@@ -121,11 +121,27 @@ function Retention({ any, made }: { any: RetentionBlock; made: RetentionBlock })
   )
 }
 
+export function BigNumbers({ total, dau, mau }: { total: number; dau: number; mau: number }) {
+  const cell = (label: string, value: number) => (
+    <div style={{ background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 18, padding: '20px 22px' }}>
+      <div style={{ fontSize: 12, letterSpacing: '.1em', textTransform: 'uppercase', color: DIM, fontWeight: 700 }}>{label}</div>
+      <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 56, lineHeight: 1.05, fontWeight: 800, color: INK, marginTop: 6, fontVariantNumeric: 'tabular-nums', letterSpacing: '-.03em' }}>{value}</div>
+    </div>
+  )
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginBottom: 18 }}>
+      {cell('total users', total)}
+      {cell('dau', dau)}
+      {cell('mau', mau)}
+    </div>
+  )
+}
+
 type SortKey = 'runs_today' | 'runs_total' | 'last_sign_in' | 'first_sign_in' | 'sign_ins' | 'bits' | 'rewrites' | 'last_bit_at' | 'active_days_30d' | 'plan'
 
 function UserTable({ rows }: { rows: ProductUserRow[] }) {
   const [q, setQ] = useState('')
-  const [sort, setSort] = useState<SortKey>('last_sign_in')
+  const [sort, setSort] = useState<SortKey>('first_sign_in')
   const [desc, setDesc] = useState(true)
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase()
@@ -244,6 +260,7 @@ export function AdminProductSection() {
         </label>
       </div>
       {err && <div style={{ color: '#17131a', marginBottom: 12 }}>{err}</div>}
+      {m && <BigNumbers total={m.users.signed_in_total} dau={m.activity.dau} mau={m.activity.mau} />}
       {!m ? (
         !err && <div style={{ color: MID }}>loading…</div>
       ) : (
@@ -306,6 +323,7 @@ export function AdminProductSection() {
             A run = one press of write or rewrite: a new bit, a rewrite, or an attempt that failed. Today = today in {m.timezone}.
             Active = a signed-in user who wrote a bit, rewrote one, fired an event or opened a visit. Days are {m.timezone} calendar days; dau / wau / mau are the last 24h / 7d / 30d.
             Paying = live Stripe subscription that is active or past due; sandbox subscriptions ({m.users.sandbox_subs}) are not counted.
+            {m.hidden_no_email > 0 ? ` ${m.hidden_no_email} account${m.hidden_no_email === 1 ? '' : 's'} with no email ${m.hidden_no_email === 1 ? 'is' : 'are'} hidden from every number and list.` : ''}
             {m.excluded_admins > 0 ? ` ${m.excluded_admins} admin account${m.excluded_admins === 1 ? ' is' : 's are'} left out of every number.` : ''}
             {' '}As of {fmtDate(m.generated_at)}.
           </p>

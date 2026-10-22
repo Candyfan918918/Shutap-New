@@ -75,6 +75,7 @@ export interface ProductMetrics {
   generated_at: string
   timezone: string
   excluded_admins: number
+  hidden_no_email: number
   runs: {
     today: number
     total: number
@@ -162,7 +163,7 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
     const [profiles, bits, versions, subs, roles, failures7, posted, fails] = await Promise.all([
       fetchAll<Profile>((f, t) => db.from('profiles')
         .select('user_id, email, full_name, first_name, last_name, provider, signup_at, last_login_at, login_count')
-        .eq('is_anonymous', false).order('user_id').range(f, t)),
+        .eq('is_anonymous', false).not('email', 'is', null).neq('email', '').order('user_id').range(f, t)),
       fetchAll<Bit>((f, t) => db.from('bits').select('id, user_id, created_at').order('created_at').range(f, t)),
       fetchAll<Version>((f, t) => db.from('bit_versions').select('bit_id, kind, created_at').order('created_at').range(f, t)),
       fetchAll<Sub>((f, t) => db.from('subscriptions').select('user_id, status, environment, cancel_at_period_end').order('user_id').range(f, t)),
@@ -182,6 +183,10 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
     ])
     const events = evChunks.flat()
     const visits = visitChunks.flat()
+
+    // Accounts with no email are hidden from every number and list.
+    const { count: noEmailCount } = await db.from('profiles').select('user_id', { count: 'exact', head: true })
+      .eq('is_anonymous', false).or('email.is.null,email.eq.')
 
     const adminIds = new Set(roles.map((r) => r.user_id))
     const excludeAdmins = !data.include_admins
@@ -392,12 +397,13 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
         plan: planOf.get(p.user_id) ?? 'free',
         is_admin: adminIds.has(p.user_id),
       }))
-      .sort((a, b) => (b.last_sign_in ?? '').localeCompare(a.last_sign_in ?? ''))
+      .sort((a, b) => (b.first_sign_in ?? '').localeCompare(a.first_sign_in ?? ''))
 
     return {
       generated_at: iso(now),
       timezone: TZ,
       excluded_admins: excludeAdmins ? adminIds.size : 0,
+      hidden_no_email: noEmailCount ?? 0,
       runs: {
         today: runsToday.length,
         total: runs.length,

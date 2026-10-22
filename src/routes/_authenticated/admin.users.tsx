@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { adminListUsers } from '@/lib/admin.functions'
 import { AdminShell } from '@/components/AdminShell'
+import { adminProductMetrics } from '@/lib/admin-product.functions'
+import { BigNumbers } from '@/pages/AdminProduct'
 
 export const Route = createFileRoute('/_authenticated/admin/users')({
   head: () => ({ meta: [...pageMeta("Admin · Users — Shutap", "Review Shutap accounts in the private user administration area.", "/admin/users"), { name: 'robots', content: 'noindex' }] }),
@@ -43,7 +45,16 @@ function AdminUsersPage() {
   const [rows, setRows] = useState<Row[] | null>(null)
   const [q, setQ] = useState('')
   const [includeAnon, setIncludeAnon] = useState(false)
-  const [sort, setSort] = useState<SortCol>('last_visit_at')
+  const [sort, setSort] = useState<SortCol>('signup_at')
+  const loadTop = useServerFn(adminProductMetrics)
+  const [top, setTop] = useState<{ total: number; dau: number; mau: number } | null>(null)
+  useEffect(() => {
+    let dead = false
+    loadTop({ data: {} })
+      .then((m) => { if (!dead) setTop({ total: m.users.signed_in_total, dau: m.activity.dau, mau: m.activity.mau }) })
+      .catch(() => {})
+    return () => { dead = true }
+  }, [loadTop])
   const [dir, setDir] = useState<'asc' | 'desc'>('desc')
   const [err, setErr] = useState<string | null>(null)
 
@@ -84,7 +95,8 @@ function AdminUsersPage() {
       : <SortableTh col={col as SortCol} label={label} />
 
   return (
-    <AdminShell title="users">
+    <AdminShell title="users" subtitle="newest sign-up first · accounts with no email are hidden">
+      {top && <BigNumbers total={top.total} dau={top.dau} mau={top.mau} />}
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 16 }}>
         <input
           value={q}
