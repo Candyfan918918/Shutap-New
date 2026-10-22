@@ -28,7 +28,9 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
   }
 }
 
-async function readUserFromRequest(): Promise<{ userId: string | null; token: string | null }> {
+type TokenClaims = { sub?: string; email?: string; is_anonymous?: boolean; app_metadata?: { provider?: string } }
+
+async function readUserFromRequest(): Promise<{ userId: string | null; token: string | null; claims?: TokenClaims }> {
   const req = getRequest()
   const authHeader = req?.headers.get('authorization') || null
   if (!authHeader?.startsWith('Bearer ')) return { userId: null, token: null }
@@ -47,7 +49,7 @@ async function readUserFromRequest(): Promise<{ userId: string | null; token: st
     })
     const { data, error } = await supabase.auth.getClaims(token)
     if (error || !data?.claims?.sub) return { userId: null, token }
-    return { userId: data.claims.sub, token }
+    return { userId: data.claims.sub, token, claims: data.claims as TokenClaims }
   } catch {
     return { userId: null, token }
   }
@@ -99,8 +101,13 @@ const ProfileIn = z.object({
 export const upsertMyProfile = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => ProfileIn.parse(d))
   .handler(async ({ data }) => {
-    const { userId } = await readUserFromRequest()
+    const { userId, claims } = await readUserFromRequest()
     if (!userId) return { ok: false, reason: 'no_auth' as const }
+    // Who the caller is comes from their login token, never from the browser's
+    // say-so: a guest session must not be written up as an email sign-in.
+    if (claims?.is_anonymous) return { ok: false, reason: 'anonymous' as const }
+    const tokenEmail = typeof claims?.email === 'string' && claims.email.trim() ? claims.email.trim() : null
+    const tokenProvider = typeof claims?.app_metadata?.provider === 'string' ? claims.app_metadata.provider : null
     const supabaseAdmin = await adminOrNull()
     if (!supabaseAdmin) return { ok: false, reason: 'tracking_unavailable' as const }
     const geo = extractGeo()
@@ -118,16 +125,16 @@ export const upsertMyProfile = createServerFn({ method: 'POST' })
     } | null
     const merge = <T,>(next: T | null | undefined, prev: T | null | undefined): T | null | undefined =>
       next ?? prev
-    const isLogin = data.login === true && data.is_anonymous !== true
+    const isLogin = data.login === true
     const row = {
       user_id: userId,
-      email: merge(data.email, prev?.email),
+      email: merge(tokenEmail ?? data.email, prev?.email),
       first_name: merge(data.first_name, prev?.first_name),
       last_name: merge(data.last_name, prev?.last_name),
       full_name: merge(data.full_name, prev?.full_name),
       avatar_url: merge(data.avatar_url, prev?.avatar_url),
-      provider: data.provider ?? null,
-      is_anonymous: data.is_anonymous ?? false,
+      provider: tokenProvider ?? data.provider ?? null,
+      is_anonymous: false,
       signup_at: prev?.signup_at ?? now,
       first_visit_at: prev?.first_visit_at ?? now,
       last_visit_at: now,
