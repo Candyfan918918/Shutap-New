@@ -102,7 +102,7 @@ export const TEMPLATES: Record<TemplateId, TemplateEntry> = {
 
 you're in. write your story and get the bit — hook, setup, tags and button. run it in the teleprompter, as a scene or a screenplay page, or post it to a room.
 
-your made-up name is what people see. your real name never shows.
+your profile shows the name and picture from your sign-in. you can change both in your profile.
 
 write your first jokes: ${v.deep_link ?? v.cta_url ?? 'https://shutap.com'}`,
   },

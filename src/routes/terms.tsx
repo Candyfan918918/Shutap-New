@@ -74,10 +74,12 @@ function TermsPage() {
         You must be <b>18 or older</b> to use Shutap. By using it, you confirm you are.
       </p>
 
-      <h3>5. Your account and pseudonym</h3>
+      <h3>5. Your account and profile name</h3>
       <p>
-        You use Shutap under a pseudonym. Your real name is never shown. We can&rsquo;t promise
-        anonymity against valid legal process, and we may disclose information when the law
+        Your profile shows the name and picture your Google or Apple sign-in shares, or, if you
+        sign in with email, a name made from your email address. You can change both in your
+        profile, and your posts appear under them. We can&rsquo;t promise anonymity against valid
+        legal process, and we may disclose information when the law
         requires it (see the Privacy Policy). You are responsible for what happens under your
         account.
       </p>
@@ -103,7 +105,7 @@ function TermsPage() {
       <h3>7. Rooms and public posts</h3>
       <p>
         Rooms are public topic feeds. When you post a joke to a room, anyone can see it under your
-        pseudonym, and people can like, comment on, save, report and follow. Jokes you don&rsquo;t
+        profile name and picture, and people can like, comment on, save, report and follow. Jokes you don&rsquo;t
         post stay private. You can delete your posts and comments at any time. We can&rsquo;t
         recall copies others have already downloaded or shared.
       </p>

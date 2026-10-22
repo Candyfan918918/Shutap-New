@@ -6,7 +6,7 @@ import { SITE_URL } from '@/lib/site'
 const URL = `${SITE_URL}/ai-disclosure`
 const TITLE = "AI Disclosure — How Shutap's AI Joke Generator Works"
 const DESCRIPTION =
-  "Every joke on Shutap is written and ranked by AI (Google Gemini and OpenAI models, via the Lovable AI Gateway). AI can be wrong or offensive; you decide what to post."
+  "Every bit on Shutap is written and ranked by AI (Google Gemini and OpenAI models, via the Lovable AI Gateway), starting from your own story. Your content never trains AI. AI can be wrong or offensive; you decide what to post."
 
 export const Route = createFileRoute('/ai-disclosure')({
   head: () => ({
@@ -94,14 +94,26 @@ function AiDisclosurePage() {
         </div>
       </div>
       <p>
-        Shutap uses AI models (Google&rsquo;s Gemini and OpenAI models, through the Lovable AI Gateway) to remove
-        identifying details, run the crisis check, write your jokes and build the Mirror. No
-        person writes or reviews a joke before you see it.
+        Shutap uses AI models from Google (Gemini) and OpenAI, through the Lovable AI Gateway, to
+        remove identifying details, run the crisis check, write and rank your bits, write rewrites
+        and build the Mirror. No person writes or reviews a bit before you see it.
+      </p>
+      <p>
+        Every bit starts from the story you type. Writing a bit doesn&rsquo;t search the internet
+        or pull from a library of other people&rsquo;s jokes, and no comedian&rsquo;s lines are in
+        Shutap&rsquo;s instructions. The AI models were trained by Google and OpenAI, not by
+        Shutap, and AI can produce a line close to an existing joke by accident, so check anything
+        you rely on commercially.
+      </p>
+      <p>
+        <b>We don&rsquo;t use your content to train AI models, and your stories and bits are never
+        added to the Shutap joke dataset.</b> That dataset is written in-house by the Shutap team.
+        How your text is handled is set out in the{' '}
+        <a href="/privacy">Privacy Policy</a>.
       </p>
       <p>
         AI output can be inaccurate, unfunny or offensive. Treat it as entertainment. You are
-        responsible for what you download, share and post. We don&rsquo;t use your content to
-        train AI models.
+        responsible for what you download, share and post.
       </p>
       <p>
         Some places, including California, require clear notice when you&rsquo;re dealing with AI
