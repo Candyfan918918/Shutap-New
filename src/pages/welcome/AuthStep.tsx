@@ -69,7 +69,7 @@ export function AuthStep() {
         }
       }
       setEmailPhase('code')
-      setMsg({ kind: 'ok', text: 'we emailed you a 6-digit code — enter it below (the magic link also works).' })
+      setMsg({ kind: 'ok', text: 'we emailed you a sign-in code. not in your inbox in a minute? check junk or spam.' })
       track('sign_in_code_sent', { method: 'email' })
     } catch (e) {
       const text = e instanceof Error ? e.message : 'sign-in failed'
@@ -81,7 +81,9 @@ export function AuthStep() {
 
   const verifyEmailCode = async () => {
     const token = code.trim()
-    if (!/^\d{6}$/.test(token)) { setMsg({ kind: 'err', text: 'enter the 6-digit code from the email' }); return }
+    // The code's length is set in the auth settings (it is 8 today), so take
+    // whatever length the email carries rather than assuming 6.
+    if (!/^\d{6,10}$/.test(token)) { setMsg({ kind: 'err', text: 'enter the code from the email' }); return }
     setBusy(true); setMsg(null)
     try {
       // A brand-new address gets a sign-up token, a returning one a sign-in
@@ -172,12 +174,12 @@ export function AuthStep() {
                 type="text"
                 inputMode="numeric"
                 autoComplete="one-time-code"
-                placeholder="6-digit code"
-                maxLength={6}
+                placeholder="code from the email"
+                maxLength={10}
                 value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D+/g, '').slice(0, 6))}
+                onChange={(e) => setCode(e.target.value.replace(/\D+/g, '').slice(0, 10))}
                 onKeyDown={(e) => e.key === 'Enter' && verifyEmailCode()}
-                style={{ flex: 1, background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.14)', borderRadius: 12, padding: '13px 15px', color: TEXT, fontFamily: "'Sora',sans-serif", fontSize: 20, letterSpacing: '.4em', outline: 'none', textAlign: 'center' }}
+                style={{ flex: 1, background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.14)', borderRadius: 12, padding: '13px 15px', color: TEXT, fontFamily: "'Sora',sans-serif", fontSize: 20, letterSpacing: '.25em', outline: 'none', textAlign: 'center' }}
               />
               <button
                 onClick={verifyEmailCode}

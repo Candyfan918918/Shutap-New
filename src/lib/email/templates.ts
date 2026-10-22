@@ -148,8 +148,9 @@ open shutap: ${v.deep_link ?? 'https://shutap.com'}`,
     id: 'magic_link',
     identity: 'hello',
     emailClass: 'transactional',
-    subject: () => 'your shutap sign-in link',
-    preview: () => 'works once. expires in 10 minutes.',
+    // Code in the subject: readable from the notification, no need to open it.
+    subject: (v) => (v.code ? `Your Shutap sign-in code: ${v.code}` : 'Your Shutap sign-in link'),
+    preview: () => 'Enter the code or tap the link. It works once and expires in 10 minutes.',
     cta: 'sign in',
     htmlDesign: magicLinkHtml,
     buildBodyText: (v) => `${g(v)}
