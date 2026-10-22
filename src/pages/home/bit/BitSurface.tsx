@@ -358,7 +358,13 @@ export function BitSurface() {
     void refresh().then(() => restore())
     void openFromLink()
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session?.user.is_anonymous !== true) void restore()
+      if (event === 'SIGNED_IN' && session?.user.is_anonymous !== true) {
+        // Signed in without leaving the page (a popup, as in the preview):
+        // the sign-in sheet has done its job, so it goes, and the bit they
+        // asked for is written underneath it.
+        setSheet((s) => (s === 'signin' || s === 'signin_write' ? null : s))
+        void restore()
+      }
     })
     return () => sub.subscription.unsubscribe()
   }, [refresh, restore, openFromLink])
@@ -528,6 +534,7 @@ export function BitSurface() {
     }
     setTier(res.tier)
     setUsage(res.usage)
+    setSheet((s) => (s === 'signin' || s === 'signin_write' ? null : s))
     setBit(res.bit)
     setCurrentId(res.bit.versions[0]?.id ?? null)
     const swaps = res.replacements.map((r) => r.replacement).filter(Boolean)
@@ -892,7 +899,7 @@ export function BitSurface() {
             }
           }}
         >
-          <div className="bt-sheet" role="dialog" aria-modal="true" aria-labelledby="bit-sheet-title">
+          <div className={`bt-sheet${sheet === 'paywall' ? ' wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="bit-sheet-title">
             {(sheet === 'signin' || sheet === 'signin_write') && (
               <>
                 <h3 id="bit-sheet-title">{sheet === 'signin_write' ? 'Sign in to write this one.' : 'Sign in to use this.'}</h3>
