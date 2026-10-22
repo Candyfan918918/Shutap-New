@@ -350,18 +350,21 @@ export function BitSurface() {
     jokeTrack('signin_dismissed', tier, {})
   }
 
-  async function signInForBit(method: 'google' | 'other', from: string) {
+  async function signInForBit(method: 'google' | 'apple' | 'email', from: string) {
     if (!bit) return
     writePending(bit.id, anonSessionId())
     try { sessionStorage.setItem('shutap_returnTo', '/') } catch { /* noop */ }
     setDurableReturn('/')
     jokeTrack('signin_clicked', tier, { method, from })
-    if (method === 'google') {
-      const err = await startOAuth('google')
+    // Each button goes straight to its own sign-in: Google and Apple to the
+    // provider, email to the email form only. Never to a second chooser.
+    if (method === 'google' || method === 'apple') {
+      const err = await startOAuth(method)
       if (!err) return
       say(err)
+      return
     }
-    void navigate({ to: '/welcome' })
+    window.location.assign('/welcome?method=email')
   }
 
   function writeAnother() {
@@ -563,10 +566,13 @@ export function BitSurface() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
                   <p className="bt-note" style={{ textAlign: 'center' }}>The rest of the tags and the button are under here. Free.</p>
                   <GoogleButton onClick={() => void signInForBit('google', 'inline')} />
-                  <button className="bt-btn ghost block" onClick={() => void signInForBit('other', 'inline')}>
-                    email or Apple
+                  <button className="bt-btn ghost block" onClick={() => void signInForBit('apple', 'inline')}>
+                    continue with Apple
                   </button>
-                  <p className="bt-note" style={{ textAlign: 'center' }}>18+ · made-up name, your real one never shows · by continuing you agree to the terms and privacy policy</p>
+                  <button className="bt-btn ghost block" onClick={() => void signInForBit('email', 'inline')}>
+                    continue with email
+                  </button>
+                  <p className="bt-note" style={{ textAlign: 'center' }}>18+ only · made-up name, your real one never shows · by continuing you confirm you're 18+ and agree to the terms and privacy policy</p>
                 </div>
               )}
             </article>
@@ -702,13 +708,16 @@ export function BitSurface() {
                   Free. You get a made-up name; your real one never shows.
                 </p>
                 <GoogleButton onClick={() => void signInForBit('google', 'sheet')} />
-                <button className="bt-btn ghost block" onClick={() => void signInForBit('other', 'sheet')}>
-                  email or Apple
+                <button className="bt-btn ghost block" onClick={() => void signInForBit('apple', 'sheet')}>
+                  continue with Apple
+                </button>
+                <button className="bt-btn ghost block" onClick={() => void signInForBit('email', 'sheet')}>
+                  continue with email
                 </button>
                 <button className="bt-btn ghost block" onClick={dismissSignin}>
                   not now
                 </button>
-                <p className="bt-note" style={{ textAlign: 'center' }}>18+ · by continuing you agree to the terms and privacy policy</p>
+                <p className="bt-note" style={{ textAlign: 'center' }}>by continuing you confirm you're 18+ and agree to the terms and privacy policy</p>
               </>
             )}
             {sheet === 'limit' && (

@@ -1,58 +1,19 @@
-/* Native React /welcome — orchestrator. Renders the four-step ceremony:
- *   auth (eager)  →  age (lazy)  →  alias (lazy)  →  welcome (lazy)
- * Later steps' code (and their server-fn imports for legal / alias /
- * welcome-email) is fetched only when the user reaches them. */
+/* Native React /welcome. Sign-in is one step:
+ *   auth  →  (alias minted silently)  →  straight back to where they were.
+ * There is no age or alias screen (Oct 2026): 18+ is confirmed by the line
+ * under the sign-in buttons, and a new account gets a random made-up name it
+ * can change later. */
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 import { clearPendingAuthReturn } from '@/lib/auth-guard'
 import { useNoIndex } from '@/components/NoIndex'
 import { AuthStep } from './welcome/AuthStep'
 import { BG, TEXT, EyeMark, SOFT } from './welcome/shared'
-import { readJokePending } from './home/joke/jokeClient'
 import type { AliasResult } from './welcome/AliasStep'
 
-const AgeStep = lazy(() => import('./welcome/AgeStep'))
-const AliasStep = lazy(() => import('./welcome/AliasStep'))
 const WelcomeEnterStep = lazy(() => import('./welcome/WelcomeEnterStep'))
 
-type Step = 'auth' | 'age' | 'alias' | 'welcome'
-
-/** What the alias buys, said at the door for anyone who arrived from the
- *  joke deck with a card turned over: the two still face-down, kept, and
- *  theirs to send. The page otherwise asks for a name with no reason given,
- *  which is fine for someone who came to write and wrong for someone who was
- *  mid-deck and got sent here. */
-function DeckBenefits() {
-  const lines = [
-    'the two cards still face-down flip — all three of every situation are yours',
-    'every card you flip is kept in your set list, under the situation it was written for',
-    'save, share, and post a card as a room — a fake name is all it takes',
-  ]
-  return (
-    <div
-      className="wstep"
-      style={{
-        marginBottom: 18, padding: '16px 18px', borderRadius: 16, textAlign: 'left',
-        background: 'rgba(23,19,26,.08)', border: '1px solid rgba(23,19,26,.28)',
-      }}
-    >
-      <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.35, color: '#e2dde0', marginBottom: 10 }}>
-        your card is waiting. an alias flips the other two.
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-        {lines.map((line) => (
-          <div key={line} style={{ display: 'flex', gap: 9, alignItems: 'flex-start' }}>
-            <span aria-hidden style={{ color: '#8f898d', fontSize: 13, lineHeight: 1.5 }}>✓</span>
-            <span style={{ fontFamily: "'Sora',sans-serif", fontSize: 13, lineHeight: 1.5, color: TEXT }}>{line}</span>
-          </div>
-        ))}
-      </div>
-      <div style={{ marginTop: 10, fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 13, color: SOFT }}>
-        thirty seconds, no real name, no password. reading what you already have stays free either way.
-      </div>
-    </div>
-  )
-}
+type Step = 'auth' | 'welcome'
 
 function StepFallback() {
   return (
@@ -80,20 +41,9 @@ export function WelcomeNativePage() {
       || /[?&](code|token_hash|error)=/.test(s)
   })()
 
-  const initialStep: Step = (() => {
-    try { if (sessionStorage.getItem('shutap_age_rejected') === '1') return 'age' } catch { /* noop */ }
-    return 'auth'
-  })()
-  const [step, setStep] = useState<Step>(initialStep)
+  const [step, setStep] = useState<Step>('auth')
   const [authError, setAuthError] = useState<string | null>(null)
-  // Read once: the note is cleared by the landing page after the claim, not
-  // by anything here, so it is stable for the life of this ceremony.
-  const [fromDeck] = useState<boolean>(() => !!readJokePending())
   const [checking, setChecking] = useState<boolean>(looksLikeAuthCallback)
-  const [ageBlocked, setAgeBlocked] = useState<boolean>(() => {
-    try { return sessionStorage.getItem('shutap_age_rejected') === '1' } catch { return false }
-  })
-  const [birth, setBirth] = useState<{ day: number; month: number; year: number }>({ day: 1, month: 1, year: new Date().getFullYear() - 30 })
   const [existingAlias, setExistingAlias] = useState<AliasResult | null>(null)
   const [finalAlias, setFinalAlias] = useState<AliasResult | null>(null)
   const signedInRef = useRef(false)
@@ -126,7 +76,7 @@ export function WelcomeNativePage() {
       } catch { /* noop */ }
       if (firstCompletion) void import('@/lib/tracking').then((m) => m.trackEvent('sign_in_completed', {})).catch(() => {})
       // Lazy-import server-fn modules so cold /welcome doesn't ship them.
-      const [{ recordLegalAcceptance }, { getMyAlias }] = await Promise.all([
+      const [{ recordLegalAcceptance }, { getMyAlias, upsertMyAlias, randomAliasParts }] = await Promise.all([
         import('@/lib/legal.functions'),
         import('@/lib/alias.functions'),
       ])
@@ -152,7 +102,7 @@ export function WelcomeNativePage() {
           setStep('auth')
           return
         }
-        if (existing?.display_name && existing.birth_year) {
+        if (existing?.display_name) {
           const a: AliasResult = {
             emotion: existing.emotion || '',
             nation: existing.nation || '',
@@ -164,7 +114,34 @@ export function WelcomeNativePage() {
           setFinalAlias(a)
           setStep('welcome')
         } else {
-          setStep('age')
+          // New account: mint a random made-up name without asking.
+          const parts = randomAliasParts()
+          type Saved = { display_name?: string; emoji?: string } | null
+          let saved: Saved = null
+          try {
+            saved = (await upsertMyAlias({ data: parts })) as unknown as Saved
+          } catch {
+            await new Promise((r) => setTimeout(r, 600))
+            saved = (await upsertMyAlias({ data: parts }).catch(() => null)) as unknown as Saved
+          }
+          if (cancelled) return
+          if (!saved) {
+            setAuthError('signed in, but saving your name failed — try once more')
+            setStep('auth')
+            return
+          }
+          const a: AliasResult = { ...parts, display_name: saved.display_name ?? parts.display_name, emoji: saved.emoji ?? parts.emoji }
+          const [{ setAlias }, tracking, welcome] = await Promise.all([
+            import('@/lib/auth'),
+            import('@/lib/tracking').catch(() => null),
+            import('@/lib/welcome-email.functions').catch(() => null),
+          ])
+          setAlias({ name: a.display_name, emoji: a.emoji })
+          void tracking?.trackEvent('alias_minted', { display_name: a.display_name, auto: true })
+          void tracking?.trackEvent('sign_up_completed', { display_name: a.display_name })
+          void welcome?.sendWelcomeEmail().catch(() => {})
+          setFinalAlias(a)
+          setStep('welcome')
         }
       } finally { if (!cancelled) setChecking(false) }
     }
@@ -257,7 +234,6 @@ export function WelcomeNativePage() {
           {checking && <StepFallback />}
           {!checking && step === 'auth' && (
             <>
-              {fromDeck ? <DeckBenefits /> : null}
               <AuthStep />
               {authError && (
                 <div style={{ marginTop: 12, color: '#ff8a8a', fontSize: 13, textAlign: 'center' }}>
@@ -265,24 +241,6 @@ export function WelcomeNativePage() {
                 </div>
               )}
             </>
-          )}
-          {!checking && step === 'age' && (
-            <Suspense fallback={<StepFallback />}>
-              <AgeStep
-                ageBlocked={ageBlocked}
-                onBlocked={() => setAgeBlocked(true)}
-                onConfirm={(b) => { setBirth(b); setStep('alias') }}
-              />
-            </Suspense>
-          )}
-          {!checking && step === 'alias' && (
-            <Suspense fallback={<StepFallback />}>
-              <AliasStep
-                birth={birth}
-                initial={existingAlias ?? undefined}
-                onComplete={(a) => { setFinalAlias(a); setStep('welcome') }}
-              />
-            </Suspense>
           )}
           {!checking && step === 'welcome' && (
             <Suspense fallback={<StepFallback />}>

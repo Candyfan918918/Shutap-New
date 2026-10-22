@@ -18,22 +18,6 @@ function safePath(p: string | null | undefined): string | null {
   return p && p.startsWith('/') && !p.startsWith('//') ? p : null
 }
 
-function hasPendingAction() {
-  try {
-    // readIntent() drops an expired/malformed intent as a side effect, so a
-    // stale entry no longer counts as a pending action.
-    if (readIntent()) return true
-    // A deck left at the joke gate is the strongest signal of all: they were
-    // mid-card, and this page is a detour. It lives in localStorage, so it is
-    // here even when the sign-in landed in a different tab.
-    if (readJokePending()) return true
-    if (PENDING_KEYS.some((key) => !!sessionStorage.getItem(key))) return true
-    return !!localStorage.getItem('shutap_returnTo_durable')
-  } catch {
-    return false
-  }
-}
-
 export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
   const [resuming, setResuming] = useState(false)
   const resumedRef = useRef(false)
@@ -93,8 +77,8 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
   }
 
   useEffect(() => {
+    // Always go straight on: back to what they were doing, else home.
     if (resumedRef.current) return
-    if (!hasPendingAction()) return
     resumedRef.current = true
     setResuming(true)
     enterRoom()

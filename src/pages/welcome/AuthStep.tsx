@@ -16,7 +16,12 @@ function splitName(raw: string): { first_name: string; last_name: string | null;
 }
 
 export function AuthStep() {
-  const [name, setName] = useState('')
+  // The name field is gone (the alias is what shows); kept as '' so the
+  // metadata path below is a no-op.
+  const name = ''
+  // /welcome?method=email comes from an "email" button elsewhere: show only
+  // the email form, never a second provider chooser.
+  const emailOnly = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('method') === 'email'
   const [email, setEmail] = useState('')
   const [emailPhase, setEmailPhase] = useState<'input' | 'code'>('input')
   const [code, setCode] = useState('')
@@ -118,10 +123,11 @@ export function AuthStep() {
         <div style={{ marginTop: 20, fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 26, letterSpacing: '-.04em', marginBottom: 10 }}>
           shut<span style={{ color: '#e7548a' }}>ap</span>
         </div>
-        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.45, color: SOFT, marginBottom: 4 }}>Sign in.</Words>
+        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.45, color: SOFT, marginBottom: 4 }}>{emailOnly ? 'Sign in with email.' : 'Sign in.'}</Words>
         <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.45, color: TEXT }}>Post, follow, keep your jokes.</Words>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {!emailOnly && (<>
         <button className="oauth-btn" style={oauthBtn} disabled={busy} onClick={() => doOAuth('google')}>
           <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
           continue with Google
@@ -135,20 +141,13 @@ export function AuthStep() {
           <span style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 13, color: MUTED }}>or</span>
           <div style={{ flex: 1, height: .5, background: 'rgba(255,255,255,.12)' }} />
         </div>
+        </>)}
         {emailPhase === 'input' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
-            <input
-              type="text"
-              autoComplete="name"
-              placeholder="your name (optional)"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && doEmail()}
-              style={{ background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.14)', borderRadius: 12, padding: '13px 15px', color: TEXT, fontFamily: "'Sora',sans-serif", fontSize: 15, outline: 'none' }}
-            />
             <div style={{ display: 'flex', gap: 9 }}>
               <input
                 type="email"
+                autoFocus={emailOnly}
                 placeholder="your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -198,10 +197,10 @@ export function AuthStep() {
         )}
       </div>
       <div style={{ textAlign: 'center', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 12.5, color: MUTED }}>
-        18+ · your real name never shows
+        18+ only · your real name never shows
       </div>
       <div style={{ textAlign: 'center', fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 12.5, color: MUTED, marginTop: 6 }}>
-        by continuing you agree to our <a href="/terms" style={{ color: MUTED, textDecoration: 'underline' }}>terms</a> and <a href="/privacy" style={{ color: MUTED, textDecoration: 'underline' }}>privacy policy</a>
+        by continuing you confirm you're 18+ and agree to our <a href="/terms" style={{ color: MUTED, textDecoration: 'underline' }}>terms</a> and <a href="/privacy" style={{ color: MUTED, textDecoration: 'underline' }}>privacy policy</a>
       </div>
     </div>
   )
