@@ -38,7 +38,8 @@ function SetListPage() {
       .catch(() => setFailed(true))
   }, [list])
 
-  const left = state ? Math.max(0, state.usage.cap - state.usage.used) : null
+  // Pro has no cap shown (null), so no count either.
+  const left = state && state.usage.cap !== null ? Math.max(0, state.usage.cap - state.usage.used) : null
 
   return (
     <div className="fd">
@@ -76,7 +77,7 @@ function SetListPage() {
           <>
             <span className="fd-muted">
               {state.bits.length} {state.bits.length === 1 ? 'bit' : 'bits'} · newest first
-              {left !== null ? ` · ${WORDS[left] ?? left} ${left === 1 ? 'story' : 'stories'} left today` : ''}
+              {left !== null ? ` · ${WORDS[left] ?? left} ${left === 1 ? 'bit' : 'bits'} left today` : ''}
             </span>
             {state.bits.length === 0 ? (
               <div className="fd-empty">

@@ -1,13 +1,13 @@
 /* Download: the bit as a 9:16 picture, the hook alone, or the script as a
  * PDF. The picture is drawn on the server, which decides the mark from the
- * tier: guest and free files carry the heavy Shutap watermark, Shutap+ files
- * are clean. On a phone the file goes to the share sheet (save to Photos,
+ * tier: guest and free files carry the heavy Shutap watermark, Basic and Pro
+ * files are clean. Everyone's file carries the whole bit. On a phone the file goes to the share sheet (save to Photos,
  * straight into TikTok); elsewhere it downloads. */
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { exportBit } from '@/lib/bits.functions'
-import type { BitTier, BitVersion } from '@/lib/bits/shared'
+import { isPaidTier, type BitTier, type BitVersion } from '@/lib/bits/shared'
 import { PLAN_TO_PRICE, usd } from '@/lib/pricing'
 import { anonSessionId, canShareFiles, isShareAbort, jokeTrack, saveBlob, svgToPng } from '../joke/jokeClient'
 import { scriptPdf } from './screenplay-pdf'
@@ -26,14 +26,12 @@ export function DownloadSheet({
   bitId,
   version,
   tier,
-  locked,
   onClose,
   say,
 }: {
   bitId: string
   version: BitVersion
   tier: BitTier
-  locked: boolean
   onClose: () => void
   say: (m: string) => void
 }) {
@@ -45,7 +43,8 @@ export function DownloadSheet({
   const [ready, setReady] = useState<Ready | null>(null)
   const [busy, setBusy] = useState(true)
   const [error, setError] = useState(false)
-  const formats = locked ? FORMATS.filter((f) => f.key !== 'pdf') : FORMATS
+  const formats = FORMATS
+  const paid = isPaidTier(tier)
 
   useEffect(() => {
     let live = true
@@ -56,10 +55,10 @@ export function DownloadSheet({
     ;(async () => {
       try {
         if (format === 'pdf') {
-          const blob = scriptPdf(version, tier !== 'paying')
+          const blob = scriptPdf(version, !paid)
           url = URL.createObjectURL(blob)
           const slug = version.hook.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'bit'
-          if (live) setReady({ blob, name: `${slug}-script.pdf`, url, watermarked: tier !== 'paying' })
+          if (live) setReady({ blob, name: `${slug}-script.pdf`, url, watermarked: !paid })
           return
         }
         const r = await exportRef.current({ data: { bit_id: bitId, version_id: version.id, format, anon_session_id: anonSessionId() } })
@@ -77,7 +76,7 @@ export function DownloadSheet({
       live = false
       if (url) URL.revokeObjectURL(url)
     }
-  }, [format, bitId, version, tier])
+  }, [format, bitId, version, paid])
 
   async function save() {
     if (!ready) return
@@ -96,7 +95,7 @@ export function DownloadSheet({
   }
 
   const note =
-    tier === 'paying' ? 'Shutap+ · clean, no watermark' : tier === 'guest' ? 'guest download · Shutap watermark' : 'free download · Shutap watermark'
+    paid ? `${tier === 'pro' ? 'Pro' : 'Basic'} · clean, no watermark` : tier === 'guest' ? 'guest download · Shutap watermark' : 'free download · Shutap watermark'
 
   return (
     <div
@@ -125,7 +124,6 @@ export function DownloadSheet({
         </div>
         <p className="bt-note" style={{ textAlign: 'center' }}>
           {note}
-          {locked ? ' · hook and setup only until you sign in' : ''}
         </p>
         <div className="bt-chips" style={{ justifyContent: 'center' }} role="group" aria-label="Format">
           {formats.map((f) => (
@@ -137,8 +135,8 @@ export function DownloadSheet({
         <button className="bt-btn block" disabled={!ready} onClick={() => void save()}>
           save
         </button>
-        <CaptionBox bitId={bitId} versionId={version.id} tier={tier} locked={locked} say={say} />
-        {tier !== 'paying' && (
+        <CaptionBox bitId={bitId} versionId={version.id} tier={tier} say={say} />
+        {!paid && (
           <button
             className="bt-btn ghost block"
             onClick={() => {

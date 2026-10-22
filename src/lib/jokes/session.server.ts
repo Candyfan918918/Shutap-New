@@ -51,6 +51,20 @@ function bearer(): string | null {
   }
 }
 
+/** The guest browser id this request carries (header first, then the
+ *  argument), or null. Untrusted, tier-free: it only names a browser. Used
+ *  after sign-in to count that browser's guest bits toward the account. */
+export function requestAnonId(anonSessionId: string | null): string | null {
+  let headerAnon = ''
+  try {
+    headerAnon = getRequest()?.headers?.get('x-shutap-anon') ?? ''
+  } catch {
+    headerAnon = ''
+  }
+  const anon = (headerAnon || anonSessionId || '').slice(0, 64)
+  return anon && anon !== 'unknown' && anon.length >= 8 ? anon : null
+}
+
 /** Resolve who is calling, and what they are entitled to, server-side. */
 export async function resolveJokeIdentity(anonSessionId: string | null): Promise<JokeIdentity> {
   // The header set by the client middleware is the canonical carrier; the

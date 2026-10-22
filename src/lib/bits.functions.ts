@@ -1,23 +1,25 @@
 // Server functions for bits: write one from a story, make versions, swap a
 // tag, read one back, list the caller's set list.
 //
-// Order on every write: the day's budget first (nothing is scrubbed,
-// classified or stored past a spent budget), then the Scrubber (the raw text
-// is never stored), then the Guard (a crisis overrides everything: no bit,
-// no paywall, the help block). The premise pass starts beside the Guard to
-// save time; if the Guard fires, its result is thrown away unread.
+// Order on every write: the day's budget is reserved first, in one locked
+// write (nothing is scrubbed, classified or stored past a spent budget), then
+// the Scrubber (the raw text is never stored), then the Guard (a crisis
+// overrides everything: no bit, no paywall, the help block). The premise pass
+// starts beside the Guard to save time; if the Guard fires, its result is
+// thrown away unread. Any path that ends without a bit gives the budget back.
 //
-// Bits are server-only rows. Ownership is checked here: the signed-in user,
-// or the guest's own anon session. A guest gets the hook and setup; the tags
-// and button stay masked until they sign in.
+// Daily new bits: guest 1 · free 2 (counting that day's guest bit) · basic 5 ·
+// pro fair-use. Only new bits count; rewrites are free on your own bits.
+// Everyone sees the whole bit. Bits are server-only rows; ownership is checked
+// here: the signed-in user, or the guest's own browser id.
 import { createServerFn } from '@tanstack/react-start'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { z } from 'zod'
 import { hasContactDetails, runScrub } from './agents/scrubber.functions'
 import { runClassifyCrisis } from './agents/guard.functions'
-import { resolveJokeIdentity, resolveDayInfo, type JokeIdentity } from './jokes/session.server'
+import { requestAnonId, resolveJokeIdentity, type JokeIdentity } from './jokes/session.server'
 import { heatFor, varyBitDraft, writeBitFromStory, type BitFailure } from './bits/pipeline.server'
-import { chargeNetwork, chargeStory, readCounter, refundStory, usageFrom } from './bits/usage.server'
+import { NO_CAP, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
 import {
   AUDIENCES,
   DEFAULT_CONTROLS,
@@ -34,6 +36,7 @@ import {
   type SceneBeat,
   type ScreenplayElement,
   type VersionKind,
+  isPaidTier,
 } from './bits/shared'
 
 const Ctx = { anon_session_id: z.string().max(64).nullable().optional() }
@@ -52,6 +55,26 @@ const ControlsSchema = z
 async function adminDb(): Promise<any> {
   const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
   return supabaseAdmin
+}
+
+/** The caller's tier for bits. Until the Basic plan ships, any active
+ *  subscription is Pro. */
+function bitTier(id: JokeIdentity): BitTier {
+  if (!id.userId) return 'guest'
+  return id.tier === 'paying' ? 'pro' : 'free'
+}
+
+/** After sign-in, count the guest bits this browser wrote today toward the
+ *  account. Idempotent; a failure here never blocks the caller. */
+async function mergeGuestToday(admin: any, id: JokeIdentity, anonSessionId: string | null, day: string): Promise<void> {
+  if (!id.userId) return
+  const anon = requestAnonId(anonSessionId)
+  if (!anon) return
+  try {
+    await mergeGuestUsage(admin, id.userId, anon, day)
+  } catch (e) {
+    console.error('[bits] guest usage merge failed', e instanceof Error ? e.message : e)
+  }
 }
 
 /** A guest's bits are keyed to their browser session; no session, no bit. */
@@ -85,39 +108,32 @@ type VersionRow = {
   created_at: string
 }
 
-/** Same shape, nothing to read: each word becomes a bar of its length. */
-function mask(text: string): string {
-  return text
-    .split(/\s+/)
-    .map((w) => '█'.repeat(Math.max(1, Math.min(w.length, 12))))
-    .join(' ')
-}
-
-function toVersion(v: VersionRow, locked: boolean): BitVersion {
+function toVersion(v: VersionRow): BitVersion {
   return {
     id: v.id,
     kind: v.kind,
     hook: v.hook,
     setup: v.setup,
-    // A guest sees the first tag so the payoff is proven; the rest stay masked.
-    tags: locked ? v.tags.map((t, i) => (i === 0 ? t : mask(t))) : v.tags,
-    button: locked ? mask(v.button) : v.button,
-    why: locked ? '' : (v.why ?? ''),
+    tags: v.tags,
+    button: v.button,
+    why: v.why ?? '',
     est_seconds: v.est_seconds,
     heat: v.heat,
     created_at: v.created_at,
   }
 }
 
-function toBit(row: BitRow, versions: VersionRow[], locked: boolean): Bit & { locked: boolean } {
+/** Everyone sees the whole bit, guests included (Oct 22 2026). `locked` stays
+ *  in the shape, always false, so older callers keep working. */
+function toBit(row: BitRow, versions: VersionRow[]): Bit & { locked: boolean } {
   return {
     id: row.id,
     story: row.story_clean,
     controls: { ...DEFAULT_CONTROLS, ...(row.controls ?? {}) },
-    alt_tags: locked ? [] : (row.alt_tags ?? []),
-    versions: versions.map((v) => toVersion(v, locked)),
+    alt_tags: row.alt_tags ?? [],
+    versions: versions.map((v) => toVersion(v)),
     created_at: row.created_at,
-    locked,
+    locked: false,
   }
 }
 
@@ -171,6 +187,20 @@ async function insertVersion(
 
 /* ───────────────────────── write a bit ───────────────────────── */
 
+/** A bit has landed once its row AND its first version exist. Another copy
+ *  of the same press may have saved the row a moment before its version, so
+ *  this waits briefly for the version before giving up. */
+async function landedBit(admin: any, bitId: string, id: JokeIdentity): Promise<{ row: BitRow; versions: VersionRow[] } | null> {
+  const row = await loadOwnedBit(admin, bitId, id)
+  if (!row) return null
+  for (let i = 0; i < 6; i++) {
+    const versions = await loadVersions(admin, row.id)
+    if (versions.length) return { row, versions }
+    await new Promise((r) => setTimeout(r, 300))
+  }
+  return null
+}
+
 export type WriteBitResult =
   | { status: 'crisis' }
   | { status: 'limited'; reason: 'daily' | 'rate_limited'; tier: BitTier; usage: BitUsage }
@@ -202,157 +232,270 @@ async function writeCore(
   controlsIn: Partial<BitControls> | undefined,
   anonSessionId: string | null,
   lab: boolean,
+  writeId?: string,
 ): Promise<WriteBitResult & { lab?: LabDetail }> {
   const started = Date.now()
   const supabaseAdmin = await adminDb()
   const id = await resolveJokeIdentity(anonSessionId)
+  const tier = bitTier(id)
   const anon = anonKey(id)
   if (!id.userId && !anon) return { status: 'no_session' }
 
-  // 1 · budget, before anything is read or stored. The admin lab skips it.
-  const { day, resetsAt } = await resolveDayInfo(supabaseAdmin, id.userId)
-  const counter = await readCounter(supabaseAdmin, id.subjectKey, day)
-  const usage = usageFrom(id.tier, counter, resetsAt)
-  if (!lab) {
-    if (usage.used >= usage.cap) return { status: 'limited', reason: 'daily', tier: id.tier, usage }
-    if ((await chargeNetwork(supabaseAdmin, day, 3)) === 'limited') {
-      return { status: 'limited', reason: 'rate_limited', tier: id.tier, usage }
-    }
-  }
+  const { day, resetsAt } = today()
+  const subject = id.subjectKey
+  const usageNow = async () => usageView(tier, await readUsed(supabaseAdmin, subject, day).catch(() => 0), resetsAt)
 
-  // 2 · scrub: the raw text goes no further than this line
-  const scrubbed = await runScrub(story)
-  const clean = scrubbed.clean_text.trim()
-  if (!clean) return { status: 'failed', tier: id.tier, usage }
-  const tScrub = Date.now()
-
-  // 3 · the Guard, with the writer started beside it to save its time. A
-  // crisis throws the writer's work away unread: nothing is charged, stored
-  // or shown, and the help block is all that comes back.
-  const controls = { ...DEFAULT_CONTROLS, ...(controlsIn ?? {}) } as BitControls
-  const sink: { failure?: BitFailure } = {}
-  const writing = writeBitFromStory(clean, controls, undefined, sink).catch((e) => {
-    sink.failure = { rejected: [], error: e instanceof Error ? e.message : 'threw' }
-    return null
-  })
-  const crisis = await runClassifyCrisis(clean)
-  const tGuard = Date.now()
-  if (crisis.crisis) {
-    await supabaseAdmin.from('crisis_events').insert({
-      alias_id: id.userId,
-      category: crisis.category,
-      severity: crisis.severity,
-      resources_shown: true,
-    } as never)
-    return { status: 'crisis' }
-  }
-
-  // 4 · charge, then write
-  const bitId = crypto.randomUUID()
-  if (!lab) await chargeStory(supabaseAdmin, counter, bitId)
-  const written = await writing
-  if (!written || !written.ranked.length) {
-    // Logged without the story: the controls, the rules that refused each
-    // candidate, and any gateway error. Enough to see why, nothing to read.
-    await supabaseAdmin
-      .from('bit_failures')
-      .insert({ user_id: id.userId, controls, rejected: sink.failure?.rejected ?? [], error: sink.failure?.error ?? null, lab, ms: Date.now() - started } as never)
-      .then(() => null, () => null)
-    if (!lab) await refundStory(supabaseAdmin, id.subjectKey, day, bitId)
-    if (!lab) {
-      const { alertBitFailure } = await import('./bits/alert.server')
-      await alertBitFailure('user_write_failed', {
-        controls,
-        signed_in: !!id.userId,
-        ms: Date.now() - started,
-        error: sink.failure?.error ?? null,
-        rejected: sink.failure?.rejected?.map((r) => r.rule) ?? [],
-      })
-    }
-    return { status: 'failed', tier: id.tier, usage }
-  }
-  const timings = {
-    scrub_ms: tScrub - started,
-    guard_ms: tGuard - tScrub,
-    ...written.timings,
-    total_ms: Date.now() - started,
-  }
-
-  const best = written.ranked[0]!
-  const { error } = await supabaseAdmin.from('bits').insert({
-    id: bitId,
-    user_id: id.userId,
-    anon_key: id.userId ? null : anon,
-    story_clean: clean,
-    controls,
-    premises: written.premises,
-    candidates: written.ranked,
-    alt_tags: written.altTags,
-    prompt_version: written.promptVersion,
-    writer_model: written.writerModel,
-    judge_model: written.judgeModel,
-    judge_why: written.judgeWhy,
-    timings: { ...timings, lab, rejected: written.rejected, attempts: written.attempts },
-  } as never)
-  if (error) {
-    if (!lab) await refundStory(supabaseAdmin, id.subjectKey, day, bitId)
-    throw new Error(error.message)
-  }
-  const original = await insertVersion(supabaseAdmin, bitId, 'original', best, controls.heat)
-  console.log('[bit] written', {
-    bit_id: bitId,
-    tier: id.tier,
-    lab,
-    candidates: written.ranked.length,
-    rejected: written.rejected,
-    attempts: written.attempts,
-    timings,
-  })
-
-  const row: BitRow = {
-    id: bitId,
-    user_id: id.userId,
-    anon_key: anon,
-    story_clean: clean,
-    controls,
-    alt_tags: written.altTags,
-    created_at: original.created_at,
-  }
-  return {
-    status: 'ok',
-    bit: toBit(row, [original], !id.userId),
-    tier: id.tier,
-    usage: lab ? usage : { ...usage, used: usage.used + 1 },
-    notice: scrubbed.notice ?? '',
-    replacements: (scrubbed.replacements ?? []).map((r) => ({
-      type: String(r.detected_type ?? ''),
-      replacement: String(r.replacement_token ?? ''),
-      count: Number(r.count ?? 1),
-    })),
-    ms: Date.now() - started,
-    ...(lab
-      ? {
-          lab: {
-            ranked: written.ranked,
-            rejected: written.rejected,
-            premises: written.premises.filter((p) => p.used).map((p) => p.t),
-            judge_why: written.judgeWhy,
-            timings,
-            writer_model: written.writerModel,
-            judge_model: written.judgeModel,
-          },
+  // A press of "write" carries one id, reused on the client's silent retry
+  // and when the sign-in return replays it. If that bit already exists, this
+  // is a copy of a write that landed (or is landing): hand the same bit back,
+  // charge nothing.
+  let bitId = writeId ?? crypto.randomUUID()
+  if (!lab && writeId) {
+    const { data: taken } = await supabaseAdmin.from('bits').select('id').eq('id', writeId).maybeSingle()
+    if (taken) {
+      if (await loadOwnedBit(supabaseAdmin, writeId, id)) {
+        const landed = await landedBit(supabaseAdmin, writeId, id)
+        if (!landed) return { status: 'failed', tier, usage: await usageNow() }
+        return {
+          status: 'ok',
+          bit: toBit(landed.row, landed.versions),
+          tier,
+          usage: await usageNow(),
+          notice: '',
+          replacements: [],
+          ms: Date.now() - started,
         }
-      : {}),
+      }
+      bitId = crypto.randomUUID() // someone else's id: never reuse it
+    }
+  }
+
+  /** Give the budget back — unless a bit with this id is stored, which means
+   *  another copy of the same press landed and its charge must stand. One
+   *  statement in the database, so the check can't go stale. */
+  const refundIfNotLanded = () => refundBitUnlessStored(supabaseAdmin, subject, day, bitId)
+
+  // After sign-in, this browser's guest bit today counts toward the account.
+  await mergeGuestToday(supabaseAdmin, id, anonSessionId, day)
+
+  // 1 · reserve today's budget in one locked write, before anything is read
+  //     or stored. The admin lab skips it.
+  let used = 0
+  if (!lab) {
+    try {
+      used = await chargeBit(supabaseAdmin, subject, day, capFor(tier), bitId)
+    } catch (e) {
+      // The budget can't be read: refuse rather than write uncounted.
+      console.error('[bit] budget unavailable', e instanceof Error ? e.message : e)
+      return { status: 'failed', tier, usage: usageView(tier, 0, resetsAt) }
+    }
+    if (used === -1) return { status: 'limited', reason: 'daily', tier, usage: await usageNow() }
+    if ((await chargeNetwork(supabaseAdmin, tier, day, 3)) === 'limited') {
+      await refundIfNotLanded()
+      return { status: 'limited', reason: 'rate_limited', tier, usage: await usageNow() }
+    }
+  }
+  const usage = usageView(tier, used, resetsAt)
+
+  // From here on, any way out without a bit gives the budget back.
+  let kept = false
+  try {
+    // 2 · scrub: the raw text goes no further than this line
+    const scrubbed = await runScrub(story)
+    const clean = scrubbed.clean_text.trim()
+    if (!clean) return { status: 'failed', tier, usage: lab ? usage : await refundedUsage() }
+    const tScrub = Date.now()
+
+    // 3 · the Guard, with the writer started beside it to save its time. A
+    // crisis throws the writer's work away unread: nothing is charged, stored
+    // or shown, and the help block is all that comes back.
+    const controls = { ...DEFAULT_CONTROLS, ...(controlsIn ?? {}) } as BitControls
+    const sink: { failure?: BitFailure } = {}
+    const writing = writeBitFromStory(clean, controls, undefined, sink).catch((e) => {
+      sink.failure = { rejected: [], error: e instanceof Error ? e.message : 'threw' }
+      return null
+    })
+    const crisis = await runClassifyCrisis(clean)
+    const tGuard = Date.now()
+    if (crisis.crisis) {
+      await supabaseAdmin.from('crisis_events').insert({
+        alias_id: id.userId,
+        category: crisis.category,
+        severity: crisis.severity,
+        resources_shown: true,
+      } as never)
+      return { status: 'crisis' }
+    }
+
+    // 4 · write
+    const written = await writing
+    if (!written || !written.ranked.length) {
+      // Logged without the story: the controls, the rules that refused each
+      // candidate, and any gateway error. Enough to see why, nothing to read.
+      await supabaseAdmin
+        .from('bit_failures')
+        .insert({ user_id: id.userId, controls, rejected: sink.failure?.rejected ?? [], error: sink.failure?.error ?? null, lab, ms: Date.now() - started } as never)
+        .then(() => null, () => null)
+      if (!lab) {
+        const { alertBitFailure } = await import('./bits/alert.server')
+        await alertBitFailure('user_write_failed', {
+          controls,
+          signed_in: !!id.userId,
+          ms: Date.now() - started,
+          error: sink.failure?.error ?? null,
+          rejected: sink.failure?.rejected?.map((r) => r.rule) ?? [],
+        })
+      }
+      return { status: 'failed', tier, usage: lab ? usage : await refundedUsage() }
+    }
+    const timings = {
+      scrub_ms: tScrub - started,
+      guard_ms: tGuard - tScrub,
+      ...written.timings,
+      total_ms: Date.now() - started,
+    }
+
+    const best = written.ranked[0]!
+    const { error } = await supabaseAdmin.from('bits').insert({
+      id: bitId,
+      user_id: id.userId,
+      anon_key: id.userId ? null : anon,
+      story_clean: clean,
+      controls,
+      premises: written.premises,
+      candidates: written.ranked,
+      alt_tags: written.altTags,
+      prompt_version: written.promptVersion,
+      writer_model: written.writerModel,
+      judge_model: written.judgeModel,
+      judge_why: written.judgeWhy,
+      timings: { ...timings, lab, rejected: written.rejected, attempts: written.attempts },
+    } as never)
+    if (error) {
+      // Two copies of the same press raced and the other one saved first:
+      // its bit is this press's bit, and its charge stands.
+      if ((error as { code?: string }).code === '23505') {
+        const landed = await landedBit(supabaseAdmin, bitId, id)
+        if (landed) {
+          kept = true
+          return {
+            status: 'ok',
+            bit: toBit(landed.row, landed.versions),
+            tier,
+            usage: await usageNow(),
+            notice: '',
+            replacements: [],
+            ms: Date.now() - started,
+          }
+        }
+      }
+      throw new Error(error.message)
+    }
+    let original: VersionRow
+    try {
+      original = await insertVersion(supabaseAdmin, bitId, 'original', best, controls.heat)
+    } catch (e) {
+      // A row without its version would read as a blank bit: take it back out.
+      const { error: delErr } = await supabaseAdmin.from('bits').delete().eq('id', bitId).then(
+        (r: { error: { message: string } | null }) => r,
+        (err: unknown) => ({ error: { message: err instanceof Error ? err.message : String(err) } }),
+      )
+      if (delErr) {
+        // The empty row stays, so the stored-bit check would keep the charge
+        // for nothing: give it back directly.
+        console.error('[bit] could not remove a bit without its version', delErr.message)
+        await refundBit(supabaseAdmin, subject, day, bitId)
+      }
+      throw e
+    }
+    kept = true
+    // The charge stands for a stored bit. If a failing copy of the same press
+    // gave it back in the meantime, this takes it again (a no-op otherwise).
+    if (!lab) {
+      try {
+        // No cap here: the bit is already written, so it always counts.
+        await chargeBit(supabaseAdmin, subject, day, NO_CAP, bitId)
+      } catch (e) {
+        console.error('[bit] re-charge after store failed', e instanceof Error ? e.message : e)
+      }
+    }
+    console.log('[bit] written', {
+      bit_id: bitId,
+      tier,
+      lab,
+      candidates: written.ranked.length,
+      rejected: written.rejected,
+      attempts: written.attempts,
+      timings,
+    })
+
+    const row: BitRow = {
+      id: bitId,
+      user_id: id.userId,
+      anon_key: anon,
+      story_clean: clean,
+      controls,
+      alt_tags: written.altTags,
+      created_at: original.created_at,
+    }
+    return {
+      status: 'ok',
+      bit: toBit(row, [original]),
+      tier,
+      usage,
+      notice: scrubbed.notice ?? '',
+      replacements: (scrubbed.replacements ?? []).map((r) => ({
+        type: String(r.detected_type ?? ''),
+        replacement: String(r.replacement_token ?? ''),
+        count: Number(r.count ?? 1),
+      })),
+      ms: Date.now() - started,
+      ...(lab
+        ? {
+            lab: {
+              ranked: written.ranked,
+              rejected: written.rejected,
+              premises: written.premises.filter((p) => p.used).map((p) => p.t),
+              judge_why: written.judgeWhy,
+              timings,
+              writer_model: written.writerModel,
+              judge_model: written.judgeModel,
+            },
+          }
+        : {}),
+    }
+  } finally {
+    if (!lab && !kept) await refundIfNotLanded()
+  }
+
+  /** The count after this write's refund, for the "didn't count" message. */
+  async function refundedUsage(): Promise<BitUsage> {
+    await refundIfNotLanded()
+    return usageNow()
   }
 }
 
 export const writeBit = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) =>
-    z.object({ story: z.string().min(1).max(4000), controls: ControlsSchema, ...Ctx }).parse(d),
+    z
+      .object({
+        story: z.string().min(1).max(4000),
+        controls: ControlsSchema,
+        /** one id per press of "write", reused on the silent retry */
+        write_id: z.string().uuid().optional(),
+        ...Ctx,
+      })
+      .parse(d),
   )
   .handler(async ({ data }): Promise<WriteBitResult> => {
     try {
-      const { lab: _lab, ...result } = await writeCore(data.story, data.controls as Partial<BitControls> | undefined, data.anon_session_id ?? null, false)
+      const { lab: _lab, ...result } = await writeCore(
+        data.story,
+        data.controls as Partial<BitControls> | undefined,
+        data.anon_session_id ?? null,
+        false,
+        data.write_id,
+      )
       if (result.status === 'no_session') {
         const { alertBitFailure } = await import('./bits/alert.server')
         await alertBitFailure('user_write_failed', { error: 'no_session (visitor has no account and no guest session)' })
@@ -394,13 +537,13 @@ export const varyBit = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<VersionResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
-    if (!id.userId) return { ok: false, reason: 'sign_in' }
+    // Rewrites are free on your own bits, guests included. MAX_VERSIONS is
+    // the per-bit safety limit; guests also pass the per-network layer.
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
     if (versions.length >= MAX_VERSIONS) return { ok: false, reason: 'too_many' }
-    const { day } = await resolveDayInfo(supabaseAdmin, id.userId)
-    if ((await chargeNetwork(supabaseAdmin, day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+    if ((await chargeNetwork(supabaseAdmin, bitTier(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
 
     const from = versions.find((v) => v.id === data.from_version_id) ?? versions[0]
     if (!from) return { ok: false, reason: 'not_found' }
@@ -413,7 +556,7 @@ export const varyBit = createServerFn({ method: 'POST' })
     )
     if (!draft) return { ok: false, reason: 'failed' }
     const saved = await insertVersion(supabaseAdmin, row.id, data.kind, draft, heatFor(data.kind, controls))
-    return { ok: true, version: toVersion(saved, false) }
+    return { ok: true, version: toVersion(saved) }
   })
 
 /** Put one of the five spare tags into a tag slot. No model call. */
@@ -432,7 +575,6 @@ export const swapTag = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<VersionResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
-    if (!id.userId) return { ok: false, reason: 'sign_in' }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
@@ -449,7 +591,7 @@ export const swapTag = createServerFn({ method: 'POST' })
       { hook: from.hook, setup: from.setup, tags, button: from.button, why: from.why ?? '' },
       from.heat,
     )
-    return { ok: true, version: toVersion(saved, false) }
+    return { ok: true, version: toVersion(saved) }
   })
 
 /* ───────────────────────── reading ───────────────────────── */
@@ -460,8 +602,8 @@ export const getBit = createServerFn({ method: 'POST' })
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
-    if (!row) return { bit: null, tier: id.tier }
-    return { bit: toBit(row, await loadVersions(supabaseAdmin, row.id), !id.userId), tier: id.tier }
+    if (!row) return { bit: null, tier: bitTier(id) }
+    return { bit: toBit(row, await loadVersions(supabaseAdmin, row.id)), tier: bitTier(id) }
   })
 
 export type SetListItem = { id: string; hook: string; audience: string; versions: number; created_at: string }
@@ -472,9 +614,18 @@ export const listMyBits = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<{ tier: BitTier; bits: SetListItem[]; usage: BitUsage }> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
-    const { day, resetsAt } = await resolveDayInfo(supabaseAdmin, id.userId)
-    const usage = usageFrom(id.tier, await readCounter(supabaseAdmin, id.subjectKey, day), resetsAt)
-    if (!id.userId) return { tier: id.tier, bits: [], usage }
+    const tier = bitTier(id)
+    const { day, resetsAt } = today()
+    // Right after sign-in, the count already includes the guest bit.
+    await mergeGuestToday(supabaseAdmin, id, data.anon_session_id ?? null, day)
+    let used = 0
+    try {
+      used = await readUsed(supabaseAdmin, id.subjectKey, day)
+    } catch (e) {
+      console.error('[bits] usage read failed', e instanceof Error ? e.message : e)
+    }
+    const usage = usageView(tier, used, resetsAt)
+    if (!id.userId) return { tier, bits: [], usage }
     const { data: rows } = await supabaseAdmin
       .from('bits')
       .select('id, controls, created_at, bit_versions(hook, kind, created_at)')
@@ -493,7 +644,7 @@ export const listMyBits = createServerFn({ method: 'POST' })
         created_at: r.created_at as string,
       }
     })
-    return { tier: id.tier, bits, usage }
+    return { tier, bits, usage }
   })
 
 /** After sign-in: the bits this browser wrote as a guest become the user's. */
@@ -509,6 +660,12 @@ export const claimGuestBits = createServerFn({ method: 'POST' })
       .is('user_id', null)
       .eq('anon_key', data.anon_session_id)
       .select('id')
+    // Today's guest bit counts toward the account's day (free is 2 in total).
+    try {
+      await mergeGuestUsage(supabaseAdmin, id.userId, data.anon_session_id, today().day)
+    } catch (e) {
+      console.error('[bits] guest usage merge failed', e instanceof Error ? e.message : e)
+    }
     return { claimed: (rows as unknown[] | null)?.length ?? 0 }
   })
 
@@ -546,7 +703,6 @@ export const getMixOptions = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<{ ok: true; pool: MixPool } | { ok: false; reason: 'sign_in' | 'not_found' }> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
-    if (!id.userId) return { ok: false, reason: 'sign_in' }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     return { ok: true, pool: await mixPool(supabaseAdmin, row.id) }
@@ -570,7 +726,6 @@ export const saveMix = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<VersionResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
-    if (!id.userId) return { ok: false, reason: 'sign_in' }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
@@ -589,7 +744,7 @@ export const saveMix = createServerFn({ method: 'POST' })
       { hook: data.hook, setup: from.setup, tags: [data.tag], button: data.button, why: 'Your mix: the hook, tag and ending you picked.' },
       from.heat,
     )
-    return { ok: true, version: toVersion(saved, false) }
+    return { ok: true, version: toVersion(saved) }
   })
 
 /* ───────────────────────── scene + screenplay ───────────────────────── */
@@ -615,8 +770,7 @@ async function layoutFor<T>(
     .maybeSingle()
   if (!v) return { ok: false, reason: 'not_found' }
   if (v[kind]) return { ok: true, data: v[kind] as T }
-  const { day } = await resolveDayInfo(supabaseAdmin, id.userId)
-  if ((await chargeNetwork(supabaseAdmin, day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+  if ((await chargeNetwork(supabaseAdmin, bitTier(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
   const { writeScene, writeScreenplay } = await import('./bits/pipeline.server')
   const made = kind === 'scene' ? await writeScene(row.story_clean, v) : await writeScreenplay(row.story_clean, v)
   if (!made) return { ok: false, reason: 'failed' }
@@ -641,8 +795,8 @@ export type ExportResult =
   | { ok: false; reason: 'not_found' }
 
 /** The picture, drawn here so the tier decides the mark: guest and free get
- *  the heavy watermark, Shutap+ gets a clean file. A guest's picture carries
- *  only the hook and setup — the same lines they can read. */
+ *  the heavy watermark, Basic and Pro get a clean file. Everyone's picture
+ *  carries the whole bit. */
 export const exportBit = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) =>
     z.object({ bit_id: z.string().uuid(), version_id: z.string().uuid(), format: z.enum(['bit', 'hook']), ...Ctx }).parse(d),
@@ -660,9 +814,10 @@ export const exportBit = createServerFn({ method: 'POST' })
       .maybeSingle()
     if (!v) return { ok: false, reason: 'not_found' }
     const { renderBitSvg, artFilename } = await import('./bits/art')
-    const watermarked = id.tier !== 'paying'
-    const svg = renderBitSvg({ ...v, format: data.format, locked: !id.userId, watermark: watermarked })
-    return { ok: true, svg, filename: artFilename(v.hook, data.format), watermarked, tier: id.tier }
+    const tier = bitTier(id)
+    const watermarked = !isPaidTier(tier)
+    const svg = renderBitSvg({ ...v, format: data.format, locked: false, watermark: watermarked })
+    return { ok: true, svg, filename: artFilename(v.hook, data.format), watermarked, tier }
   })
 
 /* ───────────────────────── post to rooms ───────────────────────── */
@@ -790,8 +945,8 @@ export type CaptionResult =
   | { ok: false; reason: 'sign_in' | 'not_found' | 'rate_limited' | 'failed' }
 
 /** The text under the video: a teaser caption and 5–8 hashtags, written on
- *  first ask and cached on the version. Signed in only: a guest's tags and
- *  button are not theirs yet, and the caption is written from them. */
+ *  first ask and cached on the version. Signed in only: it's a model call
+ *  written on request, like the scene and screenplay. */
 export const getCaption = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => LayoutInput.parse(d))
   .handler(async ({ data }): Promise<CaptionResult> => {
@@ -808,8 +963,7 @@ export const getCaption = createServerFn({ method: 'POST' })
       .maybeSingle()
     if (!v) return { ok: false, reason: 'not_found' }
     if (v.caption?.caption) return { ok: true, caption: v.caption.caption, hashtags: v.caption.hashtags ?? [] }
-    const { day } = await resolveDayInfo(supabaseAdmin, id.userId)
-    if ((await chargeNetwork(supabaseAdmin, day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+    if ((await chargeNetwork(supabaseAdmin, bitTier(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
     const { writeCaption } = await import('./bits/pipeline.server')
     const made = await writeCaption(row.story_clean, v, (row.controls as BitControls)?.audience ?? 'social')
     if (!made) return { ok: false, reason: 'failed' }

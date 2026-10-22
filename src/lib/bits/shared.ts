@@ -49,9 +49,27 @@ export type Bit = {
   created_at: string
 }
 
-export type BitTier = 'guest' | 'free' | 'paying'
+/** Who is writing, for limits and the watermark. Decided on the server only. */
+export type BitTier = 'guest' | 'free' | 'basic' | 'pro'
 
-export type BitUsage = { used: number; cap: number; resets_at: string }
+/** New bits written today. `cap` is null for Pro, whose fair-use cap is never
+ *  shown. `resets_at` is the next midnight in Los Angeles. */
+export type BitUsage = { used: number; cap: number | null; resets_at: string }
+
+/** Paid tiers download without the watermark. */
+export function isPaidTier(tier: BitTier): boolean {
+  return tier === 'basic' || tier === 'pro'
+}
+
+/** True when this tier has no new bits left today. Pro (no cap shown) never
+ *  blocks here; the server enforces its fair-use cap. A count from before
+ *  the last Pacific midnight is stale: a tab left open overnight must not
+ *  stay blocked (the server checks again either way). */
+export function atCap(u: BitUsage | null | undefined, now = Date.now()): boolean {
+  if (!u || u.cap === null || u.used < u.cap) return false
+  const resets = Date.parse(u.resets_at)
+  return !(Number.isFinite(resets) && now >= resets)
+}
 
 export function wordCount(text: string): number {
   const t = text.trim()
