@@ -51,7 +51,7 @@ function Series({ title, rows, unit }: { title: string; rows: Array<{ date: stri
   )
 }
 
-type SortKey = 'last_sign_in' | 'first_sign_in' | 'sign_ins' | 'bits' | 'rewrites' | 'last_bit_at' | 'active_days_30d' | 'plan'
+type SortKey = 'runs_today' | 'runs_total' | 'last_sign_in' | 'first_sign_in' | 'sign_ins' | 'bits' | 'rewrites' | 'last_bit_at' | 'active_days_30d' | 'plan'
 
 function UserTable({ rows }: { rows: ProductUserRow[] }) {
   const [q, setQ] = useState('')
@@ -105,6 +105,8 @@ function UserTable({ rows }: { rows: ProductUserRow[] }) {
                 <Th k="first_sign_in" label="first sign-in" />
                 <Th k="last_sign_in" label="last sign-in" />
                 <Th k="sign_ins" label="sign-ins" />
+                <Th k="runs_today" label="runs · today" />
+                <Th k="runs_total" label="runs · total" />
                 <Th k="bits" label="bits" />
                 <Th k="rewrites" label="rewrites" />
                 <Th k="last_bit_at" label="last bit" />
@@ -123,6 +125,8 @@ function UserTable({ rows }: { rows: ProductUserRow[] }) {
                   <td style={td}>{fmtDate(r.first_sign_in)}</td>
                   <td style={td}>{fmtDate(r.last_sign_in)}</td>
                   <td style={num}>{r.sign_ins}</td>
+                  <td style={{ ...num, fontWeight: r.runs_today > 0 ? 700 : 400 }}>{r.runs_today}</td>
+                  <td style={num}>{r.runs_total}</td>
                   <td style={num}>{r.bits}</td>
                   <td style={num}>{r.rewrites}</td>
                   <td style={td}>{fmtDate(r.last_bit_at)}</td>
@@ -174,6 +178,15 @@ export function AdminProductSection() {
         !err && <div style={{ color: MID }}>loading…</div>
       ) : (
         <>
+          <h3 style={groupH}>runs</h3>
+          <div style={grid}>
+            <Tile label="runs · today" value={m.runs.today} sub={`${m.runs.today_split.signed_in} signed-in · ${m.runs.today_split.guest} guest`} />
+            <Tile label="people running today" value={m.runs.users_today} sub="signed-in users" />
+            <Tile label="today's mix" value={`${m.runs.today_split.bits} / ${m.runs.today_split.rewrites} / ${m.runs.today_split.failed}`} sub="new bits / rewrites / failed" />
+            <Tile label="runs · all time" value={m.runs.total} sub={`${m.runs.total_split.signed_in} signed-in · ${m.runs.total_split.guest} guest`} />
+            <Tile label="all-time mix" value={`${m.runs.total_split.bits} / ${m.runs.total_split.rewrites} / ${m.runs.total_split.failed}`} sub="new bits / rewrites / failed" />
+          </div>
+
           <h3 style={groupH}>bits</h3>
           <div style={grid}>
             <Tile label="bits · all time" value={m.bits.total} sub={`${m.bits.d1} today · ${m.bits.d7} · 7d`} />
@@ -217,6 +230,7 @@ export function AdminProductSection() {
           <UserTable rows={m.user_rows} />
 
           <p style={{ fontSize: 11, color: DIM, marginTop: 10, lineHeight: 1.6 }}>
+            A run = one press of write or rewrite: a new bit, a rewrite, or an attempt that failed. Today = today in {m.timezone}.
             Active = a signed-in user who wrote a bit, rewrote one, fired an event or opened a visit. Days are {m.timezone} calendar days; dau / wau / mau are the last 24h / 7d / 30d.
             Paying = live Stripe subscription that is active or past due; sandbox subscriptions ({m.users.sandbox_subs}) are not counted.
             {m.excluded_admins > 0 ? ` ${m.excluded_admins} admin account${m.excluded_admins === 1 ? ' is' : 's are'} left out of every number.` : ''}
