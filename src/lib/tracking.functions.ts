@@ -212,9 +212,17 @@ export const recordVisit = createServerFn({ method: 'POST' })
 
 // ---------- events ----------
 
+/** Events only the server writes (from Stripe). A browser can't send them,
+ *  so the daily report's payments can't be faked. */
+const SERVER_ONLY_EVENTS = new Set(['paid'])
+
 const EventIn = z.object({
   session_id: z.string().min(1).max(120).optional(),
-  name: z.string().min(1).max(80),
+  name: z
+    .string()
+    .min(1)
+    .max(80)
+    .refine((n) => !SERVER_ONLY_EVENTS.has(n), { message: 'reserved event name' }),
   properties: z.record(z.string(), z.unknown()).optional(),
 })
 

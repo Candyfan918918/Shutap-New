@@ -74,12 +74,21 @@ const UPGRADE_FAIL: Record<string, string> = {
   plan_cancelling: 'Your Basic plan is set to end. Resume it from your profile first.',
 }
 
-export function UpgradeBody({ onUpgraded, onClose }: { onUpgraded: () => void; onClose: () => void }) {
+export function UpgradeBody({
+  onChoose,
+  onUpgraded,
+  onClose,
+}: {
+  onChoose: () => void
+  onUpgraded: () => void
+  onClose: () => void
+}) {
   const change = useServerFn(changePlanToPro)
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
 
   async function go() {
+    onChoose()
     setBusy(true)
     setErr(null)
     try {

@@ -158,6 +158,7 @@ async function handleInvoicePaid(invoice: any, env: StripeEnv) {
     .eq('stripe_subscription_id', subId)
     .eq('environment', env)
     .maybeSingle();
+  await recordPaid(invoice, env, subId, row);
   if (!row || !PAID_PRODUCTS.includes(row.product_id)) return;
 
   const interval: string =
@@ -186,6 +187,74 @@ async function handleInvoicePaid(invoice: any, env: StripeEnv) {
       deep_link: invoiceUrl,
     },
   });
+}
+
+// The 'paid' step of the paywall funnel, for the admin daily report: a new
+// plan (the first paid invoice) or an upgrade to Pro (the prorated invoice).
+// Renewals are not conversions and are not recorded. Live payments only —
+// sandbox test payments would inflate the report. Recorded once per invoice
+// (Stripe retries webhooks).
+async function recordPaid(
+  invoice: any,
+  env: StripeEnv,
+  subId: string,
+  row: { user_id?: string; price_id?: string | null } | null,
+) {
+  try {
+    if (env !== 'live') return;
+    const reason = invoice.billing_reason;
+    if (reason !== 'subscription_create' && reason !== 'subscription_update') return;
+    const userId =
+      row?.user_id ??
+      invoice.parent?.subscription_details?.metadata?.userId ??
+      invoice.subscription_details?.metadata?.userId ??
+      null;
+    if (!userId) {
+      console.error('[stripe webhook] paid event skipped: no user for invoice', { invoice: invoice.id });
+      return;
+    }
+    const { data: already } = await getSupabase()
+      .from('events')
+      .select('id')
+      .eq('name', 'paid')
+      .eq('properties->>invoice_id', invoice.id)
+      .limit(1);
+    if (already && already.length) return;
+    // The only upgrade on offer is Basic → Pro. For a new plan, the row may
+    // not exist yet (Stripe doesn't promise event order) and invoice lines
+    // carry no lookup key under the current API, so ask Stripe for the
+    // subscription's price.
+    let priceKey: string | null = row?.price_id ?? null;
+    if (reason === 'subscription_create' && !priceKey) {
+      try {
+        const sub = await createStripeClient(env).subscriptions.retrieve(subId);
+        const p = sub.items.data[0]?.price;
+        priceKey = p?.lookup_key || (p?.metadata as Record<string, string> | undefined)?.lovable_external_id || p?.id || null;
+      } catch (e) {
+        console.error('[stripe webhook] paid event: could not read the subscription price', e);
+      }
+    }
+    const plan = reason === 'subscription_update' ? 'pro' : planFromPriceId(priceKey) ?? 'basic';
+    const { error } = await getSupabase().from('events').insert({
+      user_id: userId,
+      session_id: null,
+      name: 'paid',
+      properties: {
+        plan,
+        kind: reason === 'subscription_update' ? 'upgrade' : 'new',
+        amount: invoice.amount_paid / 100,
+        currency: invoice.currency,
+        subscription_id: subId,
+        invoice_id: invoice.id,
+        price: priceKey,
+      },
+    });
+    // 23505: a concurrent retry recorded it first (unique per invoice).
+    if (error && (error as { code?: string }).code !== '23505') console.error('[stripe webhook] paid event insert failed', error.message);
+  } catch (e) {
+    // Never fail the webhook over the report.
+    console.error('[stripe webhook] paid event threw', e);
+  }
 }
 
 async function handleUpdated(sub: any, env: StripeEnv) {

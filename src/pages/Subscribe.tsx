@@ -33,6 +33,28 @@ const fadeUpKeyframes = `
 @keyframes shutapSubFadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 `
 
+const FROM_KEY = 'shutap_paywall_from'
+/** The paywall that sent them here, if any: from ?from=, else what this
+ *  session last stored. */
+const FROM_TTL_MS = 30 * 60 * 1000
+function paywallFrom(raw: string | null): string | null {
+  const ok = (v: unknown) => (v === 'bit_3' || v === 'daily_limit' || v === 'download' ? v : null)
+  const v = ok(raw)
+  try {
+    if (v) {
+      sessionStorage.setItem(FROM_KEY, JSON.stringify({ v, at: Date.now() }))
+      return v
+    }
+    // Only a recent paywall counts (it survives the sign-in round trip); an
+    // old one isn't credited for a later direct visit.
+    const saved = JSON.parse(sessionStorage.getItem(FROM_KEY) ?? 'null') as { v?: unknown; at?: number } | null
+    if (!saved || typeof saved.at !== 'number' || Date.now() - saved.at > FROM_TTL_MS) return null
+    return ok(saved.v)
+  } catch {
+    return v
+  }
+}
+
 function fadeUp(delay = 0): CSSProperties {
   return { animation: `shutapSubFadeUp .5s ease ${delay}s both` }
 }
@@ -102,6 +124,9 @@ export function SubscribePage() {
   const [search] = useSearchParams()
   const navigate = useNavigate()
   const initialPlan = planKeyFromParam(search.get('plan'))
+  // Where the paywall was opened (bit_3 / daily_limit / download), kept for
+  // the session so it survives the sign-in round trip before checkout.
+  const from = paywallFrom(search.get('from'))
   const [planKey, setPlanKey] = useState<PlanKey>(initialPlan)
   const plan = PLANS[planKey]
   const [err, setErr] = useState<string | null>(null)
@@ -229,7 +254,7 @@ export function SubscribePage() {
         throw new Error(result.error === 'already_subscribed' ? "You're already on a plan." : result.error)
       }
       if (!result.clientSecret) throw new Error('No client secret returned')
-      void trackEvent('checkout', { plan: planKey })
+      void trackEvent('checkout_started', { plan: plan.tier, price: plan.priceId, where: from })
       return result.clientSecret
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Could not start checkout'

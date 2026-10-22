@@ -33,6 +33,7 @@ import {
 } from '@/lib/bits/shared'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth } from '@/lib/oauth-signin'
+import { trackEvent } from '@/lib/tracking'
 import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 import { ActionIcon } from './icons'
 import { Versions } from './Versions'
@@ -391,6 +392,7 @@ export function BitSurface() {
     if (t === 'guest') {
       setSheet('signin_write')
       jokeTrack('signin_sheet_opened', t, { from: 'bit_2' })
+      void trackEvent('signin_prompt_seen', { where: 'bit_2' })
       return
     }
     if (t === 'pro') return setSheet('fair')
@@ -403,7 +405,7 @@ export function BitSurface() {
   function openPaywall(where: PaywallWhere) {
     setPaywallWhere(where)
     setSheet(where === 'daily_limit' ? 'upgrade' : 'paywall')
-    jokeTrack('paywall_opened', tier, { where })
+    void trackEvent('paywall_seen', { where, tier })
   }
 
   async function onUpgraded() {
@@ -913,11 +915,17 @@ export function BitSurface() {
             {sheet === 'paywall' && (
               <PaywallBody
                 where={paywallWhere}
-                onPick={(plan) => jokeTrack('plan_picked', tier, { plan, where: paywallWhere })}
+                onPick={(plan) => void trackEvent('plan_chosen', { plan, where: paywallWhere })}
                 onClose={() => setSheet(null)}
               />
             )}
-            {sheet === 'upgrade' && <UpgradeBody onUpgraded={() => void onUpgraded()} onClose={() => setSheet(null)} />}
+            {sheet === 'upgrade' && (
+              <UpgradeBody
+                onChoose={() => void trackEvent('plan_chosen', { plan: 'pro', where: 'daily_limit' })}
+                onUpgraded={() => void onUpgraded()}
+                onClose={() => setSheet(null)}
+              />
+            )}
             {sheet === 'fair' && (
               <>
                 <h3 id="bit-sheet-title">That's a lot of bits for one day.</h3>

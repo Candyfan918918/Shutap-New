@@ -137,7 +137,30 @@ export function DailyReportSection() {
             )}
           </div>
 
+          <h3 style={{ fontFamily: "'Sora',sans-serif", fontSize: 13, fontWeight: 700, color: INK, margin: '18px 0 10px' }}>paywall</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12 }}>
+            <Stat label="sign-in prompt" value={r.paywall.signin_prompt_seen} sub="guests asked to sign in at bit 2" />
+            <Stat
+              label="saw the paywall"
+              value={r.paywall.seen.total}
+              sub={`bit 3: ${r.paywall.seen.bit_3} · limit: ${r.paywall.seen.daily_limit} · download: ${r.paywall.seen.download}`}
+            />
+            <Stat label="picked a plan" value={r.paywall.plan_chosen.basic + r.paywall.plan_chosen.pro} sub={`basic ${r.paywall.plan_chosen.basic} · pro ${r.paywall.plan_chosen.pro}`} />
+            <Stat
+              label="opened checkout"
+              value={r.paywall.checkout_started.basic + r.paywall.checkout_started.pro}
+              sub={`${pctText(r.paywall.checkout_rate_pct)} of paywall views · basic ${r.paywall.checkout_started.basic} · pro ${r.paywall.checkout_started.pro}`}
+            />
+            <Stat
+              label="paid"
+              value={r.paywall.paid.basic + r.paywall.paid.pro}
+              sub={`${pctText(r.paywall.paid_rate_pct)} of checkouts · basic ${r.paywall.paid.basic} · pro ${r.paywall.paid.pro}`}
+            />
+            <Stat label="upgraded to pro" value={r.paywall.upgrades} sub="Basic → Pro, no checkout" />
+          </div>
+
           <p style={{ fontSize: 11, color: DIM, marginTop: 10, lineHeight: 1.6 }}>
+            Paywall numbers are unique people that day (an account, or a guest's browser session). "Opened checkout" counts checkouts reached from the paywall. "Paid" is a new plan (live payments only), not a renewal; its rate is the share of people who opened checkout and paid that day.{' '}
             Days are {r.timezone} calendar days. Visits are human sessions (bots removed); people = distinct visitors. Sign-in rate = signed-in users active that day ÷ distinct visitors.
             Returning users = signed-in users active that day who joined on an earlier day. Totals are as of the end of the day.
             {r.hidden.admins > 0 ? ` Admin accounts (${r.hidden.admins}) are left out.` : ''}
