@@ -149,19 +149,20 @@ open shutap: ${v.deep_link ?? 'https://shutap.com'}`,
     identity: 'hello',
     emailClass: 'transactional',
     // Code in the subject: readable from the notification, no need to open it.
-    subject: (v) => (v.code ? `Your Shutap sign-in code: ${v.code}` : 'Your Shutap sign-in link'),
-    preview: () => 'Enter the code or tap the link. It works once and expires in 10 minutes.',
+    subject: (v) => `Your Shutap sign-in code: ${v.code ?? ''}`,
+    preview: () => 'Enter the code on shutap. It works once.',
     cta: 'sign in',
     htmlDesign: magicLinkHtml,
+    // Code only. The link and the code share one token, so a tapped (or
+    // scanner-opened) link used the code up and it came back "expired or
+    // invalid". Never put the action link back in this email.
     buildBodyText: (v) => `${g(v)}
 
-tap the link to sign in. it works once and expires in 10 minutes.
+enter this code on shutap. it works once.
 
-${v.magic_link ?? ''}
+${v.code ?? ''}
 
-or enter this code: ${v.code ?? ''}
-
-didn't ask for this? ignore it. no one gets in without this link.`,
+didn't ask for this? ignore it. no one gets in without this code.`,
   },
 
   new_reply: {
