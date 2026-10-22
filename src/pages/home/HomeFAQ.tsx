@@ -6,6 +6,9 @@ import { FAQ_ITEMS } from '@/lib/seo/faq'
 const HOME_QUESTIONS = [
   'What is Shutap?',
   "What is Shutap's goal?",
+  'Will Shutap steal my jokes or ideas?',
+  'Does anyone at Shutap read what I write?',
+  "Isn't using AI for comedy a shortcut?",
   'Is Shutap a free joke generator?',
   'How is Shutap different from other AI joke generators?',
   'Can comedians use Shutap to write stand-up?',

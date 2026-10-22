@@ -89,7 +89,9 @@ function PrivacyPage() {
         Only what you post to a room is public. It appears under your pseudonym, along with your
         comments, likes and follows. Jokes you don&rsquo;t post stay private. The Mirror is
         private to you. Anyone can download or share a public post, so deleting it can&rsquo;t
-        recall those copies.
+        recall those copies. We open private content only to fix a problem you report, to act on
+        a safety flag, or when the law requires it. Your stories and bits are never added to the
+        Shutap joke dataset.
       </p>
 
       <h3>5. AI processing</h3>
