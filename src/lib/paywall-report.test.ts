@@ -39,6 +39,12 @@ test('unique people per step; admins and no-email accounts left out', () => {
     ev('paid', { user_id: 'u6' }, { plan: 'pro' }), // no invoice
     ev('signin_prompt_seen', { session_id: 'guest-s' }, { where: 'bit_2' }),
     ev('signin_prompt_seen', { session_id: 'guest-s' }, { where: 'bit_2' }),
+    // a guest with a hidden guest id: counts, once, in each bucket they hit
+    ev('signin_prompt_seen', { user_id: 'anon-g2', session_id: 's2' }, { where: 'rewrite' }),
+    ev('signin_prompt_seen', { user_id: 'anon-g2', session_id: 's2' }, { where: 'swap' }),
+    ev('signin_prompt_seen', { user_id: 'anon-g2', session_id: 's2' }, { where: 'download' }),
+    ev('signin_prompt_seen', { user_id: 'anon-g2', session_id: 's2' }, { where: 'scene' }),
+    ev('signin_prompt_seen', { user_id: ADMIN }, { where: 'save' }),
   ]
   const r = aggregatePaywall(rows, include)
   assert.deepEqual(r.seen, { bit_3: 1, daily_limit: 1, download: 2, total: 4 })
@@ -46,7 +52,8 @@ test('unique people per step; admins and no-email accounts left out', () => {
   assert.deepEqual(r.checkout_started, { basic: 1, pro: 1 })
   assert.deepEqual(r.paid, { basic: 1, pro: 1 })
   assert.equal(r.upgrades, 1)
-  assert.equal(r.signin_prompt_seen, 1)
+  assert.equal(r.signin_prompt_seen, 2)
+  assert.deepEqual(r.signin_by_where, { bit_2: 1, rewrite: 1, download: 1, keep: 0, other: 1 })
   assert.equal(r.checkout_rate_pct, 50)
   assert.equal(r.paid_rate_pct, 50) // u1 of {u1, u2}
 })

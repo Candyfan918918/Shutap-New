@@ -12,8 +12,14 @@ export type PaywallEventRow = {
   properties: Record<string, unknown> | null
 }
 
+/** Where a guest was asked to sign in, grouped for the report. */
+export type SigninWhere = 'bit_2' | 'rewrite' | 'download' | 'keep' | 'other'
+
 export type PaywallReport = {
+  /** guests asked to sign in, anywhere */
   signin_prompt_seen: number
+  /** the same people, by what they tapped (one person can be in several) */
+  signin_by_where: Record<SigninWhere, number>
   seen: { bit_3: number; daily_limit: number; download: number; total: number }
   plan_chosen: { basic: number; pro: number }
   /** opened checkout coming from the paywall (a direct visit to /subscribe
@@ -32,10 +38,19 @@ export type PaywallReport = {
 
 const PAYWALL_WHERE = new Set(['bit_3', 'daily_limit', 'download'])
 
+function signinBucket(where: string): SigninWhere {
+  if (where === 'bit_2') return 'bit_2'
+  if (where === 'rewrite' || where === 'swap' || where === 'mix') return 'rewrite'
+  if (where === 'download') return 'download'
+  if (where === 'save') return 'keep'
+  return 'other' // scene, screenplay, post, or anything new
+}
+
 const pct = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 1000) / 10 : null)
 
-/** `include(userId)` decides whether an account counts (admins and accounts
- *  with no email are left out of every count). Guests always count. */
+/** `include(userId)` decides whether an id counts. It should drop admins and
+ *  real accounts with no email, and keep everything else — including the
+ *  hidden guest ids every visitor gets before signing in. */
 export function aggregatePaywall(rows: PaywallEventRow[], include: (userId: string) => boolean): PaywallReport {
   const sets = new Map<string, Set<string>>()
   const add = (bucket: string, who: string) => {
@@ -53,6 +68,7 @@ export function aggregatePaywall(rows: PaywallEventRow[], include: (userId: stri
     switch (r.name) {
       case 'signin_prompt_seen':
         add('signin', who)
+        add(`signin:${signinBucket(where)}`, who)
         break
       case 'paywall_seen':
         add('seen', who)
@@ -87,6 +103,13 @@ export function aggregatePaywall(rows: PaywallEventRow[], include: (userId: stri
   const paidAfterCheckout = [...(sets.get('paid') ?? [])].filter((w) => startedSet.has(w)).length
   return {
     signin_prompt_seen: n('signin'),
+    signin_by_where: {
+      bit_2: n('signin:bit_2'),
+      rewrite: n('signin:rewrite'),
+      download: n('signin:download'),
+      keep: n('signin:keep'),
+      other: n('signin:other'),
+    },
     seen: { bit_3: n('seen:bit_3'), daily_limit: n('seen:daily_limit'), download: n('seen:download'), total: seenTotal },
     plan_chosen: { basic: n('plan_chosen:basic'), pro: n('plan_chosen:pro') },
     checkout_started: { basic: n('checkout_started:basic'), pro: n('checkout_started:pro') },

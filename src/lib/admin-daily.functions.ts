@@ -60,7 +60,7 @@ export interface DailyReport {
   top_makers: TopMaker[]
   guests: { bits_day: number; bits_total: number }
   hidden: { admins: number; no_email: number }
-  /** sign-in prompt at bit 2 → paywall → plan → checkout → paid, unique people */
+  /** sign-in prompt → paywall → plan → checkout → paid, unique people */
   paywall: PaywallReport
 }
 
@@ -90,7 +90,7 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
         .select('user_id, email, full_name, first_name, last_name, signup_at')
         .eq('is_anonymous', false).not('email', 'is', null).neq('email', '').order('user_id').range(f, t)),
       fetchAll<{ user_id: string }>((f, t) => db.from('user_roles').select('user_id').eq('role', 'admin').order('user_id').range(f, t)),
-      db.from('profiles').select('user_id', { count: 'exact', head: true }).eq('is_anonymous', false).or('email.is.null,email.eq.'),
+      fetchAll<{ user_id: string }>((f, t) => db.from('profiles').select('user_id').eq('is_anonymous', false).or('email.is.null,email.eq.').order('user_id').range(f, t)),
       fetchAll<Bit>((f, t) => db.from('bits').select('id, user_id, created_at').lt('created_at', iso(end)).order('created_at').range(f, t)),
       fetchAll<{ bit_id: string }>((f, t) => db.from('bit_versions').select('bit_id').neq('kind', 'original')
         .gte('created_at', iso(start)).lt('created_at', iso(end)).order('created_at').range(f, t)),
@@ -101,6 +101,7 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
     ])
 
     const admins = new Set(roles.map((r) => r.user_id))
+    const noEmailIds = new Set(noEmail.map((r) => r.user_id))
     const people = profiles.filter((p) => !admins.has(p.user_id) && p.signup_at && ts(p.signup_at) < end)
     const personById = new Map(people.map((p) => [p.user_id, p]))
     const isPerson = (uid: string | null | undefined): uid is string => !!uid && personById.has(uid)
@@ -207,9 +208,10 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
       },
       top_makers: topMakers,
       guests: { bits_day: guestDay, bits_total: guestTotal },
-      hidden: { admins: admins.size, no_email: noEmail.count ?? 0 },
-      // Accounts count when they're a real person (not an admin, has an
-      // email); guests count by browser session.
-      paywall: aggregatePaywall(paywallRows, (uid) => isPerson(uid)),
+      hidden: { admins: admins.size, no_email: noEmailIds.size },
+      // Leave out admins and real accounts with no email. Guests carry a
+      // hidden guest id of their own, so they must not be filtered as if
+      // they were accounts.
+      paywall: aggregatePaywall(paywallRows, (uid) => !admins.has(uid) && !noEmailIds.has(uid)),
     }
   })
