@@ -139,7 +139,11 @@ export function DailyReportSection() {
 
           <h3 style={{ fontFamily: "'Sora',sans-serif", fontSize: 13, fontWeight: 700, color: INK, margin: '18px 0 10px' }}>paywall</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12 }}>
-            <Stat label="sign-in prompt" value={r.paywall.signin_prompt_seen} sub="guests asked to sign in at bit 2" />
+            <Stat
+              label="sign-in prompt"
+              value={r.paywall.signin_prompt_seen}
+              sub={`guests asked to sign in · bit 2: ${r.paywall.signin_by_where.bit_2} · rewrite: ${r.paywall.signin_by_where.rewrite} · download: ${r.paywall.signin_by_where.download} · keep: ${r.paywall.signin_by_where.keep} · other: ${r.paywall.signin_by_where.other}`}
+            />
             <Stat
               label="saw the paywall"
               value={r.paywall.seen.total}
@@ -160,7 +164,7 @@ export function DailyReportSection() {
           </div>
 
           <p style={{ fontSize: 11, color: DIM, marginTop: 10, lineHeight: 1.6 }}>
-            Paywall numbers are unique people that day (an account, or a guest's browser session). "Opened checkout" counts checkouts reached from the paywall. "Paid" is a new plan (live payments only), not a renewal; its rate is the share of people who opened checkout and paid that day.{' '}
+            Paywall numbers are unique people that day (an account, or a guest's browser session). The sign-in prompt counts guests asked to sign in for a second bit or to rewrite, download or keep a bit; "other" is scene, screenplay or post. "Opened checkout" counts checkouts reached from the paywall. "Paid" is a new plan (live payments only), not a renewal; its rate is the share of people who opened checkout and paid that day.{' '}
             Days are {r.timezone} calendar days. Visits are human sessions (bots removed); people = distinct visitors. Sign-in rate = signed-in users active that day ÷ distinct visitors.
             Returning users = signed-in users active that day who joined on an earlier day. Totals are as of the end of the day.
             {r.hidden.admins > 0 ? ` Admin accounts (${r.hidden.admins}) are left out.` : ''}
