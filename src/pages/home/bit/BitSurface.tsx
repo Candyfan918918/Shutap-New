@@ -695,7 +695,7 @@ export function BitSurface() {
               </p>
             )}
             <p className="bt-note" style={{ textAlign: 'center' }}>
-              {tier === 'guest' ? 'no account needed · ' : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
+              {tier === 'guest' ? (left === 0 ? 'sign in free for your next bit · ' : 'first bit free, no account needed · ') : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
               names removed before anything is saved
             </p>
           </>
