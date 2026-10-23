@@ -38,6 +38,7 @@ import { trackEvent } from '@/lib/tracking'
 import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 import { ActionIcon } from './icons'
 import { Versions } from './Versions'
+import { Progress } from './Progress'
 import { MixYourOwn } from './MixYourOwn'
 import { Prompter } from './Prompter'
 import { SceneView, ScreenplayView } from './Layouts'
@@ -185,7 +186,6 @@ export function BitSurface() {
   )
   const [controls, setControls] = useState<BitControls>(DEFAULT_CONTROLS)
   const [phase, setPhase] = useState<Phase>('write')
-  const [elapsed, setElapsed] = useState(0)
   const [tier, setTier] = useState<BitTier>('guest')
   const [usage, setUsage] = useState<BitUsage | null>(null)
   const [bit, setBit] = useState<ShownBit | null>(null)
@@ -391,14 +391,6 @@ export function BitSurface() {
     })
     return () => sub.subscription.unsubscribe()
   }, [refresh, restore, openFromLink])
-
-  /* the writing clock */
-  useEffect(() => {
-    if (phase !== 'writing') return
-    setElapsed(0)
-    const t = window.setInterval(() => setElapsed((n) => n + 1), 1000)
-    return () => window.clearInterval(t)
-  }, [phase])
 
   useEffect(() => {
     if (!autostartRef.current || phase !== 'write' || opening || !story.trim()) return
@@ -647,7 +639,6 @@ export function BitSurface() {
     return () => document.removeEventListener('click', onClick, true)
   }, [])
 
-  const step = Math.min(STEPS.length - 1, Math.floor(elapsed / 2.5))
   // Pro has no cap shown (null), so no count.
   const left = usage && usage.cap !== null ? Math.max(0, usage.cap - usage.used) : null
 
@@ -716,19 +707,7 @@ export function BitSurface() {
             <p data-ph-private style={{ margin: 0, fontFamily: 'var(--news)', fontSize: 'var(--fs-body)', lineHeight: 1.45, color: 'var(--muted)', whiteSpace: 'pre-wrap' }}>
               {story.trim().slice(0, 600)}
             </p>
-            <div className="bt-steps" aria-live="polite">
-              {STEPS.map((s, i) => (
-                <span key={s} className={`bt-step${i < step ? ' done' : i === step ? ' on' : ''}`}>
-                  {s}
-                </span>
-              ))}
-            </div>
-            <div className="bt-bar" aria-hidden="true">
-              {STEPS.map((s, i) => (
-                <i key={s} className={i < step ? 'done' : i === step ? 'on' : ''} />
-              ))}
-            </div>
-            <span className="bt-note">{elapsed < 14 ? 'about ten seconds' : 'almost there'}</span>
+            <Progress steps={STEPS} expectSec={12} note="usually 10 to 15 seconds" />
           </div>
         )}
 

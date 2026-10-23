@@ -7,6 +7,7 @@ import { getScene, getScreenplay } from '@/lib/bits.functions'
 import type { BitVersion, SceneBeat, ScreenplayElement } from '@/lib/bits/shared'
 import { anonSessionId } from '../joke/jokeClient'
 import { pdfFilename, screenplayPdf } from './screenplay-pdf'
+import { Progress } from './Progress'
 
 type Load<T> = { state: 'loading' } | { state: 'ok'; data: T } | { state: 'error'; message: string }
 
@@ -68,12 +69,11 @@ function Waiting({ load, what, retry }: { load: Load<unknown>; what: string; ret
     return (
       <div data-ph-private className="bt-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <span className="bt-lbl r">laying out the {what}</span>
-        <div className="bt-bar" aria-hidden="true">
-          <i className="on" />
-          <i />
-          <i />
-        </div>
-        <span className="bt-note">a few seconds, once per version</span>
+        <Progress
+          steps={what === 'scene' ? ['reading the bit', 'blocking the shots', 'placing the on-screen text'] : ['reading the bit', 'writing the scene heading and action', 'formatting the dialogue']}
+          expectSec={10}
+          note="usually about 10 seconds, once per version"
+        />
       </div>
     )
   if (load.state === 'error')

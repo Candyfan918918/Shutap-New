@@ -224,3 +224,8 @@
   .pw-free ul { grid-template-columns: 1fr; }
   .pw-promise { font-size: 26px; }
 }
+
+/* moving sweep on the Progress bar */
+.bt-sweep { position: absolute; inset: 0; width: 30%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); animation: bt-sweep 1.4s ease-in-out infinite; }
+@keyframes bt-sweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(340%); } }
+@media (prefers-reduced-motion: reduce) { .bt-sweep { animation: none; display: none; } }
