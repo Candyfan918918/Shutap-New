@@ -9,6 +9,7 @@
 // `priceId` is the Stripe lookup key. mirror_monthly / mirror_annual never
 // change name (they are Pro). basic_monthly is the Basic plan.
 import type { BitTier } from './bits/shared'
+import { BIT_CAPS } from './bits/plans'
 
 export type PlanKey = 'basic' | 'pro' | 'pro_annual'
 export type PaidPlan = 'basic' | 'pro'
@@ -33,9 +34,55 @@ export const PLANS: Record<PlanKey, PlanEntry> = {
 
 /** What each plan gives, in the same words on every surface. */
 export const PLAN_LINES: Record<PaidPlan, string[]> = {
-  basic: ['5 new bits a day', 'no watermark'],
-  pro: ['unlimited bits', 'no watermark', 'the Mirror'],
+  basic: [`${BIT_CAPS.basic} new bits a day`, 'No watermark'],
+  pro: ['Unlimited bits', 'No watermark', 'The Mirror'],
 }
+
+/** The plans side by side: the same rows on every surface that compares
+ *  them (pricing page, paywall, upgrade sheet, account page), so Free never
+ *  reads as the biggest plan. `short` fits a narrow table cell. */
+export type CompareTier = 'free' | 'basic' | 'pro'
+export type CompareCell = { value: string; short: string; on: boolean }
+export type CompareRow = { label: string; short: string; cells: Record<CompareTier, CompareCell> }
+export const PLAN_COMPARE: CompareRow[] = [
+  {
+    label: 'New bits a day',
+    short: 'Bits a day',
+    cells: {
+      free: { value: `${BIT_CAPS.free}`, short: `${BIT_CAPS.free}`, on: true },
+      basic: { value: `${BIT_CAPS.basic}`, short: `${BIT_CAPS.basic}`, on: true },
+      pro: { value: 'Unlimited', short: 'Unlimited', on: true },
+    },
+  },
+  {
+    label: 'Downloads',
+    short: 'Downloads',
+    cells: {
+      free: { value: 'Watermarked', short: 'Watermark', on: false },
+      basic: { value: 'No watermark', short: 'Clean', on: true },
+      pro: { value: 'No watermark', short: 'Clean', on: true },
+    },
+  },
+  {
+    label: 'The Mirror',
+    short: 'The Mirror',
+    cells: {
+      free: { value: 'Not included', short: '—', on: false },
+      basic: { value: 'Not included', short: '—', on: false },
+      pro: { value: 'Included', short: '✓', on: true },
+    },
+  },
+]
+
+/** What every plan has, Free included. Listed once, beside the comparison. */
+export const EVERY_PLAN = [
+  'A full bit: hook, setup, tags and button',
+  'Hotter, tighter, mix and tag swap',
+  'Teleprompter',
+  'Scene and screenplay',
+  'Caption and hashtags',
+  'Set list of every bit',
+] as const
 
 const BY_PRICE: Record<string, PlanEntry> = Object.fromEntries(Object.values(PLANS).map((p) => [p.priceId, p]))
 

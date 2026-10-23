@@ -10,8 +10,7 @@ import { useToast } from '../components/Toast'
 import { UserAvatar } from '@/components/UserAvatar'
 import { ensureMyProfile, updateMyProfile, setMyAvatar, removeMyAvatar } from '@/lib/alias.functions'
 import { getMyBillingStatus, type BillingStatus } from '@/lib/billing.functions'
-import { PLANS, PLAN_LINES, planByPriceId, usd } from '@/lib/pricing'
-import { BIT_CAPS } from '@/lib/bits/plans'
+import { PLANS, PLAN_COMPARE, planByPriceId, usd, type CompareTier } from '@/lib/pricing'
 import { Footer } from '@/components/feed/Footer'
 import '@/components/feed/feed.css'
 import { changePlanToPro, createMirrorPortal, setPlanCancellation } from '@/lib/payments.functions'
@@ -318,13 +317,27 @@ export function ProfilePage() {
       <style>{`
         .fd-link.pf-row { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 14px 0; font-weight: 600; font-size: 15px; text-align: left; }
         .fd-link.pf-row:hover span:first-child { color: var(--rose-ink); }
-        .pf-lines { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; font-size: 14px; color: var(--ink-2); }
-        .pf-lines li { display: flex; gap: 8px; }
-        .pf-lines li::before { content: '✓'; color: var(--rose); font-weight: 800; }
       `}</style>
       <Footer />
       {ToastHost}
     </div>
+  )
+}
+
+/** The plan's rows, the same ones the pricing page and paywall compare. */
+function PlanRows({ tier }: { tier: CompareTier }) {
+  return (
+    <dl style={{ margin: 0, display: 'flex', flexDirection: 'column' }}>
+      {PLAN_COMPARE.map((r, i) => {
+        const c = r.cells[tier]
+        return (
+          <div key={r.label} className="fd-between" style={{ padding: '9px 0', borderTop: i ? '1px solid var(--line)' : 'none', alignItems: 'baseline' }}>
+            <dt style={{ fontSize: 14, color: 'var(--muted)' }}>{r.label}</dt>
+            <dd style={{ margin: 0, fontSize: 14.5, fontWeight: c.on ? 800 : 500, color: c.on ? 'var(--ink)' : 'var(--faint)' }}>{c.value}</dd>
+          </div>
+        )
+      })}
+    </dl>
   )
 }
 
@@ -393,11 +406,7 @@ function BillingCard({
         <div>
           <span style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-.03em' }}>Free</span>
         </div>
-        <ul className="pf-lines">
-          <li>{BIT_CAPS.free} new bits a day</li>
-          <li>Teleprompter, scene and screenplay views</li>
-          <li>Your set list keeps every bit</li>
-        </ul>
+        <PlanRows tier="free" />
         <button className="fd-btn sm" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/pricing')}>
           See plans
         </button>
@@ -409,7 +418,6 @@ function BillingCard({
   const endStr = end ? end.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : null
   const plan = planLabelFor(billing.priceId)
   const paid = planByPriceId(billing.priceId)?.tier
-  const lines = paid === 'pro' || paid === 'basic' ? PLAN_LINES[paid] : []
   const cancelling = billing.cancelAtPeriodEnd
   const pastDue = billing.status === 'past_due'
 
@@ -436,13 +444,7 @@ function BillingCard({
         <span style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-.03em' }}>{plan.name}</span>
         {plan.price && <span className="fd-muted"> {plan.price}</span>}
       </div>
-      {lines.length > 0 && (
-        <ul className="pf-lines">
-          {lines.map((l) => (
-            <li key={l}>{l.charAt(0).toUpperCase() + l.slice(1)}</li>
-          ))}
-        </ul>
-      )}
+      {(paid === 'basic' || paid === 'pro') && <PlanRows tier={paid} />}
       <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: pastDue ? '#b3261e' : 'var(--ink-2)' }}>{statusLine}</p>
 
       {confirming && !cancelling && (
