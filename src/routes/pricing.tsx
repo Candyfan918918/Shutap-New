@@ -2,8 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { ogImageMeta } from '@/lib/seo/meta'
 import { SITE_URL } from '@/lib/site'
 import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
-import { PLANS, usd } from '@/lib/pricing'
-import { BIT_CAPS } from '@/lib/bits/plans'
+import { EVERY_PLAN, PLANS, PLAN_COMPARE, usd, type CompareTier } from '@/lib/pricing'
 import { Footer } from '@/components/feed/Footer'
 import '@/components/feed/feed.css'
 
@@ -14,34 +13,6 @@ const PRO = PLANS.pro.amount
 const TITLE = `Pricing — Free AI Joke Generator for Creators, plans from ${usd(BASIC)}/mo`
 const DESCRIPTION = `Shutap is a free AI joke generator for creators, with teleprompter, scene and screenplay views. Basic is ${usd(BASIC)}/month: 5 new bits a day, no watermark. Pro is ${usd(PRO)}/month: unlimited bits, no watermark and the Mirror. Cancel anytime.`
 
-/** The same three rows on every card, so the plans compare line for line. */
-type Row = { label: string; value: string; on: boolean }
-const ROWS: Record<'free' | 'basic' | 'pro', Row[]> = {
-  free: [
-    { label: 'New bits a day', value: `${BIT_CAPS.free}`, on: true },
-    { label: 'Downloads', value: 'Watermarked', on: false },
-    { label: 'The Mirror', value: 'Not included', on: false },
-  ],
-  basic: [
-    { label: 'New bits a day', value: `${BIT_CAPS.basic}`, on: true },
-    { label: 'Downloads', value: 'No watermark', on: true },
-    { label: 'The Mirror', value: 'Not included', on: false },
-  ],
-  pro: [
-    { label: 'New bits a day', value: 'Unlimited', on: true },
-    { label: 'Downloads', value: 'No watermark', on: true },
-    { label: 'The Mirror', value: 'Included', on: true },
-  ],
-}
-/** What every plan has, Free included. Listed once, under the plans. */
-const EVERY_PLAN = [
-  'A full bit: hook, setup, tags and button',
-  'Hotter, tighter, mix and tag swap',
-  'Teleprompter',
-  'Scene and screenplay',
-  'Caption and hashtags',
-  'Set list of every bit',
-]
 const QA = [
   { q: 'Is the AI joke generator really free?', a: 'Yes. Your first bit needs no account to read. Signing in is free, lets you rewrite, download and keep it, and gives you 2 new bits a day. Rewrites (hotter, tighter, mix, tag swap) on your own bits never count against the limit.' },
   { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 5 new bits a day and no watermark. Pro is ${usd(PRO)} a month: unlimited bits, no watermark and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
@@ -97,7 +68,8 @@ export const Route = createFileRoute('/pricing')({
   component: PricingPage,
 })
 
-function Rows({ rows }: { rows: Row[] }) {
+function Rows({ tier }: { tier: CompareTier }) {
+  const rows = PLAN_COMPARE.map((r) => ({ label: r.label, ...r.cells[tier] }))
   return (
     <dl style={{ margin: 0, display: 'flex', flexDirection: 'column' }}>
       {rows.map((r, i) => (
@@ -151,7 +123,7 @@ function PlanCard({ plan }: { plan: 'free' | 'basic' | 'pro' }) {
         <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-.04em' }}>{price}</span>
         <span className="fd-muted"> {paid ? '/month' : 'forever'}</span>
       </div>
-      <Rows rows={ROWS[plan]} />
+      <Rows tier={plan} />
       {paid ? (
         <a href={`/subscribe?plan=${plan}`} className={`fd-btn block${best ? '' : ' ghost'}`} style={{ marginTop: 'auto' }}>
           get {name} · {price}
