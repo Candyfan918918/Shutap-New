@@ -543,8 +543,10 @@ export const varyBit = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<VersionResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
-    // Rewrites are free on your own bits, guests included. MAX_VERSIONS is
-    // the per-bit safety limit; guests also pass the per-network layer.
+    // A guest reads their first bit; rewriting it takes a (free) account.
+    // Rewrites never count toward the daily limit; MAX_VERSIONS is the
+    // per-bit safety limit.
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
@@ -581,6 +583,7 @@ export const swapTag = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<VersionResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
@@ -710,6 +713,7 @@ export const getMixOptions = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<{ ok: true; pool: MixPool } | { ok: false; reason: 'sign_in' | 'not_found' }> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     return { ok: true, pool: await mixPool(supabaseAdmin, row.id) }
@@ -733,6 +737,7 @@ export const saveMix = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<VersionResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
@@ -799,10 +804,10 @@ export const getScreenplay = createServerFn({ method: 'POST' })
 
 export type ExportResult =
   | { ok: true; svg: string; filename: string; watermarked: boolean; tier: BitTier }
-  | { ok: false; reason: 'not_found' }
+  | { ok: false; reason: 'not_found' | 'sign_in' }
 
-/** The picture, drawn here so the tier decides the mark: guest and free get
- *  the heavy watermark, Basic and Pro get a clean file. Everyone's picture
+/** The picture, drawn here so the tier decides the mark: free gets the heavy
+ *  watermark, Basic and Pro a clean file. Downloading takes an account. Everyone's picture
  *  carries the whole bit. */
 export const exportBit = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) =>
@@ -811,6 +816,7 @@ export const exportBit = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<ExportResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const { data: v } = await supabaseAdmin

@@ -74,7 +74,7 @@ export const HUBS: SituationHub[] = [
     paa: [
       { q: "Why is outgrowing someone funny?", a: "Because nothing dramatic happens. The comedy is in the repeats: the same order, the same story, the same plans that never get made." },
       { q: "Can I use the jokes in a set or a video?", a: "Yes. Download them for TikTok, Reels or the stage, or post the best one to a room." },
-      { q: "Do I need to sign in?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free for 2 new bits a day." },
+      { q: "Do I need to sign in?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free to rewrite, download or keep it, and for 2 new bits a day." },
     ],
   },
   // ── marriage ──
@@ -172,7 +172,7 @@ export const HUBS: SituationHub[] = [
     paa: [
       { q: "Can I use the jokes in a toast?", a: "You can download them and use them anywhere: TikTok, Reels, the stage, a toast. Keep them at the situation, not at a guest anyone could identify." },
       { q: "Will names show up?", a: "No. Names and places are removed before anything is saved." },
-      { q: "Do I need an account?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free for 2 new bits a day." },
+      { q: "Do I need an account?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free to rewrite, download or keep it, and for 2 new bits a day." },
     ],
   },
   {
@@ -233,7 +233,7 @@ export const HUBS: SituationHub[] = [
     paa: [
       { q: "Will Shutap tell me what I should earn?", a: "No. It writes jokes, not salary advice." },
       { q: "Can I name my company?", a: "You can type it, but names, company names and places are removed before anything is saved. The jokes go at the situation, not a company anyone could identify." },
-      { q: "Do I need to sign in?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free for 2 new bits a day." },
+      { q: "Do I need to sign in?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free to rewrite, download or keep it, and for 2 new bits a day." },
     ],
   },
   {

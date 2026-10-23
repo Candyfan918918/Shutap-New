@@ -26,6 +26,7 @@ export function Versions({
   onAdd,
   onMix,
   say,
+  onSignIn,
 }: {
   bit: Bit
   current: BitVersion
@@ -33,6 +34,9 @@ export function Versions({
   onAdd: (v: BitVersion) => void
   onMix: () => void
   say: (m: string) => void
+  /** Set for a guest: rewriting takes a free account, so every rewrite
+   *  control opens the sign-in sheet instead. */
+  onSignIn?: (from: 'rewrite' | 'swap' | 'mix') => void
 }) {
   const vary = useServerFn(varyBit)
   const swap = useServerFn(swapTag)
@@ -49,10 +53,12 @@ export function Versions({
   async function pickKind(k: VaryKind) {
     const made = latestOf(k)
     if (made) return onSelect(made.id)
+    if (onSignIn) return onSignIn('rewrite')
     setBusy(k)
     try {
       const r = await vary({ data: { bit_id: bit.id, from_version_id: original.id, kind: k, anon_session_id: anonSessionId() } })
       if (r.ok) onAdd(r.version)
+      else if (r.reason === 'sign_in') say('Sign in to rewrite it. It\'s free.')
       else say(r.reason === 'too_many' ? 'That bit has all the versions it can hold.' : "Couldn't write that version. Try again.")
     } catch {
       say("Couldn't write that version. Try again.")
@@ -63,6 +69,7 @@ export function Versions({
 
   async function pickTag(alt: number) {
     if (activeSwap && activeSwap.alt === alt) return onSelect(activeSwap.from)
+    if (onSignIn) return onSignIn('swap')
     const from = activeSwap ? activeSwap.from : current.id
     setSwapping(alt)
     try {
@@ -70,7 +77,7 @@ export function Versions({
       if (r.ok) {
         setSwappedFrom((m) => ({ ...m, [r.version.id]: { from, alt } }))
         onAdd(r.version)
-      } else say("Couldn't swap that tag. Try again.")
+      } else say(r.reason === 'sign_in' ? 'Sign in to swap the tag. It\'s free.' : "Couldn't swap that tag. Try again.")
     } catch {
       say("Couldn't swap that tag. Try again.")
     } finally {
@@ -119,7 +126,7 @@ export function Versions({
               pick your favorite hook, tag and ending, one at a time
             </span>
           </div>
-          <button className="bt-btn sm" onClick={onMix}>
+          <button className="bt-btn sm" onClick={() => (onSignIn ? onSignIn('mix') : onMix())}>
             start
           </button>
         </div>

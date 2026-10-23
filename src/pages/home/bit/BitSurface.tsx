@@ -3,7 +3,8 @@
  *   write    the box and four controls (audience, voice, length, heat)
  *   writing  the story, four steps and a bar while the server works
  *   bit      hook, setup, tags, button, one line on why it works, the
- *            action row. Everyone sees the whole bit, guests included.
+ *            action row. Everyone sees the whole bit, guests included;
+ *            a guest signs in (free) to rewrite, download or keep it.
  *
  * New bits a day: guest 1 · free 2 (counting the guest bit) · basic 5 · pro.
  * At the limit, "write" opens the next step instead: a guest gets the
@@ -56,6 +57,20 @@ const PENDING_WRITE_KEY = 'shutap_pending_write'
 const PENDING_WRITE_TTL = 30 * 60 * 1000
 
 type ShownBit = Bit & { locked: boolean }
+
+/** The sign-in sheet says what signing in unlocks, in the words of what
+ *  they just tapped. The bit comes back with them either way. */
+const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
+  rewrite: { title: 'Sign in to rewrite it.', sub: 'Free. Hotter, tighter, a new tag, or mix your own. Your bit comes with you.' },
+  swap: { title: 'Sign in to swap the tag.', sub: 'Free. Your bit comes with you, with all five spare tags.' },
+  mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
+  download: { title: 'Sign in to download it.', sub: 'Free. Your bit comes with you, ready to save as a picture.' },
+  save: { title: 'Sign in to keep it.', sub: 'Free. It goes in your set list with every version you make.' },
+  scene: { title: 'Sign in to see the scene.', sub: 'Free. Your bit comes with you.' },
+  screenplay: { title: 'Sign in for the screenplay.', sub: 'Free. Your bit comes with you.' },
+  post: { title: 'Sign in to post it.', sub: 'Free. Your bit comes with you.' },
+  sheet: { title: 'Sign in to use this.', sub: 'Free. One tap with Google or Apple.' },
+}
 type Phase = 'write' | 'writing' | 'bit' | 'mix' | 'scene' | 'screenplay' | 'crisis'
 type Notice = { text: string; swaps: string[] }
 
@@ -66,21 +81,24 @@ const WRITE_TIME_LIMIT_MS = 60_000
 const STEPS = ['reading it · names removed', 'finding the angle', 'writing four, ranking them', 'timing it at talking pace']
 
 /* ── the note left before sign-in, so the bit comes back after it ── */
-function writePending(bitId: string, anon: string) {
+/** What a guest was doing when they were asked to sign in; picked back up
+ *  once they're in. */
+type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'save' | 'scene' | 'screenplay' | 'post' | 'sheet'
+function writePending(bitId: string, anon: string, from?: SigninFrom) {
   try {
-    localStorage.setItem(PENDING_KEY, JSON.stringify({ bit_id: bitId, anon, at: Date.now() }))
+    localStorage.setItem(PENDING_KEY, JSON.stringify({ bit_id: bitId, anon, from, at: Date.now() }))
   } catch { /* noop */ }
 }
-function readPending(): { bit_id: string; anon: string } | null {
+function readPending(): { bit_id: string; anon: string; from?: SigninFrom } | null {
   try {
     const raw = localStorage.getItem(PENDING_KEY)
     if (!raw) return null
-    const p = JSON.parse(raw) as { bit_id?: string; anon?: string; at?: number }
+    const p = JSON.parse(raw) as { bit_id?: string; anon?: string; from?: SigninFrom; at?: number }
     if (!p?.bit_id || !p.anon || typeof p.at !== 'number' || Date.now() - p.at > PENDING_TTL) {
       localStorage.removeItem(PENDING_KEY)
       return null
     }
-    return { bit_id: p.bit_id, anon: p.anon }
+    return { bit_id: p.bit_id, anon: p.anon, from: p.from }
   } catch {
     return null
   }
@@ -177,6 +195,7 @@ export function BitSurface() {
    *  watermark) · upgrade: Basic at its limit · fair: Pro's fair-use cap */
   const [sheet, setSheet] = useState<null | 'signin' | 'signin_write' | 'paywall' | 'upgrade' | 'rate' | 'fair'>(null)
   const [paywallWhere, setPaywallWhere] = useState<PaywallWhere>('bit_3')
+  const [signinFrom, setSigninFrom] = useState<SigninFrom>('sheet')
   const [error, setError] = useState<string | null>(null)
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
@@ -326,13 +345,17 @@ export function BitSurface() {
         setBit(r.bit)
         setCurrentId(r.bit.versions[0]?.id ?? null)
         setPhase('bit')
-        jokeTrack('bit_reopened', t, {})
+        jokeTrack('bit_reopened', t, { from: note.from ?? null })
         requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+        // Pick up where they were.
+        if (note.from === 'download') setDownloadOpen(true)
+        else if (note.from === 'save') say('Kept. It\'s in your set list.')
+        else if (note.from === 'rewrite' || note.from === 'swap' || note.from === 'mix') say("You're in. Rewrite away.")
       }
     } catch {
       restoring.current = false
     }
-  }, [claim, fetchBit, refresh, ctx])
+  }, [claim, fetchBit, refresh, ctx, say])
 
   /* /?bit=<id> reopens a bit from the set list (or a reload). */
   const openFromLink = useCallback(async () => {
@@ -548,9 +571,11 @@ export function BitSurface() {
      guest's second bit. Google and Apple go straight to the provider; email
      goes to the email form. Either way the visitor comes back to "/" and the
      bit (or the story they were about to write) comes back with them. */
-  function openSignin(from: string) {
+  function openSignin(from: SigninFrom) {
+    setSigninFrom(from)
     setSheet('signin')
     jokeTrack('signin_sheet_opened', tier, { from })
+    void trackEvent('signin_prompt_seen', { where: from })
   }
 
   function dismissSignin() {
@@ -566,7 +591,7 @@ export function BitSurface() {
       writePendingWrite({ story: text, controls, write_id: newWriteId(), anon: anonSessionId() })
     } else {
       if (!bit) return
-      writePending(bit.id, anonSessionId())
+      writePending(bit.id, anonSessionId(), signinFrom)
     }
     try { sessionStorage.setItem('shutap_returnTo', '/') } catch { /* noop */ }
     setDurableReturn('/')
@@ -798,7 +823,13 @@ export function BitSurface() {
                   {k}
                 </button>
               ))}
-              <button className="bt-act" onClick={() => setDownloadOpen(true)}>
+              <button
+                className="bt-act"
+                onClick={() => {
+                  if (tier === 'guest') return openSignin('download')
+                  setDownloadOpen(true)
+                }}
+              >
                 <ActionIcon name="download" />
                 download
               </button>
@@ -825,13 +856,20 @@ export function BitSurface() {
                 toTop()
               }}
               say={say}
+              onSignIn={tier === 'guest' ? (from) => openSignin(from) : undefined}
             />
 
             <div className="bt-row">
               <button className="bt-btn ghost" onClick={writeAnother}>
                 write another
               </button>
-              {tier !== 'guest' && <span className="bt-note">kept to your set list</span>}
+              {tier !== 'guest' ? (
+                <span className="bt-note">kept to your set list</span>
+              ) : (
+                <button className="bt-btn sm" onClick={() => openSignin('save')}>
+                  keep it · sign in free
+                </button>
+              )}
             </div>
           </>
         )}
@@ -902,9 +940,9 @@ export function BitSurface() {
           <div className={`bt-sheet${sheet === 'paywall' ? ' wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="bit-sheet-title">
             {(sheet === 'signin' || sheet === 'signin_write') && (
               <>
-                <h3 id="bit-sheet-title">{sheet === 'signin_write' ? 'Sign in to write this one.' : 'Sign in to use this.'}</h3>
+                <h3 id="bit-sheet-title">{sheet === 'signin_write' ? 'Sign in to write this one.' : SIGNIN_COPY[signinFrom].title}</h3>
                 <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  {sheet === 'signin_write' ? 'Free. Your story stays in the box.' : 'Free. One tap with Google or Apple.'}
+                  {sheet === 'signin_write' ? 'Free. Your story stays in the box.' : SIGNIN_COPY[signinFrom].sub}
                 </p>
                 <GoogleButton onClick={() => void signInForBit('google', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />
                 <button className="bt-btn ghost block" onClick={() => void signInForBit('apple', sheet === 'signin_write' ? 'bit_2' : 'sheet')}>

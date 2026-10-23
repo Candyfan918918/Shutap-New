@@ -19,7 +19,7 @@ const STEPS = [
 ];
 const SECTIONS = [
   ...STEPS,
-  { heading: "What's free", body: "Your first bit needs no account, and you see the whole bit. Signing in is free, gives you 2 new bits a day, keeps every bit in your set list, and lets you post, follow, like and comment. Rewrites are always free. Free downloads carry a Shutap watermark." },
+  { heading: "What's free", body: "Your first bit needs no account, and you see the whole bit. Signing in is free, lets you rewrite, download and keep that bit, gives you 2 new bits a day, keeps every bit in your set list, and lets you post, follow, like and comment. Rewrites are always free. Free downloads carry a Shutap watermark." },
   { heading: "Daily limit", body: "Your first bit needs no account. Signed in, you get 2 new bits a day. Basic gets 5, Pro has no daily number. Rewrites of your own bits never count. Limits reset at midnight Pacific." },
   { heading: "Basic and Pro", body: "Basic is $1.99 a month: 5 new bits a day and no watermark. Pro is $7.99 a month: unlimited bits, no watermark, and the Mirror, a private read-back of what keeps coming up in your stories. Cancel anytime." },
   { heading: "Tips for a funnier bit", body: "Give the specific detail, not the summary: the exact text, the time it happened, the object involved. Say who did what. Leave out real names — Shutap removes them anyway. If a bit feels thin, add what they actually said and run it again." },
