@@ -57,7 +57,7 @@ const SECTIONS = [
   },
   {
     heading: "Free to start",
-    body: "Your first bit needs no account. Signing in is free, keeps every bit in your set list and lets you post. Basic removes the watermark from downloads; Pro writes as many as you want and adds the Mirror.",
+    body: "Your first bit needs no account. Signing in is free, lets you rewrite and download it, keeps every bit in your set list and lets you post. Basic removes the watermark from downloads; Pro writes as many as you want and adds the Mirror.",
   },
   {
     heading: "Who makes Shutap",

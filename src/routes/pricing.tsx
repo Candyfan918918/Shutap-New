@@ -14,7 +14,7 @@ const TITLE = `Pricing — Free AI Joke Generator for Creators, plans from ${usd
 const DESCRIPTION = `Shutap is a free AI joke generator for creators, with teleprompter, scene and screenplay views. Basic is ${usd(BASIC)}/month: 5 new bits a day, no watermark. Pro is ${usd(PRO)}/month: unlimited bits, no watermark and the Mirror. Cancel anytime.`
 
 const FREE = [
-  'Your first bit with no account',
+  'Your first bit to read, no account needed',
   '2 new bits a day when you sign in',
   'A full bit: hook, setup, tags and button',
   'Hotter, tighter, mix and tag swap on your bits',
@@ -23,7 +23,7 @@ const FREE = [
   'Downloads with a Shutap watermark',
 ]
 const QA = [
-  { q: 'Is the AI joke generator really free?', a: 'Yes. Your first bit needs no account, and signing in gives you 2 new bits a day. Rewrites (hotter, tighter, mix, tag swap) on your own bits never count against the limit.' },
+  { q: 'Is the AI joke generator really free?', a: 'Yes. Your first bit needs no account to read. Signing in is free, lets you rewrite, download and keep it, and gives you 2 new bits a day. Rewrites (hotter, tighter, mix, tag swap) on your own bits never count against the limit.' },
   { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 5 new bits a day and no watermark. Pro is ${usd(PRO)} a month: unlimited bits, no watermark and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
   { q: 'What counts toward the daily limit?', a: 'Only new bits. Rewriting a bit you already have is free. Limits reset at midnight Pacific.' },
   { q: 'Can I move from Basic to Pro?', a: 'Yes, any time. You pay the difference for the rest of the month, and Pro starts right away.' },
