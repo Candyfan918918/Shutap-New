@@ -78,6 +78,7 @@ import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminEventsRouteImport } from './routes/_authenticated/admin.events'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated/admin.feedback'
 import { Route as AuthenticatedAdminOverviewRouteImport } from './routes/_authenticated/admin.overview'
+import { Route as AuthenticatedAdminPollRouteImport } from './routes/_authenticated/admin.poll'
 import { Route as AuthenticatedAdminRelateRouteImport } from './routes/_authenticated/admin.relate'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedCheckinIdRouteImport } from './routes/_authenticated/checkin.$id'
@@ -445,6 +446,11 @@ const AuthenticatedAdminOverviewRoute =
     path: '/admin/overview',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminPollRoute = AuthenticatedAdminPollRouteImport.update({
+  id: '/admin/poll',
+  path: '/admin/poll',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminRelateRoute =
   AuthenticatedAdminRelateRouteImport.update({
     id: '/admin/relate',
@@ -597,6 +603,7 @@ export interface FileRoutesByFullPath {
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
+  '/admin/poll': typeof AuthenticatedAdminPollRoute
   '/admin/relate': typeof AuthenticatedAdminRelateRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/checkin/$id': typeof AuthenticatedCheckinIdRoute
@@ -682,6 +689,7 @@ export interface FileRoutesByTo {
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
+  '/admin/poll': typeof AuthenticatedAdminPollRoute
   '/admin/relate': typeof AuthenticatedAdminRelateRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/checkin/$id': typeof AuthenticatedCheckinIdRoute
@@ -769,6 +777,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/events': typeof AuthenticatedAdminEventsRoute
   '/_authenticated/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin/overview': typeof AuthenticatedAdminOverviewRoute
+  '/_authenticated/admin/poll': typeof AuthenticatedAdminPollRoute
   '/_authenticated/admin/relate': typeof AuthenticatedAdminRelateRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/checkin/$id': typeof AuthenticatedCheckinIdRoute
@@ -856,6 +865,7 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/overview'
+    | '/admin/poll'
     | '/admin/relate'
     | '/admin/users'
     | '/checkin/$id'
@@ -941,6 +951,7 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/overview'
+    | '/admin/poll'
     | '/admin/relate'
     | '/admin/users'
     | '/checkin/$id'
@@ -1027,6 +1038,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/events'
     | '/_authenticated/admin/feedback'
     | '/_authenticated/admin/overview'
+    | '/_authenticated/admin/poll'
     | '/_authenticated/admin/relate'
     | '/_authenticated/admin/users'
     | '/_authenticated/checkin/$id'
@@ -1606,6 +1618,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminOverviewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/poll': {
+      id: '/_authenticated/admin/poll'
+      path: '/admin/poll'
+      fullPath: '/admin/poll'
+      preLoaderRoute: typeof AuthenticatedAdminPollRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/relate': {
       id: '/_authenticated/admin/relate'
       path: '/admin/relate'
@@ -1720,6 +1739,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminEventsRoute: typeof AuthenticatedAdminEventsRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminOverviewRoute: typeof AuthenticatedAdminOverviewRoute
+  AuthenticatedAdminPollRoute: typeof AuthenticatedAdminPollRoute
   AuthenticatedAdminRelateRoute: typeof AuthenticatedAdminRelateRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedCheckinIdRoute: typeof AuthenticatedCheckinIdRoute
@@ -1731,6 +1751,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminEventsRoute: AuthenticatedAdminEventsRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminOverviewRoute: AuthenticatedAdminOverviewRoute,
+  AuthenticatedAdminPollRoute: AuthenticatedAdminPollRoute,
   AuthenticatedAdminRelateRoute: AuthenticatedAdminRelateRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedCheckinIdRoute: AuthenticatedCheckinIdRoute,
