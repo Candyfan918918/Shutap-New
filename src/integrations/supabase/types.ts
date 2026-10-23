@@ -1416,44 +1416,6 @@ export type Database = {
         }
         Relationships: []
       }
-      post_reports: {
-        Row: {
-          comment_id: string | null
-          created_at: string
-          id: string
-          reason: string
-          reporter_id: string | null
-          resolved_at: string | null
-          room_id: string
-        }
-        Insert: {
-          comment_id?: string | null
-          created_at?: string
-          id?: string
-          reason: string
-          reporter_id?: string | null
-          resolved_at?: string | null
-          room_id: string
-        }
-        Update: {
-          comment_id?: string | null
-          created_at?: string
-          id?: string
-          reason?: string
-          reporter_id?: string | null
-          resolved_at?: string | null
-          room_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "post_reports_room_id_fkey"
-            columns: ["room_id"]
-            isOneToOne: false
-            referencedRelation: "rooms"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       poll_votes: {
         Row: {
           change_count: number
@@ -1521,6 +1483,44 @@ export type Database = {
           title?: string
         }
         Relationships: []
+      }
+      post_reports: {
+        Row: {
+          comment_id: string | null
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string | null
+          resolved_at: string | null
+          room_id: string
+        }
+        Insert: {
+          comment_id?: string | null
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id?: string | null
+          resolved_at?: string | null
+          room_id: string
+        }
+        Update: {
+          comment_id?: string | null
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string | null
+          resolved_at?: string | null
+          room_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_reports_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
