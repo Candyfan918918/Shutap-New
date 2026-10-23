@@ -85,16 +85,30 @@ export function useIsAdmin(): boolean {
   const [admin, setAdmin] = useState(false)
   useEffect(() => {
     let dead = false
-    ;(async () => {
+    // Checked again on every sign-in change (Oct 23 2026): it used to run once
+    // at mount, so when the header mounted before the session was restored the
+    // admin link stayed hidden until a full reload.
+    const check = async () => {
       try {
         const { data } = await supabase.auth.getSession()
-        if (!data.session) return
+        const user = data.session?.user as { is_anonymous?: boolean } | undefined
+        if (!user || user.is_anonymous) {
+          if (!dead) setAdmin(false)
+          return
+        }
         const { getIsAdmin } = await import('@/lib/alias.functions')
         const isAdmin = await getIsAdmin()
         if (!dead) setAdmin(Boolean(isAdmin))
       } catch { /* noop */ }
-    })()
-    return () => { dead = true }
+    }
+    void check()
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'INITIAL_SESSION' || event === 'USER_UPDATED') void check()
+    })
+    return () => {
+      dead = true
+      sub.subscription.unsubscribe()
+    }
   }, [])
   return admin
 }
