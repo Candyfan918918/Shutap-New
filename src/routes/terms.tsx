@@ -87,7 +87,8 @@ function TermsPage() {
 
       <h3>6. Your content</h3>
       <p>
-        You own what you write and post. To run Shutap, you give us a non-exclusive, worldwide,
+        <b>You own what you write and what you keep. We don&rsquo;t claim your ideas or use them in
+        our own content.</b> To run Shutap, you give us a non-exclusive, worldwide,
         royalty-free license to store, process, de-identify, host, display and distribute your
         content on Shutap. We may also use de-identified content in aggregate, such as usage
         statistics, to operate and improve the service. We never use your content to train or tune

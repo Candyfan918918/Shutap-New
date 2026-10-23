@@ -108,10 +108,10 @@ function AiDisclosurePage() {
       </p>
       <h3>Your content stays yours</h3>
       <p>
-        <b>No one at Shutap reads your private bits as part of running the service, Shutap never
-        uses your stories or bits to train AI models, and they are never added to the Shutap joke
-        dataset.</b> We open private content only to fix a problem you report, to act on a safety
-        concern, or when the law requires it. Bits you post to a room are public.
+        <b>Shutap staff don&rsquo;t read the text of your stories or bits, except to fix a problem
+        you report or when the law requires it. Shutap never uses your stories or bits to train AI
+        models, and they are never added to the Shutap joke dataset.</b> Bits you post to a room are
+        public, and we review a post when someone reports it.
       </p>
       <h3>Our own jokes</h3>
       <p>

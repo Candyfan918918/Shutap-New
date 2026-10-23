@@ -13,7 +13,7 @@ const CAPSULE =
 const SECTIONS = [
   { heading: "Your name, your choice", body: "Your profile starts with the name and picture from your sign-in, or a name made from your email address. You can change both in your profile; new posts use your current name." },
   { heading: "Names and places removed before saving", body: "Before anything is stored, Shutap uses automated checks and an AI model to remove names, addresses, places, phone numbers and emails from what you write, including comments. Only the cleaned text is kept. It can miss things, so leave out details you don't want kept." },
-  { heading: "Private until you post", body: "Bits you write stay in your private set list. Only what you post to a room is public. The Mirror is private to you. No one at Shutap reads private bits as part of running the service." },
+  { heading: "Private until you post", body: "Bits you write stay in your private set list. Only what you post to a room is public. The Mirror is private to you. Shutap staff don't read the text of your stories or bits, except to fix a problem you report or when the law requires it." },
   { heading: "Jokes about situations, not people", body: "Shutap's jokes go at the situation, never at a real person someone could identify. That keeps your content shareable and keeps rooms from turning into callouts." },
   { heading: "Reporting and takedowns", body: "Anyone can report a post or comment. When a post gets three reports, it's hidden until reviewed. If a post is about you, email hello@shutap.com or use the report page and we'll take a look." },
   { heading: "Crisis check", body: "If something you write reads as a crisis, Shutap writes no jokes, posts nothing, and shows where to get help. Shutap is not a crisis service." },
