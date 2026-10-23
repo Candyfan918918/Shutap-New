@@ -19,6 +19,11 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { GlobalHeader } from "@/components/GlobalHeader";
 import { WaveDots } from "@/components/motion/WaveDots";
 import { NavProgress } from "@/components/NavProgress";
+// Loaded with the page, not on demand (Oct 23 2026): an on-demand chunk can
+// be gone after a deploy while the page is still open, and that visit's
+// tracking was lost. posthog-js itself still loads lazily inside initPostHog.
+import * as posthogLib from "@/lib/posthog";
+import * as tracking from "@/lib/tracking";
 
 import { useNavigate } from "@/compat/router";
 
@@ -49,9 +54,7 @@ function ErrorComponent({ error, reset }: { error: unknown; reset: () => void })
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
-    void import("@/lib/posthog").then((m) =>
-      m.phCaptureException(error, { boundary: "tanstack_root_error_component" }),
-    );
+    void posthogLib.phCaptureException(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (
@@ -167,12 +170,12 @@ function RootComponent() {
   useEffect(() => {
     // Kick off PostHog import ASAP so bouncy visitors still get page_view
     // + Pageleave. Non-blocking; idempotent via memoized promise.
-    void import("@/lib/posthog").then((m) => m.initPostHog());
+    void posthogLib.initPostHog();
     let mounted = true
     const run = async () => {
       const { supabase } = await import("@/integrations/supabase/client");
-      const { initPostHog } = await import("@/lib/posthog");
-      const { recordVisitOnce, syncProfileFromSession, trackEvent } = await import("@/lib/tracking");
+      const { initPostHog } = posthogLib;
+      const { recordVisitOnce, syncProfileFromSession, trackEvent } = tracking;
       let lastUserId: string | null = null;
       try {
         const { data } = await supabase.auth.getSession();
@@ -224,7 +227,7 @@ function RootComponent() {
       const p = window.location.pathname;
       if (p === lastPath) return;
       lastPath = p;
-      void import('@/lib/tracking').then(({ trackEvent }) => trackEvent('page_view', { path: p }));
+      void tracking.trackEvent('page_view', { path: p });
     });
     return () => {
       mounted = false;
