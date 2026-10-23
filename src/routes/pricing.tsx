@@ -2,7 +2,8 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { ogImageMeta } from '@/lib/seo/meta'
 import { SITE_URL } from '@/lib/site'
 import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
-import { PLANS, PLAN_LINES, usd } from '@/lib/pricing'
+import { PLANS, usd } from '@/lib/pricing'
+import { BIT_CAPS } from '@/lib/bits/plans'
 import { Footer } from '@/components/feed/Footer'
 import '@/components/feed/feed.css'
 
@@ -13,14 +14,33 @@ const PRO = PLANS.pro.amount
 const TITLE = `Pricing — Free AI Joke Generator for Creators, plans from ${usd(BASIC)}/mo`
 const DESCRIPTION = `Shutap is a free AI joke generator for creators, with teleprompter, scene and screenplay views. Basic is ${usd(BASIC)}/month: 5 new bits a day, no watermark. Pro is ${usd(PRO)}/month: unlimited bits, no watermark and the Mirror. Cancel anytime.`
 
-const FREE = [
-  'Your first bit to read, no account needed',
-  '2 new bits a day when you sign in',
+/** The same three rows on every card, so the plans compare line for line. */
+type Row = { label: string; value: string; on: boolean }
+const ROWS: Record<'free' | 'basic' | 'pro', Row[]> = {
+  free: [
+    { label: 'New bits a day', value: `${BIT_CAPS.free}`, on: true },
+    { label: 'Downloads', value: 'Watermarked', on: false },
+    { label: 'The Mirror', value: 'Not included', on: false },
+  ],
+  basic: [
+    { label: 'New bits a day', value: `${BIT_CAPS.basic}`, on: true },
+    { label: 'Downloads', value: 'No watermark', on: true },
+    { label: 'The Mirror', value: 'Not included', on: false },
+  ],
+  pro: [
+    { label: 'New bits a day', value: 'Unlimited', on: true },
+    { label: 'Downloads', value: 'No watermark', on: true },
+    { label: 'The Mirror', value: 'Included', on: true },
+  ],
+}
+/** What every plan has, Free included. Listed once, under the plans. */
+const EVERY_PLAN = [
   'A full bit: hook, setup, tags and button',
-  'Hotter, tighter, mix and tag swap on your bits',
-  'Teleprompter, scene and screenplay page',
-  'Set list of every bit you keep',
-  'Downloads with a Shutap watermark',
+  'Hotter, tighter, mix and tag swap',
+  'Teleprompter',
+  'Scene and screenplay',
+  'Caption and hashtags',
+  'Set list of every bit',
 ]
 const QA = [
   { q: 'Is the AI joke generator really free?', a: 'Yes. Your first bit needs no account to read. Signing in is free, lets you rewrite, download and keep it, and gives you 2 new bits a day. Rewrites (hotter, tighter, mix, tag swap) on your own bits never count against the limit.' },
@@ -77,23 +97,50 @@ export const Route = createFileRoute('/pricing')({
   component: PricingPage,
 })
 
-function Check() {
+function Rows({ rows }: { rows: Row[] }) {
   return (
-    <span aria-hidden style={{ color: 'var(--rose)', fontWeight: 800, flex: 'none' }}>
-      ✓
-    </span>
+    <dl style={{ margin: 0, display: 'flex', flexDirection: 'column' }}>
+      {rows.map((r, i) => (
+        <div
+          key={r.label}
+          className="fd-between"
+          style={{ padding: '11px 0', borderTop: i ? '1px solid var(--line)' : 'none', alignItems: 'baseline' }}
+        >
+          <dt style={{ fontSize: 14, color: 'var(--muted)' }}>{r.label}</dt>
+          <dd
+            style={{
+              margin: 0,
+              fontSize: r.on ? 15.5 : 14,
+              fontWeight: r.on ? 800 : 500,
+              color: r.on ? 'var(--ink)' : 'var(--faint)',
+              textAlign: 'right',
+            }}
+          >
+            {r.value}
+          </dd>
+        </div>
+      ))}
+    </dl>
   )
 }
 
-function PlanColumn({ plan, best }: { plan: 'basic' | 'pro'; best?: boolean }) {
-  const p = PLANS[plan]
+function PlanCard({ plan }: { plan: 'free' | 'basic' | 'pro' }) {
+  const best = plan === 'pro'
+  const paid = plan !== 'free'
+  const name = paid ? PLANS[plan].name : 'Free'
+  const price = paid ? usd(PLANS[plan].amount) : '$0'
   return (
     <section
       className="fd-post"
-      style={{ gap: 14, padding: 22, ...(best ? { borderColor: 'var(--rose)', boxShadow: '0 18px 40px -28px rgba(160,50,90,.55)' } : {}) }}
+      style={{
+        gap: 14,
+        padding: 22,
+        ...(best ? { borderColor: 'var(--rose)', boxShadow: '0 18px 40px -28px rgba(160,50,90,.55)' } : {}),
+        ...(plan === 'free' ? { background: 'transparent', boxShadow: 'none' } : {}),
+      }}
     >
       <div className="fd-between">
-        <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>{p.name}</h2>
+        <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>{name}</h2>
         {best && (
           <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--rose-ink)', background: 'var(--surface)', borderRadius: 999, padding: '4px 10px' }}>
             best deal
@@ -101,20 +148,19 @@ function PlanColumn({ plan, best }: { plan: 'basic' | 'pro'; best?: boolean }) {
         )}
       </div>
       <div>
-        <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-.04em' }}>{usd(p.amount)}</span>
-        <span className="fd-muted"> /month</span>
+        <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-.04em' }}>{price}</span>
+        <span className="fd-muted"> {paid ? '/month' : 'forever'}</span>
       </div>
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 9, fontSize: 14.5 }}>
-        {['Everything in Free', ...PLAN_LINES[plan]].map((f) => (
-          <li key={f} style={{ display: 'flex', gap: 9 }}>
-            <Check />
-            {f}
-          </li>
-        ))}
-      </ul>
-      <a href={`/subscribe?plan=${plan}`} className={`fd-btn block${best ? '' : ' ghost'}`} style={{ marginTop: 'auto' }}>
-        get {p.name} · {usd(p.amount)}
-      </a>
+      <Rows rows={ROWS[plan]} />
+      {paid ? (
+        <a href={`/subscribe?plan=${plan}`} className={`fd-btn block${best ? '' : ' ghost'}`} style={{ marginTop: 'auto' }}>
+          get {name} · {price}
+        </a>
+      ) : (
+        <Link to="/" className="fd-btn ghost block" style={{ marginTop: 'auto' }}>
+          write jokes free
+        </Link>
+      )}
     </section>
   )
 }
@@ -133,27 +179,24 @@ function PricingPage() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 14 }}>
-          <section className="fd-post" style={{ gap: 14, padding: 22 }}>
-            <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>Free</h2>
-            <div>
-              <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-.04em' }}>$0</span>
-              <span className="fd-muted"> forever</span>
-            </div>
-            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 9, fontSize: 14.5 }}>
-              {FREE.map((f) => (
-                <li key={f} style={{ display: 'flex', gap: 9 }}>
-                  <Check />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <Link to="/" className="fd-btn ghost block" style={{ marginTop: 'auto' }}>
-              write jokes free
-            </Link>
-          </section>
-          <PlanColumn plan="basic" />
-          <PlanColumn plan="pro" best />
+          <PlanCard plan="free" />
+          <PlanCard plan="basic" />
+          <PlanCard plan="pro" />
         </div>
+
+        <section aria-label="Every plan includes" style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center', textAlign: 'center' }}>
+          <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>Every plan, Free included</h2>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8 }}>
+            {EVERY_PLAN.map((f) => (
+              <li key={f} className="fd-chip" style={{ height: 'auto', padding: '6px 12px', cursor: 'default' }}>
+                {f}
+              </li>
+            ))}
+          </ul>
+          <p className="fd-faint" style={{ margin: 0 }}>
+            Your first bit needs no account. Sign in free to rewrite, download and keep it.
+          </p>
+        </section>
 
         <p className="fd-faint" style={{ textAlign: 'center', margin: 0 }}>
           Prices in USD. Tax may apply. No free trial. Cancel anytime. Limits reset at midnight Pacific. Payments by Stripe.
