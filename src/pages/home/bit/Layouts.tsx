@@ -208,7 +208,7 @@ export function ScreenplayView({
               copy
             </button>
             <button className="bt-btn ghost" onClick={() => download(load.data)}>
-              download PDF
+              save PDF
             </button>
           </div>
         </>

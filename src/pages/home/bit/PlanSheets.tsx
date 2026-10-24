@@ -95,7 +95,7 @@ export function PaywallBody({
   return (
     <div className="pw">
       <div className="pw-head">
-        <h3 id="bit-sheet-title">{download ? 'Download it clean.' : "That's today's free bits."}</h3>
+        <h3 id="bit-sheet-title">{download ? 'Save it clean.' : "That's today's free bits."}</h3>
         <p className="pw-sub">{download ? 'Both plans remove the watermark.' : 'Want to keep writing tonight?'}</p>
       </div>
 

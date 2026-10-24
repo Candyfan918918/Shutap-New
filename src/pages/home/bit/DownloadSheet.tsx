@@ -96,7 +96,7 @@ export function DownloadSheet({
   }
 
   const note =
-    paid ? `${tier === 'pro' ? 'Pro' : 'Basic'} · clean, no watermark` : tier === 'guest' ? 'guest download · Shutap watermark' : 'free download · Shutap watermark'
+    paid ? `${tier === 'pro' ? 'Pro' : 'Basic'} · clean, no watermark` : tier === 'guest' ? 'guest · Shutap watermark' : 'free · Shutap watermark'
 
   return (
     <div data-ph-private
@@ -107,7 +107,7 @@ export function DownloadSheet({
     >
       <div className="bt-sheet" role="dialog" aria-modal="true" aria-labelledby="dl-title" style={{ maxHeight: '92vh', overflow: 'auto' }}>
         <div className="bt-between">
-          <h3 id="dl-title">Download</h3>
+          <h3 id="dl-title">Save</h3>
           <button className="bt-btn ghost sm" onClick={onClose}>
             close
           </button>

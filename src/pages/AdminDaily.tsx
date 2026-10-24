@@ -164,7 +164,7 @@ export function DailyReportSection() {
           </div>
 
           <p style={{ fontSize: 11, color: DIM, marginTop: 10, lineHeight: 1.6 }}>
-            Paywall numbers are unique people that day (an account, or a guest's browser session). The sign-in prompt counts guests asked to sign in for a second bit or to rewrite, download or keep a bit; "other" is scene, screenplay or post. "Opened checkout" counts checkouts reached from the paywall. "Paid" is a new plan (live payments only), not a renewal; its rate is the share of people who opened checkout and paid that day.{' '}
+            Paywall numbers are unique people that day (an account, or a guest's browser session). The sign-in prompt counts guests asked to sign in for a second bit or to rewrite, save or keep a bit; "other" is scene, screenplay or post. "Opened checkout" counts checkouts reached from the paywall. "Paid" is a new plan (live payments only), not a renewal; its rate is the share of people who opened checkout and paid that day.{' '}
             Days are {r.timezone} calendar days. Visits are human sessions (bots removed); people = distinct visitors. Sign-in rate = signed-in users active that day ÷ distinct visitors.
             Returning users = signed-in users active that day who joined on an earlier day. Totals are as of the end of the day.
             {r.hidden.admins > 0 ? ` Admin accounts (${r.hidden.admins}) are left out.` : ''}

@@ -239,7 +239,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "How it works",
-        body: "Write the story the way you would tell a friend. Pick who it is for (social, live, office, work, family or school), a voice (deadpan, storyteller, roast or dry), a length (15 seconds, 30 seconds, 60 seconds or 2 minutes) and a heat level from 1 to 5. Shutap returns the script. Names and places are removed before anything is saved.",
+        body: "Write the story the way you would tell a friend. Pick who it is for (social, live, office, work, family or school), a voice (deadpan, storyteller, roast or dry), a length (15 seconds, 30 seconds, 60 seconds or 2 minutes) and heat from 1 (sticks to your story) to 5 (goes wild). Shutap returns the script. Names and places are removed before anything is saved.",
       },
       {
         heading: "Film it",
@@ -247,7 +247,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Keep it yours",
-        body: "The script uses the details you gave it, so it sounds like your story and not a template. Edit any line, then film it. You can download, share and post what Shutap writes for you.",
+        body: "The script uses the details you gave it, so it sounds like your story and not a template. Edit any line, then film it. You can save, share and post what Shutap writes for you.",
       },
       {
         heading: "The one rule",
@@ -276,7 +276,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What you get",
-        body: "A hook to open on, a setup that tells the story straight, tags that keep the laughs coming after the first one lands, and a button to end on. You choose a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes, and a heat level from 1 to 5.",
+        body: "A hook to open on, a setup that tells the story straight, tags that keep the laughs coming after the first one lands, and a button to end on. You choose a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes, and heat from 1 (sticks to your story) to 5 (goes wild).",
       },
       {
         heading: "When you are stuck",
@@ -422,7 +422,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Step two: write whole bits, not lines",
-        body: "Four complete bits are written in one pass, each built on a different observation, plus five spare tags. Every bit has a hook of eight words or fewer that can sit on screen for two seconds, a setup that states the facts plainly, one to three tags that each end on something you can picture, and a button. Four controls shape the writing: audience (social, live, office, work, family or school), voice (deadpan, storyteller, roast or dry), length (15 seconds to 2 minutes) and heat from 1 to 5. Heat changes how far a picture travels from the facts, never who the joke is aimed at.",
+        body: "Four complete bits are written in one pass, each built on a different observation, plus five spare tags. Every bit has a hook of eight words or fewer that can sit on screen for two seconds, a setup that states the facts plainly, one to three tags that each end on something you can picture, and a button. Four controls shape the writing: audience (social, live, office, work, family or school), voice (deadpan, storyteller, roast or dry), length (15 seconds to 2 minutes) and heat from 1 (sticks to your story) to 5 (goes wild). Heat sets how far the jokes stray from the facts, never who they're aimed at.",
       },
       {
         heading: "Step three: rules in code, then a judge",
@@ -446,7 +446,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "You steer",
-        body: "Hotter raises the heat two levels, up to 5, and pushes every picture further. Tighter cuts the bit to about 60 percent of its words and keeps only the best tag. Escalate moves each tag one step further along the same line and flips who is in charge on the button. Swap a tag trades one line for another. Mix your own lets you pick the hook, the tag and the button you like from the lines Shutap actually wrote for your story, and rebuilds the bit around the setup. Every change is saved as a new version, so you can go back.",
+        body: "Hotter takes it two levels further from the facts, up to 5. Tighter cuts the bit to about 60 percent of its words and keeps only the best tag. Escalate moves each tag one step further along the same line and flips who is in charge on the button. Swap a tag trades one line for another. Mix your own lets you pick the hook, the tag and the button you like from the lines Shutap actually wrote for your story, and rebuilds the bit around the setup. Every change is saved as a new version, so you can go back.",
       },
       {
         heading: "Then film it",
@@ -756,7 +756,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Check the room",
-        body: "Know the audience. A board meeting, a customer webinar and an all-hands call for different levels of heat. Shutap's heat control exists for exactly this.",
+        body: "Know the audience. A board meeting, a customer webinar and an all-hands call for different distances from the facts. Shutap's heat setting controls exactly that: 1 sticks to what happened, 5 goes wild.",
       },
       {
         heading: "Where this stands today",

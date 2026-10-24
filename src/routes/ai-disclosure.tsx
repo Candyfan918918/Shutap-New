@@ -123,7 +123,7 @@ function AiDisclosurePage() {
       </p>
       <p>
         AI output can be inaccurate, unfunny or offensive. Treat it as entertainment. You are
-        responsible for what you download, share and post.
+        responsible for what you save, share and post.
       </p>
       <p>
         Some places, including California, require clear notice when you&rsquo;re dealing with AI

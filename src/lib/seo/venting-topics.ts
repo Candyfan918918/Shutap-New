@@ -86,7 +86,7 @@ export const VENT_TOPICS: VentTopic[] = [
       'The passive note on the fridge, the dish that has lived in the sink since spring, the person you share a lease with and avoid in the hallway. Paste what happened and Shutap writes the jokes.',
     topicQuestion: {
       q: 'Can I post a roommate joke without starting a fight at home?',
-      a: 'Names and places are removed before anything is saved, and you post under a pseudonym. Keep it private, download it, or post the best one to a room.',
+      a: 'Names and places are removed before anything is saved, and you post under a pseudonym. Keep it private, save it, or post the best one to a room.',
     },
   },
   {

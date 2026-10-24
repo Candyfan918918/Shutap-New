@@ -4,7 +4,7 @@
  *   writing  the story, four steps and a bar while the server works
  *   bit      hook, setup, tags, button, one line on why it works, the
  *            action row. Everyone sees the whole bit, guests included;
- *            a guest signs in (free) to rewrite, download or keep it.
+ *            a guest signs in (free) to rewrite or save it.
  *
  * New bits a day: guest 1 · free 2 (counting the guest bit) · basic 5 · pro.
  * At the limit, "write" opens the next step instead: a guest gets the
@@ -67,7 +67,7 @@ const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   rewrite: { title: 'Sign in to rewrite it.', sub: 'Free. Hotter, tighter, a new tag, or mix your own. Your bit comes with you.' },
   swap: { title: 'Sign in to swap the tag.', sub: 'Free. Your bit comes with you, with all five spare tags.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
-  download: { title: 'Sign in to download it.', sub: 'Free. Your bit comes with you, ready to save as a picture.' },
+  download: { title: 'Sign in to save it.', sub: 'Free. Saves your bit as a picture.' },
   save: { title: 'Sign in to keep it.', sub: 'Free. It goes in your set list with every version you make.' },
   scene: { title: 'Sign in to see the scene.', sub: 'Free. Your bit comes with you.' },
   screenplay: { title: 'Sign in for the screenplay.', sub: 'Free. Your bit comes with you.' },
@@ -703,6 +703,7 @@ export function BitSurface() {
                 <Choice
                   wide
                   label="heat"
+                  hint="1 sticks to your story · 5 goes wild"
                   options={['1', '2', '3', '4', '5'] as const}
                   value={String(controls.heat) as '1'}
                   onPick={(v) => setControls((c) => ({ ...c, heat: Number(v) as BitControls['heat'] }))}
@@ -833,7 +834,7 @@ export function BitSurface() {
                 }}
               >
                 <ActionIcon name="download" />
-                download
+                save
               </button>
               <button
                 className="bt-act"
@@ -1004,8 +1005,11 @@ function Choice<T extends string>({
   value,
   onPick,
   wide,
+  hint,
 }: {
   label: string
+  /** one short line under the chips */
+  hint?: string
   options: readonly T[]
   value: T
   onPick: (v: T) => void
@@ -1021,6 +1025,7 @@ function Choice<T extends string>({
           </button>
         ))}
       </div>
+      {hint && <span className="bt-note" style={{ fontSize: 'var(--fs-label)', marginTop: 6, display: 'block' }}>{hint}</span>}
     </fieldset>
   )
 }

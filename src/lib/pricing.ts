@@ -55,8 +55,8 @@ export const PLAN_COMPARE: CompareRow[] = [
     },
   },
   {
-    label: 'Downloads',
-    short: 'Downloads',
+    label: 'Saved images',
+    short: 'Saves',
     cells: {
       free: { value: 'Watermarked', short: 'Watermark', on: false },
       basic: { value: 'No watermark', short: 'Clean', on: true },
