@@ -702,8 +702,8 @@ export function BitSurface() {
                 <Choice wide label="length" options={LENGTHS} value={controls.length} onPick={(v) => setControls((c) => ({ ...c, length: v }))} />
                 <Choice
                   wide
-                  label="heat"
-                  hint="1 sticks to your story · 5 goes wild"
+                  label="wild"
+                  hint="1 true to your story · 5 goes wild"
                   options={['1', '2', '3', '4', '5'] as const}
                   value={String(controls.heat) as '1'}
                   onPick={(v) => setControls((c) => ({ ...c, heat: Number(v) as BitControls['heat'] }))}
@@ -775,7 +775,7 @@ export function BitSurface() {
             )}
 
             <span className="bt-lbl">
-              the bit · ~{version.est_seconds}s · heat {version.heat} · {bit.controls.audience}
+              the bit · ~{version.est_seconds}s · wild {version.heat} · {bit.controls.audience}
             </span>
 
             <article className="bt-card" aria-label="The bit" data-ph-private style={{ paddingTop: 8 }}>

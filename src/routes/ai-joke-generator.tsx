@@ -45,7 +45,7 @@ function AIJokeGeneratorPage() {
         },
         {
           heading: 'How to generate jokes from your own story',
-          body: 'Write what happened in the story box. Include who did what, the exact words you remember and the small detail that made it ridiculous; leave real names out. Choose your audience, voice, length and heat, then let Shutap write the bit. Read the draft out loud and decide what fits your delivery. You can tighten it, change the tags or mix your own version before filming.',
+          body: 'Write what happened in the story box. Include who did what, the exact words you remember and the small detail that made it ridiculous; leave real names out. Choose your audience, voice, length and how wild, then let Shutap write the bit. Read the draft out loud and decide what fits your delivery. You can tighten it, change the tags or mix your own version before filming.',
         },
         {
           heading: 'For creators and comedians',

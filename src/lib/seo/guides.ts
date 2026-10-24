@@ -239,7 +239,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "How it works",
-        body: "Write the story the way you would tell a friend. Pick who it is for (social, live, office, work, family or school), a voice (deadpan, storyteller, roast or dry), a length (15 seconds, 30 seconds, 60 seconds or 2 minutes) and heat from 1 (sticks to your story) to 5 (goes wild). Shutap returns the script. Names and places are removed before anything is saved.",
+        body: "Write the story the way you would tell a friend. Pick who it is for (social, live, office, work, family or school), a voice (deadpan, storyteller, roast or dry), a length (15 seconds, 30 seconds, 60 seconds or 2 minutes) and how wild, from 1 (true to your story) to 5 (goes wild). Shutap returns the script. Names and places are removed before anything is saved.",
       },
       {
         heading: "Film it",
@@ -276,7 +276,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What you get",
-        body: "A hook to open on, a setup that tells the story straight, tags that keep the laughs coming after the first one lands, and a button to end on. You choose a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes, and heat from 1 (sticks to your story) to 5 (goes wild).",
+        body: "A hook to open on, a setup that tells the story straight, tags that keep the laughs coming after the first one lands, and a button to end on. You choose a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes, and how wild, from 1 (true to your story) to 5 (goes wild).",
       },
       {
         heading: "When you are stuck",
@@ -422,7 +422,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Step two: write whole bits, not lines",
-        body: "Four complete bits are written in one pass, each built on a different observation, plus five spare tags. Every bit has a hook of eight words or fewer that can sit on screen for two seconds, a setup that states the facts plainly, one to three tags that each end on something you can picture, and a button. Four controls shape the writing: audience (social, live, office, work, family or school), voice (deadpan, storyteller, roast or dry), length (15 seconds to 2 minutes) and heat from 1 (sticks to your story) to 5 (goes wild). Heat sets how far the jokes stray from the facts, never who they're aimed at.",
+        body: "Four complete bits are written in one pass, each built on a different observation, plus five spare tags. Every bit has a hook of eight words or fewer that can sit on screen for two seconds, a setup that states the facts plainly, one to three tags that each end on something you can picture, and a button. Four controls shape the writing: audience (social, live, office, work, family or school), voice (deadpan, storyteller, roast or dry), length (15 seconds to 2 minutes) and how wild, from 1 (true to your story) to 5 (goes wild). It sets how far the jokes stray from the facts, never who they're aimed at.",
       },
       {
         heading: "Step three: rules in code, then a judge",
@@ -434,7 +434,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "A dataset we write ourselves",
-        body: "The writing is guided by an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and heat. None of it comes from users. It grows as the team adds to it, so the guidance gets better over time.",
+        body: "The writing is guided by an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. None of it comes from users. It grows as the team adds to it, so the guidance gets better over time.",
       },
       {
         heading: "What to post today",
@@ -482,7 +482,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does",
-        body: "You write a real story. Shutap lists observations about it, writes four whole bits, filters them with rules written in code, and has a second AI model pick the best. The unit of output is a bit: a hook, a setup, tags and a button, in your choice of audience, voice, length and heat. The first one needs no account.",
+        body: "You write a real story. Shutap lists observations about it, writes four whole bits, filters them with rules written in code, and has a second AI model pick the best. The unit of output is a bit: a hook, a setup, tags and a button, in your choice of audience, voice, length and how wild. The first one needs no account.",
       },
       {
         heading: "Who is the writer",
@@ -494,7 +494,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Beyond the bit",
-        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and heat.",
+        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
       },
       {
         heading: "Which should you use",
@@ -572,7 +572,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Shutap",
-        body: "Input: a story from your own life. Output: a whole bit with a hook, setup, tags and a button, in your choice of audience, voice, length and heat. You steer it: hotter, tighter, escalate, swap a tag, or mix your own from lines Shutap wrote for your story. It views as a teleprompter, a scene or a screenplay page. Best for creators and comedians turning real stories into material. The first bit needs no account.",
+        body: "Input: a story from your own life. Output: a whole bit with a hook, setup, tags and a button, in your choice of audience, voice, length and how wild. You steer it: hotter, tighter, escalate, swap a tag, or mix your own from lines Shutap wrote for your story. It views as a teleprompter, a scene or a screenplay page. Best for creators and comedians turning real stories into material. The first bit needs no account.",
       },
       {
         heading: "Witscript",
@@ -632,7 +632,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Beyond the bit",
-        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and heat.",
+        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
       },
       {
         heading: "Who should use which",
@@ -668,11 +668,11 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does for you",
-        body: "Shutap finds observations in your story first, writes four whole bits from different ones, removes lines that would work on anyone's story, blocks advice and jokes at the teller, and ranks the rest with a second model so the writer does not grade itself. Then it gives you the controls: audience, voice, length, heat, hotter, tighter, escalate, swap a tag and mix your own.",
+        body: "Shutap finds observations in your story first, writes four whole bits from different ones, removes lines that would work on anyone's story, blocks advice and jokes at the teller, and ranks the rest with a second model so the writer does not grade itself. Then it gives you the controls: audience, voice, length, wild, hotter, tighter, escalate, swap a tag and mix your own.",
       },
       {
         heading: "What only Shutap has around the tool",
-        body: "A daily idea of what to post with a hook, a bit and a tag, drawn from what is trending. The funniest, a series of educational pages that break down the techniques of funny people with original example lines. And an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and heat. A general chatbot gives you a blank box. Shutap gives you the structure, the checks and the learning material around it.",
+        body: "A daily idea of what to post with a hook, a bit and a tag, drawn from what is trending. The funniest, a series of educational pages that break down the techniques of funny people with original example lines. And an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. A general chatbot gives you a blank box. Shutap gives you the structure, the checks and the learning material around it.",
       },
       {
         heading: "Formats",
@@ -756,7 +756,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Check the room",
-        body: "Know the audience. A board meeting, a customer webinar and an all-hands call for different distances from the facts. Shutap's heat setting controls exactly that: 1 sticks to what happened, 5 goes wild.",
+        body: "Know the audience. A board meeting, a customer webinar and an all-hands call for different distances from the facts. Shutap's wild setting controls exactly that: 1 is true to what happened, 5 goes wild.",
       },
       {
         heading: "Where this stands today",
@@ -828,11 +828,11 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does for you",
-        body: "Shutap finds observations in your story first, writes four whole bits from different ones, removes lines that would work on anyone's story, blocks advice and jokes at the teller, and ranks the rest with a second model from a different family. Then you steer: audience, voice, length, heat, hotter, tighter, escalate, swap a tag, or mix your own.",
+        body: "Shutap finds observations in your story first, writes four whole bits from different ones, removes lines that would work on anyone's story, blocks advice and jokes at the teller, and ranks the rest with a second model from a different family. Then you steer: audience, voice, length, wild, hotter, tighter, escalate, swap a tag, or mix your own.",
       },
       {
         heading: "What only Shutap has around the tool",
-        body: "A daily idea of what to post with a hook, a bit and a tag, drawn from what is trending. The funniest, a series of educational pages that break down the techniques of funny people with original example lines. And an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and heat.",
+        body: "A daily idea of what to post with a hook, a bit and a tag, drawn from what is trending. The funniest, a series of educational pages that break down the techniques of funny people with original example lines. And an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
       },
       {
         heading: "Formats",

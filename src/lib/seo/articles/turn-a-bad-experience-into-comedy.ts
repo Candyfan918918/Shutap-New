@@ -44,7 +44,7 @@ const guide: Guide = {
     },
     {
       heading: "Drafting faster with a tool",
-      body: "If you've got the story but can't see the shape, a first draft to argue with helps. Shutap, the AI joke generator for creators, takes the story as you'd tell it, lets you pick a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and a heat (how far from the facts to go), and returns a draft of the bit with a hook, setup, tags and a button. Cross out every line you wouldn't say, keep the one that made you laugh, and rewrite the rest in your own words. Your first one doesn't need an account.",
+      body: "If you've got the story but can't see the shape, a first draft to argue with helps. Shutap, the AI joke generator for creators, takes the story as you'd tell it, lets you pick a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and how wild to go, and returns a draft of the bit with a hook, setup, tags and a button. Cross out every line you wouldn't say, keep the one that made you laugh, and rewrite the rest in your own words. Your first one doesn't need an account.",
     },
   ],
   faq: [

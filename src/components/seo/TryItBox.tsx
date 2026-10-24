@@ -12,7 +12,7 @@ export function presetLabel(preset: Partial<BitControls>): string {
   const bits: string[] = []
   if (preset.voice) bits.push(preset.voice)
   if (preset.length) bits.push(preset.length === '2m' ? '2 min' : preset.length)
-  if (preset.heat) bits.push(`heat ${preset.heat}`)
+  if (preset.heat) bits.push(`wild ${preset.heat}`)
   if (preset.audience && preset.audience !== 'social') bits.push(`for ${preset.audience}`)
   return bits.join(' · ')
 }

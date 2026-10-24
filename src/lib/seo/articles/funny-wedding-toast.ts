@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Draft the funny middle with Shutap",
-      body: "If you have the story but can't find the laugh in it, Shutap, the AI joke generator for creators, can give you a first draft to push against. The button on this page opens it set for a family audience, storyteller voice, two minutes and heat 2, close to what really happened. Type the story the way you'd tell it at the bar, leaving names out. You get a draft with a hook, setup, tags and a button, which is the funny middle of the toast. Cut what doesn't sound like you, write the sincere ending yourself, and rehearse it in the teleprompter.",
+      body: "If you have the story but can't find the laugh in it, Shutap, the AI joke generator for creators, can give you a first draft to push against. The button on this page opens it set for a family audience, storyteller voice, two minutes and wild set to 2, close to what really happened. Type the story the way you'd tell it at the bar, leaving names out. You get a draft with a hook, setup, tags and a button, which is the funny middle of the toast. Cut what doesn't sound like you, write the sincere ending yourself, and rehearse it in the teleprompter.",
     },
   ],
   faq: [

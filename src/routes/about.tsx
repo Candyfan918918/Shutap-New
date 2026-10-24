@@ -41,7 +41,7 @@ const SECTIONS = [
   },
   {
     heading: "Why Shutap is different",
-    body: "Shutap writes a whole bit from your own story, then lets you steer it: hotter, tighter, escalate, or mix your own lines. It sits on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and heat. Around the tool you get a daily idea of what to post and a library of techniques taken from funny people. To our knowledge, no other joke tool pairs all of these, and the aim is simple: you get funnier, and the voice stays yours.",
+    body: "Shutap writes a whole bit from your own story, then lets you steer it: hotter, tighter, escalate, or mix your own lines. It sits on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. Around the tool you get a daily idea of what to post and a library of techniques taken from funny people. To our knowledge, no other joke tool pairs all of these, and the aim is simple: you get funnier, and the voice stays yours.",
   },
   {
     heading: "Post the best one to a room",
@@ -49,7 +49,7 @@ const SECTIONS = [
   },
   {
     heading: "What is coming next",
-    body: "The AI joke generator is the tool you can use today. Next we are building Shutap Enterprise, which brings original, human-steered humor to presentations and slides, roadshows, product demos, launches and meetings, written from a company's own material. We are also building the Shutap joke dataset, an in-house collection the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and heat. Beyond that we are exploring short videos, screenwriting and audio stories. These are plans, not promises of dates, and we will say so when each is ready. To request Enterprise pricing and solutions, or to ask about the dataset, use the form at shutap.com/business.",
+    body: "The AI joke generator is the tool you can use today. Next we are building Shutap Enterprise, which brings original, human-steered humor to presentations and slides, roadshows, product demos, launches and meetings, written from a company's own material. We are also building the Shutap joke dataset, an in-house collection the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. Beyond that we are exploring short videos, screenwriting and audio stories. These are plans, not promises of dates, and we will say so when each is ready. To request Enterprise pricing and solutions, or to ask about the dataset, use the form at shutap.com/business.",
   },
   {
     heading: "The one rule",
