@@ -3,6 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "self-deprecating-humor",
   kind: "guide",
+  preset: { voice: "storyteller" },
   topic: "types-of-humor",
   keyword: "self deprecating humor",
   title: "Self-Deprecating Humor: Examples & How to Write It | Shutap",

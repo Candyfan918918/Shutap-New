@@ -3,6 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "turn-a-bad-experience-into-comedy",
   kind: "guide",
+  preset: { voice: "storyteller", length: "60s" },
   topic: "finding-ideas",
   keyword: "turn a bad experience into comedy",
   title: "How to Turn a Bad Experience Into Comedy | Shutap",

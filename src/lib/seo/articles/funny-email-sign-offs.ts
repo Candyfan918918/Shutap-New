@@ -3,6 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "funny-email-sign-offs",
   kind: "guide",
+  preset: { audience: "work", voice: "dry", length: "15s" },
   topic: "jokes-for-occasions",
   keyword: "funny email sign offs",
   title: "Funny Email Sign-Offs for Work, With Examples | Shutap",

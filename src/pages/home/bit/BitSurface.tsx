@@ -23,7 +23,9 @@ import {
   AUDIENCES,
   DEFAULT_CONTROLS,
   LENGTHS,
+  PRESET_KEYS,
   VOICES,
+  presetFromSearch,
   type Bit,
   type BitControls,
   type BitTier,
@@ -150,6 +152,9 @@ function newWriteId(): string {
     })
   }
 }
+
+/** The controls a preset link arrived with, kept briefly across a remount. */
+let arrivedPreset: { at: number; preset: Partial<BitControls> } | null = null
 
 function readControls(): BitControls {
   try {
@@ -284,7 +289,25 @@ export function BitSurface() {
     const keep = handed || (onScreen.length >= saved.length ? onScreen : saved)
     if (keep) typed.current = true
     setStory(keep)
-    setControls(readControls())
+    // 4 · a preset link from a tool page (?voice=roast&length=60s...) sets
+    //     the controls on top of the saved ones, never the story. The query
+    //     is then dropped from the address bar so a reload or a shared link
+    //     to the homepage doesn't keep re-applying it.
+    const fromUrl = presetFromSearch(window.location.search)
+    if (Object.keys(fromUrl).length) arrivedPreset = { at: Date.now(), preset: fromUrl }
+    // The surface can mount twice on arrival (dev double-mount, hydration);
+    // the second mount sees the query already dropped, so it reuses the
+    // preset that arrived a moment ago.
+    const preset = arrivedPreset && Date.now() - arrivedPreset.at < 5000 ? arrivedPreset.preset : {}
+    setControls({ ...readControls(), ...preset })
+    if (Object.keys(fromUrl).length) {
+      jokeTrack('preset_opened', tier, { ...fromUrl })
+      try {
+        const u = new URL(window.location.href)
+        for (const k of PRESET_KEYS) u.searchParams.delete(k)
+        window.history.replaceState(window.history.state, '', u.pathname + u.search + u.hash)
+      } catch { /* noop */ }
+    }
   }, [])
   useEffect(() => {
     try { sessionStorage.setItem(DRAFT_KEY, story) } catch { /* noop */ }

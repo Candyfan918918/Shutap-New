@@ -20,6 +20,33 @@ export type BitControls = {
 
 export const DEFAULT_CONTROLS: BitControls = { audience: 'social', voice: 'deadpan', length: '30s', heat: 3 }
 
+/** A link can open the writer with its controls preset, e.g.
+ *  `/?voice=roast&length=60s&heat=4#joke` from a tool page. Only the controls:
+ *  the story box always opens empty. Unknown or invalid values are ignored. */
+export const PRESET_KEYS = ['audience', 'voice', 'length', 'heat'] as const
+
+export function presetFromSearch(search: string): Partial<BitControls> {
+  const p = new URLSearchParams(search)
+  const out: Partial<BitControls> = {}
+  const a = p.get('audience')
+  if (a && (AUDIENCES as readonly string[]).includes(a)) out.audience = a as Audience
+  const v = p.get('voice')
+  if (v && (VOICES as readonly string[]).includes(v)) out.voice = v as BitVoice
+  const l = p.get('length')
+  if (l && (LENGTHS as readonly string[]).includes(l)) out.length = l as BitLength
+  const h = Number(p.get('heat'))
+  if (Number.isInteger(h) && h >= 1 && h <= 5) out.heat = h as BitControls['heat']
+  return out
+}
+
+/** Search params for a preset link (heat stays a number so the router
+ *  writes `heat=4`, not a quoted string). */
+export function presetSearch(preset: Partial<BitControls>): Record<string, string | number> {
+  const out: Record<string, string | number> = {}
+  for (const k of PRESET_KEYS) if (preset[k] !== undefined) out[k] = preset[k] as string | number
+  return out
+}
+
 /** Talking pace the teleprompter and the seconds estimate share. */
 export const WORDS_PER_SECOND = 2.6
 

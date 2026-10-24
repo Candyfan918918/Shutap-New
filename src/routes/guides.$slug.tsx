@@ -112,6 +112,8 @@ function GuideRoute() {
   return (
     <ContentPage
       tryIt={`guides/${slug}`}
+      preset={g.preset}
+      sample={g.sample}
       breadcrumbs={[
         { name: "Guides", path: "/guides" },
         ...(topic ? [{ name: topic.label, path: topicPath(topic.id) }] : []),

@@ -5,6 +5,8 @@
 // Voice: terse, concrete. No card counts, no wellness vocabulary, no claims
 // about features that are not in the product.
 
+import type { BitControls } from "@/lib/bits/shared";
+
 export type GuideKind = "tool" | "guide" | "business";
 
 export interface GuideSection {
@@ -166,6 +168,19 @@ export const GUIDE_TOPICS: GuideTopicInfo[] = [
   },
 ];
 
+/** A bit the live product actually wrote, shown on a tool page under the
+ *  writer button. Paste real output only: never write one by hand. */
+export interface GuideSample {
+  /** The story that was typed in, as typed (already scrubbed of names). */
+  story: string;
+  hook: string;
+  setup: string;
+  tags: string[];
+  button: string;
+  /** Date it was generated on shutap.com (YYYY-MM-DD). */
+  made: string;
+}
+
 export interface Guide {
   slug: string;
   kind: GuideKind;
@@ -194,6 +209,10 @@ export interface Guide {
   faq?: GuideFaq[];
   /** Where any fact or figure on the page comes from. */
   sources?: GuideSource[];
+  /** Tool pages: open the writer with these controls set (story box stays empty). */
+  preset?: Partial<BitControls>;
+  /** Tool pages: one real bit from the product, shown below the writer button. */
+  sample?: GuideSample;
 }
 
 const CTA = { label: "Write your story, get the bit", href: "/" };
@@ -205,6 +224,7 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "storytime-script-generator",
     kind: "tool",
+    preset: { audience: "social", voice: "storyteller", length: "60s" },
     title: "Storytime Script Generator for TikTok & Reels | Shutap",
     h1: "Storytime script generator",
     description:
@@ -241,6 +261,7 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "stand-up-bit-generator",
     kind: "tool",
+    preset: { audience: "live", voice: "deadpan", length: "2m" },
     title: "AI Stand-Up Bit Generator: First Drafts From Your Stories | Shutap",
     h1: "Stand-up bit generator",
     description:
@@ -277,6 +298,7 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "pov-skit-generator",
     kind: "tool",
+    preset: { audience: "social", voice: "deadpan", length: "30s" },
     title: "POV & Skit Script Generator for Creators | Shutap",
     h1: "POV and skit generator",
     description:
@@ -309,6 +331,7 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "comedy-teleprompter",
     kind: "tool",
+    preset: { audience: "social", voice: "storyteller", length: "30s" },
     title: "Teleprompter for Comedy Videos & Open Mics | Shutap",
     h1: "Teleprompter for comedy",
     description:
@@ -341,6 +364,7 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "comedy-screenplay-format",
     kind: "tool",
+    preset: { audience: "social", voice: "dry", length: "60s" },
     title: "Comedy Scene & Screenplay Page Generator | Shutap",
     h1: "Comedy screenplay page generator",
     description:
@@ -830,6 +854,7 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "how-to-turn-a-story-into-a-bit",
     kind: "guide",
+    preset: { voice: "storyteller", length: "60s" },
     title: "How to Turn a Story Into a Comedy Bit (Step by Step) | Shutap",
     h1: "How to turn a story into a bit",
     description:

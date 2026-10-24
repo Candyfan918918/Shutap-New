@@ -3,6 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "ai-roast-generator",
   kind: "guide",
+  preset: { voice: "roast", heat: 4 },
   topic: "shutap-vs-other-tools",
   keyword: "ai roast generator",
   title: "AI Roast Generators Compared: Roast the Situation | Shutap",
