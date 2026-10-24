@@ -3,37 +3,15 @@ import { ogImageMeta } from "@/lib/seo/meta";
 import { ContentPage } from "@/components/seo/ContentPage";
 import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
-import { GUIDES, GUIDE_TOPICS, guidePath, guidesInTopic, topicPath } from "@/lib/seo/guides";
+import { GUIDES, guidePath } from "@/lib/seo/guides";
+import { GuidesBrowser } from "@/components/seo/GuidesBrowser";
 
 const PATH = "/guides";
 const TITLE = "Guides & Tools for Writing Funnier Videos and Sets | Shutap";
 const DESCRIPTION =
   "Guides and tools for creators and comedians: storytime scripts, stand-up bits, POV skits, teleprompter and screenplay pages, plus how to write a hook, tags and a button.";
 const CAPSULE =
-  "Shutap is an AI joke generator for creators. These guides cover the craft: how to turn a story into a bit, how long a TikTok bit should be, and how to write tags, plus the tools for scripts, skits, teleprompter and screenplay pages.";
-
-const toItems = (kind: "tool" | "guide" | "business") =>
-  GUIDES.filter((g) => g.kind === kind).map((g) => ({
-    href: guidePath(g.slug),
-    label: g.h1,
-    blurb: g.blurb,
-  }));
-
-// Guides grouped by topic: the newest few per topic, then a link to the topic
-// hub that lists all of them. Stays readable however many articles exist.
-const PER_TOPIC = 5;
-const topicGroups = () =>
-  GUIDE_TOPICS.map((t) => ({ t, list: guidesInTopic(t.id) }))
-    .filter((x) => x.list.length > 0)
-    .map(({ t, list }) => ({
-      heading: t.label,
-      items: [
-        ...list.slice(0, PER_TOPIC).map((g) => ({ href: guidePath(g.slug), label: g.h1, blurb: g.blurb })),
-        { href: topicPath(t.id), label: `All ${t.label.toLowerCase()} guides (${list.length}) →`, blurb: t.description },
-      ],
-    }));
-const untopicGuides = () =>
-  GUIDES.filter((g) => g.kind === "guide" && !g.topic).map((g) => ({ href: guidePath(g.slug), label: g.h1, blurb: g.blurb }));
+  "Tools and guides from Shutap, the AI joke generator for creators: search, pick a category, or sort by newest.";
 
 export const Route = createFileRoute("/guides/")({
   head: () => ({
@@ -74,26 +52,11 @@ export const Route = createFileRoute("/guides/")({
   }),
   component: () => (
     <ContentPage
-      tryIt="guides"
       breadcrumbs={[{ name: "Guides", path: PATH }]}
       h1="Guides and tools for writing funnier"
       capsule={CAPSULE}
       sections={[]}
-      linkGroups={[
-        { heading: "Tools", items: [
-          { href: "/ai-joke-generator", label: "AI joke generator", blurb: "Turn your own story into a complete comedy bit: hook, setup, tags and button — not random one-liners." },
-          ...toItems("tool"),
-        ] },
-        ...topicGroups(),
-        ...(untopicGuides().length ? [{ heading: "More guides", items: untopicGuides() }] : []),
-        {
-          heading: "Shutap Enterprise (in development)",
-          items: [
-            { href: "/business", label: "Request pricing and solutions", blurb: "Humor for presentations, demos, launches and meetings." },
-            ...toItems("business"),
-          ],
-        },
-      ]}
+      children={<GuidesBrowser />}
       cta={{ label: "Write your story, get the bit", href: "/" }}
       others={[
         { href: "/funniest", label: "The funniest people and their techniques" },
