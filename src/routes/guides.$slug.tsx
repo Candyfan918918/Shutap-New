@@ -41,14 +41,7 @@ export const Route = createFileRoute("/guides/$slug")({
             description: g.description,
             url,
             datePublished: g.published,
-            about: {
-              "@type": "SoftwareApplication",
-              name: "Shutap",
-              applicationCategory: "EntertainmentApplication",
-              operatingSystem: "Web",
-              url: SITE_URL,
-              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-            },
+            about: { "@id": `${SITE_URL}/#org` },
           };
     return {
       meta: [

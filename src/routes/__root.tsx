@@ -126,26 +126,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         }),
       },
       {
+        // A website, not an app listing (Oct 2026): Google's app markup
+        // requires ratings/reviews Shutap doesn't have, so every page was
+        // flagged as invalid structured data. Never add a rating that isn't real.
+        // When the phone app ships with real store ratings, app markup can return.
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "WebApplication",
-          "@id": "https://shutap.com/#app",
+          "@type": "WebSite",
+          "@id": "https://shutap.com/#website",
           name: "Shutap",
           alternateName: "SHUTAP. Say it funnier.",
-          applicationCategory: "EntertainmentApplication",
-          operatingSystem: "Web",
           url: "https://shutap.com",
           image: "https://shutap.com/og/shutap-og-v3.png",
           description:
             "Shutap is an AI joke generator for creators. Write your story and Shutap turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or post the best one to a room. Identifying details are removed from stories before storage, and Shutap never uses your content to train AI. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
-          offers: {
-            "@type": "Offer",
-            price: "0",
-            priceCurrency: "USD",
-            description:
-              "Free to use. Basic is $1.99/month; Pro is $7.99/month.",
-          },
+          publisher: { "@id": "https://shutap.com/#org" },
         }),
       },
     ],

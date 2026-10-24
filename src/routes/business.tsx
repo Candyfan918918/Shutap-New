@@ -6,7 +6,7 @@ import { SITE_URL } from '@/lib/site'
 import { submitBusinessInquiry } from '@/lib/business-inquiry.functions'
 
 const URL = `${SITE_URL}/business`
-const TITLE = 'Shutap Enterprise: Humor for Presentations, Demos, Launches and Meetings | Shutap'
+const TITLE = 'Shutap Enterprise: Humor for Presentations and Demos'
 const DESCRIPTION =
   'Shutap Enterprise brings original, human-steered humor to presentations, roadshows, product demos, launches and meetings. Request pricing and a tailored solution.'
 
