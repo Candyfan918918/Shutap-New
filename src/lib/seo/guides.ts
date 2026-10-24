@@ -558,7 +558,7 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "ai-joke-generators-compared",
     kind: "guide",
-    title: "AI Joke Generators Compared: Shutap, Witscript, Punchlines.ai, ChatGPT | Shutap",
+    title: "AI Joke Generators Compared: Witscript, ChatGPT & More | Shutap",
     h1: "AI joke generators compared",
     description:
       "A plain comparison of AI joke generators: Shutap, Witscript, Punchlines.ai and ChatGPT. What each takes as input, what it returns, and who it fits.",
@@ -694,7 +694,7 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "funny-for-business",
     kind: "business",
-    title: "Shutap Enterprise: Humor for Presentations, Demos and Meetings | Shutap",
+    title: "Humor for Presentations, Demos and Meetings | Shutap",
     h1: "Shutap Enterprise",
     description:
       "Where Shutap is heading: helping teams bring humor to presentations, roadshows, demos, product launches and meetings, written from their own material.",
