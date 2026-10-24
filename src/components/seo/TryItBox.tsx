@@ -63,6 +63,10 @@ export function TryItBox({
         to="/"
         search={(preset ? presetSearch(preset) : undefined) as never}
         hash="joke"
+        // A preset link is the homepage with settings in the query: same page,
+        // same canonical (/). nofollow keeps crawlers and site audits from
+        // treating each preset as another copy of the homepage.
+        rel={preset ? 'nofollow' : undefined}
         onClick={track}
         style={{
           flex: '0 0 auto',
