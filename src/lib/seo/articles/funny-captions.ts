@@ -3,6 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "funny-captions",
   kind: "guide",
+  preset: { audience: "social", length: "15s" },
   topic: "jokes-for-occasions",
   keyword: "funny captions",
   title: "Funny Captions: Write Your Own, With Examples | Shutap",

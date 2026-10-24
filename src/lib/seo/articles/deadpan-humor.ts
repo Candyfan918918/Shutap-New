@@ -3,6 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "deadpan-humor",
   kind: "guide",
+  preset: { voice: "deadpan" },
   topic: "types-of-humor",
   keyword: "deadpan humor",
   title: "Deadpan Humor: Meaning, Examples, How to Do It | Shutap",

@@ -3,6 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "roast-lines",
   kind: "guide",
+  preset: { voice: "roast" },
   topic: "roasts",
   keyword: "roast lines",
   title: "Roast Lines: How to Write Ones That Land | Shutap",

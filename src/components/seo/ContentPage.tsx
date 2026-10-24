@@ -5,6 +5,8 @@ import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
 import { TryItBox } from '@/components/seo/TryItBox'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
+import type { BitControls } from '@/lib/bits/shared'
+import type { GuideSample } from '@/lib/seo/guides'
 
 type Section = { heading: string; body: string };
 type Other = { href: string; label: string };
@@ -21,6 +23,8 @@ export function ContentPage({
   linkGroups,
   children,
   tryIt,
+  preset,
+  sample,
 }: {
   breadcrumbs?: Crumb[];
   h1: string;
@@ -34,6 +38,10 @@ export function ContentPage({
   children?: ReactNode;
   /** Page id for the inline writer at the foot of the page; omit for no writer. */
   tryIt?: string;
+  /** Tool pages: the writer button opens with these controls set. */
+  preset?: Partial<BitControls>;
+  /** Tool pages: one real bit from the product, shown under the button. */
+  sample?: GuideSample;
 }) {
   return (
     <main
@@ -84,7 +92,9 @@ export function ContentPage({
           {capsule}
         </p>
 
-        {tryIt && <TryItBox page={tryIt} position="top" />}
+        {tryIt && <TryItBox page={tryIt} position="top" preset={preset} />}
+
+        {sample && <SampleBit sample={sample} />}
 
         {sections.map((s) => (
           <section key={s.heading} style={{ marginBottom: 36 }}>
@@ -197,7 +207,7 @@ export function ContentPage({
           </nav>
         )}
 
-        {tryIt && <TryItBox page={tryIt} />}
+        {tryIt && <TryItBox page={tryIt} preset={preset} />}
 
         <p style={{ marginTop: 40, fontSize: 15 }}>
           <Link
@@ -217,4 +227,29 @@ export function ContentPage({
       </article>
     </main>
   );
+}
+
+/* One bit the product really wrote, under the writer button (never inside
+ * the box: the box always opens empty). */
+function SampleBit({ sample }: { sample: GuideSample }) {
+  const label = { fontSize: 13, fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' as const, color: '#8e1c4c', margin: '0 0 4px' }
+  const line = { fontSize: 17, margin: '0 0 14px', color: '#0b080f' }
+  return (
+    <section aria-label="A sample bit" style={{ margin: '0 0 44px', padding: '22px 24px', borderRadius: 18, background: '#ffffff', border: '1px solid rgba(11,8,15,.10)' }}>
+      <h2 style={{ margin: '0 0 6px', fontSize: 20, fontWeight: 700, color: '#17131a' }}>A sample bit</h2>
+      <p style={{ margin: '0 0 18px', fontSize: 15, color: '#443c42' }}>
+        Written by Shutap on {sample.made} from this story: “{sample.story}”
+      </p>
+      <p style={label}>hook</p>
+      <p style={line}>{sample.hook}</p>
+      <p style={label}>setup</p>
+      <p style={line}>{sample.setup}</p>
+      <p style={label}>tags</p>
+      <ul style={{ ...line, paddingLeft: 20 }}>
+        {sample.tags.map((t) => <li key={t}>{t}</li>)}
+      </ul>
+      <p style={label}>button</p>
+      <p style={{ ...line, margin: 0 }}>{sample.button}</p>
+    </section>
+  )
 }
