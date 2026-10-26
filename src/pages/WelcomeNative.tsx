@@ -5,6 +5,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 import { clearPendingAuthReturn } from '@/lib/auth-guard'
+import { friendlyOAuthError } from '@/lib/oauth-signin'
 import { useNoIndex } from '@/components/NoIndex'
 import { AuthStep } from './welcome/AuthStep'
 import { BG, TEXT, EyeMark, SOFT } from './welcome/shared'
@@ -153,22 +154,36 @@ export function WelcomeNativePage() {
     const consumeHashTokens = async (): Promise<'consumed' | 'error' | 'none'> => {
       if (typeof window === 'undefined') return 'none'
       const raw = window.location.hash?.startsWith('#') ? window.location.hash.slice(1) : ''
-      if (!raw) return 'none'
+      const query = new URLSearchParams(window.location.search)
       const params = new URLSearchParams(raw)
+      // Providers report failures in the hash or the query string.
       const err = params.get('error_description') || params.get('error')
+        || query.get('error_description') || query.get('error')
       if (err) {
-        try { history.replaceState(null, '', window.location.pathname + window.location.search) } catch { /* noop */ }
-        setAuthError(err.replace(/\+/g, ' '))
+        try {
+          for (const k of ['error', 'error_code', 'error_description', 'state']) query.delete(k)
+          const q = query.toString()
+          history.replaceState(null, '', window.location.pathname + (q ? '?' + q : ''))
+        } catch { /* noop */ }
+        // A stale second sign-in coming back after the first one already
+        // worked (repeat taps): the person is signed in, so don't show an error.
+        const { data: now } = await supabase.auth.getSession()
+        if (now.session && !isAnon(now.session.user)) {
+          trackFail('provider (ignored, already signed in): ' + err)
+          return 'none'
+        }
+        setAuthError(friendlyOAuthError(err))
         trackFail('provider: ' + err)
         return 'error'
       }
+      if (!raw) return 'none'
       const access_token = params.get('access_token')
       const refresh_token = params.get('refresh_token')
       if (!access_token || !refresh_token) return 'none'
       try {
         const { error } = await supabase.auth.setSession({ access_token, refresh_token })
         try { history.replaceState(null, '', window.location.pathname + window.location.search) } catch { /* noop */ }
-        if (error) { setAuthError(error.message); trackFail('setSession: ' + error.message); return 'error' }
+        if (error) { setAuthError(friendlyOAuthError(error.message)); trackFail('setSession: ' + error.message); return 'error' }
         return 'consumed'
       } catch (e) {
         try { history.replaceState(null, '', window.location.pathname + window.location.search) } catch { /* noop */ }
