@@ -1,6 +1,6 @@
 {
  "site": "https://shutap.com/",
- "pulledAt": "2026-10-25T18:26:43.127Z",
+ "pulledAt": "2026-10-26T20:33:49.730Z",
  "queries": [
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -68,20 +68,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1791504000000)/",
-   "Impressions": 1,
-   "Query": "relationship vents"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 4,
    "Clicks": 0,
    "Date": "/Date(1791504000000)/",
    "Impressions": 1,
    "Query": "shutpacket ai"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1791504000000)/",
+   "Impressions": 1,
+   "Query": "relationship vents"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -104,6 +104,15 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792108800000)/",
+   "Impressions": 1,
+   "Query": "+bit joke"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 4,
    "Clicks": 0,
    "Date": "/Date(1792108800000)/",
@@ -122,11 +131,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
+   "AvgImpressionPosition": 8,
    "Clicks": 0,
-   "Date": "/Date(1792108800000)/",
-   "Impressions": 1,
-   "Query": "+bit joke"
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 4,
+   "Query": "deadpan humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -149,15 +158,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 4,
-   "Query": "deadpan humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 6,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
@@ -176,15 +176,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 2,
-   "Query": "give me a roast line"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
@@ -194,11 +185,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
+   "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 2,
-   "Query": "categories of humour and examples"
+   "Query": "give me a roast line"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -212,6 +203,15 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 2,
+   "Query": "categories of humour and examples"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
@@ -221,11 +221,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
+   "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "what is a good rost line"
+   "Query": "roastplugh"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -234,16 +234,7 @@
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "funny sign off for business email"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "define deadpan comedy"
+   "Query": "sense of hunoir"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -270,7 +261,124 @@
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
+   "Query": "types of humour antics"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "what does deadpan mean in describing a movie or tv sho"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "what kind of humor is the opposite of dry humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "deadpan yorkshire humour"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "funny sign off for business email"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "define deadpan comedy"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 2,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "humor types slapstick deadpan satire roast dark comedy definitions"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "types of humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "reddit deadpan absurd"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "what is a good rost line"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
    "Query": "funny email sign offs for work thank you"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "\"low4n\" \"ia\" \"roast\""
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "humor types"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "intp deadpan humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -302,119 +410,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "reddit deadpan absurd"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 4,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
    "Query": "comedy comes in three times"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "intp deadpan humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "types of humour antics"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "what does deadpan mean in describing a movie or tv sho"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "deadpan yorkshire humour"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "roastplugh"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "\"low4n\" \"ia\" \"roast\""
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "sense of hunoir"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "what kind of humor is the opposite of dry humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "humor types"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 2,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "humor types slapstick deadpan satire roast dark comedy definitions"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "types of humor"
   }
  ],
  "pages": [
@@ -502,20 +502,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1789084800000)/",
-   "Impressions": 1,
-   "Query": "https://shutap.com/about"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1789084800000)/",
    "Impressions": 1,
    "Query": "https://shutap.com/faq"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1789084800000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/about"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -570,6 +570,114 @@
    "Date": "/Date(1792108800000)/",
    "Impressions": 1,
    "Query": "https://shutap.com/welcome"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 18,
+   "Query": "https://shutap.com/guides/deadpan-humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 11,
+   "Query": "https://shutap.com/guides/funny-email-sign-offs"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 11,
+   "Query": "https://shutap.com/guides/roast-lines"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 11,
+   "Query": "https://shutap.com/guides/types-of-humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 5,
+   "Query": "https://shutap.com/"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 2,
+   "Query": "https://shutap.com/guides/ai-roast-generator"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 4,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 2,
+   "Query": "https://shutap.com/guides/rule-of-three"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/business"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/faq"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 2,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/about"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/funniest/poet"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/guides/sense-of-humor"
   }
  ]
 }
