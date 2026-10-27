@@ -175,6 +175,8 @@ async function hasRealSession(tries = 1): Promise<boolean> {
 
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
 
+const SCRIM_GRACE_MS = 900
+
 export function BitSurface() {
   const navigate = useNavigate()
   const router = useRouter()
@@ -199,6 +201,7 @@ export function BitSurface() {
    *  second bit · paywall: Basic and Pro (free at its limit, or removing the
    *  watermark) · upgrade: Basic at its limit · fair: Pro's fair-use cap */
   const [sheet, setSheet] = useState<null | 'signin' | 'signin_write' | 'paywall' | 'upgrade' | 'rate' | 'fair'>(null)
+  const sheetOpenedAt = useRef(0)
   const [paywallWhere, setPaywallWhere] = useState<PaywallWhere>('bit_3')
   const [signinFrom, setSigninFrom] = useState<SigninFrom>('sheet')
   const [error, setError] = useState<string | null>(null)
@@ -434,6 +437,7 @@ export function BitSurface() {
   /** What the day's limit opens, by tier. The server decides the tier. */
   function showLimit(t: BitTier) {
     if (t === 'guest') {
+      sheetOpenedAt.current = Date.now()
       setSheet('signin_write')
       jokeTrack('signin_sheet_opened', t, { from: 'bit_2' })
       void trackEvent('signin_prompt_seen', { where: 'bit_2' })
@@ -587,15 +591,22 @@ export function BitSurface() {
      goes to the email form. Either way the visitor comes back to "/" and the
      bit (or the story they were about to write) comes back with them. */
   function openSignin(from: SigninFrom) {
+    sheetOpenedAt.current = Date.now()
     setSigninFrom(from)
     setSheet('signin')
     jokeTrack('signin_sheet_opened', tier, { from })
     void trackEvent('signin_prompt_seen', { where: from })
   }
 
-  function dismissSignin() {
+  /* Oct 27 2026: most closes came 0.5–1s after opening, in an open/close
+     rhythm: a second tap on "write the bit" landed on the backdrop and shut
+     the sheet before it was read. Backdrop taps in the first moment after
+     opening are ignored, and every close says how and how fast. */
+  function dismissSignin(how: 'backdrop' | 'not_now' | 'escape' = 'not_now') {
+    const ms = Date.now() - sheetOpenedAt.current
+    if (how === 'backdrop' && ms < SCRIM_GRACE_MS) return
     setSheet(null)
-    jokeTrack('signin_dismissed', tier, {})
+    jokeTrack('signin_dismissed', tier, { how, ms })
   }
 
   async function signInForBit(method: 'google' | 'apple' | 'email', from: string) {
@@ -935,7 +946,7 @@ export function BitSurface() {
           className="bt-scrim"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
-              if (sheet === 'signin' || sheet === 'signin_write') dismissSignin()
+              if (sheet === 'signin' || sheet === 'signin_write') dismissSignin('backdrop')
               else setSheet(null)
             }
           }}
@@ -952,7 +963,7 @@ export function BitSurface() {
                 <button className="bt-btn ghost block" onClick={() => void signInForBit('email', sheet === 'signin_write' ? 'bit_2' : 'sheet')}>
                   continue with email
                 </button>
-                <button className="bt-btn ghost block" onClick={dismissSignin}>
+                <button className="bt-btn ghost block" onClick={() => dismissSignin('not_now')}>
                   not now
                 </button>
                 <p className="bt-note" style={{ textAlign: 'center' }}>by continuing you confirm you're 18+ and agree to the terms and privacy policy</p>
