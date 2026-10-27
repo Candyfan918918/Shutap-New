@@ -4,7 +4,7 @@ import { MegaLaunchBadge } from './MegaLaunchBadge'
 
 /**
  * Quiet row of launch-directory badges used by every site footer. The row
- * carries the alignment so both badges stay vertically centered together.
+ * carries the alignment so all badges stay vertically centered together.
  */
 export function LaunchBadges({
   align = 'flex-start',
@@ -25,6 +25,7 @@ export function LaunchBadges({
     >
       <FazierBadge align="center" />
       <LaunchNestBadge align="center" />
+      <MegaLaunchBadge align="center" />
     </div>
   )
 }
