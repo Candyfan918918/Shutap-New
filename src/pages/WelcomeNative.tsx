@@ -26,6 +26,21 @@ function StepFallback() {
   )
 }
 
+/** Which way this sign-in came in: the identity used most recently
+ *  ('google' | 'apple' | 'email'), so completions can be split by method. */
+async function signInMethod(): Promise<string> {
+  try {
+    const { data } = await supabase.auth.getSession()
+    const u = data.session?.user
+    if (!u) return 'unknown'
+    const ids = [...(u.identities ?? [])].sort((a, b) =>
+      String(b.last_sign_in_at ?? '').localeCompare(String(a.last_sign_in_at ?? '')))
+    return ids[0]?.provider ?? (u.app_metadata as { provider?: string } | undefined)?.provider ?? 'unknown'
+  } catch {
+    return 'unknown'
+  }
+}
+
 export function WelcomeNativePage() {
   useNoIndex()
 
@@ -74,7 +89,11 @@ export function WelcomeNativePage() {
         firstCompletion = sessionStorage.getItem('shutap_signin_tracked') !== '1'
         sessionStorage.setItem('shutap_signin_tracked', '1')
       } catch { /* noop */ }
-      if (firstCompletion) void import('@/lib/tracking').then((m) => m.trackEvent('sign_in_completed', {})).catch(() => {})
+      if (firstCompletion) void (async () => {
+        const method = await signInMethod()
+        const m = await import('@/lib/tracking')
+        m.trackEvent('sign_in_completed', { method })
+      })().catch(() => {})
       // Lazy-import server-fn modules so cold /welcome doesn't ship them.
       const [{ recordLegalAcceptance }, { getMyAlias }] = await Promise.all([
         import('@/lib/legal.functions'),
@@ -139,7 +158,7 @@ export function WelcomeNativePage() {
             import('@/lib/welcome-email.functions').catch(() => null),
           ])
           setAlias({ name: a.display_name, emoji: a.emoji, avatar: saved.avatar_url })
-          void tracking?.trackEvent('sign_up_completed', { has_photo: !!saved.avatar_url })
+          void signInMethod().then((method) => tracking?.trackEvent('sign_up_completed', { has_photo: !!saved.avatar_url, method }))
           void welcome?.sendWelcomeEmail().catch(() => {})
           setFinalAlias(a)
           setStep('welcome')
