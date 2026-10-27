@@ -1,6 +1,6 @@
 {
  "source": "Bing Webmaster GetRelatedKeywords (US, last ~30 days)",
- "pulledAt": "2026-10-26T20:34:05.898Z",
+ "pulledAt": "2026-10-27T20:08:00.764Z",
  "seeds": 25,
  "ideas": [
   {
@@ -1654,15 +1654,15 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "slow cooker pork roast",
-   "impressions": 585,
-   "broadImpressions": 1141,
-   "seed": "roast jokes"
-  },
-  {
    "query": "pot roast recipes in oven",
    "impressions": 585,
    "broadImpressions": 585,
+   "seed": "roast jokes"
+  },
+  {
+   "query": "slow cooker pork roast",
+   "impressions": 585,
+   "broadImpressions": 1141,
    "seed": "roast jokes"
   },
   {
@@ -1936,15 +1936,15 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "pot roast crock pot",
-   "impressions": 507,
-   "broadImpressions": 892,
-   "seed": "roast jokes"
-  },
-  {
    "query": "crock pot pork roast",
    "impressions": 507,
    "broadImpressions": 1687,
+   "seed": "roast jokes"
+  },
+  {
+   "query": "pot roast crock pot",
+   "impressions": 507,
+   "broadImpressions": 892,
    "seed": "roast jokes"
   },
   {
@@ -2284,15 +2284,15 @@
    "seed": "roast jokes"
   },
   {
-   "query": "funny sayings",
-   "impressions": 410,
-   "broadImpressions": 728,
-   "seed": "funny captions"
-  },
-  {
    "query": "funny pic",
    "impressions": 410,
    "broadImpressions": 410,
+   "seed": "funny captions"
+  },
+  {
+   "query": "funny sayings",
+   "impressions": 410,
+   "broadImpressions": 728,
    "seed": "funny captions"
   },
   {
@@ -2524,13 +2524,13 @@
    "seed": "roast jokes"
   },
   {
-   "query": "dry goods clothing store",
+   "query": "dry socket symptoms",
    "impressions": 363,
    "broadImpressions": 363,
    "seed": "dry humor"
   },
   {
-   "query": "dry socket symptoms",
+   "query": "dry goods clothing store",
    "impressions": 363,
    "broadImpressions": 363,
    "seed": "dry humor"
@@ -2632,13 +2632,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "what is the rule of 72",
+   "query": "descartes rule of signs",
    "impressions": 346,
    "broadImpressions": 346,
    "seed": "rule of three comedy"
   },
   {
-   "query": "descartes rule of signs",
+   "query": "what is the rule of 72",
    "impressions": 346,
    "broadImpressions": 346,
    "seed": "rule of three comedy"
@@ -2818,15 +2818,15 @@
    "seed": "dry humor"
   },
   {
-   "query": "dry eye rescue",
-   "impressions": 313,
-   "broadImpressions": 313,
-   "seed": "dry humor"
-  },
-  {
    "query": "dry wall",
    "impressions": 313,
    "broadImpressions": 371,
+   "seed": "dry humor"
+  },
+  {
+   "query": "dry eye rescue",
+   "impressions": 313,
+   "broadImpressions": 313,
    "seed": "dry humor"
   },
   {
@@ -3100,15 +3100,15 @@
    "seed": "comedy writing"
   },
   {
-   "query": "super dry",
-   "impressions": 271,
-   "broadImpressions": 1021,
-   "seed": "dry humor"
-  },
-  {
    "query": "dry eyes symptoms",
    "impressions": 271,
    "broadImpressions": 271,
+   "seed": "dry humor"
+  },
+  {
+   "query": "super dry",
+   "impressions": 271,
+   "broadImpressions": 1021,
    "seed": "dry humor"
   },
   {
@@ -3238,13 +3238,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to write a recommendation letter",
+   "query": "how to write a book review",
    "impressions": 251,
    "broadImpressions": 251,
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a book review",
+   "query": "how to write a recommendation letter",
    "impressions": 251,
    "broadImpressions": 251,
    "seed": "how to write a joke"
@@ -3352,15 +3352,15 @@
    "seed": "dry humor"
   },
   {
-   "query": "how to start a nonprofit",
-   "impressions": 240,
-   "broadImpressions": 396,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "starting a business",
    "impressions": 240,
    "broadImpressions": 315,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start a nonprofit",
+   "impressions": 240,
+   "broadImpressions": 396,
    "seed": "how to start stand up comedy"
   },
   {
@@ -3466,15 +3466,15 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "dry mouth mouthwash",
-   "impressions": 225,
-   "broadImpressions": 225,
-   "seed": "dry humor"
-  },
-  {
    "query": "dry brushing",
    "impressions": 225,
    "broadImpressions": 394,
+   "seed": "dry humor"
+  },
+  {
+   "query": "dry mouth mouthwash",
+   "impressions": 225,
+   "broadImpressions": 225,
    "seed": "dry humor"
   },
   {
@@ -3736,15 +3736,15 @@
    "seed": "dry humor"
   },
   {
-   "query": "hilarious memes",
-   "impressions": 197,
-   "broadImpressions": 207,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "daily joke",
    "impressions": 197,
    "broadImpressions": 197,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "hilarious memes",
+   "impressions": 197,
+   "broadImpressions": 207,
    "seed": "deadpan humor"
   },
   {
@@ -3958,15 +3958,15 @@
    "seed": "dry humor"
   },
   {
-   "query": "show tickets near me",
-   "impressions": 176,
-   "broadImpressions": 254,
-   "seed": "stand up comedy tips"
-  },
-  {
    "query": "comedy club near me",
    "impressions": 176,
    "broadImpressions": 313,
+   "seed": "stand up comedy tips"
+  },
+  {
+   "query": "show tickets near me",
+   "impressions": 176,
+   "broadImpressions": 254,
    "seed": "stand up comedy tips"
   },
   {
@@ -4048,15 +4048,15 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "rule of nines burns",
-   "impressions": 173,
-   "broadImpressions": 173,
-   "seed": "rule of three comedy"
-  },
-  {
    "query": "rule of 9",
    "impressions": 173,
    "broadImpressions": 281,
+   "seed": "rule of three comedy"
+  },
+  {
+   "query": "rule of nines burns",
+   "impressions": 173,
+   "broadImpressions": 173,
    "seed": "rule of three comedy"
   },
   {
@@ -4216,13 +4216,13 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to start a meeting in teams",
+   "query": "how to start a nonprofit organization",
    "impressions": 156,
    "broadImpressions": 156,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start a nonprofit organization",
+   "query": "how to start a meeting in teams",
    "impressions": 156,
    "broadImpressions": 156,
    "seed": "how to start stand up comedy"
@@ -4288,15 +4288,15 @@
    "seed": "how to be funny"
   },
   {
-   "query": "comedy mask",
-   "impressions": 151,
-   "broadImpressions": 151,
-   "seed": "comedy writing"
-  },
-  {
    "query": "slapstick comedy",
    "impressions": 151,
    "broadImpressions": 211,
+   "seed": "comedy writing"
+  },
+  {
+   "query": "comedy mask",
+   "impressions": 151,
+   "broadImpressions": 151,
    "seed": "comedy writing"
   },
   {
@@ -4330,13 +4330,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to start running from zero",
+   "query": "how to start page numbers on page 2",
    "impressions": 149,
    "broadImpressions": 149,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start page numbers on page 2",
+   "query": "how to start running from zero",
    "impressions": 149,
    "broadImpressions": 149,
    "seed": "how to start stand up comedy"
@@ -4366,13 +4366,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "what does lgbtq stand for joke",
+   "query": "keepers babe joke of the day",
    "impressions": 148,
    "broadImpressions": 148,
    "seed": "joke structure"
   },
   {
-   "query": "keepers babe joke of the day",
+   "query": "what does lgbtq stand for joke",
    "impressions": 148,
    "broadImpressions": 148,
    "seed": "joke structure"
@@ -4534,15 +4534,15 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "joke definition",
-   "impressions": 136,
-   "broadImpressions": 136,
-   "seed": "joke structure"
-  },
-  {
    "query": "shane gillis joke",
    "impressions": 136,
    "broadImpressions": 151,
+   "seed": "joke structure"
+  },
+  {
+   "query": "joke definition",
+   "impressions": 136,
+   "broadImpressions": 136,
    "seed": "joke structure"
   },
   {
@@ -4594,6 +4594,12 @@
    "seed": "how to start stand up comedy"
   },
   {
+   "query": "comedy shows this weekend",
+   "impressions": 134,
+   "broadImpressions": 245,
+   "seed": "stand up comedy tips"
+  },
+  {
    "query": "live events near me comedy",
    "impressions": 134,
    "broadImpressions": 134,
@@ -4603,12 +4609,6 @@
    "query": "standup comedy",
    "impressions": 134,
    "broadImpressions": 377,
-   "seed": "stand up comedy tips"
-  },
-  {
-   "query": "comedy shows this weekend",
-   "impressions": 134,
-   "broadImpressions": 245,
    "seed": "stand up comedy tips"
   },
   {
@@ -4690,13 +4690,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "federal rule of civil procedure 33",
+   "query": "rule of 8s",
    "impressions": 129,
    "broadImpressions": 129,
    "seed": "rule of three comedy"
   },
   {
-   "query": "rule of 8s",
+   "query": "federal rule of civil procedure 33",
    "impressions": 129,
    "broadImpressions": 129,
    "seed": "rule of three comedy"
@@ -4756,27 +4756,27 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "daily dad joke",
-   "impressions": 127,
-   "broadImpressions": 127,
-   "seed": "joke structure"
-  },
-  {
    "query": "super funny jokes",
    "impressions": 127,
    "broadImpressions": 127,
    "seed": "joke structure"
   },
   {
-   "query": "how to start a summary",
+   "query": "daily dad joke",
    "impressions": 127,
    "broadImpressions": 127,
-   "seed": "how to start stand up comedy"
+   "seed": "joke structure"
   },
   {
    "query": "how to start a book",
    "impressions": 127,
    "broadImpressions": 191,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start a summary",
+   "impressions": 127,
+   "broadImpressions": 127,
    "seed": "how to start stand up comedy"
   },
   {
@@ -4798,13 +4798,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "how to be notified when someone opens a snapchat message",
+   "query": "how to be a good friend",
    "impressions": 125,
    "broadImpressions": 125,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a good friend",
+   "query": "how to be notified when someone opens a snapchat message",
    "impressions": 125,
    "broadImpressions": 125,
    "seed": "how to be funny"
@@ -4876,13 +4876,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to be pretty",
+   "query": "how to be a latin lover",
    "impressions": 121,
    "broadImpressions": 121,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a latin lover",
+   "query": "how to be pretty",
    "impressions": 121,
    "broadImpressions": 121,
    "seed": "how to be funny"
@@ -4936,15 +4936,15 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "how to start a conclusion",
-   "impressions": 119,
-   "broadImpressions": 487,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start a research paper",
    "impressions": 119,
    "broadImpressions": 119,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start a conclusion",
+   "impressions": 119,
+   "broadImpressions": 487,
    "seed": "how to start stand up comedy"
   },
   {
@@ -4984,15 +4984,15 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "stardome comedy club",
-   "impressions": 117,
-   "broadImpressions": 141,
-   "seed": "comedy writing"
-  },
-  {
    "query": "comedy video",
    "impressions": 117,
    "broadImpressions": 208,
+   "seed": "comedy writing"
+  },
+  {
+   "query": "stardome comedy club",
+   "impressions": 117,
+   "broadImpressions": 141,
    "seed": "comedy writing"
   },
   {
@@ -5014,13 +5014,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to start recording on pc",
+   "query": "how to start a podcast for beginners",
    "impressions": 116,
    "broadImpressions": 116,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start a podcast for beginners",
+   "query": "how to start recording on pc",
    "impressions": 116,
    "broadImpressions": 116,
    "seed": "how to start stand up comedy"
@@ -5032,13 +5032,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to write a good email introduction",
+   "query": "how to write a postcard",
    "impressions": 115,
    "broadImpressions": 115,
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a postcard",
+   "query": "how to write a good email introduction",
    "impressions": 115,
    "broadImpressions": 115,
    "seed": "how to write a joke"
@@ -5284,13 +5284,13 @@
    "seed": "funny tiktok ideas"
   },
   {
-   "query": "how to tell if a pokemon card is fake",
+   "query": "how to tell if you have pneumonia",
    "impressions": 102,
    "broadImpressions": 102,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if you have pneumonia",
+   "query": "how to tell if a pokemon card is fake",
    "impressions": 102,
    "broadImpressions": 102,
    "seed": "how to tell a story"
@@ -5344,13 +5344,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "rule of thirds photography composition",
+   "query": "federal rule of civil procedure 56",
    "impressions": 99,
    "broadImpressions": 99,
    "seed": "rule of three comedy"
   },
   {
-   "query": "federal rule of civil procedure 56",
+   "query": "rule of thirds photography composition",
    "impressions": 99,
    "broadImpressions": 99,
    "seed": "rule of three comedy"
@@ -5362,15 +5362,15 @@
    "seed": "joke structure"
   },
   {
-   "query": "humor meaning",
-   "impressions": 97,
-   "broadImpressions": 220,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "joke of day",
    "impressions": 97,
    "broadImpressions": 97,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "humor meaning",
+   "impressions": 97,
+   "broadImpressions": 220,
    "seed": "deadpan humor"
   },
   {
@@ -5464,15 +5464,15 @@
    "seed": "funny work stories"
   },
   {
-   "query": "stand up comedian",
-   "impressions": 92,
-   "broadImpressions": 165,
-   "seed": "stand up comedy tips"
-  },
-  {
    "query": "stand up comedy near me",
    "impressions": 92,
    "broadImpressions": 175,
+   "seed": "stand up comedy tips"
+  },
+  {
+   "query": "stand up comedian",
+   "impressions": 92,
+   "broadImpressions": 165,
    "seed": "stand up comedy tips"
   },
   {
@@ -5590,15 +5590,15 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "the rule of thirds",
-   "impressions": 88,
-   "broadImpressions": 470,
-   "seed": "rule of three comedy"
-  },
-  {
    "query": "rule of 15",
    "impressions": 88,
    "broadImpressions": 88,
+   "seed": "rule of three comedy"
+  },
+  {
+   "query": "the rule of thirds",
+   "impressions": 88,
+   "broadImpressions": 470,
    "seed": "rule of three comedy"
   },
   {
@@ -5752,6 +5752,12 @@
    "seed": "funny tiktok ideas"
   },
   {
+   "query": "how to tell if a boy likes you",
+   "impressions": 79,
+   "broadImpressions": 79,
+   "seed": "how to tell a story"
+  },
+  {
    "query": "how to tell what motherboard i have",
    "impressions": 79,
    "broadImpressions": 79,
@@ -5759,12 +5765,6 @@
   },
   {
    "query": "how to tell if something was written by ai",
-   "impressions": 79,
-   "broadImpressions": 79,
-   "seed": "how to tell a story"
-  },
-  {
-   "query": "how to tell if a boy likes you",
    "impressions": 79,
    "broadImpressions": 79,
    "seed": "how to tell a story"
@@ -5818,15 +5818,15 @@
    "seed": "funny work stories"
   },
   {
-   "query": "comedy clubs",
-   "impressions": 77,
-   "broadImpressions": 5109,
-   "seed": "stand up comedy tips"
-  },
-  {
    "query": "stand up comedy near me this weekend",
    "impressions": 77,
    "broadImpressions": 77,
+   "seed": "stand up comedy tips"
+  },
+  {
+   "query": "comedy clubs",
+   "impressions": 77,
+   "broadImpressions": 5109,
    "seed": "stand up comedy tips"
   },
   {
@@ -6010,15 +6010,15 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "rule of st benedict",
-   "impressions": 70,
-   "broadImpressions": 81,
-   "seed": "rule of three comedy"
-  },
-  {
    "query": "federal rule of civil procedure 6",
    "impressions": 70,
    "broadImpressions": 70,
+   "seed": "rule of three comedy"
+  },
+  {
+   "query": "rule of st benedict",
+   "impressions": 70,
+   "broadImpressions": 81,
    "seed": "rule of three comedy"
   },
   {
@@ -6148,13 +6148,13 @@
    "seed": "funny tiktok ideas"
   },
   {
-   "query": "how to tell if eggs are fresh",
+   "query": "how to tell if iphone is charging when dead",
    "impressions": 62,
    "broadImpressions": 62,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if iphone is charging when dead",
+   "query": "how to tell if eggs are fresh",
    "impressions": 62,
    "broadImpressions": 62,
    "seed": "how to tell a story"
@@ -6214,27 +6214,27 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "what does humor mean",
-   "impressions": 60,
-   "broadImpressions": 60,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "dark humor meaning",
    "impressions": 60,
    "broadImpressions": 60,
    "seed": "deadpan humor"
   },
   {
-   "query": "good joke",
+   "query": "what does humor mean",
    "impressions": 60,
-   "broadImpressions": 95,
-   "seed": "joke structure"
+   "broadImpressions": 60,
+   "seed": "deadpan humor"
   },
   {
    "query": "what is a joke",
    "impressions": 60,
    "broadImpressions": 60,
+   "seed": "joke structure"
+  },
+  {
+   "query": "good joke",
+   "impressions": 60,
+   "broadImpressions": 95,
    "seed": "joke structure"
   },
   {
@@ -6274,15 +6274,15 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "h anime with good humor",
-   "impressions": 59,
-   "broadImpressions": 59,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "number meaning",
    "impressions": 59,
    "broadImpressions": 7383,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "h anime with good humor",
+   "impressions": 59,
+   "broadImpressions": 59,
    "seed": "deadpan humor"
   },
   {
@@ -6322,13 +6322,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to be better",
+   "query": "how to be good at life",
    "impressions": 57,
    "broadImpressions": 57,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be good at life",
+   "query": "how to be better",
    "impressions": 57,
    "broadImpressions": 57,
    "seed": "how to be funny"
@@ -6448,13 +6448,13 @@
    "seed": "dry humor"
   },
   {
-   "query": "humour or humor",
+   "query": "funny memes picture",
    "impressions": 52,
    "broadImpressions": 52,
    "seed": "deadpan humor"
   },
   {
-   "query": "funny memes picture",
+   "query": "humour or humor",
    "impressions": 52,
    "broadImpressions": 52,
    "seed": "deadpan humor"
@@ -6514,13 +6514,13 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to be a good leader",
+   "query": "how to be single cast",
    "impressions": 49,
    "broadImpressions": 49,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be single cast",
+   "query": "how to be a good leader",
    "impressions": 49,
    "broadImpressions": 49,
    "seed": "how to be funny"
@@ -6622,15 +6622,15 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to start a counter argument paragraph",
-   "impressions": 45,
-   "broadImpressions": 45,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "starting a small business",
    "impressions": 45,
    "broadImpressions": 74,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start a counter argument paragraph",
+   "impressions": 45,
+   "broadImpressions": 45,
    "seed": "how to start stand up comedy"
   },
   {
@@ -6640,15 +6640,15 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "sense of humor meaning",
-   "impressions": 44,
-   "broadImpressions": 55,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "black humor",
    "impressions": 44,
    "broadImpressions": 44,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "sense of humor meaning",
+   "impressions": 44,
+   "broadImpressions": 55,
    "seed": "deadpan humor"
   },
   {
@@ -6706,15 +6706,15 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "tik tok online",
-   "impressions": 42,
-   "broadImpressions": 47,
-   "seed": "funny tiktok ideas"
-  },
-  {
    "query": "funny tiktoks",
    "impressions": 42,
    "broadImpressions": 42,
+   "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "tik tok online",
+   "impressions": 42,
+   "broadImpressions": 47,
    "seed": "funny tiktok ideas"
   },
   {
@@ -6760,13 +6760,13 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to be creative",
+   "query": "how to be a model",
    "impressions": 40,
    "broadImpressions": 40,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a model",
+   "query": "how to be creative",
    "impressions": 40,
    "broadImpressions": 40,
    "seed": "how to be funny"
@@ -6790,15 +6790,15 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to open a business",
-   "impressions": 40,
-   "broadImpressions": 137,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start streaming",
    "impressions": 40,
    "broadImpressions": 488,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to open a business",
+   "impressions": 40,
+   "broadImpressions": 137,
    "seed": "how to start stand up comedy"
   },
   {
@@ -6856,13 +6856,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "halloween humor",
+   "query": "best dark humor jokes",
    "impressions": 38,
    "broadImpressions": 38,
    "seed": "deadpan humor"
   },
   {
-   "query": "best dark humor jokes",
+   "query": "halloween humor",
    "impressions": 38,
    "broadImpressions": 38,
    "seed": "deadpan humor"
@@ -6922,25 +6922,25 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "rule of thirds photos",
-   "impressions": 35,
-   "broadImpressions": 35,
-   "seed": "rule of three comedy"
-  },
-  {
    "query": "rule of nine",
    "impressions": 35,
    "broadImpressions": 35,
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to be skinny",
+   "query": "rule of thirds photos",
+   "impressions": 35,
+   "broadImpressions": 35,
+   "seed": "rule of three comedy"
+  },
+  {
+   "query": "how to be good at chess",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be good at chess",
+   "query": "how to be skinny",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "how to be funny"
@@ -6970,27 +6970,27 @@
    "seed": "funny work stories"
   },
   {
-   "query": "how to be a billionaire",
-   "impressions": 32,
-   "broadImpressions": 32,
-   "seed": "how to be funny"
-  },
-  {
    "query": "how to be taller",
    "impressions": 32,
    "broadImpressions": 32,
    "seed": "how to be funny"
   },
   {
-   "query": "next stop",
+   "query": "how to be a billionaire",
    "impressions": 32,
-   "broadImpressions": 321,
-   "seed": "stand up comedy tips"
+   "broadImpressions": 32,
+   "seed": "how to be funny"
   },
   {
    "query": "comedy shows 2026 near me",
    "impressions": 32,
    "broadImpressions": 32,
+   "seed": "stand up comedy tips"
+  },
+  {
+   "query": "next stop",
+   "impressions": 32,
+   "broadImpressions": 321,
    "seed": "stand up comedy tips"
   },
   {
@@ -7126,13 +7126,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "rule of nines chart",
+   "query": "federal rule of evidence 403",
    "impressions": 25,
    "broadImpressions": 25,
    "seed": "rule of three comedy"
   },
   {
-   "query": "federal rule of evidence 403",
+   "query": "rule of nines chart",
    "impressions": 25,
    "broadImpressions": 25,
    "seed": "rule of three comedy"
@@ -7144,13 +7144,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "humor vs humour",
+   "query": "very funny memes",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "deadpan humor"
   },
   {
-   "query": "very funny memes",
+   "query": "humor vs humour",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "deadpan humor"
@@ -7174,6 +7174,12 @@
    "seed": "funny work stories"
   },
   {
+   "query": "how to be a mentalist",
+   "impressions": 23,
+   "broadImpressions": 23,
+   "seed": "how to be funny"
+  },
+  {
    "query": "how to become a better person",
    "impressions": 23,
    "broadImpressions": 23,
@@ -7181,12 +7187,6 @@
   },
   {
    "query": "how to be a substitute teacher",
-   "impressions": 23,
-   "broadImpressions": 23,
-   "seed": "how to be funny"
-  },
-  {
-   "query": "how to be a mentalist",
    "impressions": 23,
    "broadImpressions": 23,
    "seed": "how to be funny"
@@ -7258,13 +7258,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to tell if you have carpal tunnel",
+   "query": "how to tell military time",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell military time",
+   "query": "how to tell if you have carpal tunnel",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "how to tell a story"
@@ -7282,13 +7282,13 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "comedy e",
+   "query": "best stand up comedy specials",
    "impressions": 20,
    "broadImpressions": 20,
    "seed": "stand up comedy tips"
   },
   {
-   "query": "best stand up comedy specials",
+   "query": "comedy e",
    "impressions": 20,
    "broadImpressions": 20,
    "seed": "stand up comedy tips"
@@ -7336,13 +7336,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to tell if a source is credible",
+   "query": "how to tell if a molecule is polar or nonpolar",
    "impressions": 19,
    "broadImpressions": 19,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if a molecule is polar or nonpolar",
+   "query": "how to tell if a source is credible",
    "impressions": 19,
    "broadImpressions": 19,
    "seed": "how to tell a story"
@@ -7354,18 +7354,6 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to be sick",
-   "impressions": 18,
-   "broadImpressions": 18,
-   "seed": "how to be funny"
-  },
-  {
-   "query": "how to be sigma",
-   "impressions": 18,
-   "broadImpressions": 18,
-   "seed": "how to be funny"
-  },
-  {
    "query": "how to smart",
    "impressions": 18,
    "broadImpressions": 18,
@@ -7373,6 +7361,18 @@
   },
   {
    "query": "how to be a good kisser",
+   "impressions": 18,
+   "broadImpressions": 18,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be sick",
+   "impressions": 18,
+   "broadImpressions": 18,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be sigma",
    "impressions": 18,
    "broadImpressions": 18,
    "seed": "how to be funny"
@@ -7456,25 +7456,25 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to get more followers on tiktok",
-   "impressions": 16,
-   "broadImpressions": 16,
-   "seed": "how to get more views on tiktok"
-  },
-  {
    "query": "how to get more sleep",
    "impressions": 16,
    "broadImpressions": 16,
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to be strong",
+   "query": "how to get more followers on tiktok",
+   "impressions": 16,
+   "broadImpressions": 16,
+   "seed": "how to get more views on tiktok"
+  },
+  {
+   "query": "how to become smart",
    "impressions": 15,
    "broadImpressions": 15,
    "seed": "how to be funny"
   },
   {
-   "query": "how to become smart",
+   "query": "how to be strong",
    "impressions": 15,
    "broadImpressions": 15,
    "seed": "how to be funny"
@@ -7490,12 +7490,6 @@
    "impressions": 15,
    "broadImpressions": 15,
    "seed": "funny work stories"
-  },
-  {
-   "query": "how to be a heartbreaker lyrics",
-   "impressions": 14,
-   "broadImpressions": 14,
-   "seed": "how to be funny"
   },
   {
    "query": "how to be a good listener",
@@ -7516,6 +7510,12 @@
    "seed": "how to be funny"
   },
   {
+   "query": "how to be a heartbreaker lyrics",
+   "impressions": 14,
+   "broadImpressions": 14,
+   "seed": "how to be funny"
+  },
+  {
    "query": "comedy show clips",
    "impressions": 14,
    "broadImpressions": 70,
@@ -7528,13 +7528,13 @@
    "seed": "open mic tips"
   },
   {
-   "query": "how to be a good boyfriend",
+   "query": "how to be a redhead",
    "impressions": 12,
    "broadImpressions": 12,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a redhead",
+   "query": "how to be a good boyfriend",
    "impressions": 12,
    "broadImpressions": 12,
    "seed": "how to be funny"
@@ -7624,25 +7624,25 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "how to start a garden from scratch",
-   "impressions": 10,
-   "broadImpressions": 10,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "starting up",
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to be cute",
+   "query": "how to start a garden from scratch",
+   "impressions": 10,
+   "broadImpressions": 10,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to be black",
    "impressions": 9,
    "broadImpressions": 9,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be black",
+   "query": "how to be cute",
    "impressions": 9,
    "broadImpressions": 9,
    "seed": "how to be funny"
@@ -7684,13 +7684,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "openmic",
+   "query": "open mic night near me",
    "impressions": 8,
    "broadImpressions": 8,
    "seed": "open mic tips"
   },
   {
-   "query": "open mic night near me",
+   "query": "openmic",
    "impressions": 8,
    "broadImpressions": 8,
    "seed": "open mic tips"
