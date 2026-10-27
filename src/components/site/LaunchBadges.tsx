@@ -1,6 +1,7 @@
 import { FazierBadge } from './FazierBadge'
 import { LaunchNestBadge } from './LaunchNestBadge'
 import { MegaLaunchBadge } from './MegaLaunchBadge'
+import { PostYourStartupBadge } from './PostYourStartupBadge'
 
 /**
  * Quiet row of launch-directory badges used by every site footer. The row
@@ -26,6 +27,7 @@ export function LaunchBadges({
       <FazierBadge align="center" />
       <LaunchNestBadge align="center" />
       <MegaLaunchBadge align="center" />
+      <PostYourStartupBadge align="center" />
     </div>
   )
 }
