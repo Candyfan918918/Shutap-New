@@ -1,5 +1,6 @@
 import { FazierBadge } from './FazierBadge'
 import { LaunchNestBadge } from './LaunchNestBadge'
+import { MegaLaunchBadge } from './MegaLaunchBadge'
 
 /**
  * Quiet row of launch-directory badges used by every site footer. The row
