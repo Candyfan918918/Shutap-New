@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { Route as RootRoute } from "./__root";
 import { ogImageMeta } from "@/lib/seo/meta";
 import { ContentPage } from "@/components/seo/ContentPage";
 import { SeoPage } from "@/components/seo/SeoPage";
@@ -7,9 +8,11 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 import { GUIDES, getGuide, getTopic, guidePath, topicPath } from "@/lib/seo/guides";
 
 export const Route = createFileRoute("/guides/$slug")({
+  // Keep boundary options in the registered route; only the page is lazy.
+  codeSplitGroupings: [["component"]],
   loader: ({ params }) => {
     const guide = getGuide(params.slug);
-    if (!guide) throw notFound();
+    if (!guide) throw notFound({ routeId: "/guides/$slug" });
     return { slug: guide.slug };
   },
   head: ({ params }) => {
@@ -90,6 +93,10 @@ export const Route = createFileRoute("/guides/$slug")({
     };
   },
   component: GuideRoute,
+  errorComponent: (props) => {
+    const ErrorPage = RootRoute.options.errorComponent;
+    return ErrorPage ? <ErrorPage {...props} /> : null;
+  },
   notFoundComponent: () => (
     <SeoPage>
       <h1 className="text-2xl font-semibold">That guide doesn't exist.</h1>

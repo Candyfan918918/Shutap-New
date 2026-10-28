@@ -36,6 +36,7 @@ const untopicGuides = () =>
   GUIDES.filter((g) => g.kind === "guide" && !g.topic).map((g) => ({ href: guidePath(g.slug), label: g.h1, blurb: g.blurb }));
 
 export const Route = createFileRoute("/guides/")({
+  codeSplitGroupings: [["component"]],
   head: () => ({
     meta: [
       { title: TITLE },
