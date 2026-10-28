@@ -126,11 +126,38 @@ export const adminListUsers = createServerFn({ method: 'POST' })
       if (sub.status === 'active' || sub.status === 'past_due') st.plan = 'paying'
       else if (sub.status === 'trialing' && st.plan === 'free') st.plan = 'trialing'
     }
-    return profiles.map((p) => ({
+    const live = profiles.map((p) => ({
       ...p,
+      deleted_at: null as string | null,
       alias: aliasMap[p.user_id] ?? null,
       stats: statsMap[p.user_id] ?? { bits: 0, rewrites: 0, plan: 'free' as const },
     }))
+    // Accounts people deleted stay on the list (no email or name: the privacy
+    // page promises those are removed). Hidden while searching by email/name.
+    const q = data.q?.trim().toLowerCase() ?? ''
+    if (q && !'deleted account'.includes(q)) return live
+    const { data: gone } = await supabaseAdmin
+      .from('deleted_accounts' as never)
+      .select('user_id, provider, signup_at, deleted_at, last_country, last_city, visit_count, login_count')
+      .limit(limit)
+    const deleted = ((gone ?? []) as Array<{ user_id: string; provider: string | null; signup_at: string | null; deleted_at: string; last_country: string | null; last_city: string | null; visit_count: number | null; login_count: number | null }>).map((d) => ({
+      user_id: d.user_id, email: null, first_name: null, last_name: null, full_name: null, avatar_url: null,
+      provider: d.provider, is_anonymous: false, signup_at: d.signup_at, first_visit_at: d.signup_at,
+      last_visit_at: d.deleted_at, last_login_at: null, login_count: d.login_count ?? 0, visit_count: d.visit_count ?? 0,
+      last_country: d.last_country, last_city: d.last_city, deleted_at: d.deleted_at, alias: null,
+      stats: { bits: 0, rewrites: 0, plan: 'free' as const },
+    }))
+    const merged = [...live, ...deleted] as Array<Record<string, unknown>>
+    const val = (r: Record<string, unknown>) => r[sort] as string | number | null | undefined
+    merged.sort((a, b) => {
+      const x = val(a), y = val(b)
+      if (x == null && y == null) return 0
+      if (x == null) return 1
+      if (y == null) return -1
+      const c = x < y ? -1 : x > y ? 1 : 0
+      return ascending ? c : -c
+    })
+    return merged.slice(0, limit) as typeof live
   })
 
 // ---------- analytics ----------

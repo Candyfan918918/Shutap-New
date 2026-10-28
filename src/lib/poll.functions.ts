@@ -186,6 +186,15 @@ export const adminPollReport = createServerFn({ method: 'GET' })
       }
     }
 
+    // Voters who later deleted their account: say so instead of a blank row.
+    const missing = ids.filter((id) => !profiles.has(id))
+    if (missing.length) {
+      const { data: gone } = await client.from('deleted_accounts' as never).select('user_id, provider').in('user_id', missing)
+      for (const r of (gone ?? []) as Array<{ user_id: string; provider: string | null }>) {
+        profiles.set(r.user_id, { name: 'deleted account', email: 'removed at deletion', provider: r.provider })
+      }
+    }
+
     const counts = Object.fromEntries(POLL_OPTION_KEYS.map((k) => [k, 0])) as Record<PollOptionKey, number>
     const followTally = new Map<PollOptionKey, Map<string, number>>()
     for (const v of votes) {
