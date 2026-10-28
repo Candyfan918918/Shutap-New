@@ -116,14 +116,14 @@ function AiDisclosurePage() {
       <h3>Our own jokes</h3>
       <p>
         The Shutap joke dataset is in-house: the Shutap team writes, selects and rates its own
-        jokes, pairing everyday situations with jokes tagged by technique, voice and heat. It is
+        jokes, pairing everyday situations with jokes tagged by technique, voice and how wild. It is
         what guides how Shutap writes, and it is the only joke material Shutap uses to train or
         tune AI models. How your text is handled is set out in the{' '}
         <a href="/privacy">Privacy Policy</a>.
       </p>
       <p>
         AI output can be inaccurate, unfunny or offensive. Treat it as entertainment. You are
-        responsible for what you download, share and post.
+        responsible for what you save, share and post.
       </p>
       <p>
         Some places, including California, require clear notice when you&rsquo;re dealing with AI

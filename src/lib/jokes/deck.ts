@@ -264,7 +264,7 @@ export const FLIPS_PER_SET: Record<JokeTier, number> = { guest: 1, free: 3, payi
 
 /** What a membership buys, stated as behaviour. */
 export const MEMBER_BENEFITS: { line: string; detail: string }[] = [
-  { line: 'No watermark', detail: 'on every download.' },
+  { line: 'No watermark', detail: 'on everything you save.' },
   { line: 'The Mirror', detail: 'what keeps coming up in your jokes.' },
 ]
 
@@ -273,7 +273,7 @@ export const MEMBER_BENEFITS: { line: string; detail: string }[] = [
 export const ALWAYS_FREE = [
   'writing jokes',
   'posting, following, commenting',
-  'downloads with a small watermark',
+  'saving, with a small watermark',
 ]
 
 /* ─────────────────────────── the two asks ───────────────────────────
@@ -290,7 +290,7 @@ export const ALIAS_OFFER = {
 
 export const MEMBER_OFFER = {
   cta: 'remove the watermark',
-  line: 'No watermark on downloads, plus the Mirror.',
+  line: 'No watermark on what you save, plus the Mirror.',
 }
 
 /* ─────────────────────── the daily budget, as the client sees it ───────────────────────

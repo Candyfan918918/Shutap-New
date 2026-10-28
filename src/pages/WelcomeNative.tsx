@@ -5,6 +5,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 import { clearPendingAuthReturn } from '@/lib/auth-guard'
+import { friendlyOAuthError } from '@/lib/oauth-signin'
 import { useNoIndex } from '@/components/NoIndex'
 import { AuthStep } from './welcome/AuthStep'
 import { BG, TEXT, EyeMark, SOFT } from './welcome/shared'
@@ -23,6 +24,21 @@ function StepFallback() {
       </div>
     </div>
   )
+}
+
+/** Which way this sign-in came in: the identity used most recently
+ *  ('google' | 'apple' | 'email'), so completions can be split by method. */
+async function signInMethod(): Promise<string> {
+  try {
+    const { data } = await supabase.auth.getSession()
+    const u = data.session?.user
+    if (!u) return 'unknown'
+    const ids = [...(u.identities ?? [])].sort((a, b) =>
+      String(b.last_sign_in_at ?? '').localeCompare(String(a.last_sign_in_at ?? '')))
+    return ids[0]?.provider ?? (u.app_metadata as { provider?: string } | undefined)?.provider ?? 'unknown'
+  } catch {
+    return 'unknown'
+  }
 }
 
 export function WelcomeNativePage() {
@@ -73,7 +89,11 @@ export function WelcomeNativePage() {
         firstCompletion = sessionStorage.getItem('shutap_signin_tracked') !== '1'
         sessionStorage.setItem('shutap_signin_tracked', '1')
       } catch { /* noop */ }
-      if (firstCompletion) void import('@/lib/tracking').then((m) => m.trackEvent('sign_in_completed', {})).catch(() => {})
+      if (firstCompletion) void (async () => {
+        const method = await signInMethod()
+        const m = await import('@/lib/tracking')
+        m.trackEvent('sign_in_completed', { method })
+      })().catch(() => {})
       // Lazy-import server-fn modules so cold /welcome doesn't ship them.
       const [{ recordLegalAcceptance }, { getMyAlias }] = await Promise.all([
         import('@/lib/legal.functions'),
@@ -138,7 +158,7 @@ export function WelcomeNativePage() {
             import('@/lib/welcome-email.functions').catch(() => null),
           ])
           setAlias({ name: a.display_name, emoji: a.emoji, avatar: saved.avatar_url })
-          void tracking?.trackEvent('sign_up_completed', { has_photo: !!saved.avatar_url })
+          void signInMethod().then((method) => tracking?.trackEvent('sign_up_completed', { has_photo: !!saved.avatar_url, method }))
           void welcome?.sendWelcomeEmail().catch(() => {})
           setFinalAlias(a)
           setStep('welcome')
@@ -153,22 +173,36 @@ export function WelcomeNativePage() {
     const consumeHashTokens = async (): Promise<'consumed' | 'error' | 'none'> => {
       if (typeof window === 'undefined') return 'none'
       const raw = window.location.hash?.startsWith('#') ? window.location.hash.slice(1) : ''
-      if (!raw) return 'none'
+      const query = new URLSearchParams(window.location.search)
       const params = new URLSearchParams(raw)
+      // Providers report failures in the hash or the query string.
       const err = params.get('error_description') || params.get('error')
+        || query.get('error_description') || query.get('error')
       if (err) {
-        try { history.replaceState(null, '', window.location.pathname + window.location.search) } catch { /* noop */ }
-        setAuthError(err.replace(/\+/g, ' '))
+        try {
+          for (const k of ['error', 'error_code', 'error_description', 'state']) query.delete(k)
+          const q = query.toString()
+          history.replaceState(null, '', window.location.pathname + (q ? '?' + q : ''))
+        } catch { /* noop */ }
+        // A stale second sign-in coming back after the first one already
+        // worked (repeat taps): the person is signed in, so don't show an error.
+        const { data: now } = await supabase.auth.getSession()
+        if (now.session && !isAnon(now.session.user)) {
+          trackFail('provider (ignored, already signed in): ' + err)
+          return 'none'
+        }
+        setAuthError(friendlyOAuthError(err))
         trackFail('provider: ' + err)
         return 'error'
       }
+      if (!raw) return 'none'
       const access_token = params.get('access_token')
       const refresh_token = params.get('refresh_token')
       if (!access_token || !refresh_token) return 'none'
       try {
         const { error } = await supabase.auth.setSession({ access_token, refresh_token })
         try { history.replaceState(null, '', window.location.pathname + window.location.search) } catch { /* noop */ }
-        if (error) { setAuthError(error.message); trackFail('setSession: ' + error.message); return 'error' }
+        if (error) { setAuthError(friendlyOAuthError(error.message)); trackFail('setSession: ' + error.message); return 'error' }
         return 'consumed'
       } catch (e) {
         try { history.replaceState(null, '', window.location.pathname + window.location.search) } catch { /* noop */ }

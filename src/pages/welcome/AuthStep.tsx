@@ -6,7 +6,7 @@ import { useRouterState } from '@tanstack/react-router'
 import { Words } from '@/components/motion'
 import { supabase } from '@/integrations/supabase/client'
 import { sendMagicLink } from '@/lib/magic-link.functions'
-import { startOAuth } from '@/lib/oauth-signin'
+import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { EyeMark, oauthBtn, ACCENT, TEXT, SOFT, MUTED, type Msg } from './shared'
 
 const RESEND_COOLDOWN_MS = 60_000
@@ -31,6 +31,7 @@ export function AuthStep() {
   const [code, setCode] = useState('')
   const [msg, setMsg] = useState<Msg>(null)
   const [busy, setBusy] = useState(false)
+  const opening = useOAuthPending()
   const [codeSentAt, setCodeSentAt] = useState<number | null>(null)
   const [resends, setResends] = useState(0)
   const [cooldownUntil, setCooldownUntil] = useState(0)
@@ -194,13 +195,13 @@ export function AuthStep() {
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {!emailOnly && (<>
-        <button className="oauth-btn" style={oauthBtn} disabled={busy} onClick={() => doOAuth('google')}>
+        <button className="oauth-btn" style={oauthBtn} disabled={busy || !!opening} onClick={() => doOAuth('google')}>
           <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
-          continue with Google
+          {oauthButtonLabel('google', opening)}
         </button>
-        <button className="oauth-btn" style={oauthBtn} disabled={busy} onClick={() => doOAuth('apple')}>
+        <button className="oauth-btn" style={oauthBtn} disabled={busy || !!opening} onClick={() => doOAuth('apple')}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill={TEXT}><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          continue with Apple
+          {oauthButtonLabel('apple', opening)}
         </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: 11, margin: '6px 0' }}>
           <div style={{ flex: 1, height: .5, background: 'rgba(255,255,255,.12)' }} />

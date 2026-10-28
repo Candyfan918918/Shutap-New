@@ -130,6 +130,8 @@ export interface AdminPollVoter {
   votedAt: string
   updatedAt: string
   emailedAt: string | null
+  /** deleted their own account: never contact */
+  doNotContact: boolean
 }
 
 export interface AdminPollReport {
@@ -141,6 +143,10 @@ export interface AdminPollReport {
   options: Array<{ key: PollOptionKey; label: string; count: number; pct: number; topFollowUp: string | null }>
   /** Distinct browser sessions per step since the poll opened, from site events. */
   funnel: Array<{ step: string; label: string; sessions: number }>
+  /** Which option people tapped (before any sign-in), distinct browser
+   *  sessions per option since the poll opened. A session that tapped two
+   *  options counts under each. */
+  taps: Array<{ key: PollOptionKey; label: string; sessions: number; guests: number; signedIn: number }>
   voters: AdminPollVoter[]
 }
 
@@ -148,6 +154,7 @@ const FUNNEL = [
   { step: 'poll_viewed', label: 'saw the poll' },
   { step: 'poll_option_tapped', label: 'tapped an option' },
   { step: 'poll_signin_clicked', label: 'clicked sign in' },
+  { step: 'poll_signin_dismissed', label: 'closed sign-in' },
   { step: 'poll_voted', label: 'vote counted' },
 ] as const
 
@@ -181,6 +188,17 @@ export const adminPollReport = createServerFn({ method: 'GET' })
       }
     }
 
+    // Voters who later deleted their account: say so instead of a blank row.
+    const missing = ids.filter((id) => !profiles.has(id))
+    const doNotContact = new Set<string>()
+    if (missing.length) {
+      const { data: gone } = await client.from('deleted_accounts' as never).select('user_id, provider').in('user_id', missing)
+      for (const r of (gone ?? []) as Array<{ user_id: string; provider: string | null }>) {
+        profiles.set(r.user_id, { name: 'deleted by themselves', email: 'do not contact', provider: r.provider })
+        doNotContact.add(r.user_id)
+      }
+    }
+
     const counts = Object.fromEntries(POLL_OPTION_KEYS.map((k) => [k, 0])) as Record<PollOptionKey, number>
     const followTally = new Map<PollOptionKey, Map<string, number>>()
     for (const v of votes) {
@@ -207,6 +225,28 @@ export const adminPollReport = createServerFn({ method: 'GET' })
       }),
     )
 
+    // What each tap picked. The tap event carries the option and whether the
+    // person was signed in at that moment.
+    const tapSessions = new Map<string, { all: Set<string>; guests: Set<string>; signedIn: Set<string> }>()
+    for (let from = 0; from < 50_000; from += 1000) {
+      const { data } = await client
+        .from('events')
+        .select('session_id, properties')
+        .eq('name', 'poll_option_tapped')
+        .gte('ts', p.opened_at)
+        .range(from, from + 999)
+      for (const r of (data ?? []) as Array<{ session_id: string | null; properties: Record<string, unknown> | null }>) {
+        const key = pollOption(String(r.properties?.['option'] ?? ''))?.key
+        if (!key || !r.session_id) continue
+        const t = tapSessions.get(key) ?? { all: new Set<string>(), guests: new Set<string>(), signedIn: new Set<string>() }
+        t.all.add(r.session_id)
+        if (r.properties?.['signed_in'] === true) t.signedIn.add(r.session_id)
+        else t.guests.add(r.session_id)
+        tapSessions.set(key, t)
+      }
+      if (!data || data.length < 1000) break
+    }
+
     return {
       title: POLL.title,
       openedAt: p.opened_at,
@@ -218,6 +258,10 @@ export const adminPollReport = createServerFn({ method: 'GET' })
         return { key: o.key, label: o.label, count: counts[o.key], pct: pct[o.key], topFollowUp: tally[0]?.[0] ?? null }
       }),
       funnel,
+      taps: POLL.options.map((o) => {
+        const t = tapSessions.get(o.key)
+        return { key: o.key, label: o.label, sessions: t?.all.size ?? 0, guests: t?.guests.size ?? 0, signedIn: t?.signedIn.size ?? 0 }
+      }),
       voters: votes
         .filter((v) => pollOption(v.option_key))
         .map((v) => {
@@ -233,6 +277,7 @@ export const adminPollReport = createServerFn({ method: 'GET' })
             votedAt: v.voted_at,
             updatedAt: v.updated_at,
             emailedAt: v.emailed_at,
+            doNotContact: doNotContact.has(v.user_id),
           }
         }),
     }
@@ -243,6 +288,9 @@ export const adminSetPollEmailed = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => z.object({ userId: z.string().uuid(), emailed: z.boolean() }).parse(d))
   .handler(async ({ data, context }): Promise<{ emailedAt: string | null }> => {
     await assertAdmin(context)
+    // People who deleted their account are never contacted.
+    const { data: gone } = await (await db()).from('deleted_accounts' as never).select('user_id').eq('user_id', data.userId).maybeSingle()
+    if (gone && data.emailed) throw new Error('This person deleted their account. Do not contact them.')
     const emailedAt = data.emailed ? new Date().toISOString() : null
     const { error } = await (await db()).from('poll_votes').update({ emailed_at: emailedAt }).eq('poll_key', POLL_KEY).eq('user_id', data.userId)
     if (error) throw new Error(error.message)

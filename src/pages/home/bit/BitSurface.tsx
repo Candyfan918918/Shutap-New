@@ -4,7 +4,7 @@
  *   writing  the story, four steps and a bar while the server works
  *   bit      hook, setup, tags, button, one line on why it works, the
  *            action row. Everyone sees the whole bit, guests included;
- *            a guest signs in (free) to rewrite, download or keep it.
+ *            a guest signs in (free) to rewrite or save it.
  *
  * New bits a day: guest 1 · free 2 (counting the guest bit) · basic 5 · pro.
  * At the limit, "write" opens the next step instead: a guest gets the
@@ -35,7 +35,7 @@ import {
   isPaidTier,
 } from '@/lib/bits/shared'
 import { setDurableReturn } from '@/lib/auth-guard'
-import { startOAuth } from '@/lib/oauth-signin'
+import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { trackEvent } from '@/lib/tracking'
 import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 import { ActionIcon } from './icons'
@@ -67,7 +67,7 @@ const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   rewrite: { title: 'Sign in to rewrite it.', sub: 'Free. Hotter, tighter, a new tag, or mix your own. Your bit comes with you.' },
   swap: { title: 'Sign in to swap the tag.', sub: 'Free. Your bit comes with you, with all five spare tags.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
-  download: { title: 'Sign in to download it.', sub: 'Free. Your bit comes with you, ready to save as a picture.' },
+  download: { title: 'Sign in to save it.', sub: 'Free. Saves your bit as a picture.' },
   save: { title: 'Sign in to keep it.', sub: 'Free. It goes in your set list with every version you make.' },
   scene: { title: 'Sign in to see the scene.', sub: 'Free. Your bit comes with you.' },
   screenplay: { title: 'Sign in for the screenplay.', sub: 'Free. Your bit comes with you.' },
@@ -175,6 +175,8 @@ async function hasRealSession(tries = 1): Promise<boolean> {
 
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
 
+const SCRIM_GRACE_MS = 900
+
 export function BitSurface() {
   const navigate = useNavigate()
   const router = useRouter()
@@ -199,6 +201,7 @@ export function BitSurface() {
    *  second bit · paywall: Basic and Pro (free at its limit, or removing the
    *  watermark) · upgrade: Basic at its limit · fair: Pro's fair-use cap */
   const [sheet, setSheet] = useState<null | 'signin' | 'signin_write' | 'paywall' | 'upgrade' | 'rate' | 'fair'>(null)
+  const sheetOpenedAt = useRef(0)
   const [paywallWhere, setPaywallWhere] = useState<PaywallWhere>('bit_3')
   const [signinFrom, setSigninFrom] = useState<SigninFrom>('sheet')
   const [error, setError] = useState<string | null>(null)
@@ -434,6 +437,7 @@ export function BitSurface() {
   /** What the day's limit opens, by tier. The server decides the tier. */
   function showLimit(t: BitTier) {
     if (t === 'guest') {
+      sheetOpenedAt.current = Date.now()
       setSheet('signin_write')
       jokeTrack('signin_sheet_opened', t, { from: 'bit_2' })
       void trackEvent('signin_prompt_seen', { where: 'bit_2' })
@@ -587,15 +591,22 @@ export function BitSurface() {
      goes to the email form. Either way the visitor comes back to "/" and the
      bit (or the story they were about to write) comes back with them. */
   function openSignin(from: SigninFrom) {
+    sheetOpenedAt.current = Date.now()
     setSigninFrom(from)
     setSheet('signin')
     jokeTrack('signin_sheet_opened', tier, { from })
     void trackEvent('signin_prompt_seen', { where: from })
   }
 
-  function dismissSignin() {
+  /* Oct 27 2026: most closes came 0.5–1s after opening, in an open/close
+     rhythm: a second tap on "write the bit" landed on the backdrop and shut
+     the sheet before it was read. Backdrop taps in the first moment after
+     opening are ignored, and every close says how and how fast. */
+  function dismissSignin(how: 'backdrop' | 'not_now' | 'escape' = 'not_now') {
+    const ms = Date.now() - sheetOpenedAt.current
+    if (how === 'backdrop' && ms < SCRIM_GRACE_MS) return
     setSheet(null)
-    jokeTrack('signin_dismissed', tier, {})
+    jokeTrack('signin_dismissed', tier, { how, ms })
   }
 
   async function signInForBit(method: 'google' | 'apple' | 'email', from: string) {
@@ -702,7 +713,8 @@ export function BitSurface() {
                 <Choice wide label="length" options={LENGTHS} value={controls.length} onPick={(v) => setControls((c) => ({ ...c, length: v }))} />
                 <Choice
                   wide
-                  label="heat"
+                  label="wild"
+                  hint="1 true to your story · 5 goes wild"
                   options={['1', '2', '3', '4', '5'] as const}
                   value={String(controls.heat) as '1'}
                   onPick={(v) => setControls((c) => ({ ...c, heat: Number(v) as BitControls['heat'] }))}
@@ -774,7 +786,7 @@ export function BitSurface() {
             )}
 
             <span className="bt-lbl">
-              the bit · ~{version.est_seconds}s · heat {version.heat} · {bit.controls.audience}
+              the bit · ~{version.est_seconds}s · wild {version.heat} · {bit.controls.audience}
             </span>
 
             <article className="bt-card" aria-label="The bit" data-ph-private style={{ paddingTop: 8 }}>
@@ -833,7 +845,7 @@ export function BitSurface() {
                 }}
               >
                 <ActionIcon name="download" />
-                download
+                save
               </button>
               <button
                 className="bt-act"
@@ -934,7 +946,7 @@ export function BitSurface() {
           className="bt-scrim"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
-              if (sheet === 'signin' || sheet === 'signin_write') dismissSignin()
+              if (sheet === 'signin' || sheet === 'signin_write') dismissSignin('backdrop')
               else setSheet(null)
             }
           }}
@@ -947,13 +959,11 @@ export function BitSurface() {
                   {sheet === 'signin_write' ? 'Free. Your story stays in the box.' : SIGNIN_COPY[signinFrom].sub}
                 </p>
                 <GoogleButton onClick={() => void signInForBit('google', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />
-                <button className="bt-btn ghost block" onClick={() => void signInForBit('apple', sheet === 'signin_write' ? 'bit_2' : 'sheet')}>
-                  continue with Apple
-                </button>
+                <AppleButton onClick={() => void signInForBit('apple', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />
                 <button className="bt-btn ghost block" onClick={() => void signInForBit('email', sheet === 'signin_write' ? 'bit_2' : 'sheet')}>
                   continue with email
                 </button>
-                <button className="bt-btn ghost block" onClick={dismissSignin}>
+                <button className="bt-btn ghost block" onClick={() => dismissSignin('not_now')}>
                   not now
                 </button>
                 <p className="bt-note" style={{ textAlign: 'center' }}>by continuing you confirm you're 18+ and agree to the terms and privacy policy</p>
@@ -1004,8 +1014,11 @@ function Choice<T extends string>({
   value,
   onPick,
   wide,
+  hint,
 }: {
   label: string
+  /** one short line under the chips */
+  hint?: string
   options: readonly T[]
   value: T
   onPick: (v: T) => void
@@ -1021,17 +1034,28 @@ function Choice<T extends string>({
           </button>
         ))}
       </div>
+      {hint && <span className="bt-note" style={{ fontSize: 'var(--fs-label)', marginTop: 6, display: 'block' }}>{hint}</span>}
     </fieldset>
   )
 }
 
-function GoogleButton({ onClick }: { onClick: () => void }) {
+function AppleButton({ onClick }: { onClick: () => void }) {
+  const opening = useOAuthPending()
   return (
-    <button className="bt-btn block" onClick={onClick}>
+    <button className="bt-btn ghost block" disabled={!!opening} onClick={onClick}>
+      {oauthButtonLabel('apple', opening)}
+    </button>
+  )
+}
+
+function GoogleButton({ onClick }: { onClick: () => void }) {
+  const opening = useOAuthPending()
+  return (
+    <button className="bt-btn block" disabled={!!opening} onClick={onClick}>
       <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
         <path fill="#fff" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82zM12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24zM5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09zM12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z" />
       </svg>
-      continue with Google
+      {oauthButtonLabel('google', opening)}
     </button>
   )
 }

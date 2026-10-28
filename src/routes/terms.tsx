@@ -41,7 +41,7 @@ function TermsPage() {
       <p>
         Shutap is an AI bit and joke generator for content creators and comedians. You write your
         story. Shutap removes identifying details and writes comedy from it, with teleprompter,
-        scene and screenplay views. You can download, share or post what it writes to a room.
+        scene and screenplay views. You can save, share or post what it writes to a room.
         Shutap is for entertainment only.
       </p>
       <p>
@@ -97,7 +97,7 @@ function TermsPage() {
         must keep by law and copies others already downloaded or shared.
       </p>
       <p>
-        The jokes Shutap writes for you are yours to download, share and post, including in your
+        The jokes Shutap writes for you are yours to save, share and post, including in your
         own content. AI output may be similar to output for other people, and we don&rsquo;t
         promise any joke is unique or free of third-party rights.
       </p>
@@ -152,7 +152,7 @@ function TermsPage() {
         Jokes are written by AI.{' '}
         <b>They can be wrong, unfunny or offensive, and you must not rely on them</b> for any
         decision. They are provided &ldquo;as is.&rdquo; You are responsible for what you post,
-        download and share.
+        save and share.
       </p>
 
       <h3 id="plans">12. Free use and daily limits</h3>
@@ -161,7 +161,7 @@ function TermsPage() {
         <b>two new bits a day</b> in total, counting any bit written as a guest that day. Basic allows
         five a day; Pro has no daily number, within fair use. Rewrites of a bit you already have do
         not count. Signing in keeps your bits in your set list and lets you post them. Free and
-        guest downloads carry a Shutap watermark.
+        guest saves carry a Shutap watermark.
       </p>
       <p>
         Limits reset at midnight Pacific time (Los Angeles) for everyone. Limits are a cost
@@ -172,7 +172,7 @@ function TermsPage() {
       <h3 id="refunds">13. Paid plans, billing and refunds</h3>
       <p>
         <b>Basic</b> costs <b>US$1.99 per month</b> and allows five new bits a day with no watermark
-        on downloads. <b>Pro</b> costs <b>US$7.99 per month</b> (or US$49.99 per year where offered)
+        on what you save. <b>Pro</b> costs <b>US$7.99 per month</b> (or US$49.99 per year where offered)
         and allows unlimited new bits within fair use, no watermark, and the Mirror. Prices are plus
         any taxes, billed through Stripe. Moving from Basic to Pro charges the prorated difference
         for the current period at the time you switch.

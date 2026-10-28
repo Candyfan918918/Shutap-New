@@ -57,7 +57,7 @@ function AdminPollPage() {
 
   const rows = useMemo(() => {
     if (!data) return []
-    return data.voters.filter((v) => (filter === 'all' || v.option === filter) && (!onlyNotEmailed || !v.emailedAt))
+    return data.voters.filter((v) => (filter === 'all' || v.option === filter) && (!onlyNotEmailed || (!v.emailedAt && !v.doNotContact)))
   }, [data, filter, onlyNotEmailed])
 
   async function toggleEmailed(v: AdminPollVoter) {
@@ -129,6 +129,17 @@ function AdminPollPage() {
             ))}
           </div>
 
+          <h2 style={h2}>what they tapped <span style={{ fontWeight: 500, color: '#6b4a5c', fontSize: 12 }}>every tap, voted or not · browser sessions since voting opened</span></h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12, marginBottom: 24 }}>
+            {data.taps.map((t) => (
+              <div key={t.key} style={card}>
+                <div style={{ fontSize: 13, fontWeight: 600, lineHeight: 1.35, minHeight: 36 }}>{t.label}</div>
+                <div style={{ fontSize: 26, fontWeight: 800, marginTop: 10, fontVariantNumeric: 'tabular-nums' }}>{t.sessions}</div>
+                <div style={{ fontSize: 12, color: '#6b4a5c', marginTop: 6 }}>{t.guests} not signed in · {t.signedIn} signed in</div>
+              </div>
+            ))}
+          </div>
+
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 10 }}>
             <h2 style={{ ...h2, margin: 0 }}>who picked what</h2>
             <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', fontSize: 13, color: '#443c42' }}>
@@ -169,7 +180,9 @@ function AdminPollPage() {
                     <td style={{ ...td, color: '#6b4a5c', whiteSpace: 'nowrap' }}>{when(v.votedAt)}</td>
                     <td style={td}>
                       <label style={{ display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
-                        <input type="checkbox" checked={!!v.emailedAt} onChange={() => void toggleEmailed(v)} aria-label={`emailed ${v.name ?? v.email ?? 'this voter'}`} />
+                        {v.doNotContact
+                          ? <span style={{ color: '#6b4a5c', fontSize: 12 }}>never contact</span>
+                          : <input type="checkbox" checked={!!v.emailedAt} onChange={() => void toggleEmailed(v)} aria-label={`emailed ${v.name ?? v.email ?? 'this voter'}`} />}
                         <span style={{ color: '#6b4a5c', fontSize: 12 }}>{v.emailedAt ? pollDate(v.emailedAt) : ''}</span>
                       </label>
                     </td>

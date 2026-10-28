@@ -231,3 +231,9 @@
 .bt-sweep { position: absolute; inset: 0; width: 30%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); animation: bt-sweep 1.4s ease-in-out infinite; }
 @keyframes bt-sweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(340%); } }
 @media (prefers-reduced-motion: reduce) { .bt-sweep { animation: none; display: none; } }
+
+/* The sheet slides up so it is noticed where the eye isn't (Oct 27 2026). */
+@keyframes bt-sheet-in { from { transform: translateY(24px); opacity: 0 } to { transform: none; opacity: 1 } }
+@keyframes bt-scrim-in { from { opacity: 0 } to { opacity: 1 } }
+.bt-scrim { animation: bt-scrim-in .18s ease-out; }
+.bt-sheet { animation: bt-sheet-in .24s cubic-bezier(.2,.8,.2,1); }

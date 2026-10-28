@@ -73,8 +73,8 @@ export const HUBS: SituationHub[] = [
       "Shutap can't tell you that, but outgrowing someone is good material: the same three stories at every dinner, the inside joke that expired years ago, the catch-up that feels like a rerun. Paste what happened and Shutap writes three jokes about the situation: the take, the clapback and the roast.",
     paa: [
       { q: "Why is outgrowing someone funny?", a: "Because nothing dramatic happens. The comedy is in the repeats: the same order, the same story, the same plans that never get made." },
-      { q: "Can I use the jokes in a set or a video?", a: "Yes. Download them for TikTok, Reels or the stage, or post the best one to a room." },
-      { q: "Do I need to sign in?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free to rewrite, download or keep it, and for 2 new bits a day." },
+      { q: "Can I use the jokes in a set or a video?", a: "Yes. Save them for TikTok, Reels or the stage, or post the best one to a room." },
+      { q: "Do I need to sign in?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free to rewrite or save it, and for 2 new bits a day." },
     ],
   },
   // ── marriage ──
@@ -134,7 +134,7 @@ export const HUBS: SituationHub[] = [
       "Shutap can't answer that. It writes jokes. But the stretch where people start asking is full of material: separate streaming profiles, the divorce lawyer ads your feed suddenly serves you, the fight about the fight. Paste what happened and Shutap writes three jokes about it.",
     paa: [
       { q: "Can I joke about a divorce?", a: "Yes. Divorce comedy is a whole tradition. The jokes go at the situation, never at a real person someone could identify." },
-      { q: "Can I use the jokes on stage?", a: "Yes. Download them for TikTok, Reels or the stage, or post the best one to a room." },
+      { q: "Can I use the jokes on stage?", a: "Yes. Save them for TikTok, Reels or the stage, or post the best one to a room." },
       { q: "Does Shutap give marriage advice?", a: "No. Shutap writes jokes. It's not advice and not therapy." },
     ],
   },
@@ -170,9 +170,9 @@ export const HUBS: SituationHub[] = [
     answer:
       "Shutap doesn't rule on guest lists. It writes jokes about them. Wedding family politics is premium material: the seating chart drafted like a peace treaty, the RSVP with a plus-one nobody invited, the relative running a back channel. Paste what happened and get three jokes.",
     paa: [
-      { q: "Can I use the jokes in a toast?", a: "You can download them and use them anywhere: TikTok, Reels, the stage, a toast. Keep them at the situation, not at a guest anyone could identify." },
+      { q: "Can I use the jokes in a toast?", a: "Save them and use them anywhere: TikTok, Reels, the stage, a toast. Keep them at the situation, not at a guest anyone could identify." },
       { q: "Will names show up?", a: "No. Names and places are removed before anything is saved." },
-      { q: "Do I need an account?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free to rewrite, download or keep it, and for 2 new bits a day." },
+      { q: "Do I need an account?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free to rewrite or save it, and for 2 new bits a day." },
     ],
   },
   {
@@ -196,7 +196,7 @@ export const HUBS: SituationHub[] = [
     paa: [
       { q: "What's the take?", a: "The take names what was really going on underneath, in words the situation didn't give you." },
       { q: "Will the jokes be about me?", a: "No. The jokes go at the situation, never at the person telling it." },
-      { q: "Can I post one?", a: "Yes. Post the best one to the family room, or download it for TikTok, Reels or the stage." },
+      { q: "Can I post one?", a: "Yes. Post the best one to the family room, or save it for TikTok, Reels or the stage." },
     ],
   },
   // ── career ──
@@ -220,7 +220,7 @@ export const HUBS: SituationHub[] = [
       "Shutap won't make that call. It writes jokes. \"Great job, why would you leave\" is good material: free snacks as compensation, mandatory fun, relatives who think your job title is a personality. Paste what happened and get three jokes: the take, the clapback and the roast.",
     paa: [
       { q: "What's the clapback here?", a: "The line you wish you'd said to the next person who calls it a dream job, written to leave no good reply." },
-      { q: "Can I use the jokes on TikTok?", a: "Yes. Download them for TikTok, Reels or the stage, or post the best one to the work room." },
+      { q: "Can I use the jokes on TikTok?", a: "Yes. Save them for TikTok, Reels or the stage, or post the best one to the work room." },
       { q: "Is this career advice?", a: "No. Shutap writes jokes. It's not advice." },
     ],
   },
@@ -233,7 +233,7 @@ export const HUBS: SituationHub[] = [
     paa: [
       { q: "Will Shutap tell me what I should earn?", a: "No. It writes jokes, not salary advice." },
       { q: "Can I name my company?", a: "You can type it, but names, company names and places are removed before anything is saved. The jokes go at the situation, not a company anyone could identify." },
-      { q: "Do I need to sign in?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free to rewrite, download or keep it, and for 2 new bits a day." },
+      { q: "Do I need to sign in?", a: "No. Your first bit needs no account, and you see the whole bit. Sign in free to rewrite or save it, and for 2 new bits a day." },
     ],
   },
   {
@@ -244,7 +244,7 @@ export const HUBS: SituationHub[] = [
       "Shutap won't explain the guilt, but it can write jokes about it. Time off is full of material: the out-of-office you edited four times, checking email from a beach chair, the \"quick question\" that arrives the moment you land. Paste what happened and get three jokes.",
     paa: [
       { q: "What does the roast go after?", a: "The situation: the inbox, the meeting invite, a culture that treats a vacation like a confession." },
-      { q: "Can I post it?", a: "Yes. Post the best one to the work room, or download it for TikTok, Reels or the stage." },
+      { q: "Can I post it?", a: "Yes. Post the best one to the work room, or save it for TikTok, Reels or the stage." },
       { q: "Is this advice?", a: "No. Shutap writes jokes. It's not advice and not therapy." },
     ],
   },
@@ -255,7 +255,7 @@ export const HUBS: SituationHub[] = [
     answer:
       "Shutap can't tell you that. It writes jokes. Quitting without a plan is good material: the resignation drafted in your notes app, the exit interview, relatives asking \"so what's next\" at every meal. Paste what happened and Shutap writes three jokes: the take, the clapback and the roast.",
     paa: [
-      { q: "Can I turn my resignation into content?", a: "Yes. Download the jokes for TikTok, Reels or the stage, or post the best one to a room." },
+      { q: "Can I turn my resignation into content?", a: "Yes. Save the jokes for TikTok, Reels or the stage, or post the best one to a room." },
       { q: "Will my old boss be identifiable?", a: "No. Names, company names and places are removed before anything is saved, and jokes never target a real person someone could identify." },
       { q: "Is this career advice?", a: "No. Shutap writes jokes. It's not advice." },
     ],

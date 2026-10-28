@@ -24,6 +24,7 @@ interface Row {
   provider: string | null
   is_anonymous: boolean
   signup_at: string | null
+  deleted_at: string | null
   first_visit_at: string
   last_visit_at: string
   last_login_at: string | null
@@ -95,7 +96,7 @@ function AdminUsersPage() {
       : <SortableTh col={col as SortCol} label={label} />
 
   return (
-    <AdminShell title="users" subtitle="newest sign-up first · accounts with no email are hidden">
+    <AdminShell title="users" subtitle="newest sign-up first · people who deleted their account stay listed, without email or name, and are never contacted">
       {top && <BigNumbers total={top.total} dau={top.dau} mau={top.mau} />}
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 16 }}>
         <input
@@ -138,7 +139,9 @@ function AdminUsersPage() {
             <tbody>
               {rows.map((r) => (
                 <tr key={r.user_id} style={{ borderTop: '.5px solid rgba(11,8,15,.05)' }}>
-                  <td style={td}>{r.email || (r.is_anonymous ? <span style={{ color: '#6f666c' }}>guest</span> : '—')}</td>
+                  <td style={td}>{r.deleted_at
+                    ? <span style={{ color: '#6f666c' }} title="they deleted their own account; email and name were removed. Never contact.">deleted by themselves · {fmt(r.deleted_at)} · never contact</span>
+                    : r.email || (r.is_anonymous ? <span style={{ color: '#6f666c' }}>guest</span> : '—')}</td>
                   <td style={td}>{r.first_name || '—'}</td>
                   <td style={td}>{r.last_name || '—'}</td>
                   <td style={td}>{r.provider || (r.is_anonymous ? 'anon' : '—')}</td>

@@ -23,7 +23,7 @@ const guide: Guide = {
     },
     {
       heading: "Step two: drafting a bit from your own story",
-      body: "This is the step most tools skip, and it's the one storytime and POV creators need most. Shutap, the AI joke generator for creators, is built for it. You write what happened, pick a voice (deadpan, storyteller, roast or dry), a length (15s, 30s, 60s or 2 min) and a heat level from 1 to 5, and you get a draft of the whole bit: hook, setup, tags and a button. Tars's comedic script writing assistant takes a different route, walking you through format, tone and premise in a guided chat. Either way, treat the draft as a sparring partner. Keep what sounds like you and rewrite the rest.",
+      body: "This is the step most tools skip, and it's the one storytime and POV creators need most. Shutap, the AI joke generator for creators, is built for it. You write what happened, pick a voice (deadpan, storyteller, roast or dry), a length (15s, 30s, 60s or 2 min) and how wild, from 1 (true to your story) to 5 (goes wild), and you get a draft of the whole bit: hook, setup, tags and a button. Tars's comedic script writing assistant takes a different route, walking you through format, tone and premise in a guided chat. Either way, treat the draft as a sparring partner. Keep what sounds like you and rewrite the rest.",
     },
     {
       heading: "Step three: punching up lines you already have",
@@ -49,7 +49,7 @@ const guide: Guide = {
   faq: [
     {
       q: "What is the best AI tool to turn a story into a stand-up bit?",
-      a: "Shutap is built for that job: write the story, pick a voice, length and heat, and get a draft of the bit with a hook, setup, tags and a button to rewrite. General assistants can do it too if you spell out the structure.",
+      a: "Shutap is built for that job: write the story, pick a voice, length and how wild, and get a draft of the bit with a hook, setup, tags and a button to rewrite. General assistants can do it too if you spell out the structure.",
     },
     {
       q: "Can AI write comedy for TikTok?",

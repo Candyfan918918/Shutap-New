@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { Route as RootRoute } from "./__root";
 import { ogImageMeta } from "@/lib/seo/meta";
 import { ContentPage } from "@/components/seo/ContentPage";
 import { SeoPage } from "@/components/seo/SeoPage";
@@ -9,9 +10,10 @@ import { GUIDE_TOPICS, getTopic, guidePath, guidesInTopic, topicPath } from "@/l
 // Topic hub: one cluster of guides, newest first. Grows on its own as the
 // daily article agent adds files with this topic.
 export const Route = createFileRoute("/guides/topic/$topic")({
+  codeSplitGroupings: [["component"]],
   loader: ({ params }) => {
     const t = getTopic(params.topic);
-    if (!t || guidesInTopic(t.id).length === 0) throw notFound();
+    if (!t || guidesInTopic(t.id).length === 0) throw notFound({ routeId: "/guides/topic/$topic" });
     return { topic: t.id };
   },
   head: ({ params }) => {
@@ -62,6 +64,10 @@ export const Route = createFileRoute("/guides/topic/$topic")({
     };
   },
   component: TopicRoute,
+  errorComponent: (props) => {
+    const ErrorPage = RootRoute.options.errorComponent;
+    return ErrorPage ? <ErrorPage {...props} /> : null;
+  },
   notFoundComponent: () => (
     <SeoPage>
       <h1 className="text-2xl font-semibold">That topic doesn't exist yet.</h1>
