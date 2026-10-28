@@ -5,103 +5,99 @@ const guide: Guide = {
   kind: "guide",
   topic: "growing-views",
   keyword: "how to get more views on youtube",
-  preset: { audience: "social", voice: "storyteller", length: "60s" },
-  title: "How to Get More Views on YouTube: A Comic's Guide | Shutap",
-  h1: "How to get more views on YouTube",
+  title: "How to Get More Views on YouTube for Funny Videos | Shutap",
+  h1: "How to get more views on YouTube when you make comedy",
   description:
-    "More YouTube views for comics: titles that sell the situation, openings that start on the problem, Shorts that feed long videos, and which numbers matter.",
+    "Get more YouTube views on funny videos: put the premise in the title and thumbnail, protect the first 30 seconds, read the dips, and link Shorts to the full bit.",
   capsule:
-    "To get more views on YouTube, make videos that viewers click and then feel good about watching, because YouTube recommends what it predicts each person will be satisfied by, not what a channel pushes. For comedy that means a title that sells a specific situation, an opening that starts on the problem, and a format people can binge.",
-  blurb: "Titles, openings, Shorts and series: getting a comedy channel recommended.",
+    "To get more views on YouTube, make a title and thumbnail that promise one specific funny situation, then keep people watching past the first 30 seconds, because YouTube tests packaging on watch time rather than clicks. For comedy, that means the premise goes in the packaging, the first joke lands early, and every Short points to a longer version of the bit.",
+  blurb: "Put the premise in the packaging, protect the first 30 seconds, and link every Short to the full bit.",
+  preset: { audience: "social", voice: "storyteller", length: "60s", heat: 3 },
   sections: [
     {
-      heading: "YouTube pulls videos to viewers, it doesn't push them",
-      body: "Most advice treats views as something you force out with keywords and posting times. YouTube describes it the other way round. Its growth and discovery lead, Todd Beaupré, said in 2025 that recommendations are about pulling the right video to each viewer, and that the system tracks how people feel about the time they spent, using likes, dislikes and surveys. YouTube's 2021 explainer says only videos people rate four or five stars in those surveys count as valued watch time. So the job is simple to say and hard to do: get the click, then deserve it.",
+      heading: "What YouTube says it looks at",
+      body: "YouTube's help page on recommendations lists the signals it uses: watch history, search history, subscriptions, likes, dislikes, \"not interested\" taps and \"don't recommend channel\" choices. It also runs surveys asking viewers to rate videos they watched, so the system learns about satisfaction, not just watch time. Read that as a warning for comedy. A misleading thumbnail might win the click, but the viewer who feels tricked hits \"not interested\" or rates it low. The views that compound come from people who got the joke they were promised.",
     },
     {
-      heading: "Write titles that sell the situation, not the punchline",
-      body: "A comedy title has one task: make a stranger picture the mess in under a second. Vague titles describe a genre. Specific titles describe a scene. Weak: \"Funny story about my landlord.\" Stronger: \"My landlord fixed the leak with a single sock.\" The second one gives you an object, a person and a problem, and it makes you want to see the sock. Never give away the turn in the title. Promise the setup, and let the video pay it off. If the title only works for people who already know you, it isn't doing its job yet.",
+      heading: "Put the premise in the title",
+      body: "A comedy title is a setup with the punchline held back. It should name one strange, specific situation so a stranger can picture it before clicking. Weak: \"Funniest Thing That Happened To Me This Week.\" Stronger: \"My Dentist Asked About My Weekend With Both Hands In My Mouth.\" The first could be anyone's video. The second has a picture, a problem and a question. Avoid putting the joke's ending in the title, and skip \"(GONE WRONG)\" style tags. They promise drama, and comedy viewers can smell the gap.",
     },
     {
-      heading: "Test titles and thumbnails instead of guessing",
-      body: "YouTube Studio has a built-in A/B test. You can try up to three titles, three thumbnails, or combinations of both on one long video, and YouTube shows the winner to everyone once the test ends, usually within two weeks. The winner is the version with the most watch time, not the most clicks, which suits comedy: a misleading thumbnail that gets clicks and then loses people will lose the test. Two catches. It only runs from YouTube Studio on a computer, and Shorts can't be tested at all.",
+      heading: "Make the thumbnail the moment before the laugh",
+      body: "The thumbnail works best as the frozen second right before things go wrong. Not your face doing a shocked mouth, which every channel uses, but the object or situation that makes the story. For the dentist video, that might be a close-up of the dental mirror with a speech bubble that just says \"so…any plans?\" Short text, large, three words or fewer. YouTube lets you A/B test up to three titles and thumbnails on one video, and the winner is picked by watch time share, not click-through rate. So a thumbnail that tells the truth about the joke usually beats a louder one.",
     },
     {
-      heading: "Start on the problem in the first five seconds",
-      body: "Comedy videos die in the throat-clearing. \"Hey guys, so this happened last week, and I wasn't going to post it, but…\" is ten seconds of nobody laughing. Open on the moment it went wrong and backfill only what the viewer needs. Weak opener: \"So I went to my cousin's wedding.\" Stronger: \"The DJ at my cousin's wedding played her ex's favorite song, and he was the officiant.\" Now the viewer has stakes, a picture and a question. Cut every line before that sentence and see if anyone misses it.",
+      heading: "Protect the first 30 seconds",
+      body: "YouTube Analytics has a key moments report, and its intro figure shows what share of your audience was still watching after the first 30 seconds. On a comedy video that number mostly reflects one thing: how long you made people wait for the first laugh. Cut the channel intro, the \"hey everybody\" and the sponsor read from the opening. Start inside the situation. Weak: \"So I've been meaning to tell you guys about this for a while.\" Stronger: \"The dentist has a rule. He only asks questions once both his hands are in your mouth.\"",
     },
     {
-      heading: "Know what a Shorts view means now",
-      body: "Since March 31, 2025, YouTube counts a Shorts view every time the clip starts or replays, with no minimum watch time. A viewer who swipes away after one second still adds a view. That makes the public number flattering and less useful. The older watch-based count lives on as engaged views in your Studio analytics, and that is the one to judge a Short by. For comedy, a loop helps both: end on a line that makes the first line funnier, so a replay feels like the joke landing twice.",
+      heading: "Read the dips like a heckler",
+      body: "The same key moments report marks dips, where viewers skipped or left, and spikes, where they rewatched or shared. For a comedian this is the closest thing to hearing the room on a recording. A dip right after a setup usually means the setup ran long or the joke got explained. A spike often sits on a line people replayed to catch, which is either your best tag or a mumble. Write down the timestamp of each dip, rewatch those few seconds, and ask what you were saying that didn't need saying.",
     },
     {
-      heading: "Turn one good bit into a series",
-      body: "A single funny video gets a view. A format gets a habit. If \"things my roommate labels in the fridge\" works once, it can work every week, and each episode sends viewers to the last one. Name the series the same way each time, put the episodes in a playlist, and keep the opening beat identical so a returning viewer knows the game in two seconds. Series also solve the blank-page problem: you're no longer looking for an idea, you're looking for the next fridge label.",
+      heading: "Use Shorts as the trailer",
+      body: "Shorts can now run up to three minutes, which YouTube allowed from October 15, 2024. That's long enough for a whole bit, but the bigger use is as a doorway. YouTube's own creator blog calls the Related Video link the most effective tool for moving viewers from a Short to a longer video. Cut the best minute of a longer story into a Short, end it on a strong line, and link the full version. Then make the long video pay off fast: its first beat should be the moment the Short promised, not a recap of it.",
     },
     {
-      heading: "Use Shorts to feed longer videos",
-      body: "YouTube's Shorts product lead said in 2023 that the company doesn't see Shorts as cannibalizing long-form videos. For a comedy channel they work best as a trailer. Cut the strongest tag from a ten-minute storytime into a 30-second Short, end it before the button, and pin the full video. Someone who laughed at \"she alphabetized the spices but left the fire alarm unplugged\" will want the rest of that apartment. A Short that tells the whole story leaves them nothing to click for.",
+      heading: "Know which view count you are looking at",
+      body: "Since March 31, 2025, YouTube counts a Shorts view every time one starts or replays, with no minimum watch time. The old figure still exists in Advanced Mode as engaged views, which tracks people who kept watching. For a comedy creator the engaged number is the honest one. A Short with plenty of views and few engaged views is a first frame that failed. Compare two cuts of the same joke by engaged views, not by the headline count, or you'll keep making the version people swipe past.",
     },
     {
-      heading: "Stop chasing posting times and reuploads",
-      body: "Two habits waste a lot of comedy creators' evenings. The first is hunting for the perfect upload hour; YouTube's Shorts lead said time of day isn't a factor to optimize for, except for news. The second is deleting a video that stalled and uploading it again. YouTube advises against that, since it can look like spam, and YouTube says a Short that stalls may simply have been tested on a small first audience before the system decided how far to send it. Rewrite the title or thumbnail instead. Then make the next one.",
-    },
-    {
-      heading: "Read the numbers that tell you where the joke died",
-      body: "The retention graph in YouTube Studio is a laugh track with the sound off. A sharp drop means a stretch where the joke stopped working: a slow setup, a tangent, a tag that wasn't funny. A bump means people rewound, which usually marks your best line. Fix the drop in the next video, and copy whatever caused the bump. YouTube's growth lead also suggests judging a channel over 90 days or more, since views rise and fall with the season. One quiet week is weather, not a verdict.",
-    },
-    {
-      heading: "Make more videos worth recommending",
-      body: "Every tactic here multiplies the material. None of them replaces it. The channels that grow are the ones that post funny, specific videos often enough for the system to learn who likes them. If the bottleneck is turning what happened this week into a bit, Shutap, the AI joke generator for creators, can give you a first draft to push against: write the story, pick a voice and a length, and you get a hook, setup, tags and a button. Cut what isn't you, rewrite the rest, and film it off the teleprompter.",
+      heading: "Build a series people can binge",
+      body: "One great video gets a spike. A series gets a habit. Pick a format you can repeat with new material every time: the worst customer of the week, texts from your mom ranked, one bad date retold in three acts. Name it the same way each time and put the episodes in a playlist so the next one plays on its own. Example series titles: \"Roommate Notes, Episode 4: The Fridge Has a Constitution Now.\" If a blank page slows down episode five, Shutap, the AI joke generator for creators, turns what happened into a first draft of the bit to push against. You cut, rewrite and keep the jokes as your own.",
     },
   ],
   faq: [
     {
-      q: "How does YouTube decide which videos to recommend?",
-      a: "YouTube matches videos to each viewer using clicks, watch time, likes, dislikes, shares and survey answers about whether the time felt well spent. Its 2021 explainer says only videos people rate four or five stars count as valued watch time.",
+      q: "Why are my YouTube videos not getting views?",
+      a: "Usually the title and thumbnail don't promise anything specific, or people leave early. Check the key moments report in YouTube Analytics: a weak intro figure means the first 30 seconds aren't holding viewers, and that limits how far the video gets recommended.",
     },
     {
-      q: "Does the time I post on YouTube matter?",
-      a: "Not much. YouTube's Shorts product lead said in 2023 that time of day isn't a factor to optimize for, with news as the exception because freshness matters there. A better title or opening will do more than a better upload hour.",
+      q: "Do YouTube Shorts help long videos get more views?",
+      a: "They can, if you connect them. YouTube's creator blog calls the Related Video link the most effective tool for sending Shorts viewers to longer videos. Add it in YouTube Studio under the Short's details, and make sure the long video delivers what the Short teased right away.",
     },
     {
-      q: "How are YouTube Shorts views counted?",
-      a: "Since March 31, 2025, a Shorts view counts every time the clip starts or replays, with no minimum watch time. The watch-based number is still in YouTube Studio as engaged views, which is the better measure of whether a Short held people.",
+      q: "Is click-through rate the most important YouTube metric?",
+      a: "Not on its own. YouTube's title and thumbnail testing picks winners by watch time share rather than click-through rate, and its recommendation system also uses viewer surveys about satisfaction. A click that leads to an early exit doesn't help much.",
     },
     {
-      q: "Should I delete and reupload a video that isn't getting views?",
-      a: "No. YouTube advises against deleting and reuploading to revive a video, because it can be treated as spam. Change the title or thumbnail instead, or run a test in YouTube Studio with up to three versions on a long video.",
+      q: "How long can a YouTube Short be?",
+      a: "Up to three minutes. YouTube raised the limit from 60 seconds starting October 15, 2024. Length only helps a comedy Short if the laughs keep coming, so test a tight cut against a longer one and compare engaged views.",
     },
     {
-      q: "Do Shorts hurt views on long YouTube videos?",
-      a: "YouTube says it doesn't see Shorts as cannibalizing long-form videos. Comedy channels can use a Short as a trailer: post the best tag from a longer video, stop before the payoff, and point viewers to the full version.",
+      q: "How does YouTube count Shorts views now?",
+      a: "Since March 31, 2025, a Shorts view counts each time the video starts or replays, with no minimum watch time. The older measure, renamed engaged views, is still in YouTube Analytics Advanced Mode and shows how many people kept watching.",
     },
   ],
   sources: [
     {
-      label: "Search Engine Journal (Jan 27, 2025), How YouTube's recommendation system works in 2025, reporting Todd Beaupré, YouTube Senior Director of Growth & Discovery",
-      url: "https://www.searchenginejournal.com/how-youtubes-recommendation-system-works-in-2025/538379/",
-    },
-    {
-      label: "YouTube Official Blog, Cristos Goodrow (Sep 15, 2021), On YouTube's recommendation system",
-      url: "https://blog.youtube/inside-youtube/on-youtubes-recommendation-system/",
+      label: "YouTube Help, How YouTube recommendations work",
+      url: "https://support.google.com/youtube/answer/16089387?hl=en",
     },
     {
       label: "YouTube Help, A/B test titles & thumbnails",
       url: "https://support.google.com/youtube/answer/16391400?hl=en",
     },
     {
-      label: "9to5Google (Mar 26, 2025), YouTube Shorts is changing how views are counted for creators",
-      url: "https://9to5google.com/2025/03/26/youtube-shorts-views-metric/",
+      label: "YouTube Help, Measure key moments for audience retention",
+      url: "https://support.google.com/youtube/answer/9314415?hl=en",
     },
     {
-      label: "TechCrunch (Aug 25, 2023), YouTube demystifies the Shorts algorithm, views and answers other creator questions",
-      url: "https://techcrunch.com/2023/08/25/youtube-demystifies-the-shorts-algorithm-views-and-answers-other-creator-questions/",
+      label: "YouTube Official Blog (Oct 3, 2024), Tall updates coming to Shorts",
+      url: "https://blog.youtube/news-and-events/tall-updates-coming-to-shorts/",
+    },
+    {
+      label: "YouTube Official Blog (Jul 14, 2026), Related videos traffic guide",
+      url: "https://blog.youtube/creator-and-artist-stories/youtube-related-videos-traffic-guide/",
+    },
+    {
+      label: "PPC Land (Mar 28, 2025), YouTube changes how Shorts views are counted from March 31",
+      url: "https://ppc.land/youtube-changes-how-shorts-views-are-counted-from-march-31/",
     },
   ],
-  related: ["how-long-should-a-tiktok-bit-be", "how-to-turn-a-story-into-a-bit", "funny-captions"],
+  related: ["how-to-get-more-views-on-tiktok", "how-long-should-a-tiktok-bit-be", "how-to-turn-a-story-into-a-bit"],
   cta: { label: "Write your story, get the bit", href: "/" },
-  published: "2026-10-24",
+  published: "2026-10-28",
 };
 
 export default guide;
