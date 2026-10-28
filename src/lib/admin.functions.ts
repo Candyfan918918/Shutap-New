@@ -135,7 +135,7 @@ export const adminListUsers = createServerFn({ method: 'POST' })
     // Accounts people deleted stay on the list (no email or name: the privacy
     // page promises those are removed). Hidden while searching by email/name.
     const q = data.q?.trim().toLowerCase() ?? ''
-    if (q && !'deleted account'.includes(q)) return live
+    if (q && !'deleted by themselves'.includes(q)) return live
     const { data: gone } = await supabaseAdmin
       .from('deleted_accounts' as never)
       .select('user_id, provider, signup_at, deleted_at, last_country, last_city, visit_count, login_count')

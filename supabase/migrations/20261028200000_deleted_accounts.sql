@@ -28,3 +28,8 @@ end $$;
 drop trigger if exists profiles_record_deleted on public.profiles;
 create trigger profiles_record_deleted before delete on public.profiles
   for each row execute function public.record_deleted_account();
+
+-- Every deleted account is labelled as deleted by the person themselves and
+-- is never contacted again (Candy, Oct 28 2026).
+alter table public.deleted_accounts add column if not exists deleted_by text not null default 'self';
+alter table public.deleted_accounts add column if not exists do_not_contact boolean not null default true;

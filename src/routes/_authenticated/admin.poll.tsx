@@ -57,7 +57,7 @@ function AdminPollPage() {
 
   const rows = useMemo(() => {
     if (!data) return []
-    return data.voters.filter((v) => (filter === 'all' || v.option === filter) && (!onlyNotEmailed || !v.emailedAt))
+    return data.voters.filter((v) => (filter === 'all' || v.option === filter) && (!onlyNotEmailed || (!v.emailedAt && !v.doNotContact)))
   }, [data, filter, onlyNotEmailed])
 
   async function toggleEmailed(v: AdminPollVoter) {
@@ -180,7 +180,9 @@ function AdminPollPage() {
                     <td style={{ ...td, color: '#6b4a5c', whiteSpace: 'nowrap' }}>{when(v.votedAt)}</td>
                     <td style={td}>
                       <label style={{ display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
-                        <input type="checkbox" checked={!!v.emailedAt} onChange={() => void toggleEmailed(v)} aria-label={`emailed ${v.name ?? v.email ?? 'this voter'}`} />
+                        {v.doNotContact
+                          ? <span style={{ color: '#6b4a5c', fontSize: 12 }}>never contact</span>
+                          : <input type="checkbox" checked={!!v.emailedAt} onChange={() => void toggleEmailed(v)} aria-label={`emailed ${v.name ?? v.email ?? 'this voter'}`} />}
                         <span style={{ color: '#6b4a5c', fontSize: 12 }}>{v.emailedAt ? pollDate(v.emailedAt) : ''}</span>
                       </label>
                     </td>
