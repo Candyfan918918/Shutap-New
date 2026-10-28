@@ -633,6 +633,45 @@ export type Database = {
         }
         Relationships: []
       }
+      deleted_accounts: {
+        Row: {
+          deleted_at: string
+          deleted_by: string
+          do_not_contact: boolean
+          last_city: string | null
+          last_country: string | null
+          login_count: number | null
+          provider: string | null
+          signup_at: string | null
+          user_id: string
+          visit_count: number | null
+        }
+        Insert: {
+          deleted_at?: string
+          deleted_by?: string
+          do_not_contact?: boolean
+          last_city?: string | null
+          last_country?: string | null
+          login_count?: number | null
+          provider?: string | null
+          signup_at?: string | null
+          user_id: string
+          visit_count?: number | null
+        }
+        Update: {
+          deleted_at?: string
+          deleted_by?: string
+          do_not_contact?: boolean
+          last_city?: string | null
+          last_country?: string | null
+          login_count?: number | null
+          provider?: string | null
+          signup_at?: string | null
+          user_id?: string
+          visit_count?: number | null
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           id: string
