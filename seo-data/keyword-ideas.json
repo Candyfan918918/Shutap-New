@@ -1,7 +1,7 @@
 {
  "source": "Bing Webmaster GetRelatedKeywords (US, last ~30 days)",
- "pulledAt": "2026-10-27T20:08:00.764Z",
- "seeds": 25,
+ "pulledAt": "2026-10-28T20:20:46.995Z",
+ "seeds": 27,
  "ideas": [
   {
    "query": "tiktok",
@@ -14,6 +14,12 @@
    "impressions": 791566,
    "broadImpressions": 820369,
    "seed": "stand up comedy tips"
+  },
+  {
+   "query": "tiktok app",
+   "impressions": 294046,
+   "broadImpressions": 307286,
+   "seed": "tiktok watch time"
   },
   {
    "query": "youtube videos",
@@ -46,6 +52,12 @@
    "seed": "how to tell a story"
   },
   {
+   "query": "tt",
+   "impressions": 48076,
+   "broadImpressions": 56860,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "open ai",
    "impressions": 47714,
    "broadImpressions": 113435,
@@ -70,10 +82,22 @@
    "seed": "how to tell a story"
   },
   {
+   "query": "tictok",
+   "impressions": 25364,
+   "broadImpressions": 25518,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "tik",
    "impressions": 24843,
    "broadImpressions": 231663,
    "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "tiktok.com",
+   "impressions": 18012,
+   "broadImpressions": 22821,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how",
@@ -148,6 +172,24 @@
    "seed": "funny captions"
   },
   {
+   "query": "titok",
+   "impressions": 8985,
+   "broadImpressions": 9230,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "watch",
+   "impressions": 8640,
+   "broadImpressions": 1390366,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "titkok",
+   "impressions": 8056,
+   "broadImpressions": 8121,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "tick tock",
    "impressions": 7887,
    "broadImpressions": 9821,
@@ -178,6 +220,24 @@
    "seed": "funny tiktok ideas"
   },
   {
+   "query": "tiktok download",
+   "impressions": 5847,
+   "broadImpressions": 8634,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "tiktok app download",
+   "impressions": 5719,
+   "broadImpressions": 8322,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "www.tiktok.com login",
+   "impressions": 5520,
+   "broadImpressions": 5601,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "comedy events near me tickets",
    "impressions": 5464,
    "broadImpressions": 10613,
@@ -202,10 +262,22 @@
    "seed": "deadpan humor"
   },
   {
+   "query": "tiktik",
+   "impressions": 4800,
+   "broadImpressions": 5028,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "how to write a linear equation from a table",
    "impressions": 4774,
    "broadImpressions": 4774,
    "seed": "how to write a joke"
+  },
+  {
+   "query": "tiktok apps",
+   "impressions": 4448,
+   "broadImpressions": 4502,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to write a cover letter",
@@ -224,6 +296,12 @@
    "impressions": 4338,
    "broadImpressions": 11231,
    "seed": "roast jokes"
+  },
+  {
+   "query": "tic toc",
+   "impressions": 4063,
+   "broadImpressions": 5441,
+   "seed": "tiktok watch time"
   },
   {
    "query": "try not to laugh",
@@ -304,6 +382,12 @@
    "seed": "stand up comedy tips"
   },
   {
+   "query": "tiktok official website",
+   "impressions": 2964,
+   "broadImpressions": 3130,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "national tell a joke day",
    "impressions": 2951,
    "broadImpressions": 2976,
@@ -316,10 +400,22 @@
    "seed": "how to write a joke"
   },
   {
+   "query": "tiktok'",
+   "impressions": 2879,
+   "broadImpressions": 2879,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "funny gifs",
    "impressions": 2817,
    "broadImpressions": 3354,
    "seed": "funny captions"
+  },
+  {
+   "query": "tikto",
+   "impressions": 2789,
+   "broadImpressions": 2989,
+   "seed": "tiktok watch time"
   },
   {
    "query": "comedy events near me this weekend",
@@ -332,6 +428,12 @@
    "impressions": 2657,
    "broadImpressions": 2657,
    "seed": "how to write a joke"
+  },
+  {
+   "query": "tk",
+   "impressions": 2649,
+   "broadImpressions": 10919,
+   "seed": "tiktok watch time"
   },
   {
    "query": "funny dad jokes",
@@ -376,6 +478,12 @@
    "seed": "how to write a joke"
   },
   {
+   "query": "tik tok login",
+   "impressions": 2362,
+   "broadImpressions": 2376,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "dry needling",
    "impressions": 2361,
    "broadImpressions": 4965,
@@ -394,6 +502,12 @@
    "seed": "roast jokes"
   },
   {
+   "query": "tick tok",
+   "impressions": 2290,
+   "broadImpressions": 2291,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "comedy movies",
    "impressions": 2180,
    "broadImpressions": 7343,
@@ -404,6 +518,12 @@
    "impressions": 2151,
    "broadImpressions": 2373,
    "seed": "dry humor"
+  },
+  {
+   "query": "tiktok viewer",
+   "impressions": 2146,
+   "broadImpressions": 2556,
+   "seed": "tiktok watch time"
   },
   {
    "query": "highmark blue cross blue shield",
@@ -446,6 +566,12 @@
    "impressions": 1931,
    "broadImpressions": 4745,
    "seed": "stand up comedy tips"
+  },
+  {
+   "query": "tiktok website",
+   "impressions": 1920,
+   "broadImpressions": 2263,
+   "seed": "tiktok watch time"
   },
   {
    "query": "comedy central",
@@ -544,6 +670,12 @@
    "seed": "storytime ideas"
   },
   {
+   "query": "tiktok for free",
+   "impressions": 1690,
+   "broadImpressions": 1809,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "funny animal videos",
    "impressions": 1607,
    "broadImpressions": 1980,
@@ -580,10 +712,22 @@
    "seed": "how to start stand up comedy"
   },
   {
+   "query": "tiktok app download free",
+   "impressions": 1537,
+   "broadImpressions": 1614,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "how to read an analog clock",
    "impressions": 1521,
    "broadImpressions": 1521,
    "seed": "how to tell a story"
+  },
+  {
+   "query": "tiktok search",
+   "impressions": 1484,
+   "broadImpressions": 1786,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to write a good email subject line",
@@ -670,6 +814,12 @@
    "seed": "stand up comedy tips"
   },
   {
+   "query": "tictock",
+   "impressions": 1361,
+   "broadImpressions": 1436,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "roast beef",
    "impressions": 1359,
    "broadImpressions": 10967,
@@ -706,6 +856,12 @@
    "seed": "how to tell a story"
   },
   {
+   "query": "tiktok com",
+   "impressions": 1343,
+   "broadImpressions": 1628,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "happy birthday funny",
    "impressions": 1324,
    "broadImpressions": 2588,
@@ -736,6 +892,12 @@
    "seed": "funny captions"
   },
   {
+   "query": "tik tok.com",
+   "impressions": 1274,
+   "broadImpressions": 1274,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "funny faces",
    "impressions": 1261,
    "broadImpressions": 1532,
@@ -752,6 +914,12 @@
    "impressions": 1242,
    "broadImpressions": 1707,
    "seed": "roast jokes"
+  },
+  {
+   "query": "til",
+   "impressions": 1235,
+   "broadImpressions": 15009,
+   "seed": "tiktok watch time"
   },
   {
    "query": "memes funny",
@@ -800,6 +968,12 @@
    "impressions": 1208,
    "broadImpressions": 1311,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "tikt",
+   "impressions": 1204,
+   "broadImpressions": 1285,
+   "seed": "tiktok watch time"
   },
   {
    "query": "funny shooter 2",
@@ -862,6 +1036,12 @@
    "seed": "how to write a joke"
   },
   {
+   "query": "toktok",
+   "impressions": 1125,
+   "broadImpressions": 1695,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "how to write a resignation letter",
    "impressions": 1119,
    "broadImpressions": 1119,
@@ -904,6 +1084,12 @@
    "seed": "funny captions"
   },
   {
+   "query": "www.tiktok.com",
+   "impressions": 1101,
+   "broadImpressions": 7107,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "funny valentine",
    "impressions": 1086,
    "broadImpressions": 1532,
@@ -920,6 +1106,12 @@
    "impressions": 1074,
    "broadImpressions": 1074,
    "seed": "roast jokes"
+  },
+  {
+   "query": "til tok",
+   "impressions": 1064,
+   "broadImpressions": 1098,
+   "seed": "tiktok watch time"
   },
   {
    "query": "funny dogs",
@@ -956,6 +1148,12 @@
    "impressions": 1002,
    "broadImpressions": 5585,
    "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "tiktoki",
+   "impressions": 998,
+   "broadImpressions": 998,
+   "seed": "tiktok watch time"
   },
   {
    "query": "funny pfp",
@@ -1054,6 +1252,12 @@
    "seed": "funny captions"
   },
   {
+   "query": "tiktok lite",
+   "impressions": 946,
+   "broadImpressions": 1896,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "funny soundboard",
    "impressions": 939,
    "broadImpressions": 1744,
@@ -1072,16 +1276,34 @@
    "seed": "funny captions"
   },
   {
+   "query": "tiktok download pc",
+   "impressions": 920,
+   "broadImpressions": 935,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "happy friday funny",
    "impressions": 917,
    "broadImpressions": 1740,
    "seed": "funny captions"
   },
   {
+   "query": "tok",
+   "impressions": 915,
+   "broadImpressions": 214119,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "storybook online",
    "impressions": 901,
    "broadImpressions": 917,
    "seed": "storytime ideas"
+  },
+  {
+   "query": "tiktok online",
+   "impressions": 890,
+   "broadImpressions": 2559,
+   "seed": "tiktok watch time"
   },
   {
    "query": "funny halloween jokes",
@@ -1198,6 +1420,12 @@
    "seed": "how to start stand up comedy"
   },
   {
+   "query": "tik ninja",
+   "impressions": 789,
+   "broadImpressions": 789,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "best comedy movies",
    "impressions": 787,
    "broadImpressions": 1275,
@@ -1262,6 +1490,12 @@
    "impressions": 768,
    "broadImpressions": 1491,
    "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "tikvib",
+   "impressions": 768,
+   "broadImpressions": 768,
+   "seed": "tiktok watch time"
   },
   {
    "query": "comedy cellar nyc",
@@ -1376,6 +1610,18 @@
    "impressions": 713,
    "broadImpressions": 713,
    "seed": "funny captions"
+  },
+  {
+   "query": "tikrok",
+   "impressions": 713,
+   "broadImpressions": 713,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "tiktok for you",
+   "impressions": 710,
+   "broadImpressions": 823,
+   "seed": "tiktok watch time"
   },
   {
    "query": "what causes dry mouth",
@@ -1600,6 +1846,12 @@
    "seed": "dry humor"
   },
   {
+   "query": "tiktok app for pc",
+   "impressions": 614,
+   "broadImpressions": 711,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "funny monkey",
    "impressions": 609,
    "broadImpressions": 941,
@@ -1610,6 +1862,12 @@
    "impressions": 604,
    "broadImpressions": 604,
    "seed": "how to write a joke"
+  },
+  {
+   "query": "tik'",
+   "impressions": 602,
+   "broadImpressions": 602,
+   "seed": "tiktok watch time"
   },
   {
    "query": "upcoming comedy shows near me",
@@ -1694,6 +1952,12 @@
    "impressions": 580,
    "broadImpressions": 603,
    "seed": "roast jokes"
+  },
+  {
+   "query": "tiktokt",
+   "impressions": 580,
+   "broadImpressions": 580,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to write a good email",
@@ -1864,6 +2128,12 @@
    "seed": "joke structure"
   },
   {
+   "query": "tiktok app videos",
+   "impressions": 523,
+   "broadImpressions": 588,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "funny drawings",
    "impressions": 521,
    "broadImpressions": 540,
@@ -1936,15 +2206,15 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "crock pot pork roast",
-   "impressions": 507,
-   "broadImpressions": 1687,
-   "seed": "roast jokes"
-  },
-  {
    "query": "pot roast crock pot",
    "impressions": 507,
    "broadImpressions": 892,
+   "seed": "roast jokes"
+  },
+  {
+   "query": "crock pot pork roast",
+   "impressions": 507,
+   "broadImpressions": 1687,
    "seed": "roast jokes"
   },
   {
@@ -1984,6 +2254,12 @@
    "seed": "funny video ideas"
   },
   {
+   "query": "tiktok online videos",
+   "impressions": 493,
+   "broadImpressions": 519,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "funny birthday wishes",
    "impressions": 492,
    "broadImpressions": 643,
@@ -2006,6 +2282,12 @@
    "impressions": 485,
    "broadImpressions": 966,
    "seed": "dry humor"
+  },
+  {
+   "query": "tick toc",
+   "impressions": 484,
+   "broadImpressions": 484,
+   "seed": "tiktok watch time"
   },
   {
    "query": "beef chuck roast",
@@ -2042,6 +2324,12 @@
    "impressions": 476,
    "broadImpressions": 638,
    "seed": "funny captions"
+  },
+  {
+   "query": "tiktok youtube",
+   "impressions": 474,
+   "broadImpressions": 526,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to write a quadratic function in standard form",
@@ -2134,15 +2422,15 @@
    "seed": "comedy writing"
   },
   {
-   "query": "funny buttons",
-   "impressions": 447,
-   "broadImpressions": 450,
-   "seed": "funny captions"
-  },
-  {
    "query": "cat videos funny",
    "impressions": 447,
    "broadImpressions": 447,
+   "seed": "funny captions"
+  },
+  {
+   "query": "funny buttons",
+   "impressions": 447,
+   "broadImpressions": 450,
    "seed": "funny captions"
   },
   {
@@ -2320,6 +2608,12 @@
    "seed": "roast jokes"
   },
   {
+   "query": "tiktok profile viewer",
+   "impressions": 404,
+   "broadImpressions": 405,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "roast chicken in oven",
    "impressions": 403,
    "broadImpressions": 403,
@@ -2366,6 +2660,12 @@
    "impressions": 397,
    "broadImpressions": 592,
    "seed": "funny work stories"
+  },
+  {
+   "query": "tiok",
+   "impressions": 397,
+   "broadImpressions": 556,
+   "seed": "tiktok watch time"
   },
   {
    "query": "coffee roast levels",
@@ -2434,9 +2734,9 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "dry eye symptoms",
+   "query": "dry erase boards",
    "impressions": 374,
-   "broadImpressions": 374,
+   "broadImpressions": 413,
    "seed": "dry humor"
   },
   {
@@ -2446,9 +2746,9 @@
    "seed": "dry humor"
   },
   {
-   "query": "dry erase boards",
+   "query": "dry eye symptoms",
    "impressions": 374,
-   "broadImpressions": 413,
+   "broadImpressions": 374,
    "seed": "dry humor"
   },
   {
@@ -2504,6 +2804,12 @@
    "impressions": 367,
    "broadImpressions": 779,
    "seed": "dry humor"
+  },
+  {
+   "query": "free tiktok",
+   "impressions": 367,
+   "broadImpressions": 1680,
+   "seed": "tiktok watch time"
   },
   {
    "query": "divine comedy",
@@ -2632,16 +2938,22 @@
    "seed": "how to start stand up comedy"
   },
   {
+   "query": "what is the rule of 72",
+   "impressions": 346,
+   "broadImpressions": 346,
+   "seed": "rule of three comedy"
+  },
+  {
    "query": "descartes rule of signs",
    "impressions": 346,
    "broadImpressions": 346,
    "seed": "rule of three comedy"
   },
   {
-   "query": "what is the rule of 72",
+   "query": "unblocked tiktok",
    "impressions": 346,
-   "broadImpressions": 346,
-   "seed": "rule of three comedy"
+   "broadImpressions": 364,
+   "seed": "tiktok watch time"
   },
   {
    "query": "bricktown comedy club",
@@ -2818,15 +3130,15 @@
    "seed": "dry humor"
   },
   {
-   "query": "dry wall",
-   "impressions": 313,
-   "broadImpressions": 371,
-   "seed": "dry humor"
-  },
-  {
    "query": "dry eye rescue",
    "impressions": 313,
    "broadImpressions": 313,
+   "seed": "dry humor"
+  },
+  {
+   "query": "dry wall",
+   "impressions": 313,
+   "broadImpressions": 371,
    "seed": "dry humor"
   },
   {
@@ -2860,10 +3172,28 @@
    "seed": "deadpan humor"
   },
   {
+   "query": "tit tok",
+   "impressions": 310,
+   "broadImpressions": 569,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "tiktok anonymous viewer",
+   "impressions": 310,
+   "broadImpressions": 310,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "definition of rule of law",
    "impressions": 309,
    "broadImpressions": 327,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "tiktok online watch",
+   "impressions": 306,
+   "broadImpressions": 331,
+   "seed": "tiktok watch time"
   },
   {
    "query": "funny things",
@@ -2950,10 +3280,22 @@
    "seed": "dry humor"
   },
   {
+   "query": "anonymous tiktok viewer",
+   "impressions": 291,
+   "broadImpressions": 291,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "what is dry ice",
    "impressions": 290,
    "broadImpressions": 412,
    "seed": "dry humor"
+  },
+  {
+   "query": "tiktok trends",
+   "impressions": 290,
+   "broadImpressions": 349,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to write a good resume",
@@ -2996,6 +3338,12 @@
    "impressions": 283,
    "broadImpressions": 1954,
    "seed": "stand up comedy tips"
+  },
+  {
+   "query": "tt viewer",
+   "impressions": 283,
+   "broadImpressions": 283,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to write a lab report",
@@ -3074,6 +3422,12 @@
    "impressions": 274,
    "broadImpressions": 435,
    "seed": "funny video ideas"
+  },
+  {
+   "query": "tikninja",
+   "impressions": 274,
+   "broadImpressions": 274,
+   "seed": "tiktok watch time"
   },
   {
    "query": "silly jokes",
@@ -3178,6 +3532,12 @@
    "seed": "comedy writing"
   },
   {
+   "query": "tik tok viewer",
+   "impressions": 262,
+   "broadImpressions": 273,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "acme comedy club",
    "impressions": 260,
    "broadImpressions": 377,
@@ -3226,6 +3586,12 @@
    "seed": "rule of three comedy"
   },
   {
+   "query": "tiktok free videos",
+   "impressions": 255,
+   "broadImpressions": 265,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "funny work jokes",
    "impressions": 254,
    "broadImpressions": 254,
@@ -3238,13 +3604,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to write a book review",
+   "query": "how to write a recommendation letter",
    "impressions": 251,
    "broadImpressions": 251,
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a recommendation letter",
+   "query": "how to write a book review",
    "impressions": 251,
    "broadImpressions": 251,
    "seed": "how to write a joke"
@@ -3262,15 +3628,15 @@
    "seed": "funny work stories"
   },
   {
-   "query": "how to write a case study report",
-   "impressions": 250,
-   "broadImpressions": 250,
-   "seed": "how to write a joke"
-  },
-  {
    "query": "how to write a paragraph",
    "impressions": 250,
    "broadImpressions": 264,
+   "seed": "how to write a joke"
+  },
+  {
+   "query": "how to write a case study report",
+   "impressions": 250,
+   "broadImpressions": 250,
    "seed": "how to write a joke"
   },
   {
@@ -3346,21 +3712,27 @@
    "seed": "stand up comedy tips"
   },
   {
+   "query": "tiktok free",
+   "impressions": 243,
+   "broadImpressions": 1041,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "dry dock",
    "impressions": 241,
    "broadImpressions": 498,
    "seed": "dry humor"
   },
   {
-   "query": "starting a business",
-   "impressions": 240,
-   "broadImpressions": 315,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start a nonprofit",
    "impressions": 240,
    "broadImpressions": 396,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "starting a business",
+   "impressions": 240,
+   "broadImpressions": 315,
    "seed": "how to start stand up comedy"
   },
   {
@@ -3392,6 +3764,12 @@
    "impressions": 238,
    "broadImpressions": 519,
    "seed": "deadpan humor"
+  },
+  {
+   "query": "ticktalk",
+   "impressions": 238,
+   "broadImpressions": 375,
+   "seed": "tiktok watch time"
   },
   {
    "query": "comedy on state",
@@ -3430,15 +3808,15 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "best dry shampoo",
-   "impressions": 229,
-   "broadImpressions": 341,
-   "seed": "dry humor"
-  },
-  {
    "query": "osrs dry calc",
    "impressions": 229,
    "broadImpressions": 229,
+   "seed": "dry humor"
+  },
+  {
+   "query": "best dry shampoo",
+   "impressions": 229,
+   "broadImpressions": 341,
    "seed": "dry humor"
   },
   {
@@ -3466,15 +3844,15 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "dry brushing",
-   "impressions": 225,
-   "broadImpressions": 394,
-   "seed": "dry humor"
-  },
-  {
    "query": "dry mouth mouthwash",
    "impressions": 225,
    "broadImpressions": 225,
+   "seed": "dry humor"
+  },
+  {
+   "query": "dry brushing",
+   "impressions": 225,
+   "broadImpressions": 394,
    "seed": "dry humor"
   },
   {
@@ -3710,6 +4088,12 @@
    "impressions": 200,
    "broadImpressions": 200,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "tiktok watch videos",
+   "impressions": 200,
+   "broadImpressions": 235,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to write a formal email",
@@ -3958,15 +4342,15 @@
    "seed": "dry humor"
   },
   {
-   "query": "comedy club near me",
-   "impressions": 176,
-   "broadImpressions": 313,
-   "seed": "stand up comedy tips"
-  },
-  {
    "query": "show tickets near me",
    "impressions": 176,
    "broadImpressions": 254,
+   "seed": "stand up comedy tips"
+  },
+  {
+   "query": "comedy club near me",
+   "impressions": 176,
+   "broadImpressions": 313,
    "seed": "stand up comedy tips"
   },
   {
@@ -4048,15 +4432,15 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "rule of 9",
-   "impressions": 173,
-   "broadImpressions": 281,
-   "seed": "rule of three comedy"
-  },
-  {
    "query": "rule of nines burns",
    "impressions": 173,
    "broadImpressions": 173,
+   "seed": "rule of three comedy"
+  },
+  {
+   "query": "rule of 9",
+   "impressions": 173,
+   "broadImpressions": 281,
    "seed": "rule of three comedy"
   },
   {
@@ -4088,6 +4472,12 @@
    "impressions": 170,
    "broadImpressions": 170,
    "seed": "joke structure"
+  },
+  {
+   "query": "tiktok watch now",
+   "impressions": 170,
+   "broadImpressions": 172,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to be a youtuber",
@@ -4132,6 +4522,12 @@
    "seed": "rule of three comedy"
   },
   {
+   "query": "tiktok ninja",
+   "impressions": 165,
+   "broadImpressions": 165,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "how to tell if a molecule is polar",
    "impressions": 164,
    "broadImpressions": 164,
@@ -4168,13 +4564,13 @@
    "seed": "roast jokes"
   },
   {
-   "query": "how to write a self-evaluation",
+   "query": "how to write a sonnet",
    "impressions": 160,
    "broadImpressions": 160,
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a sonnet",
+   "query": "how to write a self-evaluation",
    "impressions": 160,
    "broadImpressions": 160,
    "seed": "how to write a joke"
@@ -4202,6 +4598,12 @@
    "impressions": 158,
    "broadImpressions": 158,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "tiktok you",
+   "impressions": 158,
+   "broadImpressions": 263,
+   "seed": "tiktok watch time"
   },
   {
    "query": "funny youtube videos",
@@ -4282,6 +4684,12 @@
    "seed": "how to start stand up comedy"
   },
   {
+   "query": "tiktok.com free",
+   "impressions": 152,
+   "broadImpressions": 152,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "how to be single 2016",
    "impressions": 151,
    "broadImpressions": 151,
@@ -4330,13 +4738,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to start page numbers on page 2",
+   "query": "how to start running from zero",
    "impressions": 149,
    "broadImpressions": 149,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start running from zero",
+   "query": "how to start page numbers on page 2",
    "impressions": 149,
    "broadImpressions": 149,
    "seed": "how to start stand up comedy"
@@ -4366,22 +4774,16 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "keepers babe joke of the day",
-   "impressions": 148,
-   "broadImpressions": 148,
-   "seed": "joke structure"
-  },
-  {
    "query": "what does lgbtq stand for joke",
    "impressions": 148,
    "broadImpressions": 148,
    "seed": "joke structure"
   },
   {
-   "query": "how to be a better person",
-   "impressions": 147,
-   "broadImpressions": 147,
-   "seed": "how to be funny"
+   "query": "keepers babe joke of the day",
+   "impressions": 148,
+   "broadImpressions": 148,
+   "seed": "joke structure"
   },
   {
    "query": "how to be cool",
@@ -4390,15 +4792,21 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to write a signature",
+   "query": "how to be a better person",
    "impressions": 147,
-   "broadImpressions": 202,
-   "seed": "how to write a joke"
+   "broadImpressions": 147,
+   "seed": "how to be funny"
   },
   {
    "query": "how to write a professional resume",
    "impressions": 147,
    "broadImpressions": 147,
+   "seed": "how to write a joke"
+  },
+  {
+   "query": "how to write a signature",
+   "impressions": 147,
+   "broadImpressions": 202,
    "seed": "how to write a joke"
   },
   {
@@ -4534,15 +4942,15 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "shane gillis joke",
-   "impressions": 136,
-   "broadImpressions": 151,
-   "seed": "joke structure"
-  },
-  {
    "query": "joke definition",
    "impressions": 136,
    "broadImpressions": 136,
+   "seed": "joke structure"
+  },
+  {
+   "query": "shane gillis joke",
+   "impressions": 136,
+   "broadImpressions": 151,
    "seed": "joke structure"
   },
   {
@@ -4556,6 +4964,12 @@
    "impressions": 136,
    "broadImpressions": 1002,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "tiktok desktop",
+   "impressions": 136,
+   "broadImpressions": 508,
+   "seed": "tiktok watch time"
   },
   {
    "query": "comedy tickets",
@@ -4594,6 +5008,12 @@
    "seed": "how to start stand up comedy"
   },
   {
+   "query": "standup comedy",
+   "impressions": 134,
+   "broadImpressions": 377,
+   "seed": "stand up comedy tips"
+  },
+  {
    "query": "comedy shows this weekend",
    "impressions": 134,
    "broadImpressions": 245,
@@ -4603,12 +5023,6 @@
    "query": "live events near me comedy",
    "impressions": 134,
    "broadImpressions": 134,
-   "seed": "stand up comedy tips"
-  },
-  {
-   "query": "standup comedy",
-   "impressions": 134,
-   "broadImpressions": 377,
    "seed": "stand up comedy tips"
   },
   {
@@ -4756,13 +5170,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "super funny jokes",
+   "query": "daily dad joke",
    "impressions": 127,
    "broadImpressions": 127,
    "seed": "joke structure"
   },
   {
-   "query": "daily dad joke",
+   "query": "super funny jokes",
    "impressions": 127,
    "broadImpressions": 127,
    "seed": "joke structure"
@@ -4798,13 +5212,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "how to be a good friend",
+   "query": "how to be notified when someone opens a snapchat message",
    "impressions": 125,
    "broadImpressions": 125,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be notified when someone opens a snapchat message",
+   "query": "how to be a good friend",
    "impressions": 125,
    "broadImpressions": 125,
    "seed": "how to be funny"
@@ -4984,15 +5398,15 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "comedy video",
-   "impressions": 117,
-   "broadImpressions": 208,
-   "seed": "comedy writing"
-  },
-  {
    "query": "stardome comedy club",
    "impressions": 117,
    "broadImpressions": 141,
+   "seed": "comedy writing"
+  },
+  {
+   "query": "comedy video",
+   "impressions": 117,
+   "broadImpressions": 208,
    "seed": "comedy writing"
   },
   {
@@ -5044,13 +5458,13 @@
    "seed": "how to write a joke"
   },
   {
-   "query": "funny work memes for coworkers",
+   "query": "thursday funny work meme",
    "impressions": 115,
    "broadImpressions": 115,
    "seed": "funny work stories"
   },
   {
-   "query": "thursday funny work meme",
+   "query": "funny work memes for coworkers",
    "impressions": 115,
    "broadImpressions": 115,
    "seed": "funny work stories"
@@ -5134,13 +5548,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "multiplication rule of probability",
+   "query": "irs rule of 55",
    "impressions": 111,
    "broadImpressions": 111,
    "seed": "rule of three comedy"
   },
   {
-   "query": "irs rule of 55",
+   "query": "multiplication rule of probability",
    "impressions": 111,
    "broadImpressions": 111,
    "seed": "rule of three comedy"
@@ -5162,6 +5576,12 @@
    "impressions": 110,
    "broadImpressions": 110,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "tick talk",
+   "impressions": 110,
+   "broadImpressions": 118,
+   "seed": "tiktok watch time"
   },
   {
    "query": "kidtimestorytime",
@@ -5210,6 +5630,12 @@
    "impressions": 107,
    "broadImpressions": 107,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "tic tox",
+   "impressions": 107,
+   "broadImpressions": 107,
+   "seed": "tiktok watch time"
   },
   {
    "query": "comedy movie",
@@ -5308,13 +5734,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to tell if someone is lying",
+   "query": "how to tell if you have a sinus infection",
    "impressions": 101,
    "broadImpressions": 101,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if you have a sinus infection",
+   "query": "how to tell if someone is lying",
    "impressions": 101,
    "broadImpressions": 101,
    "seed": "how to tell a story"
@@ -5344,13 +5770,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "federal rule of civil procedure 56",
+   "query": "rule of thirds photography composition",
    "impressions": 99,
    "broadImpressions": 99,
    "seed": "rule of three comedy"
   },
   {
-   "query": "rule of thirds photography composition",
+   "query": "federal rule of civil procedure 56",
    "impressions": 99,
    "broadImpressions": 99,
    "seed": "rule of three comedy"
@@ -5362,15 +5788,15 @@
    "seed": "joke structure"
   },
   {
-   "query": "joke of day",
-   "impressions": 97,
-   "broadImpressions": 97,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "humor meaning",
    "impressions": 97,
    "broadImpressions": 220,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "joke of day",
+   "impressions": 97,
+   "broadImpressions": 97,
    "seed": "deadpan humor"
   },
   {
@@ -5530,6 +5956,12 @@
    "seed": "joke structure"
   },
   {
+   "query": "tiktok for pc",
+   "impressions": 90,
+   "broadImpressions": 241,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "read alouds for kids",
    "impressions": 89,
    "broadImpressions": 351,
@@ -5608,15 +6040,15 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "i started a joke",
-   "impressions": 87,
-   "broadImpressions": 283,
-   "seed": "joke structure"
-  },
-  {
    "query": "halloween joke for kids",
    "impressions": 87,
    "broadImpressions": 87,
+   "seed": "joke structure"
+  },
+  {
+   "query": "i started a joke",
+   "impressions": 87,
+   "broadImpressions": 283,
    "seed": "joke structure"
   },
   {
@@ -5752,12 +6184,6 @@
    "seed": "funny tiktok ideas"
   },
   {
-   "query": "how to tell if a boy likes you",
-   "impressions": 79,
-   "broadImpressions": 79,
-   "seed": "how to tell a story"
-  },
-  {
    "query": "how to tell what motherboard i have",
    "impressions": 79,
    "broadImpressions": 79,
@@ -5770,19 +6196,25 @@
    "seed": "how to tell a story"
   },
   {
+   "query": "how to tell if a boy likes you",
+   "impressions": 79,
+   "broadImpressions": 79,
+   "seed": "how to tell a story"
+  },
+  {
    "query": "what does humorous mean",
    "impressions": 79,
    "broadImpressions": 79,
    "seed": "deadpan humor"
   },
   {
-   "query": "how to start sourdough starter",
+   "query": "how to start a sourdough starter",
    "impressions": 79,
    "broadImpressions": 79,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start a sourdough starter",
+   "query": "how to start sourdough starter",
    "impressions": 79,
    "broadImpressions": 79,
    "seed": "how to start stand up comedy"
@@ -5932,15 +6364,15 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "funny videos shorts",
-   "impressions": 73,
-   "broadImpressions": 102,
-   "seed": "funny tiktok ideas"
-  },
-  {
    "query": "funny tiktok stickers",
    "impressions": 73,
    "broadImpressions": 73,
+   "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "funny videos shorts",
+   "impressions": 73,
+   "broadImpressions": 102,
    "seed": "funny tiktok ideas"
   },
   {
@@ -5950,10 +6382,10 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to tell if you have adhd",
-   "impressions": 72,
-   "broadImpressions": 72,
-   "seed": "how to tell a story"
+   "query": "tiktok watch for free",
+   "impressions": 73,
+   "broadImpressions": 73,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to tell how much ram you have",
@@ -5963,6 +6395,12 @@
   },
   {
    "query": "how to tell someone you like them",
+   "impressions": 72,
+   "broadImpressions": 72,
+   "seed": "how to tell a story"
+  },
+  {
+   "query": "how to tell if you have adhd",
    "impressions": 72,
    "broadImpressions": 72,
    "seed": "how to tell a story"
@@ -6010,16 +6448,22 @@
    "seed": "funny video ideas"
   },
   {
+   "query": "rule of st benedict",
+   "impressions": 70,
+   "broadImpressions": 81,
+   "seed": "rule of three comedy"
+  },
+  {
    "query": "federal rule of civil procedure 6",
    "impressions": 70,
    "broadImpressions": 70,
    "seed": "rule of three comedy"
   },
   {
-   "query": "rule of st benedict",
+   "query": "ticktalk 5",
    "impressions": 70,
-   "broadImpressions": 81,
-   "seed": "rule of three comedy"
+   "broadImpressions": 70,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to be a femboy",
@@ -6148,13 +6592,13 @@
    "seed": "funny tiktok ideas"
   },
   {
-   "query": "how to tell if iphone is charging when dead",
+   "query": "how to tell if eggs are fresh",
    "impressions": 62,
    "broadImpressions": 62,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if eggs are fresh",
+   "query": "how to tell if iphone is charging when dead",
    "impressions": 62,
    "broadImpressions": 62,
    "seed": "how to tell a story"
@@ -6226,15 +6670,15 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "what is a joke",
-   "impressions": 60,
-   "broadImpressions": 60,
-   "seed": "joke structure"
-  },
-  {
    "query": "good joke",
    "impressions": 60,
    "broadImpressions": 95,
+   "seed": "joke structure"
+  },
+  {
+   "query": "what is a joke",
+   "impressions": 60,
+   "broadImpressions": 60,
    "seed": "joke structure"
   },
   {
@@ -6274,15 +6718,15 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "number meaning",
-   "impressions": 59,
-   "broadImpressions": 7383,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "h anime with good humor",
    "impressions": 59,
    "broadImpressions": 59,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "number meaning",
+   "impressions": 59,
+   "broadImpressions": 7383,
    "seed": "deadpan humor"
   },
   {
@@ -6322,9 +6766,9 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to be good at life",
+   "query": "how to be successful",
    "impressions": 57,
-   "broadImpressions": 57,
+   "broadImpressions": 102,
    "seed": "how to be funny"
   },
   {
@@ -6334,9 +6778,9 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be successful",
+   "query": "how to be good at life",
    "impressions": 57,
-   "broadImpressions": 102,
+   "broadImpressions": 57,
    "seed": "how to be funny"
   },
   {
@@ -6344,6 +6788,12 @@
    "impressions": 57,
    "broadImpressions": 64,
    "seed": "deadpan humor"
+  },
+  {
+   "query": "play tiktok for free",
+   "impressions": 57,
+   "broadImpressions": 57,
+   "seed": "tiktok watch time"
   },
   {
    "query": "funny videos try not to laugh",
@@ -6364,13 +6814,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to tell if you have a blood clot",
+   "query": "how to send a text message",
    "impressions": 55,
    "broadImpressions": 55,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to send a text message",
+   "query": "how to tell if you have a blood clot",
    "impressions": 55,
    "broadImpressions": 55,
    "seed": "how to tell a story"
@@ -6386,6 +6836,12 @@
    "impressions": 55,
    "broadImpressions": 97,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "tiktok watch online free",
+   "impressions": 55,
+   "broadImpressions": 55,
+   "seed": "tiktok watch time"
   },
   {
    "query": "self deprecation meaning",
@@ -6556,13 +7012,13 @@
    "seed": "dry humor"
   },
   {
-   "query": "what is humor",
+   "query": "humor me meaning",
    "impressions": 48,
    "broadImpressions": 48,
    "seed": "deadpan humor"
   },
   {
-   "query": "humor me meaning",
+   "query": "what is humor",
    "impressions": 48,
    "broadImpressions": 48,
    "seed": "deadpan humor"
@@ -6578,6 +7034,12 @@
    "impressions": 48,
    "broadImpressions": 294,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "tiktok watch online",
+   "impressions": 48,
+   "broadImpressions": 105,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to be a pilot",
@@ -6610,27 +7072,27 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "ms joke mha",
-   "impressions": 45,
-   "broadImpressions": 45,
-   "seed": "joke structure"
-  },
-  {
    "query": "joke bear",
    "impressions": 45,
    "broadImpressions": 45,
    "seed": "joke structure"
   },
   {
-   "query": "starting a small business",
+   "query": "ms joke mha",
    "impressions": 45,
-   "broadImpressions": 74,
-   "seed": "how to start stand up comedy"
+   "broadImpressions": 45,
+   "seed": "joke structure"
   },
   {
    "query": "how to start a counter argument paragraph",
    "impressions": 45,
    "broadImpressions": 45,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "starting a small business",
+   "impressions": 45,
+   "broadImpressions": 74,
    "seed": "how to start stand up comedy"
   },
   {
@@ -6640,15 +7102,15 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "black humor",
-   "impressions": 44,
-   "broadImpressions": 44,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "sense of humor meaning",
    "impressions": 44,
    "broadImpressions": 55,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "black humor",
+   "impressions": 44,
+   "broadImpressions": 44,
    "seed": "deadpan humor"
   },
   {
@@ -6670,9 +7132,9 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to be productive",
+   "query": "how to be kind",
    "impressions": 42,
-   "broadImpressions": 84,
+   "broadImpressions": 42,
    "seed": "how to be funny"
   },
   {
@@ -6682,9 +7144,9 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be kind",
+   "query": "how to be productive",
    "impressions": 42,
-   "broadImpressions": 42,
+   "broadImpressions": 84,
    "seed": "how to be funny"
   },
   {
@@ -6736,13 +7198,13 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to be successful in life",
+   "query": "how to be happy in life",
    "impressions": 41,
    "broadImpressions": 41,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be happy in life",
+   "query": "how to be successful in life",
    "impressions": 41,
    "broadImpressions": 41,
    "seed": "how to be funny"
@@ -6784,9 +7246,9 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "starting your own business",
+   "query": "how to open a business",
    "impressions": 40,
-   "broadImpressions": 72,
+   "broadImpressions": 137,
    "seed": "how to start stand up comedy"
   },
   {
@@ -6796,9 +7258,9 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to open a business",
+   "query": "starting your own business",
    "impressions": 40,
-   "broadImpressions": 137,
+   "broadImpressions": 72,
    "seed": "how to start stand up comedy"
   },
   {
@@ -6806,6 +7268,12 @@
    "impressions": 40,
    "broadImpressions": 40,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "tiktok watch history",
+   "impressions": 40,
+   "broadImpressions": 45,
+   "seed": "tiktok watch time"
   },
   {
    "query": "tg storytime big top",
@@ -6856,13 +7324,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "best dark humor jokes",
+   "query": "halloween humor",
    "impressions": 38,
    "broadImpressions": 38,
    "seed": "deadpan humor"
   },
   {
-   "query": "halloween humor",
+   "query": "best dark humor jokes",
    "impressions": 38,
    "broadImpressions": 38,
    "seed": "deadpan humor"
@@ -6884,6 +7352,12 @@
    "impressions": 37,
    "broadImpressions": 37,
    "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "tik talk",
+   "impressions": 37,
+   "broadImpressions": 37,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to be a good citizen",
@@ -6970,10 +7444,10 @@
    "seed": "funny work stories"
   },
   {
-   "query": "how to be taller",
-   "impressions": 32,
-   "broadImpressions": 32,
-   "seed": "how to be funny"
+   "query": "tictalk",
+   "impressions": 33,
+   "broadImpressions": 33,
+   "seed": "tiktok watch time"
   },
   {
    "query": "how to be a billionaire",
@@ -6982,15 +7456,21 @@
    "seed": "how to be funny"
   },
   {
-   "query": "comedy shows 2026 near me",
+   "query": "how to be taller",
    "impressions": 32,
    "broadImpressions": 32,
-   "seed": "stand up comedy tips"
+   "seed": "how to be funny"
   },
   {
    "query": "next stop",
    "impressions": 32,
    "broadImpressions": 321,
+   "seed": "stand up comedy tips"
+  },
+  {
+   "query": "comedy shows 2026 near me",
+   "impressions": 32,
+   "broadImpressions": 32,
    "seed": "stand up comedy tips"
   },
   {
@@ -7096,6 +7576,12 @@
    "seed": "how to tell a story"
   },
   {
+   "query": "tik tok watch",
+   "impressions": 26,
+   "broadImpressions": 59,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "how to be assertive",
    "impressions": 25,
    "broadImpressions": 25,
@@ -7144,13 +7630,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "very funny memes",
+   "query": "humor vs humour",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "deadpan humor"
   },
   {
-   "query": "humor vs humour",
+   "query": "very funny memes",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "deadpan humor"
@@ -7162,19 +7648,19 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "funny work quotes for colleagues",
-   "impressions": 24,
-   "broadImpressions": 24,
-   "seed": "funny work stories"
-  },
-  {
    "query": "funny work halloween costumes",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "funny work stories"
   },
   {
-   "query": "how to be a mentalist",
+   "query": "funny work quotes for colleagues",
+   "impressions": 24,
+   "broadImpressions": 24,
+   "seed": "funny work stories"
+  },
+  {
+   "query": "how to be a substitute teacher",
    "impressions": 23,
    "broadImpressions": 23,
    "seed": "how to be funny"
@@ -7186,7 +7672,7 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a substitute teacher",
+   "query": "how to be a mentalist",
    "impressions": 23,
    "broadImpressions": 23,
    "seed": "how to be funny"
@@ -7258,13 +7744,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to tell military time",
+   "query": "how to tell if you have carpal tunnel",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if you have carpal tunnel",
+   "query": "how to tell military time",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "how to tell a story"
@@ -7426,15 +7912,15 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "tiktok videos 2025",
-   "impressions": 16,
-   "broadImpressions": 22,
-   "seed": "funny tiktok ideas"
-  },
-  {
    "query": "tiktok videos on youtube",
    "impressions": 16,
    "broadImpressions": 16,
+   "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "tiktok videos 2025",
+   "impressions": 16,
+   "broadImpressions": 22,
    "seed": "funny tiktok ideas"
   },
   {
@@ -7468,13 +7954,13 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to become smart",
+   "query": "how to be strong",
    "impressions": 15,
    "broadImpressions": 15,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be strong",
+   "query": "how to become smart",
    "impressions": 15,
    "broadImpressions": 15,
    "seed": "how to be funny"
@@ -7498,12 +7984,6 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a gentleman",
-   "impressions": 14,
-   "broadImpressions": 14,
-   "seed": "how to be funny"
-  },
-  {
    "query": "how to be safe online",
    "impressions": 14,
    "broadImpressions": 14,
@@ -7511,6 +7991,12 @@
   },
   {
    "query": "how to be a heartbreaker lyrics",
+   "impressions": 14,
+   "broadImpressions": 14,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be a gentleman",
    "impressions": 14,
    "broadImpressions": 14,
    "seed": "how to be funny"
@@ -7528,13 +8014,19 @@
    "seed": "open mic tips"
   },
   {
-   "query": "how to be a redhead",
+   "query": "tiktok watch videos for free",
+   "impressions": 14,
+   "broadImpressions": 14,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "how to be a good boyfriend",
    "impressions": 12,
    "broadImpressions": 12,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a good boyfriend",
+   "query": "how to be a redhead",
    "impressions": 12,
    "broadImpressions": 12,
    "seed": "how to be funny"
@@ -7612,6 +8104,12 @@
    "seed": "rule of three comedy"
   },
   {
+   "query": "tiktok watch live",
+   "impressions": 11,
+   "broadImpressions": 11,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "funny tiktok shorts",
    "impressions": 10,
    "broadImpressions": 10,
@@ -7636,13 +8134,19 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to be black",
+   "query": "tiktok watch without downloading",
+   "impressions": 10,
+   "broadImpressions": 10,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "how to be cute",
    "impressions": 9,
    "broadImpressions": 9,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be cute",
+   "query": "how to be black",
    "impressions": 9,
    "broadImpressions": 9,
    "seed": "how to be funny"
@@ -7738,6 +8242,12 @@
    "seed": "deadpan humor"
   },
   {
+   "query": "tiktok watch videos free",
+   "impressions": 7,
+   "broadImpressions": 7,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "most funny videos",
    "impressions": 6,
    "broadImpressions": 6,
@@ -7756,13 +8266,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "how to be a hero",
+   "query": "how to be an entrepreneur",
    "impressions": 5,
    "broadImpressions": 5,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be an entrepreneur",
+   "query": "how to be a hero",
    "impressions": 5,
    "broadImpressions": 5,
    "seed": "how to be funny"
@@ -7822,10 +8332,28 @@
    "seed": "how to start stand up comedy"
   },
   {
+   "query": "tiktok watch videos online",
+   "impressions": 3,
+   "broadImpressions": 5,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "kit tok",
+   "impressions": 3,
+   "broadImpressions": 3,
+   "seed": "tiktok watch time"
+  },
+  {
    "query": "youtube shorts reels funny video",
    "impressions": 2,
    "broadImpressions": 2,
    "seed": "funny video ideas"
+  },
+  {
+   "query": "tiktok watch videos online free",
+   "impressions": 2,
+   "broadImpressions": 2,
+   "seed": "tiktok watch time"
   },
   {
    "query": "comedy show clips near me",
