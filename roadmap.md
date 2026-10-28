@@ -7,3 +7,4 @@
 - [x] Verify rendered page metadata and record completed SEO corrections.
 - [x] Add the small Fazier launch badge to every site footer.
 - [x] Verify the badge renders small and unwrapped at desktop and phone widths.
+- [ ] Harden shared guide-route loading and verify every guide, topic hub and missing slug in the preview.
