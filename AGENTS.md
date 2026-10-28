@@ -23,3 +23,4 @@
 - Content routes own search and social descriptions; use pageMeta for utility pages and keep root metadata free of homepage-specific descriptions, URLs and images to prevent inheritance across unrelated pages.
 - The root layout's GlobalHeader is the only site header; page shells (SeoPage, DocLayout) must not render their own top bar, and the header holds a neutral placeholder until sign-in status is known so the sign-in pill never flashes.
 - Links preload on intent (router defaultPreload) and the homepage loader has a staleTime, so Write opens without waiting on fresh server reads each click.
+- Guide routes split only their page component; boundary options stay eager and missing-resource errors target the matching guide route so 404 handling does not depend on a separate boundary chunk.
