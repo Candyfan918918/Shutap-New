@@ -30,7 +30,6 @@ import {
 import {
   clinicalWord,
   hardRuleFailure,
-  judgeModel,
   runPremisePass,
   toneFailure,
   writerModel,
@@ -46,7 +45,20 @@ import {
   type ScreenplayElement,
   type VaryKind,
 } from './shared'
-import { dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt } from './techniques'
+import { bankFromFunniest, dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt, type Technique } from './techniques'
+
+/* ── the /funniest bank ──
+   Built once per process from the published /funniest pages, so every new
+   daily page feeds the writer on the next build. Loaded lazily: the pages
+   module uses import.meta.glob, which only Vite provides; under plain node
+   (the unit tests) the bank is empty and the hand-tuned 25 stand alone. */
+let bankPromise: Promise<{ line: Technique[]; performance: Technique[] }> | null = null
+export function funniestBank(): Promise<{ line: Technique[]; performance: Technique[] }> {
+  bankPromise ??= import('@/lib/seo/funniest')
+    .then((m) => bankFromFunniest(m.FUNNIEST.flatMap((e) => e.techniques.map((t) => ({ slug: e.slug, name: t.name, whyItWorks: t.whyItWorks, example: t.example, tryIt: t.tryIt })))))
+    .catch(() => ({ line: [], performance: [] }))
+  return bankPromise
+}
 
 export { BIT_PROMPT_VERSION }
 
@@ -64,8 +76,14 @@ export { BIT_PROMPT_VERSION }
 
    Hedge raised 3s → 9s (Oct 29 2026, bit-1.3): at 3s the backup joined
    every run and won 194 of 196 bits in a week, so the weakest model wrote
-   almost everything. The primary answers in ~10s; the backup now joins only
-   when the primary is genuinely slow or fails. */
+   almost everything.
+
+   bit-1.4 (Oct 29 2026): the primary writer is a stronger, slower model
+   (BIT_WRITER_MODEL, default openai/gpt-5 at low reasoning) and the race
+   PREFERS it: the backup still starts at the hedge, but its answer is only
+   used if the primary fails or runs past its cap. Funny is the product; a
+   few more seconds is the price. BIT_PREFER_PRIMARY=off restores the pure
+   race. The judge is back on by default (BIT_JUDGE=off turns it off). */
 function budgetMs(name: string, fallback: number): number {
   const n = Number(process.env[name] ?? '')
   return Number.isFinite(n) && n > 0 ? n : fallback
@@ -86,7 +104,28 @@ export const BIT_BUDGET = {
  *  to the default model when the primary is set to something else. */
 export function backupWriterModel(): string {
   const wanted = (process.env['BIT_BACKUP_MODEL'] ?? '').trim() || 'google/gemini-2.5-flash-lite'
-  return wanted === writerModel() ? DEFAULT_MODEL : wanted
+  return wanted === bitWriterModel() ? DEFAULT_MODEL : wanted
+}
+
+/** The bit writer's primary model: BIT_WRITER_MODEL, else the card
+ *  pipeline's writer when one is set explicitly, else gpt-5. */
+export function bitWriterModel(): string {
+  const own = (process.env['BIT_WRITER_MODEL'] ?? '').trim()
+  if (own) return own
+  const shared = (process.env['JOKE_WRITER_MODEL'] ?? '').trim()
+  return shared || 'openai/gpt-5'
+}
+
+/** The bit judge: must be a different family from the writer. */
+export function bitJudgeModel(): string {
+  const wanted = (process.env['BIT_JUDGE_MODEL'] ?? '').trim() || 'google/gemini-3-flash-preview'
+  const same = wanted.split('/')[0] === bitWriterModel().split('/')[0]
+  return same ? (wanted.startsWith('openai/') ? 'google/gemini-3-flash-preview' : 'openai/gpt-5-mini') : wanted
+}
+
+/** Reasoning models take an effort level instead of a temperature. */
+function reasoning(model: string): 'low' | undefined {
+  return /^openai\/(gpt-5|o[1-9])/i.test(model) ? 'low' : undefined
 }
 
 /* ── controls → prompt text ── */
@@ -196,17 +235,19 @@ export async function runBitPass(
   story: string,
   premises: Premise[],
   controls: BitControls,
-  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal; dealt?: Dealt[] } = {},
+  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal; dealt?: Dealt[]; prompt?: string; angleFinder?: string } = {},
 ): Promise<BitPass> {
-  const prompt = fill(BIT_PROMPT, {
+  const model = opts.model ?? bitWriterModel()
+  const prompt = fill(opts.prompt ?? BIT_PROMPT, {
     SITUATION: story.slice(0, 2000),
-    PREMISES: formatPremisesForBit(premises),
+    PREMISES: premises.length ? formatPremisesForBit(premises) : (opts.angleFinder ?? BIT_ANGLE_FINDER),
     TECHNIQUES: formatTechniques(opts.dealt ?? dealTechniques(4)),
     ...controlVars(controls),
   })
   const res = await callAgent({
-    model: opts.model ?? writerModel(),
+    model,
     temperature: 1.0,
+    reasoningEffort: reasoning(model),
     maxTokens: 4000,
     timeoutMs: opts.timeoutMs ?? BIT_BUDGET.write(),
     signal: opts.signal,
@@ -239,13 +280,13 @@ function formatBits(bits: BitDraft[]): string {
 }
 
 export async function runBitJudge(story: string, controls: BitControls, bits: BitDraft[]): Promise<BitVerdict> {
-  const model = judgeModel()
+  const model = bitJudgeModel()
   const identity = bits.map((_, i) => i)
   if (bits.length < 2) return { order: identity, why: null, model }
   const res = await callAgent({
     model,
     temperature: 0,
-    reasoningEffort: 'low',
+    reasoningEffort: reasoning(model),
     maxTokens: 3000,
     timeoutMs: BIT_BUDGET.judge(),
     messages: [
@@ -297,6 +338,9 @@ export async function raceWriters<T>(opts: {
   backup: Leg
   hedgeMs: number
   deadlineMs: number
+  /** Hold a usable backup answer and keep waiting for the primary until
+   *  its cap; the backup is used only when the primary fails. */
+  preferPrimary?: boolean
   run: (leg: Leg, signal: AbortSignal) => Promise<T & { bits: unknown[]; error?: string }>
   usable: (result: T & { bits: unknown[] }) => boolean
 }): Promise<{ winner: (T & { bits: unknown[]; error?: string }) | null; last: (T & { bits: unknown[]; error?: string }) | null; attempts: WriterAttempt[] }> {
@@ -337,12 +381,20 @@ export async function raceWriters<T>(opts: {
   const legs = hedge.kind === 'primary' ? [b] : [a, b]
   const winner = await new Promise<R | null>((resolve) => {
     let pending = legs.length
+    let held: R | null = null
     for (const leg of legs) {
       void leg.done.then(({ r, ok }) => {
         if (ok) {
+          // Preferring the primary: a usable backup waits for the primary's
+          // own verdict; a usable primary wins outright.
+          if (opts.preferPrimary && leg === b && hedge.kind !== 'primary' && pending > 1) {
+            held = r
+            if (--pending === 0) resolve(held)
+            return
+          }
           for (const other of legs) if (other !== leg) other.ctl.abort()
           resolve(r)
-        } else if (--pending === 0) resolve(null)
+        } else if (--pending === 0) resolve(held)
       })
     }
   })
@@ -381,11 +433,27 @@ export type WrittenBit = {
 }
 
 /** Premises are passed in when they were started early (beside the Guard). */
+/** A pipeline variant, for the eval bench: which prompt, models and
+ *  stages. Production passes nothing and gets the current pipeline. */
+export type BitVariant = {
+  prompt?: string
+  angleFinder?: string
+  writer?: string
+  backup?: string
+  judge?: boolean
+  preferPrimary?: boolean
+  /** extra techniques the deal may draw from (the /funniest bank) */
+  pool?: Technique[]
+  /** no technique deal at all (bit-1.2 behaviour) */
+  noTechniques?: boolean
+}
+
 export async function writeBitFromStory(
   story: string,
   controls: BitControls,
   premisesPromise?: Promise<Premise[]>,
   sink?: { failure?: BitFailure },
+  variant: BitVariant = {},
 ): Promise<WrittenBit | null> {
   const t0 = Date.now()
   // Since bit-1.1 the writer finds its own angles (BIT_ANGLE_FINDER), which
@@ -396,7 +464,9 @@ export async function writeBitFromStory(
   const rejected: { hook: string; rule: string }[] = []
   // One deal per run: both writers in the race get the same techniques, so
   // the bit is the same operation whichever model answers first.
-  const dealt = dealTechniques(4)
+  const dealt = variant.noTechniques ? [] : dealTechniques(4, Math.random, variant.pool ?? (await funniestBank()).line)
+  const primaryModel = variant.writer ?? bitWriterModel()
+  const backupModel = variant.backup ?? backupWriterModel()
   const sortBits = (bits: BitDraft[]) => {
     const ok: BitDraft[] = []
     const craftOnly: BitDraft[] = []
@@ -410,18 +480,19 @@ export async function writeBitFromStory(
   // A pass is usable when at least one bit is safe to show (a craft-only
   // miss still counts: it is shown rather than an error).
   const race = await raceWriters<BitPass>({
-    primary: { model: writerModel(), leg: 'primary', timeoutMs: BIT_BUDGET.write() },
-    backup: { model: backupWriterModel(), leg: 'backup', timeoutMs: BIT_BUDGET.backup() },
+    primary: { model: primaryModel, leg: 'primary', timeoutMs: BIT_BUDGET.write() },
+    backup: { model: backupModel === primaryModel ? DEFAULT_MODEL : backupModel, leg: 'backup', timeoutMs: BIT_BUDGET.backup() },
     hedgeMs: BIT_BUDGET.hedge(),
     deadlineMs: BIT_BUDGET.write() + 5_000,
-    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal, dealt }),
+    preferPrimary: variant.preferPrimary ?? preferPrimaryOn(),
+    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal, dealt, prompt: variant.prompt, angleFinder: variant.angleFinder }),
     usable: (p) => {
       const s = sortBits(p.bits as BitDraft[])
       return s.ok.length + s.craftOnly.length > 0
     },
   })
   const t2 = Date.now()
-  const pass = (race.winner ?? race.last ?? { bits: [], altTags: [], angles: [], model: writerModel(), error: 'no attempt' }) as BitPass
+  const pass = (race.winner ?? race.last ?? { bits: [], altTags: [], angles: [], model: primaryModel, error: 'no attempt' }) as BitPass
   for (const b of pass.bits) {
     const f = bitFailure(b, story, controls)
     if (f) rejected.push({ hook: b.hook, rule: f })
@@ -437,9 +508,9 @@ export async function writeBitFromStory(
     return null
   }
 
-  // Since bit-1.1 the writer orders its own four, strongest first, which
-  // saves the judge call. BIT_JUDGE=on brings the judge back.
-  const verdict: BitVerdict = judgeOn()
+  // The judge (a different model family) ranks what passed; BIT_JUDGE=off
+  // falls back to the writer's own order.
+  const verdict: BitVerdict = (variant.judge ?? judgeOn())
     ? await runBitJudge(story, controls, passing)
     : { order: passing.map((_, i) => i), why: null, model: 'writer-order' }
   const t3 = Date.now()
@@ -468,8 +539,12 @@ const flag = (name: string) => (process.env[name] ?? '').trim().toLowerCase() ==
 function premisePassOn(): boolean {
   return flag('BIT_PREMISE_PASS')
 }
+/** On unless BIT_JUDGE=off (bit-1.4; it was opt-in from bit-1.1 to 1.3). */
 function judgeOn(): boolean {
-  return flag('BIT_JUDGE')
+  return (process.env['BIT_JUDGE'] ?? '').trim().toLowerCase() !== 'off'
+}
+function preferPrimaryOn(): boolean {
+  return (process.env['BIT_PREFER_PRIMARY'] ?? '').trim().toLowerCase() !== 'off'
 }
 
 /** Stage 1 on the bit budget: one attempt, then the writer reads the story itself. */
@@ -492,9 +567,11 @@ export async function varyBitDraft(
   // than "try again". Safety rules are never relaxed.
   let craftMiss: BitDraft | null = null
   for (let attempt = 0; attempt < 2; attempt++) {
+    const model = attempt === 0 ? bitWriterModel() : backupWriterModel()
     const res = await callAgent({
-      model: attempt === 0 ? writerModel() : backupWriterModel(),
+      model,
       temperature: 1.0,
+      reasoningEffort: reasoning(model),
       maxTokens: 2000,
       timeoutMs: BIT_BUDGET.vary(),
       messages: [

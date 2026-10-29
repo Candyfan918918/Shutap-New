@@ -233,8 +233,11 @@ export const TECHNIQUES: Technique[] = [
 ]
 
 /** Self-only techniques are dealt less often: most stories are about
- *  someone else, and the writer can always fall back to the backup. */
+ *  someone else, and the writer can always fall back to the backup. A
+ *  technique from the /funniest bank (family starts with "funniest:") is
+ *  dealt at half the weight of a hand-tuned one. */
 const WEIGHT: Record<TechniqueFit, number> = { any: 3, other: 3, self: 1 }
+const weightOf = (t: Technique) => (t.family.startsWith('funniest:') ? Math.max(1, WEIGHT[t.fit] / 2) : WEIGHT[t.fit])
 
 export type Dealt = { primary: Technique; backup: Technique }
 
@@ -244,15 +247,16 @@ export type Dealt = { primary: Technique; backup: Technique }
  * primary that does not fit the story (it needs another person and there is
  * none) still has somewhere to go. `rand` is injectable for tests.
  */
-export function dealTechniques(n = 4, rand: () => number = Math.random): Dealt[] {
+export function dealTechniques(n = 4, rand: () => number = Math.random, extra: Technique[] = []): Dealt[] {
+  const pool = extra.length ? [...TECHNIQUES, ...extra] : TECHNIQUES
   const used = new Set<string>()
   const draw = (pool: Technique[]): Technique => {
     const open = pool.filter((t) => !used.has(t.family))
     const from = open.length ? open : pool
-    const total = from.reduce((s, t) => s + WEIGHT[t.fit], 0)
+    const total = from.reduce((s, t) => s + weightOf(t), 0)
     let r = rand() * total
     for (const t of from) {
-      r -= WEIGHT[t.fit]
+      r -= weightOf(t)
       if (r < 0) {
         used.add(t.family)
         return t
@@ -262,8 +266,8 @@ export function dealTechniques(n = 4, rand: () => number = Math.random): Dealt[]
     used.add(last.family)
     return last
   }
-  const primaries = Array.from({ length: n }, () => draw(TECHNIQUES))
-  const anyFit = TECHNIQUES.filter((t) => t.fit === 'any')
+  const primaries = Array.from({ length: n }, () => draw(pool))
+  const anyFit = pool.filter((t) => t.fit === 'any')
   return primaries.map((primary) => ({ primary, backup: draw(anyFit) }))
 }
 
@@ -315,12 +319,12 @@ export function isLabelLine(line: string): boolean {
 
 /** A run of `n` words shared with any technique example: the writer copied
  *  the shape's words instead of the shape. */
-export function copiesExample(line: string, n = 5): boolean {
+export function copiesExample(line: string, n = 5, pool: Technique[] = TECHNIQUES): boolean {
   const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9'\s]/g, ' ').split(/\s+/).filter(Boolean)
   const w = norm(line)
   if (w.length < n) return false
   const grams = new Set<string>()
-  for (const t of TECHNIQUES) {
+  for (const t of pool) {
     const e = norm(t.example)
     for (let i = 0; i + n <= e.length; i++) grams.add(e.slice(i, i + n).join(' '))
   }
@@ -337,4 +341,42 @@ export function techniqueCraftFailure(lines: string[], story: string): string | 
   const costumes = lines.map((l) => costumeToken(l, story)).filter((t): t is string => !!t)
   if (costumes.length >= 2) return `costume vocabulary: ${costumes.join(', ')}`
   return null
+}
+
+/* ── the /funniest bank ──
+   Every technique on the /funniest pages, split by whether it can be done
+   in a written line (dealt to the writer) or needs a camera, a prop, a
+   sound or a performance (kept for the video and scene layouts). The
+   pages are the source of truth: a new daily page feeds the bank on the
+   next build. Pure function: the caller passes the entries. */
+
+export interface FunniestTechniqueIn {
+  slug: string
+  name: string
+  whyItWorks: string
+  example: string
+  tryIt: string
+}
+
+const PERFORMANCE = /\b(film|camera|cut to|prop|sound|voice|sing|tune|hold up|on screen|screen|video|pin a|record|perform|act out|shot|montage|footage|reaction shot|open your next|opens? (a|your) video|viewers|comments? (section|to the screen)|rhyme|ballad|music)\b/i
+
+export function bankFromFunniest(entries: FunniestTechniqueIn[]): { line: Technique[]; performance: Technique[] } {
+  const line: Technique[] = []
+  const performance: Technique[] = []
+  const seen = new Set<string>()
+  for (const t of entries) {
+    const id = `${t.slug}:${t.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`
+    if (seen.has(id)) continue
+    seen.add(id)
+    const out: Technique = {
+      id,
+      family: `funniest:${t.slug}`,
+      fit: /\b(you|your own|yourself|the teller)\b/i.test(t.tryIt) && !/\b(someone|other person|they|their|them)\b/i.test(t.tryIt) ? 'self' : 'any',
+      name: t.name.toUpperCase(),
+      op: t.tryIt.trim(),
+      example: t.example.trim(),
+    }
+    ;(PERFORMANCE.test(t.tryIt) || PERFORMANCE.test(t.name) ? performance : line).push(out)
+  }
+  return { line, performance }
 }
