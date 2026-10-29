@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/about";
-const TITLE = "About Shutap - Humor Amplify Lab";
+const TITLE = "About — Shutap Humor Amplifier Lab";
 const DESCRIPTION =
   "Shutap is the humor amplifier. Type what happened, get a bit in your voice with a hook, setup, tags and button, a 5-second video, caption and hashtags, then run it in the teleprompter, as a scene or a screenplay page.";
 const CAPSULE =
@@ -40,8 +40,8 @@ const SECTIONS = [
     body: "Every bit comes with a 5-second vertical video in the Shutap style, a caption under 100 characters and five hashtags, so what happened to you is ready to post without opening an editor. Watch it free. Downloading it needs an account; free downloads carry a shutap.com watermark, Basic and Pro remove it.",
   },
   {
-    heading: "The Shutap Humor Lab",
-    body: "The Humor Lab is Shutap's research arm. It writes, selects and rates the in-house joke dataset the amplifier learns from (never from users), publishes The funniest series on the techniques of famously funny people, and does the work behind Shutap Enterprise. Its motto is ours: stay funny, stay human.",
+    heading: "The Shutap Humor Amplifier Lab",
+    body: "The Humor Amplifier Lab is Shutap's research arm. It writes, selects and rates the in-house joke dataset the amplifier learns from (never from users), publishes The funniest series on the techniques of famously funny people, and does the work behind Shutap Enterprise. Its motto is ours: stay funny, stay human.",
   },
   {
     heading: "The funniest: learn from the best",
@@ -57,7 +57,7 @@ const SECTIONS = [
   },
   {
     heading: "What is coming next",
-    body: "The humor amplifier is the tool you can use today. Next we are building Shutap Enterprise, which brings original, human-steered humor to presentations and slides, roadshows, product demos, launches and meetings, written from a company's own material. Behind both is the Shutap Humor Lab: the research arm that writes, selects and rates an in-house joke dataset pairing everyday situations with jokes, tagged by technique, voice and how wild, and publishes The funniest series. Beyond that we are exploring screenwriting and audio stories. These are plans, not promises of dates, and we will say so when each is ready. To request Enterprise pricing and solutions, or to ask about the dataset, use the form at shutap.com/business.",
+    body: "The humor amplifier is the tool you can use today. Next we are building Shutap Enterprise, which brings original, human-steered humor to presentations and slides, roadshows, product demos, launches and meetings, written from a company's own material. Behind both is the Shutap Humor Amplifier Lab: the research arm that writes, selects and rates an in-house joke dataset pairing everyday situations with jokes, tagged by technique, voice and how wild, and publishes The funniest series. Beyond that we are exploring screenwriting and audio stories. These are plans, not promises of dates, and we will say so when each is ready. To request Enterprise pricing and solutions, or to ask about the dataset, use the form at shutap.com/business.",
   },
   {
     heading: "The one rule",

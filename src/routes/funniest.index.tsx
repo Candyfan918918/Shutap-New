@@ -8,9 +8,9 @@ import { FUNNIEST, FUNNIEST_HUB, funniestPath } from "@/lib/seo/funniest";
 
 const TITLE = "The Funniest People in the World, and Their Techniques | Shutap";
 const DESCRIPTION =
-  "From the Shutap Humor Lab: who is the funniest president, billionaire, actor, philosopher and more, according to the people who rank them, and the techniques you can take from each. Every technique feeds the humor amplifier.";
+  "From the Shutap Humor Amplifier Lab: who is the funniest president, billionaire, actor, philosopher and more, according to the people who rank them, and the techniques you can take from each. Every technique feeds the humor amplifier.";
 const CAPSULE =
-  "Each page answers one question, like who was the funniest US president, using published rankings and sources rather than our own opinion. Then it breaks down how that person was funny into techniques you can use in a video, a set, a toast or a talk, each with an original example line and a way to try it. The series is published by the Shutap Humor Lab, and every technique on it goes into the bank the humor amplifier writes from.";
+  "Each page answers one question, like who was the funniest US president, using published rankings and sources rather than our own opinion. Then it breaks down how that person was funny into techniques you can use in a video, a set, a toast or a talk, each with an original example line and a way to try it. The series is published by the Shutap Humor Amplifier Lab, and every technique on it goes into the bank the humor amplifier writes from.";
 
 export const Route = createFileRoute("/funniest/")({
   head: () => ({
@@ -51,7 +51,7 @@ export const Route = createFileRoute("/funniest/")({
     <ContentPage
       tryIt="funniest"
       breadcrumbs={[{ name: "The funniest", path: FUNNIEST_HUB }]}
-      h1="The funniest people in the world, and what to take from them — from the Shutap Humor Lab"
+      h1="The funniest people in the world, and what to take from them — from the Shutap Humor Amplifier Lab"
       capsule={CAPSULE}
       sections={[]}
       cta={{ label: "Try a technique on your own story", href: "/" }}
