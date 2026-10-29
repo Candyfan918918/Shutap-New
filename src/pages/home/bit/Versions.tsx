@@ -28,6 +28,8 @@ export function Versions({
   say,
   onSignIn,
   onLimit,
+  left,
+  onCharged,
 }: {
   bit: Bit
   current: BitVersion
@@ -40,6 +42,10 @@ export function Versions({
   onSignIn?: (from: 'rewrite' | 'swap' | 'mix') => void
   /** A rewrite counts as a new bit: at the daily cap, open the limit sheet. */
   onLimit?: (tier: BitTier) => void
+  /** bits left today (null = no cap), shown on the rewrite chips */
+  left?: number | null
+  /** a rewrite was charged: the parent refreshes the count */
+  onCharged?: () => void
 }) {
   const vary = useServerFn(varyBit)
   const swap = useServerFn(swapTag)
@@ -60,8 +66,10 @@ export function Versions({
     setBusy(k)
     try {
       const r = await vary({ data: { bit_id: bit.id, from_version_id: original.id, kind: k, anon_session_id: anonSessionId() } })
-      if (r.ok) onAdd(r.version)
-      else if (r.reason === 'sign_in') say('Sign in to rewrite it. It\'s free.')
+      if (r.ok) {
+        onAdd(r.version)
+        onCharged?.()
+      } else if (r.reason === 'sign_in') say('Sign in to rewrite it. It\'s free.')
       else if (r.reason === 'daily') (onLimit ? onLimit(r.tier) : say("That's today's bits. A rewrite counts as a new one."))
       else say(r.reason === 'too_many' ? 'That bit has all the versions it can hold.' : "Couldn't write that version. Try again.")
     } catch {
@@ -92,7 +100,14 @@ export function Versions({
   return (
     <>
       <section className="bt-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }} aria-label="Versions">
-        <span className="bt-lbl">versions</span>
+        <span className="bt-lbl">
+          versions
+          {left !== undefined && left !== null && !onSignIn ? (
+            <span className="bt-note" style={{ marginLeft: 8, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>
+              a rewrite is a new bit and a new video · {left === 0 ? 'none left today' : `${left} left today`}
+            </span>
+          ) : null}
+        </span>
         <div className="bt-chips">
           <button className="bt-chip" aria-pressed={current.id === original.id} onClick={() => onSelect(original.id)}>
             original
@@ -108,7 +123,7 @@ export function Versions({
                 disabled={!!busy}
                 onClick={() => void pickKind(k)}
               >
-                {busy === k ? 'writing…' : k}
+                {busy === k ? 'writing…' : left === 0 && !onSignIn ? `${k} · limit` : k}
               </button>
             )
           })}
