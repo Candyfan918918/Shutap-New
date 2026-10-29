@@ -21,7 +21,7 @@ const SECTIONS = [
   },
   {
     heading: "Built for content creators",
-    body: "Storytime, POV, talking-head and skit videos all run on the same structure. Type the story you were going to tell anyway, get the bit, and read it straight off the teleprompter while you film for TikTok, Instagram Reels or YouTube Shorts.",
+    body: "Storytime, POV, talking-head and skit videos all run on the same structure. Type the story you were going to tell anyway, get the bit with its 5-second video, caption and hashtags, and post it, or read it straight off the teleprompter while you film for TikTok, Instagram Reels or YouTube Shorts.",
   },
   {
     heading: "Built for comedians",
@@ -57,7 +57,7 @@ const SECTIONS = [
   },
   {
     heading: "What is coming next",
-    body: "The humor amplifier is the tool you can use today. Next we are building Shutap Enterprise, which brings original, human-steered humor to presentations and slides, roadshows, product demos, launches and meetings, written from a company's own material. Behind both is the Shutap Humor Lab: the research arm that writes, selects and rates an in-house joke dataset pairing everyday situations with jokes, tagged by technique, voice and how wild, and publishes The funniest series. Beyond that we are exploring short videos, screenwriting and audio stories. These are plans, not promises of dates, and we will say so when each is ready. To request Enterprise pricing and solutions, or to ask about the dataset, use the form at shutap.com/business.",
+    body: "The humor amplifier is the tool you can use today. Next we are building Shutap Enterprise, which brings original, human-steered humor to presentations and slides, roadshows, product demos, launches and meetings, written from a company's own material. Behind both is the Shutap Humor Lab: the research arm that writes, selects and rates an in-house joke dataset pairing everyday situations with jokes, tagged by technique, voice and how wild, and publishes The funniest series. Beyond that we are exploring screenwriting and audio stories. These are plans, not promises of dates, and we will say so when each is ready. To request Enterprise pricing and solutions, or to ask about the dataset, use the form at shutap.com/business.",
   },
   {
     heading: "The one rule",
@@ -65,7 +65,7 @@ const SECTIONS = [
   },
   {
     heading: "Free to start",
-    body: "Your first bit needs no account. Signing in is free, lets you rewrite and save it, keeps every bit in your set list and lets you post. Basic removes the watermark from saves; Pro writes as many as you want and adds the Mirror.",
+    body: "Your first bit needs no account. Signing in is free, lets you rewrite it and download once a day (the video, or the caption and hashtags, or the picture) with a shutap.com watermark, keeps every bit in your set list and lets you post. Basic: 5 bits and 3 clean downloads a day. Pro: unlimited bits and downloads, no watermark, and the Mirror.",
   },
   {
     heading: "Who makes Shutap",
