@@ -24,6 +24,9 @@ export function VideoCard({
   onFallbackPicture,
   downloadsLeft,
   onCharged,
+  beforeDownload,
+  resume,
+  onResumed,
 }: {
   bitId: string
   version: BitVersion
@@ -38,6 +41,11 @@ export function VideoCard({
   onFallbackPicture: () => void
   downloadsLeft: number | null | undefined
   onCharged: (r: Extract<DownloadCharge, { ok: true }>) => void
+  /** returns true when a confirm sheet took over; the download waits for `resume` */
+  beforeDownload?: () => boolean
+  /** finish the download now (after the confirm, sign-in or payment) */
+  resume?: boolean
+  onResumed?: () => void
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [spec, setSpec] = useState<VideoSpec>(() => buildSpec(version, story))
@@ -111,8 +119,9 @@ export function VideoCard({
     else void ac.resume()
   }
 
-  async function download() {
+  async function download(skipConfirm = false) {
     if (onSignIn) return onSignIn()
+    if (!skipConfirm && beforeDownload?.()) return
     if (support === 'none') {
       say("This browser can't make a video file. Saving the picture instead.")
       return onFallbackPicture()
@@ -159,6 +168,18 @@ export function VideoCard({
       setBusy(null)
     }
   }
+
+  // Finish a download that was waiting on the confirm, sign-in or payment.
+  const resumedRef = useRef(false)
+  useEffect(() => {
+    if (!resume || resumedRef.current || support === null) return
+    resumedRef.current = true
+    onResumed?.()
+    void download(true).finally(() => {
+      resumedRef.current = false
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resume, support])
 
   const left = downloadsLeft
   const label =

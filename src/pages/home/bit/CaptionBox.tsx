@@ -14,6 +14,10 @@ export function CaptionBox({
   onLimit,
   downloadsLeft,
   onCharged,
+  onSignIn,
+  beforeCopy,
+  resume,
+  onResumed,
 }: {
   bitId: string
   versionId: string
@@ -23,6 +27,12 @@ export function CaptionBox({
   onLimit?: () => void
   downloadsLeft?: number | null
   onCharged?: (used: number, cap: number | null) => void
+  /** guests: copying needs an account */
+  onSignIn?: () => void
+  /** returns true when a confirm sheet took over; the copy waits for `resume` */
+  beforeCopy?: () => boolean
+  resume?: boolean
+  onResumed?: () => void
 }) {
   const fn = useServerFn(getCaption)
   const charge = useServerFn(chargeDownload)
@@ -46,7 +56,8 @@ export function CaptionBox({
 
   // Copying the caption or the hashtags is one download (the first copy of
   // this version today; later copies of the same version are free).
-  async function copy(text: string, what: string) {
+  async function copy(text: string, what: string, skipConfirm = false) {
+    if (!skipConfirm && beforeCopy?.()) return
     let r: Awaited<ReturnType<typeof chargeDownload>>
     try {
       r = await charge({ data: { bit_id: bitId, version_id: versionId, kind: 'caption', anon_session_id: anonSessionId() } })
@@ -75,6 +86,18 @@ export function CaptionBox({
     }
   }
 
+  // Finish a copy that was waiting on the confirm, sign-in or payment.
+  const resumedRef = useRef(false)
+  useEffect(() => {
+    if (!resume || resumedRef.current || !state || typeof state !== 'object') return
+    resumedRef.current = true
+    onResumed?.()
+    void copy(`${state.caption}\n\n${state.hashtags.join(' ')}`, 'Caption and hashtags', true).finally(() => {
+      resumedRef.current = false
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resume, state])
+
   const leftLabel = downloadsLeft === undefined ? '' : downloadsLeft === null ? '' : ` · ${downloadsLeft} download${downloadsLeft === 1 ? '' : 's'} left today`
 
   if (locked) {
@@ -82,6 +105,11 @@ export function CaptionBox({
       <section data-ph-private className="bt-card bt-cap" aria-label="Caption and hashtags">
         <span className="bt-lbl">caption + hashtags</span>
         <p className="bt-note">A caption under 100 characters and five hashtags, written for this bit. Sign in free to see and copy them.</p>
+        {onSignIn && (
+          <button className="bt-btn sm" onClick={onSignIn}>
+            sign in to copy
+          </button>
+        )}
       </section>
     )
   }
