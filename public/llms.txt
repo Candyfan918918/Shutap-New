@@ -8,7 +8,7 @@ The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Sign
 
 - [What Shutap is](https://shutap.com/about): The humor amplifier — storytime, POV, talking-head and skit videos, first drafts for stand-up, toasts and talks. It amplifies your humor; it never replaces it.
 - [How it works](https://shutap.com/how-it-works): Type what happened, names and places are removed, get the bit with its video, caption and hashtags, then pick teleprompter, scene or screenplay page.
-- [Pricing](https://shutap.com/pricing): Free to write; Basic and Pro remove the watermark on saves.
+- [Pricing](https://shutap.com/pricing): Free to write, with one watermarked download a day; Basic ($1.99/mo) gives 3 clean downloads a day, Pro ($7.99/mo) unlimited downloads and the Mirror.
 - [FAQ](https://shutap.com/faq): Is it free, can I use the bits in my own videos and sets, is my name on anything, what can I post.
 - [Trust & privacy](https://shutap.com/trust): Names and places removed from stories before saving, private until you post, never used to train AI, takedown path.
 
