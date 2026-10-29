@@ -5,21 +5,21 @@ import { POLL, pollDate, pollOption, toPercents } from './poll'
 const sum = (r: Record<string, number>) => Object.values(r).reduce((a, b) => a + b, 0)
 
 test('nobody voted: all zeros', () => {
-  assert.deepEqual(toPercents({ love: 0, lines: 0, better: 0, trash: 0 }), { love: 0, lines: 0, better: 0, trash: 0 })
+  assert.deepEqual(toPercents({ all: 0, caption: 0, bit: 0, none: 0 }), { all: 0, caption: 0, bit: 0, none: 0 })
 })
 
 test('first vote: that option is 100%', () => {
-  assert.deepEqual(toPercents({ love: 0, lines: 1, better: 0, trash: 0 }), { love: 0, lines: 100, better: 0, trash: 0 })
+  assert.deepEqual(toPercents({ all: 0, caption: 1, bit: 0, none: 0 }), { all: 0, caption: 100, bit: 0, none: 0 })
 })
 
 test('thirds still add up to 100', () => {
-  const r = toPercents({ love: 1, lines: 1, better: 1, trash: 0 })
+  const r = toPercents({ all: 1, caption: 1, bit: 1, none: 0 })
   assert.equal(sum(r), 100)
   assert.deepEqual(Object.values(r).sort(), [0, 33, 33, 34])
 })
 
 test('uneven split adds up to 100', () => {
-  assert.equal(sum(toPercents({ love: 7, lines: 3, better: 2, trash: 1 })), 100)
+  assert.equal(sum(toPercents({ all: 7, caption: 3, bit: 2, none: 1 })), 100)
 })
 
 test('every option has a follow-up, chips or typed', () => {

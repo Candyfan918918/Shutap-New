@@ -2,9 +2,9 @@
 // Shared by the poll section, its server functions and the admin page, so
 // the words a person tapped and the words the admin reads never drift.
 
-export const POLL_KEY = 'ai-joke-generators'
+export const POLL_KEY = 'humor-amplifier-2026-10'
 
-export type PollOptionKey = 'love' | 'lines' | 'better' | 'trash'
+export type PollOptionKey = 'all' | 'caption' | 'bit' | 'none'
 
 export interface PollFollowUp {
   question: string
@@ -20,32 +20,29 @@ export interface PollOption {
 }
 
 export const POLL = {
-  title: 'AI joke generators: funny or trash?',
-  description: 'we built one, so tell us straight. sign in to vote and see the split.',
+  title: 'The humor amplifier: what would you actually post?',
+  description: 'every bit comes with a 5-second video, a caption and five hashtags. tell us straight. sign in to vote and see the split.',
   privacy: 'your vote is linked to your account, never shown publicly. we may email you about your answer.',
   options: [
     {
-      key: 'love',
-      label: 'love it — gets me unstuck',
-      followUp: { question: 'what are you making with it?', chips: ['stand-up', 'social posts', 'scripts', 'just messing around'] },
+      key: 'all',
+      label: 'the whole post: video, caption and hashtags',
+      followUp: { question: 'where would it go?', chips: ['TikTok', 'Reels', 'Shorts', 'all three'] },
     },
     {
-      key: 'lines',
-      label: 'good ideas, but the lines need work',
-      followUp: { question: "what's off?", chips: ['too generic', 'not my voice', 'too long', 'not that funny'] },
+      key: 'caption',
+      label: 'the caption and hashtags; I film my own video',
+      followUp: { question: 'what keeps you from the video?', chips: ['I want my face in it', 'not my style', 'too short', 'the cartoon'] },
     },
     {
-      key: 'better',
-      label: 'I use something better',
-      followUp: { question: 'which one?', chips: [], placeholder: 'the name of it' },
+      key: 'bit',
+      label: 'the bit only; I write my own caption',
+      followUp: { question: "what's off about the caption?", chips: ['not my voice', 'too generic', 'wrong hashtags', 'I just prefer mine'] },
     },
     {
-      key: 'trash',
-      label: "AI can't be funny — this is trash",
-      followUp: {
-        question: "what's the dealbreaker?",
-        chips: ['no timing', 'sounds like a robot', "feels like it's stealing from comedians", 'just no'],
-      },
+      key: 'none',
+      label: "none of it; this doesn't help",
+      followUp: { question: "what's missing?", chips: ['not funny', 'not my voice', 'too generic', 'I use something better'] },
     },
   ] as PollOption[],
 } as const
