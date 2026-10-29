@@ -78,7 +78,7 @@ export function CaptionBox({
       say(`${what} copied.`)
       jokeTrack('caption_copied', tier, { what })
       if (!r.repeat) {
-        jokeTrack('download', tier, { kind: 'caption', watermarked: false, used: r.used, cap: r.cap })
+        jokeTrack('download', tier, { kind: 'caption', watermarked: false, used: r.used, cap: r.cap, resumed: skipConfirm })
         onCharged?.(r.used, r.cap)
       }
     } catch {
