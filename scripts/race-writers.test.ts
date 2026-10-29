@@ -50,6 +50,10 @@ await check('primary slow but beats backup', { P: [120, 'ok'], B: [200, 'ok'] },
 await check('primary fails early → backup starts at once', { P: [10, 'empty'], B: [40, 'ok'] }, 'B', 90)
 await check('both bad quickly → last try on backup', { P: [10, 'empty'], B: [20, 'empty'] }, null, 400)
 await check('both time out → null, bounded', { P: [5000, 'timeout'], B: [5000, 'timeout'] }, null, 2100)
+// bit-1.4: prefer the primary. The backup answers first and is held; the slow primary still wins.
+await check('prefer primary: slow primary beats a fast backup', { P: [200, 'ok'], B: [20, 'ok'] }, 'P', 260, { preferPrimary: true })
+await check('prefer primary: primary fails → held backup used', { P: [200, 'empty'], B: [20, 'ok'] }, 'B', 260, { preferPrimary: true })
+await check('prefer primary: primary times out → held backup used', { P: [5000, 'timeout'], B: [20, 'ok'] }, 'B', 400, { preferPrimary: true })
 {
   // last try: backup returns junk once, then a bit
   let n = 0

@@ -1265,7 +1265,7 @@ export function fill(template: string, vars: Record<string, string | undefined>)
    kept bit as hotter / tighter / escalate.
 
    BIT_PROMPT_VERSION is stamped on every bit. Bump it on ANY edit below. */
-export const BIT_PROMPT_VERSION = 'bit-1.3'
+export const BIT_PROMPT_VERSION = 'bit-1.4'
 
 /** What each audience control changes. The aim never changes: the situation. */
 export const BIT_AUDIENCE: Record<string, string> = {
