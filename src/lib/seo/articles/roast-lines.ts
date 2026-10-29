@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Writing your own roast",
-      body: "List ten things the person does on purpose. Circle the three the room has seen. For each one, write the line four ways using the shapes above, then read them out loud and keep the one you'd actually say. Cut any word that isn't doing work. If you'd like options to react to, Shutap, the AI joke generator for creators, has a roast voice: write what the person did, get a draft of the bit, then pick, cut and rewrite it so every line sounds like you. The final roast has to be yours, because you're the one standing up to say it.",
+      body: "List ten things the person does on purpose. Circle the three the room has seen. For each one, write the line four ways using the shapes above, then read them out loud and keep the one you'd actually say. Cut any word that isn't doing work. If you'd like options to react to, Shutap, the humor amplifier, has a roast voice: write what the person did, get a draft of the bit, then pick, cut and rewrite it so every line sounds like you. The final roast has to be yours, because you're the one standing up to say it.",
     },
   ],
   faq: [
@@ -80,7 +80,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "how-to-write-comedy-tags", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-20",
 };
 

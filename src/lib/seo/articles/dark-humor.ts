@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "When to cut it",
-      body: "Run three checks before you post or perform. First, the front-row test: if the people the subject touches were sitting right there, would the joke still be aimed at the situation? Second, the shock test: take out the grim word and see if anything funny is left. If not, the shock was doing all the work, and shock wears off by the second viewing. Third, the distance test from above: close and huge means wait. If you want something to push against, Shutap, the AI joke generator for creators, will draft a bit from what happened in a deadpan or dry voice at higher heat. Cut what isn't yours and rewrite the rest.",
+      body: "Run three checks before you post or perform. First, the front-row test: if the people the subject touches were sitting right there, would the joke still be aimed at the situation? Second, the shock test: take out the grim word and see if anything funny is left. If not, the shock was doing all the work, and shock wears off by the second viewing. Third, the distance test from above: close and huge means wait. If you want something to push against, Shutap, the humor amplifier, will draft a bit from what happened in a deadpan or dry voice at higher heat. Cut what isn't yours and rewrite the rest.",
     },
   ],
   faq: [
@@ -87,7 +87,7 @@ const guide: Guide = {
     },
   ],
   related: ["deadpan-humor", "types-of-humor", "self-deprecating-humor"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   preset: { voice: "deadpan", heat: 4 },
   published: "2026-10-27",
 };

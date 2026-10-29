@@ -76,13 +76,13 @@ const checkinText = (line: (v: TemplateVars) => string) => (v: TemplateVars) =>
   `${g(v)}\n\n${line(v)}\n\nopen shutap: ${v.deep_link ?? ''}`
 
 // One generic line for every retired check-in template.
-const CHECKIN_LINE = 'got a new story? write it and get the bit.'
+const CHECKIN_LINE = 'got a new story? type it and say it funnier.'
 const checkin = (id: TemplateId): TemplateEntry => ({
   id,
   identity: 'hello',
   emailClass: 'engagement',
   subject: () => 'got a new one?',
-  preview: () => 'write your story. get the bit.',
+  preview: () => 'type what happened. say it funnier.',
   cta: 'open shutap',
   htmlDesign: spillFollowupHtml,
   beatLine: CHECKIN_LINE,
@@ -95,12 +95,12 @@ export const TEMPLATES: Record<TemplateId, TemplateEntry> = {
     identity: 'hello',
     emailClass: 'transactional',
     subject: () => "you're in. SHUTAP. Say it funnier.",
-    preview: () => 'write your story. get the bit.',
+    preview: () => 'type what happened. say it funnier.',
     cta: 'write your first jokes',
     htmlDesign: welcomeHtml,
     buildBodyText: (v) => `${g(v)}
 
-you're in. write your story and get the bit — hook, setup, tags and button. run it in the teleprompter, as a scene or a screenplay page, or post it to a room.
+you're in. type what happened and shutap amplifies it into a bit in your voice — hook, setup, tags and button. run it in the teleprompter, as a scene or a screenplay page.
 
 your profile shows the name and picture from your sign-in. you can change both in your profile.
 
@@ -119,12 +119,12 @@ write your first jokes: ${v.deep_link ?? v.cta_url ?? 'https://shutap.com'}`,
     identity: 'hello',
     emailClass: 'nontransactional',
     subject: () => 'something happen this week?',
-    preview: () => 'write it. get the bit.',
+    preview: () => 'type it. say it funnier.',
     cta: 'write some jokes',
     htmlDesign: reengagementHtml,
     buildBodyText: (v) => `${g(v)}
 
-something annoying happen lately? write it and get the bit. or see what people are posting in the rooms.
+something annoying happen lately? type it and say it funnier.
 
 write some jokes: ${v.deep_link ?? v.cta_url ?? 'https://shutap.com'}`,
   },
@@ -134,7 +134,7 @@ write some jokes: ${v.deep_link ?? v.cta_url ?? 'https://shutap.com'}`,
     identity: 'hello',
     emailClass: 'engagement',
     subject: () => 'got a new one?',
-    preview: () => 'write your story. get the bit.',
+    preview: () => 'type what happened. say it funnier.',
     cta: 'open shutap',
     htmlDesign: scanFollowupHtml,
     buildBodyText: (v) => `${g(v)}

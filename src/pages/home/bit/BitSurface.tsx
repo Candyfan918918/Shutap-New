@@ -689,9 +689,9 @@ export function BitSurface() {
             <div className="bt-hero">
               <h1 className="bt-h1">
                 Say it <em>funnier.</em>
-                <span className="bt-h1-kicker">The AI joke generator for creators.</span>
+                <span className="bt-h1-kicker">Your humor, amplified.</span>
               </h1>
-              <p className="bt-sub">Write your story. Get the bit. Film it.</p>
+              <p className="bt-sub">Type what happened. Get the video, the caption, the bit. In your voice.</p>
             </div>
 
             <div className="bt-box">
@@ -721,7 +721,7 @@ export function BitSurface() {
                 />
               </div>
               <button className="bt-btn block" disabled={!story.trim()} onClick={() => void onWrite()}>
-                write the bit
+                make it funnier
               </button>
             </div>
             {error && (

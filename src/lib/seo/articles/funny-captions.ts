@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Write five, post one",
-      body: "Most good captions are the third or fourth try. Write five versions fast, each from a different angle: the detail, the number, the object talking, what happened off camera, and one plain deadpan statement. Read them out loud and keep the one you'd actually say. If the photo is from a real story, you can also write the story out and pull the caption from its best line. Shutap, the AI joke generator for creators, can turn that story into a draft of the bit with a hook, setup and tags, and the hook often makes a good first line. Treat it as something to push against: you pick, cut and rewrite until it sounds like you.",
+      body: "Most good captions are the third or fourth try. Write five versions fast, each from a different angle: the detail, the number, the object talking, what happened off camera, and one plain deadpan statement. Read them out loud and keep the one you'd actually say. If the photo is from a real story, you can also write the story out and pull the caption from its best line. Shutap, the humor amplifier, can turn that story into a draft of the bit with a hook, setup and tags, and the hook often makes a good first line. Treat it as something to push against: you pick, cut and rewrite until it sounds like you.",
     },
   ],
   faq: [
@@ -88,7 +88,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-email-sign-offs", "types-of-humor", "deadpan-humor"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-23",
 };
 

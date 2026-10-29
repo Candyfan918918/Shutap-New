@@ -4,9 +4,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/terms`
-const TITLE = "Terms of Service — Shutap AI Joke Generator"
+const TITLE = "Terms of Service — Shutap, the Humor Amplifier"
 const DESCRIPTION =
-  "Terms for using Shutap, the AI joke generator for content creators and comedians: using the jokes you generate, posting to rooms, house rules, Basic and Pro billing, AI output and liability."
+  "Terms for using Shutap, the humor amplifier: using the jokes you generate, posting to rooms, house rules, Basic and Pro billing, AI output and liability."
 
 export const Route = createFileRoute('/terms')({
   head: () => ({
@@ -39,7 +39,7 @@ function TermsPage() {
 
       <h3>1. What Shutap is</h3>
       <p>
-        Shutap is an AI bit and joke generator for content creators and comedians. You write your
+        Shutap is the humor amplifier: it amplifies your own story into a bit. You write your
         story. Shutap removes identifying details and writes comedy from it, with teleprompter,
         scene and screenplay views. You can save, share or post what it writes to a room.
         Shutap is for entertainment only.

@@ -5,11 +5,11 @@ import { HOME_FAQ } from '@/pages/home/HomeFAQ'
 import { SITE_URL } from '@/lib/site'
 import { listDailyIdea } from '@/lib/daily-idea.functions'
 
-const HOME_TITLE = "Shutap — AI Joke Generator for Creators"
+const HOME_TITLE = "Shutap — The Humor Amplifier"
 const HOME_DESCRIPTION =
-  "Shutap is the AI joke generator for creators. Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page."
+  "Shutap is the humor amplifier. Type what happened and get a bit in your voice: hook, setup, tags and button, with a 5-second video, caption and hashtags. Run it in the teleprompter, as a scene or a screenplay page."
 const HOME_OG_DESCRIPTION =
-  "Shutap is the AI joke generator for creators. Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page."
+  "Shutap is the humor amplifier. Type what happened and get a bit in your voice: hook, setup, tags and button, with a 5-second video, caption and hashtags. Run it in the teleprompter, as a scene or a screenplay page."
 
 const HOME_URL = `${SITE_URL}/`
 
@@ -30,13 +30,13 @@ export const Route = createFileRoute('/')({
     meta: [
       { title: HOME_TITLE },
       { name: "description", content: HOME_DESCRIPTION },
-      { property: "og:title", content: "Shutap — AI Joke Generator for Creators" },
+      { property: "og:title", content: "Shutap — The Humor Amplifier" },
       { property: "og:description", content: HOME_OG_DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: HOME_URL },
       ...ogImageMeta(),
-      { name: "twitter:title", content: "Shutap — AI Joke Generator for Creators" },
-      { name: "twitter:description", content: "Shutap is the AI joke generator for creators. Write your story and get a bit: hook, setup, tags and button. Run it in the teleprompter, as a scene or a screenplay page." },
+      { name: "twitter:title", content: "Shutap — The Humor Amplifier" },
+      { name: "twitter:description", content: "Shutap is the humor amplifier. Type what happened and get a bit in your voice: hook, setup, tags and button, with a 5-second video, caption and hashtags. Run it in the teleprompter, as a scene or a screenplay page." },
     ],
     links: [
       { rel: "canonical", href: HOME_URL },

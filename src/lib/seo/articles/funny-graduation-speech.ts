@@ -66,7 +66,7 @@ const guide: Guide = {
     { label: "Toastmasters International (May 27, 2014), \"Five Tips for Commencement Speeches\"", url: "https://mediacenter.toastmasters.org/2014-05-27-Five-Tips-for-Commencement-Speeches" },
   ],
   related: ["funny-wedding-toast", "self-deprecating-humor", "rule-of-three"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-27",
 };
 

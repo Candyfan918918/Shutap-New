@@ -6,7 +6,7 @@ import { SITE_URL } from '@/lib/site'
 const URL = `${SITE_URL}/safety`
 const TITLE = "Crisis Help — Shutap"
 const DESCRIPTION =
-  "Shutap is a joke generator, not a crisis service. If you need help now: US call or text 988, UK and Ireland Samaritans 116 123, or findahelpline.com."
+  "Shutap amplifies jokes; it is not a crisis service. If you need help now: US call or text 988, UK and Ireland Samaritans 116 123, or findahelpline.com."
 
 type Card = { name: string; action: string; href: string; external?: boolean }
 
@@ -48,7 +48,7 @@ function SafetyPage() {
       subline="if you need help right now"
     >
       <p>
-        Shutap is a joke generator, not a crisis service. If you or someone else is in danger, get
+        Shutap amplifies jokes; it is not a crisis service. If you or someone else is in danger, get
         help from a person now:
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, margin: '18px 0' }}>

@@ -33,7 +33,7 @@ function AIJokeGeneratorPage() {
       breadcrumbs={[{ name: 'AI joke generator', path: PATH }]}
       h1="AI joke generator: turn your story into a bit"
       capsule="Shutap turns your story into a complete comedy bit — hook, setup, tags and button. Start with what happened to you, not a request for a random joke. The result is material for a video or the stage, built around the details that make your story yours."
-      cta={{ label: 'Write your story, get the bit', href: '/' }}
+      cta={{ label: 'Type what happened. Say it funnier.', href: '/' }}
       sections={[
         {
           heading: 'Your story, not a random one-liner',

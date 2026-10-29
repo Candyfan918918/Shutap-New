@@ -28,7 +28,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap for the funny middle",
-      body: "Shutap, the AI joke generator for creators, does a narrower job that fits the middle of a toast. You type one story, set the audience to family, pick the storyteller voice, a length of 60 seconds or 2 minutes, and keep the heat low, around 2. It drafts that story as a short run with a hook, setup, tags and a closing line. It won't write your whole speech, and it shouldn't. It gives you a draft of the stretch where the room laughs, which you then rewrite, trim and stitch between your own opening and your own sincere ending.",
+      body: "Shutap, the humor amplifier, does a narrower job that fits the middle of a toast. You type one story, set the audience to family, pick the storyteller voice, a length of 60 seconds or 2 minutes, and keep the heat low, around 2. It drafts that story as a short run with a hook, setup, tags and a closing line. It won't write your whole speech, and it shouldn't. It gives you a draft of the stretch where the room laughs, which you then rewrite, trim and stitch between your own opening and your own sincere ending.",
     },
     {
       heading: "A worked example",
@@ -73,7 +73,7 @@ const guide: Guide = {
     { label: "Morning Dough (Feb 23, 2024), \"9 best AI wedding speech generators\"", url: "https://www.morningdough.com/?p=37319" },
   ],
   related: ["funny-wedding-toast", "self-deprecating-humor", "ai-comedy-writing-tools"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-26",
 };
 

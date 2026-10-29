@@ -70,7 +70,7 @@ const guide: Guide = {
     { label: "Joel Lim, Trustworthy (updated Dec 17, 2025), \"Can a Eulogy Be Funny? Yes, and Here Are 10 Respectful Examples\"", url: "https://www.trustworthy.com/blog/can-a-eulogy-be-funny" },
   ],
   related: ["funny-wedding-toast", "self-deprecating-humor", "sense-of-humor"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-27",
 };
 

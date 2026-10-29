@@ -4,7 +4,7 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/contact`
-const TITLE = "Contact Shutap — AI Joke Generator for Creators"
+const TITLE = "Contact Shutap — The Humor Amplifier"
 const DESCRIPTION =
   "Questions, feedback, partnerships, press, privacy or reports: write to Shutap at hello@shutap.com."
 

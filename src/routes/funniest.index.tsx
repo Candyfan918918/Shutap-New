@@ -51,7 +51,7 @@ export const Route = createFileRoute("/funniest/")({
     <ContentPage
       tryIt="funniest"
       breadcrumbs={[{ name: "The funniest", path: FUNNIEST_HUB }]}
-      h1="The funniest people in the world, and what to take from them"
+      h1="The funniest people in the world, and what to take from them — from the Shutap Humor Lab"
       capsule={CAPSULE}
       sections={[]}
       cta={{ label: "Try a technique on your own story", href: "/" }}

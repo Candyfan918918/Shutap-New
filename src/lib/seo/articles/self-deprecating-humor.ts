@@ -52,7 +52,7 @@ const guide: Guide = {
     },
     {
       heading: "Draft it, then make it sound like you",
-      body: "Start from one real mishap from this week. Write it plainly, find the moment you look worst, and try it in each of the three shapes above. Shutap, the AI joke generator for creators, can give you a draft of the bit from that story in a storyteller, dry or deadpan voice, with a hook, tags and a button. Treat it as something to push against: keep the line that sounds like your own mouth, cut the rest, and rewrite until you'd say it to a friend without reading it.",
+      body: "Start from one real mishap from this week. Write it plainly, find the moment you look worst, and try it in each of the three shapes above. Shutap, the humor amplifier, can give you a draft of the bit from that story in a storyteller, dry or deadpan voice, with a hook, tags and a button. Treat it as something to push against: keep the line that sounds like your own mouth, cut the rest, and rewrite until you'd say it to a friend without reading it.",
     },
   ],
   faq: [
@@ -96,7 +96,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "turn-a-bad-experience-into-comedy", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-21",
 };
 

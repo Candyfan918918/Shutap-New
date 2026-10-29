@@ -76,7 +76,7 @@ const guide: Guide = {
     { label: "Blockchain Council (Apr 20, 2026), \"Claude AI for TikTok script writing\"", url: "https://www.blockchain-council.org/claude-ai/claude-ai-for-tiktok-script-writing/" },
   ],
   related: ["shutap-vs-claude-for-jokes", "best-ai-joke-generator-for-tiktok", "how-long-should-a-tiktok-bit-be"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-26",
 };
 

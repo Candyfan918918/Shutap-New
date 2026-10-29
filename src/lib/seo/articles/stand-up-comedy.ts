@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Stand-up on stage vs a comedy video",
-      body: "The craft carries over, but the clock changes. A club crowd gives you a minute to settle in. A phone viewer gives you about a second before they swipe. So a bit written for camera starts on its strongest image, cuts the slow setup and lands the first laugh fast. A live set can breathe and build to a callback twenty minutes later. If you write both, write the story once and cut two versions. Shutap, the AI joke generator for creators, takes a story you type and gives you a rough draft of the bit, with a hook, setup, tags and a button, set for a live room or a short video. Treat it as something to push against: cut what isn't you, rewrite the rest, and the jokes you take on stage stay yours.",
+      body: "The craft carries over, but the clock changes. A club crowd gives you a minute to settle in. A phone viewer gives you about a second before they swipe. So a bit written for camera starts on its strongest image, cuts the slow setup and lands the first laugh fast. A live set can breathe and build to a callback twenty minutes later. If you write both, write the story once and cut two versions. Shutap, the humor amplifier, takes a story you type and gives you a rough draft of the bit, with a hook, setup, tags and a button, set for a live room or a short video. Treat it as something to push against: cut what isn't you, rewrite the rest, and the jokes you take on stage stay yours.",
     },
   ],
   faq: [
@@ -88,7 +88,7 @@ const guide: Guide = {
     },
   ],
   related: ["open-mic-night", "how-to-write-comedy-tags", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-25",
 };
 

@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "How to write your own sign-off",
-      body: "Start with the email itself. What's the actual subject, and what's the dumbest physical object involved? A spreadsheet, a broken link, a calendar, an attachment that won't open. Give that object a small life (\"the spreadsheet and I are both doing our best\"), or invent a number that's oddly exact (\"read it at 70% trust\"), or set up two things and let one lose (\"thanks in advance, and in the present\"). Read it out loud. If it needs a second sentence, cut it. Comedy creators do the same thing with a punchline before they post, and if a work saga is turning into a bigger story you want to film, Shutap, the AI joke generator for creators, can give you a draft of the bit to push against while you pick, cut and rewrite it in your own words.",
+      body: "Start with the email itself. What's the actual subject, and what's the dumbest physical object involved? A spreadsheet, a broken link, a calendar, an attachment that won't open. Give that object a small life (\"the spreadsheet and I are both doing our best\"), or invent a number that's oddly exact (\"read it at 70% trust\"), or set up two things and let one lose (\"thanks in advance, and in the present\"). Read it out loud. If it needs a second sentence, cut it. Comedy creators do the same thing with a punchline before they post, and if a work saga is turning into a bigger story you want to film, Shutap, the humor amplifier, can give you a draft of the bit to push against while you pick, cut and rewrite it in your own words.",
     },
   ],
   faq: [
@@ -84,7 +84,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "how-to-write-comedy-tags"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-20",
 };
 

@@ -5,23 +5,23 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/about";
-const TITLE = "About Shutap — AI Joke Generator for Creators";
+const TITLE = "About Shutap — The Humor Amplifier";
 const DESCRIPTION =
-  "Shutap is an AI joke generator for creators. Write your story, get a bit with a hook, setup, tags and button, then run it in the teleprompter, as a scene or a screenplay page.";
+  "Shutap is the humor amplifier. Type what happened, get a bit in your voice with a hook, setup, tags and button, a 5-second video, caption and hashtags, then run it in the teleprompter, as a scene or a screenplay page.";
 const CAPSULE =
-  "Shutap is an AI joke generator for creators. Write your story. Shutap turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page.";
+  "Shutap is the humor amplifier. Type what happened. Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, a caption and hashtags, then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. It amplifies your humor; it never replaces it.";
 const SECTIONS = [
   {
     heading: "Our goal: say it funnier",
-    body: "Shutap exists to help people say it funnier, because humor is a form of wisdom and the people who use it well are listened to. Today that starts with bits for creators and comedians. Over time we want to bring it to more of how people speak and tell stories, so nobody has to say it flat.",
+    body: "Shutap exists to help people say it funnier, because humor is a form of wisdom and the people who use it well are listened to. Shutap amplifies your humor and never replaces it: stay funny, stay human. Today that starts with a bit and a video from what happened to you. Over time we want to bring it to more of how people speak, present and tell stories, so nobody has to say it flat.",
   },
   {
     heading: "A bit, not a pun",
-    body: "Most joke generators hand you a one-liner about a keyword. Shutap writes a bit from your real story: a hook that stops the scroll, a setup that tells it straight, tags that keep the laughs coming, and a button to end on. It uses your details, so it sounds like you, not like anyone could have posted it.",
+    body: "Most joke generators hand you a one-liner about a keyword. Shutap amplifies the humor already in your story: a hook that stops the scroll, a setup that tells it straight, tags that keep the laughs coming, and a button to end on. It uses your details and your voice, so it sounds like you, not like anyone could have posted it. It amplifies; it never replaces.",
   },
   {
     heading: "Built for content creators",
-    body: "Storytime, POV, talking-head and skit videos all run on the same structure. Write the story you were going to tell anyway, get the bit, and read it straight off the teleprompter while you film for TikTok, Instagram Reels or YouTube Shorts.",
+    body: "Storytime, POV, talking-head and skit videos all run on the same structure. Type the story you were going to tell anyway, get the bit, and read it straight off the teleprompter while you film for TikTok, Instagram Reels or YouTube Shorts.",
   },
   {
     heading: "Built for comedians",
@@ -34,6 +34,14 @@ const SECTIONS = [
   {
     heading: "What to post today",
     body: "Never start from a blank page. The homepage shows a daily idea of what to post, with a hook, a short bit and a tag, drawn from what is trending, along with a trend panel that shows which topics are rising or cooling.",
+  },
+  {
+    heading: "Your post, in five seconds",
+    body: "Every bit comes with a 5-second vertical video in the Shutap style, a caption under 100 characters and five hashtags, so what happened to you is ready to post without opening an editor. Watch it free. Downloading it needs an account; free downloads carry a shutap.com watermark, Basic and Pro remove it.",
+  },
+  {
+    heading: "The Shutap Humor Lab",
+    body: "The Humor Lab is Shutap's research arm. It writes, selects and rates the in-house joke dataset the amplifier learns from (never from users), publishes The funniest series on the techniques of famously funny people, and does the work behind Shutap Enterprise. Its motto is ours: stay funny, stay human.",
   },
   {
     heading: "The funniest: learn from the best",
@@ -49,7 +57,7 @@ const SECTIONS = [
   },
   {
     heading: "What is coming next",
-    body: "The AI joke generator is the tool you can use today. Next we are building Shutap Enterprise, which brings original, human-steered humor to presentations and slides, roadshows, product demos, launches and meetings, written from a company's own material. We are also building the Shutap joke dataset, an in-house collection the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. Beyond that we are exploring short videos, screenwriting and audio stories. These are plans, not promises of dates, and we will say so when each is ready. To request Enterprise pricing and solutions, or to ask about the dataset, use the form at shutap.com/business.",
+    body: "The humor amplifier is the tool you can use today. Next we are building Shutap Enterprise, which brings original, human-steered humor to presentations and slides, roadshows, product demos, launches and meetings, written from a company's own material. Behind both is the Shutap Humor Lab: the research arm that writes, selects and rates an in-house joke dataset pairing everyday situations with jokes, tagged by technique, voice and how wild, and publishes The funniest series. Beyond that we are exploring short videos, screenwriting and audio stories. These are plans, not promises of dates, and we will say so when each is ready. To request Enterprise pricing and solutions, or to ask about the dataset, use the form at shutap.com/business.",
   },
   {
     heading: "The one rule",
@@ -106,7 +114,7 @@ export const Route = createFileRoute("/about")({
   component: () => (
     <ContentPage
       breadcrumbs={[{ name: "About", path: PATH }]}
-      h1="About Shutap, the AI joke generator for creators"
+      h1="About Shutap, the humor amplifier"
       capsule={CAPSULE}
       sections={SECTIONS}
       others={OTHERS}

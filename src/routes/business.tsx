@@ -19,7 +19,7 @@ const USE_CASES: { id: UseCase; label: string }[] = [
   { id: 'roadshows', label: 'Roadshows and investor pitches' },
   { id: 'demos', label: 'Product demos and launches' },
   { id: 'meetings', label: 'Meetings and conversations' },
-  { id: 'dataset', label: 'The Shutap joke dataset' },
+  { id: 'dataset', label: 'The Shutap Humor Lab dataset' },
   { id: 'other', label: 'Something else' },
 ]
 
@@ -30,7 +30,7 @@ const VALUE = [
   },
   {
     h: 'A dataset built by hand',
-    b: 'Behind the writing is an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. None of it comes from users. It is the foundation for how Shutap finds what is funny.',
+    b: 'Behind the writing is the Shutap Humor Lab dataset, an in-house collection the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. None of it comes from users. It is the foundation for how Shutap finds what is funny.',
   },
   {
     h: 'Your people stay in charge',

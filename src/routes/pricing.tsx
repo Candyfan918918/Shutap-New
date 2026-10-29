@@ -10,11 +10,11 @@ const PATH = '/pricing'
 const BASIC = PLANS.basic.amount
 const PRO = PLANS.pro.amount
 
-const TITLE = `Pricing — Free AI Joke Generator for Creators, plans from ${usd(BASIC)}/mo`
-const DESCRIPTION = `Shutap is a free AI joke generator for creators, with teleprompter, scene and screenplay views. Basic is ${usd(BASIC)}/month: 5 new bits a day, no watermark. Pro is ${usd(PRO)}/month: unlimited bits, no watermark and the Mirror. Cancel anytime.`
+const TITLE = `Pricing — Shutap, the Humor Amplifier, plans from ${usd(BASIC)}/mo`
+const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video, caption and hashtags from your story, with teleprompter, scene and screenplay views. Basic is ${usd(BASIC)}/month: 5 new bits a day, no watermark. Pro is ${usd(PRO)}/month: unlimited bits, no watermark and the Mirror. Cancel anytime.`
 
 const QA = [
-  { q: 'Is the AI joke generator really free?', a: 'Yes. Your first bit needs no account to read. Signing in is free, lets you rewrite and save it, and gives you 2 new bits a day. Rewrites (hotter, tighter, mix, tag swap) on your own bits never count against the limit.' },
+  { q: 'Is Shutap really free?', a: 'Yes. Your first bit needs no account to read. Signing in is free, lets you rewrite and save it, and gives you 2 new bits a day. Rewrites (hotter, tighter, mix, tag swap) on your own bits never count against the limit.' },
   { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 5 new bits a day and no watermark. Pro is ${usd(PRO)} a month: unlimited bits, no watermark and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
   { q: 'What counts toward the daily limit?', a: 'Only new bits. Rewriting a bit you already have is free. Limits reset at midnight Pacific.' },
   { q: 'Can I move from Basic to Pro?', a: 'Yes, any time. You pay the difference for the rest of the month, and Pro starts right away.' },
@@ -44,7 +44,7 @@ export const Route = createFileRoute('/pricing')({
           '@context': 'https://schema.org',
           '@type': 'Product',
           name: 'Shutap',
-          description: 'AI bit and joke generator for content creators and comedians, with teleprompter, scene and screenplay views.',
+          description: 'The humor amplifier: a bit, a 5-second video, caption and hashtags from your own story, with teleprompter, scene and screenplay views.',
           brand: { '@type': 'Brand', name: 'Shutap' },
           url: SITE_URL,
           offers: [
@@ -146,7 +146,7 @@ function PricingPage() {
             Free to write. {usd(BASIC)} to go clean.
           </h1>
           <p className="fd-muted" style={{ fontSize: 16, maxWidth: 560, margin: 0 }}>
-            Shutap is a free AI joke generator for creators. Basic removes the watermark. Pro writes as many as you want and adds the Mirror.
+            Shutap is free to use. Basic removes the watermark. Pro writes as many as you want and adds the Mirror.
           </p>
         </div>
 

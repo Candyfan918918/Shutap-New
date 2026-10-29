@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Build your first one from your own week",
-      body: "Pick one thing that annoyed you in the last seven days and write it as a plain setup: who, where, what they said. Then list three things a listener might assume next, and write a punchline that breaks each one. Keep the one that makes you laugh out loud, not the one that sounds clever. If you'd like something to push against, Shutap, the AI joke generator for creators, turns a story you type into a draft of the bit with a hook, setup, tags and a button. Cut what sounds generic, keep what's true, and rewrite it until every line sounds like you.",
+      body: "Pick one thing that annoyed you in the last seven days and write it as a plain setup: who, where, what they said. Then list three things a listener might assume next, and write a punchline that breaks each one. Keep the one that makes you laugh out loud, not the one that sounds clever. If you'd like something to push against, Shutap, the humor amplifier, turns a story you type into a draft of the bit with a hook, setup, tags and a button. Cut what sounds generic, keep what's true, and rewrite it until every line sounds like you.",
     },
   ],
   faq: [
@@ -95,7 +95,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-write-comedy-tags", "rule-of-three", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-23",
 };
 
