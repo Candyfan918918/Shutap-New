@@ -8,7 +8,7 @@ import { submitBusinessInquiry } from '@/lib/business-inquiry.functions'
 const URL = `${SITE_URL}/business`
 const TITLE = 'Shutap Enterprise: Humor for Presentations, Demos, Launches and Meetings | Shutap'
 const DESCRIPTION =
-  'Shutap Enterprise brings original, human-steered humor to presentations, roadshows, product demos, launches and meetings. Request pricing and a tailored solution.'
+  'Shutap Enterprise, from the Shutap Humor Lab: original, human-steered humor for presentations, roadshows, product demos, launches and meetings, built on the Humor Lab dataset. Request pricing and a tailored solution.'
 
 type UseCase = 'presentations' | 'roadshows' | 'demos' | 'meetings' | 'dataset' | 'other'
 type Size = '1-50' | '51-500' | '501-5000' | '5000+'
@@ -29,7 +29,7 @@ const VALUE = [
     b: 'Shutap starts from your own story, product and facts, so every line belongs to your company and could not be dropped into anyone else’s deck.',
   },
   {
-    h: 'A dataset built by hand',
+    h: 'The Humor Lab dataset, built by hand',
     b: 'Behind the writing is the Shutap Humor Lab dataset, an in-house collection the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. None of it comes from users. It is the foundation for how Shutap finds what is funny.',
   },
   {
@@ -47,7 +47,7 @@ const SOLUTIONS = [
   ['Roadshows and investor pitches', 'Lines that survive being said fifty times and adapt to each room.'],
   ['Product demos and launches', 'Open with the problem everyone recognizes and let the product be the turn.'],
   ['Meetings and conversations', 'Lighter, clearer communication for the people who lead and present.'],
-  ['Joke dataset access', 'For teams and researchers: access is reviewed case by case under a separate agreement.'],
+  ['Humor Lab dataset access', 'For teams and researchers: access is reviewed case by case under a separate agreement.'],
 ]
 
 const STEPS = [
