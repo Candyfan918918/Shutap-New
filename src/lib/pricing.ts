@@ -55,7 +55,7 @@ export const PLAN_COMPARE: CompareRow[] = [
     },
   },
   {
-    label: 'Downloads a day (video, caption, hashtags)',
+    label: 'Downloads a day (the video, and the caption + hashtags, each count as one)',
     short: 'Downloads',
     cells: {
       free: { value: '1, watermarked', short: '1 · mark', on: false },
@@ -78,7 +78,7 @@ export const PLAN_COMPARE: CompareRow[] = [
 export const EVERY_PLAN = [
   'A full bit: hook, setup, tags and button',
   'A 5-second video of it',
-  'Hotter, tighter, mix and tag swap',
+  'Hotter, tighter, escalate (each counts as a bit), mix and tag swap',
   'Teleprompter',
   'Scene and screenplay',
   'Caption and hashtags',

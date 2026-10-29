@@ -5,7 +5,7 @@
  * straight into TikTok); elsewhere it downloads. */
 import { useEffect, useRef, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
-import { exportBit } from '@/lib/bits.functions'
+import { chargeDownload, exportBit } from '@/lib/bits.functions'
 import { isPaidTier, type BitTier, type BitVersion } from '@/lib/bits/shared'
 import { PLANS, usd } from '@/lib/pricing'
 import { anonSessionId, canShareFiles, isShareAbort, jokeTrack, saveBlob, svgToPng } from '../joke/jokeClient'
@@ -79,9 +79,26 @@ export function DownloadSheet({
     }
   }, [format, bitId, version, paid])
 
+  const charge = useServerFn(chargeDownload)
   async function save() {
     if (!ready) return
-    jokeTrack('download', tier, { format, watermarked: ready.watermarked })
+    // One download against today's cap (the picture and the PDF are each a
+    // kind; the same kind of the same version again today is free).
+    let r: Awaited<ReturnType<typeof chargeDownload>>
+    try {
+      r = await charge({ data: { bit_id: bitId, version_id: version.id, kind: format === 'pdf' ? 'pdf' : 'image', anon_session_id: anonSessionId() } })
+    } catch {
+      say("Couldn't save. Try again.")
+      return
+    }
+    if (!r.ok) {
+      if (r.reason === 'limited') {
+        say(`That's today's ${r.cap} download${r.cap === 1 ? '' : 's'}. Basic gets 3 a day, Pro unlimited.`)
+        onUpgrade()
+      } else say(r.reason === 'sign_in' ? 'Sign in to save it.' : "Couldn't save. Try again.")
+      return
+    }
+    jokeTrack('download', tier, { kind: format === 'pdf' ? 'pdf' : 'image', format, watermarked: ready.watermarked, used: r.used, cap: r.cap, repeat: r.repeat })
     const file = new File([ready.blob], ready.name, { type: ready.blob.type })
     if (canShareFiles([file])) {
       try {
@@ -136,7 +153,7 @@ export function DownloadSheet({
         <button className="bt-btn block" disabled={!ready} onClick={() => void save()}>
           save
         </button>
-        <CaptionBox bitId={bitId} versionId={version.id} tier={tier} say={say} />
+        <CaptionBox bitId={bitId} versionId={version.id} tier={tier} say={say} onLimit={onUpgrade} />
         {!paid && (
           <button
             className="bt-btn ghost block"

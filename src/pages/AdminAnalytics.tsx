@@ -1,7 +1,7 @@
 // Admin analytics page. Growth + acquisition are prioritized above KPI cards.
 import { useEffect, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
-import { adminAnalytics, adminGrowth, adminAcquisition, type GrowthPayload, type GrowthBlock, type AcquisitionPayload } from '@/lib/admin.functions'
+import { adminAnalytics, adminGrowth, adminAcquisition, adminDownloads, type GrowthPayload, type GrowthBlock, type AcquisitionPayload, type DownloadsPayload } from '@/lib/admin.functions'
 import { AdminShell } from '@/components/AdminShell'
 import { AdminProductSection, moreBox, moreSummary } from '@/pages/AdminProduct'
 import { DailyReportSection } from '@/pages/AdminDaily'
@@ -34,6 +34,12 @@ function Bar({ value, max }: { value: number; max: number }) {
 
 export function AdminAnalyticsPage() {
   const load = useServerFn(adminAnalytics)
+  const loadDownloads = useServerFn(adminDownloads)
+  const [downloads, setDownloads] = useState<DownloadsPayload | null>(null)
+  useEffect(() => {
+    loadDownloads({ data: {} }).then(setDownloads).catch(() => setDownloads(null))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const loadGrowth = useServerFn(adminGrowth)
   const loadAcq = useServerFn(adminAcquisition)
   const [data, setData] = useState<Analytics | null>(null)
@@ -98,6 +104,33 @@ export function AdminAnalyticsPage() {
             </section>
           )}
 
+
+          {/* Downloads — the ledger */}
+          {downloads && (
+            <section style={{ marginBottom: 24 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
+                <h2 style={{ ...sectionH2, margin: 0 }}>downloads · each kind counts</h2>
+                <span style={{ fontSize: 11, color: '#6f666c' }}>
+                  30d: {downloads.users_30} people · {downloads.clean_30} clean · {downloads.watermarked_30} watermarked
+                  {downloads.by_tier_30.length ? ' · ' + downloads.by_tier_30.map((t) => `${t.tier} ${t.n}`).join(', ') : ''}
+                </span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12 }}>
+                {downloads.by_kind.map((k) => (
+                  <Card key={k.kind} label={k.kind === 'caption' ? 'caption + hashtags' : k.kind} value={k.d30} sub={`24h ${k.d1} · 7d ${k.d7} · all ${k.all}`} />
+                ))}
+              </div>
+              {downloads.recent.length > 0 && (
+                <div style={{ marginTop: 10, fontSize: 12, color: '#443c42', display: 'grid', gap: 2 }}>
+                  {downloads.recent.slice(0, 10).map((r, i) => (
+                    <div key={i}>
+                      {fmt(r.created_at)} · {r.kind} · {r.tier} · {r.watermarked ? 'watermark' : 'clean'} · {r.user_id.slice(0, 8)}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
 
           {/* Acquisition — second */}
           {acq && (

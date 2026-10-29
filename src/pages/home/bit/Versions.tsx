@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { swapTag, varyBit } from '@/lib/bits.functions'
-import { VARY_KINDS, type Bit, type BitVersion, type VaryKind } from '@/lib/bits/shared'
+import { VARY_KINDS, type Bit, type BitTier, type BitVersion, type VaryKind } from '@/lib/bits/shared'
 import { anonSessionId } from '../joke/jokeClient'
 
 export function chipLabel(v: BitVersion, all: BitVersion[]): string {
@@ -27,6 +27,7 @@ export function Versions({
   onMix,
   say,
   onSignIn,
+  onLimit,
 }: {
   bit: Bit
   current: BitVersion
@@ -37,6 +38,8 @@ export function Versions({
   /** Set for a guest: rewriting takes a free account, so every rewrite
    *  control opens the sign-in sheet instead. */
   onSignIn?: (from: 'rewrite' | 'swap' | 'mix') => void
+  /** A rewrite counts as a new bit: at the daily cap, open the limit sheet. */
+  onLimit?: (tier: BitTier) => void
 }) {
   const vary = useServerFn(varyBit)
   const swap = useServerFn(swapTag)
@@ -59,6 +62,7 @@ export function Versions({
       const r = await vary({ data: { bit_id: bit.id, from_version_id: original.id, kind: k, anon_session_id: anonSessionId() } })
       if (r.ok) onAdd(r.version)
       else if (r.reason === 'sign_in') say('Sign in to rewrite it. It\'s free.')
+      else if (r.reason === 'daily') (onLimit ? onLimit(r.tier) : say("That's today's bits. A rewrite counts as a new one."))
       else say(r.reason === 'too_many' ? 'That bit has all the versions it can hold.' : "Couldn't write that version. Try again.")
     } catch {
       say("Couldn't write that version. Try again.")

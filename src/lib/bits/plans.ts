@@ -10,3 +10,14 @@ export const BIT_CAPS: Record<Exclude<BitTier, 'pro'>, number> = {
   free: 2, // counting the bit written as a guest earlier that day
   basic: 5,
 }
+
+/** Downloads a day. A download is one of: the caption + hashtags (copied),
+ *  the picture or script PDF, the 5-second video. Each kind counts on its
+ *  own; a second copy of the same version in the same day is free. Pro has
+ *  no cap. Guests can't download at all (sign-in first). */
+export const DOWNLOAD_CAPS: Record<Exclude<BitTier, 'pro' | 'guest'>, number> = {
+  free: 1,
+  basic: 3,
+}
+export const DOWNLOAD_KINDS = ['caption', 'image', 'pdf', 'video'] as const
+export type DownloadKind = (typeof DOWNLOAD_KINDS)[number]
