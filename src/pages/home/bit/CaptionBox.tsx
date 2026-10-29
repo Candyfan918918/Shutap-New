@@ -12,6 +12,8 @@ export function CaptionBox({
   tier,
   say,
   onLimit,
+  downloadsLeft,
+  onCharged,
 }: {
   bitId: string
   versionId: string
@@ -19,6 +21,8 @@ export function CaptionBox({
   say: (m: string) => void
   /** at the daily download cap: open the plans */
   onLimit?: () => void
+  downloadsLeft?: number | null
+  onCharged?: (used: number, cap: number | null) => void
 }) {
   const fn = useServerFn(getCaption)
   const charge = useServerFn(chargeDownload)
@@ -52,6 +56,7 @@ export function CaptionBox({
     }
     if (!r.ok) {
       if (r.reason === 'limited') {
+        jokeTrack('download_blocked', tier, { kind: 'caption', used: r.used, cap: r.cap })
         say(`That's today's ${r.cap} download${r.cap === 1 ? '' : 's'}. Basic gets 3 a day, Pro unlimited.`)
         onLimit?.()
       } else say(r.reason === 'sign_in' ? 'Sign in to copy it.' : "Couldn't copy. Try again.")
@@ -61,40 +66,51 @@ export function CaptionBox({
       await navigator.clipboard.writeText(text)
       say(`${what} copied.`)
       jokeTrack('caption_copied', tier, { what })
-      if (!r.repeat) jokeTrack('download', tier, { kind: 'caption', watermarked: false, used: r.used, cap: r.cap })
+      if (!r.repeat) {
+        jokeTrack('download', tier, { kind: 'caption', watermarked: false, used: r.used, cap: r.cap })
+        onCharged?.(r.used, r.cap)
+      }
     } catch {
       say("Couldn't copy. Press and hold the text instead.")
     }
   }
 
+  const leftLabel = downloadsLeft === undefined ? '' : downloadsLeft === null ? '' : ` · ${downloadsLeft} download${downloadsLeft === 1 ? '' : 's'} left today`
+
   if (locked) {
     return (
-      <div data-ph-private className="bt-cap">
+      <section data-ph-private className="bt-card bt-cap" aria-label="Caption and hashtags">
         <span className="bt-lbl">caption + hashtags</span>
-        <p className="bt-note">Sign in free to copy the caption and hashtags for this bit.</p>
-      </div>
+        <p className="bt-note">A caption under 100 characters and five hashtags, written for this bit. Sign in free to see and copy them.</p>
+      </section>
     )
   }
 
   return (
-    <div data-ph-private className="bt-cap" aria-live="polite">
-      <span className="bt-lbl">caption + hashtags</span>
+    <section data-ph-private className="bt-card bt-cap" aria-live="polite" aria-label="Caption and hashtags">
+      <div className="bt-between">
+        <span className="bt-lbl">caption + hashtags</span>
+        <span className="bt-note">copying is one download{leftLabel}</span>
+      </div>
       {state === 'loading' && <p className="bt-note">writing the caption…</p>}
       {state === 'error' && <p className="bt-note">Couldn't write a caption this time.</p>}
       {state && typeof state === 'object' && (
         <>
           <p className="cap">{state.caption}</p>
-          <p className="tags">{state.hashtags.join(' ')}</p>
+          <div className="bt-chips" aria-label="Hashtags">
+            {state.hashtags.map((h) => (
+              <span key={h} className="bt-chip" style={{ cursor: 'default' }}>
+                {h}
+              </span>
+            ))}
+          </div>
           <div className="bt-chips">
-            <button className="bt-chip" onClick={() => void copy(`${state.caption}\n\n${state.hashtags.join(' ')}`, 'Caption and hashtags')}>
-              copy both
-            </button>
-            <button className="bt-chip" onClick={() => void copy(state.hashtags.join(' '), 'Hashtags')}>
-              copy hashtags
+            <button className="bt-btn sm" disabled={downloadsLeft === 0} onClick={() => void copy(`${state.caption}\n\n${state.hashtags.join(' ')}`, 'Caption and hashtags')}>
+              {downloadsLeft === 0 ? "that's today's downloads" : 'copy caption + hashtags'}
             </button>
           </div>
         </>
       )}
-    </div>
+    </section>
   )
 }

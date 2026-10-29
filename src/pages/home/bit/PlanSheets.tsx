@@ -16,7 +16,10 @@ import { changePlanToPro } from '@/lib/payments.functions'
 import { getStripeEnvironment } from '@/lib/stripe'
 import { EVERY_PLAN, PLANS, PLAN_COMPARE, usd, type CompareTier, type PaidPlan } from '@/lib/pricing'
 
-export type PaywallWhere = 'bit_3' | 'daily_limit' | 'download'
+/** Where the plans opened from. 'download' = remove the watermark;
+ *  'download_count' = a free account out of downloads today;
+ *  'download_limit' = a Basic account out of downloads today (Pro only). */
+export type PaywallWhere = 'bit_3' | 'daily_limit' | 'download' | 'download_count' | 'download_limit'
 
 /** What every plan keeps, Free included (the same list as the pricing
  *  page), so a paywall never reads as "pay to use Shutap". */
@@ -92,12 +95,24 @@ export function PaywallBody({
   onPick: (p: PaidPlan) => void
   onClose: () => void
 }) {
-  const download = where === 'download'
+  const download = where === 'download' || where === 'download_count'
+  const head =
+    where === 'download'
+      ? 'Download it clean.'
+      : where === 'download_count'
+        ? "That's today's free download."
+        : "That's today's free bits."
+  const sub =
+    where === 'download'
+      ? 'Free downloads carry the shutap.com watermark. Basic gets 3 clean downloads a day; Pro has no limit.'
+      : where === 'download_count'
+        ? 'Free is one download a day: the video, or the caption and hashtags, or the picture. Basic gets 3 a day with no watermark; Pro has no limit. More at midnight Pacific.'
+        : 'A rewrite is a new bit and a new video. Want to keep going tonight?'
   return (
     <div className="pw">
       <div className="pw-head">
-        <h3 id="bit-sheet-title">{download ? 'Download it clean.' : "That's today's free bits."}</h3>
-        <p className="pw-sub">{download ? 'Free is one download a day (the video, or the caption and hashtags, or the picture), with a shutap.com watermark. Basic gets 3 clean ones; Pro has no limit.' : 'A rewrite is a new bit and a new video. Want to keep going tonight?'}</p>
+        <h3 id="bit-sheet-title">{head}</h3>
+        <p className="pw-sub">{sub}</p>
       </div>
 
       <Compare tiers={['free', 'basic', 'pro']} you="free" />
@@ -139,10 +154,13 @@ export function UpgradeBody({
   onChoose,
   onUpgraded,
   onClose,
+  why = 'bits',
 }: {
   onChoose: () => void
   onUpgraded: () => void
   onClose: () => void
+  /** a Basic account at its bit cap, or at its download cap */
+  why?: 'bits' | 'downloads'
 }) {
   const change = useServerFn(changePlanToPro)
   const [busy, setBusy] = useState(false)
@@ -174,9 +192,9 @@ export function UpgradeBody({
 
   return (
     <>
-      <h3 id="bit-sheet-title">That's 5 for today.</h3>
+      <h3 id="bit-sheet-title">{why === 'downloads' ? "That's 3 downloads for today." : "That's 5 for today."}</h3>
       <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-        Pro writes as many as you want.
+        {why === 'downloads' ? 'Pro downloads as many as you want.' : 'Pro writes as many as you want.'}
       </p>
       <Compare tiers={['basic', 'pro']} you="basic" />
       <button className="bt-btn block" disabled={busy} onClick={() => void go()}>

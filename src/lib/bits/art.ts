@@ -79,14 +79,16 @@ function draw(blocks: Block[], k: number, top: number): string {
 }
 
 function heavyMark(): string {
-  const size = 86
-  const text = 'SHUTAP.COM · SHUTAP.COM · SHUTAP.COM'
+  // The logo wordmark — shut + ap + .com — tilted across the middle, the
+  // same mark the free video carries.
+  const size = 150
+  const cx = ART_W / 2
+  const cy = ART_H / 2
   return (
-    `<g opacity="0.13" transform="rotate(-22 ${ART_W / 2} ${ART_H / 2})">` +
-    Array.from({ length: 14 })
-      .map((_, i) => `<text x="${ART_W / 2}" y="${r1(-ART_H * 0.25 + i * 225)}" text-anchor="middle" font-family="${DISPLAY}" font-weight="800" font-size="${size}" letter-spacing="-2" fill="${ROSE}">${text}</text>`)
-      .join('') +
-    `</g>`
+    `<g opacity="0.5" transform="rotate(-18 ${cx} ${cy})">` +
+    `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" font-family="${DISPLAY}" font-weight="800" font-size="${size}" letter-spacing="-3">` +
+    `<tspan fill="#0b080f">shut</tspan><tspan fill="#c1216b">ap</tspan><tspan fill="#0b080f">.com</tspan>` +
+    `</text></g>`
   )
 }
 
