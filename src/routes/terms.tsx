@@ -39,10 +39,11 @@ function TermsPage() {
 
       <h3>1. What Shutap is</h3>
       <p>
-        Shutap is the humor amplifier: it amplifies your own story into a bit. You write your
-        story. Shutap removes identifying details and writes comedy from it, with teleprompter,
-        scene and screenplay views. You can save, share or post what it writes to a room.
-        Shutap is for entertainment only.
+        Shutap is the humor amplifier: it amplifies your own story into a bit. You type what
+        happened. Shutap removes identifying details and writes comedy from it, in your voice, with
+        a short video, a caption and hashtags, and teleprompter, scene and screenplay views. You
+        can download, share or post what it writes. Shutap amplifies your humor; it never replaces
+        it. Shutap is for entertainment only.
       </p>
       <p>
         We are also developing Shutap Enterprise, for presentations, demos, launches and meetings.
@@ -159,9 +160,16 @@ function TermsPage() {
       <p>
         A guest can write <b>one new bit a day</b> without an account. Signing in is free and allows
         <b>two new bits a day</b> in total, counting any bit written as a guest that day. Basic allows
-        five a day; Pro has no daily number, within fair use. Rewrites of a bit you already have do
-        not count. Signing in keeps your bits in your set list and lets you post them. Free and
-        guest saves carry a Shutap watermark.
+        five a day; Pro has no daily number, within fair use. A rewrite (hotter, tighter, escalate)
+        counts as a new bit; swapping a tag or mixing your own does not. Signing in keeps your bits
+        in your set list and lets you post them.
+      </p>
+      <p>
+        Downloads are counted separately. The video, the caption and hashtags (when copied), and
+        the picture or script PDF each count as one download; the same one of the same version
+        again the same day is free. Guests can watch but not download. A free account gets
+        <b>one download a day</b>, with a shutap.com watermark on the video and the picture. Basic
+        gets <b>three a day</b> with no watermark; Pro has no daily number, within fair use.
       </p>
       <p>
         Limits reset at midnight Pacific time (Los Angeles) for everyone. Limits are a cost
@@ -171,9 +179,10 @@ function TermsPage() {
 
       <h3 id="refunds">13. Paid plans, billing and refunds</h3>
       <p>
-        <b>Basic</b> costs <b>US$1.99 per month</b> and allows five new bits a day with no watermark
-        on what you save. <b>Pro</b> costs <b>US$7.99 per month</b> (or US$49.99 per year where offered)
-        and allows unlimited new bits within fair use, no watermark, and the Mirror. Prices are plus
+        <b>Basic</b> costs <b>US$1.99 per month</b> and allows five new bits a day and three
+        downloads a day with no watermark. <b>Pro</b> costs <b>US$7.99 per month</b> (or US$49.99 per
+        year where offered) and allows unlimited new bits and downloads within fair use, no
+        watermark, and the Mirror. Prices are plus
         any taxes, billed through Stripe. Moving from Basic to Pro charges the prorated difference
         for the current period at the time you switch.
       </p>

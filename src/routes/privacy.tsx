@@ -58,7 +58,14 @@ function PrivacyPage() {
           <b>What you write:</b> your original story is checked for contact details and sent to an
           AI model that removes identifying details. If that model doesn&rsquo;t respond, only
           emails, phone numbers and links are removed before saving. We save the cleaned story,
-          with the bits Shutap writes from it and any rewrites you make.
+          with the bits Shutap writes from it, any rewrites you make, and the caption and hashtags
+          written for it. The short video is drawn from the bit on your own device; we don&rsquo;t
+          keep a copy of the file.
+        </li>
+        <li>
+          <b>Downloads:</b> when you download a video or picture, or copy the caption and hashtags,
+          we record which bit, which kind, your plan and the day, to count your daily limit and to
+          see which outputs people use. We don&rsquo;t keep the files.
         </li>
         <li>
           <b>Rooms:</b> what you post, your comments, likes, saves, follows and reports.
