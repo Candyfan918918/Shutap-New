@@ -97,7 +97,7 @@ function AiDisclosurePage() {
         Shutap uses AI models from Google (Gemini) and OpenAI, through the Lovable AI Gateway, to
         remove identifying details, run the crisis check, write and rank your bits, write rewrites,
         write the caption and hashtags, and build the Mirror. The writer is given one comedy
-        technique per draft from the Shutap Humor Lab bank, which is distilled from our own
+        technique per draft from the Shutap Humor Amplifier Lab bank, which is distilled from our own
         /funniest and /guides pages (the operation, never anyone&rsquo;s material). The short
         video is not AI-generated: it is drawn from the finished bit by a fixed template on your
         own device. Removing identifying details uses automated checks and an AI model, and it can
@@ -119,7 +119,7 @@ function AiDisclosurePage() {
       </p>
       <h3>Our own jokes</h3>
       <p>
-        The Shutap Humor Lab dataset is in-house: the Shutap team writes, selects and rates its own
+        The Shutap Humor Amplifier Lab dataset is in-house: the Shutap team writes, selects and rates its own
         jokes, pairing everyday situations with jokes tagged by technique, voice and how wild. It is
         what guides how Shutap writes, and it is the only joke material Shutap uses to train or
         tune AI models. How your text is handled is set out in the{' '}

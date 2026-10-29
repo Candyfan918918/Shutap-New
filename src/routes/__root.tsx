@@ -93,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Shutap - Humor Amplify Lab" },
+      { title: "Shutap Humor Amplifier Lab" },
       { name: "author", content: "Shutap" },
       { property: "og:site_name", content: "Shutap" },
       { property: "og:type", content: "website" },

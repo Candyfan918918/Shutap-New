@@ -8,7 +8,7 @@ import { submitBusinessInquiry } from '@/lib/business-inquiry.functions'
 const URL = `${SITE_URL}/business`
 const TITLE = 'Shutap Enterprise: Humor for Presentations, Demos, Launches and Meetings | Shutap'
 const DESCRIPTION =
-  'Shutap Enterprise, from the Shutap Humor Lab: original, human-steered humor for presentations, roadshows, product demos, launches and meetings, built on the Humor Lab dataset. Request pricing and a tailored solution.'
+  'Shutap Enterprise, from the Shutap Humor Amplifier Lab: original, human-steered humor for presentations, roadshows, product demos, launches and meetings, built on the Humor Amplifier Lab dataset. Request pricing and a tailored solution.'
 
 type UseCase = 'presentations' | 'roadshows' | 'demos' | 'meetings' | 'dataset' | 'other'
 type Size = '1-50' | '51-500' | '501-5000' | '5000+'
@@ -19,7 +19,7 @@ const USE_CASES: { id: UseCase; label: string }[] = [
   { id: 'roadshows', label: 'Roadshows and investor pitches' },
   { id: 'demos', label: 'Product demos and launches' },
   { id: 'meetings', label: 'Meetings and conversations' },
-  { id: 'dataset', label: 'The Shutap Humor Lab dataset' },
+  { id: 'dataset', label: 'The Shutap Humor Amplifier Lab dataset' },
   { id: 'other', label: 'Something else' },
 ]
 
@@ -29,8 +29,8 @@ const VALUE = [
     b: 'Shutap starts from your own story, product and facts, so every line belongs to your company and could not be dropped into anyone else’s deck.',
   },
   {
-    h: 'The Humor Lab dataset, built by hand',
-    b: 'Behind the writing is the Shutap Humor Lab dataset, an in-house collection the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. None of it comes from users. It is the foundation for how Shutap finds what is funny.',
+    h: 'The Humor Amplifier Lab dataset, built by hand',
+    b: 'Behind the writing is the Shutap Humor Amplifier Lab dataset, an in-house collection the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. None of it comes from users. It is the foundation for how Shutap finds what is funny.',
   },
   {
     h: 'Your people stay in charge',
@@ -47,7 +47,7 @@ const SOLUTIONS = [
   ['Roadshows and investor pitches', 'Lines that survive being said fifty times and adapt to each room.'],
   ['Product demos and launches', 'Open with the problem everyone recognizes and let the product be the turn.'],
   ['Meetings and conversations', 'Lighter, clearer communication for the people who lead and present.'],
-  ['Humor Lab dataset access', 'For teams and researchers: access is reviewed case by case under a separate agreement.'],
+  ['Humor Amplifier Lab dataset access', 'For teams and researchers: access is reviewed case by case under a separate agreement.'],
 ]
 
 const STEPS = [
