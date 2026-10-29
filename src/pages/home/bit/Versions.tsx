@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { swapTag, varyBit } from '@/lib/bits.functions'
 import { VARY_KINDS, type Bit, type BitTier, type BitVersion, type VaryKind } from '@/lib/bits/shared'
-import { anonSessionId } from '../joke/jokeClient'
+import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 
 export function chipLabel(v: BitVersion, all: BitVersion[]): string {
   if (v.kind === 'mix') {
@@ -70,7 +70,11 @@ export function Versions({
         onAdd(r.version)
         onCharged?.()
       } else if (r.reason === 'sign_in') say('Sign in to rewrite it. It\'s free.')
-      else if (r.reason === 'daily') (onLimit ? onLimit(r.tier) : say("That's today's bits. A rewrite counts as a new one."))
+      else if (r.reason === 'daily') {
+        jokeTrack('rewrite_blocked', r.tier, { kind: k })
+        if (onLimit) onLimit(r.tier)
+        else say("That's today's bits. A rewrite counts as a new one.")
+      }
       else say(r.reason === 'too_many' ? 'That bit has all the versions it can hold.' : "Couldn't write that version. Try again.")
     } catch {
       say("Couldn't write that version. Try again.")

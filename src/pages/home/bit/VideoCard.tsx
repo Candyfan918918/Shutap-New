@@ -115,6 +115,7 @@ export function VideoCard({
       }
     }
     const ac = audioRef.current!
+    jokeTrack('video_sound_toggled', tier, { on: ac.state !== 'running' })
     if (ac.state === 'running') void ac.suspend()
     else void ac.resume()
   }
@@ -123,6 +124,7 @@ export function VideoCard({
     if (onSignIn) return onSignIn()
     if (!skipConfirm && beforeDownload?.()) return
     if (support === 'none') {
+      jokeTrack('video_fallback_picture', tier, { reason: 'unsupported' })
       say("This browser can't make a video file. Saving the picture instead.")
       return onFallbackPicture()
     }
@@ -148,7 +150,7 @@ export function VideoCard({
       const out = await encodeVideo(spec, { watermark, onProgress: (p) => setBusy(p) })
       const slug = version.hook.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'bit'
       const name = `${slug}-shutap.${out.ext}`
-      jokeTrack('download', tier, { kind: 'video', ext: out.ext, audio: out.audio, watermarked: watermark, used: r.used, cap: r.cap, repeat: r.repeat })
+      jokeTrack('download', tier, { kind: 'video', ext: out.ext, audio: out.audio, watermarked: watermark, used: r.used, cap: r.cap, repeat: r.repeat, resumed: skipConfirm })
       const file = new File([out.blob], name, { type: out.blob.type })
       if (canShareFiles([file])) {
         try {
@@ -162,6 +164,8 @@ export function VideoCard({
       say(watermark ? 'Saved, with the shutap.com watermark.' : 'Saved. No watermark.')
     } catch (e) {
       console.warn('[video] encode failed', e)
+      jokeTrack('video_encode_failed', tier, { support, message: e instanceof Error ? e.message.slice(0, 120) : 'unknown' })
+      jokeTrack('video_fallback_picture', tier, { reason: 'encode_failed' })
       say("Couldn't make the video on this device. Saving the picture instead; it won't count again.")
       onFallbackPicture()
     } finally {
