@@ -89,7 +89,7 @@ const STEPS = ['reading it · names removed', 'finding the angle', 'writing four
 /* ── the note left before sign-in, so the bit comes back after it ── */
 /** What a guest was doing when they were asked to sign in; picked back up
  *  once they're in. */
-type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'save' | 'scene' | 'screenplay' | 'post' | 'sheet'
+type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'caption' | 'save' | 'scene' | 'screenplay' | 'post' | 'sheet'
 function writePending(bitId: string, anon: string, from?: SigninFrom) {
   try {
     localStorage.setItem(PENDING_KEY, JSON.stringify({ bit_id: bitId, anon, from, at: Date.now() }))
@@ -203,7 +203,7 @@ export function BitSurface() {
   /** signin: a feature that needs an account · signin_write: a guest's
    *  second bit · paywall: Basic and Pro (free at its limit, or removing the
    *  watermark) · upgrade: Basic at its limit · fair: Pro's fair-use cap */
-  const [sheet, setSheet] = useState<null | 'signin' | 'signin_write' | 'paywall' | 'upgrade' | 'rate' | 'fair'>(null)
+  const [sheet, setSheet] = useState<null | 'signin' | 'signin_write' | 'paywall' | 'upgrade' | 'rate' | 'fair' | 'first_download'>(null)
   const sheetOpenedAt = useRef(0)
   const [paywallWhere, setPaywallWhere] = useState<PaywallWhere>('bit_3')
   const [signinFrom, setSigninFrom] = useState<SigninFrom>('sheet')
@@ -223,6 +223,22 @@ export function BitSurface() {
     dlRef.current({ data: { anon_session_id: anonSessionId() } }).then(setDlUsage).catch(() => {})
   }, [])
   const downloadsLeft = dlUsage ? (dlUsage.cap === null ? null : Math.max(0, dlUsage.cap - dlUsage.used)) : undefined
+  /** a download to finish once the person is back (after sign-in or payment), or after the first-download confirm */
+  const [resume, setResume] = useState<'video' | 'caption' | null>(null)
+  /** the first-download-of-the-day confirm: which action asked, so the sheet can finish it */
+  const [firstAsk, setFirstAsk] = useState<'video' | 'caption' | null>(null)
+  /** Free accounts get one download a day: before the first one, ask which.
+   *  Returns true when the sheet took over (the caller stops). */
+  const confirmFirst = useCallback(
+    (kind: 'video' | 'caption'): boolean => {
+      if (tier !== 'free' || !dlUsage || dlUsage.used !== 0 || resume === kind) return false
+      setFirstAsk(kind)
+      setSheet('first_download')
+      jokeTrack('download_first_confirm', tier, { kind })
+      return true
+    },
+    [tier, dlUsage, resume],
+  )
   useEffect(() => {
     if (phase === 'bit' && tier !== 'guest') refreshDownloads()
   }, [phase, tier, refreshDownloads])
@@ -390,6 +406,7 @@ export function BitSurface() {
         requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
         // Pick up where they were.
         if (note.from === 'download') setDownloadOpen(true)
+        else if (note.from === 'video' || note.from === 'caption') setResume(note.from)
         else if (note.from === 'save') say('Kept. It\'s in your set list.')
         else if (note.from === 'rewrite' || note.from === 'swap' || note.from === 'mix') say("You're in. Rewrite away.")
       }
@@ -471,16 +488,21 @@ export function BitSurface() {
     void trackEvent('paywall_seen', { where, tier })
   }
 
-  /** Out of downloads, or wants the watermark gone. */
-  function onDownloadLimit(why: 'count' | 'watermark') {
+  /** Out of downloads, or wants the watermark gone. The note makes
+   *  /subscribe/return land back here and finish the download. */
+  function onDownloadLimit(why: 'count' | 'watermark', kind: 'video' | 'caption' = 'video') {
     if (tier === 'pro') return
+    if (bit) writePending(bit.id, anonSessionId(), kind)
     if (why === 'watermark') return openPaywall('download')
     openPaywall(tier === 'basic' ? 'download_limit' : 'download_count')
   }
 
   async function onUpgraded() {
     setSheet(null)
+    const note = readPending()
+    clearPending()
     await refresh()
+    if (note && (note.from === 'video' || note.from === 'caption')) setResume(note.from)
     say("You're on Pro. Write as many as you want.")
   }
 
@@ -813,14 +835,29 @@ export function BitSurface() {
               story={bit.story}
               tier={tier}
               say={say}
-              onSignIn={tier === 'guest' ? () => openSignin('download') : undefined}
-              onLimit={onDownloadLimit}
+              onSignIn={tier === 'guest' ? () => openSignin('video') : undefined}
+              onLimit={(why) => onDownloadLimit(why, 'video')}
               onFallbackPicture={() => setDownloadOpen(true)}
               downloadsLeft={downloadsLeft}
               onCharged={(r) => setDlUsage({ used: r.used, cap: r.cap, tier: r.tier })}
+              beforeDownload={() => confirmFirst('video')}
+              resume={resume === 'video'}
+              onResumed={() => setResume(null)}
             />
 
-            <CaptionBox bitId={bit.id} versionId={version.id} tier={tier} say={say} onLimit={() => onDownloadLimit('count')} downloadsLeft={downloadsLeft} onCharged={(used, cap) => setDlUsage((u) => (u ? { ...u, used, cap } : { used, cap, tier }))} />
+            <CaptionBox
+              bitId={bit.id}
+              versionId={version.id}
+              tier={tier}
+              say={say}
+              onSignIn={tier === 'guest' ? () => openSignin('caption') : undefined}
+              onLimit={() => onDownloadLimit('count', 'caption')}
+              downloadsLeft={downloadsLeft}
+              onCharged={(used, cap) => setDlUsage((u) => (u ? { ...u, used, cap } : { used, cap, tier }))}
+              beforeCopy={() => confirmFirst('caption')}
+              resume={resume === 'caption'}
+              onResumed={() => setResume(null)}
+            />
 
             <span className="bt-lbl">
               the bit · ~{version.est_seconds}s · wild {version.heat} · {bit.controls.audience}
@@ -987,7 +1024,10 @@ export function BitSurface() {
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               if (sheet === 'signin' || sheet === 'signin_write') dismissSignin('backdrop')
-              else setSheet(null)
+              else {
+                if (sheet === 'paywall' || sheet === 'upgrade') clearPending()
+                setSheet(null)
+              }
             }
           }}
         >
@@ -1013,7 +1053,10 @@ export function BitSurface() {
               <PaywallBody
                 where={paywallWhere}
                 onPick={(plan) => void trackEvent('plan_chosen', { plan, where: paywallWhere })}
-                onClose={() => setSheet(null)}
+                onClose={() => {
+                  clearPending()
+                  setSheet(null)
+                }}
               />
             )}
             {sheet === 'upgrade' && (
@@ -1021,8 +1064,41 @@ export function BitSurface() {
                 why={paywallWhere === 'download_limit' ? 'downloads' : 'bits'}
                 onChoose={() => void trackEvent('plan_chosen', { plan: 'pro', where: paywallWhere })}
                 onUpgraded={() => void onUpgraded()}
-                onClose={() => setSheet(null)}
+                onClose={() => {
+                  clearPending()
+                  setSheet(null)
+                }}
               />
+            )}
+            {sheet === 'first_download' && (
+              <>
+                <h3 id="bit-sheet-title">Your one free download today.</h3>
+                <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
+                  Free accounts get one a day: the video (with the shutap.com watermark), or the caption and hashtags. Which one?
+                </p>
+                <button
+                  className="bt-btn block"
+                  onClick={() => {
+                    setSheet(null)
+                    setResume('video')
+                  }}
+                >
+                  {firstAsk === 'video' ? 'download the video' : 'the video instead'}
+                </button>
+                <button
+                  className="bt-btn ghost block"
+                  onClick={() => {
+                    setSheet(null)
+                    setResume('caption')
+                  }}
+                >
+                  {firstAsk === 'caption' ? 'copy caption + hashtags' : 'the caption + hashtags instead'}
+                </button>
+                <p className="bt-note" style={{ textAlign: 'center' }}>Basic gets 3 a day with no watermark · Pro has no limit</p>
+                <button className="bt-btn ghost sm block" onClick={() => setSheet(null)}>
+                  not now
+                </button>
+              </>
             )}
             {sheet === 'fair' && (
               <>

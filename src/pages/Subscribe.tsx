@@ -519,7 +519,13 @@ export function SubscribeReturnPage() {
   // to flip now.
   useEffect(() => {
     if (state !== 'ok') return
-    if (!readJokePending()) return
+    let bitNote = false
+    try {
+      bitNote = !!localStorage.getItem('shutap_bit_pending')
+    } catch {
+      /* noop */
+    }
+    if (!readJokePending() && !bitNote) return
     navigate('/', { replace: true })
   }, [state, navigate])
 
