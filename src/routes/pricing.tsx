@@ -11,12 +11,12 @@ const BASIC = PLANS.basic.amount
 const PRO = PLANS.pro.amount
 
 const TITLE = `Pricing — Shutap, the Humor Amplifier, plans from ${usd(BASIC)}/mo`
-const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video, caption and hashtags from your story, with teleprompter, scene and screenplay views. Basic is ${usd(BASIC)}/month: 5 new bits a day, no watermark. Pro is ${usd(PRO)}/month: unlimited bits, no watermark and the Mirror. Cancel anytime.`
+const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video, caption and hashtags from your story, with teleprompter, scene and screenplay views. Free: one download a day with a watermark. Basic is ${usd(BASIC)}/month: 5 new bits and 3 clean downloads a day. Pro is ${usd(PRO)}/month: unlimited bits and downloads, no watermark, and the Mirror. Cancel anytime.`
 
 const QA = [
-  { q: 'Is Shutap really free?', a: 'Yes. Your first bit needs no account to read. Signing in is free, lets you rewrite and save it, and gives you 2 new bits a day. Rewrites (hotter, tighter, mix, tag swap) on your own bits never count against the limit.' },
-  { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 5 new bits a day and no watermark. Pro is ${usd(PRO)} a month: unlimited bits, no watermark and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
-  { q: 'What counts toward the daily limit?', a: 'Only new bits. Rewriting a bit you already have is free. Limits reset at midnight Pacific.' },
+  { q: 'Is Shutap really free?', a: 'Yes. Your first bit needs no account to read, and you can watch its video here. Signing in is free: it lets you rewrite it, and download the video with its caption and hashtags once a day (with a shutap.com watermark), and gives you 2 new bits a day. Rewrites (hotter, tighter, mix, tag swap) on your own bits never count against the limit.' },
+  { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 5 new bits a day and 3 downloads a day with no watermark. Pro is ${usd(PRO)} a month: unlimited bits, unlimited downloads with no watermark, and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
+  { q: 'What counts toward the daily limit?', a: 'New bits, and downloads. A download is the video, caption and hashtags for one bit, together. Rewriting a bit you already have is free. Limits reset at midnight Pacific.' },
   { q: 'Can I move from Basic to Pro?', a: 'Yes, any time. You pay the difference for the rest of the month, and Pro starts right away.' },
   { q: 'Is there a free trial?', a: 'No trial. The free plan is the trial: write your bits before you decide.' },
   { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your account; you keep your plan until the end of the period you paid for. Payments are handled by Stripe.' },
@@ -130,7 +130,7 @@ function PlanCard({ plan }: { plan: 'free' | 'basic' | 'pro' }) {
         </a>
       ) : (
         <Link to="/" className="fd-btn ghost block" style={{ marginTop: 'auto' }}>
-          write jokes free
+          start free
         </Link>
       )}
     </section>
@@ -143,10 +143,10 @@ function PricingPage() {
       <div className="fd-col" style={{ maxWidth: 980, gap: 22, paddingTop: 36 }}>
         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
           <h1 className="fd-h1" style={{ fontSize: 'clamp(30px,5vw,46px)' }}>
-            Free to write. {usd(BASIC)} to go clean.
+            Free to use. {usd(BASIC)} to download clean.
           </h1>
           <p className="fd-muted" style={{ fontSize: 16, maxWidth: 560, margin: 0 }}>
-            Shutap is free to use. Basic removes the watermark. Pro writes as many as you want and adds the Mirror.
+            Every bit comes with a 5-second video, a caption and hashtags. Free downloads one a day with a watermark. Basic removes it. Pro downloads as much as you want and adds the Mirror.
           </p>
         </div>
 
@@ -166,7 +166,7 @@ function PricingPage() {
             ))}
           </ul>
           <p className="fd-faint" style={{ margin: 0 }}>
-            Your first bit needs no account. Sign in free to rewrite and save it.
+            Your first bit needs no account. Sign in free to rewrite it and download the video.
           </p>
         </section>
 

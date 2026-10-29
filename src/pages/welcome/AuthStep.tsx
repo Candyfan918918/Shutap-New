@@ -191,7 +191,7 @@ export function AuthStep() {
           shut<span style={{ color: '#e7548a' }}>ap</span>
         </div>
         <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.45, color: SOFT, marginBottom: 4 }}>{emailOnly ? 'Sign in with email.' : 'Sign in.'}</Words>
-        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.45, color: TEXT }}>Post, follow, keep your jokes.</Words>
+        <Words as="div" style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, lineHeight: 1.45, color: TEXT }}>Keep your bits. Download the video. Say it funnier.</Words>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {!emailOnly && (<>

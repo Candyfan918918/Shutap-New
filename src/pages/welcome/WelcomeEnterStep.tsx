@@ -94,7 +94,7 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
           </Words>
         </div>
         <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 16, lineHeight: 1.6, color: SOFT, maxWidth: '34ch', margin: '0 auto' }}>
-          you're in. your jokes are saved to your set list.
+          you're in. your bits are saved to your set list.
         </div>
       </div>
       <div style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 16, padding: '18px 20px', textAlign: 'left', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
