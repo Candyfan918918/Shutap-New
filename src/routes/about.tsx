@@ -17,7 +17,7 @@ const SECTIONS = [
   },
   {
     heading: "A bit, not a pun",
-    body: "Most joke generators hand you a one-liner about a keyword. Shutap amplifies the humor already in your story: a hook that stops the scroll, a setup that tells it straight, tags that keep the laughs coming, and a button to end on. It uses your details and your voice, so it sounds like you, not like anyone could have posted it. It amplifies; it never replaces.",
+    body: "Most joke tools hand you a one-liner about a keyword. Shutap amplifies the humor already in your story: a hook that stops the scroll, a setup that tells it straight, tags that keep the laughs coming, and a button to end on. It uses your details and your voice, so it sounds like you, not like anyone could have posted it. It amplifies; it never replaces.",
   },
   {
     heading: "Built for content creators",

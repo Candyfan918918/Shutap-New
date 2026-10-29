@@ -61,8 +61,8 @@ export const Route = createFileRoute("/guides/")({
           url: `${SITE_URL}${PATH}`,
           hasPart: [{
             "@type": "WebPage",
-            name: "AI joke generator",
-            url: `${SITE_URL}/ai-joke-generator`,
+            name: "The humor amplifier",
+            url: `${SITE_URL}/humor-amplifier`,
           }, ...GUIDES.map((g) => ({
             "@type": "WebPage",
             name: g.h1,
@@ -82,7 +82,7 @@ export const Route = createFileRoute("/guides/")({
       sections={[]}
       linkGroups={[
         { heading: "Tools", items: [
-          { href: "/ai-joke-generator", label: "AI joke generator", blurb: "Turn your own story into a complete comedy bit: hook, setup, tags and button — not random one-liners." },
+          { href: "/humor-amplifier", label: "The humor amplifier", blurb: "Turn what happened into a post: a bit in your voice, a 5-second video, a caption and hashtags — not random one-liners." },
           ...toItems("tool"),
         ] },
         ...topicGroups(),

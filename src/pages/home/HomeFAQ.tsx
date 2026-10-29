@@ -11,7 +11,7 @@ const HOME_QUESTIONS = [
   'Does anyone at Shutap read what I write?',
   "Isn't using AI for comedy a shortcut?",
   'Is Shutap free?',
-  'How is Shutap different from AI joke generators?',
+  'How is Shutap different from AI joke tools?',
   'Can comedians use Shutap to write stand-up?',
   'What is Shutap Enterprise?',
   'Is my real name on anything?',
