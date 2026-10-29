@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/about";
-const TITLE = "About Shutap — The Humor Amplifier";
+const TITLE = "About Shutap - Humor Amplify Lab";
 const DESCRIPTION =
   "Shutap is the humor amplifier. Type what happened, get a bit in your voice with a hook, setup, tags and button, a 5-second video, caption and hashtags, then run it in the teleprompter, as a scene or a screenplay page.";
 const CAPSULE =
