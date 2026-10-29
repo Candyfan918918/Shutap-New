@@ -48,8 +48,8 @@ function GuidelinesPage() {
           </li>
           <li>
             <b>No real names.</b> No addresses, workplaces, handles or anything else that points to
-            someone. Our scrubber removes a lot of this. Don&rsquo;t add it back in a caption or
-            comment.
+            someone. Our scrubber removes a lot of this. Don&rsquo;t add it back in a caption,
+            a hashtag, a video or a comment.
           </li>
           <li>No harassment, threats or targeting anyone.</li>
           <li>No hate.</li>

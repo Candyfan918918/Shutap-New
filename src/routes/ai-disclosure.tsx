@@ -95,9 +95,13 @@ function AiDisclosurePage() {
       </div>
       <p>
         Shutap uses AI models from Google (Gemini) and OpenAI, through the Lovable AI Gateway, to
-        remove identifying details, run the crisis check, write and rank your bits, write rewrites
-        and build the Mirror. Removing identifying details uses automated checks and an AI model,
-        and it can miss things. No person writes or reviews a bit before you see it.
+        remove identifying details, run the crisis check, write and rank your bits, write rewrites,
+        write the caption and hashtags, and build the Mirror. The writer is given one comedy
+        technique per draft from the Shutap Humor Lab bank, which is distilled from our own
+        /funniest and /guides pages (the operation, never anyone&rsquo;s material). The short
+        video is not AI-generated: it is drawn from the finished bit by a fixed template on your
+        own device. Removing identifying details uses automated checks and an AI model, and it can
+        miss things. No person writes or reviews a bit before you see it.
       </p>
       <p>
         Every bit starts from the story you type. Writing a bit doesn&rsquo;t search the internet
