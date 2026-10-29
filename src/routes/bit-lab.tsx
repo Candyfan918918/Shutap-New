@@ -94,7 +94,7 @@ function BitLab() {
 
         <div className="fd-row" style={{ flexWrap: 'wrap' }}>
           <button className="fd-btn" disabled={!story.trim()} onClick={() => run([story.trim()])}>
-            write the bit
+            make it funnier
           </button>
           <button className="fd-btn ghost" onClick={() => run(SAMPLES)}>
             run the 3 samples

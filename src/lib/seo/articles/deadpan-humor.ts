@@ -44,7 +44,7 @@ const guide: Guide = {
     },
     {
       heading: "How to practice it",
-      body: "Record the same line five times: once smiling, once flat, once like a weather forecast, once while doing a chore, once as fast as you can. Watch them full screen with the sound on and pick the take where you'd believe the speaker isn't joking. That one is usually funniest. Next, try one-word answers to a friend's questions and see how long you can hold a straight face. If you'd like a starting point, Shutap, the AI joke generator for creators, lets you write what happened and pick the deadpan voice for a draft of the bit. Cut every line you couldn't say without smiling, rewrite the rest in your own words, and run it in the teleprompter so your eyes stay on the lens.",
+      body: "Record the same line five times: once smiling, once flat, once like a weather forecast, once while doing a chore, once as fast as you can. Watch them full screen with the sound on and pick the take where you'd believe the speaker isn't joking. That one is usually funniest. Next, try one-word answers to a friend's questions and see how long you can hold a straight face. If you'd like a starting point, Shutap, the humor amplifier, lets you write what happened and pick the deadpan voice for a draft of the bit. Cut every line you couldn't say without smiling, rewrite the rest in your own words, and run it in the teleprompter so your eyes stay on the lens.",
     },
   ],
   faq: [
@@ -88,7 +88,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "self-deprecating-humor", "how-to-write-comedy-tags"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-22",
 };
 

@@ -93,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Shutap — AI Joke Generator for Creators" },
+      { title: "Shutap — The Humor Amplifier" },
       { name: "author", content: "Shutap" },
       { property: "og:site_name", content: "Shutap" },
       { property: "og:type", content: "website" },
@@ -138,7 +138,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           url: "https://shutap.com",
           image: "https://shutap.com/og/shutap-og-v3.png",
           description:
-            "Shutap is an AI joke generator for creators. Write your story and Shutap turns it into a bit — hook, setup, tags and a button — then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or post the best one to a room. Identifying details are removed from stories before storage, and Shutap never uses your content to train AI. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
+            "Shutap is the humor amplifier. Type what happened and Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, a caption and hashtags, then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or bring it to a toast, a talk or a meeting. Shutap amplifies your humor; it never replaces it. Your stories and jokes stay yours. Identifying details are removed from stories before storage, and Shutap never uses your content to train AI. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
           offers: {
             "@type": "Offer",
             price: "0",

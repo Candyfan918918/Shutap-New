@@ -65,7 +65,7 @@ const guide: Guide = {
     { label: "Kate Miller-Wilson, LoveToKnow (updated Nov 14, 2022), \"Thanksgiving toasts\"", url: "https://www.lovetoknow.com/celebrations/thanksgiving/thanksgiving-toasts" },
   ],
   related: ["funny-wedding-toast", "funny-captions", "self-deprecating-humor"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-27",
 };
 

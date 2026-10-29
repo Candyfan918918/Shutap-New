@@ -77,7 +77,7 @@ const guide: Guide = {
     { label: "OpenAI, ChatGPT plans and pricing, fetched Oct 2026", url: "https://openai.com/chatgpt/pricing/" },
   ],
   related: ["shutap-vs-chatgpt-for-jokes", "stand-up-comedy", "open-mic-night"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-26",
 };
 

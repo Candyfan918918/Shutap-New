@@ -4,7 +4,7 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/ai-disclosure`
-const TITLE = "AI Disclosure — How Shutap's AI Joke Generator Works"
+const TITLE = "AI Disclosure — How Shutap's Humor Amplifier Works"
 const DESCRIPTION =
   "Every bit on Shutap is written and ranked by AI (Google Gemini and OpenAI models, via the Lovable AI Gateway), starting from your own story. Shutap never uses your content to train AI. AI can be wrong or offensive; you decide what to post."
 
@@ -115,7 +115,7 @@ function AiDisclosurePage() {
       </p>
       <h3>Our own jokes</h3>
       <p>
-        The Shutap joke dataset is in-house: the Shutap team writes, selects and rates its own
+        The Shutap Humor Lab dataset is in-house: the Shutap team writes, selects and rates its own
         jokes, pairing everyday situations with jokes tagged by technique, voice and how wild. It is
         what guides how Shutap writes, and it is the only joke material Shutap uses to train or
         tune AI models. How your text is handled is set out in the{' '}

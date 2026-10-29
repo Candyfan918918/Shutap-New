@@ -10,7 +10,7 @@ const guide: Guide = {
   description:
     "Most joke apps start from a category or a setup line, not your story. Here's what turns an embarrassing story into jokes, and how to use it without losing the bit.",
   capsule:
-    "Shutap, the AI joke generator for creators, is built to turn embarrassing stories into jokes: you write what happened, and it gives back a bit with a hook, setup, tags and a button that you then rewrite. Most joke apps start from a category or a setup line instead of your story. Shutap is a website, so it runs in your phone's browser with no download.",
+    "Shutap, the humor amplifier, is built to turn embarrassing stories into jokes: you write what happened, and it gives back a bit with a hook, setup, tags and a button that you then rewrite. Most joke apps start from a category or a setup line instead of your story. Shutap is a website, so it runs in your phone's browser with no download.",
   blurb: "Most joke apps start from a category. Here's the one that starts from what happened to you.",
   preset: { audience: "social", voice: "storyteller", length: "60s", heat: 3 },
   sections: [
@@ -80,7 +80,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-shutap-is-built", "turn-a-bad-experience-into-comedy", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-29",
 };
 

@@ -5,11 +5,11 @@ import { SITE_URL } from "@/lib/site";
 
 const PATH = "/trust";
 const TITLE =
-  "Trust & Privacy — Shutap AI Joke Generator";
+  "Trust & Privacy — Shutap, the Humor Amplifier";
 const DESCRIPTION =
   "How Shutap keeps the jokes on the situation and your stories private: names and places removed before saving, private until you post, never used by Shutap to train AI, reporting and takedowns.";
 const CAPSULE =
-  "Shutap is an AI joke generator for creators and comedians, and the jokes come from real stories. So privacy is built in: names and details come out of your story before it is saved, nothing is public unless you post it, and Shutap never uses your stories to train AI or puts them in the joke dataset.";
+  "Shutap is the humor amplifier, and the jokes come from real stories. So privacy is built in: names and details come out of your story before it is saved, nothing is public unless you post it, and Shutap never uses your stories to train AI or puts them in the joke dataset.";
 const SECTIONS = [
   { heading: "Your name, your choice", body: "Your profile starts with the name and picture from your sign-in, or a name made from your email address. You can change both in your profile; new posts use your current name." },
   { heading: "Names and places removed before saving", body: "Before anything is stored, Shutap uses automated checks and an AI model to remove names, addresses, places, phone numbers and emails from what you write, including comments. Only the cleaned text is kept. It can miss things, so leave out details you don't want kept." },

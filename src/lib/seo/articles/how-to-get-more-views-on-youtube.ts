@@ -44,7 +44,7 @@ const guide: Guide = {
     },
     {
       heading: "Build a series people can binge",
-      body: "One great video gets a spike. A series gets a habit. Pick a format you can repeat with new material every time: the worst customer of the week, texts from your mom ranked, one bad date retold in three acts. Name it the same way each time and put the episodes in a playlist so the next one plays on its own. Example series titles: \"Roommate Notes, Episode 4: The Fridge Has a Constitution Now.\" If a blank page slows down episode five, Shutap, the AI joke generator for creators, turns what happened into a first draft of the bit to push against. You cut, rewrite and keep the jokes as your own.",
+      body: "One great video gets a spike. A series gets a habit. Pick a format you can repeat with new material every time: the worst customer of the week, texts from your mom ranked, one bad date retold in three acts. Name it the same way each time and put the episodes in a playlist so the next one plays on its own. Example series titles: \"Roommate Notes, Episode 4: The Fridge Has a Constitution Now.\" If a blank page slows down episode five, Shutap, the humor amplifier, turns what happened into a first draft of the bit to push against. You cut, rewrite and keep the jokes as your own.",
     },
   ],
   faq: [
@@ -96,7 +96,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-get-more-views-on-tiktok", "how-long-should-a-tiktok-bit-be", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-28",
 };
 

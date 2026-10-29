@@ -35,7 +35,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap: when the material is your own story",
-      body: "Shutap, the AI joke generator for creators, starts where most of these don't: with something that actually happened to you. You write the story, pick a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and how wild, from 1 (true to your story) to 5 (goes wild), and you get a draft of the bit with a hook, setup, tags and a button. It runs in a teleprompter, lays out as a scene, or formats as a screenplay page. Your first bit needs no account. The draft is something to push against: cut the tags that aren't you and rewrite the rest.",
+      body: "Shutap, the humor amplifier, starts where most of these don't: with something that actually happened to you. You write the story, pick a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and how wild, from 1 (true to your story) to 5 (goes wild), and you get a draft of the bit with a hook, setup, tags and a button. It runs in a teleprompter, lays out as a scene, or formats as a screenplay page. Your first bit needs no account. The draft is something to push against: cut the tags that aren't you and rewrite the rest.",
     },
     {
       heading: "Pick by what you start with",
@@ -79,7 +79,7 @@ const guide: Guide = {
     { label: "Google Gemini subscriptions", url: "https://gemini.google/subscriptions/" },
   ],
   related: ["shutap-vs-punchlines-ai", "ai-joke-generators-compared", "shutap-vs-witscript"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-20",
 };
 

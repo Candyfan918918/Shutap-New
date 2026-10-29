@@ -4,7 +4,7 @@ import { DocLayout } from "@/components/site/DocLayout";
 import { SITE_URL } from "@/lib/site";
 
 const URL = `${SITE_URL}/legal`;
-const TITLE = "Legal & Policies — Shutap AI Joke Generator"
+const TITLE = "Legal & Policies — Shutap, the Humor Amplifier"
 const DESCRIPTION =
   "Shutap's terms, privacy policy, house rules, AI disclosure, disclaimer, crisis help and contact, in one place."
 
@@ -14,7 +14,7 @@ const ITEMS: Item[] = [
   {
     href: "/how-it-works",
     label: "How it works",
-    sub: "write your story, get the bit: teleprompter, scene, screenplay page. what\u2019s free and what Basic and Pro add.",
+    sub: "type what happened, get the bit: teleprompter, scene, screenplay page. what\u2019s free and what Basic and Pro add.",
   },
   {
     href: "/faq",

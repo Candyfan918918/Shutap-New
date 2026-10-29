@@ -4,9 +4,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/disclaimer`
-const TITLE = "Disclaimer — Shutap AI Joke Generator"
+const TITLE = "Disclaimer — Shutap, the Humor Amplifier"
 const DESCRIPTION =
-  "Shutap is an AI joke generator for entertainment. It is not therapy, advice, a diagnosis or a crisis service. Adults 18+."
+  "Shutap is a humor amplifier for entertainment. It is not therapy, advice, a diagnosis or a crisis service. Adults 18+."
 
 export const Route = createFileRoute('/disclaimer')({
   head: () => ({
@@ -35,7 +35,7 @@ function DisclaimerPage() {
     >
       <h3>Formal</h3>
       <p>
-        Shutap is an AI joke generator for entertainment only. It does not provide medical,
+        Shutap is a humor amplifier for entertainment only. It does not provide medical,
         psychological, mental-health, crisis or legal services or advice, and using it creates no
         professional relationship. In an emergency, call or text 988 or call 911 (US), call
         Samaritans on 116 123 (UK and Ireland), or go to findahelpline.com. 18+ only.

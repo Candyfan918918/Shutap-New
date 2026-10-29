@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Watch for lazy triples",
-      body: "Three adjectives in a row is a rule-of-three habit, not a joke. Writers fall into it, and so does AI: the Wikipedia entry on the rule notes that AI text often overuses three-part lists, especially adjectives, which reads padded and empty. If none of your three items surprise, cut it to the one that does. Shutap, the AI joke generator for creators, gives you a draft of the bit from your story with a hook, setup and tags. Treat it as something to push against: find the triple you'd actually say, swap in your own third item, and cut the rest.",
+      body: "Three adjectives in a row is a rule-of-three habit, not a joke. Writers fall into it, and so does AI: the Wikipedia entry on the rule notes that AI text often overuses three-part lists, especially adjectives, which reads padded and empty. If none of your three items surprise, cut it to the one that does. Shutap, the humor amplifier, gives you a draft of the bit from your story with a hook, setup and tags. Treat it as something to push against: find the triple you'd actually say, swap in your own third item, and cut the rest.",
     },
   ],
   faq: [
@@ -87,7 +87,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-write-comedy-tags", "deadpan-humor", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-22",
 };
 

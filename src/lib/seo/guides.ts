@@ -215,7 +215,7 @@ export interface Guide {
   sample?: GuideSample;
 }
 
-const CTA = { label: "Write your story, get the bit", href: "/" };
+const CTA = { label: "Type what happened. Say it funnier.", href: "/" };
 const BIZ_CTA = { label: "Request pricing and solutions", href: "/business" };
 const PUBLISHED = "2026-10-17";
 

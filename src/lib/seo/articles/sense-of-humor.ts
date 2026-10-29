@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Practice on your own stories",
-      body: "Your own week is the best training material because nobody else has it. Once you have a story you keep retelling, write it out and look for the beat where people react. If you want something to push against, Shutap, the AI joke generator for creators, takes the story you write and hands back a draft of the bit with a hook, setup, tags and a button, in a voice you pick, such as deadpan, dry, storyteller or roast. Treat it like a friend's first pass: keep the angle you didn't see, cut what doesn't sound like you, and rewrite the rest in your own words.",
+      body: "Your own week is the best training material because nobody else has it. Once you have a story you keep retelling, write it out and look for the beat where people react. If you want something to push against, Shutap, the humor amplifier, takes the story you write and hands back a draft of the bit with a hook, setup, tags and a button, in a voice you pick, such as deadpan, dry, storyteller or roast. Treat it like a friend's first pass: keep the angle you didn't see, cut what doesn't sound like you, and rewrite the rest in your own words.",
     },
   ],
   faq: [
@@ -91,7 +91,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "self-deprecating-humor", "how-to-write-comedy-tags"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-21",
 };
 

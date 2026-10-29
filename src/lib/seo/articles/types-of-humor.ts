@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Find your type",
-      body: "Most comedians are known for one register and borrow from two others. To find yours, write the same small situation five ways: observational, dry, sarcastic, self-deprecating and absurd. Read them out loud. The one you can say without forcing it is your home base. Shutap, the AI joke generator for creators, can give you a draft of the same story in different voices, such as deadpan, dry, storyteller or roast. Treat them as options to react to: keep the one that sounds like you, then rewrite it in your own words.",
+      body: "Most comedians are known for one register and borrow from two others. To find yours, write the same small situation five ways: observational, dry, sarcastic, self-deprecating and absurd. Read them out loud. The one you can say without forcing it is your home base. Shutap, the humor amplifier, can give you a draft of the same story in different voices, such as deadpan, dry, storyteller or roast. Treat them as options to react to: keep the one that sounds like you, then rewrite it in your own words.",
     },
   ],
   faq: [
@@ -83,7 +83,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-write-comedy-tags", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your story, get the bit", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-20",
 };
 
