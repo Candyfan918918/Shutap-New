@@ -9,7 +9,7 @@
 // thrown away unread. Any path that ends without a bit gives the budget back.
 //
 // Daily new bits: guest 1 · free 2 (counting that day's guest bit) · basic 5 ·
-// pro fair-use. Only new bits count; rewrites are free on your own bits.
+// pro fair-use. New bits and rewrites (hotter/tighter/escalate) count; tag swap and mix are free.
 // Everyone sees the whole bit. Bits are server-only rows; ownership is checked
 // here: the signed-in user, or the guest's own browser id.
 import { createServerFn } from '@tanstack/react-start'
@@ -21,6 +21,7 @@ import { requestAnonId, resolveJokeIdentity, type JokeIdentity } from './jokes/s
 import { activePlan } from './plan.server'
 import { heatFor, varyBitDraft, writeBitFromStory, type BitFailure } from './bits/pipeline.server'
 import { NO_CAP, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
+import { DOWNLOAD_CAPS, DOWNLOAD_KINDS } from './bits/plans'
 import {
   AUDIENCES,
   DEFAULT_CONTROLS,
@@ -532,8 +533,11 @@ const MAX_VERSIONS = 16
 export type VersionResult =
   | { ok: true; version: BitVersion }
   | { ok: false; reason: 'not_found' | 'sign_in' | 'too_many' | 'rate_limited' | 'failed' }
+  | { ok: false; reason: 'daily'; tier: BitTier }
 
-/** Hotter, tighter or escalate, rewritten from the version the user is on. */
+/** Hotter, tighter or escalate, rewritten from the version the user is on.
+ *  A rewrite is a model call, so since Oct 29 2026 it counts as a new bit
+ *  against the daily cap (tag swap and mix your own stay free: no model). */
 export const varyBit = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) =>
     z
@@ -544,14 +548,26 @@ export const varyBit = createServerFn({ method: 'POST' })
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
     // A guest reads their first bit; rewriting it takes a (free) account.
-    // Rewrites never count toward the daily limit; MAX_VERSIONS is the
-    // per-bit safety limit.
+    // MAX_VERSIONS is the per-bit safety limit.
     if (!id.userId) return { ok: false, reason: 'sign_in' }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
     if (versions.length >= MAX_VERSIONS) return { ok: false, reason: 'too_many' }
-    if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+    const { day } = today()
+    if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+    // The rewrite is a new bit against today's cap. Charged under a fresh
+    // id so a retry of the same press is still one charge.
+    const tier = await resolveTier(supabaseAdmin, id)
+    const chargeId = crypto.randomUUID()
+    let used: number
+    try {
+      used = await chargeBit(supabaseAdmin, id.subjectKey, day, capFor(tier), chargeId)
+    } catch {
+      return { ok: false, reason: 'failed' }
+    }
+    if (used === -1) return { ok: false, reason: 'daily', tier }
+    const refund = () => refundBit(supabaseAdmin, id.subjectKey, day, chargeId).catch(() => {})
 
     const from = versions.find((v) => v.id === data.from_version_id) ?? versions[0]
     if (!from) return { ok: false, reason: 'not_found' }
@@ -562,7 +578,10 @@ export const varyBit = createServerFn({ method: 'POST' })
       controls,
       data.kind,
     )
-    if (!draft) return { ok: false, reason: 'failed' }
+    if (!draft) {
+      await refund()
+      return { ok: false, reason: 'failed' }
+    }
     const saved = await insertVersion(supabaseAdmin, row.id, data.kind, draft, heatFor(data.kind, controls))
     return { ok: true, version: toVersion(saved) }
   })
@@ -801,6 +820,63 @@ export const getScreenplay = createServerFn({ method: 'POST' })
   .handler(({ data }) => layoutFor<ScreenplayElement[]>('screenplay', data.bit_id, data.version_id, data.anon_session_id ?? null))
 
 /* ───────────────────────── download ───────────────────────── */
+
+export type DownloadCharge =
+  | { ok: true; used: number; cap: number | null; watermarked: boolean; tier: BitTier; repeat: boolean }
+  | { ok: false; reason: 'sign_in' | 'not_found' | 'failed' }
+  | { ok: false; reason: 'limited'; used: number; cap: number; tier: BitTier }
+
+/** One download against today's cap. Caption + hashtags, the picture, the
+ *  PDF and the video are each their own download; the same kind on the same
+ *  version the same day is free (a retry, a second copy). Logged to
+ *  bit_downloads (the admin ledger) and to events (the admin feed); the
+ *  browser sends the PostHog event with the same name and properties. */
+export const chargeDownload = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) =>
+    z.object({ bit_id: z.string().uuid(), version_id: z.string().uuid(), kind: z.enum(DOWNLOAD_KINDS), ...Ctx }).parse(d),
+  )
+  .handler(async ({ data }): Promise<DownloadCharge> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
+    const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
+    if (!row) return { ok: false, reason: 'not_found' }
+    const tier = await resolveTier(supabaseAdmin, id)
+    const { day } = today()
+    const cap = tier === 'pro' ? null : tier === 'guest' ? 0 : DOWNLOAD_CAPS[tier]
+    const watermarked = !isPaidTier(tier)
+    const { count: usedBefore, error: readErr } = await supabaseAdmin.from('bit_downloads').select('id', { count: 'exact', head: true }).eq('user_id', id.userId).eq('day', day)
+    // Ledger not there yet (migration pending): never block a download over
+    // bookkeeping. Let it through uncounted and say so in the log.
+    if (readErr) {
+      console.error('[download] ledger unavailable, download allowed uncounted', readErr.message)
+      return { ok: true, used: 0, cap, watermarked, tier, repeat: false }
+    }
+    const used = usedBefore ?? 0
+    const { count: sameCount } = await supabaseAdmin
+      .from('bit_downloads')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', id.userId)
+      .eq('version_id', data.version_id)
+      .eq('kind', data.kind)
+      .eq('day', day)
+    if ((sameCount ?? 0) > 0) return { ok: true, used, cap, watermarked, tier, repeat: true }
+    if (cap !== null && used >= cap) return { ok: false, reason: 'limited', used, cap, tier }
+    const { error } = await supabaseAdmin
+      .from('bit_downloads')
+      .insert({ user_id: id.userId, bit_id: row.id, version_id: data.version_id, kind: data.kind, tier, watermarked, day })
+    if (error) {
+      // The unique index: a parallel press already counted it.
+      if (String(error.code) === '23505') return { ok: true, used, cap, watermarked, tier, repeat: true }
+      console.error('[download] ledger insert failed', error.message)
+      return { ok: false, reason: 'failed' }
+    }
+    await supabaseAdmin
+      .from('events')
+      .insert({ user_id: id.userId, session_id: null, name: 'download', properties: { kind: data.kind, tier, watermarked, bit_id: row.id, version_id: data.version_id } as never } as never)
+      .then(() => {}, () => {})
+    return { ok: true, used: used + 1, cap, watermarked, tier, repeat: false }
+  })
 
 export type ExportResult =
   | { ok: true; svg: string; filename: string; watermarked: boolean; tier: BitTier }

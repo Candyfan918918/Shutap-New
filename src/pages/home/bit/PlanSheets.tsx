@@ -23,7 +23,7 @@ export type PaywallWhere = 'bit_3' | 'daily_limit' | 'download'
 const EVERY_ICON: Record<(typeof EVERY_PLAN)[number], FeatureIcon> = {
   'A full bit: hook, setup, tags and button': 'bit',
   'A 5-second video of it': 'post',
-  'Hotter, tighter, mix and tag swap': 'rewrite',
+  'Hotter, tighter, escalate (each counts as a bit), mix and tag swap': 'rewrite',
   Teleprompter: 'prompter',
   'Scene and screenplay': 'screenplay',
   'Caption and hashtags': 'hash',
@@ -97,7 +97,7 @@ export function PaywallBody({
     <div className="pw">
       <div className="pw-head">
         <h3 id="bit-sheet-title">{download ? 'Download it clean.' : "That's today's free bits."}</h3>
-        <p className="pw-sub">{download ? 'Free is one download a day with a shutap.com watermark. Basic and Pro remove it.' : 'Want to keep writing tonight?'}</p>
+        <p className="pw-sub">{download ? 'Free is one download a day (the video, or the caption and hashtags, or the picture), with a shutap.com watermark. Basic gets 3 clean ones; Pro has no limit.' : 'A rewrite counts as a new bit. Want to keep going tonight?'}</p>
       </div>
 
       <Compare tiers={['free', 'basic', 'pro']} you="free" />

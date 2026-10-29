@@ -67,7 +67,7 @@ const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   rewrite: { title: 'Sign in to rewrite it.', sub: 'Free. Hotter, tighter, a new tag, or mix your own. Your bit comes with you.' },
   swap: { title: 'Sign in to swap the tag.', sub: 'Free. Your bit comes with you, with all five spare tags.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
-  download: { title: 'Sign in to download it.', sub: 'Free: one download a day, the video with your caption and hashtags, with a shutap.com watermark.' },
+  download: { title: 'Sign in to download it.', sub: 'Free: one download a day (the video, or the caption and hashtags, or the picture), with a shutap.com watermark.' },
   save: { title: 'Sign in to keep it.', sub: 'Free. It goes in your set list with every version you make.' },
   scene: { title: 'Sign in to see the scene.', sub: 'Free. Your bit comes with you.' },
   screenplay: { title: 'Sign in for the screenplay.', sub: 'Free. Your bit comes with you.' },
@@ -871,6 +871,7 @@ export function BitSurface() {
               }}
               say={say}
               onSignIn={tier === 'guest' ? (from) => openSignin(from) : undefined}
+              onLimit={showLimit}
             />
 
             <div className="bt-row">

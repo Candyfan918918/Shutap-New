@@ -2,7 +2,7 @@
  * TikTok, Reels or Shorts. Written on first open, then cached per version. */
 import { useEffect, useRef, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
-import { getCaption } from '@/lib/bits.functions'
+import { chargeDownload, getCaption } from '@/lib/bits.functions'
 import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 import type { BitTier } from '@/lib/bits/shared'
 
@@ -11,13 +11,17 @@ export function CaptionBox({
   versionId,
   tier,
   say,
+  onLimit,
 }: {
   bitId: string
   versionId: string
   tier: BitTier
   say: (m: string) => void
+  /** at the daily download cap: open the plans */
+  onLimit?: () => void
 }) {
   const fn = useServerFn(getCaption)
+  const charge = useServerFn(chargeDownload)
   const fnRef = useRef(fn)
   fnRef.current = fn
   // Captions are written on request, so they need an account.
@@ -36,11 +40,28 @@ export function CaptionBox({
     }
   }, [bitId, versionId, locked])
 
+  // Copying the caption or the hashtags is one download (the first copy of
+  // this version today; later copies of the same version are free).
   async function copy(text: string, what: string) {
+    let r: Awaited<ReturnType<typeof chargeDownload>>
+    try {
+      r = await charge({ data: { bit_id: bitId, version_id: versionId, kind: 'caption', anon_session_id: anonSessionId() } })
+    } catch {
+      say("Couldn't copy. Try again.")
+      return
+    }
+    if (!r.ok) {
+      if (r.reason === 'limited') {
+        say(`That's today's ${r.cap} download${r.cap === 1 ? '' : 's'}. Basic gets 3 a day, Pro unlimited.`)
+        onLimit?.()
+      } else say(r.reason === 'sign_in' ? 'Sign in to copy it.' : "Couldn't copy. Try again.")
+      return
+    }
     try {
       await navigator.clipboard.writeText(text)
       say(`${what} copied.`)
       jokeTrack('caption_copied', tier, { what })
+      if (!r.repeat) jokeTrack('download', tier, { kind: 'caption', watermarked: false, used: r.used, cap: r.cap })
     } catch {
       say("Couldn't copy. Press and hold the text instead.")
     }

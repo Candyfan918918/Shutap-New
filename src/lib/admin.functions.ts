@@ -734,3 +734,51 @@ export const adminAcquisition = createServerFn({ method: 'POST' })
       captured_utm_count: capturedUtm,
     }
   })
+
+/* ───────────────────────── downloads ───────────────────────── */
+
+export type DownloadsPayload = {
+  by_kind: { kind: string; d1: number; d7: number; d30: number; all: number }[]
+  by_tier_30: { tier: string; n: number }[]
+  watermarked_30: number
+  clean_30: number
+  users_30: number
+  recent: { created_at: string; kind: string; tier: string; watermarked: boolean; user_id: string }[]
+}
+
+/** The download ledger (bit_downloads): caption + hashtags, picture, PDF,
+ *  video — each its own download. Counts by kind and tier, and the last 30. */
+export const adminDownloads = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({}).parse(d ?? {}))
+  .handler(async ({ context }): Promise<DownloadsPayload> => {
+    await assertAdmin(context)
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const db = supabaseAdmin as any
+    const now = Date.now()
+    const iso = (ms: number) => new Date(ms).toISOString()
+    const d30 = iso(now - 30 * 24 * 3600 * 1000)
+    const d7 = iso(now - 7 * 24 * 3600 * 1000)
+    const d1 = iso(now - 24 * 3600 * 1000)
+    const { data: all } = await db.from('bit_downloads').select('kind, tier, watermarked, user_id, created_at').gte('created_at', d30).order('created_at', { ascending: false })
+    const rows: { kind: string; tier: string; watermarked: boolean; user_id: string; created_at: string }[] = all ?? []
+    const { data: allTime } = await db.from('bit_downloads').select('kind')
+    const kinds = ['caption', 'image', 'pdf', 'video']
+    const by_kind = kinds.map((kind) => ({
+      kind,
+      d1: rows.filter((r) => r.kind === kind && r.created_at >= d1).length,
+      d7: rows.filter((r) => r.kind === kind && r.created_at >= d7).length,
+      d30: rows.filter((r) => r.kind === kind).length,
+      all: ((allTime ?? []) as { kind: string }[]).filter((r) => r.kind === kind).length,
+    }))
+    const tiers = new Map<string, number>()
+    for (const r of rows) tiers.set(r.tier, (tiers.get(r.tier) ?? 0) + 1)
+    return {
+      by_kind,
+      by_tier_30: Array.from(tiers, ([tier, n]) => ({ tier, n })),
+      watermarked_30: rows.filter((r) => r.watermarked).length,
+      clean_30: rows.filter((r) => !r.watermarked).length,
+      users_30: new Set(rows.map((r) => r.user_id)).size,
+      recent: rows.slice(0, 30),
+    }
+  })
