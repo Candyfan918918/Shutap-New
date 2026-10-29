@@ -1,6 +1,6 @@
 {
  "site": "https://shutap.com/",
- "pulledAt": "2026-10-28T20:20:26.883Z",
+ "pulledAt": "2026-10-29T20:21:01.576Z",
  "queries": [
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -68,20 +68,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1791504000000)/",
-   "Impressions": 1,
-   "Query": "relationship vents"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 4,
    "Clicks": 0,
    "Date": "/Date(1791504000000)/",
    "Impressions": 1,
    "Query": "shutpacket ai"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1791504000000)/",
+   "Impressions": 1,
+   "Query": "relationship vents"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -104,20 +104,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
-   "Clicks": 0,
-   "Date": "/Date(1792108800000)/",
-   "Impressions": 1,
-   "Query": "shutpacket ai"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1792108800000)/",
    "Impressions": 1,
    "Query": "+bit joke"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 4,
+   "Clicks": 0,
+   "Date": "/Date(1792108800000)/",
+   "Impressions": 1,
+   "Query": "shutpacket ai"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -131,20 +131,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 4,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 4,
+   "Query": "shutap founder"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 6,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 4,
    "Query": "shutap"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 4,
-   "Query": "deadpan humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -158,11 +158,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
+   "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 4,
-   "Query": "shutap founder"
+   "Query": "deadpan humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -172,33 +172,6 @@
    "Date": "/Date(1792713600000)/",
    "Impressions": 3,
    "Query": "deadpan"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 2,
-   "Query": "a roast line"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 2,
-   "Query": "give me a roast line"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 2,
-   "Query": "give me an americenroast line"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -221,11 +194,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
+   "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "\"low4n\" \"ia\" \"roast\""
+   "Impressions": 2,
+   "Query": "a roast line"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -233,8 +206,17 @@
    "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "roastplugh"
+   "Impressions": 2,
+   "Query": "give me an americenroast line"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 2,
+   "Query": "give me a roast line"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -257,15 +239,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "reddit deadpan absurd"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 4,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
@@ -275,20 +248,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "what kind of humor is the opposite of dry humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "funny sign off for business email"
+   "Query": "what is a good rost line"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -302,11 +266,29 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "types of humour antics"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "what does deadpan mean in describing a movie or tv sho"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "define deadpan comedy"
+   "Query": "intp deadpan humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -315,16 +297,70 @@
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "roasting lines"
+   "Query": "funny sign off for business email"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 2,
+   "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "hilarious email sign offs for co workers"
+   "Query": "funny email sign offs for work thank you"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "humor types"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "reddit deadpan absurd"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "roastplugh"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "\"low4n\" \"ia\" \"roast\""
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "sense of hunoir"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "deadpan yorkshire humour"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -351,34 +387,25 @@
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "types of humour antics"
+   "Query": "roasting lines"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
+   "AvgImpressionPosition": 3,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "funny email sign offs for work thank you"
+   "Query": "what kind of humor is the opposite of dry humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
+   "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "what does deadpan mean in describing a movie or tv sho"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "what is a good rost line"
+   "Query": "hilarious email sign offs for co workers"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -387,34 +414,7 @@
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "intp deadpan humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "deadpan yorkshire humour"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "humor types"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "sense of hunoir"
+   "Query": "define deadpan comedy"
   }
  ],
  "pages": [
@@ -493,20 +493,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 1,
-   "Clicks": 0,
-   "Date": "/Date(1789084800000)/",
-   "Impressions": 1,
-   "Query": "https://shutap.com/"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1789084800000)/",
    "Impressions": 1,
    "Query": "https://shutap.com/about"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 1,
+   "Clicks": 0,
+   "Date": "/Date(1789084800000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -529,20 +529,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
-   "Clicks": 0,
-   "Date": "/Date(1791504000000)/",
-   "Impressions": 1,
-   "Query": "https://shutap.com/about"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1791504000000)/",
    "Impressions": 1,
    "Query": "https://shutap.com/relationships"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 4,
+   "Clicks": 0,
+   "Date": "/Date(1791504000000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/about"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -583,20 +583,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 11,
-   "Query": "https://shutap.com/guides/roast-lines"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 7,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 11,
    "Query": "https://shutap.com/guides/types-of-humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 11,
+   "Query": "https://shutap.com/guides/roast-lines"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -637,29 +637,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "https://shutap.com/funniest/poet"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "https://shutap.com/business"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
    "Query": "https://shutap.com/about"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/funniest/poet"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -678,6 +669,15 @@
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
    "Query": "https://shutap.com/guides/sense-of-humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/business"
   }
  ]
 }
