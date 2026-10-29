@@ -89,6 +89,22 @@ const guide: Guide = {
   related: ["deadpan-humor", "types-of-humor", "self-deprecating-humor"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
   preset: { voice: "deadpan", heat: 4 },
+  techniques: [
+    {
+      name: "The petty thing beside the enormous",
+      whatTheyDid: "Puts a form, a price or a pen on a chain next to the grim fact.",
+      whyItWorks: "The mismatch of scale lets the room laugh at the object, not the loss, so nobody grieving is the target.",
+      example: "The guest book at the funeral had the pen on a little chain. Even in grief, somebody was worried we'd take the pen.",
+      tryIt: "Find the most ordinary object or rule standing next to the heavy thing in your story and aim the whole line at it.",
+    },
+    {
+      name: "The object nobody will touch",
+      whatTheyDid: "Treats a small leftover thing as if it carried the weight of the big event.",
+      whyItWorks: "The small object is safe to joke about and still says everything about the large thing behind it.",
+      example: "Dad left us the house, a car and forty-one rubber bands. We split the house. Nobody will touch the rubber bands. They feel like a test.",
+      tryIt: "Name one small, specific, slightly absurd object left behind and give it the gravity everyone is refusing to say out loud.",
+    },
+  ],
   published: "2026-10-27",
 };
 

@@ -89,6 +89,43 @@ const guide: Guide = {
   ],
   related: ["deadpan-humor", "types-of-humor", "sense-of-humor"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  techniques: [
+    {
+      name: "The understatement",
+      whatTheyDid: "Shrinks the disaster to a small inconvenience.",
+      whyItWorks: "The listener knows how bad it was; the gap between that and the small words is the laugh.",
+      example: "My car died on the freeway in the rain. So I've really seen the freeway now. Up close. For three hours.",
+      tryIt: "Take the worst thing that happened and describe it in the smallest words you have, then add one flat detail that shows how big it was.",
+    },
+    {
+      name: "The borrowed euphemism",
+      whatTheyDid: "Describes the mess in someone else's polite vocabulary.",
+      whyItWorks: "The polite phrase is doing visible work to cover something ugly, and the reader watches it strain.",
+      example: "The upstairs neighbor's bathtub came through our ceiling. The kitchen is open-concept now.",
+      tryIt: "Describe the damage or the mess with the phrase a real-estate listing, a brochure or HR would use for it.",
+    },
+    {
+      name: "The faint answer",
+      whatTheyDid: "Replies to a big question with one tiny true fact.",
+      whyItWorks: "The question asked for a verdict; a detail that small is a verdict, delivered sideways.",
+      example: "How's the new job? It has a parking lot.",
+      tryIt: "Find the big question in your story (how's it going, how was it) and answer with the smallest true detail you have, nothing more.",
+    },
+    {
+      name: "The calm procedure",
+      whatTheyDid: "Reports a failure as if it were the plan.",
+      whyItWorks: "Narrating a loss in the voice of a status update makes the loss obvious without saying it.",
+      example: "Day four of the diet. I moved the cookies to a higher shelf. I can still reach it.",
+      tryIt: "Report what went wrong as a numbered day or a step in a plan, flat, and let the last fact admit the failure.",
+    },
+    {
+      name: "The polite fact",
+      whatTheyDid: "Lets a neutral word carry the insult.",
+      whyItWorks: "Nothing rude is said; the reader supplies the judgement from a word that is technically kind.",
+      example: "Everyone on the group project contributed. Some people contributed their availability.",
+      tryIt: "Say something true and neutral about everyone, then name the one specific, useless thing the other person actually contributed.",
+    },
+  ],
   published: "2026-10-28",
 };
 

@@ -89,6 +89,29 @@ const guide: Guide = {
   ],
   related: ["types-of-humor", "self-deprecating-humor", "how-to-write-comedy-tags"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  techniques: [
+    {
+      name: "The polite reading of an insult",
+      whatTheyDid: "Takes a corporate or passive-aggressive message at face value and reads it as something darker, calmly.",
+      whyItWorks: "The reader hears the real message under the polite one; stating the darker reading flat lets them have both at once.",
+      example: "The gym sent a 'we miss you' email. I've decided to take it as a threat.",
+      tryIt: "Quote the automated or passive-aggressive line someone sent you, then state, calmly, the one way you've decided to read it.",
+    },
+    {
+      name: "The overcommitted reasonable person",
+      whatTheyDid: "Describes someone agreeing completely and then doing the wrong thing with total confidence.",
+      whyItWorks: "Agreement makes the wrong action impossible to argue with; the mismatch does the work.",
+      example: "I told my roommate the dishes were becoming a problem. He agreed and moved them to my side of the sink.",
+      tryIt: "Report the moment the other person agreed with you, then the exact thing they did next, as if the two obviously go together.",
+    },
+    {
+      name: "The calm second beat",
+      whatTheyDid: "Adds one more quiet fact that makes the absurd thing worse.",
+      whyItWorks: "The first fact lands; the second, said in the same flat voice, proves the person meant it.",
+      example: "My landlord fixed the leak by putting a bowl under it. He also labeled the bowl.",
+      tryIt: "After the absurd thing someone did, add one small extra detail that shows they thought it was a good job.",
+    },
+  ],
   published: "2026-10-22",
 };
 

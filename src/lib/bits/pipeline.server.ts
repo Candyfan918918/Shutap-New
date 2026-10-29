@@ -48,14 +48,21 @@ import {
 import { bankFromFunniest, dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt, type Technique } from './techniques'
 
 /* ── the /funniest bank ──
-   Built once per process from the published /funniest pages, so every new
-   daily page feeds the writer on the next build. Loaded lazily: the pages
+   Built once per process from the published /funniest pages and the
+   /guides pages that declare techniques, so every new daily page feeds the
+   writer on the next build. Loaded lazily: the pages
    module uses import.meta.glob, which only Vite provides; under plain node
    (the unit tests) the bank is empty and the hand-tuned 25 stand alone. */
 let bankPromise: Promise<{ line: Technique[]; performance: Technique[] }> | null = null
 export function funniestBank(): Promise<{ line: Technique[]; performance: Technique[] }> {
-  bankPromise ??= import('@/lib/seo/funniest')
-    .then((m) => bankFromFunniest(m.FUNNIEST.flatMap((e) => e.techniques.map((t) => ({ slug: e.slug, name: t.name, whyItWorks: t.whyItWorks, example: t.example, tryIt: t.tryIt })))))
+  bankPromise ??= Promise.all([import('@/lib/seo/funniest'), import('@/lib/seo/guides')])
+    .then(([f, g]) =>
+      bankFromFunniest([
+        ...f.FUNNIEST.flatMap((e) => e.techniques.map((t) => ({ slug: e.slug, name: t.name, whyItWorks: t.whyItWorks, example: t.example, tryIt: t.tryIt }))),
+        // The /guides pages that declare techniques (same shape) join the bank too.
+        ...g.GUIDES.flatMap((e) => (e.techniques ?? []).map((t) => ({ slug: `guides/${e.slug}`, name: t.name, whyItWorks: t.whyItWorks, example: t.example, tryIt: t.tryIt }))),
+      ]),
+    )
     .catch(() => ({ line: [], performance: [] }))
   return bankPromise
 }

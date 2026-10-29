@@ -96,6 +96,15 @@ const guide: Guide = {
   ],
   related: ["how-to-write-comedy-tags", "rule-of-three", "how-to-turn-a-story-into-a-bit"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  techniques: [
+    {
+      name: "End on the receipt",
+      whatTheyDid: "Moves the reveal to the last word and cuts everything after it.",
+      whyItWorks: "Nothing walks on the laugh; the final noun carries the second meaning.",
+      example: "I labeled my leftovers with my name. My roommate ate them and left the label on the counter, like a receipt.",
+      tryIt: "Rewrite the line so the word that flips its meaning is the last word, then delete whatever came after it.",
+    },
+  ],
   published: "2026-10-23",
 };
 

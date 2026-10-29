@@ -88,6 +88,15 @@ const guide: Guide = {
   ],
   related: ["how-to-write-comedy-tags", "deadpan-humor", "how-to-turn-a-story-into-a-bit"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  techniques: [
+    {
+      name: "The relaxed fourth",
+      whatTheyDid: "A real, plain list of three, then a fourth item that swerves.",
+      whyItWorks: "Everyone relaxes after three; the fourth arrives when they've stopped guarding.",
+      example: "I keep snacks at my desk: granola bars, clementines, string cheese and, since the reorg, a printed copy of my resume.",
+      tryIt: "Write three plain, true items in the same shape, then add a fourth that tells the real story. Keep the first three boring.",
+    },
+  ],
   published: "2026-10-22",
 };
 
