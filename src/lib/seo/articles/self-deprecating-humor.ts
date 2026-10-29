@@ -97,6 +97,22 @@ const guide: Guide = {
   ],
   related: ["types-of-humor", "turn-a-bad-experience-into-comedy", "how-to-turn-a-story-into-a-bit"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  techniques: [
+    {
+      name: "Plan versus reality",
+      whatTheyDid: "States the ambitious plan, then the much smaller thing that actually happened.",
+      whyItWorks: "The plan is the setup and the result is the picture; the teller stays the target without asking for pity.",
+      example: "The plan was to reorganize the closet. By Sunday I'd reorganized it into a different pile on the floor of the same closet.",
+      tryIt: "Say the plan in its grand version, then the exact, physical place it ended up.",
+    },
+    {
+      name: "The evidence list",
+      whatTheyDid: "Two real items, then one that gives you away.",
+      whyItWorks: "A list promises more of the same; the third item breaks the promise and confesses.",
+      example: "Things I said I'd start Monday: running, flossing. Things I started Monday: a fourth streaming subscription.",
+      tryIt: "List two virtuous things you meant to do, then the one specific thing you actually did instead.",
+    },
+  ],
   published: "2026-10-21",
 };
 

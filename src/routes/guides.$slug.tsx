@@ -130,7 +130,7 @@ function GuideRoute() {
       capsule={g.capsule}
       sections={g.sections}
       cta={g.cta}
-      children={<GuideExtras faq={g.faq} sources={g.sources} />}
+      children={<GuideExtras faq={g.faq} sources={g.sources} techniques={g.techniques} />}
       others={[...related, ...(topic ? [{ href: topicPath(topic.id), label: `More on ${topic.label.toLowerCase()}` }] : []), { href: "/guides", label: "All guides" }, { href: "/funniest", label: "The funniest" }, { href: "/business", label: "Shutap Enterprise" }, { href: "/pricing", label: "Pricing" }]}
     />
   );
@@ -145,10 +145,26 @@ const H2 = {
   color: "#0b080f",
 } as const;
 
-function GuideExtras({ faq, sources }: { faq?: { q: string; a: string }[]; sources?: { label: string; url: string }[] }) {
-  if (!faq?.length && !sources?.length) return null;
+function GuideExtras({ faq, sources, techniques }: { faq?: { q: string; a: string }[]; sources?: { label: string; url: string }[]; techniques?: { name: string; whyItWorks: string; example: string; tryIt: string }[] }) {
+  if (!faq?.length && !sources?.length && !techniques?.length) return null;
   return (
     <>
+      {techniques?.length ? (
+        <section style={{ marginBottom: 36 }}>
+          <h2 style={H2}>The techniques, as Shutap uses them</h2>
+          <p style={{ fontSize: 15, margin: "0 0 14px", color: "#443c42" }}>
+            Each move on this page is in the humor amplifier's technique bank: when you type what happened, one of these may be the shape your bit is built on.
+          </p>
+          {techniques.map((t) => (
+            <div key={t.name} style={{ marginBottom: 18 }}>
+              <h3 style={{ fontSize: 17, fontWeight: 600, margin: "0 0 4px", color: "#0b080f" }}>{t.name}</h3>
+              <p style={{ fontSize: 16, margin: "0 0 4px", color: "#0b080f" }}>{t.whyItWorks}</p>
+              <p style={{ fontSize: 16, margin: "0 0 4px", color: "#0b080f", fontStyle: "italic" }}>{t.example}</p>
+              <p style={{ fontSize: 15, margin: 0, color: "#443c42" }}>Try it: {t.tryIt}</p>
+            </div>
+          ))}
+        </section>
+      ) : null}
       {faq?.length ? (
         <section style={{ marginBottom: 36 }}>
           <h2 style={H2}>Questions people ask</h2>

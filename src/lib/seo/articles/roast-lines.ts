@@ -81,6 +81,15 @@ const guide: Guide = {
   ],
   related: ["types-of-humor", "how-to-write-comedy-tags", "how-to-turn-a-story-into-a-bit"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  techniques: [
+    {
+      name: "Exaggerate the habit",
+      whatTheyDid: "Pushes one real habit one step past possible.",
+      whyItWorks: "The room has watched the habit; the exaggeration confirms it without needing a second joke.",
+      example: "Maria plans so far ahead she's already annoyed about next Christmas.",
+      tryIt: "Take the one habit everyone has seen this person do and extend it to the next, slightly impossible, occasion.",
+    },
+  ],
   published: "2026-10-20",
 };
 

@@ -71,6 +71,15 @@ const guide: Guide = {
   ],
   related: ["how-to-turn-a-story-into-a-bit", "how-to-write-comedy-tags", "types-of-humor"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  techniques: [
+    {
+      name: "Give the wave an owner",
+      whatTheyDid: "Makes the situation the target and leaves the teller as the one person behaving normally.",
+      whyItWorks: "A confession that calls yourself an idiot gets a pity laugh; a scene where the world is at fault gets a real one.",
+      example: "A woman waved at me across the café, so I waved back, and we both held it for a full three seconds before her actual friend walked in and took my wave.",
+      tryIt: "Retell the embarrassing moment so that the room, the object or the other person is the strange one and you were simply responding to it.",
+    },
+  ],
   published: "2026-10-20",
 };
 

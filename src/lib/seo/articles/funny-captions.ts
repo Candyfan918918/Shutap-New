@@ -89,6 +89,15 @@ const guide: Guide = {
   ],
   related: ["funny-email-sign-offs", "types-of-humor", "deadpan-humor"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  techniques: [
+    {
+      name: "Tell them what the picture can't",
+      whatTheyDid: "Describes the minute around the moment: what it cost, what was said, how many tries.",
+      whyItWorks: "The visible moment is the setup; the invisible one is the punchline.",
+      example: "Packed four swimsuits. This is the only hour it didn't rain.",
+      tryIt: "Name the thing nobody could see from the outside of your story: the count, the cost, the one hour it worked.",
+    },
+  ],
   published: "2026-10-23",
 };
 

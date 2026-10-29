@@ -213,6 +213,19 @@ export interface Guide {
   preset?: Partial<BitControls>;
   /** Tool pages: one real bit from the product, shown below the writer button. */
   sample?: GuideSample;
+  /** The line-level techniques this guide teaches, in the same shape as the
+   *  /funniest pages. They feed the bit writer's technique bank at build:
+   *  `name` short, `tryIt` an instruction, `example` an original Shutap
+   *  line. Only moves doable in a written line; performance moves stay out. */
+  techniques?: GuideTechnique[];
+}
+
+export interface GuideTechnique {
+  name: string;
+  whatTheyDid: string;
+  whyItWorks: string;
+  example: string;
+  tryIt: string;
 }
 
 const CTA = { label: "Type what happened. Say it funnier.", href: "/" };
