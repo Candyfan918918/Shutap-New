@@ -4,13 +4,13 @@ const guide: Guide = {
   slug: "best-ai-joke-generator-for-tiktok",
   kind: "guide",
   topic: "shutap-vs-other-tools",
-  keyword: "best ai joke generator for tiktok",
-  title: "Best AI Joke Generator for TikTok: What to Look For | Shutap",
-  h1: "The best AI joke generator for TikTok, by what you film",
+  keyword: "best ai joke tool for tiktok",
+  title: "Best AI Joke Tool for TikTok: What to Look For | Shutap",
+  h1: "The best AI joke tool for TikTok, by what you film",
   description:
-    "The best AI joke generator for TikTok starts from your story and hands back a hook, a timed bit and a way to film it. How ChatGPT, CapCut and Shutap compare.",
+    "The best AI joke tool for TikTok starts from your story and hands back a hook, a timed bit and a way to film it. How ChatGPT, CapCut and Shutap compare.",
   capsule:
-    "The best AI joke generator for TikTok is one that starts from something that happened to you and returns a spoken draft with a hook in the first line, timed to 15, 30 or 60 seconds, plus a way to film it. Generic joke tools give everyone the same lines. For talking-to-camera comedy, that's the gap Shutap is built for; for faceless videos, CapCut fits better.",
+    "The best AI joke tool for TikTok is one that starts from something that happened to you and returns a spoken draft with a hook in the first line, timed to 15, 30 or 60 seconds, plus a way to film it. Generic joke tools give everyone the same lines. For talking-to-camera comedy, that's the gap Shutap is built for; for faceless videos, CapCut fits better.",
   blurb: "What a TikTok joke tool actually needs to do, and which one fits the video you make.",
   preset: { audience: "social", voice: "storyteller", length: "30s", heat: 3 },
   sections: [
@@ -40,7 +40,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap, for talking-to-camera bits",
-      body: "Shutap is the AI joke generator for creators, and it starts where a TikTok comic starts: with what happened. You type the story, keep the audience on social, pick a voice (deadpan, storyteller, roast or dry), a length of 15, 30 or 60 seconds or 2 minutes, and a heat from 1 to 5. You get a draft of the bit with a hook, setup, tags and a button. Then you push on it: hotter, tighter, escalate, swap a tag, or mix your own from lines you liked. The teleprompter scrolls it full screen at talking pace, so you can film it in one take. Your first bit each day needs no account, and paid plans remove the download watermark.",
+      body: "Shutap is the humor amplifier, and it starts where a TikTok comic starts: with what happened. You type the story, keep the audience on social, pick a voice (deadpan, storyteller, roast or dry), a length of 15, 30 or 60 seconds or 2 minutes, and a heat from 1 to 5. You get a draft of the bit with a hook, setup, tags and a button. Then you push on it: hotter, tighter, escalate, swap a tag, or mix your own from lines you liked. The teleprompter scrolls it full screen at talking pace, so you can film it in one take. Your first bit each day needs no account, and paid plans remove the download watermark.",
     },
     {
       heading: "Captions are a separate job",
@@ -53,7 +53,7 @@ const guide: Guide = {
   ],
   faq: [
     {
-      q: "What is the best AI joke generator for TikTok?",
+      q: "What is the best AI joke tool for TikTok?",
       a: "It depends on the video. For talking-to-camera bits from your own life, Shutap drafts a hook, setup, tags and a button at 15, 30 or 60 seconds. For faceless voiceover videos, CapCut's script-to-video builds the footage too. For brainstorming lines, a chatbot works.",
     },
     {
@@ -65,7 +65,7 @@ const guide: Guide = {
       a: "Shorter than you think. At a normal talking pace, about 70 to 80 words fills 30 seconds. Write the hook first, keep the setup to what the joke needs, and stop on the funniest line instead of explaining it.",
     },
     {
-      q: "Is there a free AI joke generator for TikTok?",
+      q: "Is there a free AI joke tool for TikTok?",
       a: "Several. Shutap's first bit each day needs no account, ChatGPT has a free plan, and CapCut says its script-to-video feature is free. Shutap's free downloads carry a watermark that paid plans remove.",
     },
     {

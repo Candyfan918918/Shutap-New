@@ -275,12 +275,12 @@ const BASE_GUIDES: Guide[] = [
     slug: "stand-up-bit-generator",
     kind: "tool",
     preset: { audience: "live", voice: "deadpan", length: "2m" },
-    title: "AI Stand-Up Bit Generator: First Drafts From Your Stories | Shutap",
-    h1: "Stand-up bit generator",
+    title: "Stand-Up Bit Writer: First Drafts From Your Stories | Shutap",
+    h1: "Stand-up bit writer",
     description:
       "Write a story from your own life and get a stand-up bit draft: setup, tags and a button. Use it to get unstuck, then take it to the open mic.",
     capsule:
-      "Shutap is an AI stand-up bit generator. You write a real story from your life and it drafts the bit: a setup, tags and a button, in your choice of voice and length. It is a first draft to push against, not a finished set.",
+      "Shutap writes a first draft of a stand-up bit from your own story. You write a real story from your life and it drafts the bit: a setup, tags and a button, in your choice of voice and length. It is a first draft to push against, not a finished set.",
     blurb: "A first draft of the bit, with setup, tags and a button, from a real story.",
     sections: [
       {
@@ -413,7 +413,7 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "how-shutap-is-built",
     kind: "guide",
-    title: "How Shutap Is Built: An AI Joke Generator You Steer | Shutap",
+    title: "How Shutap Is Built: The Humor Amplifier You Steer | Shutap",
     h1: "How Shutap is built",
     description:
       "How Shutap turns your story into a bit: twelve observations, four whole bits, rules in code, a second model as judge, then hotter, tighter, escalate and mix-your-own controls so you stay the writer.",
@@ -423,7 +423,7 @@ const BASE_GUIDES: Guide[] = [
     sections: [
       {
         heading: "What makes it different",
-        body: "Most joke generators take a topic and return a line you either use or do not. Shutap works the other way. It starts from your story, writes a whole bit with a hook, setup, tags and a button, and then gives you controls to change it. You stay the writer. Shutap is the draft and the sparring partner.",
+        body: "Most joke tools take a topic and return a line you either use or do not. Shutap works the other way. It starts from your story, writes a whole bit with a hook, setup, tags and a button, and then gives you controls to change it. You stay the writer. Shutap is the draft and the sparring partner.",
       },
       {
         heading: "You start with a story, not a prompt",
@@ -507,7 +507,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Beyond the bit",
-        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
+        body: "Around the humor amplifier, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
       },
       {
         heading: "Which should you use",
@@ -571,12 +571,12 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "ai-joke-generators-compared",
     kind: "guide",
-    title: "AI Joke Generators Compared: Shutap, Witscript, Punchlines.ai, ChatGPT | Shutap",
-    h1: "AI joke generators compared",
+    title: "AI Joke Tools Compared: Shutap, Witscript, Punchlines.ai, ChatGPT | Shutap",
+    h1: "AI joke tools compared",
     description:
-      "A plain comparison of AI joke generators: Shutap, Witscript, Punchlines.ai and ChatGPT. What each takes as input, what it returns, and who it fits.",
+      "A plain comparison of AI joke tools: Shutap, Witscript, Punchlines.ai and ChatGPT. What each takes as input, what it returns, and who it fits.",
     capsule:
-      "AI joke generators fall into three kinds: tools that return one-liners from a setup or headline (Witscript, Punchlines.ai), general chatbots you prompt for jokes (ChatGPT, Claude), and Shutap, which writes a whole bit from a story from your own life and lets you steer it.",
+      "AI joke tools fall into three kinds: tools that return one-liners from a setup or headline (Witscript, Punchlines.ai), general chatbots you prompt for jokes (ChatGPT, Claude), and Shutap, which writes a whole bit from a story from your own life and lets you steer it.",
     blurb: "Shutap, Witscript, Punchlines.ai and ChatGPT side by side: input, output and fit.",
     sections: [
       {
@@ -601,7 +601,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap adds around the tool",
-        body: "Shutap pairs the bit generator with a daily what-to-post idea, The funniest (a series that teaches the techniques of funny people), and an in-house joke dataset the Shutap team writes, selects and rates, never from users. To our knowledge, no other joke tool pairs all of these.",
+        body: "Shutap pairs the humor amplifier with a daily what-to-post idea, The funniest (a series that teaches the techniques of funny people), and an in-house joke dataset the Shutap team writes, selects and rates, never from users. To our knowledge, no other joke tool pairs all of these.",
       },
       {
         heading: "Which should you pick",
@@ -645,7 +645,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Beyond the bit",
-        body: "Around the bit generator, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
+        body: "Around the humor amplifier, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
       },
       {
         heading: "Who should use which",

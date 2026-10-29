@@ -16,7 +16,7 @@ const guide: Guide = {
   sections: [
     {
       heading: "The short version",
-      body: "ChatGPT is a general assistant. Ask it for jokes about airports and you'll get jokes about airports, as many as you want, in any style you describe. Shutap is the AI joke generator for creators, and it does one narrower thing: you type what actually happened, set the room to live and pick a length, and it hands back a draft of the whole bit. So the real question isn't which one is funnier. It's where you are in the process. If you have a vague premise and want to throw things at it, a chatbot is great. If you have a story and want to see it shaped into something you could say out loud on Thursday, start from the story.",
+      body: "ChatGPT is a general assistant. Ask it for jokes about airports and you'll get jokes about airports, as many as you want, in any style you describe. Shutap is the humor amplifier, and it does one narrower thing: you type what actually happened, set the room to live and pick a length, and it hands back a draft of the whole bit. So the real question isn't which one is funnier. It's where you are in the process. If you have a vague premise and want to throw things at it, a chatbot is great. If you have a story and want to see it shaped into something you could say out loud on Thursday, start from the story.",
     },
     {
       heading: "What ChatGPT is good at for stand-up",

@@ -29,6 +29,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GuidelinesRouteImport } from './routes/guidelines'
 import { Route as HallsRouteImport } from './routes/halls'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as HumorAmplifierRouteImport } from './routes/humor-amplifier'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as LivedIntelligenceRouteImport } from './routes/lived-intelligence'
 import { Route as MarriageRouteImport } from './routes/marriage'
@@ -193,6 +194,11 @@ const HallsRoute = HallsRouteImport.update({
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HumorAmplifierRoute = HumorAmplifierRouteImport.update({
+  id: '/humor-amplifier',
+  path: '/humor-amplifier',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LegalRoute = LegalRouteImport.update({
@@ -560,6 +566,7 @@ export interface FileRoutesByFullPath {
   '/guidelines': typeof GuidelinesRoute
   '/halls': typeof HallsRouteWithChildren
   '/how-it-works': typeof HowItWorksRoute
+  '/humor-amplifier': typeof HumorAmplifierRoute
   '/legal': typeof LegalRoute
   '/lived-intelligence': typeof LivedIntelligenceRoute
   '/marriage': typeof MarriageRoute
@@ -647,6 +654,7 @@ export interface FileRoutesByTo {
   '/guidelines': typeof GuidelinesRoute
   '/halls': typeof HallsRouteWithChildren
   '/how-it-works': typeof HowItWorksRoute
+  '/humor-amplifier': typeof HumorAmplifierRoute
   '/legal': typeof LegalRoute
   '/lived-intelligence': typeof LivedIntelligenceRoute
   '/marriage': typeof MarriageRoute
@@ -736,6 +744,7 @@ export interface FileRoutesById {
   '/guidelines': typeof GuidelinesRoute
   '/halls': typeof HallsRouteWithChildren
   '/how-it-works': typeof HowItWorksRoute
+  '/humor-amplifier': typeof HumorAmplifierRoute
   '/legal': typeof LegalRoute
   '/lived-intelligence': typeof LivedIntelligenceRoute
   '/marriage': typeof MarriageRoute
@@ -825,6 +834,7 @@ export interface FileRouteTypes {
     | '/guidelines'
     | '/halls'
     | '/how-it-works'
+    | '/humor-amplifier'
     | '/legal'
     | '/lived-intelligence'
     | '/marriage'
@@ -912,6 +922,7 @@ export interface FileRouteTypes {
     | '/guidelines'
     | '/halls'
     | '/how-it-works'
+    | '/humor-amplifier'
     | '/legal'
     | '/lived-intelligence'
     | '/marriage'
@@ -1000,6 +1011,7 @@ export interface FileRouteTypes {
     | '/guidelines'
     | '/halls'
     | '/how-it-works'
+    | '/humor-amplifier'
     | '/legal'
     | '/lived-intelligence'
     | '/marriage'
@@ -1089,6 +1101,7 @@ export interface RootRouteChildren {
   GuidelinesRoute: typeof GuidelinesRoute
   HallsRoute: typeof HallsRouteWithChildren
   HowItWorksRoute: typeof HowItWorksRoute
+  HumorAmplifierRoute: typeof HumorAmplifierRoute
   LegalRoute: typeof LegalRoute
   LivedIntelligenceRoute: typeof LivedIntelligenceRoute
   MarriageRoute: typeof MarriageRoute
@@ -1286,6 +1299,13 @@ declare module '@tanstack/react-router' {
       path: '/how-it-works'
       fullPath: '/how-it-works'
       preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/humor-amplifier': {
+      id: '/humor-amplifier'
+      path: '/humor-amplifier'
+      fullPath: '/humor-amplifier'
+      preLoaderRoute: typeof HumorAmplifierRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal': {
@@ -1823,6 +1843,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuidelinesRoute: GuidelinesRoute,
   HallsRoute: HallsRouteWithChildren,
   HowItWorksRoute: HowItWorksRoute,
+  HumorAmplifierRoute: HumorAmplifierRoute,
   LegalRoute: LegalRoute,
   LivedIntelligenceRoute: LivedIntelligenceRoute,
   MarriageRoute: MarriageRoute,

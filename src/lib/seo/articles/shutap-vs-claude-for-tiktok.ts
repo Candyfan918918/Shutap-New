@@ -16,7 +16,7 @@ const guide: Guide = {
   sections: [
     {
       heading: "The short version",
-      body: "Claude is Anthropic's general assistant. It writes well, it takes instructions seriously, and it can hold a whole notebook of your rules and past scripts in one place. That makes it a good workshop if you like building a process. Shutap is the AI joke generator for creators, and it skips the workshop: you type the thing that happened, choose a voice and a length, and you get a draft of the bit to push against. The honest choice depends on whether you want to design how your scripts get written, or just want a first draft of this one before the light goes.",
+      body: "Claude is Anthropic's general assistant. It writes well, it takes instructions seriously, and it can hold a whole notebook of your rules and past scripts in one place. That makes it a good workshop if you like building a process. Shutap is the humor amplifier, and it skips the workshop: you type the thing that happened, choose a voice and a length, and you get a draft of the bit to push against. The honest choice depends on whether you want to design how your scripts get written, or just want a first draft of this one before the light goes.",
     },
     {
       heading: "What Claude does well for TikTok",

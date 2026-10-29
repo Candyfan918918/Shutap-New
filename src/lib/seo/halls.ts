@@ -1,5 +1,5 @@
 // Legacy URLs at /halls/$hall/$region/$window. These pages now render a
-// short noindex page pointing to rooms and the joke generator. Slugs stay
+// short noindex page pointing to rooms and the humor amplifier. Slugs stay
 // so indexed URLs keep resolving.
 
 export const HALLS = {
