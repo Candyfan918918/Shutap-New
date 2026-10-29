@@ -234,6 +234,7 @@ export function GlobalHeader() {
             {navLink('/', 'write')}
             {navLink('/guides', 'guides')}
             {navLink('/funniest', 'funniest')}
+            {navLink('/pricing', 'pricing')}
             {/* Hidden on phones so the nav fits; enterprise is still in the footer. */}
             <span data-gh-wide="" style={{ display: 'contents' }}>{navLink('/business', 'enterprise')}</span>
           </span>
