@@ -12,7 +12,7 @@ import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { EVAL_SET, JOKENET_SET } from '@/lib/jokes/eval-set'
 import type { BitControls, BitDraft } from '@/lib/bits/shared'
 
-export const EVAL_ROUND = 'bit-1.4-vs-1.2'
+export const EVAL_ROUND = 'bit-1.5-vs-1.2' // bit-1.4 round: 10 new, 16 old, 4 neither (Oct 29)
 
 /** The thirty: the frozen eval set plus the first founder-ledger stories. */
 export const EVAL_STORIES: { id: string; story: string }[] = [
