@@ -826,6 +826,21 @@ export type DownloadCharge =
   | { ok: false; reason: 'sign_in' | 'not_found' | 'failed' }
   | { ok: false; reason: 'limited'; used: number; cap: number; tier: BitTier }
 
+export type DownloadUsage = { used: number; cap: number | null; tier: BitTier }
+
+/** How many downloads this account has used today, for the labels. */
+export const downloadUsage = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) => z.object({ ...Ctx }).parse(d ?? {}))
+  .handler(async ({ data }): Promise<DownloadUsage> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    const tier = await resolveTier(supabaseAdmin, id)
+    const cap = tier === 'pro' ? null : tier === 'guest' ? 0 : DOWNLOAD_CAPS[tier]
+    if (!id.userId) return { used: 0, cap, tier }
+    const { count } = await supabaseAdmin.from('bit_downloads').select('id', { count: 'exact', head: true }).eq('user_id', id.userId).eq('day', today().day)
+    return { used: count ?? 0, cap, tier }
+  })
+
 /** One download against today's cap. Caption + hashtags, the picture, the
  *  PDF and the video are each their own download; the same kind on the same
  *  version the same day is free (a retry, a second copy). Logged to

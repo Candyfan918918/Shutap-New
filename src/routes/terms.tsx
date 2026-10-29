@@ -161,13 +161,14 @@ function TermsPage() {
         A guest can write <b>one new bit a day</b> without an account. Signing in is free and allows
         <b>two new bits a day</b> in total, counting any bit written as a guest that day. Basic allows
         five a day; Pro has no daily number, within fair use. A rewrite (hotter, tighter, escalate)
-        counts as a new bit; swapping a tag or mixing your own does not. Signing in keeps your bits
+        is a new bit: it is written again and its video is rendered again, so it counts as one.
+        Swapping a tag or mixing your own does not. Signing in keeps your bits
         in your set list and lets you post them.
       </p>
       <p>
         Downloads are counted separately. The video, the caption and hashtags (when copied), and
         the picture or script PDF each count as one download; the same one of the same version
-        again the same day is free. Guests can watch but not download. A free account gets
+        again the same day is free. A rewrite is a new version, and its downloads count again. Guests can watch but not download. A free account gets
         <b>one download a day</b>, with a shutap.com watermark on the video and the picture. Basic
         gets <b>three a day</b> with no watermark; Pro has no daily number, within fair use.
       </p>

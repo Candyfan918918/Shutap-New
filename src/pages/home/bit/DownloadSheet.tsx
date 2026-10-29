@@ -5,7 +5,7 @@
  * straight into TikTok); elsewhere it downloads. */
 import { useEffect, useRef, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
-import { chargeDownload, exportBit } from '@/lib/bits.functions'
+import { chargeDownload, downloadUsage, exportBit, type DownloadUsage } from '@/lib/bits.functions'
 import { isPaidTier, type BitTier, type BitVersion } from '@/lib/bits/shared'
 import { PLANS, usd } from '@/lib/pricing'
 import { anonSessionId, canShareFiles, isShareAbort, jokeTrack, saveBlob, svgToPng } from '../joke/jokeClient'
@@ -80,6 +80,18 @@ export function DownloadSheet({
   }, [format, bitId, version, paid])
 
   const charge = useServerFn(chargeDownload)
+  const usageFn = useServerFn(downloadUsage)
+  const [dl, setDl] = useState<DownloadUsage | null>(null)
+  useEffect(() => {
+    let live = true
+    usageFn({ data: { anon_session_id: anonSessionId() } }).then((u) => live && setDl(u)).catch(() => {})
+    return () => {
+      live = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bitId, version.id])
+  const dlLeft = dl && dl.cap !== null ? Math.max(0, dl.cap - dl.used) : null
+  const dlLabel = dl === null ? '' : dl.cap === null ? ' · unlimited' : dlLeft === 0 ? ' · none left today' : ` · ${dlLeft} of ${dl.cap} left today`
   async function save() {
     if (!ready) return
     // One download against today's cap (the picture and the PDF are each a
@@ -99,6 +111,7 @@ export function DownloadSheet({
       return
     }
     jokeTrack('download', tier, { kind: format === 'pdf' ? 'pdf' : 'image', format, watermarked: ready.watermarked, used: r.used, cap: r.cap, repeat: r.repeat })
+    if (!r.repeat) setDl((u) => (u ? { ...u, used: r.used } : u))
     const file = new File([ready.blob], ready.name, { type: ready.blob.type })
     if (canShareFiles([file])) {
       try {
@@ -151,8 +164,11 @@ export function DownloadSheet({
           ))}
         </div>
         <button className="bt-btn block" disabled={!ready} onClick={() => void save()}>
-          save
+          {dlLeft === 0 ? `that's today's downloads · see plans` : `download${dlLabel}`}
         </button>
+        <p className="bt-note" style={{ textAlign: 'center', margin: 0 }}>
+          each kind is one download: the picture, the PDF, the caption + hashtags, the video. The same one again today is free. A rewrite makes a new version, and its downloads count again.
+        </p>
         <CaptionBox bitId={bitId} versionId={version.id} tier={tier} say={say} onLimit={onUpgrade} />
         {!paid && (
           <button

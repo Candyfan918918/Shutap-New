@@ -872,6 +872,8 @@ export function BitSurface() {
               say={say}
               onSignIn={tier === 'guest' ? (from) => openSignin(from) : undefined}
               onLimit={showLimit}
+              left={left}
+              onCharged={() => setUsage((u) => (u && u.cap !== null ? { ...u, used: Math.min(u.cap, u.used + 1) } : u))}
             />
 
             <div className="bt-row">
