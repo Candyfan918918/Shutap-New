@@ -47,6 +47,9 @@ import { SceneView, ScreenplayView } from './Layouts'
 import { DownloadSheet } from './DownloadSheet'
 import { PostSheet } from './PostSheet'
 import { PaywallBody, UpgradeBody, type PaywallWhere } from './PlanSheets'
+import { VideoCard } from './VideoCard'
+import { CaptionBox } from './CaptionBox'
+import { downloadUsage, type DownloadUsage } from '@/lib/bits.functions'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
@@ -211,6 +214,18 @@ export function BitSurface() {
   const [opening, setOpening] = useState(false)
   const [prompter, setPrompter] = useState<BitVersion | null>(null)
   const [downloadOpen, setDownloadOpen] = useState(false)
+  /** downloads used today, for the labels on the video and caption */
+  const [dlUsage, setDlUsage] = useState<DownloadUsage | null>(null)
+  const dlFn = useServerFn(downloadUsage)
+  const dlRef = useRef(dlFn)
+  dlRef.current = dlFn
+  const refreshDownloads = useCallback(() => {
+    dlRef.current({ data: { anon_session_id: anonSessionId() } }).then(setDlUsage).catch(() => {})
+  }, [])
+  const downloadsLeft = dlUsage ? (dlUsage.cap === null ? null : Math.max(0, dlUsage.cap - dlUsage.used)) : undefined
+  useEffect(() => {
+    if (phase === 'bit' && tier !== 'guest') refreshDownloads()
+  }, [phase, tier, refreshDownloads])
   const [postOpen, setPostOpen] = useState(false)
   const topRef = useRef<HTMLDivElement | null>(null)
   const restoring = useRef(false)
@@ -452,8 +467,15 @@ export function BitSurface() {
    *  upgrade on the same subscription rather than a second checkout. */
   function openPaywall(where: PaywallWhere) {
     setPaywallWhere(where)
-    setSheet(where === 'daily_limit' ? 'upgrade' : 'paywall')
+    setSheet(where === 'daily_limit' || where === 'download_limit' ? 'upgrade' : 'paywall')
     void trackEvent('paywall_seen', { where, tier })
+  }
+
+  /** Out of downloads, or wants the watermark gone. */
+  function onDownloadLimit(why: 'count' | 'watermark') {
+    if (tier === 'pro') return
+    if (why === 'watermark') return openPaywall('download')
+    openPaywall(tier === 'basic' ? 'download_limit' : 'download_count')
   }
 
   async function onUpgraded() {
@@ -785,6 +807,21 @@ export function BitSurface() {
               </div>
             )}
 
+            <VideoCard
+              bitId={bit.id}
+              version={version}
+              story={bit.story}
+              tier={tier}
+              say={say}
+              onSignIn={tier === 'guest' ? () => openSignin('download') : undefined}
+              onLimit={onDownloadLimit}
+              onFallbackPicture={() => setDownloadOpen(true)}
+              downloadsLeft={downloadsLeft}
+              onCharged={(r) => setDlUsage({ used: r.used, cap: r.cap, tier: r.tier })}
+            />
+
+            <CaptionBox bitId={bit.id} versionId={version.id} tier={tier} say={say} onLimit={() => onDownloadLimit('count')} downloadsLeft={downloadsLeft} onCharged={(used, cap) => setDlUsage((u) => (u ? { ...u, used, cap } : { used, cap, tier }))} />
+
             <span className="bt-lbl">
               the bit · ~{version.est_seconds}s · wild {version.heat} · {bit.controls.audience}
             </span>
@@ -981,7 +1018,8 @@ export function BitSurface() {
             )}
             {sheet === 'upgrade' && (
               <UpgradeBody
-                onChoose={() => void trackEvent('plan_chosen', { plan: 'pro', where: 'daily_limit' })}
+                why={paywallWhere === 'download_limit' ? 'downloads' : 'bits'}
+                onChoose={() => void trackEvent('plan_chosen', { plan: 'pro', where: paywallWhere })}
                 onUpgraded={() => void onUpgraded()}
                 onClose={() => setSheet(null)}
               />

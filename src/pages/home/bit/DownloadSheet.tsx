@@ -10,7 +10,6 @@ import { isPaidTier, type BitTier, type BitVersion } from '@/lib/bits/shared'
 import { PLANS, usd } from '@/lib/pricing'
 import { anonSessionId, canShareFiles, isShareAbort, jokeTrack, saveBlob, svgToPng } from '../joke/jokeClient'
 import { scriptPdf } from './screenplay-pdf'
-import { CaptionBox } from './CaptionBox'
 
 type Format = 'bit' | 'hook' | 'pdf'
 const FORMATS: { key: Format; label: string }[] = [
@@ -169,7 +168,6 @@ export function DownloadSheet({
         <p className="bt-note" style={{ textAlign: 'center', margin: 0 }}>
           each kind is one download: the picture, the PDF, the caption + hashtags, the video. The same one again today is free. A rewrite makes a new version, and its downloads count again.
         </p>
-        <CaptionBox bitId={bitId} versionId={version.id} tier={tier} say={say} onLimit={onUpgrade} />
         {!paid && (
           <button
             className="bt-btn ghost block"
