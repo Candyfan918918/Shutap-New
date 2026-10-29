@@ -1,7 +1,7 @@
 /* The paywall and the Pro upgrade, shown inside the writer's bottom sheet.
  *
  *   PaywallBody   a free account at its daily limit (bit 3), or anyone
- *                 removing the watermark from a download. Free, Basic and
+ *                 past the free download or removing the watermark. Free, Basic and
  *                 Pro side by side on the same rows as the pricing page,
  *                 Pro first to buy, then what every plan keeps. Checkout is
  *                 /subscribe.
@@ -22,6 +22,7 @@ export type PaywallWhere = 'bit_3' | 'daily_limit' | 'download'
  *  page), so a paywall never reads as "pay to use Shutap". */
 const EVERY_ICON: Record<(typeof EVERY_PLAN)[number], FeatureIcon> = {
   'A full bit: hook, setup, tags and button': 'bit',
+  'A 5-second video of it': 'post',
   'Hotter, tighter, mix and tag swap': 'rewrite',
   Teleprompter: 'prompter',
   'Scene and screenplay': 'screenplay',
@@ -95,8 +96,8 @@ export function PaywallBody({
   return (
     <div className="pw">
       <div className="pw-head">
-        <h3 id="bit-sheet-title">{download ? 'Save it clean.' : "That's today's free bits."}</h3>
-        <p className="pw-sub">{download ? 'Both plans remove the watermark.' : 'Want to keep writing tonight?'}</p>
+        <h3 id="bit-sheet-title">{download ? 'Download it clean.' : "That's today's free bits."}</h3>
+        <p className="pw-sub">{download ? 'Free is one download a day with a shutap.com watermark. Basic and Pro remove it.' : 'Want to keep writing tonight?'}</p>
       </div>
 
       <Compare tiers={['free', 'basic', 'pro']} you="free" />

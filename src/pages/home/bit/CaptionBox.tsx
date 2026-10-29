@@ -50,7 +50,7 @@ export function CaptionBox({
     return (
       <div data-ph-private className="bt-cap">
         <span className="bt-lbl">caption + hashtags</span>
-        <p className="bt-note">Sign in free to get a caption and hashtags for this bit.</p>
+        <p className="bt-note">Sign in free to copy the caption and hashtags for this bit.</p>
       </div>
     )
   }

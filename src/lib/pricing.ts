@@ -34,8 +34,8 @@ export const PLANS: Record<PlanKey, PlanEntry> = {
 
 /** What each plan gives, in the same words on every surface. */
 export const PLAN_LINES: Record<PaidPlan, string[]> = {
-  basic: [`${BIT_CAPS.basic} new bits a day`, 'No watermark'],
-  pro: ['Unlimited bits', 'No watermark', 'The Mirror'],
+  basic: [`${BIT_CAPS.basic} new bits a day`, '3 downloads a day, no watermark'],
+  pro: ['Unlimited bits', 'Unlimited downloads, no watermark', 'The Mirror'],
 }
 
 /** The plans side by side: the same rows on every surface that compares
@@ -55,12 +55,12 @@ export const PLAN_COMPARE: CompareRow[] = [
     },
   },
   {
-    label: 'Saved images',
-    short: 'Saves',
+    label: 'Downloads a day (video, caption, hashtags)',
+    short: 'Downloads',
     cells: {
-      free: { value: 'Watermarked', short: 'Watermark', on: false },
-      basic: { value: 'No watermark', short: 'Clean', on: true },
-      pro: { value: 'No watermark', short: 'Clean', on: true },
+      free: { value: '1, watermarked', short: '1 · mark', on: false },
+      basic: { value: '3, no watermark', short: '3 · clean', on: true },
+      pro: { value: 'Unlimited, no watermark', short: '∞ · clean', on: true },
     },
   },
   {
@@ -77,6 +77,7 @@ export const PLAN_COMPARE: CompareRow[] = [
 /** What every plan has, Free included. Listed once, beside the comparison. */
 export const EVERY_PLAN = [
   'A full bit: hook, setup, tags and button',
+  'A 5-second video of it',
   'Hotter, tighter, mix and tag swap',
   'Teleprompter',
   'Scene and screenplay',
