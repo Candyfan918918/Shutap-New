@@ -1265,7 +1265,7 @@ export function fill(template: string, vars: Record<string, string | undefined>)
    kept bit as hotter / tighter / escalate.
 
    BIT_PROMPT_VERSION is stamped on every bit. Bump it on ANY edit below. */
-export const BIT_PROMPT_VERSION = 'bit-1.2'
+export const BIT_PROMPT_VERSION = 'bit-1.3'
 
 /** What each audience control changes. The aim never changes: the situation. */
 export const BIT_AUDIENCE: Record<string, string> = {
@@ -1316,58 +1316,65 @@ whole bit at talking pace. Never more than {{MAX_WORDS}} words.
 A BIT HAS FOUR PARTS:
 
 HOOK — the first two seconds, also the on-screen text. At most 8 words.
-  Readable at a glance. It names the situation or its strangest fact so a
-  scrolling thumb stops. Not a question, not "story time", not "POV:",
+  Readable at a glance. It names the strangest TRUE fact in the story, the
+  one detail a stranger would stop for, not the summary ("my husband only
+  washes dishes" is a summary; "he washes the forks and leaves the pan"
+  stops a thumb). Not a question, not "story time", not "POV:",
   not a pun. "my roommate's girlfriend" works. "she asked ME to keep it
   down" works.
 
 SETUP — the facts, plainly, with their real detail: the time, the number,
   the exact words someone said. One to three short sentences. The setup is
   not trying to be funny yet; it is loading the gun. Use the details the
-  story gave and invent none.
+  story gave and invent none: no new numbers, times or events in the setup.
+  The plainer the setup, the harder the turn lands.
 
-TAGS — 1 to 3 jokes on the SAME premise, each one a step further. A tag is
-  premise → picture → landing:
-    PICTURE: take the fact one step past what happened, into an image that
-      did not happen but had to. "She's not a guest anymore. She's a
-      utility." If it is a comparison, the second half is something you
-      can see or hold.
-    LANDING: the last word is a thing you can point at — a noun from their
-      life (the fridge, the shelf, the 11pm knock) — never an abstraction
-      like "dynamic", "boundaries", "situation", "energy".
-  The moves that work. Use a DIFFERENT move for each tag and the button.
-  The examples show the move on other stories; never reuse their words.
-  - ADD A NUMBER: an invented figure one notch more specific than theirs.
-      ("$4,000 on the Bahamas. His favourite part was the hotel TV.")
-  - GIVE IT A JOB: the person or object gets a job title that fits what
-      they did. ("He's a health inspector who tastes the evidence.")
-  - THEIR WORD MADE A WORLD: take the word they used and move into the
-      building it came from.
-  - THE OBJECT GIVEN A LIFE: the thing in the story wants, decides, wins.
-  - THE ERRAND: the physical task someone did before the event.
-  - SPLIT YOURSELF IN TWO: two versions of the teller, only one of them
-      did it. ("I left at 8:00 in spirit and 8:30 in Honda.")
-  - TALK LIKE A SIGN: the line said in short, official, final words, as a
-      shop or an office would say it. ("Mommy is closed.")
-  - THE LINEUP: three items, and the last one is the one you can see or
-      smell. ("Notes of 2019, parking lot, and somebody's dog.")
-  - CUT THE SETUP: if a line still works without its first half, drop the
-      first half. Start where it gets funny.
+TAGS — 1 to 3 jokes on the SAME premise, each one a step further, each
+  shorter than the last. A tag is premise → picture → landing:
+    PICTURE: take the fact one step past what happened, into something that
+      did not happen but had to. If it is a comparison, the second half is
+      something you can see or hold.
+    LANDING: the last word is the one that does the turning, and it is a
+      thing you can point at (the pan, the 2 a.m. note, the left AirPod).
+      Nothing after it: no "though", no "anyway", no explanation.
 
-  ONE WORLD — the pictures come from the story's own world (the kitchen,
-  the drop-off line, the hotel room, the group chat) or from a word someone
-  in the story said. Never carry one borrowed world through the bit — a
-  courtroom, a war, a fashion show, a premiere, an office, a sports match.
-  At most one borrowed image in the whole bit, and only if it is sharper
-  than anything the story's own world offers.
+THE TECHNIQUES — each bit is built on its own technique, dealt below. The
+  bit's tags carry out that technique on THIS story; the button may use any
+  technique on this page. The shape line shows the technique on a different
+  story: copy the operation, never its words, nouns or numbers.
 
-  NO SHAPE TWICE — no two lines in a bit share a sentence shape. At most one
+{{TECHNIQUES}}
+
+ACTS, NOT LABELS — the funniest lines show something HAPPENING: a note
+  left, a reply sent, a rule followed to the letter, an object doing
+  something, a number someone could check. "He's a philanthropist of the
+  silverware drawer", "I'm a quality control department of one", "the
+  cursor is a firing squad" are LABELS: a finding wearing a costume, and
+  they are not funny. At most ONE line in a bit may say what someone or
+  something is ("he's a ...", "it's a ...").
+
+NO COSTUME — never dress the story in an institution's vocabulary it did
+  not use: audit, consultant, department, protocol, forensic, CEO, officer,
+  committee, verdict, magistrate, legal, corporate, crime scene, bunker.
+  At most one official-sounding line per bit, and only when the technique
+  asks for it (a note in management voice).
+
+THE TELLER MAY ACT — a tag can say what the teller did next ("so I taped a
+  note to the pan"). That is the bit. Never invent the other person's past,
+  motives, habits or new facts about them; an obviously comic number is
+  fine.
+
+SAY IT FLAT — state it like a fact. Never point at the contradiction,
+  never explain the joke, never "I mean", "honestly", "basically".
+
+NO SHAPE TWICE — no two lines in a bit share a sentence shape. At most one
   line in the whole bit may use "it wasn't X, it was Y", "not X but Y",
   "went from X to Y" or "less X and more Y".
 
-BUTTON — the last line. The laugh you walk off on. A verdict, a reversal,
-  or a consequence, landing on a picture. Short. Never a moral, never
-  advice, never "and that's when I realized".
+BUTTON — the last line. The laugh you walk off on: the strongest line in
+  the bit, not the politest. A reversal, a consequence, or a callback to the
+  hook, landing on a picture. Short. Never a moral, never advice, never
+  "and that's when I realized", never a label.
 
 HARD RULES — a bit that breaks one is worthless, however funny:
 - The joke goes at the situation and the other party's behaviour, never at
@@ -1386,16 +1393,17 @@ HARD RULES — a bit that breaks one is worthless, however funny:
   restatement, not a joke. The tag must arrive somewhere the story's words
   could not reach.
 
-WRITE FOUR DIFFERENT BITS. Each one builds on a different angle, so they
-are genuinely different, not rewordings. PUT THE STRONGEST BIT FIRST: the
+WRITE FOUR DIFFERENT BITS, in the order of the techniques above: bit 1 on
+technique 1, and so on. Each builds on a different angle, so they are
+genuinely different, not rewordings. PUT THE STRONGEST BIT FIRST: the
 first one is the one the performer sees, so judge them against the rules
-above before you order them — a picture beats a finding, a landing you can
-point at beats an abstraction, a button that ends it beats one that
-explains it. Then write FIVE spare tags for the first bit's angle: lines
+above before you order them — an act beats a label, a picture beats a
+finding, a landing you can point at beats an abstraction, a button that
+ends it beats one that explains it. Then write FIVE spare tags for the first bit's angle: lines
 that could replace a tag in it.
 
-For each bit, "why" is one plain sentence on what makes it work (the
-picture and why it only fits this story). No jargon.
+For each bit, "why" is one plain sentence naming its technique and what
+makes it work on this story only. No jargon.
 
 Return only JSON, "angles" first (one short sentence each, the angle each
 bit is built on, in the same order as the bits):
@@ -1416,10 +1424,11 @@ yet. Look in this order and use what fires:
    they actually did.
 3. SENTIMENT AS PRETEXT — the warm feeling that arrived because something
    was needed.
-4. PROCESS LANGUAGE — the administrative word that makes it sound
-   procedural; name the institution that word belongs to.
-5. SELF-APPOINTMENT — what the person quietly turned themselves into (an
-   auditor, a committee, a press office).
+4. THE SIZE GAP — the size of someone's response next to the size of the
+   problem (four pages about a pumpkin).
+5. THEIR RULE, LITERALLY — the excuse, rule or deal someone gave, taken at
+   its exact word: what would it mean if you followed it?
+6. THE OBJECT — the thing in the story that waited, decided or took a side.
 Keep the object from the story in every angle (the fridge, the camera, the
 11pm knock). Go past the first three things anyone would notice. Never
 make the teller's feelings, body or worth an angle.`
@@ -1450,6 +1459,9 @@ THEN RANK what survives, weighted in this order:
 - IS THERE A PICTURE. A tag that goes one step past the fact into an image
   beats a correct observation with no image. A bit made of findings ranks
   below a weaker idea with a picture.
+- ACTS BEAT LABELS. A line that shows something happening (a note left, a
+  rule followed to the letter, a number) beats "he's a [job title] of
+  [thing]". Institution vocabulary the story never used is a costume.
 - THE HOOK. Would a scrolling thumb stop? Specific and strange beats
   general. Eight words or fewer.
 - THE BUTTON. Does it land on a picture and end the bit, or explain it?
@@ -1500,6 +1512,11 @@ verdict or reversal, never a moral). Same hard rules as always: the joke
 goes at the situation and the other party's behaviour, never at the teller;
 no advice; no therapy words; no invented facts about real people; no
 names; nothing about bodies, age, looks or intelligence.
+Acts, not labels: show something happening (a note left, a rule followed to
+the letter, a number, an object doing something) instead of saying what
+someone "is". At most one such label line. No institution vocabulary the
+story never used (audit, department, protocol, CEO, verdict, crime scene).
+The word that does the turning is the last word of its line.
 
 "why" is one plain sentence on what changed and why it works.
 

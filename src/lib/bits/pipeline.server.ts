@@ -46,6 +46,7 @@ import {
   type ScreenplayElement,
   type VaryKind,
 } from './shared'
+import { dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt } from './techniques'
 
 export { BIT_PROMPT_VERSION }
 
@@ -59,7 +60,12 @@ export { BIT_PROMPT_VERSION }
    ran slow (every attempt hit the cap, ~50s, then an error). Now the primary
    writer starts at once; if it has not answered by BIT_HEDGE_MS, a backup
    writer on a faster model starts beside it, and the first usable answer
-   wins. A slow model costs seconds, never the bit. */
+   wins. A slow model costs seconds, never the bit.
+
+   Hedge raised 3s → 9s (Oct 29 2026, bit-1.3): at 3s the backup joined
+   every run and won 194 of 196 bits in a week, so the weakest model wrote
+   almost everything. The primary answers in ~10s; the backup now joins only
+   when the primary is genuinely slow or fails. */
 function budgetMs(name: string, fallback: number): number {
   const n = Number(process.env[name] ?? '')
   return Number.isFinite(n) && n > 0 ? n : fallback
@@ -69,7 +75,7 @@ export const BIT_BUDGET = {
   /** primary writer's own cap; it keeps running while the backup races it */
   write: () => budgetMs('BIT_WRITE_MS', 30_000),
   /** when the backup writer joins the race */
-  hedge: () => budgetMs('BIT_HEDGE_MS', 3_000),
+  hedge: () => budgetMs('BIT_HEDGE_MS', 9_000),
   /** backup writer's cap, from the moment it starts */
   backup: () => budgetMs('BIT_BACKUP_MS', 22_000),
   judge: () => budgetMs('BIT_JUDGE_MS', 6_000),
@@ -163,6 +169,8 @@ export function bitFailure(b: BitDraft, story: string, controls: BitControls): s
     craft ??= f
   }
   if (craft) return craft
+  const technique = techniqueCraftFailure([...b.tags, b.button], story)
+  if (technique) return technique
   if (b.hook.split(/\s+/).length > 10) return 'hook over 10 words'
   if (bitWords(b) > maxWords(controls)) return 'over length'
   return null
@@ -175,6 +183,11 @@ export function isSafetyFailure(rule: string): boolean {
   return rule === 'advice' || rule === 'reassurance' || rule === 'clinical vocabulary' || rule.startsWith('banned construction')
 }
 
+/** The bit-1.3 technique rules (labels, costume, copied example). */
+export function isTechniqueFailure(rule: string): boolean {
+  return rule.startsWith('labels, not acts') || rule.startsWith('costume vocabulary') || rule === 'copied a technique example'
+}
+
 /* ── stage 2 · the bit pass ── */
 
 export type BitPass = { bits: BitDraft[]; altTags: string[]; angles: string[]; model: string; error?: string }
@@ -183,11 +196,12 @@ export async function runBitPass(
   story: string,
   premises: Premise[],
   controls: BitControls,
-  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal } = {},
+  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal; dealt?: Dealt[] } = {},
 ): Promise<BitPass> {
   const prompt = fill(BIT_PROMPT, {
     SITUATION: story.slice(0, 2000),
     PREMISES: formatPremisesForBit(premises),
+    TECHNIQUES: formatTechniques(opts.dealt ?? dealTechniques(4)),
     ...controlVars(controls),
   })
   const res = await callAgent({
@@ -360,6 +374,8 @@ export type WrittenBit = {
   judgeModel: string
   promptVersion: string
   timings: Record<string, number>
+  /** the technique dealt to each bit, in writer order (bit-1.3) */
+  techniques: string[]
   rejected: { hook: string; rule: string }[]
   attempts: WriterAttempt[]
 }
@@ -378,6 +394,9 @@ export async function writeBitFromStory(
   const t1 = Date.now()
 
   const rejected: { hook: string; rule: string }[] = []
+  // One deal per run: both writers in the race get the same techniques, so
+  // the bit is the same operation whichever model answers first.
+  const dealt = dealTechniques(4)
   const sortBits = (bits: BitDraft[]) => {
     const ok: BitDraft[] = []
     const craftOnly: BitDraft[] = []
@@ -395,7 +414,7 @@ export async function writeBitFromStory(
     backup: { model: backupWriterModel(), leg: 'backup', timeoutMs: BIT_BUDGET.backup() },
     hedgeMs: BIT_BUDGET.hedge(),
     deadlineMs: BIT_BUDGET.write() + 5_000,
-    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal }),
+    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal, dealt }),
     usable: (p) => {
       const s = sortBits(p.bits as BitDraft[])
       return s.ok.length + s.craftOnly.length > 0
@@ -439,6 +458,7 @@ export async function writeBitFromStory(
     judgeModel: verdict.model,
     promptVersion: BIT_PROMPT_VERSION,
     timings: { premises_ms: t1 - t0, write_ms: t2 - t1, judge_ms: t3 - t2 },
+    techniques: dealt.map((d) => d.primary.id),
     rejected,
     attempts: race.attempts,
   }
@@ -467,6 +487,10 @@ export async function varyBitDraft(
 ): Promise<BitDraft | null> {
   const asText = `HOOK: ${bit.hook}\nSETUP: ${bit.setup}\n${bit.tags.map((t, j) => `TAG ${j + 1}: ${t}`).join('\n')}\nBUTTON: ${bit.button}`
   const cv = controlVars(controls)
+  // A rewrite that only misses the bit-1.3 technique rules (a second label
+  // line, costume vocabulary) is kept as a last resort: better a rewrite
+  // than "try again". Safety rules are never relaxed.
+  let craftMiss: BitDraft | null = null
   for (let attempt = 0; attempt < 2; attempt++) {
     const res = await callAgent({
       model: attempt === 0 ? writerModel() : backupWriterModel(),
@@ -494,9 +518,10 @@ export async function varyBitDraft(
     if (!draft) continue
     const f = bitFailure(draft, story, { ...controls, length: '2m' })
     if (!f) return draft
+    if (isTechniqueFailure(f)) craftMiss ??= draft
     console.warn('[bit-vary] failed a rule', { kind, rule: f })
   }
-  return null
+  return craftMiss
 }
 
 export function heatFor(kind: VaryKind | 'original', controls: BitControls): number {

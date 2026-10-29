@@ -375,7 +375,7 @@ async function writeCore(
       writer_model: written.writerModel,
       judge_model: written.judgeModel,
       judge_why: written.judgeWhy,
-      timings: { ...timings, lab, rejected: written.rejected.map((r) => r.rule), attempts: written.attempts },
+      timings: { ...timings, lab, rejected: written.rejected.map((r) => r.rule), attempts: written.attempts, techniques: written.techniques },
     } as never)
     if (error) {
       // Two copies of the same press raced and the other one saved first:

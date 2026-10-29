@@ -76,7 +76,14 @@ export const Route = createFileRoute('/api/public/bit-health')({
           } else {
             ok = true
             model = written.writerModel
-            detail.hook = written.ranked[0]!.hook
+            const best = written.ranked[0]!
+            detail.hook = best.hook
+            // The whole bit, so a deploy check can read quality, not just
+            // liveness. Safe: the test stories are fixed, never user text.
+            detail.bit = { story, setup: best.setup, tags: best.tags, button: best.button, why: best.why }
+            detail.prompt_version = written.promptVersion
+            detail.techniques = written.techniques
+            detail.rejected = written.rejected.map((r) => r.rule)
             detail.attempts = written.attempts
           }
         } catch (e) {
