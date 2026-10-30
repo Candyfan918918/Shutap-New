@@ -45,6 +45,7 @@ import {
   type ScreenplayElement,
   type VaryKind,
 } from './shared'
+import { houseSignal } from './house.server'
 import { bankFromFunniest, costumeToken, dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt, type Technique } from './techniques'
 
 /* ── the /funniest bank ──
@@ -285,19 +286,28 @@ export function isTechniqueFailure(rule: string): boolean {
 
 /* ── stage 2 · the bit pass ── */
 
-export type BitPass = { bits: BitDraft[]; altTags: string[]; angles: string[]; model: string; error?: string }
+export type BitPass = {
+  bits: BitDraft[]
+  /** each bit's position in the writer's output = the technique it was dealt */
+  slots?: number[]
+  altTags: string[]
+  angles: string[]
+  model: string
+  error?: string
+}
 
 export async function runBitPass(
   story: string,
   premises: Premise[],
   controls: BitControls,
-  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal; dealt?: Dealt[]; prompt?: string; angleFinder?: string } = {},
+  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal; dealt?: Dealt[]; prompt?: string; angleFinder?: string; house?: string } = {},
 ): Promise<BitPass> {
   const model = opts.model ?? bitWriterModel()
   const prompt = fill(opts.prompt ?? BIT_PROMPT, {
     SITUATION: story.slice(0, 2000),
     PREMISES: premises.length ? formatPremisesForBit(premises) : (opts.angleFinder ?? BIT_ANGLE_FINDER),
     TECHNIQUES: formatTechniques(opts.dealt ?? dealTechniques(4)),
+    HOUSE: opts.house ?? '',
     ...controlVars(controls),
   })
   const res = await callAgent({
@@ -311,15 +321,15 @@ export async function runBitPass(
   })
   if (res.error) return { bits: [], altTags: [], angles: [], model: res.model, error: res.error }
   const parsed = tryParseJson<{ bits?: unknown; alt_tags?: unknown; angles?: unknown }>(res.text)
-  const bits = (Array.isArray(parsed?.bits) ? parsed!.bits : [])
-    .map(cleanBit)
-    .filter((b): b is BitDraft => !!b)
+  const cleaned = (Array.isArray(parsed?.bits) ? parsed!.bits : []).map(cleanBit)
+  const slots = cleaned.flatMap((b, i) => (b ? [i] : []))
+  const bits = cleaned.filter((b): b is BitDraft => !!b)
   const altTags = (Array.isArray(parsed?.alt_tags) ? parsed!.alt_tags : [])
     .map(tidy)
     .filter((t) => t && !hardRuleFailure(t, story, 'the_roast', { ignoreLength: true }))
     .slice(0, 5)
   const angles = (Array.isArray(parsed?.angles) ? parsed!.angles : []).map(tidy).filter(Boolean).slice(0, 6)
-  return { bits, altTags, angles, model: res.model, ...(bits.length ? {} : { error: 'no bits parsed' }) }
+  return { bits, slots, altTags, angles, model: res.model, ...(bits.length ? {} : { error: 'no bits parsed' }) }
 }
 
 /* ── stage 3 · the judge ── */
@@ -520,7 +530,8 @@ export async function writeBitFromStory(
   const rejected: { hook: string; rule: string }[] = []
   // One deal per run: both writers in the race get the same techniques, so
   // the bit is the same operation whichever model answers first.
-  const dealt = variant.noTechniques ? [] : dealTechniques(4, Math.random, variant.pool ?? (await funniestBank()).line)
+  const house = variant.noTechniques ? { examples: '', weights: {} } : await houseSignal()
+  const dealt = variant.noTechniques ? [] : dealTechniques(4, Math.random, variant.pool ?? (await funniestBank()).line, house.weights)
   const primaryModel = variant.writer ?? bitWriterModel()
   const backupModel = variant.backup ?? backupWriterModel()
   const sortBits = (bits: BitDraft[]) => {
@@ -541,7 +552,7 @@ export async function writeBitFromStory(
     hedgeMs: BIT_BUDGET.hedge(),
     deadlineMs: BIT_BUDGET.write() + 5_000,
     preferPrimary: variant.preferPrimary ?? preferPrimaryOn(),
-    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal, dealt, prompt: variant.prompt, angleFinder: variant.angleFinder }),
+    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal, dealt, prompt: variant.prompt, angleFinder: variant.angleFinder, house: house.examples }),
     usable: (p) => {
       const s = sortBits(p.bits as BitDraft[])
       return s.ok.length + s.craftOnly.length > 0

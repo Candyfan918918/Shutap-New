@@ -247,16 +247,23 @@ export type Dealt = { primary: Technique; backup: Technique }
  * primary that does not fit the story (it needs another person and there is
  * none) still has somewhere to go. `rand` is injectable for tests.
  */
-export function dealTechniques(n = 4, rand: () => number = Math.random, extra: Technique[] = []): Dealt[] {
+export function dealTechniques(
+  n = 4,
+  rand: () => number = Math.random,
+  extra: Technique[] = [],
+  /** per-technique multipliers learned from the founder's daily ratings */
+  learned: Record<string, number> = {},
+): Dealt[] {
   const pool = extra.length ? [...TECHNIQUES, ...extra] : TECHNIQUES
   const used = new Set<string>()
+  const w = (t: Technique) => weightOf(t) * (learned[t.id] ?? 1)
   const draw = (pool: Technique[]): Technique => {
     const open = pool.filter((t) => !used.has(t.family))
     const from = open.length ? open : pool
-    const total = from.reduce((s, t) => s + weightOf(t), 0)
+    const total = from.reduce((s, t) => s + w(t), 0)
     let r = rand() * total
     for (const t of from) {
-      r -= weightOf(t)
+      r -= w(t)
       if (r < 0) {
         used.add(t.family)
         return t
