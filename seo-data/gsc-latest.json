@@ -1,8 +1,8 @@
 {
  "property": "sc-domain:shutap.com",
- "startDate": "2026-09-29",
- "endDate": "2026-10-27",
- "pulledAt": "2026-10-29T20:21:01.078Z",
+ "startDate": "2026-09-30",
+ "endDate": "2026-10-28",
+ "pulledAt": "2026-10-30T00:35:30.409Z",
  "striking": [
   {
    "query": "shutap",
@@ -22,19 +22,19 @@
   },
   {
    "query": "shutap",
-   "page": "https://shutap.com/how-it-works",
+   "page": "https://shutap.com/faq",
    "clicks": 0,
-   "impressions": 35,
+   "impressions": 31,
    "ctr": 0,
-   "position": 5.4
+   "position": 5.9
   },
   {
    "query": "shutap",
-   "page": "https://shutap.com/faq",
+   "page": "https://shutap.com/how-it-works",
    "clicks": 0,
-   "impressions": 34,
+   "impressions": 29,
    "ctr": 0,
-   "position": 6.2
+   "position": 6
   },
   {
    "query": "shutap",
@@ -77,14 +77,6 @@
    "position": 7
   },
   {
-   "query": "shutap",
-   "page": "https://shutap.com/lived-intelligence",
-   "clicks": 0,
-   "impressions": 4,
-   "ctr": 0,
-   "position": 8
-  },
-  {
    "query": "punchlines.ai",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
@@ -102,6 +94,14 @@
   },
   {
    "query": "shutap",
+   "page": "https://shutap.com/lived-intelligence",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
+  },
+  {
+   "query": "shutap",
    "page": "https://shutap.com/safety",
    "clicks": 0,
    "impressions": 1,
@@ -112,9 +112,9 @@
  "pages": [
   {
    "page": "https://shutap.com/",
-   "clicks": 110,
-   "impressions": 268,
-   "ctr": 0.4104,
+   "clicks": 108,
+   "impressions": 262,
+   "ctr": 0.4122,
    "position": 1.7
   },
   {
@@ -169,9 +169,9 @@
   {
    "page": "https://shutap.com/faq",
    "clicks": 1,
-   "impressions": 58,
-   "ctr": 0.0172,
-   "position": 5.7
+   "impressions": 55,
+   "ctr": 0.0182,
+   "position": 5.5
   },
   {
    "page": "https://shutap.com/guides/ai-comedy-writing-tools",
@@ -190,16 +190,16 @@
   {
    "page": "https://shutap.com/how-it-works",
    "clicks": 1,
-   "impressions": 61,
-   "ctr": 0.0164,
-   "position": 5.1
+   "impressions": 55,
+   "ctr": 0.0182,
+   "position": 5.4
   },
   {
    "page": "https://shutap.com/lived-intelligence",
    "clicks": 1,
-   "impressions": 6,
-   "ctr": 0.1667,
-   "position": 6
+   "impressions": 3,
+   "ctr": 0.3333,
+   "position": 4
   },
   {
    "page": "https://shutap.com/ai-disclosure",
@@ -423,9 +423,9 @@
   {
    "query": "shutap",
    "page": "https://shutap.com/",
-   "clicks": 100,
-   "impressions": 235,
-   "ctr": 0.4255,
+   "clicks": 98,
+   "impressions": 229,
+   "ctr": 0.4279,
    "position": 1.7
   },
   {
@@ -696,9 +696,9 @@
    "query": "shutap",
    "page": "https://shutap.com/faq",
    "clicks": 0,
-   "impressions": 34,
+   "impressions": 31,
    "ctr": 0,
-   "position": 6.2
+   "position": 5.9
   },
   {
    "query": "shutap",
@@ -768,15 +768,15 @@
    "query": "shutap",
    "page": "https://shutap.com/how-it-works",
    "clicks": 0,
-   "impressions": 35,
+   "impressions": 29,
    "ctr": 0,
-   "position": 5.4
+   "position": 6
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/lived-intelligence",
    "clicks": 0,
-   "impressions": 4,
+   "impressions": 1,
    "ctr": 0,
    "position": 8
   },
