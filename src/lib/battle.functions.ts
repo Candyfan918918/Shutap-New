@@ -649,10 +649,10 @@ async function guideTechniques(): Promise<BankTechnique[]> {
 
 /** CANDIDATES techniques, at most two from one guide, the least-used first. */
 const CANDIDATES = 6
-function dealCandidates(all: BankTechnique[], used: Map<string, number>): BankTechnique[] {
+function dealCandidates(all: BankTechnique[], used: Map<string, number>, skip: Set<string> = new Set()): BankTechnique[] {
   const out: BankTechnique[] = []
   const perGuide = new Map<string, number>()
-  for (const t of shuffle(all).sort((a, b) => (used.get(a.id) ?? 0) - (used.get(b.id) ?? 0))) {
+  for (const t of shuffle(all.filter((x) => !skip.has(x.id))).sort((a, b) => (used.get(a.id) ?? 0) - (used.get(b.id) ?? 0))) {
     if ((perGuide.get(t.guideSlug) ?? 0) >= (out.length < 4 ? 1 : 2)) continue
     out.push(t)
     perGuide.set(t.guideSlug, (perGuide.get(t.guideSlug) ?? 0) + 1)
@@ -770,13 +770,27 @@ async function setupsWithoutVersions(client: any): Promise<any[]> {
   return setups.filter((s) => !has.has(s.id))
 }
 
-/** Six candidate lines for up to 4 setups that have none, judged down to the best four. */
+/** Setups paused because only one or two lines survived, not yet topped up. */
+async function setupsToTopUp(client: any): Promise<any[]> {
+  const [setups, versions] = await Promise.all([
+    fetchAll((a, b) => client.from('battle_setups').select('id, n, topic, setup').eq('archived', false).eq('active', false).eq('topups', 0).order('n').range(a, b)),
+    fetchAll((a, b) => client.from('battle_versions').select('setup_id, text, technique_id, active').eq('active', true).range(a, b)),
+  ])
+  const lines = new Map<string, any[]>()
+  for (const v of versions) lines.set(v.setup_id, [...(lines.get(v.setup_id) ?? []), v])
+  return setups.map((s) => ({ ...s, existing: lines.get(s.id) ?? [] })).filter((s) => s.existing.length >= 1 && s.existing.length < 3)
+}
+
+/** Six candidate lines for up to 4 setups that have none, judged down to the
+ *  best four. Then, setups paused with one or two lines get one more round of
+ *  six candidates, judged together with the lines they already have. */
 export const adminBattleWriteVersions = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<BankProgress> => {
     await assertAdmin(context)
     const client = await db()
-    const todo = (await setupsWithoutVersions(client)).slice(0, 4)
+    const fresh = (await setupsWithoutVersions(client)).slice(0, 4).map((x) => ({ ...x, existing: [] as any[], topup: false }))
+    const todo = fresh.length ? fresh : (await setupsToTopUp(client)).slice(0, 4).map((x) => ({ ...x, topup: true }))
     const all = await guideTechniques()
     if (all.length < CANDIDATES) throw new Error('the /guides pages have too few line techniques')
     const usedRows = await fetchAll((a, b) => client.from('battle_versions').select('technique_id').eq('active', true).range(a, b))
@@ -790,7 +804,8 @@ export const adminBattleWriteVersions = createServerFn({ method: 'POST' })
 
     await Promise.all(
       todo.map(async (s) => {
-        const deal = dealCandidates(all, used)
+        const have = new Set<string>(s.existing.map((v: any) => v.technique_id))
+        const deal = dealCandidates(all, used, have)
         for (const t of deal) used.set(t.id, (used.get(t.id) ?? 0) + 1)
         const res = await callAgent({
           model: writer,
@@ -815,28 +830,37 @@ export const adminBattleWriteVersions = createServerFn({ method: 'POST' })
           const line = lines[i]
           if (line && !(await lineFailure(line, s.setup))) passed.push({ text: line, t: deal[i]! })
         }
-        // The judge cuts what doesn't make sense and ranks the rest.
-        let ranked = passed
-        if (passed.length > 1) {
+        // The judge cuts what doesn't make sense and ranks the rest; on a top-up,
+        // the lines the setup already has are judged alongside the new ones.
+        const old: { text: string; t: BankTechnique | null }[] = s.existing.map((v: any) => ({ text: v.text, t: null }))
+        const pool = [...old, ...passed]
+        let ranked: { text: string; t: BankTechnique | null }[] = pool
+        if (pool.length > 1) {
           const j = await callAgent({
             model: judge,
             temperature: judge.startsWith('openai/') ? undefined : 0,
             reasoningEffort: judge.startsWith('openai/gpt-5') ? 'low' : undefined,
             maxTokens: 1500,
             timeoutMs: 45_000,
-            messages: [{ role: 'user', content: BANK_JUDGE_PROMPT.replace('{{SETUP}}', s.setup).replace('{{LINES}}', passed.map((p, i) => `${i + 1}. ${p.text}`).join('\n')) }],
+            messages: [{ role: 'user', content: BANK_JUDGE_PROMPT.replace('{{SETUP}}', s.setup).replace('{{LINES}}', pool.map((p, i) => `${i + 1}. ${p.text}`).join('\n')) }],
           })
           const keep = tryParseJson<{ keep?: unknown[] }>(j.text)?.keep
           if (Array.isArray(keep)) {
-            const order = keep.map((k) => Number(k) - 1).filter((i) => Number.isInteger(i) && i >= 0 && i < passed.length)
-            ranked = [...new Set(order)].map((i) => passed[i]!)
+            const order = keep.map((k) => Number(k) - 1).filter((i) => Number.isInteger(i) && i >= 0 && i < pool.length)
+            ranked = [...new Set(order)].map((i) => pool[i]!)
           } else {
             errors.push(`setup ${s.n}: judge unreadable, kept the code-checked lines`)
           }
         }
-        const keepLines = ranked.slice(0, BATTLE.versions)
-        if (keepLines.length < 3) {
-          errors.push(`setup ${s.n}: only ${keepLines.length} lines survived; setup paused`)
+        const best = ranked.slice(0, BATTLE.versions)
+        const keepLines = best.filter((k): k is { text: string; t: BankTechnique } => !!k.t)
+        const total = s.existing.length + keepLines.length
+        if (s.topup) {
+          // One top-up per setup: back on if it now has three, else it stays paused.
+          await client.from('battle_setups').update({ topups: 1, ...(total >= 3 ? { active: true } : {}) }).eq('id', s.id)
+          errors.push(`setup ${s.n}: topped up to ${total} lines${total >= 3 ? ', back on' : ', still paused'}`)
+        } else if (keepLines.length < 3) {
+          errors.push(`setup ${s.n}: only ${keepLines.length} lines survived; setup paused, will be topped up`)
           await client.from('battle_setups').update({ active: false }).eq('id', s.id)
         }
         if (keepLines.length) {
@@ -857,7 +881,7 @@ export const adminBattleWriteVersions = createServerFn({ method: 'POST' })
       }),
     )
     const { count: setups } = await client.from('battle_setups').select('id', { count: 'exact', head: true }).eq('active', true)
-    const withoutVersions = (await setupsWithoutVersions(client)).length
+    const withoutVersions = (await setupsWithoutVersions(client)).length + (await setupsToTopUp(client)).length
     return { added, setups: setups ?? 0, withoutVersions, errors }
   })
 

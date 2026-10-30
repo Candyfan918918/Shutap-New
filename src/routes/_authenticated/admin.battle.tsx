@@ -60,14 +60,18 @@ function AdminBattlePage() {
     setLog([])
     try {
       // Setups first, 20 a call, until the bank holds the target.
-      for (let i = 0; i < 20 && !stop.current; i++) {
-        setBusy(`writing setups… (${data?.bank.setups ?? 0} so far)`)
+      // An empty call (a timeout, unreadable output) is retried; two in a row stops.
+      let empty = 0
+      for (let i = 0; i < 25 && !stop.current; i++) {
+        setBusy(`writing setups… (${i ? 'call ' + (i + 1) : 'starting'})`)
         const r = await writeSetups()
-        setLog((l) => [...l, `setups: +${r.added} (now ${r.setups})${r.errors.length ? ` · ${r.errors.join('; ')}` : ''}`])
-        if (r.setups >= BATTLE.setups || r.added === 0) break
+        setLog((l) => [...l, `setups: +${r.added} (now ${r.setups} active)${r.errors.length ? ` · ${r.errors.join('; ')}` : ''}`])
+        if (r.setups >= BATTLE.setups) break
+        empty = r.added === 0 ? empty + 1 : 0
+        if (empty >= 2) break
       }
-      // Then four versions per setup, 5 setups a call.
-      for (let i = 0; i < 60 && !stop.current; i++) {
+      // Then lines: new setups first, then one top-up round for setups paused with 1–2 lines.
+      for (let i = 0; i < 120 && !stop.current; i++) {
         const r = await writeVersions()
         setBusy(`writing versions… ${r.withoutVersions} setups to go`)
         setLog((l) => [...l, `versions: +${r.added} · ${r.withoutVersions} setups to go${r.errors.length ? ` · ${r.errors.join('; ')}` : ''}`])
