@@ -230,14 +230,16 @@ export function WelcomeNativePage() {
     void run()
 
     // Safety net: if the callback markers were present but no auth event
-    // arrives within 4s, drop back to the auth step so the user isn't stuck.
+    // arrives in time, drop back to the auth step so the user isn't stuck.
+    // Oct 30 2026: 4s was too short on a slow Android phone; the sign-in was
+    // still finishing and the person was told it failed. 12s now.
     const stuckTimer = looksLikeAuthCallback ? window.setTimeout(() => {
       if (cancelled || advanced) return
       setStep('auth')
       setChecking(false)
       setAuthError((prev) => prev ?? 'that sign-in didn’t come through — try once more')
       trackFail('callback timeout')
-    }, 4000) : null
+    }, 12_000) : null
 
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
