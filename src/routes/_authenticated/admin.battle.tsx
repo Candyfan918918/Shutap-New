@@ -60,14 +60,18 @@ function AdminBattlePage() {
     setLog([])
     try {
       // Setups first, 20 a call, until the bank holds the target.
-      for (let i = 0; i < 20 && !stop.current; i++) {
-        setBusy(`writing setups… (${data?.bank.setups ?? 0} so far)`)
+      // An empty call (a timeout, unreadable output) is retried; two in a row stops.
+      let empty = 0
+      for (let i = 0; i < 25 && !stop.current; i++) {
+        setBusy(`writing setups… (${i ? 'call ' + (i + 1) : 'starting'})`)
         const r = await writeSetups()
-        setLog((l) => [...l, `setups: +${r.added} (now ${r.setups})${r.errors.length ? ` · ${r.errors.join('; ')}` : ''}`])
-        if (r.setups >= BATTLE.setups || r.added === 0) break
+        setLog((l) => [...l, `setups: +${r.added} (now ${r.setups} active)${r.errors.length ? ` · ${r.errors.join('; ')}` : ''}`])
+        if (r.setups >= BATTLE.setups) break
+        empty = r.added === 0 ? empty + 1 : 0
+        if (empty >= 2) break
       }
-      // Then four versions per setup, 5 setups a call.
-      for (let i = 0; i < 60 && !stop.current; i++) {
+      // Then lines: new setups first, then one top-up round for setups paused with 1–2 lines.
+      for (let i = 0; i < 120 && !stop.current; i++) {
         const r = await writeVersions()
         setBusy(`writing versions… ${r.withoutVersions} setups to go`)
         setLog((l) => [...l, `versions: +${r.added} · ${r.withoutVersions} setups to go${r.errors.length ? ` · ${r.errors.join('; ')}` : ''}`])
@@ -166,7 +170,7 @@ function AdminBattlePage() {
         <>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 24 }}>
             <Kpi label="counted picks" value={t.counted} sub={`${t.decided} decided · ${t.served} rounds served · ${t.today} today`} />
-            <Kpi label="players" value={t.players} sub={`${t.guests} guests · ${t.signedIn} signed in`} />
+            <Kpi label="real players" value={t.players} sub={`made a pick, skip or "none" · ${t.guests} guests · ${t.signedIn} signed in · ${t.internal} internal browsers left out (you, previews, test browsers)`} />
             <Kpi label='"none of these"' value={t.counted ? pct(t.nones / t.counted) : '—'} sub={`${t.nones} rounds`} />
             <Kpi label="skips" value={t.decided ? pct(t.skips / t.decided) : '—'} sub={`${t.skips} rounds`} />
             <Kpi label="filtered out" value={nonSkip ? pct(flaggedTotal / nonSkip) : '—'} sub={`${t.flagged.too_fast} too fast · ${t.flagged.test_fail} picked the control · ${t.flagged.repeat} repeats · ${t.flagged.low_quality_player} from low-quality players`} />

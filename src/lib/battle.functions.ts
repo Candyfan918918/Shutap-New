@@ -9,6 +9,7 @@
 // admin page: setups by the writer, four versions per setup, each with a
 // different technique from the /guides pages. Never from a user's story.
 import { createServerFn } from '@tanstack/react-start'
+import { getRequest } from '@tanstack/react-start/server'
 import { z } from 'zod'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { requireRealUser } from '@/lib/require-real-user'
@@ -57,10 +58,25 @@ function playerView(p: any): BattlePlayer {
   }
 }
 
+/** Is this request from the real site and a real browser? Previews (the
+ *  Lovable editor), localhost, screenshot and test browsers are internal:
+ *  their rows are kept but never counted as players or picks. */
+export function isInternalRequest(origin: string, ua: string): boolean {
+  let host = ''
+  try { host = origin ? new URL(origin).host : '' } catch { host = '' }
+  if (!/^(www\.)?shutap\.com$/i.test(host)) return true
+  return /HeadlessChrome|Playwright|Puppeteer|Lighthouse|bot\b|crawler|spider|preview/i.test(ua)
+}
+
+function requestIsInternal(): boolean {
+  const h = getRequest()?.headers
+  return isInternalRequest(h?.get('origin') || h?.get('referer') || '', h?.get('user-agent') || '')
+}
+
 async function getPlayer(client: any, playerId: string): Promise<any> {
   const { data } = await client.from('battle_players').select('*').eq('player_id', playerId).maybeSingle()
   if (data) return data
-  const { data: made } = await client.from('battle_players').upsert({ player_id: playerId }, { onConflict: 'player_id', ignoreDuplicates: true }).select('*').maybeSingle()
+  const { data: made } = await client.from('battle_players').upsert({ player_id: playerId, internal: requestIsInternal() }, { onConflict: 'player_id', ignoreDuplicates: true }).select('*').maybeSingle()
   if (made) return made
   const again = await client.from('battle_players').select('*').eq('player_id', playerId).single()
   return again.data
@@ -192,7 +208,8 @@ export const battlePick = createServerFn({ method: 'POST' })
     // Flags: a flagged pick is stored but not counted toward the results.
     let flag: string | null = null
     if (choice !== 'skip') {
-      if (ms < BATTLE.fastMs) flag = 'too_fast'
+      if (player?.internal) flag = 'internal'
+      else if (ms < BATTLE.fastMs) flag = 'too_fast'
       else if (choice === 'control') flag = 'test_fail'
       else {
         const { count } = await client
@@ -271,6 +288,10 @@ export const battleLink = createServerFn({ method: 'POST' })
     const userId = (context as { userId: string }).userId
     const client = await db()
     const p = await getPlayer(client, data.player)
+    // The founder's own browsers never count as players.
+    const c = context as { supabase: { rpc: (fn: 'has_role', args: { _user_id: string; _role: 'admin' }) => PromiseLike<{ data: unknown }> } }
+    const admin = !!(await c.supabase.rpc('has_role', { _user_id: userId, _role: 'admin' })).data
+    if (admin && p && !p.internal) await client.from('battle_players').update({ internal: true }).eq('player_id', data.player)
     if (p && !p.user_id) {
       await client.from('battle_players').update({ user_id: userId, linked_at: new Date().toISOString() }).eq('player_id', data.player)
       await client.from('battle_rounds').update({ user_id: userId }).eq('player_id', data.player).is('user_id', null)
@@ -357,9 +378,12 @@ export type AdminBattleReport = {
     skips: number
     nones: number
     flagged: { too_fast: number; test_fail: number; repeat: number; low_quality_player: number }
+    /** real people who made at least one pick, skip or "none" */
     players: number
     guests: number
     signedIn: number
+    /** browsers left out: the founder's, previews, screenshot and test browsers */
+    internal: number
     today: number
   }
   agreement: { setupsCompared: number; agree: number } | null
@@ -376,21 +400,27 @@ export const adminBattleReport = createServerFn({ method: 'POST' })
       fetchAll((a, b) => client.from('battle_setups').select('id, n, topic, setup, active, live, picks, nones').eq('archived', false).order('n').range(a, b)),
       fetchAll((a, b) => client.from('battle_versions').select('id, setup_id, text, technique_name, guide_slug, active, battle_setups!inner(archived)').eq('battle_setups.archived', false).range(a, b)),
       fetchAll((a, b) => client.from('battle_rounds').select('player_id, user_id, setup_id, shown, pick, flag, picked_at, served_at').order('served_at', { ascending: false }).range(a, b)),
-      fetchAll((a, b) => client.from('battle_players').select('player_id, user_id, picks, test_passed, test_failed').range(a, b)),
+      fetchAll((a, b) => client.from('battle_players').select('player_id, user_id, picks, test_passed, test_failed, internal').range(a, b)),
     ])
     // A player who keeps picking the flat control line over real jokes is tapping, not reading.
     const lowQuality = new Set(players.filter((p) => (p.test_failed ?? 0) >= 2 && (p.test_failed ?? 0) > (p.test_passed ?? 0)).map((p) => p.player_id))
     const today = pacificDay()
+    // Internal browsers (you, previews, screenshot and test browsers) are left out of everything below.
+    const internal = new Set(players.filter((p) => p.internal).map((p) => p.player_id))
+    const realRounds = rounds.filter((r) => !internal.has(r.player_id))
+    const played = new Set(realRounds.filter((r) => r.picked_at).map((r) => r.player_id))
+    const people = players.filter((p) => !p.internal && played.has(p.player_id))
 
     const stats = new Map<string, { shown: number; picked: number }>()
     const bySetupGroup = new Map<string, { guest: Map<string, number>; signed: Map<string, number> }>()
     const flagged = { too_fast: 0, test_fail: 0, repeat: 0, low_quality_player: 0 }
     let decided = 0, counted = 0, skips = 0, nones = 0, todayN = 0
-    for (const r of rounds) {
+    for (const r of realRounds) {
       if (r.served_at && pacificDay(new Date(r.served_at)) === today) todayN++
       if (!r.picked_at) continue
       decided++
       if (r.pick === 'skip') { skips++; continue }
+      if (r.flag === 'internal') continue
       if (r.flag) { flagged[r.flag as keyof typeof flagged] = (flagged[r.flag as keyof typeof flagged] ?? 0) + 1; continue }
       if (lowQuality.has(r.player_id)) { flagged.low_quality_player++; continue }
       counted++
@@ -464,15 +494,16 @@ export const adminBattleReport = createServerFn({ method: 'POST' })
         retired: setups.filter((s) => (s.picks ?? 0) >= BATTLE.retireAfter).length,
       },
       totals: {
-        served: rounds.length,
+        served: realRounds.length,
         decided,
         counted,
         skips,
         nones,
         flagged,
-        players: players.length,
-        guests: players.filter((p) => !p.user_id).length,
-        signedIn: players.filter((p) => !!p.user_id).length,
+        players: people.length,
+        guests: people.filter((p) => !p.user_id).length,
+        signedIn: people.filter((p) => !!p.user_id).length,
+        internal: internal.size,
         today: todayN,
       },
       agreement: compared ? { setupsCompared: compared, agree } : null,
@@ -618,10 +649,10 @@ async function guideTechniques(): Promise<BankTechnique[]> {
 
 /** CANDIDATES techniques, at most two from one guide, the least-used first. */
 const CANDIDATES = 6
-function dealCandidates(all: BankTechnique[], used: Map<string, number>): BankTechnique[] {
+function dealCandidates(all: BankTechnique[], used: Map<string, number>, skip: Set<string> = new Set()): BankTechnique[] {
   const out: BankTechnique[] = []
   const perGuide = new Map<string, number>()
-  for (const t of shuffle(all).sort((a, b) => (used.get(a.id) ?? 0) - (used.get(b.id) ?? 0))) {
+  for (const t of shuffle(all.filter((x) => !skip.has(x.id))).sort((a, b) => (used.get(a.id) ?? 0) - (used.get(b.id) ?? 0))) {
     if ((perGuide.get(t.guideSlug) ?? 0) >= (out.length < 4 ? 1 : 2)) continue
     out.push(t)
     perGuide.set(t.guideSlug, (perGuide.get(t.guideSlug) ?? 0) + 1)
@@ -739,13 +770,27 @@ async function setupsWithoutVersions(client: any): Promise<any[]> {
   return setups.filter((s) => !has.has(s.id))
 }
 
-/** Six candidate lines for up to 4 setups that have none, judged down to the best four. */
+/** Setups paused because only one or two lines survived, not yet topped up. */
+async function setupsToTopUp(client: any): Promise<any[]> {
+  const [setups, versions] = await Promise.all([
+    fetchAll((a, b) => client.from('battle_setups').select('id, n, topic, setup').eq('archived', false).eq('active', false).eq('topups', 0).order('n').range(a, b)),
+    fetchAll((a, b) => client.from('battle_versions').select('setup_id, text, technique_id, active').eq('active', true).range(a, b)),
+  ])
+  const lines = new Map<string, any[]>()
+  for (const v of versions) lines.set(v.setup_id, [...(lines.get(v.setup_id) ?? []), v])
+  return setups.map((s) => ({ ...s, existing: lines.get(s.id) ?? [] })).filter((s) => s.existing.length >= 1 && s.existing.length < 3)
+}
+
+/** Six candidate lines for up to 4 setups that have none, judged down to the
+ *  best four. Then, setups paused with one or two lines get one more round of
+ *  six candidates, judged together with the lines they already have. */
 export const adminBattleWriteVersions = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<BankProgress> => {
     await assertAdmin(context)
     const client = await db()
-    const todo = (await setupsWithoutVersions(client)).slice(0, 4)
+    const fresh = (await setupsWithoutVersions(client)).slice(0, 4).map((x) => ({ ...x, existing: [] as any[], topup: false }))
+    const todo = fresh.length ? fresh : (await setupsToTopUp(client)).slice(0, 4).map((x) => ({ ...x, topup: true }))
     const all = await guideTechniques()
     if (all.length < CANDIDATES) throw new Error('the /guides pages have too few line techniques')
     const usedRows = await fetchAll((a, b) => client.from('battle_versions').select('technique_id').eq('active', true).range(a, b))
@@ -759,7 +804,8 @@ export const adminBattleWriteVersions = createServerFn({ method: 'POST' })
 
     await Promise.all(
       todo.map(async (s) => {
-        const deal = dealCandidates(all, used)
+        const have = new Set<string>(s.existing.map((v: any) => v.technique_id))
+        const deal = dealCandidates(all, used, have)
         for (const t of deal) used.set(t.id, (used.get(t.id) ?? 0) + 1)
         const res = await callAgent({
           model: writer,
@@ -784,28 +830,37 @@ export const adminBattleWriteVersions = createServerFn({ method: 'POST' })
           const line = lines[i]
           if (line && !(await lineFailure(line, s.setup))) passed.push({ text: line, t: deal[i]! })
         }
-        // The judge cuts what doesn't make sense and ranks the rest.
-        let ranked = passed
-        if (passed.length > 1) {
+        // The judge cuts what doesn't make sense and ranks the rest; on a top-up,
+        // the lines the setup already has are judged alongside the new ones.
+        const old: { text: string; t: BankTechnique | null }[] = s.existing.map((v: any) => ({ text: v.text, t: null }))
+        const pool = [...old, ...passed]
+        let ranked: { text: string; t: BankTechnique | null }[] = pool
+        if (pool.length > 1) {
           const j = await callAgent({
             model: judge,
             temperature: judge.startsWith('openai/') ? undefined : 0,
             reasoningEffort: judge.startsWith('openai/gpt-5') ? 'low' : undefined,
             maxTokens: 1500,
             timeoutMs: 45_000,
-            messages: [{ role: 'user', content: BANK_JUDGE_PROMPT.replace('{{SETUP}}', s.setup).replace('{{LINES}}', passed.map((p, i) => `${i + 1}. ${p.text}`).join('\n')) }],
+            messages: [{ role: 'user', content: BANK_JUDGE_PROMPT.replace('{{SETUP}}', s.setup).replace('{{LINES}}', pool.map((p, i) => `${i + 1}. ${p.text}`).join('\n')) }],
           })
           const keep = tryParseJson<{ keep?: unknown[] }>(j.text)?.keep
           if (Array.isArray(keep)) {
-            const order = keep.map((k) => Number(k) - 1).filter((i) => Number.isInteger(i) && i >= 0 && i < passed.length)
-            ranked = [...new Set(order)].map((i) => passed[i]!)
+            const order = keep.map((k) => Number(k) - 1).filter((i) => Number.isInteger(i) && i >= 0 && i < pool.length)
+            ranked = [...new Set(order)].map((i) => pool[i]!)
           } else {
             errors.push(`setup ${s.n}: judge unreadable, kept the code-checked lines`)
           }
         }
-        const keepLines = ranked.slice(0, BATTLE.versions)
-        if (keepLines.length < 3) {
-          errors.push(`setup ${s.n}: only ${keepLines.length} lines survived; setup paused`)
+        const best = ranked.slice(0, BATTLE.versions)
+        const keepLines = best.filter((k): k is { text: string; t: BankTechnique } => !!k.t)
+        const total = s.existing.length + keepLines.length
+        if (s.topup) {
+          // One top-up per setup: back on if it now has three, else it stays paused.
+          await client.from('battle_setups').update({ topups: 1, ...(total >= 3 ? { active: true } : {}) }).eq('id', s.id)
+          errors.push(`setup ${s.n}: topped up to ${total} lines${total >= 3 ? ', back on' : ', still paused'}`)
+        } else if (keepLines.length < 3) {
+          errors.push(`setup ${s.n}: only ${keepLines.length} lines survived; setup paused, will be topped up`)
           await client.from('battle_setups').update({ active: false }).eq('id', s.id)
         }
         if (keepLines.length) {
@@ -826,7 +881,7 @@ export const adminBattleWriteVersions = createServerFn({ method: 'POST' })
       }),
     )
     const { count: setups } = await client.from('battle_setups').select('id', { count: 'exact', head: true }).eq('active', true)
-    const withoutVersions = (await setupsWithoutVersions(client)).length
+    const withoutVersions = (await setupsWithoutVersions(client)).length + (await setupsToTopUp(client)).length
     return { added, setups: setups ?? 0, withoutVersions, errors }
   })
 
