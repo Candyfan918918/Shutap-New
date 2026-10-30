@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { chargeDownload, getCaption } from "@/lib/bits.functions";
-import { anonSessionId, jokeTrack } from "../joke/jokeClient";
+import { anonSessionId, jokeTap, jokeTrack } from "../joke/jokeClient";
 import type { BitTier } from "@/lib/bits/shared";
 
 export function CaptionBox({
@@ -68,6 +68,12 @@ export function CaptionBox({
   // Copying the caption or the hashtags is one download (the first copy of
   // this version today; later copies of the same version are free).
   async function copy(text: string, what: string, skipConfirm = false) {
+    jokeTap("download_tapped", tier, {
+      kind: "caption",
+      state: downloadsLeft === 0 ? "capped" : "ok",
+      resumed: skipConfirm,
+      left: downloadsLeft ?? null,
+    });
     if (!skipConfirm && beforeCopy?.()) return;
     let r: Awaited<ReturnType<typeof chargeDownload>>;
     try {
@@ -80,7 +86,7 @@ export function CaptionBox({
         },
       });
     } catch (e) {
-      jokeTrack("download_failed", tier, {
+      jokeTap("download_failed", tier, {
         kind: "caption",
         reason: "threw",
         message: e instanceof Error ? e.message.slice(0, 120) : String(e).slice(0, 120),
@@ -90,13 +96,13 @@ export function CaptionBox({
     }
     if (!r.ok) {
       if (r.reason === "limited") {
-        jokeTrack("download_blocked", tier, { kind: "caption", used: r.used, cap: r.cap });
+        jokeTap("download_blocked", tier, { kind: "caption", used: r.used, cap: r.cap });
         say(
           `That's today's ${r.cap} download${r.cap === 1 ? "" : "s"}. Basic gets 3 a day, Pro unlimited.`,
         );
         onLimit?.();
       } else {
-        jokeTrack("download_failed", tier, { kind: "caption", reason: r.reason });
+        jokeTap("download_failed", tier, { kind: "caption", reason: r.reason });
         say(r.reason === "sign_in" ? "Sign in to copy it." : "Couldn't copy. Try again.");
       }
       return;
@@ -104,7 +110,7 @@ export function CaptionBox({
     try {
       await navigator.clipboard.writeText(text);
       say(`${what} copied.`);
-      jokeTrack("caption_copied", tier, { what });
+      jokeTap("caption_copied", tier, { what });
       if (!r.repeat) {
         jokeTrack("download", tier, {
           kind: "caption",
@@ -166,7 +172,13 @@ export function CaptionBox({
       <div className="bt-chips">
         {actions}
         {onSignIn && (
-          <button className="bt-btn sm" onClick={onSignIn}>
+          <button
+            className="bt-btn sm"
+            onClick={() => {
+              jokeTap("download_tapped", tier, { kind: "caption", state: "guest" });
+              onSignIn();
+            }}
+          >
             sign in to copy
           </button>
         )}

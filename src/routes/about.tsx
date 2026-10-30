@@ -37,7 +37,7 @@ const SECTIONS = [
   },
   {
     heading: "Your post, in five seconds",
-    body: "Every bit comes with a 5-second vertical video in the Shutap style, a caption under 100 characters and five hashtags, so what happened to you is ready to post without opening an editor. Watch it free. Downloading it needs an account; free downloads carry a shutap.com watermark, Basic and Pro remove it.",
+    body: "Every bit comes with a 5-second vertical video in the Shutap style, a caption under 100 characters and five hashtags, so what happened to you is ready to post without opening an editor. Watching and downloading it takes a free account; free downloads carry a shutap.com watermark, Basic and Pro remove it.",
   },
   {
     heading: "The Shutap Humor Amplifier Lab",

@@ -3,6 +3,9 @@ import { LaunchBadges } from "@/components/site/LaunchBadges";
 import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
 import { TryItBox } from '@/components/seo/TryItBox'
+import { BitSurface } from '@/pages/home/bit/BitSurface'
+import { FUNNIEST_WRITER } from '@/lib/seo/writer-copy'
+import { WriterBar } from '@/components/seo/WriterBar'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
 import type { FunniestEntry, FunniestSource } from '@/lib/seo/funniest'
 
@@ -127,9 +130,11 @@ export function FunniestPage({
           </p>
         </div>
 
-        <TryItBox page={`funniest/${entry.slug}`} position="top" />
+        <p style={{ fontSize: 17, margin: '0 0 32px' }}>{entry.capsule}</p>
 
-        <p style={{ fontSize: 17, margin: '0 0 48px' }}>{entry.capsule}</p>
+        <div style={{ margin: '0 0 44px' }}>
+          <BitSurface embed={{ page: `funniest/${entry.slug}`, ...FUNNIEST_WRITER }} />
+        </div>
 
         <section style={{ marginBottom: 40 }}>
           <h2 style={h2Style}>The pick: {entry.pick.name}</h2>
@@ -186,6 +191,20 @@ export function FunniestPage({
                 </p>
                 <span style={label}>Try it</span>
                 <p style={{ fontSize: 16, margin: 0 }}>{t.tryIt}</p>
+                <a
+                  href="#bit-write"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    const id = `${entry.slug}:${t.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`
+                    window.dispatchEvent(new CustomEvent('shutap:move', { detail: { id, name: t.name } }))
+                    void import('@/lib/tracking').then((m) => m.trackEvent('move_clicked', { page: `funniest/${entry.slug}`, technique: id })).catch(() => {})
+                    document.getElementById('bit-write')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    window.setTimeout(() => (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.focus(), 500)
+                  }}
+                  style={{ alignSelf: 'flex-start', marginTop: 4, color: BRAND, fontWeight: 600, fontSize: 15, textDecoration: 'none' }}
+                >
+                  Use this move on your story ↑
+                </a>
               </li>
             ))}
           </ol>
@@ -212,7 +231,8 @@ export function FunniestPage({
           </section>
         )}
 
-        <TryItBox page={`funniest/${entry.slug}`} heading="Try these techniques on your own story" />
+        <TryItBox page={`funniest/${entry.slug}`} heading="Try these techniques on your own story" anchor />
+        <WriterBar page={`funniest/${entry.slug}`} label={FUNNIEST_WRITER.heading} />
 
         <section style={{ marginBottom: 32 }}>
           <h2 style={{ ...h2Style, fontSize: 18 }}>Sources</h2>
