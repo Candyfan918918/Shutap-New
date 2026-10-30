@@ -259,7 +259,6 @@ export function HomeBattle() {
           <div className="hbat-top">
             <span className="hbat-meta">
               <span className="hbat-topic">{round.setup.topic}</span>
-              <span className="hbat-count">setup {round.setup.n} of {round.total}</span>
             </span>
             <button
               type="button"

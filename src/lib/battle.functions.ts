@@ -373,8 +373,8 @@ export const adminBattleReport = createServerFn({ method: 'POST' })
     await assertAdmin(context)
     const client = await db()
     const [setups, versions, rounds, players] = await Promise.all([
-      fetchAll((a, b) => client.from('battle_setups').select('id, n, topic, setup, active, live, picks, nones').order('n').range(a, b)),
-      fetchAll((a, b) => client.from('battle_versions').select('id, setup_id, text, technique_name, guide_slug, active').range(a, b)),
+      fetchAll((a, b) => client.from('battle_setups').select('id, n, topic, setup, active, live, picks, nones').eq('archived', false).order('n').range(a, b)),
+      fetchAll((a, b) => client.from('battle_versions').select('id, setup_id, text, technique_name, guide_slug, active, battle_setups!inner(archived)').eq('battle_setups.archived', false).range(a, b)),
       fetchAll((a, b) => client.from('battle_rounds').select('player_id, user_id, setup_id, shown, pick, flag, picked_at, served_at').order('served_at', { ascending: false }).range(a, b)),
       fetchAll((a, b) => client.from('battle_players').select('player_id, user_id, picks, test_passed, test_failed').range(a, b)),
     ])
@@ -517,21 +517,49 @@ export const adminBattleGoLive = createServerFn({ method: 'POST' })
 
 const TOPICS = ['work', 'family', 'roommates', 'dating', 'in-laws', 'friends', 'school', 'neighbors', 'group chat', 'travel', 'shopping', 'partner']
 
-const SETUP_PROMPT = `Write {{N}} setups for a comedy game. A setup is one everyday annoyance,
-told in first person by the person it happened to, the way they'd text a friend.
+/* Bank v2 (Oct 29 2026). v1's setups were invented oddities ("a wet spoon in
+   the freezer for no reason"), so the jokes had nothing true to push against,
+   and most lines didn't make sense. v2: setups people have lived, a stronger
+   writer (the bank is written once, so latency doesn't matter), six candidate
+   lines per setup, a judge from another model family that cuts what doesn't
+   make sense and ranks the rest, and stricter code checks. */
+
+/** The bank's writer: slow and strong is fine, nobody is waiting. */
+function bankWriterModel(): string {
+  return (process.env['BIT_BANK_MODEL'] ?? '').trim() || 'openai/gpt-5'
+}
+function bankJudgeModel(writer: string): string {
+  return writer.startsWith('openai/') ? 'google/gemini-3-flash-preview' : 'openai/gpt-5-mini'
+}
+
+const SETUP_PROMPT = `Write {{N}} setups for a comedy game. A setup is an everyday annoyance that
+most adults have lived through themselves, told in first person by the person
+it happened to, the way they'd text a friend.
+
+The test: a stranger reads it and thinks "that has happened to me" or "I know
+that person." Not "that's random." Recognition is what makes a joke land.
+
+The register (do not reuse these):
+- My coworker replied-all "thanks!" to an email sent to 300 people.
+- My mom texted "call me, it's important." It was a coupon.
+- My roommate washed his one mug and left the rest of the sink.
+- My boss said "quick question" and then talked for 40 minutes.
+- The group chat planned the whole weekend while I was in the shower.
+
 Rules for every setup:
 - one or two short sentences, at most 22 words
 - one concrete detail a joke can grab: a clock time, a number, an object, or the exact words someone said (in quotes)
-- small and everyday: the kind of thing that ruins twenty minutes, not a life
-- no names, no brands, no places, nothing tragic, no illness or injury, no bodies, nobody's age, looks, race, religion or politics
-- the other person did something; the teller did nothing wrong
+- common, not strange: nothing invented to be quirky, no "for no reason", nothing nobody has ever seen happen
+- small: the kind of thing that ruins twenty minutes, not a life
+- no names, no brands, no places, nothing tragic, no illness, injury or death, no bodies or bodily functions, nobody's age, looks, race, religion or politics
+- someone else did the annoying thing; the teller did nothing wrong
 Spread them across these topics, about evenly: {{TOPICS}}.
 Do not repeat or closely resemble any of these existing setups:
 {{EXISTING}}
 Return only JSON: {"setups":[{"topic":"work","setup":"..."}, ...]}`
 
 const VERSION_PROMPT = `You write one-line jokes for a comedy game. Players read the setup, then
-pick the funniest of several lines. The setup is already on screen: your line is
+pick the funniest of three lines. The setup is already on screen: your line is
 the punchline only, said by the same person, first person.
 
 SETUP ({{TOPIC}}):
@@ -543,14 +571,36 @@ its shape on a different story: copy the operation, never its words or nouns.
 {{TECHNIQUES}}
 
 Every line:
-- at most 15 words, one or two short sentences, sayable out loud
+- makes sense on first read to someone who only saw this setup; plain words, no riddles, no made-up objects
+- at most 15 words, sayable out loud, the way a funny friend would say it
+- grows out of THIS setup's detail: if it would fit any other setup, it's wrong
 - something happens, or a detail you can picture: a note, a reply, an object, a number. Not a label ("she's the CEO of the fridge" is a label)
-- no office, legal or official vocabulary the setup didn't use (audit, inventory, protocol, department, report, evidence, receipt, formal)
+- no names of people, no office/legal/official vocabulary the setup didn't use (audit, inventory, protocol, department, report, evidence, receipt, formal)
+- nothing about death, funerals, weapons, violence, bodies or bodily functions
 - the joke is on the other person's behaviour or the situation, never on the teller
 - no advice, no therapy words, no moral, no "I realized"
-- do not repeat the setup; land somewhere its words could not reach
+- no fill-in template ("Things I planned: ... Things I did: ...")
 - end on the word that does the turning; nothing after it
 Return only JSON: {"lines":["...", ...]} in technique order.`
+
+const BANK_JUDGE_PROMPT = `You are a comedy editor choosing lines for a game. Players see the setup,
+then pick the funniest of three punchlines. You are not the writer.
+
+SETUP:
+{{SETUP}}
+
+LINES:
+{{LINES}}
+
+First, cut any line that:
+- doesn't make sense on first read, or needs explaining
+- would fit a different setup just as well
+- is a label or a summary instead of something happening
+- mocks the teller, gives advice, or mentions death, violence or bodies
+Then rank the lines you kept, funniest first: the one a real person would
+laugh at and repeat to a friend. Specific and surprising beats clever.
+
+Return only JSON: {"keep":[<line numbers, funniest first>], "cut":{"<line number>":"<short reason>"}}`
 
 type BankTechnique = { id: string; name: string; op: string; example: string; guideSlug: string; guideTitle: string }
 
@@ -566,22 +616,53 @@ async function guideTechniques(): Promise<BankTechnique[]> {
     })
 }
 
-/** Four techniques from four different guides, the least-used in the bank first. */
-function dealFour(all: BankTechnique[], used: Map<string, number>): BankTechnique[] {
+/** CANDIDATES techniques, at most two from one guide, the least-used first. */
+const CANDIDATES = 6
+function dealCandidates(all: BankTechnique[], used: Map<string, number>): BankTechnique[] {
   const out: BankTechnique[] = []
-  const guides = new Set<string>()
+  const perGuide = new Map<string, number>()
   for (const t of shuffle(all).sort((a, b) => (used.get(a.id) ?? 0) - (used.get(b.id) ?? 0))) {
-    if (guides.has(t.guideSlug)) continue
+    if ((perGuide.get(t.guideSlug) ?? 0) >= (out.length < 4 ? 1 : 2)) continue
     out.push(t)
-    guides.add(t.guideSlug)
-    if (out.length === BATTLE.versions) break
+    perGuide.set(t.guideSlug, (perGuide.get(t.guideSlug) ?? 0) + 1)
+    if (out.length === CANDIDATES) break
   }
   return out
 }
 
-async function lineFailure(line: string, setup: string): Promise<string | null> {
-  const [{ hardRuleFailure }, { costumeToken, isLabelLine }] = await Promise.all([import('@/lib/jokes/pipeline.server'), import('@/lib/bits/techniques')])
+const OFF_LIMITS = /\b(funeral|coffin|grave|dead|die|dies|died|dying|death|kill|killed|murder|weapon|gun|knife|stab|shoot|blood|bleed|fart|farts|poop|pee|vomit|puke|diarrh\w*|lungs?|naked|sex\w*|cancer|hospital|ambulance|suicid\w*)\b/i
+const TEMPLATE = /\bthings i (planned|expected|wanted|did|got|achieved|saw)\b/i
+const WEEKDAYS = /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|January|February|March|April|May|June|July|August|September|October|November|December|I|I'm|I'd|I've|I'll|OK|TV)$/
+
+/** A capitalised word mid-sentence that the setup didn't use: a name. */
+export function nameIn(line: string, setup: string): string | null {
+  const words = line.split(/\s+/)
+  for (let i = 1; i < words.length; i++) {
+    const prev = words[i - 1]!
+    // after a sentence end, or opening a quote, a capital is just a capital
+    if (/[.!?:"“]$/.test(prev) || /^["“‘(]/.test(words[i]!)) continue
+    const w = words[i]!.replace(/^["'“‘(]+|[^A-Za-z']+$/g, '')
+    if (!/^[A-Z][a-z]/.test(w) || WEEKDAYS.test(w)) continue
+    if (new RegExp(`\\b${w}\\b`, 'i').test(setup)) continue
+    return w
+  }
+  return null
+}
+
+export function bankLineFailure(line: string, setup: string): string | null {
+  if (!line) return 'empty'
   if (wordCount(line) > BATTLE.maxWords) return 'too long'
+  if (OFF_LIMITS.test(line)) return 'off-limits topic'
+  if (TEMPLATE.test(line)) return 'template'
+  const n = nameIn(line, setup)
+  if (n) return `name: ${n}`
+  return null
+}
+
+async function lineFailure(line: string, setup: string): Promise<string | null> {
+  const own = bankLineFailure(line, setup)
+  if (own) return own
+  const [{ hardRuleFailure }, { costumeToken, isLabelLine }] = await Promise.all([import('@/lib/jokes/pipeline.server'), import('@/lib/bits/techniques')])
   const f = hardRuleFailure(line, setup, 'the_roast', { ignoreLength: true })
   if (f && f !== 'too short') return f
   if (costumeToken(line, setup)) return 'costume'
@@ -591,31 +672,33 @@ async function lineFailure(line: string, setup: string): Promise<string | null> 
 
 export type BankProgress = { added: number; setups: number; withoutVersions: number; errors: string[] }
 
-/** Write up to 20 new setups (until the bank holds BATTLE.setups). */
+/** Write up to 20 new setups (until BATTLE.setups setups are active). */
 export const adminBattleWriteSetups = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<BankProgress> => {
     await assertAdmin(context)
     const client = await db()
-    const existing = await fetchAll((a, b) => client.from('battle_setups').select('n, setup').order('n').range(a, b))
+    const existing = await fetchAll((a, b) => client.from('battle_setups').select('n, setup, active').order('n').range(a, b))
+    const activeCount = existing.filter((s) => s.active).length
     const errors: string[] = []
-    const want = Math.min(20, BATTLE.setups - existing.length)
+    const want = Math.min(20, BATTLE.setups - activeCount)
     let added = 0
     if (want > 0) {
       const { callAgent, tryParseJson } = await import('@/lib/agents/gateway')
-      const { bitWriterModel } = await import('@/lib/bits/pipeline.server')
       const { toneFailure } = await import('@/lib/jokes/pipeline.server')
+      const model = bankWriterModel()
       const res = await callAgent({
-        model: bitWriterModel(),
-        temperature: 1.0,
-        maxTokens: 3000,
-        timeoutMs: 45_000,
+        model,
+        temperature: model.startsWith('openai/') ? undefined : 1.0,
+        reasoningEffort: model.startsWith('openai/gpt-5') ? 'low' : undefined,
+        maxTokens: 4096,
+        timeoutMs: 90_000,
         messages: [
           {
             role: 'user',
             content: SETUP_PROMPT.replace('{{N}}', String(want))
               .replace('{{TOPICS}}', TOPICS.join(', '))
-              .replace('{{EXISTING}}', existing.slice(-80).map((s) => `- ${s.setup}`).join('\n') || '(none yet)'),
+              .replace('{{EXISTING}}', existing.filter((s) => s.active).slice(-80).map((s) => `- ${s.setup}`).join('\n') || '(none yet)'),
           },
         ],
       })
@@ -625,16 +708,24 @@ export const adminBattleWriteSetups = createServerFn({ method: 'POST' })
       let n = existing.reduce((m, s) => Math.max(m, s.n ?? 0), 0)
       const rows = (parsed?.setups ?? [])
         .map((s) => ({ topic: String(s.topic ?? '').toLowerCase().trim(), setup: String(s.setup ?? '').replace(/\s+/g, ' ').trim() }))
-        .filter((s) => s.setup.length > 15 && wordCount(s.setup) <= 26 && !toneFailure(s.setup) && !seen.has(s.setup.toLowerCase()))
+        .filter(
+          (s) =>
+            s.setup.length > 15 &&
+            wordCount(s.setup) <= 26 &&
+            !toneFailure(s.setup) &&
+            !OFF_LIMITS.test(s.setup) &&
+            !/for no (apparent )?reason/i.test(s.setup) &&
+            !seen.has(s.setup.toLowerCase()),
+        )
         .slice(0, want)
-        .map((s) => ({ n: ++n, topic: TOPICS.includes(s.topic) ? s.topic : 'everyday', setup: s.setup, active: true }))
+        .map((s) => ({ n: ++n, topic: TOPICS.includes(s.topic) ? s.topic : 'everyday', setup: s.setup, active: true, live: false }))
       if (rows.length) {
         const { error } = await client.from('battle_setups').insert(rows)
         if (error) errors.push(error.message)
         else added = rows.length
       }
     }
-    const { count: setups } = await client.from('battle_setups').select('id', { count: 'exact', head: true })
+    const { count: setups } = await client.from('battle_setups').select('id', { count: 'exact', head: true }).eq('active', true)
     const withoutVersions = await setupsWithoutVersions(client)
     return { added, setups: setups ?? 0, withoutVersions: withoutVersions.length, errors }
   })
@@ -648,64 +739,78 @@ async function setupsWithoutVersions(client: any): Promise<any[]> {
   return setups.filter((s) => !has.has(s.id))
 }
 
-/** Write the four versions for up to 5 setups that have none yet. */
+/** Six candidate lines for up to 4 setups that have none, judged down to the best four. */
 export const adminBattleWriteVersions = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<BankProgress> => {
     await assertAdmin(context)
     const client = await db()
-    const todo = (await setupsWithoutVersions(client)).slice(0, 5)
+    const todo = (await setupsWithoutVersions(client)).slice(0, 4)
     const all = await guideTechniques()
-    if (all.length < BATTLE.versions) throw new Error('the /guides pages have fewer than four line techniques')
-    const usedRows = await fetchAll((a, b) => client.from('battle_versions').select('technique_id').range(a, b))
+    if (all.length < CANDIDATES) throw new Error('the /guides pages have too few line techniques')
+    const usedRows = await fetchAll((a, b) => client.from('battle_versions').select('technique_id').eq('active', true).range(a, b))
     const used = new Map<string, number>()
     for (const r of usedRows) used.set(r.technique_id, (used.get(r.technique_id) ?? 0) + 1)
     const { callAgent, tryParseJson } = await import('@/lib/agents/gateway')
-    const { bitWriterModel, backupWriterModel } = await import('@/lib/bits/pipeline.server')
+    const writer = bankWriterModel()
+    const judge = bankJudgeModel(writer)
     const errors: string[] = []
     let added = 0
 
     await Promise.all(
       todo.map(async (s) => {
-        const four = dealFour(all, used)
-        for (const t of four) used.set(t.id, (used.get(t.id) ?? 0) + 1)
-        const keep: { text: string; t: BankTechnique }[] = []
-        // Two tries: the first writer, then the backup for whatever failed.
-        let want = four
-        for (const model of [bitWriterModel(), backupWriterModel()]) {
-          if (!want.length) break
-          const res = await callAgent({
-            model,
-            temperature: 1.0,
-            maxTokens: 1200,
-            timeoutMs: 30_000,
-            messages: [
-              {
-                role: 'user',
-                content: VERSION_PROMPT.replace('{{TOPIC}}', s.topic)
-                  .replace('{{SETUP}}', s.setup)
-                  .replace('{{K}}', String(want.length))
-                  .replace('{{TECHNIQUES}}', want.map((t, i) => `${i + 1}. ${t.name.toUpperCase()}: ${t.op}\n   shape: ${t.example}`).join('\n')),
-              },
-            ],
-          })
-          const lines = (tryParseJson<{ lines?: unknown[] }>(res.text)?.lines ?? []).map((l) => String(l ?? '').replace(/\s+/g, ' ').trim())
-          const failed: BankTechnique[] = []
-          for (let i = 0; i < want.length; i++) {
-            const line = lines[i]
-            if (line && !(await lineFailure(line, s.setup))) keep.push({ text: line, t: want[i]! })
-            else failed.push(want[i]!)
-          }
-          want = failed
+        const deal = dealCandidates(all, used)
+        for (const t of deal) used.set(t.id, (used.get(t.id) ?? 0) + 1)
+        const res = await callAgent({
+          model: writer,
+          temperature: writer.startsWith('openai/') ? undefined : 1.0,
+          reasoningEffort: writer.startsWith('openai/gpt-5') ? 'low' : undefined,
+          maxTokens: 4096,
+          timeoutMs: 90_000,
+          messages: [
+            {
+              role: 'user',
+              content: VERSION_PROMPT.replace('{{TOPIC}}', s.topic)
+                .replace('{{SETUP}}', s.setup)
+                .replace('{{K}}', String(deal.length))
+                .replace('{{TECHNIQUES}}', deal.map((t, i) => `${i + 1}. ${t.name.toUpperCase()}: ${t.op}\n   shape: ${t.example}`).join('\n')),
+            },
+          ],
+        })
+        if (res.error) errors.push(`setup ${s.n}: ${res.error}`)
+        const lines = (tryParseJson<{ lines?: unknown[] }>(res.text)?.lines ?? []).map((l) => String(l ?? '').replace(/\s+/g, ' ').trim())
+        const passed: { text: string; t: BankTechnique }[] = []
+        for (let i = 0; i < deal.length; i++) {
+          const line = lines[i]
+          if (line && !(await lineFailure(line, s.setup))) passed.push({ text: line, t: deal[i]! })
         }
-        if (keep.length < 3) {
-          errors.push(`setup ${s.n}: only ${keep.length} lines passed`)
-          // Keep what passed but park the setup until it has three.
+        // The judge cuts what doesn't make sense and ranks the rest.
+        let ranked = passed
+        if (passed.length > 1) {
+          const j = await callAgent({
+            model: judge,
+            temperature: judge.startsWith('openai/') ? undefined : 0,
+            reasoningEffort: judge.startsWith('openai/gpt-5') ? 'low' : undefined,
+            maxTokens: 1500,
+            timeoutMs: 45_000,
+            messages: [{ role: 'user', content: BANK_JUDGE_PROMPT.replace('{{SETUP}}', s.setup).replace('{{LINES}}', passed.map((p, i) => `${i + 1}. ${p.text}`).join('\n')) }],
+          })
+          const keep = tryParseJson<{ keep?: unknown[] }>(j.text)?.keep
+          if (Array.isArray(keep)) {
+            const order = keep.map((k) => Number(k) - 1).filter((i) => Number.isInteger(i) && i >= 0 && i < passed.length)
+            ranked = [...new Set(order)].map((i) => passed[i]!)
+          } else {
+            errors.push(`setup ${s.n}: judge unreadable, kept the code-checked lines`)
+          }
+        }
+        const keepLines = ranked.slice(0, BATTLE.versions)
+        if (keepLines.length < 3) {
+          errors.push(`setup ${s.n}: only ${keepLines.length} lines survived; setup paused`)
           await client.from('battle_setups').update({ active: false }).eq('id', s.id)
         }
-        if (keep.length) {
+        if (keepLines.length) {
           const { error } = await client.from('battle_versions').insert(
-            keep.map((k) => ({
+            keepLines.map((k) => ({
               setup_id: s.id,
               text: k.text,
               technique_id: k.t.id,
@@ -716,11 +821,22 @@ export const adminBattleWriteVersions = createServerFn({ method: 'POST' })
             })),
           )
           if (error) errors.push(error.message)
-          else added += keep.length
+          else added += keepLines.length
         }
       }),
     )
-    const { count: setups } = await client.from('battle_setups').select('id', { count: 'exact', head: true })
+    const { count: setups } = await client.from('battle_setups').select('id', { count: 'exact', head: true }).eq('active', true)
     const withoutVersions = (await setupsWithoutVersions(client)).length
     return { added, setups: setups ?? 0, withoutVersions, errors }
+  })
+
+/** Retire the whole current bank (kept for the record, never served) so a new one can be written. */
+export const adminBattleArchiveBank = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ archived: number }> => {
+    await assertAdmin(context)
+    const client = await db()
+    const { data, error } = await client.from('battle_setups').update({ active: false, live: false, archived: true }).eq('archived', false).select('id')
+    if (error) throw new Error(error.message)
+    return { archived: (data ?? []).length }
   })
