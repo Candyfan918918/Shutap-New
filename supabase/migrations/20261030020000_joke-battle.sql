@@ -8,6 +8,7 @@ create table if not exists public.battle_setups (
   topic text not null default 'everyday',
   setup text not null,
   active boolean not null default true,
+  live boolean not null default false, -- on the homepage only after the founder turns it on
   picks int not null default 0,   -- counted picks (flags excluded)
   nones int not null default 0,   -- of which "none of these"
   created_at timestamptz not null default now()

@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { AdminShell } from '@/components/AdminShell'
 import {
+  adminBattleGoLive,
   adminBattleReport,
   adminBattleToggle,
   adminBattleWriteSetups,
@@ -33,6 +34,7 @@ function AdminBattlePage() {
   const toggle = useServerFn(adminBattleToggle)
   const writeSetups = useServerFn(adminBattleWriteSetups)
   const writeVersions = useServerFn(adminBattleWriteVersions)
+  const goLive = useServerFn(adminBattleGoLive)
   const [data, setData] = useState<AdminBattleReport | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
@@ -77,11 +79,24 @@ function AdminBattlePage() {
     }
   }
 
-  async function flip(kind: 'setup' | 'version', id: string, active: boolean) {
+  async function allLive() {
+    if (!data?.bank.readyNotLive) return
+    if (!window.confirm(`Put ${data.bank.readyNotLive} setups on the homepage?`)) return
+    try {
+      const r = await goLive()
+      setLog((l) => [...l, `live: +${r.turnedOn} setups`])
+      await refresh()
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'update failed')
+    }
+  }
+
+  async function flip(kind: 'setup' | 'version' | 'live', id: string, active: boolean) {
     try {
       await toggle({ data: { kind, id, active } })
       setData((d) => {
         if (!d) return d
+        if (kind === 'live') return { ...d, setups: d.setups.map((s) => (s.id === id ? { ...s, live: active } : s)) }
         if (kind === 'setup') return { ...d, setups: d.setups.map((s) => (s.id === id ? { ...s, active } : s)) }
         return { ...d, setups: d.setups.map((s) => ({ ...s, versions: s.versions.map((v) => (v.id === id ? { ...v, active } : v)) })) }
       })
@@ -104,7 +119,7 @@ function AdminBattlePage() {
   return (
     <AdminShell
       title="joke battle"
-      subtitle={data ? `${data.bank.activeSetups} live setups · ${data.bank.versions} lines · ${t?.counted ?? 0} counted picks` : undefined}
+      subtitle={data ? `${data.bank.liveSetups} setups on the homepage · ${data.bank.readyNotLive} ready, not live · ${data.bank.versions} lines · ${t?.counted ?? 0} counted picks` : undefined}
       right={
         <div style={{ display: 'flex', gap: 8 }}>
           {busy ? (
@@ -113,6 +128,9 @@ function AdminBattlePage() {
             <button type="button" style={btn} onClick={() => void fillBank()} disabled={!data}>
               {data && data.bank.setups < BATTLE.setups ? `write the bank (${data.bank.setups}/${BATTLE.setups})` : data?.bank.setupsWithoutVersions ? `write missing versions (${data.bank.setupsWithoutVersions})` : 'bank is full'}
             </button>
+          )}
+          {!!data?.bank.readyNotLive && !busy && (
+            <button type="button" style={{ ...btn, background: '#0b080f', color: '#fff' }} onClick={() => void allLive()}>put {data.bank.readyNotLive} ready setups live</button>
           )}
           <button type="button" style={btn} onClick={() => void refresh()}>refresh</button>
         </div>
@@ -187,7 +205,7 @@ function AdminBattlePage() {
               {setups.map((s) => (
                 <SetupRow key={s.id} s={s} open={open === s.id} onOpen={() => setOpen(open === s.id ? null : s.id)} onFlip={flip} />
               ))}
-              {!setups.length && <div style={card}>no setups yet. "write the bank" writes {BATTLE.setups} setups, then four lines each.</div>}
+              {!setups.length && <div style={card}>no setups yet. "write the bank" writes {BATTLE.setups} setups, then four lines each. Nothing goes on the homepage until you put it live.</div>}
             </div>
           </section>
         </>
@@ -206,15 +224,16 @@ function Kpi({ label, value, sub }: { label: string; value: string | number; sub
   )
 }
 
-function SetupRow({ s, open, onOpen, onFlip }: { s: AdminBattleSetup; open: boolean; onOpen: () => void; onFlip: (k: 'setup' | 'version', id: string, a: boolean) => void }) {
+function SetupRow({ s, open, onOpen, onFlip }: { s: AdminBattleSetup; open: boolean; onOpen: () => void; onFlip: (k: 'setup' | 'version' | 'live', id: string, a: boolean) => void }) {
   const live = s.versions.filter((v) => v.active).length
   return (
     <div style={{ ...card, padding: 12, opacity: s.active ? 1 : 0.6 }}>
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
         <button type="button" onClick={onOpen} style={{ flex: 1, minWidth: 240, textAlign: 'left', background: 'none', border: 0, padding: 0, cursor: 'pointer', fontFamily: "'Sora',sans-serif", color: '#0b080f' }} aria-expanded={open}>
-          <span style={{ fontSize: 12, color: '#6b4a5c' }}>#{s.n} · {s.topic} · {live} live lines · {s.picks} picks{s.picks ? ` · none ${pct(s.noneRate)}` : ''}{s.picks >= BATTLE.retireAfter ? ' · retired (enough picks)' : ''}</span>
+          <span style={{ fontSize: 12, color: '#6b4a5c' }}>#{s.n} · {s.live ? 'on the homepage' : 'not live'} · {s.topic} · {live} lines · {s.picks} picks{s.picks ? ` · none ${pct(s.noneRate)}` : ''}{s.picks >= BATTLE.retireAfter ? ' · retired (enough picks)' : ''}</span>
           <span style={{ display: 'block', fontSize: 14, fontWeight: 600, marginTop: 2 }}>{s.setup}</span>
         </button>
+        <button type="button" style={btn} onClick={() => onFlip('live', s.id, !s.live)}>{s.live ? 'take off homepage' : 'put live'}</button>
         <button type="button" style={btn} onClick={() => onFlip('setup', s.id, !s.active)}>{s.active ? 'pause setup' : 'turn on'}</button>
       </div>
       {open && (

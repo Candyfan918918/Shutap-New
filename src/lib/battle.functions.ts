@@ -114,6 +114,7 @@ export const battleNext = createServerFn({ method: 'POST' })
       .from('battle_setups')
       .select('id, n, topic, setup, picks')
       .eq('active', true)
+      .eq('live', true)
       .lt('picks', BATTLE.retireAfter)
     const live: any[] = setups ?? []
     if (!live.length) return null
@@ -158,7 +159,7 @@ export const battleNext = createServerFn({ method: 'POST' })
       .update({ rounds_served: (player.rounds_served ?? 0) + 1, served_today: servedToday + 1, served_day: today, last_seen_at: new Date().toISOString() })
       .eq('player_id', data.player)
 
-    const { count } = await client.from('battle_setups').select('id', { count: 'exact', head: true }).eq('active', true)
+    const { count } = await client.from('battle_setups').select('id', { count: 'exact', head: true }).eq('active', true).eq('live', true)
     return { roundId: round.id, setup: { n: setup.n, topic: setup.topic, text: setup.setup }, total: count ?? live.length, options, player: playerView(player) }
   })
 
@@ -281,9 +282,9 @@ export const battleLink = createServerFn({ method: 'POST' })
 
 export type AdminBattleTechnique = { name: string; guideSlug: string | null; versions: number; shown: number; picked: number; rate: number }
 export type AdminBattleVersion = { id: string; text: string; technique: string; guideSlug: string | null; shown: number; picked: number; share: number; active: boolean }
-export type AdminBattleSetup = { id: string; n: number; topic: string; setup: string; active: boolean; picks: number; nones: number; noneRate: number; versions: AdminBattleVersion[] }
+export type AdminBattleSetup = { id: string; n: number; topic: string; setup: string; active: boolean; live: boolean; picks: number; nones: number; noneRate: number; versions: AdminBattleVersion[] }
 export type AdminBattleReport = {
-  bank: { setups: number; activeSetups: number; versions: number; setupsWithoutVersions: number; retired: number }
+  bank: { setups: number; activeSetups: number; liveSetups: number; readyNotLive: number; versions: number; setupsWithoutVersions: number; retired: number }
   totals: {
     served: number
     decided: number
@@ -307,7 +308,7 @@ export const adminBattleReport = createServerFn({ method: 'POST' })
     await assertAdmin(context)
     const client = await db()
     const [setups, versions, rounds, players] = await Promise.all([
-      fetchAll((a, b) => client.from('battle_setups').select('id, n, topic, setup, active, picks, nones').order('n').range(a, b)),
+      fetchAll((a, b) => client.from('battle_setups').select('id, n, topic, setup, active, live, picks, nones').order('n').range(a, b)),
       fetchAll((a, b) => client.from('battle_versions').select('id, setup_id, text, technique_name, guide_slug, active').range(a, b)),
       fetchAll((a, b) => client.from('battle_rounds').select('player_id, user_id, setup_id, shown, pick, flag, picked_at, served_at').order('served_at', { ascending: false }).range(a, b)),
       fetchAll((a, b) => client.from('battle_players').select('player_id, user_id, picks, test_passed, test_failed').range(a, b)),
@@ -380,6 +381,7 @@ export const adminBattleReport = createServerFn({ method: 'POST' })
       topic: s.topic,
       setup: s.setup,
       active: s.active,
+      live: !!s.live,
       picks: s.picks ?? 0,
       nones: s.nones ?? 0,
       noneRate: s.picks ? (s.nones ?? 0) / s.picks : 0,
@@ -390,6 +392,8 @@ export const adminBattleReport = createServerFn({ method: 'POST' })
       bank: {
         setups: setups.length,
         activeSetups: setups.filter((s) => s.active).length,
+        liveSetups: setups.filter((s) => s.active && s.live).length,
+        readyNotLive: setupRows.filter((s) => s.active && !s.live && s.versions.filter((v) => v.active).length >= 3).length,
         versions: versions.length,
         setupsWithoutVersions: setupRows.filter((s) => s.versions.length === 0).length,
         retired: setups.filter((s) => (s.picks ?? 0) >= BATTLE.retireAfter).length,
@@ -414,13 +418,34 @@ export const adminBattleReport = createServerFn({ method: 'POST' })
 
 export const adminBattleToggle = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ kind: z.enum(['setup', 'version']), id: z.string().uuid(), active: z.boolean() }).parse(d))
+  .inputValidator((d: unknown) => z.object({ kind: z.enum(['setup', 'version', 'live']), id: z.string().uuid(), active: z.boolean() }).parse(d))
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
     await assertAdmin(context)
     const client = await db()
-    const { error } = await client.from(data.kind === 'setup' ? 'battle_setups' : 'battle_versions').update({ active: data.active }).eq('id', data.id)
+    const table = data.kind === 'version' ? 'battle_versions' : 'battle_setups'
+    const { error } = await client.from(table).update(data.kind === 'live' ? { live: data.active } : { active: data.active }).eq('id', data.id)
     if (error) throw new Error(error.message)
     return { ok: true }
+  })
+
+/** Put every ready setup (active, 3+ live lines) on the homepage. */
+export const adminBattleGoLive = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ turnedOn: number }> => {
+    await assertAdmin(context)
+    const client = await db()
+    const [setups, versions] = await Promise.all([
+      fetchAll((a, b) => client.from('battle_setups').select('id').eq('active', true).eq('live', false).range(a, b)),
+      fetchAll((a, b) => client.from('battle_versions').select('setup_id').eq('active', true).range(a, b)),
+    ])
+    const lines = new Map<string, number>()
+    for (const v of versions) lines.set(v.setup_id, (lines.get(v.setup_id) ?? 0) + 1)
+    const ready = setups.filter((s) => (lines.get(s.id) ?? 0) >= 3).map((s) => s.id)
+    for (let i = 0; i < ready.length; i += 100) {
+      const { error } = await client.from('battle_setups').update({ live: true }).in('id', ready.slice(i, i + 100))
+      if (error) throw new Error(error.message)
+    }
+    return { turnedOn: ready.length }
   })
 
 /* ── admin: writing the bank ── */
