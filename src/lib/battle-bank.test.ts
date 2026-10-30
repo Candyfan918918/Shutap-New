@@ -16,3 +16,16 @@ test('off-limits topics and templates are cut', () => {
   assert.equal(bankLineFailure('Things I planned: lunch. Things I did: listen.', setup), 'template')
   assert.equal(bankLineFailure('Minute 38, he said "one last thing."', setup), null)
 })
+
+import { isInternalRequest } from './battle.functions'
+
+test('only shutap.com in a real browser counts', () => {
+  const chrome = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
+  assert.equal(isInternalRequest('https://shutap.com', chrome), false)
+  assert.equal(isInternalRequest('https://www.shutap.com/', chrome), false)
+  assert.equal(isInternalRequest('https://id-preview--621a43a7.lovable.app', chrome), true)
+  assert.equal(isInternalRequest('http://localhost:5173', chrome), true)
+  assert.equal(isInternalRequest('', chrome), true)
+  assert.equal(isInternalRequest('https://shutap.com', 'Mozilla/5.0 HeadlessChrome/130.0'), true)
+  assert.equal(isInternalRequest('https://shutap.com', 'Googlebot/2.1'), true)
+})

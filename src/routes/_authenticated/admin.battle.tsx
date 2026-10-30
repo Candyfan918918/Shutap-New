@@ -166,7 +166,7 @@ function AdminBattlePage() {
         <>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 24 }}>
             <Kpi label="counted picks" value={t.counted} sub={`${t.decided} decided · ${t.served} rounds served · ${t.today} today`} />
-            <Kpi label="players" value={t.players} sub={`${t.guests} guests · ${t.signedIn} signed in`} />
+            <Kpi label="real players" value={t.players} sub={`made a pick, skip or "none" · ${t.guests} guests · ${t.signedIn} signed in · ${t.internal} internal browsers left out (you, previews, test browsers)`} />
             <Kpi label='"none of these"' value={t.counted ? pct(t.nones / t.counted) : '—'} sub={`${t.nones} rounds`} />
             <Kpi label="skips" value={t.decided ? pct(t.skips / t.decided) : '—'} sub={`${t.skips} rounds`} />
             <Kpi label="filtered out" value={nonSkip ? pct(flaggedTotal / nonSkip) : '—'} sub={`${t.flagged.too_fast} too fast · ${t.flagged.test_fail} picked the control · ${t.flagged.repeat} repeats · ${t.flagged.low_quality_player} from low-quality players`} />
