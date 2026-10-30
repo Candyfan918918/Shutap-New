@@ -316,7 +316,7 @@ export function VideoCard({
     >
       <div className="bt-between">
         <span className="bt-lbl">
-          video + caption · {version.kind === "original" ? "this bit" : version.kind}
+          post it · video + caption · {version.kind === "original" ? "this bit" : version.kind}
         </span>
         <span className="bt-note">
           {downloadsLeft === null
@@ -326,8 +326,8 @@ export function VideoCard({
               : `each is one download · ${downloadsLeft} left today`}
         </span>
       </div>
-      <div style={{ display: "flex", gap: 18, alignItems: "flex-start", flexWrap: "wrap" }}>
-        <div style={{ width: 180, flexShrink: 0 }}>
+      <div className="bt-vc">
+        <div className="bt-vc-video">
           <div style={{ position: "relative" }}>
             <canvas
               ref={canvasRef}
@@ -357,7 +357,7 @@ export function VideoCard({
                 type="button"
                 className="bt-btn sm"
                 onClick={tapVideo}
-                style={{ position: "absolute", left: "50%", top: "62%", transform: "translate(-50%, -50%)", whiteSpace: "nowrap" }}
+                style={{ position: "absolute", left: "50%", top: "62%", transform: "translate(-50%, -50%)", whiteSpace: "nowrap", height: 30, padding: "0 10px", fontSize: 12 }}
               >
                 sign in to watch
               </button>
@@ -385,17 +385,7 @@ export function VideoCard({
             {VIDEO_SECONDS}s · 1080×1920 · {support === "webm" ? "webm" : "mp4"}
           </span>
         </div>
-        <div
-          style={{
-            flex: "1 1 240px",
-            minWidth: 0,
-            display: "flex",
-            flexDirection: "column",
-            gap: 12,
-            alignSelf: "stretch",
-            justifyContent: "center",
-          }}
-        >
+        <div className="bt-vc-right">
           {right ? (
             right(downloadButton, note)
           ) : (

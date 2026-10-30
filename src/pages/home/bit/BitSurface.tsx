@@ -861,143 +861,148 @@ export function BitSurface() {
               </div>
             )}
 
-            <VideoCard
-              bitId={bit.id}
-              version={version}
-              story={bit.story}
-              tier={tier}
-              say={say}
-              onSignIn={tier === 'guest' ? () => openSignin('video') : undefined}
-              onWatch={tier === 'guest' ? () => openSignin('watch') : undefined}
-              onLimit={(why) => onDownloadLimit(why, 'video')}
-              onFallbackPicture={() => setDownloadOpen(true)}
-              downloadsLeft={downloadsLeft}
-              onCharged={(r) => setDlUsage({ used: r.used, cap: r.cap, tier: r.tier })}
-              beforeDownload={() => confirmFirst('video')}
-              resume={resume === 'video'}
-              onResumed={() => setResume(null)}
-              right={(downloadButton, note) => (
-                <CaptionBox
-                  embedded
-                  actions={downloadButton}
-                  note={note}
-                  bitId={bit.id}
-                  versionId={version.id}
-                  tier={tier}
-                  say={say}
-                  onSignIn={tier === 'guest' ? () => openSignin('caption') : undefined}
-                  onLimit={() => onDownloadLimit('count', 'caption')}
-                  downloadsLeft={downloadsLeft}
-                  onCharged={(used, cap) => setDlUsage((u) => (u ? { ...u, used, cap } : { used, cap, tier }))}
-                  beforeCopy={() => confirmFirst('caption')}
-                  resume={resume === 'caption'}
-                  onResumed={() => setResume(null)}
-                />
-              )}
-            />
+            <div className="bt-result">
+              <div className="bt-result-main">
+              <span className="bt-lbl">
+                the bit · ~{version.est_seconds}s · wild {version.heat} · {bit.controls.audience}
+              </span>
 
-            <span className="bt-lbl">
-              the bit · ~{version.est_seconds}s · wild {version.heat} · {bit.controls.audience}
-            </span>
-
-            <article className="bt-card" aria-label="The bit" data-ph-private style={{ paddingTop: 8 }}>
-              <div className="bt-slot">
-                <span className="bt-lbl r">hook · on screen, first 2 seconds</span>
-                <p className="bt-v hook">{version.hook}</p>
-              </div>
-              <div className="bt-slot">
-                <span className="bt-lbl">setup</span>
-                <p className="bt-v">{version.setup}</p>
-              </div>
-              {version.tags.map((t, i) => (
-                <div key={i} className={`bt-slot${i === 0 && version.kind === 'tag_swap' ? ' new' : ''}`}>
-                  <span className={`bt-lbl${i === 0 && version.kind === 'tag_swap' ? ' r' : ''}`}>tag {i + 1}{i === 0 && version.kind === 'tag_swap' ? ' · swapped' : ''}</span>
-                  <p className="bt-v">{t}</p>
+              <article className="bt-card" aria-label="The bit" data-ph-private style={{ paddingTop: 8 }}>
+                <div className="bt-slot">
+                  <span className="bt-lbl r">hook · on screen, first 2 seconds</span>
+                  <p className="bt-v hook">{version.hook}</p>
                 </div>
-              ))}
-              <div className="bt-slot">
-                <span className="bt-lbl r">button</span>
-                <p className="bt-v" style={{ fontWeight: 400 }}>{version.button}</p>
-              </div>
-            </article>
+                <div className="bt-slot">
+                  <span className="bt-lbl">setup</span>
+                  <p className="bt-v">{version.setup}</p>
+                </div>
+                {version.tags.map((t, i) => (
+                  <div key={i} className={`bt-slot${i === 0 && version.kind === 'tag_swap' ? ' new' : ''}`}>
+                    <span className={`bt-lbl${i === 0 && version.kind === 'tag_swap' ? ' r' : ''}`}>tag {i + 1}{i === 0 && version.kind === 'tag_swap' ? ' · swapped' : ''}</span>
+                    <p className="bt-v">{t}</p>
+                  </div>
+                ))}
+                <div className="bt-slot">
+                  <span className="bt-lbl r">button</span>
+                  <p className="bt-v" style={{ fontWeight: 400 }}>{version.button}</p>
+                </div>
+              </article>
 
-            <div className="bt-acts" role="group" aria-label="Use the bit">
-              <button
-                className="bt-act"
-                onClick={() => {
-                  setPrompter(version)
-                  jokeTrack('prompter_opened', tier, { kind: version.kind })
-                }}
-              >
-                <ActionIcon name="prompter" />
-                prompter
-              </button>
-              {(['scene', 'screenplay'] as const).map((k) => (
+              <div className="bt-acts" role="group" aria-label="Use the bit">
                 <button
-                  key={k}
                   className="bt-act"
                   onClick={() => {
-                    // Scene and screenplay are written on request: account only.
-                    if (tier === 'guest') return openSignin(k)
-                    setPhase(k)
-                    jokeTrack(`${k}_opened`, tier, { kind: version.kind })
-                    toTop()
+                    setPrompter(version)
+                    jokeTrack('prompter_opened', tier, { kind: version.kind })
                   }}
                 >
-                  <ActionIcon name={k} />
-                  {k}
+                  <ActionIcon name="prompter" />
+                  prompter
                 </button>
-              ))}
-              <button
-                className="bt-act"
-                onClick={() => {
-                  if (tier === 'guest') return openSignin('download')
-                  setDownloadOpen(true)
-                }}
-              >
-                <ActionIcon name="download" />
-                save
-              </button>
-              <button
-                className="bt-act"
-                onClick={() => {
-                  if (tier === 'guest') return openSignin('post')
-                  setPostOpen(true)
-                }}
-              >
-                <ActionIcon name="post" />
-                post
-              </button>
-            </div>
-
-            <Versions
-              bit={bit}
-              current={version}
-              onSelect={(id) => setCurrentId(id)}
-              onAdd={addVersion}
-              onMix={() => {
-                setMixFromId(version.id)
-                setPhase('mix')
-                toTop()
-              }}
-              say={say}
-              onSignIn={tier === 'guest' ? (from) => openSignin(from) : undefined}
-              onLimit={showLimit}
-              left={left}
-              onCharged={() => setUsage((u) => (u && u.cap !== null ? { ...u, used: Math.min(u.cap, u.used + 1) } : u))}
-            />
-
-            <div className="bt-row">
-              <button className="bt-btn ghost" onClick={writeAnother}>
-                write another
-              </button>
-              {tier !== 'guest' ? (
-                <span className="bt-note">kept to your set list</span>
-              ) : (
-                <button className="bt-btn sm" onClick={() => openSignin('save')}>
-                  keep it · sign in free
+                {(['scene', 'screenplay'] as const).map((k) => (
+                  <button
+                    key={k}
+                    className="bt-act"
+                    onClick={() => {
+                      // Scene and screenplay are written on request: account only.
+                      if (tier === 'guest') return openSignin(k)
+                      setPhase(k)
+                      jokeTrack(`${k}_opened`, tier, { kind: version.kind })
+                      toTop()
+                    }}
+                  >
+                    <ActionIcon name={k} />
+                    {k}
+                  </button>
+                ))}
+                <button
+                  className="bt-act"
+                  onClick={() => {
+                    if (tier === 'guest') return openSignin('download')
+                    setDownloadOpen(true)
+                  }}
+                >
+                  <ActionIcon name="download" />
+                  save
                 </button>
-              )}
+                <button
+                  className="bt-act"
+                  onClick={() => {
+                    if (tier === 'guest') return openSignin('post')
+                    setPostOpen(true)
+                  }}
+                >
+                  <ActionIcon name="post" />
+                  post
+                </button>
+              </div>
+
+              <Versions
+                bit={bit}
+                current={version}
+                onSelect={(id) => setCurrentId(id)}
+                onAdd={addVersion}
+                onMix={() => {
+                  setMixFromId(version.id)
+                  setPhase('mix')
+                  toTop()
+                }}
+                say={say}
+                onSignIn={tier === 'guest' ? (from) => openSignin(from) : undefined}
+                onLimit={showLimit}
+                left={left}
+                onCharged={() => setUsage((u) => (u && u.cap !== null ? { ...u, used: Math.min(u.cap, u.used + 1) } : u))}
+              />
+
+              <div className="bt-row">
+                <button className="bt-btn ghost" onClick={writeAnother}>
+                  write another
+                </button>
+                {tier !== 'guest' ? (
+                  <span className="bt-note">kept to your set list</span>
+                ) : (
+                  <button className="bt-btn sm" onClick={() => openSignin('save')}>
+                    keep it · sign in free
+                  </button>
+                )}
+              </div>
+              </div>
+              <aside className="bt-result-side" aria-label="Post it">
+                <VideoCard
+                  bitId={bit.id}
+                  version={version}
+                  story={bit.story}
+                  tier={tier}
+                  say={say}
+                  onSignIn={tier === 'guest' ? () => openSignin('video') : undefined}
+                  onWatch={tier === 'guest' ? () => openSignin('watch') : undefined}
+                  onLimit={(why) => onDownloadLimit(why, 'video')}
+                  onFallbackPicture={() => setDownloadOpen(true)}
+                  downloadsLeft={downloadsLeft}
+                  onCharged={(r) => setDlUsage({ used: r.used, cap: r.cap, tier: r.tier })}
+                  beforeDownload={() => confirmFirst('video')}
+                  resume={resume === 'video'}
+                  onResumed={() => setResume(null)}
+                  right={(downloadButton, note) => (
+                    <CaptionBox
+                      embedded
+                      actions={downloadButton}
+                      note={note}
+                      bitId={bit.id}
+                      versionId={version.id}
+                      tier={tier}
+                      say={say}
+                      onSignIn={tier === 'guest' ? () => openSignin('caption') : undefined}
+                      onLimit={() => onDownloadLimit('count', 'caption')}
+                      downloadsLeft={downloadsLeft}
+                      onCharged={(used, cap) => setDlUsage((u) => (u ? { ...u, used, cap } : { used, cap, tier }))}
+                      beforeCopy={() => confirmFirst('caption')}
+                      resume={resume === 'caption'}
+                      onResumed={() => setResume(null)}
+                    />
+                  )}
+                />
+              </aside>
             </div>
           </>
         )}
