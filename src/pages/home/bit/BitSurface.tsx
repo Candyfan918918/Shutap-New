@@ -50,6 +50,7 @@ import { PaywallBody, UpgradeBody, type PaywallWhere } from './PlanSheets'
 import { VideoCard } from './VideoCard'
 import { CaptionBox } from './CaptionBox'
 import { downloadUsage, type DownloadUsage } from '@/lib/bits.functions'
+import { FuelMeter, storyFuel, useTypingPrompt } from './storyBox'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
@@ -195,6 +196,7 @@ export function BitSurface() {
     typeof document === 'undefined' ? '' : ((document.getElementById('bit-story') as HTMLTextAreaElement | null)?.value ?? ''),
   )
   const [controls, setControls] = useState<BitControls>(DEFAULT_CONTROLS)
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const [phase, setPhase] = useState<Phase>('write')
   const [tier, setTier] = useState<BitTier>('guest')
   const [usage, setUsage] = useState<BitUsage | null>(null)
@@ -539,7 +541,7 @@ export function BitSurface() {
     setPhase('writing')
     setNotice(null)
     requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
-    jokeTrack('bit_submitted', tier, { audience: ctl.audience, voice: ctl.voice, length: ctl.length, heat: ctl.heat, after_signin: !!opts?.fromSignIn })
+    jokeTrack('bit_submitted', tier, { audience: ctl.audience, voice: ctl.voice, length: ctl.length, heat: ctl.heat, after_signin: !!opts?.fromSignIn, fuel: storyFuel(text).pct, details: storyFuel(text).details })
     // One silent retry before the visitor ever sees an error: a slow model or
     // a dropped request costs a few seconds, not the bit.
     // A time limit on every try (Oct 22 2026): phones sat on "writing…" for
@@ -717,6 +719,9 @@ export function BitSurface() {
     return () => document.removeEventListener('click', onClick, true)
   }, [])
 
+  const fuel = storyFuel(story)
+  const prompt = useTypingPrompt(phase === 'write' && !story)
+
   // Pro has no cap shown (null), so no count.
   const left = usage && usage.cap !== null ? Math.max(0, usage.cap - usage.used) : null
 
@@ -739,11 +744,18 @@ export function BitSurface() {
             </div>
 
             <div className="bt-box">
-              <label htmlFor="bit-story" className="bt-lbl">your story</label>
+              <div className="bt-box-head">
+                <label htmlFor="bit-story" className="bt-box-title">
+                  <span className="bt-rec" aria-hidden="true" />
+                  tell it like you'd tell your funniest friend
+                </label>
+                <span className="bt-box-aside">names get removed</span>
+              </div>
               <textarea
                 suppressHydrationWarning
                 id="bit-story"
-                placeholder="write your story…"
+                className="bt-paper"
+                placeholder={prompt}
                 value={story}
                 maxLength={4000}
                 onChange={(e) => { typed.current = true; setStory(e.target.value) }}
@@ -751,22 +763,41 @@ export function BitSurface() {
                   if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void onWrite()
                 }}
               />
-              <div className="bt-ctl">
-                <Choice label="audience" options={AUDIENCES} value={controls.audience} onPick={(v) => setControls((c) => ({ ...c, audience: v }))} />
-                <Choice label="voice" options={VOICES} value={controls.voice} onPick={(v) => setControls((c) => ({ ...c, voice: v }))} />
-                <Choice wide label="length" options={LENGTHS} value={controls.length} onPick={(v) => setControls((c) => ({ ...c, length: v }))} />
-                <Choice
-                  wide
-                  label="wild"
-                  hint="1 true to your story · 5 goes wild"
-                  options={['1', '2', '3', '4', '5'] as const}
-                  value={String(controls.heat) as '1'}
-                  onPick={(v) => setControls((c) => ({ ...c, heat: Number(v) as BitControls['heat'] }))}
-                />
+              <FuelMeter fuel={fuel} />
+              <div className="bt-box-foot">
+                <button
+                  type="button"
+                  className="bt-settings"
+                  aria-expanded={settingsOpen}
+                  aria-controls="bit-settings"
+                  onClick={() => { setSettingsOpen((v) => !v); if (!settingsOpen) jokeTrack('write_settings_opened', tier, {}) }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M4 7h10" /><path d="M18 7h2" /><circle cx="16" cy="7" r="2" /><path d="M4 17h4" /><path d="M12 17h8" /><circle cx="10" cy="17" r="2" /></svg>
+                  <span>{controls.audience} · {controls.voice} · {controls.length} · wild {controls.heat}</span>
+                  <span className="bt-chev" aria-hidden="true">{settingsOpen ? '▴' : '▾'}</span>
+                </button>
+                <div className="bt-box-go">
+                  {fuel.words > 0 && <span className="bt-count">{fuel.words} {fuel.words === 1 ? 'word' : 'words'}</span>}
+                  <button className="bt-btn bt-go" disabled={!story.trim()} onClick={() => void onWrite()}>
+                    make it funnier →
+                  </button>
+                </div>
               </div>
-              <button className="bt-btn block" disabled={!story.trim()} onClick={() => void onWrite()}>
-                make it funnier
-              </button>
+              {settingsOpen && (
+                <div className="bt-ctl" id="bit-settings">
+                  <Choice label="audience" options={AUDIENCES} value={controls.audience} onPick={(v) => setControls((c) => ({ ...c, audience: v }))} />
+                  <Choice label="voice" options={VOICES} value={controls.voice} onPick={(v) => setControls((c) => ({ ...c, voice: v }))} />
+                  <Choice wide label="length" options={LENGTHS} value={controls.length} onPick={(v) => setControls((c) => ({ ...c, length: v }))} />
+                  <Choice
+                    wide
+                    label="wild"
+                    hint="1 true to your story · 5 goes wild"
+                    options={['1', '2', '3', '4', '5'] as const}
+                    value={String(controls.heat) as '1'}
+                    onPick={(v) => setControls((c) => ({ ...c, heat: Number(v) as BitControls['heat'] }))}
+                  />
+                </div>
+              )}
             </div>
             {error && (
               <p role="alert" className="bt-note" style={{ textAlign: 'center', color: 'var(--rose-ink)', fontSize: 'var(--fs-small)' }}>
@@ -775,7 +806,7 @@ export function BitSurface() {
             )}
             <p className="bt-note" style={{ textAlign: 'center' }}>
               {tier === 'guest' ? (left === 0 ? 'sign in free for your next bit · ' : 'first bit free, no account needed · ') : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
-              names removed before anything is saved
+              names removed before anything is saved · ⌘↵ to write it
             </p>
           </>
         )}
