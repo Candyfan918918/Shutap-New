@@ -743,12 +743,12 @@ export async function writeCaption(
     })
     if (res.error) continue
     const raw = tryParseJson<{ caption?: unknown; hashtags?: unknown }>(res.text)
-    const caption = tidy(raw?.caption).slice(0, 220)
+    const caption = tidy(raw?.caption).slice(0, 120)
     const hashtags = (Array.isArray(raw?.hashtags) ? raw!.hashtags : [])
       .map((h) => '#' + tidy(h).replace(/^#+/, '').replace(/[^\p{L}\p{N}_]/gu, ''))
       .filter((h) => h.length > 2 && h.length < 40)
       .filter((h, i, a) => a.findIndex((x) => x.toLowerCase() === h.toLowerCase()) === i)
-      .slice(0, 8)
+      .slice(0, 5)
     if (caption && !toneFailure(caption) && hashtags.length >= 3) return { caption, hashtags }
   }
   return null
