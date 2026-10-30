@@ -109,3 +109,17 @@ export function nextStreak(prevDay: string | null, prevStreak: number, today: st
   if (prevDay === yesterday) return prevStreak + 1
   return 1
 }
+
+/** Each rank unlocks a profile picture (static art in /public/rank-avatars).
+ *  Signed-in players collect the rank's badge on their profile and can use
+ *  its picture as their profile picture. */
+export const RANK_AVATAR_DIR = '/rank-avatars/'
+export function rankAvatarPath(key: RankKey): string {
+  return `${RANK_AVATAR_DIR}${key}.svg`
+}
+/** The rank a profile picture URL belongs to, if it is one of ours. */
+export function rankOfAvatar(url: string | null | undefined): RankKey | null {
+  const m = url ? /\/rank-avatars\/([a-z-]+)\.svg$/.exec(url) : null
+  const key = m?.[1]
+  return key && RANKS.some((r) => r.key === key) ? (key as RankKey) : null
+}

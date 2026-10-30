@@ -16,24 +16,29 @@
 .hbat-rankchip[aria-expanded='true'] { border-color: var(--rose); background: var(--tint-2); }
 .hbat-chipbadge { width: 24px; height: 24px; border-radius: 999px; display: grid; place-items: center; background: var(--tint); color: var(--wine); }
 .hbat-chiptext { display: flex; flex-direction: column; gap: 3px; font-size: 12px; line-height: 1; padding-left: 4px; }
-.hbat-chiptext strong { font-weight: 700; }
-.hbat-chipbar { display: block; width: 64px; height: 3px; border-radius: 999px; background: var(--track); overflow: hidden; }
+.hbat-chipline { display: flex; gap: 8px; justify-content: space-between; align-items: baseline; }
+.hbat-chipline strong { font-weight: 700; }
+.hbat-chipline span { color: var(--faint); font-size: 11px; white-space: nowrap; }
+.hbat-chipbar { display: block; width: 100%; min-width: 96px; height: 3px; border-radius: 999px; background: var(--track); overflow: hidden; }
 .hbat-chipbar > span { display: block; height: 3px; border-radius: 999px; background: var(--rose); transition: width .4s cubic-bezier(.16, 1, .3, 1); }
 .hbat-streak { display: inline-flex; align-items: center; gap: 2px; font-size: 12px; font-weight: 700; color: var(--rose-ink); }
 
-.hbat-setup { margin: 2px 2px 0; font-size: clamp(19px, 2.4vw, 22px); font-weight: 700; line-height: 1.35; color: var(--ink); }
+.hbat-setupwrap { display: flex; flex-direction: column; gap: 4px; margin: 2px 2px 0; }
+.hbat-q { margin: 0; font-size: 13px; color: var(--faint); }
+.hbat-setup { margin: 0; font-size: clamp(19px, 2.4vw, 22px); font-weight: 700; line-height: 1.35; color: var(--ink); }
 
 /* options: whole row is the button */
 .hbat-options { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .hbat-opt { width: 100%; display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px; border: 1px solid var(--line-2); border-radius: 14px; background: var(--card); color: var(--ink); font: inherit; text-align: left; transition: background .2s, border-color .2s, opacity .3s; }
 button.hbat-opt { cursor: pointer; }
 button.hbat-opt:hover:not(:disabled) { border-color: var(--rose); background: var(--tint-2); }
-button.hbat-opt:hover:not(:disabled) .hbat-num { background: var(--rose); color: #fff; }
 button.hbat-opt:disabled { cursor: default; }
 .hbat-opt.mine { border-color: var(--rose); background: var(--tint-2); }
 .hbat-opt.dim { opacity: .6; }
 .hbat-num { flex: none; width: 28px; height: 28px; border-radius: 999px; display: grid; place-items: center; background: var(--tint); color: var(--rose-ink); font-size: 13px; font-weight: 700; transition: background .2s, color .2s; }
 .hbat-opt.mine .hbat-num { background: var(--rose); color: #fff; }
+.hbat-picktag { flex: none; align-self: center; height: 30px; padding: 0 12px; border-radius: 999px; background: var(--tint); color: var(--rose-ink); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; transition: background .2s, color .2s; }
+button.hbat-opt:hover:not(:disabled) .hbat-picktag { background: var(--rose); color: #fff; }
 .hbat-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .hbat-line { flex: 1; font-family: var(--news); font-size: 19px; line-height: 1.35; padding-top: 2px; }
 .hbat-tech { font-size: 12px; color: var(--faint); }
@@ -42,8 +47,8 @@ button.hbat-opt:disabled { cursor: default; }
 /* footer row inside the card */
 .hbat-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 2px 2px 0; min-height: 36px; }
 .hbat-hint { font-size: 12px; color: var(--faint); }
-.hbat-quiet { display: inline-flex; gap: 4px; }
-.hbat-quiet button { border: 0; background: none; padding: 8px 10px; border-radius: 999px; font: 600 13px var(--sora); color: var(--muted); cursor: pointer; }
+.hbat-quiet { display: inline-flex; gap: 8px; }
+.hbat-quiet button { border: 1px solid var(--line-2); background: var(--card); padding: 8px 14px; border-radius: 999px; font: 600 13px var(--sora); color: var(--muted); cursor: pointer; }
 .hbat-quiet button:hover:not(:disabled) { background: var(--tint); color: var(--rose-ink); }
 .hbat-quiet button:disabled { opacity: .5; cursor: default; }
 .hbat-result { font-size: 14px; color: var(--ink-2); flex: 1 1 220px; }
@@ -101,5 +106,20 @@ button.hbat-opt:disabled { cursor: default; }
   .hbat-line { font-size: 17px; }
   .hbat-hint { display: none; }
   .hbat-foot { justify-content: flex-end; }
-  .hbat-topic { max-width: 120px; }
+  .hbat-top { flex-wrap: wrap; }
+  .hbat-topic { max-width: 200px; }
+  .hbat-rankchip { margin-left: auto; }
 }
+
+/* after every pick: collect the badge (guests sign in; signed-in see it collected) */
+.hbat-collect { display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 10px; border-radius: 16px; background: var(--tint-2); border: 1px dashed rgba(184, 69, 107, 0.45); animation: hbat-in .35s cubic-bezier(.16, 1, .3, 1); }
+.hbat-collect-pic { flex: none; width: 44px; height: 44px; border-radius: 999px; box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--rose); }
+.hbat-collect-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; font-size: 13px; line-height: 1.4; color: var(--muted); }
+.hbat-collect-text strong { color: var(--ink); font-size: 14px; }
+.home-immersive .hbat-collect-btn, .hbat-collect-btn { flex: none; display: inline-flex; align-items: center; height: 40px; padding: 0 18px; border-radius: 999px; border: 0; background: var(--wine); color: #fff; font: 700 14px var(--sora); cursor: pointer; text-decoration: none; }
+.home-immersive .hbat-collect-btn:hover, .hbat-collect-btn:hover { color: #fff; filter: brightness(1.08); }
+.hbat-sheet-pic { align-self: center; width: 72px; height: 72px; border-radius: 999px; box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--rose); margin-top: 4px; }
+@keyframes hbat-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .hbat-collect { animation: none; } }
+@media (max-width: 480px) { .hbat-collect { flex-wrap: wrap; } .hbat-collect-btn { width: 100%; justify-content: center; } }
+.hbat-badge.pic { padding: 0; border: 0 !important; box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--rose); object-fit: cover; }

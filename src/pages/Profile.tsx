@@ -19,6 +19,9 @@ import { getStripeEnvironment } from '@/lib/stripe'
 import { setAlias, signOut as unifiedSignOut } from '@/lib/auth'
 import { supabase } from '@/integrations/supabase/client'
 import { useNoIndex } from '@/components/NoIndex'
+import { trackEvent } from '@/lib/tracking'
+import { myBattleBadges, setRankPicture, type MyBadges } from '@/lib/battle.functions'
+import { RANKS, rankAvatarPath, type RankKey } from '@/lib/battle'
 
 type Profile = { display_name: string; emoji: string; avatar_url: string | null }
 
@@ -61,6 +64,8 @@ export function ProfilePage() {
   const setCancelFn = useServerFn(setPlanCancellation)
   const upgradeFn = useServerFn(changePlanToPro)
   const deleteAccountFn = useServerFn(deleteMyAccount)
+  const loadBadges = useServerFn(myBattleBadges)
+  const pickRankPicture = useServerFn(setRankPicture)
 
   const [profile, setProfile] = useState<Profile | null>(null)
   const [email, setEmail] = useState('')
@@ -72,6 +77,8 @@ export function ProfilePage() {
   const [showDelete, setShowDelete] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState('')
   const [deleteBusy, setDeleteBusy] = useState(false)
+  const [badges, setBadges] = useState<MyBadges | null>(null)
+  const [badgeBusy, setBadgeBusy] = useState<RankKey | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const apply = (p: Profile | null) => {
@@ -86,6 +93,12 @@ export function ProfilePage() {
     fetchBilling({ data: { environment: getStripeEnvironment() } })
       .then((b) => setBilling(b as BillingStatus))
       .catch(() => setBilling(null))
+    loadBadges()
+      .then((b) => {
+        setBadges(b)
+        if (window.location.hash === '#badges') requestAnimationFrame(() => document.getElementById('badges')?.scrollIntoView({ block: 'center' }))
+      })
+      .catch(() => setBadges(null))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -116,6 +129,18 @@ export function ProfilePage() {
       setBusy(null)
       if (fileRef.current) fileRef.current.value = ''
     }
+  }
+
+  async function onUseRankPicture(rank: RankKey) {
+    setBadgeBusy(rank)
+    try {
+      apply((await pickRankPicture({ data: { rank } })) as Profile)
+      setBadges((b) => (b ? { ...b, pictureRank: rank } : b))
+      void trackEvent('battle_rank_picture_used', { rank })
+      toast('profile picture updated.')
+    } catch (e) {
+      toast(e instanceof Error ? e.message : "couldn't change the picture.")
+    } finally { setBadgeBusy(null) }
   }
 
   async function onRemovePhoto() {
@@ -261,6 +286,9 @@ export function ProfilePage() {
           </div>
         </section>
 
+        {/* humor wisdom badges, from the joke battle */}
+        <BadgesCard badges={badges} busy={badgeBusy} onUse={(k) => void onUseRankPicture(k)} />
+
         {/* plan */}
         <BillingCard billing={billing} onOpenPortal={openPortal} portalBusy={portalBusy} navigate={navigate} onCancellation={changeCancellation} onUpgrade={upgrade} />
 
@@ -321,6 +349,64 @@ export function ProfilePage() {
       <Footer />
       {ToastHost}
     </div>
+  )
+}
+
+/** Badges collected in the homepage joke battle. Each earned rank's picture
+ *  can be used as the profile picture. */
+function BadgesCard({ badges, busy, onUse }: { badges: MyBadges | null; busy: RankKey | null; onUse: (k: RankKey) => void }) {
+  if (badges === null) return null
+  const picks = badges.picks
+  return (
+    <section id="badges" className="fd-post pf-badges" aria-label="Humor wisdom badges" style={{ scrollMarginTop: 90 }}>
+      <div className="fd-between">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <b style={{ fontSize: 16 }}>Humor wisdom badges</b>
+          <span className="fd-muted" style={{ fontSize: 13 }}>
+            {picks
+              ? `${badges.rank?.name ?? 'No rank yet'} · ${picks} ${picks === 1 ? 'pick' : 'picks'}${badges.next ? ` · ${badges.next.at - picks} to ${badges.next.name}` : ''}${badges.humorLabel ? ` · ${badges.humorLabel}` : ''}`
+              : 'Pick the funniest line in the joke battle to earn your first badge.'}
+          </span>
+        </div>
+        <a href="/#battle" className="fd-link" style={{ fontWeight: 700, whiteSpace: 'nowrap' }}>play →</a>
+      </div>
+      <ol className="pf-ranks">
+        {RANKS.map((r) => {
+          const earned = badges.earned.includes(r.key)
+          const inUse = badges.pictureRank === r.key
+          return (
+            <li key={r.key} className={`pf-rank${earned ? ' earned' : ''}`}>
+              <img src={rankAvatarPath(r.key)} alt="" width={56} height={56} className="pf-rank-pic" />
+              <b>{r.name}</b>
+              <span className="fd-faint">{earned ? 'collected' : `${r.at} ${r.at === 1 ? 'pick' : 'picks'}`}</span>
+              {earned ? (
+                inUse ? (
+                  <span className="pf-rank-tag">your picture</span>
+                ) : (
+                  <button className="fd-btn sm ghost pf-rank-btn" disabled={busy !== null} onClick={() => onUse(r.key)}>
+                    {busy === r.key ? 'Saving…' : 'Use as picture'}
+                  </button>
+                )
+              ) : (
+                <span className="pf-rank-tag locked">locked</span>
+              )}
+            </li>
+          )
+        })}
+      </ol>
+      <style>{`
+        .pf-ranks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+        .pf-rank { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 1px solid var(--line); border-radius: 14px; text-align: center; font-size: 14px; }
+        .pf-rank .fd-faint { font-size: 12px; }
+        .pf-rank-pic { width: 56px; height: 56px; border-radius: 999px; margin-bottom: 4px; }
+        .pf-rank:not(.earned) .pf-rank-pic { filter: grayscale(1) opacity(.45); }
+        .pf-rank:not(.earned) b { color: var(--faint, #7d7277); }
+        .pf-rank.earned .pf-rank-pic { box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--rose, #b8456b); }
+        .pf-rank-btn { margin-top: 4px; height: 32px !important; padding: 0 12px !important; font-size: 12px !important; }
+        .pf-rank-tag { margin-top: 4px; height: 32px; display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--rose-ink, #9b3559); }
+        .pf-rank-tag.locked { color: var(--faint, #7d7277); font-weight: 600; }
+      `}</style>
+    </section>
   )
 }
 
