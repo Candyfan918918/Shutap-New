@@ -1,9 +1,11 @@
-// "what to post today": a quiet trend panel under the write box.
-// Matches the write box: white cards, hairline borders, Sora UI, Newsreader
-// for the words people read, pink only as an accent (badges, the line, one CTA).
+// "what to post today": under the joke battle, above the poll. Same shell as
+// the other homepage sections (home-section.css): centered head, one card.
+// Inside the card, top to bottom: today's pick and why, the chart, a bit to
+// start from, also trending, and the 14-day heatmap folded away.
 import { useEffect, useId, useState } from 'react'
 import type { DailyIdea, Interest, SignalTopic } from '@/lib/daily-idea.functions'
 import { rankTopics } from './trend-data'
+import { SectionHead } from './HomeSection'
 import './todays-idea.css'
 
 const ARROW = { rising: '↑', peaking: '↑', steady: '→', cooling: '↓' } as const
@@ -60,11 +62,12 @@ function Heatmap({ topics }: { topics: SignalTopic[] }) {
   const dates = topics.find((t) => t.interest)?.interest?.series.map((d) => d.date)
   if (!dates) return null
   return (
-    <div className="tdi-block">
-      <div className="tdi-block-head">
-        <h4 className="tdi-label">the last 14 days</h4>
-        <span className="tdi-meta">lighter = fewer views, per topic</span>
-      </div>
+    <details className="tdi-block tdi-details">
+      <summary className="tdi-summary">
+        <span className="tdi-label">the last 14 days</span>
+        <span className="tdi-meta">show ↓</span>
+      </summary>
+      <p className="tdi-meta">lighter = fewer views, per topic</p>
       <div className="tdi-heat" role="table" aria-label="Daily interest per topic">
         {topics.map((t) => {
           const series = t.interest?.series ?? []
@@ -86,7 +89,7 @@ function Heatmap({ topics }: { topics: SignalTopic[] }) {
           )
         })}
       </div>
-    </div>
+    </details>
   )
 }
 
@@ -118,66 +121,43 @@ export function TodaysIdea({ idea }: { idea: DailyIdea | null }) {
   }
 
   return (
-    <section id="today" className="tdi" aria-labelledby="tdi-title">
-      <div className="tdi-inner">
-        <header className="tdi-head">
-          <div>
-            <div className="tdi-label">what to post today · {dayLabel(idea.day, { weekday: 'short', month: 'short', day: 'numeric' })}</div>
-            <h2 id="tdi-title" className="tdi-title">What people are talking about</h2>
+    <section id="today" className="hsec tdi" aria-labelledby="tdi-title">
+      <div className="hsec-col">
+        <SectionHead
+          id="tdi-title"
+          kicker={`what to post today · ${dayLabel(idea.day, { weekday: 'short', month: 'short', day: 'numeric' })}`}
+          title="What people are"
+          accent="talking about."
+          sub="One trending topic, why it's up, and a bit to start from. New every morning."
+        />
+
+        <article className="hsec-card tdi-card">
+          <div className="tdi-pick">
+            <div className="tdi-row">
+              <span className="tdi-label tdi-accent">today's pick</span>
+              <Badge topic={pick} long />
+            </div>
+            <h3 className="tdi-topic">{sentence(pick.topic)}</h3>
+            {idea.why_now ? <p className="tdi-why">{idea.why_now}</p> : null}
           </div>
-          <span className="tdi-meta">updated every morning</span>
-        </header>
 
-        <div className="tdi-grid">
-          <article className="tdi-card tdi-main">
-            <div className="tdi-pick">
-              <div className="tdi-row">
-                <span className="tdi-label tdi-accent">today's pick</span>
-                <Badge topic={pick} long />
-              </div>
-              <h3 className="tdi-topic">{sentence(pick.topic)}</h3>
-              {idea.why_now ? <p className="tdi-why">{idea.why_now}</p> : null}
+          {pick.interest ? <Chart interest={pick.interest} hero /> : null}
+
+          {pick.sources?.length ? (
+            <div className="tdi-sources">
+              <span className="tdi-meta">sources</span>
+              {pick.sources.map((s) => (
+                <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a>
+              ))}
             </div>
+          ) : null}
 
-            {pick.interest ? <Chart interest={pick.interest} hero /> : null}
-
-            {pick.sources?.length ? (
-              <div className="tdi-sources">
-                <span className="tdi-meta">sources</span>
-                {pick.sources.map((s) => (
-                  <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a>
-                ))}
-              </div>
-            ) : null}
-
-            {others.length ? (
-              <div className="tdi-block">
-                <h4 className="tdi-label">also trending</h4>
-                <ol className="tdi-list">
-                  {others.map((t, i) => (
-                    <li key={t.topic} className="tdi-item">
-                      <span className="tdi-rank">{i + 2}</span>
-                      <div className="tdi-item-text">
-                        <span className="tdi-item-name">{sentence(t.topic)}</span>
-                        {t.note ? <span className="tdi-item-note">{t.note}</span> : null}
-                      </div>
-                      {t.interest ? <Chart interest={t.interest} /> : <span className="tdi-spark" />}
-                      <Badge topic={t} />
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            ) : null}
-
-            <Heatmap topics={[pick, ...others]} />
-          </article>
-
-          <aside className="tdi-card tdi-demo" aria-label="demo: today's bit">
-            <div className="tdi-label">demo · today's bit</div>
-            <div className="tdi-stack">
-              <span className="tdi-label tdi-accent">hook</span>
-              <p className="tdi-hook">{idea.hook}</p>
+          <div className="tdi-bitbox" aria-label="a bit to start from">
+            <div className="tdi-row tdi-between">
+              <span className="tdi-label tdi-accent">a bit to start from</span>
+              <span className="tdi-meta">film it, it's yours</span>
             </div>
+            <p className="tdi-hook">{idea.hook}</p>
             <p className={`tdi-bit ${open ? 'tdi-open' : ''}`}>{idea.bit}</p>
             <button type="button" className="tdi-more" aria-expanded={open} onClick={() => setOpen(!open)}>
               {open ? 'show less ↑' : 'read all ↓'}
@@ -190,11 +170,31 @@ export function TodaysIdea({ idea }: { idea: DailyIdea | null }) {
               <button type="button" className="tdi-btn" onClick={copy}>{copied ? 'copied' : 'copy'}</button>
               <a href="#" className="tdi-btn tdi-btn-primary" onClick={writeYours}>write yours ↑</a>
             </div>
-            <span className="tdi-meta">new one every morning. film it, it's yours.</span>
-          </aside>
-        </div>
+          </div>
 
-        <p className="tdi-foot">Interest = English Wikipedia page views, read live. Topics and notes from this morning's search of public coverage.</p>
+          {others.length ? (
+            <div className="tdi-block">
+              <h4 className="tdi-label">also trending</h4>
+              <ol className="tdi-list">
+                {others.map((t, i) => (
+                  <li key={t.topic} className="tdi-item">
+                    <span className="tdi-rank">{i + 2}</span>
+                    <div className="tdi-item-text">
+                      <span className="tdi-item-name">{sentence(t.topic)}</span>
+                      {t.note ? <span className="tdi-item-note">{t.note}</span> : null}
+                    </div>
+                    {t.interest ? <Chart interest={t.interest} /> : <span className="tdi-spark" />}
+                    <Badge topic={t} />
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ) : null}
+
+          <Heatmap topics={[pick, ...others]} />
+        </article>
+
+        <p className="hsec-fine">Interest = English Wikipedia page views, read live. Topics and notes from this morning's search of public coverage.</p>
       </div>
     </section>
   )

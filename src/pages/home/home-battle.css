@@ -1,42 +1,11 @@
-/* The homepage joke battle, right under the write box. One centered column
-   at the write box's width (680px) and in its palette (bit.css): wine heads,
+/* The homepage joke battle, right under the write box. Shell, palette and
+   head come from home-section.css (the write box's column and palette): wine heads,
    rose actions, blush tint, white cards. Flat market-card rows (Kalshi-style):
    thin borders, no tilt, pink only for picks, ranks and progress. Light only,
    like the write box, so the two never disagree on a dark-mode device. */
-.hbat {
-  --ink: #1a1418;
-  --ink-2: #3a3236;
-  --muted: #6e6468;
-  --faint: #7d7277;
-  --line: rgba(90, 30, 50, 0.10);
-  --line-2: rgba(90, 30, 50, 0.20);
-  --tint: #f6e9ee;
-  --tint-2: #fbf3f6;
-  --card: #ffffff;
-  --rose: #b8456b;
-  --rose-ink: #9b3559;
-  --wine: #8e1c4c;
-  --track: #efe3e8;
-  --sora: 'Sora', system-ui, sans-serif;
-  --news: 'Newsreader', Georgia, serif;
-  font-family: var(--sora);
-  color: var(--ink);
-  padding: clamp(24px, 5vh, 48px) 16px clamp(40px, 7vh, 72px);
-  scroll-margin-top: 80px;
-}
 .hbat-pending { height: 1px; }
-.hbat * { box-sizing: border-box; }
-.hbat-col { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
-
-/* section head: same voice as the write box hero, one step smaller */
-.hbat-head { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: clamp(16px, 3vh, 28px); border-top: 1px solid var(--line); }
-.hbat-kicker { font-size: var(--fs-label, 12px); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--rose); }
-.hbat-title { margin: 0; font-weight: 800; color: var(--wine); line-height: 1.1; font-size: var(--fs-h2, clamp(28px, 4vw, 40px)); }
-.hbat-title em { font-family: var(--news); font-style: italic; font-weight: 400; color: var(--rose); }
-.hbat-sub { margin: 0; color: var(--muted); font-size: var(--fs-body, 16px); max-width: 460px; }
-
 /* the card */
-.hbat-card { background: var(--card); border: 1.5px solid rgba(184, 69, 107, 0.22); border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 50px -38px rgba(160, 50, 90, 0.45); }
+.hbat-card { gap: 14px; }
 .hbat-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .hbat-meta { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--faint); min-width: 0; }
 .hbat-topic { background: var(--tint); color: var(--rose-ink); border-radius: 999px; padding: 4px 10px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
@@ -81,7 +50,6 @@ button.hbat-opt:disabled { cursor: default; }
 .hbat-result strong { color: var(--ink); }
 .hbat-next { height: 44px; padding: 0 22px; border-radius: 999px; border: 0; background: linear-gradient(155deg, #cf6189, #b8456b 55%, #a33a5e); color: #fff; font: 700 15px var(--sora); cursor: pointer; white-space: nowrap; }
 .hbat-error { margin: 0; font-size: 13px; color: var(--rose-ink); }
-.hbat-fine { margin: 0; text-align: center; font-size: 12px; color: var(--faint); line-height: 1.5; }
 
 .hbat-opt:focus-visible, .hbat-rankchip:focus-visible, .hbat-next:focus-visible, .hbat-quiet button:focus-visible, .hbat-btn:focus-visible, .hbat-x:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
 
@@ -130,7 +98,6 @@ button.hbat-opt:disabled { cursor: default; }
 .hbat-grab { width: 44px; height: 5px; border-radius: 999px; background: var(--line-2); align-self: center; }
 
 @media (max-width: 480px) {
-  .hbat-card { padding: 14px 12px; border-radius: 18px; }
   .hbat-line { font-size: 17px; }
   .hbat-hint { display: none; }
   .hbat-foot { justify-content: flex-end; }

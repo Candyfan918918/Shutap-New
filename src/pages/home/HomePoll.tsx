@@ -11,6 +11,7 @@ import { FOLLOW_UP_MAX, POLL, pollDate, pollOption, type PollOptionKey } from '@
 import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { trackEvent } from '@/lib/tracking'
+import { SectionHead } from './HomeSection'
 import './home-poll.css'
 
 const PENDING_KEY = 'shutap_poll_pending'
@@ -174,14 +175,16 @@ export function HomePoll() {
   const showFollow = voted && myOption && !mine?.vote?.followUp && follow === 'open'
 
   return (
-    <section id="poll" ref={rootRef} className="hpoll" aria-labelledby="hpoll-title">
-      <div className="hpoll-card">
-        <div className="hpoll-label">quick poll</div>
-        <div className="hpoll-head">
-          <h2 id="hpoll-title" className="hpoll-title">{POLL.title}</h2>
-          {!voted && <p className="hpoll-desc">{POLL.description}</p>}
-        </div>
-
+    <section id="poll" ref={rootRef} className="hsec hpoll" aria-labelledby="hpoll-title">
+      <div className="hsec-col">
+      <SectionHead
+        id="hpoll-title"
+        kicker="quick poll"
+        title={POLL.title.includes(':') ? `${POLL.title.split(':')[0]}:` : POLL.title}
+        accent={POLL.title.includes(':') ? POLL.title.slice(POLL.title.indexOf(':') + 1).trim() : undefined}
+        sub={voted ? undefined : POLL.description}
+      />
+      <div className="hsec-card hpoll-card">
         {voted && mine?.percents ? (
           <>
             <ul className="hpoll-results" aria-label="results">
@@ -281,6 +284,7 @@ export function HomePoll() {
           <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="7" width="10" height="7" rx="1.5" /><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" /></svg>
           {POLL.privacy}
         </p>
+      </div>
       </div>
 
       {sheet && (

@@ -10,7 +10,9 @@ export function HomeFooter() {
   return <Footer />
 }
 
-export function HomePage() {
+import type { DailyIdea } from '@/lib/daily-idea.functions'
+
+export function HomePage({ dailyIdea = null }: { dailyIdea?: DailyIdea | null | Promise<DailyIdea | null> } = {}) {
   const navigate = useNavigate()
 
   // Old links: /#spill and /#scan now land on the write box. /#mirror goes
@@ -30,7 +32,7 @@ export function HomePage() {
 
   return (
     <div className="home-immersive" style={{ background: 'transparent', color: '#1a1418', fontFamily: "'Sora',system-ui,sans-serif" }}>
-      <HomeImmersive />
+      <HomeImmersive dailyIdea={dailyIdea} />
     </div>
   )
 }

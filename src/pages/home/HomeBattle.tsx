@@ -14,6 +14,7 @@ import { BATTLE, RANKS, type RankKey } from '@/lib/battle'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { trackEvent } from '@/lib/tracking'
+import { SectionHead } from './HomeSection'
 import './home-battle.css'
 
 const PLAYER_KEY = 'shutap_battle_player'
@@ -249,15 +250,11 @@ export function HomeBattle() {
   const picks = player?.picks ?? 0
 
   return (
-    <section id="battle" ref={rootRef} className="hbat" aria-labelledby="hbat-title" onKeyDown={onKey}>
-      <div className="hbat-col">
-        <header className="hbat-head">
-          <span className="hbat-kicker">joke battle</span>
-          <h2 id="hbat-title" className="hbat-title">Pick the <em>funniest.</em></h2>
-          <p className="hbat-sub">One setup, three ways to say it. Every pick teaches Shutap what's funny.</p>
-        </header>
+    <section id="battle" ref={rootRef} className="hsec hbat" aria-labelledby="hbat-title" onKeyDown={onKey}>
+      <div className="hsec-col">
+        <SectionHead id="hbat-title" kicker="joke battle" title="Pick the" accent="funniest." sub="One setup, three ways to say it. Every pick teaches Shutap what's funny." />
 
-        <div className="hbat-card">
+        <div className="hsec-card hbat-card">
           <div className="hbat-top">
             <span className="hbat-meta">
               <span className="hbat-topic">{round.setup.topic}</span>
@@ -352,7 +349,7 @@ export function HomeBattle() {
           {error && phase !== 'error' && <p className="hbat-error" role="alert">{error}</p>}
         </div>
 
-        <p className="hbat-fine">Battles use jokes Shutap writes, never anyone's story. Only you see your rank.</p>
+        <p className="hsec-fine">Battles use jokes Shutap writes, never anyone's story. Only you see your rank.</p>
       </div>
 
       {sheet && (
