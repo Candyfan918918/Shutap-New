@@ -1614,15 +1614,15 @@ THE BIT:
 
 AUDIENCE: {{AUDIENCE}}
 
-CAPTION: one or two short lines, under 150 characters. It makes someone
+CAPTION: one short line, under 100 characters. It makes someone
 want to watch to the end: a teaser in the performer's voice, not a summary
 and not the punchline. Lowercase is fine. At most one emoji, only if it
 earns its place. Never "story time", never "wait for it", never "POV:" unless
 the bit is literally a POV. No real names. No advice, no therapy words.
 
-HASHTAGS: 5 to 8, most specific first. Two or three about this exact
-situation (#roommates, #badroommate), two about the format (#comedy,
-#standupcomedy, #storytime only if it fits), one or two broad reach tags.
+HASHTAGS: exactly 5, most specific first. Two about this exact situation
+(#roommates, #badroommate), two about the format (#comedy, #standupcomedy,
+#storytime only if it fits), one broad reach tag.
 No spaces inside a tag, no banned or sexual tags, no tags with real names.
 
 Return only JSON:

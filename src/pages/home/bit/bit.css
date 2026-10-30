@@ -168,7 +168,8 @@
 
 /* caption + hashtags */
 .bt-cap { border: 1px solid rgba(90,30,50,.12); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; background: #fff; }
-.bt-cap .cap { margin: 0; font-size:var(--fs-body); line-height: 1.4; color: #1a1418; }
+.bt-cap .cap, .bt-cap-in .cap { margin: 0; font-size:var(--fs-body); line-height: 1.4; color: #1a1418; }
+.bt-cap-in .bt-chip { height: 30px; padding: 0 10px; }
 .bt-cap .tags { margin: 0; font-size:var(--fs-small); font-weight: 500; color: #9b3559; line-height: 1.5; word-break: break-word; }
 
 /* One homepage type system, including sheets opened from the write box. */

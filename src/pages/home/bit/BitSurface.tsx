@@ -843,20 +843,24 @@ export function BitSurface() {
               beforeDownload={() => confirmFirst('video')}
               resume={resume === 'video'}
               onResumed={() => setResume(null)}
-            />
-
-            <CaptionBox
-              bitId={bit.id}
-              versionId={version.id}
-              tier={tier}
-              say={say}
-              onSignIn={tier === 'guest' ? () => openSignin('caption') : undefined}
-              onLimit={() => onDownloadLimit('count', 'caption')}
-              downloadsLeft={downloadsLeft}
-              onCharged={(used, cap) => setDlUsage((u) => (u ? { ...u, used, cap } : { used, cap, tier }))}
-              beforeCopy={() => confirmFirst('caption')}
-              resume={resume === 'caption'}
-              onResumed={() => setResume(null)}
+              right={(downloadButton, note) => (
+                <CaptionBox
+                  embedded
+                  actions={downloadButton}
+                  note={note}
+                  bitId={bit.id}
+                  versionId={version.id}
+                  tier={tier}
+                  say={say}
+                  onSignIn={tier === 'guest' ? () => openSignin('caption') : undefined}
+                  onLimit={() => onDownloadLimit('count', 'caption')}
+                  downloadsLeft={downloadsLeft}
+                  onCharged={(used, cap) => setDlUsage((u) => (u ? { ...u, used, cap } : { used, cap, tier }))}
+                  beforeCopy={() => confirmFirst('caption')}
+                  resume={resume === 'caption'}
+                  onResumed={() => setResume(null)}
+                />
+              )}
             />
 
             <span className="bt-lbl">

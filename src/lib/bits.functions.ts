@@ -860,37 +860,46 @@ export const chargeDownload = createServerFn({ method: 'POST' })
     const { day } = today()
     const cap = tier === 'pro' ? null : tier === 'guest' ? 0 : DOWNLOAD_CAPS[tier]
     const watermarked = !isPaidTier(tier)
-    const { count: usedBefore, error: readErr } = await supabaseAdmin.from('bit_downloads').select('id', { count: 'exact', head: true }).eq('user_id', id.userId).eq('day', day)
-    // Ledger not there yet (migration pending): never block a download over
-    // bookkeeping. Let it through uncounted and say so in the log.
-    if (readErr) {
-      console.error('[download] ledger unavailable, download allowed uncounted', readErr.message)
+    // The ledger is bookkeeping. Whatever goes wrong with it (table not
+    // there yet, a bad connection), the download goes through uncounted and
+    // the reason lands in the admin feed, never in the user's face.
+    const allowUncounted = async (why: string): Promise<DownloadCharge> => {
+      console.error('[download] ledger unavailable, download allowed uncounted:', why)
+      await supabaseAdmin
+        .from('events')
+        .insert({ user_id: id.userId, session_id: null, name: 'download_ledger_error', properties: { kind: data.kind, tier, why: why.slice(0, 200) } as never } as never)
+        .then(() => {}, () => {})
       return { ok: true, used: 0, cap, watermarked, tier, repeat: false }
     }
-    const used = usedBefore ?? 0
-    const { count: sameCount } = await supabaseAdmin
-      .from('bit_downloads')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', id.userId)
-      .eq('version_id', data.version_id)
-      .eq('kind', data.kind)
-      .eq('day', day)
-    if ((sameCount ?? 0) > 0) return { ok: true, used, cap, watermarked, tier, repeat: true }
-    if (cap !== null && used >= cap) return { ok: false, reason: 'limited', used, cap, tier }
-    const { error } = await supabaseAdmin
-      .from('bit_downloads')
-      .insert({ user_id: id.userId, bit_id: row.id, version_id: data.version_id, kind: data.kind, tier, watermarked, day })
-    if (error) {
-      // The unique index: a parallel press already counted it.
-      if (String(error.code) === '23505') return { ok: true, used, cap, watermarked, tier, repeat: true }
-      console.error('[download] ledger insert failed', error.message)
-      return { ok: false, reason: 'failed' }
+    try {
+      const { count: usedBefore, error: readErr } = await supabaseAdmin.from('bit_downloads').select('id', { count: 'exact', head: true }).eq('user_id', id.userId).eq('day', day)
+      if (readErr) return allowUncounted(readErr.message)
+      const used = usedBefore ?? 0
+      const { count: sameCount } = await supabaseAdmin
+        .from('bit_downloads')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', id.userId)
+        .eq('version_id', data.version_id)
+        .eq('kind', data.kind)
+        .eq('day', day)
+      if ((sameCount ?? 0) > 0) return { ok: true, used, cap, watermarked, tier, repeat: true }
+      if (cap !== null && used >= cap) return { ok: false, reason: 'limited', used, cap, tier }
+      const { error } = await supabaseAdmin
+        .from('bit_downloads')
+        .insert({ user_id: id.userId, bit_id: row.id, version_id: data.version_id, kind: data.kind, tier, watermarked, day })
+      if (error) {
+        // The unique index: a parallel press already counted it.
+        if (String(error.code) === '23505') return { ok: true, used, cap, watermarked, tier, repeat: true }
+        return allowUncounted(error.message)
+      }
+      await supabaseAdmin
+        .from('events')
+        .insert({ user_id: id.userId, session_id: null, name: 'download', properties: { kind: data.kind, tier, watermarked, bit_id: row.id, version_id: data.version_id } as never } as never)
+        .then(() => {}, () => {})
+      return { ok: true, used: used + 1, cap, watermarked, tier, repeat: false }
+    } catch (e) {
+      return allowUncounted(e instanceof Error ? e.message : String(e))
     }
-    await supabaseAdmin
-      .from('events')
-      .insert({ user_id: id.userId, session_id: null, name: 'download', properties: { kind: data.kind, tier, watermarked, bit_id: row.id, version_id: data.version_id } as never } as never)
-      .then(() => {}, () => {})
-    return { ok: true, used: used + 1, cap, watermarked, tier, repeat: false }
   })
 
 export type ExportResult =
@@ -1048,7 +1057,7 @@ export type CaptionResult =
   | { ok: true; caption: string; hashtags: string[] }
   | { ok: false; reason: 'sign_in' | 'not_found' | 'rate_limited' | 'failed' }
 
-/** The text under the video: a teaser caption and 5–8 hashtags, written on
+/** The text under the video: a teaser caption and five hashtags, written on
  *  first ask and cached on the version. Signed in only: it's a model call
  *  written on request, like the scene and screenplay. */
 export const getCaption = createServerFn({ method: 'POST' })
@@ -1066,7 +1075,7 @@ export const getCaption = createServerFn({ method: 'POST' })
       .eq('bit_id', row.id)
       .maybeSingle()
     if (!v) return { ok: false, reason: 'not_found' }
-    if (v.caption?.caption) return { ok: true, caption: v.caption.caption, hashtags: v.caption.hashtags ?? [] }
+    if (v.caption?.caption) return { ok: true, caption: v.caption.caption, hashtags: (v.caption.hashtags ?? []).slice(0, 5) }
     if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
     const { writeCaption } = await import('./bits/pipeline.server')
     const made = await writeCaption(row.story_clean, v, (row.controls as BitControls)?.audience ?? 'social')
