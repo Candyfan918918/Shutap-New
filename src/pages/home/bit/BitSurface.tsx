@@ -84,7 +84,7 @@ type Notice = { text: string; swaps: string[] }
  *  about 50s in the worst case (scrub + writer race); a normal bit is 10-20s. */
 const WRITE_TIME_LIMIT_MS = 60_000
 
-const STEPS = ['reading it · names removed', 'finding the angle', 'writing four, ranking them', 'timing it at talking pace']
+const STEPS = ['reading it · names removed', 'finding the angle', 'writing four, ranking them', 'timing it at talking pace', 'drawing the video + caption']
 
 /* ── the note left before sign-in, so the bit comes back after it ── */
 /** What a guest was doing when they were asked to sign in; picked back up
