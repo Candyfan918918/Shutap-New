@@ -4,7 +4,7 @@
 //
 // Everything inside the TikTok safe zone: top 11% .. bottom 80%, left 9% ..
 // right 87% (the right column is TikTok's buttons).
-import { VIDEO_H, VIDEO_W, type Role, type SceneKind, type VideoSpec } from './spec'
+import { VIDEO_H, VIDEO_W, type Character, type SceneKind, type VideoSpec } from './spec'
 
 export const FONT = "'Sora', system-ui, sans-serif"
 
@@ -99,17 +99,28 @@ const SHIRT = ['#2f6db5', '#0b6b45', '#c1216b', '#d9522b', '#1d3f8f']
 
 type Mood = 'flat' | 'talk' | 'grin' | 'oops'
 
-function person(ctx: CanvasRenderingContext2D, x: number, y: number, s: number, seed: number, mood: Mood, blink: boolean, role: Role) {
+function person(ctx: CanvasRenderingContext2D, x: number, y: number, s: number, seed: number, mood: Mood, blink: boolean, who: Character) {
   const skin = SKIN[Math.floor(seed * 10) % SKIN.length]!
   const hair = HAIR[Math.floor(seed * 100) % HAIR.length]!
   const shirt = SHIRT[Math.floor(seed * 1000) % SHIRT.length]!
+  const { role, gender, kid } = who
   ctx.save()
   ctx.translate(x, y)
   ctx.scale(s, s)
-  // body
+  // body: a dress (trapezoid) for a girl or woman, a shirt for everyone else
   ctx.fillStyle = shirt
-  roundRect(ctx, -34, 26, 68, 78, 18)
-  ctx.fill()
+  if (gender === 'f') {
+    ctx.beginPath()
+    ctx.moveTo(-26, 26)
+    ctx.lineTo(26, 26)
+    ctx.lineTo(44, 104)
+    ctx.lineTo(-44, 104)
+    ctx.closePath()
+    ctx.fill()
+  } else {
+    roundRect(ctx, -34, 26, 68, 78, 18)
+    ctx.fill()
+  }
   // neck
   ctx.fillStyle = skin
   ctx.fillRect(-9, 14, 18, 18)
@@ -117,12 +128,49 @@ function person(ctx: CanvasRenderingContext2D, x: number, y: number, s: number, 
   ctx.beginPath()
   ctx.arc(0, 0, 30, 0, Math.PI * 2)
   ctx.fill()
-  // hair: parent/boss get a tidier cap, kid a tuft, else a fringe
+  // hair, by who they are: a girl gets pigtails and a bow, a woman long hair
+  // past the shoulders, a boy a tuft, a man a short cap, anyone else a fringe
   ctx.fillStyle = hair
   ctx.beginPath()
-  if (role === 'kid') {
+  if (gender === 'f' && kid) {
+    ctx.moveTo(-30, -2)
+    ctx.quadraticCurveTo(0, -46, 30, -2)
+    ctx.quadraticCurveTo(14, -24, 0, -22)
+    ctx.quadraticCurveTo(-14, -24, -30, -2)
+    ctx.closePath()
+    ctx.fill()
+    for (const sx of [-1, 1]) {
+      ctx.beginPath()
+      ctx.ellipse(sx * 36, 6, 9, 20, sx * 0.25, 0, Math.PI * 2)
+      ctx.fill()
+    }
+    // the bow
+    ctx.fillStyle = '#e0508a'
+    ctx.beginPath()
+    ctx.moveTo(20, -26)
+    ctx.lineTo(32, -34)
+    ctx.lineTo(32, -18)
+    ctx.closePath()
+    ctx.moveTo(20, -26)
+    ctx.lineTo(8, -34)
+    ctx.lineTo(8, -18)
+    ctx.closePath()
+    ctx.fill()
+    ctx.beginPath()
+  } else if (gender === 'f') {
+    // long hair: a cap plus two falls down the sides
+    ctx.moveTo(-32, 0)
+    ctx.quadraticCurveTo(0, -48, 32, 0)
+    ctx.lineTo(34, 46)
+    ctx.lineTo(22, 46)
+    ctx.lineTo(24, 4)
+    ctx.quadraticCurveTo(0, -18, -24, 4)
+    ctx.lineTo(-22, 46)
+    ctx.lineTo(-34, 46)
+    ctx.closePath()
+  } else if (kid) {
     ctx.arc(0, -26, 12, 0, Math.PI * 2)
-  } else if (role === 'boss' || role === 'landlord') {
+  } else if (gender === 'm' || role === 'boss' || role === 'landlord') {
     ctx.arc(0, -4, 30, Math.PI, 2 * Math.PI)
   } else {
     ctx.moveTo(-30, -2)
@@ -203,9 +251,13 @@ function scene(ctx: CanvasRenderingContext2D, kind: SceneKind, t: number, spec: 
   ctx.ellipse(x0 + w / 2, floorY + 18, w * 0.42, 22, 0, 0, Math.PI * 2)
   ctx.fill()
 
-  const px = x0 + w * 0.3
+  const cast = spec.cast.length ? spec.cast : [{ role: 'me', gender: 'n', kid: false } as Character]
+  const two = cast.length === 2
+  const px = x0 + w * (two ? 0.26 : 0.3)
   const py = floorY - 215 * f
-  const ox = x0 + w * 0.7
+  // with two people the second one stands where the prop would; the prop
+  // keeps to the furniture (counter, bench, board) behind them
+  const ox = x0 + w * (two ? 0.74 : 0.7)
   switch (kind) {
     case 'kitchen': {
       // counter + sink, stove with the pan
@@ -331,6 +383,147 @@ function scene(ctx: CanvasRenderingContext2D, kind: SceneKind, t: number, spec: 
       }
       break
     }
+    case 'school': {
+      // a chalkboard on the wall, a row of cubbies, a paper star on tag 2
+      ctx.fillStyle = '#2f5d46'
+      roundRect(ctx, x0 + 40, y0 + 20 * f, w - 80, 150 * f, 10)
+      ctx.fill()
+      ctx.strokeStyle = 'rgba(255,255,255,0.75)'
+      ctx.lineWidth = 5
+      ctx.lineCap = 'round'
+      ctx.beginPath()
+      ctx.moveTo(x0 + 80, y0 + 70 * f)
+      ctx.lineTo(x0 + 260, y0 + 70 * f)
+      ctx.moveTo(x0 + 80, y0 + 110 * f)
+      ctx.lineTo(x0 + 200, y0 + 110 * f)
+      ctx.stroke()
+      ctx.fillStyle = '#e9d6c5'
+      roundRect(ctx, x0 + 20, floorY - 70, w - 40, 60, 10)
+      ctx.fill()
+      ctx.fillStyle = 'rgba(0,0,0,0.08)'
+      for (let i = 0; i < 4; i++) roundRect(ctx, x0 + 40 + i * ((w - 80) / 4), floorY - 62, (w - 80) / 4 - 10, 44, 6), ctx.fill()
+      if (!two) {
+        ctx.fillStyle = '#d9a441'
+        roundRect(ctx, ox - 40, floorY - 120, 80, 50, 8)
+        ctx.fill()
+      }
+      if (reacts) {
+        ctx.fillStyle = '#ffb703'
+        const cx = x0 + w - 90
+        const cy = y0 + 60 * f
+        ctx.beginPath()
+        for (let i = 0; i < 10; i++) {
+          const r = i % 2 ? 9 : 22
+          const a = (i * Math.PI) / 5 - Math.PI / 2
+          ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r)
+        }
+        ctx.closePath()
+        ctx.fill()
+      }
+      break
+    }
+    case 'street': {
+      // a bus-stop sign and a bench; a bus rolls in on tag 2
+      ctx.fillStyle = '#cfcfcf'
+      ctx.fillRect(x0 + 20, floorY - 30, w - 40, 22)
+      ctx.fillStyle = '#6b6b6b'
+      roundRect(ctx, x0 + w / 2 - 70, floorY - 100, 140, 16, 6)
+      ctx.fill()
+      ctx.fillRect(x0 + w / 2 - 60, floorY - 84, 10, 54)
+      ctx.fillRect(x0 + w / 2 + 50, floorY - 84, 10, 54)
+      const sx = two ? x0 + w / 2 : ox
+      ctx.fillStyle = '#3a3a3a'
+      ctx.fillRect(sx - 4, floorY - 250, 8, 220)
+      ctx.fillStyle = spec.palette.badge1
+      roundRect(ctx, sx - 34, floorY - 290, 68, 48, 8)
+      ctx.fill()
+      ctx.fillStyle = '#ffffff'
+      roundRect(ctx, sx - 22, floorY - 278, 44, 24, 5)
+      ctx.fill()
+      if (reacts) {
+        const k = Math.min(1, (t - c.tag2) / 0.6)
+        const bx = x0 + w + 160 - k * 300
+        ctx.fillStyle = spec.palette.badge2
+        roundRect(ctx, bx - 110, y0 + 70 * f, 220, 110 * f, 18)
+        ctx.fill()
+        ctx.fillStyle = '#dfe9f3'
+        for (let i = 0; i < 3; i++) roundRect(ctx, bx - 92 + i * 64, y0 + 86 * f, 48, 36 * f, 6), ctx.fill()
+      }
+      break
+    }
+    case 'restaurant': {
+      // a table with a plate and a glass; the glass tips on tag 2
+      ctx.fillStyle = '#d7c4ad'
+      roundRect(ctx, x0 + 40, floorY - 76, w - 80, 40, 10)
+      ctx.fill()
+      ctx.fillStyle = '#ffffff'
+      const tx = two ? x0 + w / 2 : ox
+      ctx.beginPath()
+      ctx.ellipse(tx, floorY - 84, 54, 16, 0, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.fillStyle = spec.palette.badge2
+      ctx.beginPath()
+      ctx.ellipse(tx, floorY - 86, 30, 9, 0, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.save()
+      ctx.translate(tx + 80, floorY - 80)
+      if (reacts) ctx.rotate(0.5)
+      ctx.fillStyle = '#bfe6f5'
+      roundRect(ctx, -12, -50, 24, 50, 5)
+      ctx.fill()
+      ctx.restore()
+      break
+    }
+    case 'clinic': {
+      // an exam bed, a cross on the wall, a chart that drops on tag 2
+      ctx.fillStyle = '#ffffff'
+      roundRect(ctx, x0 + 40, y0 + 30 * f, 90, 90, 12)
+      ctx.fill()
+      ctx.fillStyle = '#d62f3a'
+      ctx.fillRect(x0 + 75, y0 + 45 * f, 20, 60)
+      ctx.fillRect(x0 + 55, y0 + 65 * f, 60, 20)
+      ctx.fillStyle = '#dfe9f3'
+      roundRect(ctx, (two ? x0 + w / 2 : ox) - 110, floorY - 90, 220, 44, 12)
+      ctx.fill()
+      ctx.fillStyle = '#9aa5ab'
+      ctx.fillRect((two ? x0 + w / 2 : ox) - 96, floorY - 46, 10, 40)
+      ctx.fillRect((two ? x0 + w / 2 : ox) + 86, floorY - 46, 10, 40)
+      if (reacts) {
+        ctx.fillStyle = '#ffffff'
+        roundRect(ctx, x0 + w - 150, y0 + 40 * f, 90, 110, 8)
+        ctx.fill()
+        ctx.strokeStyle = '#d62f3a'
+        ctx.lineWidth = 4
+        ctx.beginPath()
+        ctx.moveTo(x0 + w - 135, y0 + 110 * f)
+        ctx.lineTo(x0 + w - 115, y0 + 80 * f)
+        ctx.lineTo(x0 + w - 100, y0 + 120 * f)
+        ctx.lineTo(x0 + w - 75, y0 + 60 * f)
+        ctx.stroke()
+      }
+      break
+    }
+    case 'gym': {
+      // a rack and a dumbbell; a sweat drop on tag 2
+      ctx.fillStyle = '#3a3a3a'
+      ctx.fillRect(x0 + 40, floorY - 150, 12, 130)
+      ctx.fillRect(x0 + 40, floorY - 150, w - 80, 12)
+      ctx.fillRect(x0 + w - 52, floorY - 150, 12, 130)
+      const dx = two ? x0 + w / 2 : ox
+      ctx.fillStyle = '#2b2b2b'
+      ctx.fillRect(dx - 60, floorY - 52, 120, 10)
+      roundRect(ctx, dx - 84, floorY - 70, 28, 46, 6)
+      ctx.fill()
+      roundRect(ctx, dx + 56, floorY - 70, 28, 46, 6)
+      ctx.fill()
+      if (reacts) {
+        ctx.fillStyle = '#bfe6f5'
+        ctx.beginPath()
+        ctx.ellipse(px + 70 * f, py - 40 * f, 8, 13, 0, 0, Math.PI * 2)
+        ctx.fill()
+      }
+      break
+    }
     default: {
       // a table and a cup
       ctx.fillStyle = '#d7c4ad'
@@ -353,14 +546,25 @@ function scene(ctx: CanvasRenderingContext2D, kind: SceneKind, t: number, spec: 
   }
   // the person, bobbing a little while talking
   const bob = talking ? Math.sin(t * 18) * 3 : 0
-  person(ctx, px, py + bob, 2.3 * f, seed, mood, blink, spec.role)
+  const a = cast[0]!
+  const sa = (a.kid ? 1.75 : 2.3) * f
+  // a kid stands on the floor, so a smaller figure sits lower
+  person(ctx, px, floorY - 104 * sa + bob, sa, seed, mood, blink, a)
+  if (two) {
+    const b = cast[1]!
+    const sb = (b.kid ? 1.75 : 2.3) * f
+    const seedB = (seed * 31 + 0.37) % 1
+    const blinkB = Math.floor((t * 1000 + seedB * 2600) / 2600) !== Math.floor((t * 1000 + seedB * 2600 - 110) / 2600)
+    const moodB: Mood = reacts ? 'oops' : t >= c.tag1 ? 'flat' : 'flat'
+    person(ctx, ox, floorY - 104 * sb, sb, seedB, moodB, blinkB, b)
+  }
   // sparkle on the grin
   if (mood === 'grin') {
     ctx.strokeStyle = spec.palette.badge2
     ctx.lineWidth = 4
     ctx.lineCap = 'round'
     const sx = px + 95 * f
-    const sy = py - 60 * f
+    const sy = floorY - 104 * sa - 60 * f
     ctx.beginPath()
     ctx.moveTo(sx - 10, sy)
     ctx.lineTo(sx + 10, sy)

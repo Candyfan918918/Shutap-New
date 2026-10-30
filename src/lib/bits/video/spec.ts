@@ -14,8 +14,11 @@ export const VIDEO_FPS = 30
 export const VIDEO_SECONDS = 5
 export const VIDEO_FRAMES = VIDEO_FPS * VIDEO_SECONDS
 
-export type SceneKind = 'kitchen' | 'office' | 'living' | 'phone' | 'car' | 'generic'
+export type SceneKind = 'kitchen' | 'office' | 'living' | 'phone' | 'car' | 'school' | 'street' | 'restaurant' | 'clinic' | 'gym' | 'generic'
 export type Role = 'partner' | 'parent' | 'boss' | 'coworker' | 'roommate' | 'kid' | 'landlord' | 'friend' | 'stranger' | 'me'
+export type Gender = 'f' | 'm' | 'n'
+/** One person in the cartoon: who they are to the teller, how to draw them. */
+export type Character = { role: Role; gender: Gender; kid: boolean }
 
 export type Palette = {
   /** stage gradient, top to bottom */
@@ -47,7 +50,10 @@ export type VideoSpec = {
   button: { lead: string; accent: string }
   tagline: string
   scene: SceneKind
+  /** the first person named in the story (kept for the tests and the hair) */
   role: Role
+  /** up to two people, in the order the story names them; empty = the teller */
+  cast: Character[]
   palette: Palette
   /** 0..1 seeds for motion and character variants */
   seed: number
@@ -66,32 +72,84 @@ export function seedFrom(s: string): number {
 }
 
 const SCENE_WORDS: [SceneKind, RegExp][] = [
+  ['school', /\b(daycare|day care|preschool|pre-k|kindergarten|classroom|class|school|teacher|homework|pickup line|pick-up line|recess|playground|pta)\b/i],
+  ['clinic', /\b(doctor|dentist|dental|hospital|clinic|nurse|pediatrician|vet|therapist|er|urgent care|pharmacy|appointment)\b/i],
+  ['restaurant', /\b(restaurant|waiter|waitress|server|menu|bar|bartender|cafe|café|barista|brunch|diner|takeout|drive-thru|drive thru|pizza)\b/i],
+  ['gym', /\b(gym|trainer|treadmill|yoga|pilates|workout|crossfit|spin class|weights)\b/i],
   ['kitchen', /\b(dish|dishes|pan|pot|stove|sink|fridge|kitchen|cook|oven|microwave|leftover|dinner|lunch|breakfast|coffee)\b/i],
+  ['car', /\b(car|drive|driving|parking|traffic|uber|lyft|freeway|highway|gas|road trip)\b/i],
+  ['street', /\b(bus stop|bus|sidewalk|street|crosswalk|park|store|grocery|supermarket|mall|target|walmart|costco|checkout|line|queue|cashier|train|subway|airport|flight|plane|hotel|lobby|elevator)\b/i],
   ['office', /\b(boss|manager|meeting|office|email|slack|zoom|coworker|co-worker|deck|desk|hr|client|interview|job|work)\b/i],
-  ['car', /\b(car|drive|driving|parking|traffic|uber|lyft|freeway|highway|gas)\b/i],
-  ['phone', /\b(text|texted|group chat|dm|message|messaged|phone|call|called|instagram|tiktok|comment)\b/i],
+  ['phone', /\b(text|texted|texting|group chat|dm|dms|messaged|phone|facetime|voicemail|instagram|tiktok|comments?|dating app|tinder|hinge)\b/i],
   ['living', /\b(couch|tv|remote|living room|apartment|roommate|landlord|rent|laundry|bathroom|bed|sleep)\b/i],
 ]
 
-const ROLE_WORDS: [Role, RegExp][] = [
-  ['partner', /\b(husband|wife|boyfriend|girlfriend|partner|fianc[ée]e?|spouse|my ex)\b/i],
-  ['parent', /\b(mom|mother|dad|father|mother-in-law|father-in-law|in-law|grandma|grandpa|aunt|uncle)\b/i],
-  ['boss', /\b(boss|manager|ceo|supervisor|team lead|director)\b/i],
-  ['coworker', /\b(coworker|co-worker|colleague|intern|hr)\b/i],
-  ['roommate', /\b(roommate|flatmate|housemate)\b/i],
-  ['kid', /\b(my son|my daughter|my kid|my kids|toddler|baby|my child)\b/i],
-  ['landlord', /\b(landlord|hoa|neighbor|neighbour)\b/i],
-  ['friend', /\b(friend|bestie|buddy|cousin|sister|brother)\b/i],
-  ['stranger', /\b(barista|waiter|cashier|driver|customer|guy|woman|man|stranger|courier|delivery)\b/i],
+/** Who a word names, and how to draw them. Order matters only among words
+ *  at the same place in the story: the story's own order decides the cast. */
+const ROLE_WORDS: [Role, Gender, boolean, RegExp][] = [
+  ['partner', 'm', false, /\b(husband|boyfriend|fiancé|my ex-husband)\b/i],
+  ['partner', 'f', false, /\b(wife|girlfriend|fiancée|my ex-wife)\b/i],
+  ['partner', 'n', false, /\b(partner|spouse|my ex)\b/i],
+  ['parent', 'f', false, /\b(mom|mother|mother-in-law|grandma|grandmother|aunt|stepmom)\b/i],
+  ['parent', 'm', false, /\b(dad|father|father-in-law|grandpa|grandfather|uncle|stepdad)\b/i],
+  ['parent', 'n', false, /\b(in-law|in-laws|my parents)\b/i],
+  ['kid', 'f', true, /\b(my daughter|daughters?|my little girl|my girl|niece|stepdaughter)\b/i],
+  ['kid', 'm', true, /\b(my son|sons?|my little boy|my boy|nephew|stepson)\b/i],
+  ['kid', 'n', true, /\b(my kid|my kids|toddler|baby|my child|my children|four-year-old|three-year-old|five-year-old|\d-year-old|teenager)\b/i],
+  ['boss', 'n', false, /\b(boss|manager|ceo|supervisor|team lead|director)\b/i],
+  ['coworker', 'n', false, /\b(coworker|co-worker|colleague|intern|hr)\b/i],
+  ['roommate', 'n', false, /\b(roommate|flatmate|housemate)\b/i],
+  ['landlord', 'n', false, /\b(landlord|hoa|neighbor|neighbour)\b/i],
+  ['friend', 'f', false, /\b(sister|best friend who is a girl|girlfriends)\b/i],
+  ['friend', 'm', false, /\b(brother|bro)\b/i],
+  ['friend', 'n', false, /\b(friend|bestie|buddy|cousin)\b/i],
+  ['stranger', 'f', false, /\b(lady|woman|girl|waitress|her mom|some woman|old lady)\b/i],
+  ['stranger', 'm', false, /\b(guy|man|dude|waiter|some guy|old man)\b/i],
+  ['stranger', 'n', false, /\b(barista|cashier|driver|customer|stranger|courier|delivery|teacher|doctor|dentist|nurse|cop|officer|server|bartender|trainer)\b/i],
 ]
 
+/** Where each pattern first appears; the setting named first wins. Kitchen,
+ *  office and the rest are ordered most-specific first for the tie. */
 export function sceneFor(story: string): SceneKind {
-  for (const [k, re] of SCENE_WORDS) if (re.test(story)) return k
-  return 'generic'
+  let best: SceneKind = 'generic'
+  let at = Infinity
+  for (const [k, re] of SCENE_WORDS) {
+    const m = re.exec(story)
+    if (m && m.index < at) {
+      at = m.index
+      best = k
+    }
+  }
+  return best
 }
+
+/** The people in the story, in the order it names them, two at most. The
+ *  gender comes from the word used (daughter, wife, guy); a word that says
+ *  nothing about it ('boss') draws a neutral figure. The same role twice is
+ *  one person. */
+export function castFor(story: string): Character[] {
+  const hits: { at: number; c: Character }[] = []
+  for (const [role, gender, kid, re] of ROLE_WORDS) {
+    const m = re.exec(story)
+    if (m) hits.push({ at: m.index, c: { role, gender, kid } })
+  }
+  hits.sort((a, b) => a.at - b.at)
+  const out: Character[] = []
+  for (const h of hits) {
+    const same = out.find((c) => c.role === h.c.role)
+    if (same) {
+      // 'my kid … she' style: a gendered word for the same role refines the neutral one
+      if (same.gender === 'n' && h.c.gender !== 'n') same.gender = h.c.gender
+      continue
+    }
+    out.push({ ...h.c })
+    if (out.length === 2) break
+  }
+  return out
+}
+
 export function roleFor(story: string): Role {
-  for (const [k, re] of ROLE_WORDS) if (re.test(story)) return k
-  return 'me'
+  return castFor(story)[0]?.role ?? 'me'
 }
 
 /** Split the hook into two lines of roughly equal width, breaking at a word. */
@@ -143,6 +201,7 @@ export function buildSpec(v: Pick<BitVersion, 'id' | 'hook' | 'tags' | 'button'>
     tagline: 'Say it funnier.',
     scene: sceneFor(story),
     role: roleFor(story),
+    cast: castFor(story),
     palette,
     seed,
     cues: {

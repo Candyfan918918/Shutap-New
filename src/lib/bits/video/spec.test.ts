@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { buildSpec, cutWords, roleFor, sceneFor, seedFrom, splitButton, splitHook } from './spec'
+import { buildSpec, castFor, cutWords, roleFor, sceneFor, seedFrom, splitButton, splitHook } from './spec'
 
 test('seed is stable and in range', () => {
   const a = seedFrom('abc-123')
@@ -43,4 +43,26 @@ test('spec carries two tags, cues in order, a palette', () => {
   assert.ok(s.cues.pill < s.cues.hook && s.cues.hook < s.cues.tag1 && s.cues.tag1 < s.cues.tag2 && s.cues.tag2 < s.cues.button && s.cues.button < s.cues.tagline)
   assert.ok(s.cues.tagline < 5)
   assert.ok(s.palette.stage.length === 3)
+})
+
+test('the cast follows the story: who, in order, drawn as the words say', () => {
+  const bus = castFor('my daughter called a homeless lady "homeless" in front of her at the bus stop')
+  assert.deepEqual(bus, [
+    { role: 'kid', gender: 'f', kid: true },
+    { role: 'stranger', gender: 'f', kid: false },
+  ])
+  assert.equal(sceneFor('my daughter called a homeless lady "homeless" at the bus stop'), 'street')
+  assert.equal(sceneFor('the daycare teacher said my son bit a kid'), 'school')
+  assert.deepEqual(castFor('the daycare teacher said my son bit a kid'), [
+    { role: 'stranger', gender: 'n', kid: false },
+    { role: 'kid', gender: 'm', kid: true },
+  ])
+  // a gendered word for the same role refines it, and a role repeats as one person
+  assert.deepEqual(castFor('my kid, my daughter, asked my daughter\'s teacher'), [
+    { role: 'kid', gender: 'f', kid: true },
+    { role: 'stranger', gender: 'n', kid: false },
+  ])
+  assert.equal(castFor('nothing in particular').length, 0)
+  // 'called' is a verb, not a phone
+  assert.equal(sceneFor('she called me at the restaurant'), 'restaurant')
 })
