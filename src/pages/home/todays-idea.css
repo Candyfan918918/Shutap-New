@@ -1,14 +1,14 @@
-/* what to post today — matches the write box (Shutap-Brand-Tokens: neutral
-   canvas, pink as accent only). Sizes come from the home.css scale (--fs-label, --fs-small, --fs-body, --fs-read);
-   section and topic titles are fixed at 28px / 24px. */
-/* Shell, palette and head come from home-section.css. These map the panel's
-   own names onto that palette. Light only, like the write box. */
+/* what to post today. Shell, palette and head come from home-section.css;
+   these map the panel's own names onto that palette. Three cards: today's
+   pick, a bit to start from (a script page), also trending. Light only,
+   like the write box. */
 .tdi {
   --tdi-ink: var(--ink);
   --tdi-ink-soft: var(--ink-2);
   --tdi-text-2: var(--muted);
   --tdi-text-3: var(--faint);
   --tdi-pink: #e7548a;
+  --tdi-hot: #d1336f;
   --tdi-wine: var(--rose-ink);
   --tdi-tint: var(--tint);
   --tdi-surface: var(--card);
@@ -26,63 +26,92 @@
 /* type */
 .tdi-label { font-size: var(--fs-label, 12px); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tdi-text-3); }
 .tdi-accent { color: var(--tdi-wine); }
-.tdi-meta { font-size: var(--fs-small, 14px); color: var(--tdi-text-3); line-height: 1.4; }
-.tdi-topic { font-size: 24px; color: var(--ink); line-height: 1.2; font-weight: 700; }
-.tdi-why { font-family: 'Newsreader', Georgia, serif; font-size: var(--fs-read, 19px); line-height: 1.6; color: var(--tdi-ink-soft); max-width: 60ch; }
+.tdi-meta { font-size: 13px; color: var(--tdi-text-3); line-height: 1.4; }
 .tdi-strong { font-weight: 600; color: var(--tdi-ink); }
-
-/* layout */
-.tdi-card { gap: 20px; }
-.tdi-pick { display: flex; flex-direction: column; gap: 10px; }
 .tdi-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .tdi-between { justify-content: space-between; }
-.tdi-block { border-top: 1px solid var(--tdi-border); padding-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+
+/* card 1: today's pick */
+.tdi-pickcard { gap: 14px; padding: 22px 22px 20px; }
+.tdi-topic { font-size: clamp(28px, 4vw, 36px); line-height: 1.1; font-weight: 800; color: var(--wine); letter-spacing: -0.01em; }
+.tdi-stats { display: flex; flex-wrap: wrap; gap: 10px; }
+.tdi-stat { flex: 1 1 130px; display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: 14px; background: var(--tdi-surface-2); border: 1px solid var(--tdi-border); }
+.tdi-stat strong { font-size: 30px; line-height: 1.1; font-weight: 800; color: var(--tdi-hot); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.tdi-stat strong.ink { color: var(--ink); }
+.tdi-stat strong.down { color: var(--tdi-text-2); }
+.tdi-stat span { font-size: 13px; color: var(--tdi-text-2); }
+.tdi-why { font-family: var(--news); font-size: 19px; line-height: 1.55; color: var(--tdi-ink-soft); }
+
+/* charts */
+.tdi-chart-box { position: relative; }
+.tdi-hero-chart { margin: 2px 0 0; }
+.tdi-hero-chart svg { display: block; width: 100%; height: 132px; }
+.tdi-divide { stroke: var(--tdi-border-2); stroke-width: 1; stroke-dasharray: 4 4; }
+.tdi-line { fill: none; stroke: var(--tdi-hot); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.tdi-endpoint { position: absolute; right: 0; width: 12px; height: 12px; margin: -6px -6px 0 0; border-radius: 999px; background: var(--tdi-hot); box-shadow: 0 0 0 4px rgba(209, 51, 111, 0.18), 0 0 0 2px #fff inset; }
+.tdi-chart-legend { display: flex; justify-content: space-around; margin-top: 6px; font-size: 12px; font-weight: 600; color: var(--tdi-text-3); text-transform: uppercase; letter-spacing: 0.1em; }
+.tdi-spark svg { display: block; width: 100%; height: 40px; }
+.tdi-spark .tdi-line { stroke-width: 1.8; }
+.tdi-spark .tdi-endpoint { width: 7px; height: 7px; margin: -3.5px -3.5px 0 0; box-shadow: 0 0 0 3px rgba(209, 51, 111, 0.15); }
+
+/* badge */
+.tdi-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; line-height: 1; padding: 6px 10px; border-radius: 999px; white-space: nowrap; }
+.tdi-up { color: #fff; background: var(--tdi-hot); }
+.tdi-flat { color: var(--tdi-text-2); background: var(--tdi-surface-2); box-shadow: inset 0 0 0 1px var(--tdi-border); }
+.tdi-down { color: var(--tdi-text-2); background: transparent; box-shadow: inset 0 0 0 1px var(--tdi-border-2); }
+
+/* sources */
+.tdi-sources { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.tdi-sources .tdi-meta { margin-right: 2px; }
+.home-immersive .tdi-sources a, .tdi-sources a { font-size: 13px; font-weight: 600; color: var(--tdi-wine); text-decoration: none; padding: 5px 11px; border-radius: 999px; background: var(--tdi-tint); }
+.home-immersive .tdi-sources a:hover, .tdi-sources a:hover { color: var(--wine); background: #f1dbe4; }
+
+/* card 2: a bit to start from, a script page */
+.tdi-script {
+  gap: 12px; padding: 22px 22px 20px;
+}
+.tdi-hook { font-family: var(--news); font-style: italic; font-size: clamp(22px, 3vw, 27px); line-height: 1.3; color: var(--wine); }
+.tdi-bit {
+  font-family: var(--news); font-size: 18px; line-height: 1.6; color: var(--ink-2); white-space: pre-line;
+  max-height: 6.4em; overflow: hidden; position: relative;
+  -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent);
+}
+.tdi-bit.tdi-open { max-height: none; -webkit-mask-image: none; mask-image: none; }
+.tdi-more { align-self: flex-start; font: 600 13px var(--sora); color: var(--tdi-wine); background: none; border: 0; padding: 4px 0; cursor: pointer; }
+.tdi-more:hover { color: var(--wine); }
+.tdi-tag { display: flex; align-items: baseline; gap: 12px; background: var(--tdi-tint); border-radius: 14px; padding: 12px 16px; }
+.tdi-tag p { font-family: var(--news); font-size: 18px; line-height: 1.45; color: var(--ink); }
+.tdi-tag .tdi-label { color: var(--tdi-wine); flex: none; }
+.tdi-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 2px; }
+.tdi-btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 20px;
+  font: 600 15px var(--sora); color: var(--tdi-ink); background: var(--tdi-surface);
+  border: 1px solid var(--tdi-border-2); border-radius: 999px; cursor: pointer; text-decoration: none;
+}
+.tdi-btn:hover { border-color: var(--rose); }
+.home-immersive .tdi-btn-primary, .tdi-btn-primary { color: #fff; background: linear-gradient(155deg, #cf6189, #b8456b 55%, #a33a5e); border: 0; font-weight: 700; }
+.home-immersive .tdi-btn-primary:hover, .tdi-btn-primary:hover { color: #fff; filter: brightness(.96); }
+
+/* card 3: also trending */
+.tdi-trendcard { gap: 14px; padding: 20px 22px; }
+.tdi-grid { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.tdi-mini { display: flex; flex-direction: column; gap: 6px; padding: 12px 12px 8px; border-radius: 14px; border: 1px solid var(--tdi-border); background: var(--tdi-surface); transition: border-color .2s, transform .2s; }
+.tdi-mini:hover { border-color: var(--rose); transform: translateY(-2px); }
+.tdi-rank { font-size: 12px; font-weight: 700; color: var(--tdi-text-3); }
+.tdi-item-name { font-size: 16px; font-weight: 700; line-height: 1.25; color: var(--ink); }
+.tdi-item-note { font-size: 13px; color: var(--tdi-text-2); line-height: 1.4; flex: 1; }
+.tdi-mini .tdi-spark { margin-top: 2px; }
+@media (max-width: 700px) { .tdi-grid { grid-template-columns: minmax(0, 1fr); } .tdi-mini { padding: 12px; } }
+
+/* heatmap, folded */
+.tdi-block { border-top: 1px solid var(--tdi-border); padding-top: 14px; display: flex; flex-direction: column; gap: 10px; }
 .tdi-details > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .tdi-details > summary::-webkit-details-marker { display: none; }
 .tdi-details[open] .tdi-summary .tdi-meta { visibility: hidden; }
 .tdi-details:not([open]) { gap: 0; }
-
-/* a bit to start from: tinted panel inside the card */
-.tdi-bitbox { background: var(--tint-2); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-
-/* badge */
-.tdi-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; line-height: 1; padding: 5px 10px; border-radius: 999px; white-space: nowrap; }
-.tdi-up { color: var(--tdi-wine); background: var(--tdi-tint); }
-.tdi-flat { color: var(--tdi-text-2); background: var(--tdi-surface-2); }
-.tdi-down { color: var(--tdi-text-2); background: transparent; box-shadow: inset 0 0 0 1px var(--tdi-border-2); }
-
-/* charts */
-.tdi-hero-chart svg { display: block; width: 100%; height: 96px; }
-.tdi-week { fill: var(--tdi-surface-2); }
-.tdi-line { fill: none; stroke: var(--tdi-pink); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
-.tdi-chart-legend { display: flex; justify-content: space-between; margin-top: 6px; font-size: 12px; color: var(--tdi-text-3); }
-.tdi-spark { width: 96px; height: 28px; display: block; }
-.tdi-spark svg { display: block; width: 96px; height: 28px; }
-.tdi-spark .tdi-line { stroke-width: 1.5; }
-
-/* sources */
-.tdi-sources { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; }
-.home-immersive .tdi-sources a, .tdi-sources a { font-size: var(--fs-small, 14px); font-weight: 600; color: var(--tdi-wine); text-decoration: none; }
-.home-immersive .tdi-sources a:hover, .tdi-sources a:hover { text-decoration: underline; text-underline-offset: 2px; }
-
-/* also trending */
-.tdi-list { list-style: none; display: flex; flex-direction: column; }
-.tdi-item { display: grid; grid-template-columns: 24px minmax(0, 1fr) 96px auto; gap: 14px; align-items: center; padding: 10px 0; }
-.tdi-item + .tdi-item { border-top: 1px solid var(--tdi-border); }
-.tdi-rank { font-size: 13px; font-weight: 600; color: var(--tdi-text-3); }
-.tdi-item-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.tdi-item-name { font-size: var(--fs-body, 16px); font-weight: 600; }
-.tdi-item-note { font-size: var(--fs-small, 14px); color: var(--tdi-text-2); line-height: 1.4; }
-.tdi-item .tdi-badge { justify-self: end; }
-@media (max-width: 600px) {
-  .tdi-item { grid-template-columns: 20px minmax(0, 1fr) auto; gap: 10px; align-items: start; }
-  .tdi-item .tdi-spark { display: none; }
-}
-
-/* heatmap */
 .tdi-heat { display: flex; flex-direction: column; gap: 4px; }
 .tdi-heat-row { display: grid; grid-template-columns: minmax(0, 160px) repeat(14, minmax(0, 1fr)); gap: 4px; align-items: center; }
-.tdi-heat-name { font-size: var(--fs-small, 14px); color: var(--tdi-ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tdi-heat-name { font-size: 14px; color: var(--tdi-ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tdi-cell { height: 18px; border-radius: 4px; background: var(--tdi-l0); }
 .tdi-l1 { background: var(--tdi-l1); } .tdi-l2 { background: var(--tdi-l2); }
 .tdi-l3 { background: var(--tdi-l3); } .tdi-l4 { background: var(--tdi-l4); }
@@ -93,28 +122,11 @@
   .tdi-heat-name { grid-column: 1 / -1; margin-top: 4px; }
   .tdi-cell { height: 16px; border-radius: 3px; }
   .tdi-none { grid-column: 1 / -1; }
+  .tdi-pickcard, .tdi-script, .tdi-trendcard { padding: 16px 14px; }
+  .tdi-stat { padding: 10px 12px; }
+  .tdi-stat strong { font-size: 24px; }
+  .tdi-stat span { font-size: 12px; }
 }
 
-/* the bit */
-.tdi-hook { font-size: 17px; font-weight: 700; line-height: 1.35; }
-.tdi-bit {
-  font-family: 'Newsreader', Georgia, serif; font-size: 16px; line-height: 1.6; white-space: pre-line;
-  max-height: 7.2em; overflow: hidden; position: relative;
-  -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent);
-}
-.tdi-bit.tdi-open { max-height: none; -webkit-mask-image: none; mask-image: none; }
-.tdi-more { align-self: flex-start; font: 600 13px 'Sora', system-ui, sans-serif; color: var(--tdi-text-2); background: none; border: 0; padding: 4px 0; cursor: pointer; }
-.tdi-more:hover { color: var(--tdi-ink); }
-.tdi-tag { background: var(--card); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
-.tdi-tag p { font-family: 'Newsreader', Georgia, serif; font-size: 16px; line-height: 1.5; }
-.tdi-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.tdi-btn {
-  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px;
-  font: 600 14px 'Sora', system-ui, sans-serif; color: var(--tdi-ink); background: var(--tdi-surface);
-  border: 1px solid var(--tdi-border-2); border-radius: 999px; cursor: pointer; text-decoration: none;
-}
-.tdi-btn:hover { border-color: var(--tdi-ink); }
-.home-immersive .tdi-btn-primary, .tdi-btn-primary { color: #fff; background: linear-gradient(155deg, #cf6189, #b8456b 55%, #a33a5e); border: 0; font-weight: 700; }
-.home-immersive .tdi-btn-primary:hover, .tdi-btn-primary:hover { color: #fff; filter: brightness(.96); }
-.tdi-btn:focus-visible, .tdi-more:focus-visible, .tdi-sources a:focus-visible { outline: 2px solid var(--tdi-pink); outline-offset: 2px; }
-
+.tdi-btn:focus-visible, .tdi-more:focus-visible, .tdi-sources a:focus-visible, .tdi-details > summary:focus-visible { outline: 2px solid var(--tdi-pink); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .tdi-mini { transition: none; } .tdi-mini:hover { transform: none; } }
