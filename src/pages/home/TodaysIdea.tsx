@@ -1,7 +1,8 @@
 // "what to post today": under the joke battle, above the poll. Same shell as
-// the other homepage sections (home-section.css): centered head, one card.
-// Inside the card, top to bottom: today's pick and why, the chart, a bit to
-// start from, also trending, and the 14-day heatmap folded away.
+// the other homepage sections (home-section.css): centered head, then three
+// cards: today's pick (big numbers, the 14-day chart, why now), a bit to
+// start from (a script page), and also trending (mini cards with sparklines,
+// the 14-day heatmap folded away).
 import { useEffect, useId, useState } from 'react'
 import type { DailyIdea, Interest, SignalTopic } from '@/lib/daily-idea.functions'
 import { rankTopics } from './trend-data'
@@ -27,31 +28,39 @@ function Badge({ topic, long = false }: { topic: SignalTopic; long?: boolean }) 
 function Chart({ interest, hero = false }: { interest: Interest; hero?: boolean }) {
   const id = useId().replace(/:/g, '')
   const s = interest.series
-  const w = hero ? 600 : 96
-  const h = hero ? 96 : 28
+  const w = hero ? 600 : 200
+  const h = hero ? 132 : 44
+  const top = hero ? 16 : 6
+  const bottom = hero ? 6 : 4
   const max = Math.max(...s.map((d) => d.views), 1)
-  const pts = s.map((d, i) => [(i / Math.max(1, s.length - 1)) * w, h - 4 - (d.views / max) * (h - 12)] as const)
+  const min = Math.min(...s.map((d) => d.views))
+  const span = Math.max(1, max - min * 0.7)
+  const pts = s.map((d, i) => [(i / Math.max(1, s.length - 1)) * w, top + (1 - (d.views - min * 0.7) / span) * (h - top - bottom)] as const)
   const last = s.at(-1)
-  if (!last || pts.length < 2) return null
+  const end = pts.at(-1)
+  if (!last || !end || pts.length < 2) return null
   const line = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ')
   return (
     <div className={hero ? 'tdi-hero-chart' : 'tdi-spark'}>
-      <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" role="img"
-        aria-label={`Interest over ${s.length} days; ${num(last.views)} views on ${dayLabel(last.date, { month: 'short', day: 'numeric' })}`}>
-        <defs>
-          <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--tdi-pink)" stopOpacity="0.14" />
-            <stop offset="100%" stopColor="var(--tdi-pink)" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        {hero ? <rect x={w / 2} y="0" width={w / 2} height={h} className="tdi-week" /> : null}
-        <path d={`${line} L${w},${h} L0,${h} Z`} fill={`url(#${id})`} />
-        <path d={line} className="tdi-line" vectorEffect="non-scaling-stroke" />
-      </svg>
+      <div className="tdi-chart-box">
+        <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" role="img"
+          aria-label={`Interest over ${s.length} days; ${num(last.views)} views on ${dayLabel(last.date, { month: 'short', day: 'numeric' })}`}>
+          <defs>
+            <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--tdi-pink)" stopOpacity={hero ? 0.28 : 0.2} />
+              <stop offset="100%" stopColor="var(--tdi-pink)" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          {hero ? <line x1={w / 2} x2={w / 2} y1="0" y2={h} className="tdi-divide" vectorEffect="non-scaling-stroke" /> : null}
+          <path d={`${line} L${w},${h} L0,${h} Z`} fill={`url(#${id})`} />
+          <path d={line} className="tdi-line" vectorEffect="non-scaling-stroke" />
+        </svg>
+        <span className="tdi-endpoint" style={{ top: `${(end[1] / h) * 100}%` }} aria-hidden="true" />
+      </div>
       {hero ? (
         <div className="tdi-chart-legend">
           <span>last week</span>
-          <span>this week · {num(interest.thisWeek)} views</span>
+          <span>this week</span>
         </div>
       ) : null}
     </div>
@@ -120,6 +129,9 @@ export function TodaysIdea({ idea }: { idea: DailyIdea | null }) {
     box.focus({ preventScroll: true })
   }
 
+  const change = pick.interest?.change ?? null
+  const changeText = change == null ? null : `${change > 0 ? '+' : ''}${change}%`
+
   return (
     <section id="today" className="hsec tdi" aria-labelledby="tdi-title">
       <div className="hsec-col">
@@ -131,68 +143,83 @@ export function TodaysIdea({ idea }: { idea: DailyIdea | null }) {
           sub="One trending topic, why it's up, and a bit to start from. New every morning."
         />
 
-        <article className="hsec-card tdi-card">
-          <div className="tdi-pick">
-            <div className="tdi-row">
-              <span className="tdi-label tdi-accent">today's pick</span>
-              <Badge topic={pick} long />
-            </div>
-            <h3 className="tdi-topic">{sentence(pick.topic)}</h3>
-            {idea.why_now ? <p className="tdi-why">{idea.why_now}</p> : null}
+        <article className="hsec-card tdi-card tdi-pickcard">
+          <div className="tdi-row tdi-between">
+            <span className="tdi-label tdi-accent">today's pick</span>
+            <span className={`tdi-badge ${pick.direction === 'cooling' ? 'tdi-down' : pick.direction === 'steady' ? 'tdi-flat' : 'tdi-up'}`}>
+              {ARROW[pick.direction ?? 'steady']} {pick.direction ?? 'steady'}
+            </span>
           </div>
+          <h3 className="tdi-topic">{sentence(pick.topic)}</h3>
+
+          {pick.interest ? (
+            <div className="tdi-stats">
+              {changeText ? (
+                <div className="tdi-stat">
+                  <strong className={change != null && change < 0 ? 'down' : undefined}>{changeText}</strong>
+                  <span>interest vs last week</span>
+                </div>
+              ) : null}
+              <div className="tdi-stat">
+                <strong className="ink">{num(pick.interest.thisWeek)}</strong>
+                <span>Wikipedia views this week</span>
+              </div>
+            </div>
+          ) : null}
 
           {pick.interest ? <Chart interest={pick.interest} hero /> : null}
+
+          {idea.why_now ? <p className="tdi-why">{idea.why_now}</p> : null}
 
           {pick.sources?.length ? (
             <div className="tdi-sources">
               <span className="tdi-meta">sources</span>
               {pick.sources.map((s) => (
-                <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a>
+                <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer">{s.label} ↗</a>
               ))}
             </div>
           ) : null}
-
-          <div className="tdi-bitbox" aria-label="a bit to start from">
-            <div className="tdi-row tdi-between">
-              <span className="tdi-label tdi-accent">a bit to start from</span>
-              <span className="tdi-meta">film it, it's yours</span>
-            </div>
-            <p className="tdi-hook">{idea.hook}</p>
-            <p className={`tdi-bit ${open ? 'tdi-open' : ''}`}>{idea.bit}</p>
-            <button type="button" className="tdi-more" aria-expanded={open} onClick={() => setOpen(!open)}>
-              {open ? 'show less ↑' : 'read all ↓'}
-            </button>
-            <div className="tdi-tag">
-              <span className="tdi-label">tag</span>
-              <p>{idea.tag}</p>
-            </div>
-            <div className="tdi-actions">
-              <button type="button" className="tdi-btn" onClick={copy}>{copied ? 'copied' : 'copy'}</button>
-              <a href="#" className="tdi-btn tdi-btn-primary" onClick={writeYours}>write yours ↑</a>
-            </div>
-          </div>
-
-          {others.length ? (
-            <div className="tdi-block">
-              <h4 className="tdi-label">also trending</h4>
-              <ol className="tdi-list">
-                {others.map((t, i) => (
-                  <li key={t.topic} className="tdi-item">
-                    <span className="tdi-rank">{i + 2}</span>
-                    <div className="tdi-item-text">
-                      <span className="tdi-item-name">{sentence(t.topic)}</span>
-                      {t.note ? <span className="tdi-item-note">{t.note}</span> : null}
-                    </div>
-                    {t.interest ? <Chart interest={t.interest} /> : <span className="tdi-spark" />}
-                    <Badge topic={t} />
-                  </li>
-                ))}
-              </ol>
-            </div>
-          ) : null}
-
-          <Heatmap topics={[pick, ...others]} />
         </article>
+
+        <article className="hsec-card tdi-card tdi-script" aria-label="a bit to start from">
+          <div className="tdi-row tdi-between">
+            <span className="tdi-label tdi-accent">a bit to start from</span>
+            <span className="tdi-meta">film it, it's yours</span>
+          </div>
+          <p className="tdi-hook">“{idea.hook}”</p>
+          <p className={`tdi-bit ${open ? 'tdi-open' : ''}`}>{idea.bit}</p>
+          <button type="button" className="tdi-more" aria-expanded={open} onClick={() => setOpen(!open)}>
+            {open ? 'show less ↑' : 'read all ↓'}
+          </button>
+          <div className="tdi-tag">
+            <span className="tdi-label">tag</span>
+            <p>{idea.tag}</p>
+          </div>
+          <div className="tdi-actions">
+            <a href="#" className="tdi-btn tdi-btn-primary" onClick={writeYours}>write yours ↑</a>
+            <button type="button" className="tdi-btn" onClick={copy}>{copied ? 'copied ✓' : 'copy the bit'}</button>
+          </div>
+        </article>
+
+        {others.length ? (
+          <article className="hsec-card tdi-card tdi-trendcard">
+            <span className="tdi-label">also trending</span>
+            <ol className="tdi-grid">
+              {others.map((t, i) => (
+                <li key={t.topic} className="tdi-mini">
+                  <div className="tdi-row tdi-between">
+                    <span className="tdi-rank">#{i + 2}</span>
+                    <Badge topic={t} />
+                  </div>
+                  <span className="tdi-item-name">{sentence(t.topic)}</span>
+                  {t.note ? <span className="tdi-item-note">{t.note}</span> : null}
+                  {t.interest ? <Chart interest={t.interest} /> : null}
+                </li>
+              ))}
+            </ol>
+            <Heatmap topics={[pick, ...others]} />
+          </article>
+        ) : null}
 
         <p className="hsec-fine">Interest = English Wikipedia page views, read live. Topics and notes from this morning's search of public coverage.</p>
       </div>
