@@ -90,7 +90,12 @@ export { BIT_PROMPT_VERSION }
    PREFERS it: the backup still starts at the hedge, but its answer is only
    used if the primary fails or runs past its cap. Funny is the product; a
    few more seconds is the price. BIT_PREFER_PRIMARY=off restores the pure
-   race. The judge is back on by default (BIT_JUDGE=off turns it off). */
+   race. The judge is back on by default (BIT_JUDGE=off turns it off).
+
+   bit-1.5 (Oct 29 2026): back to a fast writer. In the blind eval gpt-5
+   ran past its 30s cap on 19 of 30 stories and, when it did answer, won
+   2 of 11. Default writer is now google/gemini-3-flash-preview; the judge
+   moves to the other family (openai/gpt-5-mini) with a 10s cap. */
 function budgetMs(name: string, fallback: number): number {
   const n = Number(process.env[name] ?? '')
   return Number.isFinite(n) && n > 0 ? n : fallback
@@ -103,7 +108,7 @@ export const BIT_BUDGET = {
   hedge: () => budgetMs('BIT_HEDGE_MS', 9_000),
   /** backup writer's cap, from the moment it starts */
   backup: () => budgetMs('BIT_BACKUP_MS', 22_000),
-  judge: () => budgetMs('BIT_JUDGE_MS', 6_000),
+  judge: () => budgetMs('BIT_JUDGE_MS', 10_000),
   vary: () => budgetMs('BIT_VARY_MS', 15_000),
 }
 
@@ -115,17 +120,17 @@ export function backupWriterModel(): string {
 }
 
 /** The bit writer's primary model: BIT_WRITER_MODEL, else the card
- *  pipeline's writer when one is set explicitly, else gpt-5. */
+ *  pipeline's writer when one is set explicitly, else a fast Gemini. */
 export function bitWriterModel(): string {
   const own = (process.env['BIT_WRITER_MODEL'] ?? '').trim()
   if (own) return own
   const shared = (process.env['JOKE_WRITER_MODEL'] ?? '').trim()
-  return shared || 'openai/gpt-5'
+  return shared || 'google/gemini-3-flash-preview'
 }
 
 /** The bit judge: must be a different family from the writer. */
 export function bitJudgeModel(): string {
-  const wanted = (process.env['BIT_JUDGE_MODEL'] ?? '').trim() || 'google/gemini-3-flash-preview'
+  const wanted = (process.env['BIT_JUDGE_MODEL'] ?? '').trim() || 'openai/gpt-5-mini'
   const same = wanted.split('/')[0] === bitWriterModel().split('/')[0]
   return same ? (wanted.startsWith('openai/') ? 'google/gemini-3-flash-preview' : 'openai/gpt-5-mini') : wanted
 }
