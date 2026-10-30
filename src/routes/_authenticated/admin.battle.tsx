@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { AdminShell } from '@/components/AdminShell'
 import {
+  adminBattleArchiveBank,
   adminBattleGoLive,
   adminBattleReport,
   adminBattleToggle,
@@ -35,6 +36,7 @@ function AdminBattlePage() {
   const writeSetups = useServerFn(adminBattleWriteSetups)
   const writeVersions = useServerFn(adminBattleWriteVersions)
   const goLive = useServerFn(adminBattleGoLive)
+  const archive = useServerFn(adminBattleArchiveBank)
   const [data, setData] = useState<AdminBattleReport | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
@@ -76,6 +78,17 @@ function AdminBattlePage() {
     } finally {
       setBusy(null)
       void refresh()
+    }
+  }
+
+  async function archiveBank() {
+    if (!window.confirm('Retire the whole current bank? It comes off the homepage and is kept only for the record. Then "write the bank" writes a new one.')) return
+    try {
+      const r = await archive()
+      setLog((l) => [...l, `archived ${r.archived} setups`])
+      await refresh()
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'archive failed')
     }
   }
 
@@ -131,6 +144,9 @@ function AdminBattlePage() {
           )}
           {!!data?.bank.readyNotLive && !busy && (
             <button type="button" style={{ ...btn, background: '#0b080f', color: '#fff' }} onClick={() => void allLive()}>put {data.bank.readyNotLive} ready setups live</button>
+          )}
+          {!busy && !!data?.bank.setups && (
+            <button type="button" style={btn} onClick={() => void archiveBank()}>retire this bank</button>
           )}
           <button type="button" style={btn} onClick={() => void refresh()}>refresh</button>
         </div>
