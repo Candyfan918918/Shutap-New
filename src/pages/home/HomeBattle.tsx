@@ -10,10 +10,11 @@ import { useNavigate } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { supabase } from '@/integrations/supabase/client'
 import { battleLink, battleMe, battleNext, battlePick, type BattlePickResult, type BattlePlayer, type BattleRound } from '@/lib/battle.functions'
-import { BATTLE, RANKS, type RankKey } from '@/lib/battle'
+import { BATTLE, RANKS, rankAvatarPath, type RankKey } from '@/lib/battle'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { trackEvent } from '@/lib/tracking'
+import { SectionHead } from './HomeSection'
 import './home-battle.css'
 
 const PLAYER_KEY = 'shutap_battle_player'
@@ -180,6 +181,7 @@ export function HomeBattle() {
       if (key === 'none') void trackEvent('battle_none', { setup: round.setup.n, counted: r.counted })
       else void trackEvent('battle_pick', { setup: round.setup.n, topic: round.setup.topic, technique: mine?.technique, guide: mine?.guideSlug, control: !!mine?.control, counted: r.counted, picks: r.player.picks, rank: r.player.rank?.name ?? null })
       if (r.newRank) void trackEvent('battle_rank_up', { rank: r.newRank.name, picks: r.player.picks })
+      if (!r.player.signedIn && r.player.rank) void trackEvent('battle_collect_prompt', { rank: r.player.rank.name, picks: r.player.picks })
       // A guest who just reached the sign-in mark is asked once.
       if (!r.player.signedIn && r.player.picks >= BATTLE.signInAt) {
         let asked = false
@@ -246,69 +248,75 @@ export function HomeBattle() {
 
   const revealed = phase === 'revealed' && !!result
   const reveal = (key: string) => result?.reveal.find((x) => x.key === key)
+  const picks = player?.picks ?? 0
 
   return (
-    <section id="battle" ref={rootRef} className="hbat" aria-labelledby="hbat-title" onKeyDown={onKey}>
-      <div className="hbat-wrap">
-        <div className="hbat-head">
-          <div className="hbat-titles">
-            <h2 id="hbat-title" className="hbat-title">Joke battle</h2>
-            <p className="hbat-sub">One setup, three ways to say it. Pick the funniest.</p>
-          </div>
-          <div className="hbat-stats">
-            {player && player.streak > 0 && (
-              <span className="hbat-streak"><Bolt /><strong>{player.streak}</strong> {player.streak === 1 ? 'day' : 'day streak'}</span>
-            )}
-            <button type="button" className="hbat-rankbtn" onClick={() => { setLadder((v) => !v); if (!ladder) void trackEvent('battle_ladder_opened', { picks: player?.picks ?? 0 }) }} aria-expanded={ladder}>
-              <span className="hbat-rankline">
-                <strong>{player?.rank?.name ?? 'no rank yet'}</strong>
-                <span>{player?.next ? `${player.next.at - player.picks} to ${player.next.name}` : player?.rank ? 'top of the ladder' : ''}</span>
+    <section id="battle" ref={rootRef} className="hsec hbat" aria-labelledby="hbat-title" onKeyDown={onKey}>
+      <div className="hsec-col">
+        <SectionHead id="hbat-title" kicker="joke battle" title="Pick the" accent="funniest." sub="One setup, three ways to say it. Every pick teaches Shutap what's funny." />
+
+        <div className="hsec-card hbat-card">
+          <div className="hbat-top">
+            <span className="hbat-meta">
+              <span className="hbat-topic">{round.setup.topic}</span>
+              <span className="hbat-count">setup {round.setup.n} of {round.total}</span>
+            </span>
+            <button
+              type="button"
+              className="hbat-rankchip"
+              onClick={() => { setLadder((v) => !v); if (!ladder) void trackEvent('battle_ladder_opened', { picks }) }}
+              aria-expanded={ladder}
+              aria-controls="hbat-ladder"
+            >
+              {player?.rank ? (
+                <span className="hbat-chipbadge"><RankIcon rank={player.rank.key as RankKey} size={16} /></span>
+              ) : null}
+              <span className="hbat-chiptext">
+                <span className="hbat-chipline">
+                  <strong>{player?.rank?.name ?? 'no rank yet'}</strong>
+                  <span>{player?.next ? `${player.next.at - (player?.picks ?? 0)} to ${player.next.name}` : player?.rank ? 'top' : ''}</span>
+                </span>
+                <span className="hbat-chipbar" aria-hidden="true"><span style={{ width: `${Math.max(6, Math.round((player?.progress ?? 0) * 100))}%` }} /></span>
               </span>
-              <span className="hbat-bar" aria-hidden="true"><span style={{ width: `${Math.max(4, Math.round((player?.progress ?? 0) * 100))}%` }} /></span>
+              {player && player.streak > 0 && (
+                <span className="hbat-streak" title={`${player.streak}-day streak`}><Bolt />{player.streak}</span>
+              )}
             </button>
           </div>
-        </div>
 
-        {ladder && (
-          <Ladder player={player} cardRef={cardRef} onSave={saveCard} onClose={() => setLadder(false)} />
-        )}
+          {ladder && <Ladder player={player} cardRef={cardRef} onSave={saveCard} onClose={() => setLadder(false)} />}
 
-        <div className="hbat-grid">
-          <div className="hbat-card">
-            {result?.newRank && (
-              <div className="hbat-rankup" role="status">
-                <span className="hbat-rankup-badge"><RankIcon rank={result.newRank.key as RankKey} size={22} /></span>
-                <span><strong>New rank: {result.newRank.name}.</strong> {result.newRank.line}</span>
-              </div>
-            )}
+          {result?.newRank && (
+            <div className="hbat-rankup" role="status">
+              <span className="hbat-rankup-badge"><RankIcon rank={result.newRank.key as RankKey} size={20} /></span>
+              <span><strong>New rank: {result.newRank.name}.</strong> {result.newRank.line}</span>
+            </div>
+          )}
 
-            {round ? (
-              <>
-                <div className="hbat-meta">
-                  <span className="hbat-topic">{round.setup.topic}</span>
-                  <span>setup {round.setup.n} of {round.total}</span>
-                </div>
-                <div className="hbat-setup">
-                  <p className="hbat-setup-text">{round.setup.text}</p>
-                  <p className="hbat-q">Which is funniest?</p>
-                </div>
-                <ol className="hbat-options">
-                  {round.options.map((o, i) => {
-                    const r = reveal(o.key)
-                    const mine = chosen === o.key
-                    return (
-                      <li key={o.key} className={`hbat-opt${mine ? ' mine' : ''}${revealed && !mine ? ' dim' : ''}`}>
-                        <div className="hbat-opt-row">
-                          <span className="hbat-line">{o.text}</span>
-                          {!revealed ? (
-                            <button type="button" className="hbat-pick" disabled={phase !== 'open'} onClick={() => void choose(o.key)} aria-label={`Pick line ${i + 1}`}>
-                              {phase === 'picking' && mine ? '…' : 'Pick'}
-                            </button>
-                          ) : mine ? (
-                            <span className="hbat-mine">your pick</span>
-                          ) : null}
-                        </div>
-                        {revealed && r && (
+          <div className="hbat-setupwrap">
+            <p className="hbat-setup">{round.setup.text}</p>
+            <p className="hbat-q">Which is funniest?</p>
+          </div>
+
+          <ol className="hbat-options" aria-label="Which is funniest?">
+            {round.options.map((o, i) => {
+              const r = reveal(o.key)
+              const mine = chosen === o.key
+              const cls = `hbat-opt${mine ? ' mine' : ''}${revealed && !mine ? ' dim' : ''}`
+              return (
+                <li key={o.key}>
+                  {!revealed ? (
+                    <button type="button" className={cls} disabled={phase !== 'open'} onClick={() => void choose(o.key)} aria-label={`Pick line ${i + 1}: ${o.text}`}>
+                      <span className="hbat-num" aria-hidden="true">{phase === 'picking' && mine ? '…' : i + 1}</span>
+                      <span className="hbat-line">{o.text}</span>
+                      <span className="hbat-picktag" aria-hidden="true">pick</span>
+                    </button>
+                  ) : (
+                    <div className={cls}>
+                      <span className="hbat-num" aria-hidden="true">{mine ? '✓' : i + 1}</span>
+                      <span className="hbat-body">
+                        <span className="hbat-line">{o.text}</span>
+                        {r && (
                           <span className="hbat-tech">
                             {r.technique}
                             {r.guideSlug && (
@@ -319,72 +327,70 @@ export function HomeBattle() {
                             )}
                           </span>
                         )}
-                      </li>
-                    )
-                  })}
-                </ol>
+                      </span>
+                    </div>
+                  )}
+                </li>
+              )
+            })}
+          </ol>
 
-                {revealed && result && (
-                  <div className="hbat-after">
-                    <span className="hbat-after-main">
-                      {chosen === 'none' ? 'Noted. All three go back to the writer.' : `Picked. You chose ${reveal(chosen ?? '')?.technique ?? 'that one'}.`}
-                    </span>
-                    {player?.humorLabel && <span className="hbat-after-sub">Your humor: {player.humorLabel}.</span>}
-                  </div>
-                )}
+          <div className="hbat-foot">
+            {revealed && result ? (
+              <>
+                <span className="hbat-result">
+                  <strong>{chosen === 'none' ? 'Noted. All three go back to the writer.' : 'Picked.'}</strong>
+                  {player?.humorLabel ? <span> Your humor: {player.humorLabel}.</span> : null}
+                </span>
+                <button type="button" className="hbat-next" onClick={() => void load()}>Next battle →</button>
               </>
             ) : (
-              <div className="hbat-loading" aria-live="polite">{phase === 'error' ? error : 'loading a battle…'}</div>
+              <>
+                <span className="hbat-hint">tap a line, or press 1 · 2 · 3</span>
+                <span className="hbat-quiet">
+                  <button type="button" disabled={phase !== 'open'} onClick={() => void choose('none')}>None of these</button>
+                  <button type="button" disabled={phase !== 'open'} onClick={() => void skip()}>Skip</button>
+                </span>
+              </>
             )}
-
-            <div className="hbat-actions">
-              {revealed ? (
-                <button type="button" className="hbat-btn dark" onClick={() => void load()}>Next battle</button>
-              ) : round ? (
-                <>
-                  <button type="button" className="hbat-btn" disabled={phase !== 'open'} onClick={() => void choose('none')}>None of these</button>
-                  <button type="button" className="hbat-btn quiet" disabled={phase !== 'open'} onClick={() => void skip()}>Skip</button>
-                </>
-              ) : phase === 'error' ? (
-                <button type="button" className="hbat-btn" onClick={() => void load()}>Try again</button>
-              ) : null}
-            </div>
-            {error && phase !== 'error' && <p className="hbat-error" role="alert">{error}</p>}
           </div>
-
-          <aside className="hbat-side" aria-label="your humor type">
-            <span className="hbat-label">your humor type</span>
-            <div className="hbat-panel">
-              {player?.humor.length ? (
-                <>
-                  <strong className="hbat-type">{player.humorLabel}</strong>
-                  <ul className="hbat-styles">
-                    {player.humor.slice(0, 3).map((h) => {
-                      const max = player.humor[0]!.n
-                      return (
-                        <li key={h.style}>
-                          <span className="hbat-style-top"><span>{h.style}</span><span>{h.n} {h.n === 1 ? 'pick' : 'picks'}</span></span>
-                          <span className="hbat-bar" aria-hidden="true"><span style={{ width: `${Math.round((h.n / max) * 100)}%` }} /></span>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </>
-              ) : (
-                <p className="hbat-empty">Pick a few lines and your type shows up here.</p>
-              )}
+          {revealed && result && player?.rank && !player.signedIn && (
+            <div className="hbat-collect" role="status">
+              <img className="hbat-collect-pic" src={rankAvatarPath(player.rank.key as RankKey)} alt="" width={44} height={44} />
+              <span className="hbat-collect-text">
+                <strong>Sign in to collect your {player.rank.name} badge.</strong>
+                <span>It goes on your profile, with a {player.rank.name} profile picture. {player.picks} {player.picks === 1 ? 'pick' : 'picks'} so far.</span>
+              </span>
+              <button type="button" className="hbat-collect-btn" onClick={() => { setSheet(true); void trackEvent('battle_collect_clicked', { rank: player.rank?.name ?? null, picks: player.picks }) }}>
+                Collect
+              </button>
             </div>
-            <p className="hbat-fine">Only your own picks show here. Every pick trains Shutap's joke writer. Battles use jokes we write, never anyone's story.</p>
-          </aside>
+          )}
+          {revealed && result?.newRank && player?.signedIn && (
+            <div className="hbat-collect" role="status">
+              <img className="hbat-collect-pic" src={rankAvatarPath(result.newRank.key as RankKey)} alt="" width={44} height={44} />
+              <span className="hbat-collect-text">
+                <strong>{result.newRank.name} badge collected.</strong>
+                <span>It's on your profile, with a new profile picture to use.</span>
+              </span>
+              <a className="hbat-collect-btn" href="/profile#badges" onClick={() => void trackEvent('battle_badge_profile_clicked', { rank: result.newRank?.name ?? null })}>
+                See it
+              </a>
+            </div>
+          )}
+          {error && phase !== 'error' && <p className="hbat-error" role="alert">{error}</p>}
         </div>
+
+        <p className="hsec-fine">Only your own picks and rank show here. Every pick trains Shutap's joke writer. Battles use jokes we write, never anyone's story.</p>
       </div>
 
       {sheet && (
         <div className="hbat-scrim" onClick={(e) => { if (e.target === e.currentTarget) { setSheet(false); void trackEvent('battle_signin_dismissed', {}) } }}>
           <div className="hbat-sheet" role="dialog" aria-modal="true" aria-labelledby="hbat-sheet-title">
             <div className="hbat-grab" aria-hidden="true" />
-            <h3 id="hbat-sheet-title">Keep your rank and your streak</h3>
-            <p>Sign in so your {player?.rank?.name ?? 'rank'} badge and streak follow you to any device. Your picks count either way.</p>
+            {player?.rank && <img className="hbat-sheet-pic" src={rankAvatarPath(player.rank.key as RankKey)} alt="" width={72} height={72} />}
+            <h3 id="hbat-sheet-title">Collect your {player?.rank?.name ?? 'first'} badge</h3>
+            <p>Sign in and your badge goes on your profile, with a {player?.rank?.name ?? 'rank'} profile picture you can use. Every rank you reach adds the next one. Your rank and streak follow you to any device; your picks count either way.</p>
             <button type="button" className="hbat-btn block" disabled={!!opening} onClick={() => void signIn('google')}>{oauthButtonLabel('google', opening)}</button>
             <button type="button" className="hbat-btn block dark" disabled={!!opening} onClick={() => void signIn('apple')}>{oauthButtonLabel('apple', opening)}</button>
             <button type="button" className="hbat-btn block" onClick={() => void signIn('email')}>continue with email</button>
@@ -400,14 +406,16 @@ export function HomeBattle() {
 function Ladder({ player, cardRef, onSave, onClose }: { player: BattlePlayer | null; cardRef: React.RefObject<HTMLDivElement | null>; onSave: () => void; onClose: () => void }) {
   const picks = player?.picks ?? 0
   return (
-    <div className="hbat-ladder">
+    <div className="hbat-ladder" id="hbat-ladder">
       <div className="hbat-ladder-head">
         <div>
-          <span className="hbat-label">Shutap Humor Amplifier Lab</span>
           <h3 className="hbat-ladder-title">The humor wisdom ladder</h3>
-          <p className="hbat-ladder-sub">Humor is wisdom. Every pick is a lesson.</p>
+          <p className="hbat-ladder-sub">
+            {picks} {picks === 1 ? 'pick' : 'picks'}
+            {player?.next ? ` · ${player.next.at - picks} to ${player.next.name}` : player?.rank ? ' · top of the ladder' : ''}
+          </p>
         </div>
-        <button type="button" className="hbat-btn quiet" onClick={onClose}>close</button>
+        <button type="button" className="hbat-x" onClick={onClose} aria-label="Close the ladder">×</button>
       </div>
       <ol className="hbat-ranks">
         {RANKS.map((r) => {
@@ -415,22 +423,31 @@ function Ladder({ player, cardRef, onSave, onClose }: { player: BattlePlayer | n
           const current = player?.rank?.key === r.key
           return (
             <li key={r.key} className={`hbat-rank${earned ? ' earned' : ''}${current ? ' current' : ''}`}>
-              <span className="hbat-badge"><RankIcon rank={r.key} /></span>
+              {earned ? (
+                <img className="hbat-badge pic" src={rankAvatarPath(r.key)} alt="" width={38} height={38} />
+              ) : (
+                <span className="hbat-badge"><RankIcon rank={r.key} size={20} /></span>
+              )}
               <span className="hbat-rank-body">
-                <span className="hbat-rank-top"><strong>{r.name}</strong><span>{current ? 'you are here' : `${r.at} ${r.at === 1 ? 'pick' : 'picks'}`}</span></span>
+                <span className="hbat-rank-top"><strong>{r.name}</strong><span>{current ? 'you' : `${r.at}`}</span></span>
                 <span className="hbat-rank-line">{r.line}</span>
-                {!earned && player?.next?.name === r.name && (
-                  <span className="hbat-bar" aria-hidden="true"><span style={{ width: `${Math.max(4, Math.round(player.progress * 100))}%` }} /></span>
-                )}
               </span>
             </li>
           )
         })}
       </ol>
+      {player?.humor.length ? (
+        <div className="hbat-styles">
+          <span className="hbat-styles-label">your humor: <strong>{player.humorLabel}</strong></span>
+          {player.humor.slice(0, 3).map((h) => (
+            <span key={h.style} className="hbat-style">{h.style} · {h.n}</span>
+          ))}
+        </div>
+      ) : null}
       {player?.rank && (
         <div className="hbat-share">
           <div ref={cardRef} className="hbat-rankcard">
-            <span className="hbat-badge on-dark"><RankIcon rank={player.rank.key as RankKey} /></span>
+            <span className="hbat-badge on-dark"><RankIcon rank={player.rank.key as RankKey} size={22} /></span>
             <span className="hbat-rankcard-body">
               <span className="hbat-rankcard-kicker">SHUTAP · HUMOR WISDOM</span>
               <strong>{player.rank.name}</strong>

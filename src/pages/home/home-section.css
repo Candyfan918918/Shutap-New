@@ -1,0 +1,34 @@
+/* Homepage sections under the write box share one shape: the write box's
+   680px column and palette (bit.css), a centered head over a hairline, then
+   one white card. Light only, like the write box. */
+.hsec {
+  --ink: #1a1418;
+  --ink-2: #3a3236;
+  --muted: #6e6468;
+  --faint: #7d7277;
+  --line: rgba(90, 30, 50, 0.10);
+  --line-2: rgba(90, 30, 50, 0.20);
+  --tint: #f6e9ee;
+  --tint-2: #fbf3f6;
+  --card: #ffffff;
+  --rose: #b8456b;
+  --rose-ink: #9b3559;
+  --wine: #8e1c4c;
+  --track: #efe3e8;
+  --sora: 'Sora', system-ui, sans-serif;
+  --news: 'Newsreader', Georgia, serif;
+  font-family: var(--sora);
+  color: var(--ink);
+  padding: clamp(20px, 4vh, 40px) 16px clamp(28px, 5vh, 48px);
+  scroll-margin-top: 80px;
+}
+.hsec *, .hsec *::before, .hsec *::after { box-sizing: border-box; }
+.hsec-col { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.hsec-head { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: clamp(16px, 3vh, 28px); border-top: 1px solid var(--line); }
+.hsec-kicker { font-size: var(--fs-label, 12px); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--rose); }
+.hsec-title { margin: 0; font-weight: 800; color: var(--wine); line-height: 1.12; font-size: var(--fs-h2, clamp(28px, 4vw, 40px)); text-wrap: balance; }
+.hsec-title em { font-family: var(--news); font-style: italic; font-weight: 400; color: var(--rose); }
+.hsec-sub { margin: 0; color: var(--muted); font-size: var(--fs-body, 16px); line-height: 1.45; max-width: 480px; text-wrap: balance; }
+.hsec-card { background: var(--card); border: 1.5px solid rgba(184, 69, 107, 0.22); border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 20px 50px -38px rgba(160, 50, 90, 0.45); min-width: 0; }
+.hsec-fine { margin: 0; text-align: center; font-size: 12px; color: var(--faint); line-height: 1.5; }
+@media (max-width: 480px) { .hsec-card { padding: 14px 12px; border-radius: 18px; } }

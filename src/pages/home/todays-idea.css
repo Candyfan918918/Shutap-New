@@ -1,96 +1,49 @@
 /* what to post today — matches the write box (Shutap-Brand-Tokens: neutral
    canvas, pink as accent only). Sizes come from the home.css scale (--fs-label, --fs-small, --fs-body, --fs-read);
    section and topic titles are fixed at 28px / 24px. */
+/* Shell, palette and head come from home-section.css. These map the panel's
+   own names onto that palette. Light only, like the write box. */
 .tdi {
-  --tdi-ink: #0b080f;
-  --tdi-ink-soft: #4a3040;
-  --tdi-text-2: #6b4a5c;
-  --tdi-text-3: #9e7a8c;
+  --tdi-ink: var(--ink);
+  --tdi-ink-soft: var(--ink-2);
+  --tdi-text-2: var(--muted);
+  --tdi-text-3: var(--faint);
   --tdi-pink: #e7548a;
-  --tdi-wine: #c1216b;
-  --tdi-tint: #fdf0f5;
-  --tdi-surface: #ffffff;
-  --tdi-surface-2: #f7f6f4;
-  --tdi-border: rgba(11, 8, 15, 0.08);
-  --tdi-border-2: rgba(11, 8, 15, 0.16);
+  --tdi-wine: var(--rose-ink);
+  --tdi-tint: var(--tint);
+  --tdi-surface: var(--card);
+  --tdi-surface-2: var(--tint-2);
+  --tdi-border: var(--line);
+  --tdi-border-2: var(--line-2);
   --tdi-l0: #f7eef2;
   --tdi-l1: #f3dde6;
   --tdi-l2: #eec4d4;
   --tdi-l3: #e9a8c0;
   --tdi-l4: #e58cab;
-  font-family: 'Sora', system-ui, sans-serif;
-  color: var(--tdi-ink);
-  padding: 72px 16px 88px;
-  scroll-margin-top: 72px;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) .tdi {
-    --tdi-ink: #f4eef1;
-    --tdi-ink-soft: #dccbd3;
-    --tdi-text-2: #c2a9b5;
-    --tdi-text-3: #9a8590;
-    --tdi-wine: #f07aa5;
-    --tdi-tint: rgba(231, 84, 138, 0.14);
-    --tdi-surface: #17121a;
-    --tdi-surface-2: #201a22;
-    --tdi-border: rgba(255, 255, 255, 0.09);
-    --tdi-border-2: rgba(255, 255, 255, 0.18);
-    --tdi-l0: #241b22;
-    --tdi-l1: #3a2330;
-    --tdi-l2: #5a2c42;
-    --tdi-l3: #833a5b;
-    --tdi-l4: #b04a76;
-  }
-}
-.dark .tdi {
-  --tdi-ink: #f4eef1;
-  --tdi-ink-soft: #dccbd3;
-  --tdi-text-2: #c2a9b5;
-  --tdi-text-3: #9a8590;
-  --tdi-wine: #f07aa5;
-  --tdi-tint: rgba(231, 84, 138, 0.14);
-  --tdi-surface: #17121a;
-  --tdi-surface-2: #201a22;
-  --tdi-border: rgba(255, 255, 255, 0.09);
-  --tdi-border-2: rgba(255, 255, 255, 0.18);
-  --tdi-l0: #241b22;
-  --tdi-l1: #3a2330;
-  --tdi-l2: #5a2c42;
-  --tdi-l3: #833a5b;
-  --tdi-l4: #b04a76;
-}
-
-.tdi *, .tdi *::before, .tdi *::after { box-sizing: border-box; }
-.tdi h2, .tdi h3, .tdi h4, .tdi p, .tdi ol { margin: 0; padding: 0; }
-.tdi-inner { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.tdi h3, .tdi h4, .tdi p, .tdi ol { margin: 0; padding: 0; }
 
 /* type */
 .tdi-label { font-size: var(--fs-label, 12px); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tdi-text-3); }
 .tdi-accent { color: var(--tdi-wine); }
 .tdi-meta { font-size: var(--fs-small, 14px); color: var(--tdi-text-3); line-height: 1.4; }
-.tdi-title { font-size: 28px; line-height: 1.15; font-weight: 800; letter-spacing: -0.01em; margin-top: 8px; }
-.tdi-topic { font-size: 24px; line-height: 1.2; font-weight: 700; }
+.tdi-topic { font-size: 24px; color: var(--ink); line-height: 1.2; font-weight: 700; }
 .tdi-why { font-family: 'Newsreader', Georgia, serif; font-size: var(--fs-read, 19px); line-height: 1.6; color: var(--tdi-ink-soft); max-width: 60ch; }
 .tdi-strong { font-weight: 600; color: var(--tdi-ink); }
 
 /* layout */
-.tdi-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
-.tdi-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
-@media (min-width: 960px) { .tdi-grid { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); } }
-.tdi-card {
-  background: var(--tdi-surface);
-  border: 1px solid var(--tdi-border);
-  border-radius: 18px;
-  box-shadow: 0 1px 2px rgba(11, 8, 15, 0.04), 0 8px 24px rgba(11, 8, 15, 0.04);
-  padding: 24px;
-  display: flex; flex-direction: column; gap: 22px; min-width: 0;
-}
-@media (min-width: 960px) { .tdi-main { padding: 28px; } }
-.tdi-pick, .tdi-stack { display: flex; flex-direction: column; gap: 12px; }
-.tdi-stack { gap: 4px; }
+.tdi-card { gap: 20px; }
+.tdi-pick { display: flex; flex-direction: column; gap: 10px; }
 .tdi-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.tdi-block { border-top: 1px solid var(--tdi-border); padding-top: 18px; display: flex; flex-direction: column; gap: 10px; }
-.tdi-block-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; }
+.tdi-between { justify-content: space-between; }
+.tdi-block { border-top: 1px solid var(--tdi-border); padding-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.tdi-details > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.tdi-details > summary::-webkit-details-marker { display: none; }
+.tdi-details[open] .tdi-summary .tdi-meta { visibility: hidden; }
+.tdi-details:not([open]) { gap: 0; }
+
+/* a bit to start from: tinted panel inside the card */
+.tdi-bitbox { background: var(--tint-2); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
 
 /* badge */
 .tdi-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; line-height: 1; padding: 5px 10px; border-radius: 999px; white-space: nowrap; }
@@ -109,8 +62,8 @@
 
 /* sources */
 .tdi-sources { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; }
-.tdi-sources a { font-size: var(--fs-small, 14px); font-weight: 600; color: var(--tdi-wine); text-decoration: none; }
-.tdi-sources a:hover { text-decoration: underline; text-underline-offset: 2px; }
+.home-immersive .tdi-sources a, .tdi-sources a { font-size: var(--fs-small, 14px); font-weight: 600; color: var(--tdi-wine); text-decoration: none; }
+.home-immersive .tdi-sources a:hover, .tdi-sources a:hover { text-decoration: underline; text-underline-offset: 2px; }
 
 /* also trending */
 .tdi-list { list-style: none; display: flex; flex-direction: column; }
@@ -142,9 +95,8 @@
   .tdi-none { grid-column: 1 / -1; }
 }
 
-/* demo */
-.tdi-demo { gap: 16px; padding: 24px; }
-.tdi-hook { font-size: 16px; font-weight: 700; line-height: 1.35; }
+/* the bit */
+.tdi-hook { font-size: 17px; font-weight: 700; line-height: 1.35; }
 .tdi-bit {
   font-family: 'Newsreader', Georgia, serif; font-size: 16px; line-height: 1.6; white-space: pre-line;
   max-height: 7.2em; overflow: hidden; position: relative;
@@ -153,7 +105,7 @@
 .tdi-bit.tdi-open { max-height: none; -webkit-mask-image: none; mask-image: none; }
 .tdi-more { align-self: flex-start; font: 600 13px 'Sora', system-ui, sans-serif; color: var(--tdi-text-2); background: none; border: 0; padding: 4px 0; cursor: pointer; }
 .tdi-more:hover { color: var(--tdi-ink); }
-.tdi-tag { background: var(--tdi-surface-2); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.tdi-tag { background: var(--card); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
 .tdi-tag p { font-family: 'Newsreader', Georgia, serif; font-size: 16px; line-height: 1.5; }
 .tdi-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .tdi-btn {
@@ -162,8 +114,7 @@
   border: 1px solid var(--tdi-border-2); border-radius: 999px; cursor: pointer; text-decoration: none;
 }
 .tdi-btn:hover { border-color: var(--tdi-ink); }
-.tdi-btn-primary { color: #fff; background: var(--tdi-wine); border-color: var(--tdi-wine); font-weight: 700; }
-.tdi-btn-primary:hover { background: #890041; border-color: #890041; color: #fff; }
+.home-immersive .tdi-btn-primary, .tdi-btn-primary { color: #fff; background: linear-gradient(155deg, #cf6189, #b8456b 55%, #a33a5e); border: 0; font-weight: 700; }
+.home-immersive .tdi-btn-primary:hover, .tdi-btn-primary:hover { color: #fff; filter: brightness(.96); }
 .tdi-btn:focus-visible, .tdi-more:focus-visible, .tdi-sources a:focus-visible { outline: 2px solid var(--tdi-pink); outline-offset: 2px; }
 
-.tdi-foot { font-size: 12px; line-height: 1.5; color: var(--tdi-text-3); }

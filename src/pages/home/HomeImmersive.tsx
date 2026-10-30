@@ -1,24 +1,26 @@
-/* Home: the write box, then the latest posts, FAQ and footer. The site
- * header comes from the root layout. */
+/* Home (Oct 29 2026): the write box, then the joke battle, "what to post
+ * today" and the poll, then the footer. Every section under the write box
+ * shares one shell (HomeSection / home-section.css). The rooms strip and the
+ * FAQ are off the homepage (the FAQ lives at /faq). The site header comes
+ * from the root layout. */
 import { Suspense } from 'react'
 import { Await } from '@tanstack/react-router'
 import { EyeGradients } from './sections/EyeGradients'
 import { BitSurface } from './bit/BitSurface'
-import { HomeRest } from './HomeRest'
-import type { NewestRoom } from '@/lib/newest-rooms.functions'
-import type { DailyIdea } from '@/lib/daily-idea.functions'
+import { HomeBattle } from './HomeBattle'
 import { TodaysIdea } from './TodaysIdea'
 import { HomePoll } from './HomePoll'
-import { HomeBattle } from './HomeBattle'
+import { Footer } from '@/components/feed/Footer'
+import type { DailyIdea } from '@/lib/daily-idea.functions'
+import '@/components/feed/feed.css'
 
-export function HomeImmersive({ dailyIdea = null }: { openRoomsCount?: number; newestRooms?: NewestRoom[]; dailyIdea?: DailyIdea | null | Promise<DailyIdea | null> } = {}) {
+export function HomeImmersive({ dailyIdea = null }: { dailyIdea?: DailyIdea | null | Promise<DailyIdea | null> } = {}) {
   return (
     <>
       <EyeGradients />
       <main>
         <BitSurface />
         <HomeBattle />
-        <HomePoll />
         {/* Only this section waits for its data; the write box above never does. */}
         {dailyIdea instanceof Promise ? (
           <Suspense fallback={null}>
@@ -27,8 +29,11 @@ export function HomeImmersive({ dailyIdea = null }: { openRoomsCount?: number; n
         ) : (
           <TodaysIdea idea={dailyIdea} />
         )}
-        <HomeRest />
+        <HomePoll />
       </main>
+      <div className="fd" style={{ minHeight: 0 }}>
+        <Footer />
+      </div>
     </>
   )
 }

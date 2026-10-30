@@ -13,7 +13,8 @@ import { z } from 'zod'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { requireRealUser } from '@/lib/require-real-user'
 import { pacificDay, shiftDay } from '@/lib/pacific-day'
-import { BATTLE, CONTROL_LINES, humorLabel, humorType, nextStreak, rankFor, rankUp, styleOf, wordCount } from '@/lib/battle'
+import { BATTLE, CONTROL_LINES, RANKS, humorLabel, humorType, nextStreak, rankAvatarPath, rankFor, rankOfAvatar, rankUp, styleOf, wordCount, type RankKey } from '@/lib/battle'
+import { SITE_URL } from '@/lib/site'
 
 /* ── shared ── */
 
@@ -276,6 +277,70 @@ export const battleLink = createServerFn({ method: 'POST' })
     }
     const { data: fresh } = await client.from('battle_players').select('*').eq('player_id', data.player).maybeSingle()
     return playerView(fresh)
+  })
+
+/* ── badges: the profile side ── */
+
+export type MyBadges = {
+  picks: number
+  rank: { key: RankKey; name: string } | null
+  next: { name: string; at: number } | null
+  progress: number
+  humorLabel: string | null
+  earned: RankKey[]
+  /** The rank whose picture is the profile picture now, if any. */
+  pictureRank: RankKey | null
+}
+
+/** A signed-in person's badges: picks added up across every browser they
+ *  have played in and linked. */
+export const myBattleBadges = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .handler(async ({ context }): Promise<MyBadges> => {
+    const userId = (context as { userId: string }).userId
+    const client = await db()
+    const { data: rows } = await client.from('battle_players').select('picks, humor').eq('user_id', userId)
+    let picks = 0
+    const humor: Record<string, number> = {}
+    for (const r of (rows ?? []) as { picks: number | null; humor: Record<string, number> | null }[]) {
+      picks += r.picks ?? 0
+      for (const [k, n] of Object.entries(r.humor ?? {})) humor[k] = (humor[k] ?? 0) + (n ?? 0)
+    }
+    const r = rankFor(picks)
+    const { data: alias } = await client.from('aliases').select('avatar_url').eq('user_id', userId).maybeSingle()
+    return {
+      picks,
+      rank: r.rank ? { key: r.rank.key, name: r.rank.name } : null,
+      next: r.next ? { name: r.next.name, at: r.next.at } : null,
+      progress: r.progress,
+      humorLabel: humorLabel(humor),
+      earned: RANKS.filter((x) => picks >= x.at).map((x) => x.key),
+      pictureRank: rankOfAvatar((alias as { avatar_url?: string | null } | null)?.avatar_url),
+    }
+  })
+
+/** Use an earned rank's picture as the profile picture. Like uploading a new
+ *  photo, it replaces the old one (an uploaded file is removed). */
+export const setRankPicture = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .inputValidator((d: unknown) => z.object({ rank: z.enum(RANKS.map((r) => r.key) as [RankKey, ...RankKey[]]) }).parse(d))
+  .handler(async ({ data, context }) => {
+    const userId = (context as { userId: string }).userId
+    const client = await db()
+    const { data: rows } = await client.from('battle_players').select('picks').eq('user_id', userId)
+    const picks = ((rows ?? []) as { picks: number | null }[]).reduce((a, r) => a + (r.picks ?? 0), 0)
+    const rank = RANKS.find((r) => r.key === data.rank)!
+    if (picks < rank.at) throw new Error(`reach ${rank.name} first`)
+    const { data: saved, error } = await client
+      .from('aliases')
+      .update({ avatar_url: `${SITE_URL}${rankAvatarPath(rank.key)}` })
+      .eq('user_id', userId)
+      .select('user_id, display_name, emoji, avatar_url')
+      .maybeSingle()
+    if (error) throw new Error(error.message)
+    const { removeAvatarFiles } = await import('./avatar-files.server')
+    await removeAvatarFiles(userId)
+    return saved as { user_id: string; display_name: string; emoji: string; avatar_url: string | null } | null
   })
 
 /* ── admin: the report ── */
