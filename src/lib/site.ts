@@ -4,8 +4,8 @@
 export const SITE_URL = "https://shutap.com";
 
 // Sitewide social share image (1200×630). The physical file lives at
-// public/og/shutap-og-v3.png. Any public route's head() should emit this
+// public/og/shutap-og-v4.png. Any public route's head() should emit this
 // via `ogImageMeta()` from `@/lib/seo/meta`.
-export const OG_IMAGE = `${SITE_URL}/og/shutap-og-v3.png`;
+export const OG_IMAGE = `${SITE_URL}/og/shutap-og-v4.png`;
 export const OG_IMAGE_ALT =
-  "SHUTAP. Say it funnier. — you have the story, Shutap writes the bit. For content creators and comedians.";
+  "Shutap. Say it funnier. Your humor, amplified. Type what happened and get the video, the caption and the bit, in your voice. shutap.com";
