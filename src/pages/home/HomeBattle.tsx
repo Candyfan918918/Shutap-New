@@ -246,69 +246,72 @@ export function HomeBattle() {
 
   const revealed = phase === 'revealed' && !!result
   const reveal = (key: string) => result?.reveal.find((x) => x.key === key)
+  const picks = player?.picks ?? 0
 
   return (
     <section id="battle" ref={rootRef} className="hbat" aria-labelledby="hbat-title" onKeyDown={onKey}>
-      <div className="hbat-wrap">
-        <div className="hbat-head">
-          <div className="hbat-titles">
-            <h2 id="hbat-title" className="hbat-title">Joke battle</h2>
-            <p className="hbat-sub">One setup, three ways to say it. Pick the funniest.</p>
-          </div>
-          <div className="hbat-stats">
-            {player && player.streak > 0 && (
-              <span className="hbat-streak"><Bolt /><strong>{player.streak}</strong> {player.streak === 1 ? 'day' : 'day streak'}</span>
-            )}
-            <button type="button" className="hbat-rankbtn" onClick={() => { setLadder((v) => !v); if (!ladder) void trackEvent('battle_ladder_opened', { picks: player?.picks ?? 0 }) }} aria-expanded={ladder}>
-              <span className="hbat-rankline">
-                <strong>{player?.rank?.name ?? 'no rank yet'}</strong>
-                <span>{player?.next ? `${player.next.at - player.picks} to ${player.next.name}` : player?.rank ? 'top of the ladder' : ''}</span>
+      <div className="hbat-col">
+        <header className="hbat-head">
+          <span className="hbat-kicker">joke battle</span>
+          <h2 id="hbat-title" className="hbat-title">Pick the <em>funniest.</em></h2>
+          <p className="hbat-sub">One setup, three ways to say it. Every pick teaches Shutap what's funny.</p>
+        </header>
+
+        <div className="hbat-card">
+          <div className="hbat-top">
+            <span className="hbat-meta">
+              <span className="hbat-topic">{round.setup.topic}</span>
+              <span className="hbat-count">{round.setup.n} of {round.total}</span>
+            </span>
+            <button
+              type="button"
+              className="hbat-rankchip"
+              onClick={() => { setLadder((v) => !v); if (!ladder) void trackEvent('battle_ladder_opened', { picks }) }}
+              aria-expanded={ladder}
+              aria-controls="hbat-ladder"
+            >
+              {player?.rank ? (
+                <span className="hbat-chipbadge"><RankIcon rank={player.rank.key as RankKey} size={16} /></span>
+              ) : null}
+              <span className="hbat-chiptext">
+                <strong>{player?.rank?.name ?? 'Unranked'}</strong>
+                <span className="hbat-chipbar" aria-hidden="true"><span style={{ width: `${Math.max(6, Math.round((player?.progress ?? 0) * 100))}%` }} /></span>
               </span>
-              <span className="hbat-bar" aria-hidden="true"><span style={{ width: `${Math.max(4, Math.round((player?.progress ?? 0) * 100))}%` }} /></span>
+              {player && player.streak > 0 && (
+                <span className="hbat-streak" title={`${player.streak}-day streak`}><Bolt />{player.streak}</span>
+              )}
             </button>
           </div>
-        </div>
 
-        {ladder && (
-          <Ladder player={player} cardRef={cardRef} onSave={saveCard} onClose={() => setLadder(false)} />
-        )}
+          {ladder && <Ladder player={player} cardRef={cardRef} onSave={saveCard} onClose={() => setLadder(false)} />}
 
-        <div className="hbat-grid">
-          <div className="hbat-card">
-            {result?.newRank && (
-              <div className="hbat-rankup" role="status">
-                <span className="hbat-rankup-badge"><RankIcon rank={result.newRank.key as RankKey} size={22} /></span>
-                <span><strong>New rank: {result.newRank.name}.</strong> {result.newRank.line}</span>
-              </div>
-            )}
+          {result?.newRank && (
+            <div className="hbat-rankup" role="status">
+              <span className="hbat-rankup-badge"><RankIcon rank={result.newRank.key as RankKey} size={20} /></span>
+              <span><strong>New rank: {result.newRank.name}.</strong> {result.newRank.line}</span>
+            </div>
+          )}
 
-            {round ? (
-              <>
-                <div className="hbat-meta">
-                  <span className="hbat-topic">{round.setup.topic}</span>
-                  <span>setup {round.setup.n} of {round.total}</span>
-                </div>
-                <div className="hbat-setup">
-                  <p className="hbat-setup-text">{round.setup.text}</p>
-                  <p className="hbat-q">Which is funniest?</p>
-                </div>
-                <ol className="hbat-options">
-                  {round.options.map((o, i) => {
-                    const r = reveal(o.key)
-                    const mine = chosen === o.key
-                    return (
-                      <li key={o.key} className={`hbat-opt${mine ? ' mine' : ''}${revealed && !mine ? ' dim' : ''}`}>
-                        <div className="hbat-opt-row">
-                          <span className="hbat-line">{o.text}</span>
-                          {!revealed ? (
-                            <button type="button" className="hbat-pick" disabled={phase !== 'open'} onClick={() => void choose(o.key)} aria-label={`Pick line ${i + 1}`}>
-                              {phase === 'picking' && mine ? '…' : 'Pick'}
-                            </button>
-                          ) : mine ? (
-                            <span className="hbat-mine">your pick</span>
-                          ) : null}
-                        </div>
-                        {revealed && r && (
+          <p className="hbat-setup">{round.setup.text}</p>
+
+          <ol className="hbat-options" aria-label="Which is funniest?">
+            {round.options.map((o, i) => {
+              const r = reveal(o.key)
+              const mine = chosen === o.key
+              const cls = `hbat-opt${mine ? ' mine' : ''}${revealed && !mine ? ' dim' : ''}`
+              return (
+                <li key={o.key}>
+                  {!revealed ? (
+                    <button type="button" className={cls} disabled={phase !== 'open'} onClick={() => void choose(o.key)} aria-label={`Pick line ${i + 1}: ${o.text}`}>
+                      <span className="hbat-num" aria-hidden="true">{phase === 'picking' && mine ? '…' : i + 1}</span>
+                      <span className="hbat-line">{o.text}</span>
+                    </button>
+                  ) : (
+                    <div className={cls}>
+                      <span className="hbat-num" aria-hidden="true">{mine ? '✓' : i + 1}</span>
+                      <span className="hbat-body">
+                        <span className="hbat-line">{o.text}</span>
+                        {r && (
                           <span className="hbat-tech">
                             {r.technique}
                             {r.guideSlug && (
@@ -319,64 +322,37 @@ export function HomeBattle() {
                             )}
                           </span>
                         )}
-                      </li>
-                    )
-                  })}
-                </ol>
+                      </span>
+                    </div>
+                  )}
+                </li>
+              )
+            })}
+          </ol>
 
-                {revealed && result && (
-                  <div className="hbat-after">
-                    <span className="hbat-after-main">
-                      {chosen === 'none' ? 'Noted. All three go back to the writer.' : `Picked. You chose ${reveal(chosen ?? '')?.technique ?? 'that one'}.`}
-                    </span>
-                    {player?.humorLabel && <span className="hbat-after-sub">Your humor: {player.humorLabel}.</span>}
-                  </div>
-                )}
+          <div className="hbat-foot">
+            {revealed && result ? (
+              <>
+                <span className="hbat-result">
+                  <strong>{chosen === 'none' ? 'Noted. All three go back to the writer.' : 'Picked.'}</strong>
+                  {player?.humorLabel ? <span> Your humor: {player.humorLabel}.</span> : null}
+                </span>
+                <button type="button" className="hbat-next" onClick={() => void load()}>Next battle →</button>
               </>
             ) : (
-              <div className="hbat-loading" aria-live="polite">{phase === 'error' ? error : 'loading a battle…'}</div>
+              <>
+                <span className="hbat-hint">tap a line, or press 1 · 2 · 3</span>
+                <span className="hbat-quiet">
+                  <button type="button" disabled={phase !== 'open'} onClick={() => void choose('none')}>none are funny</button>
+                  <button type="button" disabled={phase !== 'open'} onClick={() => void skip()}>skip</button>
+                </span>
+              </>
             )}
-
-            <div className="hbat-actions">
-              {revealed ? (
-                <button type="button" className="hbat-btn dark" onClick={() => void load()}>Next battle</button>
-              ) : round ? (
-                <>
-                  <button type="button" className="hbat-btn" disabled={phase !== 'open'} onClick={() => void choose('none')}>None of these</button>
-                  <button type="button" className="hbat-btn quiet" disabled={phase !== 'open'} onClick={() => void skip()}>Skip</button>
-                </>
-              ) : phase === 'error' ? (
-                <button type="button" className="hbat-btn" onClick={() => void load()}>Try again</button>
-              ) : null}
-            </div>
-            {error && phase !== 'error' && <p className="hbat-error" role="alert">{error}</p>}
           </div>
-
-          <aside className="hbat-side" aria-label="your humor type">
-            <span className="hbat-label">your humor type</span>
-            <div className="hbat-panel">
-              {player?.humor.length ? (
-                <>
-                  <strong className="hbat-type">{player.humorLabel}</strong>
-                  <ul className="hbat-styles">
-                    {player.humor.slice(0, 3).map((h) => {
-                      const max = player.humor[0]!.n
-                      return (
-                        <li key={h.style}>
-                          <span className="hbat-style-top"><span>{h.style}</span><span>{h.n} {h.n === 1 ? 'pick' : 'picks'}</span></span>
-                          <span className="hbat-bar" aria-hidden="true"><span style={{ width: `${Math.round((h.n / max) * 100)}%` }} /></span>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </>
-              ) : (
-                <p className="hbat-empty">Pick a few lines and your type shows up here.</p>
-              )}
-            </div>
-            <p className="hbat-fine">Only your own picks show here. Every pick trains Shutap's joke writer. Battles use jokes we write, never anyone's story.</p>
-          </aside>
+          {error && phase !== 'error' && <p className="hbat-error" role="alert">{error}</p>}
         </div>
+
+        <p className="hbat-fine">Battles use jokes Shutap writes, never anyone's story. Only you see your rank.</p>
       </div>
 
       {sheet && (
@@ -400,14 +376,16 @@ export function HomeBattle() {
 function Ladder({ player, cardRef, onSave, onClose }: { player: BattlePlayer | null; cardRef: React.RefObject<HTMLDivElement | null>; onSave: () => void; onClose: () => void }) {
   const picks = player?.picks ?? 0
   return (
-    <div className="hbat-ladder">
+    <div className="hbat-ladder" id="hbat-ladder">
       <div className="hbat-ladder-head">
         <div>
-          <span className="hbat-label">Shutap Humor Amplifier Lab</span>
           <h3 className="hbat-ladder-title">The humor wisdom ladder</h3>
-          <p className="hbat-ladder-sub">Humor is wisdom. Every pick is a lesson.</p>
+          <p className="hbat-ladder-sub">
+            {picks} {picks === 1 ? 'pick' : 'picks'}
+            {player?.next ? ` · ${player.next.at - picks} to ${player.next.name}` : player?.rank ? ' · top of the ladder' : ''}
+          </p>
         </div>
-        <button type="button" className="hbat-btn quiet" onClick={onClose}>close</button>
+        <button type="button" className="hbat-x" onClick={onClose} aria-label="Close the ladder">×</button>
       </div>
       <ol className="hbat-ranks">
         {RANKS.map((r) => {
@@ -415,22 +393,27 @@ function Ladder({ player, cardRef, onSave, onClose }: { player: BattlePlayer | n
           const current = player?.rank?.key === r.key
           return (
             <li key={r.key} className={`hbat-rank${earned ? ' earned' : ''}${current ? ' current' : ''}`}>
-              <span className="hbat-badge"><RankIcon rank={r.key} /></span>
+              <span className="hbat-badge"><RankIcon rank={r.key} size={20} /></span>
               <span className="hbat-rank-body">
-                <span className="hbat-rank-top"><strong>{r.name}</strong><span>{current ? 'you are here' : `${r.at} ${r.at === 1 ? 'pick' : 'picks'}`}</span></span>
+                <span className="hbat-rank-top"><strong>{r.name}</strong><span>{current ? 'you' : `${r.at}`}</span></span>
                 <span className="hbat-rank-line">{r.line}</span>
-                {!earned && player?.next?.name === r.name && (
-                  <span className="hbat-bar" aria-hidden="true"><span style={{ width: `${Math.max(4, Math.round(player.progress * 100))}%` }} /></span>
-                )}
               </span>
             </li>
           )
         })}
       </ol>
+      {player?.humor.length ? (
+        <div className="hbat-styles">
+          <span className="hbat-styles-label">your humor: <strong>{player.humorLabel}</strong></span>
+          {player.humor.slice(0, 3).map((h) => (
+            <span key={h.style} className="hbat-style">{h.style} · {h.n}</span>
+          ))}
+        </div>
+      ) : null}
       {player?.rank && (
         <div className="hbat-share">
           <div ref={cardRef} className="hbat-rankcard">
-            <span className="hbat-badge on-dark"><RankIcon rank={player.rank.key as RankKey} /></span>
+            <span className="hbat-badge on-dark"><RankIcon rank={player.rank.key as RankKey} size={22} /></span>
             <span className="hbat-rankcard-body">
               <span className="hbat-rankcard-kicker">SHUTAP · HUMOR WISDOM</span>
               <strong>{player.rank.name}</strong>
