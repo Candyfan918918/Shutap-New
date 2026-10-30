@@ -2,8 +2,16 @@
  "property": "sc-domain:shutap.com",
  "startDate": "2026-09-30",
  "endDate": "2026-10-28",
- "pulledAt": "2026-10-30T00:35:30.409Z",
+ "pulledAt": "2026-10-30T19:56:42.857Z",
  "striking": [
+  {
+   "query": "shutap",
+   "page": "https://shutap.com/business",
+   "clicks": 1,
+   "impressions": 137,
+   "ctr": 0.0073,
+   "position": 7.2
+  },
   {
    "query": "shutap",
    "page": "https://shutap.com/guides",
@@ -14,43 +22,35 @@
   },
   {
    "query": "shutap",
-   "page": "https://shutap.com/business",
-   "clicks": 1,
-   "impressions": 132,
-   "ctr": 0.0076,
-   "position": 7.4
-  },
-  {
-   "query": "shutap",
    "page": "https://shutap.com/faq",
    "clicks": 0,
-   "impressions": 31,
+   "impressions": 36,
    "ctr": 0,
-   "position": 5.9
+   "position": 5.3
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/how-it-works",
    "clicks": 0,
-   "impressions": 29,
+   "impressions": 33,
    "ctr": 0,
-   "position": 6
+   "position": 5.5
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/guides/how-shutap-is-built",
    "clicks": 0,
-   "impressions": 27,
+   "impressions": 31,
    "ctr": 0,
-   "position": 6.7
+   "position": 6.1
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/guides/funny-for-business",
    "clicks": 0,
-   "impressions": 21,
+   "impressions": 25,
    "ctr": 0,
-   "position": 5.9
+   "position": 5.7
   },
   {
    "query": "shutap",
@@ -72,17 +72,17 @@
    "query": "shutap",
    "page": "https://shutap.com/trust",
    "clicks": 0,
-   "impressions": 9,
+   "impressions": 10,
    "ctr": 0,
-   "position": 7
+   "position": 6.5
   },
   {
    "query": "punchlines.ai",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 3,
+   "impressions": 4,
    "ctr": 0,
-   "position": 11
+   "position": 9.3
   },
   {
    "query": "shotap",
@@ -91,6 +91,22 @@
    "impressions": 2,
    "ctr": 0,
    "position": 6.5
+  },
+  {
+   "query": "funniest philosophers",
+   "page": "https://shutap.com/funniest/philosopher",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
+  },
+  {
+   "query": "shut up ai",
+   "page": "https://shutap.com/",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 5
   },
   {
    "query": "shutap",
@@ -112,24 +128,24 @@
  "pages": [
   {
    "page": "https://shutap.com/",
-   "clicks": 108,
-   "impressions": 262,
-   "ctr": 0.4122,
+   "clicks": 113,
+   "impressions": 271,
+   "ctr": 0.417,
    "position": 1.7
   },
   {
    "page": "https://shutap.com/about",
    "clicks": 10,
-   "impressions": 251,
-   "ctr": 0.0398,
-   "position": 3.5
+   "impressions": 257,
+   "ctr": 0.0389,
+   "position": 3.4
   },
   {
    "page": "https://shutap.com/business",
    "clicks": 3,
-   "impressions": 145,
-   "ctr": 0.0207,
-   "position": 7.2
+   "impressions": 150,
+   "ctr": 0.02,
+   "position": 7
   },
   {
    "page": "https://shutap.com/guides/humor-is-wisdom",
@@ -169,9 +185,9 @@
   {
    "page": "https://shutap.com/faq",
    "clicks": 1,
-   "impressions": 55,
-   "ctr": 0.0182,
-   "position": 5.5
+   "impressions": 60,
+   "ctr": 0.0167,
+   "position": 5.1
   },
   {
    "page": "https://shutap.com/guides/ai-comedy-writing-tools",
@@ -190,9 +206,9 @@
   {
    "page": "https://shutap.com/how-it-works",
    "clicks": 1,
-   "impressions": 55,
-   "ctr": 0.0182,
-   "position": 5.4
+   "impressions": 59,
+   "ctr": 0.0169,
+   "position": 5.2
   },
   {
    "page": "https://shutap.com/lived-intelligence",
@@ -223,11 +239,25 @@
    "position": 9.3
   },
   {
+   "page": "https://shutap.com/funniest/athlete",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 4
+  },
+  {
    "page": "https://shutap.com/funniest/author",
    "clicks": 0,
    "impressions": 3,
    "ctr": 0,
    "position": 25.7
+  },
+  {
+   "page": "https://shutap.com/funniest/philosopher",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
   },
   {
    "page": "https://shutap.com/funniest/poet",
@@ -246,9 +276,9 @@
   {
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 29,
+   "impressions": 32,
    "ctr": 0,
-   "position": 80.9
+   "position": 76.2
   },
   {
    "page": "https://shutap.com/guides/funny-email-sign-offs",
@@ -260,9 +290,9 @@
   {
    "page": "https://shutap.com/guides/funny-for-business",
    "clicks": 0,
-   "impressions": 23,
+   "impressions": 27,
    "ctr": 0,
-   "position": 5.9
+   "position": 5.7
   },
   {
    "page": "https://shutap.com/guides/funny-presentations-and-slides",
@@ -272,11 +302,18 @@
    "position": 5
   },
   {
+   "page": "https://shutap.com/guides/funny-wedding-toast",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 7
+  },
+  {
    "page": "https://shutap.com/guides/how-shutap-is-built",
    "clicks": 0,
-   "impressions": 43,
+   "impressions": 47,
    "ctr": 0,
-   "position": 6.2
+   "position": 5.8
   },
   {
    "page": "https://shutap.com/guides/how-to-turn-a-story-into-a-bit",
@@ -302,9 +339,9 @@
   {
    "page": "https://shutap.com/guides/self-deprecating-humor",
    "clicks": 0,
-   "impressions": 18,
+   "impressions": 22,
    "ctr": 0,
-   "position": 65.4
+   "position": 65.7
   },
   {
    "page": "https://shutap.com/guides/shutap-vs-chatgpt-for-jokes",
@@ -337,16 +374,23 @@
   {
    "page": "https://shutap.com/guides/topic/ai-writing-partner",
    "clicks": 0,
-   "impressions": 2,
+   "impressions": 3,
    "ctr": 0,
    "position": 7
   },
   {
+   "page": "https://shutap.com/guides/topic/how-to-be-funny",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 89
+  },
+  {
    "page": "https://shutap.com/guides/topic/roasts",
    "clicks": 0,
-   "impressions": 49,
+   "impressions": 62,
    "ctr": 0,
-   "position": 10.3
+   "position": 10.1
   },
   {
    "page": "https://shutap.com/guides/topic/storytime-and-pov",
@@ -407,9 +451,9 @@
   {
    "page": "https://shutap.com/trust",
    "clicks": 0,
-   "impressions": 19,
+   "impressions": 20,
    "ctr": 0,
-   "position": 7.2
+   "position": 6.9
   },
   {
    "page": "https://shutap.com/vent/family",
@@ -423,18 +467,18 @@
   {
    "query": "shutap",
    "page": "https://shutap.com/",
-   "clicks": 98,
-   "impressions": 229,
-   "ctr": 0.4279,
+   "clicks": 103,
+   "impressions": 236,
+   "ctr": 0.4364,
    "position": 1.7
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/about",
    "clicks": 4,
-   "impressions": 218,
-   "ctr": 0.0183,
-   "position": 3.6
+   "impressions": 224,
+   "ctr": 0.0179,
+   "position": 3.5
   },
   {
    "query": "shutap",
@@ -448,9 +492,9 @@
    "query": "shutap",
    "page": "https://shutap.com/business",
    "clicks": 1,
-   "impressions": 132,
-   "ctr": 0.0076,
-   "position": 7.4
+   "impressions": 137,
+   "ctr": 0.0073,
+   "position": 7.2
   },
   {
    "query": "shutap",
@@ -533,6 +577,14 @@
    "position": 3
   },
   {
+   "query": "funniest philosophers",
+   "page": "https://shutap.com/funniest/philosopher",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
+  },
+  {
    "query": "funniest poets",
    "page": "https://shutap.com/funniest/poet",
    "clicks": 0,
@@ -555,6 +607,22 @@
    "impressions": 1,
    "ctr": 0,
    "position": 1
+  },
+  {
+   "query": "how to be funny",
+   "page": "https://shutap.com/guides/topic/how-to-be-funny",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 89
+  },
+  {
+   "query": "humor autodepreciativo",
+   "page": "https://shutap.com/guides/self-deprecating-humor",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 76
   },
   {
    "query": "joke creation on topic by ai",
@@ -592,9 +660,9 @@
    "query": "punchline generator",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 7,
+   "impressions": 8,
    "ctr": 0,
-   "position": 67.1
+   "position": 68.9
   },
   {
    "query": "punchlines ai",
@@ -608,9 +676,9 @@
    "query": "punchlines.ai",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 3,
+   "impressions": 4,
    "ctr": 0,
-   "position": 11
+   "position": 9.3
   },
   {
    "query": "self deprecating examples",
@@ -669,6 +737,14 @@
    "position": 92
   },
   {
+   "query": "self humor",
+   "page": "https://shutap.com/guides/self-deprecating-humor",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 34
+  },
+  {
    "query": "self-deprecating humor examples",
    "page": "https://shutap.com/guides/self-deprecating-humor",
    "clicks": 0,
@@ -685,6 +761,14 @@
    "position": 6.5
   },
   {
+   "query": "shut up ai",
+   "page": "https://shutap.com/",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 5
+  },
+  {
    "query": "shutap",
    "page": "https://shutap.com/ai-joke-generator",
    "clicks": 0,
@@ -696,9 +780,9 @@
    "query": "shutap",
    "page": "https://shutap.com/faq",
    "clicks": 0,
-   "impressions": 31,
+   "impressions": 36,
    "ctr": 0,
-   "position": 5.9
+   "position": 5.3
   },
   {
    "query": "shutap",
@@ -712,17 +796,17 @@
    "query": "shutap",
    "page": "https://shutap.com/guides/funny-for-business",
    "clicks": 0,
-   "impressions": 21,
+   "impressions": 25,
    "ctr": 0,
-   "position": 5.9
+   "position": 5.7
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/guides/how-shutap-is-built",
    "clicks": 0,
-   "impressions": 27,
+   "impressions": 31,
    "ctr": 0,
-   "position": 6.7
+   "position": 6.1
   },
   {
    "query": "shutap",
@@ -768,9 +852,9 @@
    "query": "shutap",
    "page": "https://shutap.com/how-it-works",
    "clicks": 0,
-   "impressions": 29,
+   "impressions": 33,
    "ctr": 0,
-   "position": 6
+   "position": 5.5
   },
   {
    "query": "shutap",
@@ -792,9 +876,9 @@
    "query": "shutap",
    "page": "https://shutap.com/trust",
    "clicks": 0,
-   "impressions": 9,
+   "impressions": 10,
    "ctr": 0,
-   "position": 7
+   "position": 6.5
   },
   {
    "query": "types of humor",

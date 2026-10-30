@@ -1,7 +1,7 @@
 {
  "source": "Bing Webmaster GetRelatedKeywords (US, last ~30 days)",
- "pulledAt": "2026-10-30T00:35:50.491Z",
- "seeds": 27,
+ "pulledAt": "2026-10-30T19:57:03.292Z",
+ "seeds": 32,
  "ideas": [
   {
    "query": "tiktok",
@@ -934,6 +934,12 @@
    "seed": "funny captions"
   },
   {
+   "query": "secret santa",
+   "impressions": 1569,
+   "broadImpressions": 9045,
+   "seed": "funny secret santa ideas"
+  },
+  {
    "query": "happy birthday gif funny",
    "impressions": 1567,
    "broadImpressions": 1778,
@@ -1270,15 +1276,15 @@
    "seed": "funny captions"
   },
   {
-   "query": "funny soundboard",
-   "impressions": 1154,
-   "broadImpressions": 2040,
-   "seed": "funny captions"
-  },
-  {
    "query": "happy friday funny",
    "impressions": 1154,
    "broadImpressions": 2177,
+   "seed": "funny captions"
+  },
+  {
+   "query": "funny soundboard",
+   "impressions": 1154,
+   "broadImpressions": 2040,
    "seed": "funny captions"
   },
   {
@@ -1510,15 +1516,15 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "prime rib roast",
-   "impressions": 962,
-   "broadImpressions": 1859,
-   "seed": "roast jokes"
-  },
-  {
    "query": "beef roast crock pot recipe",
    "impressions": 962,
    "broadImpressions": 962,
+   "seed": "roast jokes"
+  },
+  {
+   "query": "prime rib roast",
+   "impressions": 962,
+   "broadImpressions": 1859,
    "seed": "roast jokes"
   },
   {
@@ -1978,15 +1984,15 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "youtube shorts funny",
-   "impressions": 713,
-   "broadImpressions": 795,
-   "seed": "funny captions"
-  },
-  {
    "query": "funny songs",
    "impressions": 713,
    "broadImpressions": 765,
+   "seed": "funny captions"
+  },
+  {
+   "query": "youtube shorts funny",
+   "impressions": 713,
+   "broadImpressions": 795,
    "seed": "funny captions"
   },
   {
@@ -2108,6 +2114,12 @@
    "impressions": 668,
    "broadImpressions": 670,
    "seed": "joke structure"
+  },
+  {
+   "query": "dry erase board",
+   "impressions": 665,
+   "broadImpressions": 796,
+   "seed": "dry humor"
   },
   {
    "query": "how to write a conclusion paragraph",
@@ -2314,15 +2326,15 @@
    "seed": "tiktok watch time"
   },
   {
-   "query": "roast pork shoulder",
-   "impressions": 597,
-   "broadImpressions": 804,
-   "seed": "roast jokes"
-  },
-  {
    "query": "beef chuck roast",
    "impressions": 597,
    "broadImpressions": 2678,
+   "seed": "roast jokes"
+  },
+  {
+   "query": "roast pork shoulder",
+   "impressions": 597,
+   "broadImpressions": 804,
    "seed": "roast jokes"
   },
   {
@@ -2494,15 +2506,15 @@
    "seed": "funny captions"
   },
   {
-   "query": "funny buttons",
-   "impressions": 540,
-   "broadImpressions": 544,
-   "seed": "funny captions"
-  },
-  {
    "query": "funny games movie",
    "impressions": 540,
    "broadImpressions": 582,
+   "seed": "funny captions"
+  },
+  {
+   "query": "funny buttons",
+   "impressions": 540,
+   "broadImpressions": 544,
    "seed": "funny captions"
   },
   {
@@ -2518,6 +2530,12 @@
    "seed": "how to tell a story"
   },
   {
+   "query": "roast chicken in oven",
+   "impressions": 536,
+   "broadImpressions": 536,
+   "seed": "roast jokes"
+  },
+  {
    "query": "pork loin roast recipes",
    "impressions": 536,
    "broadImpressions": 673,
@@ -2527,12 +2545,6 @@
    "query": "prime rib roast recipe",
    "impressions": 536,
    "broadImpressions": 550,
-   "seed": "roast jokes"
-  },
-  {
-   "query": "roast chicken in oven",
-   "impressions": 536,
-   "broadImpressions": 536,
    "seed": "roast jokes"
   },
   {
@@ -2650,12 +2662,6 @@
    "seed": "roast jokes"
   },
   {
-   "query": "dry herb vaporizer",
-   "impressions": 503,
-   "broadImpressions": 679,
-   "seed": "dry humor"
-  },
-  {
    "query": "dry mouth lozenges",
    "impressions": 502,
    "broadImpressions": 631,
@@ -2758,6 +2764,12 @@
    "seed": "roast jokes"
   },
   {
+   "query": "dry eye symptoms",
+   "impressions": 474,
+   "broadImpressions": 506,
+   "seed": "dry humor"
+  },
+  {
    "query": "how to start streaming on twitch",
    "impressions": 473,
    "broadImpressions": 473,
@@ -2806,6 +2818,12 @@
    "seed": "tiktok watch time"
   },
   {
+   "query": "holiday party",
+   "impressions": 466,
+   "broadImpressions": 1977,
+   "seed": "office holiday party speech"
+  },
+  {
    "query": "blow dry bar",
    "impressions": 465,
    "broadImpressions": 974,
@@ -2830,12 +2848,6 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "dry needling vs acupuncture",
-   "impressions": 460,
-   "broadImpressions": 518,
-   "seed": "dry humor"
-  },
-  {
    "query": "chuck roast in oven",
    "impressions": 459,
    "broadImpressions": 459,
@@ -2846,6 +2858,12 @@
    "impressions": 455,
    "broadImpressions": 835,
    "seed": "how to write a joke"
+  },
+  {
+   "query": "new years",
+   "impressions": 455,
+   "broadImpressions": 5524,
+   "seed": "funny new years toast"
   },
   {
    "query": "stand up",
@@ -2980,15 +2998,15 @@
    "seed": "funny captions"
   },
   {
-   "query": "dry mix pantry cookbook",
-   "impressions": 428,
-   "broadImpressions": 731,
-   "seed": "dry humor"
-  },
-  {
    "query": "dry tortugas ferry",
    "impressions": 428,
    "broadImpressions": 428,
+   "seed": "dry humor"
+  },
+  {
+   "query": "dry mix pantry cookbook",
+   "impressions": 428,
+   "broadImpressions": 731,
    "seed": "dry humor"
   },
   {
@@ -3226,15 +3244,15 @@
    "seed": "how to write a joke"
   },
   {
-   "query": "easy pot roast",
-   "impressions": 376,
-   "broadImpressions": 1131,
-   "seed": "roast jokes"
-  },
-  {
    "query": "standing rib roast",
    "impressions": 376,
    "broadImpressions": 557,
+   "seed": "roast jokes"
+  },
+  {
+   "query": "easy pot roast",
+   "impressions": 376,
+   "broadImpressions": 1131,
    "seed": "roast jokes"
   },
   {
@@ -3340,15 +3358,15 @@
    "seed": "comedy writing"
   },
   {
-   "query": "beef roast",
-   "impressions": 360,
-   "broadImpressions": 3855,
-   "seed": "roast jokes"
-  },
-  {
    "query": "pork roast recipe",
    "impressions": 360,
    "broadImpressions": 1206,
+   "seed": "roast jokes"
+  },
+  {
+   "query": "beef roast",
+   "impressions": 360,
+   "broadImpressions": 3855,
    "seed": "roast jokes"
   },
   {
@@ -3436,15 +3454,15 @@
    "seed": "dry humor"
   },
   {
-   "query": "chuck roast recipe",
-   "impressions": 344,
-   "broadImpressions": 3699,
-   "seed": "roast jokes"
-  },
-  {
    "query": "beef pot roast",
    "impressions": 344,
    "broadImpressions": 1127,
+   "seed": "roast jokes"
+  },
+  {
+   "query": "chuck roast recipe",
+   "impressions": 344,
+   "broadImpressions": 3699,
    "seed": "roast jokes"
   },
   {
@@ -3490,10 +3508,22 @@
    "seed": "joke structure"
   },
   {
+   "query": "funny christmas cards",
+   "impressions": 336,
+   "broadImpressions": 336,
+   "seed": "funny christmas card messages"
+  },
+  {
    "query": "comedy show",
    "impressions": 335,
    "broadImpressions": 2420,
    "seed": "stand up comedy tips"
+  },
+  {
+   "query": "baltic dry index",
+   "impressions": 334,
+   "broadImpressions": 370,
+   "seed": "dry humor"
   },
   {
    "query": "how to write a lab report",
@@ -3532,13 +3562,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to write a recommendation letter",
+   "query": "how to write a case study report",
    "impressions": 329,
    "broadImpressions": 329,
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a case study report",
+   "query": "how to write a recommendation letter",
    "impressions": 329,
    "broadImpressions": 329,
    "seed": "how to write a joke"
@@ -3590,12 +3620,6 @@
    "impressions": 322,
    "broadImpressions": 1748,
    "seed": "roast jokes"
-  },
-  {
-   "query": "baked ziti recipe never dry",
-   "impressions": 322,
-   "broadImpressions": 322,
-   "seed": "dry humor"
   },
   {
    "query": "rule of rose",
@@ -3988,15 +4012,15 @@
    "seed": "how to write a joke"
   },
   {
-   "query": "dry humping porn",
-   "impressions": 260,
-   "broadImpressions": 269,
-   "seed": "dry humor"
-  },
-  {
    "query": "dry heaving definition",
    "impressions": 260,
    "broadImpressions": 260,
+   "seed": "dry humor"
+  },
+  {
+   "query": "dry humping porn",
+   "impressions": 260,
+   "broadImpressions": 269,
    "seed": "dry humor"
   },
   {
@@ -4684,13 +4708,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "happy friday gif funny work",
+   "query": "happy wednesday gif funny work",
    "impressions": 194,
    "broadImpressions": 194,
    "seed": "funny work stories"
   },
   {
-   "query": "happy wednesday gif funny work",
+   "query": "happy friday gif funny work",
    "impressions": 194,
    "broadImpressions": 194,
    "seed": "funny work stories"
@@ -4750,15 +4774,15 @@
    "seed": "dry humor"
   },
   {
-   "query": "how to be cool",
-   "impressions": 188,
-   "broadImpressions": 188,
-   "seed": "how to be funny"
-  },
-  {
    "query": "how to be smart",
    "impressions": 188,
    "broadImpressions": 224,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be cool",
+   "impressions": 188,
+   "broadImpressions": 188,
    "seed": "how to be funny"
   },
   {
@@ -4774,13 +4798,19 @@
    "seed": "comedy writing"
   },
   {
-   "query": "federal rule of evidence 702",
+   "query": "christmas sayings",
+   "impressions": 184,
+   "broadImpressions": 184,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "federal rule of civil procedure 4",
    "impressions": 183,
    "broadImpressions": 183,
    "seed": "rule of three comedy"
   },
   {
-   "query": "federal rule of civil procedure 4",
+   "query": "federal rule of evidence 702",
    "impressions": 183,
    "broadImpressions": 183,
    "seed": "rule of three comedy"
@@ -4864,13 +4894,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "keepers babe joke of the day",
+   "query": "norm macdonald moth joke",
    "impressions": 177,
    "broadImpressions": 177,
    "seed": "joke structure"
   },
   {
-   "query": "norm macdonald moth joke",
+   "query": "keepers babe joke of the day",
    "impressions": 177,
    "broadImpressions": 177,
    "seed": "joke structure"
@@ -5080,13 +5110,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "how to write a good conclusion",
+   "query": "how to write a good email introduction",
    "impressions": 164,
    "broadImpressions": 164,
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a good email introduction",
+   "query": "how to write a good conclusion",
    "impressions": 164,
    "broadImpressions": 164,
    "seed": "how to write a joke"
@@ -5158,13 +5188,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to write a screenplay",
+   "query": "how to write a linear equation in point-slope form",
    "impressions": 161,
    "broadImpressions": 161,
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a linear equation in point-slope form",
+   "query": "how to write a screenplay",
    "impressions": 161,
    "broadImpressions": 161,
    "seed": "how to write a joke"
@@ -5542,6 +5572,12 @@
    "seed": "tiktok watch time"
   },
   {
+   "query": "christmas card sayings",
+   "impressions": 140,
+   "broadImpressions": 140,
+   "seed": "funny christmas card messages"
+  },
+  {
    "query": "joke of the day today",
    "impressions": 139,
    "broadImpressions": 139,
@@ -5608,15 +5644,15 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to tell if you have a blood clot in leg",
-   "impressions": 135,
-   "broadImpressions": 135,
-   "seed": "how to tell a story"
-  },
-  {
    "query": "story telling",
    "impressions": 135,
    "broadImpressions": 267,
+   "seed": "how to tell a story"
+  },
+  {
+   "query": "how to tell if you have a blood clot in leg",
+   "impressions": 135,
+   "broadImpressions": 135,
    "seed": "how to tell a story"
   },
   {
@@ -5698,13 +5734,13 @@
    "seed": "funny work stories"
   },
   {
-   "query": "how to become smarter",
+   "query": "how to be a notary",
    "impressions": 132,
    "broadImpressions": 132,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a notary",
+   "query": "how to become smarter",
    "impressions": 132,
    "broadImpressions": 132,
    "seed": "how to be funny"
@@ -5818,13 +5854,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "how to tell if a pokemon card is fake",
+   "query": "how to tell which windows i have",
    "impressions": 123,
    "broadImpressions": 123,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell which windows i have",
+   "query": "how to tell if a pokemon card is fake",
    "impressions": 123,
    "broadImpressions": 123,
    "seed": "how to tell a story"
@@ -5914,15 +5950,15 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "joke for kids",
-   "impressions": 117,
-   "broadImpressions": 263,
-   "seed": "joke structure"
-  },
-  {
    "query": "knock knock joke",
    "impressions": 117,
    "broadImpressions": 117,
+   "seed": "joke structure"
+  },
+  {
+   "query": "joke for kids",
+   "impressions": 117,
+   "broadImpressions": 263,
    "seed": "joke structure"
   },
   {
@@ -5944,15 +5980,15 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to start a zoom meeting",
-   "impressions": 116,
-   "broadImpressions": 116,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to make a business",
    "impressions": 116,
    "broadImpressions": 704,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start a zoom meeting",
+   "impressions": 116,
+   "broadImpressions": 116,
    "seed": "how to start stand up comedy"
   },
   {
@@ -5968,13 +6004,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "thursday memes funny work appropriate",
+   "query": "tuesday funny work meme",
    "impressions": 115,
    "broadImpressions": 115,
    "seed": "funny work stories"
   },
   {
-   "query": "tuesday funny work meme",
+   "query": "thursday memes funny work appropriate",
    "impressions": 115,
    "broadImpressions": 115,
    "seed": "funny work stories"
@@ -6046,15 +6082,15 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to tell if something is peer reviewed",
-   "impressions": 111,
-   "broadImpressions": 111,
-   "seed": "how to tell a story"
-  },
-  {
    "query": "how to tell time",
    "impressions": 111,
    "broadImpressions": 711,
+   "seed": "how to tell a story"
+  },
+  {
+   "query": "how to tell if something is peer reviewed",
+   "impressions": 111,
+   "broadImpressions": 111,
    "seed": "how to tell a story"
   },
   {
@@ -6118,6 +6154,12 @@
    "seed": "rule of three comedy"
   },
   {
+   "query": "christmas greetings",
+   "impressions": 108,
+   "broadImpressions": 176,
+   "seed": "funny christmas card messages"
+  },
+  {
    "query": "self deprecating humor",
    "impressions": 107,
    "broadImpressions": 107,
@@ -6148,13 +6190,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to tell if you have a blood clot",
+   "query": "how to tell if something was written by ai",
    "impressions": 104,
    "broadImpressions": 104,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if something was written by ai",
+   "query": "how to tell if you have a blood clot",
    "impressions": 104,
    "broadImpressions": 104,
    "seed": "how to tell a story"
@@ -6194,6 +6236,12 @@
    "impressions": 103,
    "broadImpressions": 103,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "merry christmas greeting card",
+   "impressions": 103,
+   "broadImpressions": 179,
+   "seed": "funny christmas card messages"
   },
   {
    "query": "upcoming stand up comedy shows",
@@ -6254,6 +6302,12 @@
    "impressions": 100,
    "broadImpressions": 100,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "funny christmas shirts",
+   "impressions": 100,
+   "broadImpressions": 100,
+   "seed": "funny christmas card messages"
   },
   {
    "query": "funny tiktok stickers",
@@ -6394,6 +6448,12 @@
    "seed": "rule of three comedy"
   },
   {
+   "query": "christmas wishes",
+   "impressions": 92,
+   "broadImpressions": 144,
+   "seed": "funny christmas card messages"
+  },
+  {
    "query": "stand-up comedy",
    "impressions": 91,
    "broadImpressions": 157,
@@ -6430,13 +6490,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to tell if you have adhd",
+   "query": "how to tell if a wall is load bearing",
    "impressions": 89,
    "broadImpressions": 89,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if a wall is load bearing",
+   "query": "how to tell if you have adhd",
    "impressions": 89,
    "broadImpressions": 89,
    "seed": "how to tell a story"
@@ -6520,13 +6580,13 @@
    "seed": "comedy writing"
   },
   {
-   "query": "how to tell your crush you like them",
+   "query": "how to tell if eggs are fresh",
    "impressions": 85,
    "broadImpressions": 85,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if eggs are fresh",
+   "query": "how to tell your crush you like them",
    "impressions": 85,
    "broadImpressions": 85,
    "seed": "how to tell a story"
@@ -6574,13 +6634,13 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "storytime online youtube",
+   "query": "tg storytime big top",
    "impressions": 83,
    "broadImpressions": 83,
    "seed": "storytime ideas"
   },
   {
-   "query": "tg storytime big top",
+   "query": "storytime online youtube",
    "impressions": 83,
    "broadImpressions": 83,
    "seed": "storytime ideas"
@@ -6736,25 +6796,25 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "type a message",
-   "impressions": 78,
-   "broadImpressions": 166,
-   "seed": "how to tell a story"
-  },
-  {
    "query": "how to tell if you have appendicitis",
    "impressions": 78,
    "broadImpressions": 78,
    "seed": "how to tell a story"
   },
   {
-   "query": "what does humor mean",
+   "query": "type a message",
+   "impressions": 78,
+   "broadImpressions": 166,
+   "seed": "how to tell a story"
+  },
+  {
+   "query": "halloween humor",
    "impressions": 77,
    "broadImpressions": 77,
    "seed": "deadpan humor"
   },
   {
-   "query": "halloween humor",
+   "query": "what does humor mean",
    "impressions": 77,
    "broadImpressions": 77,
    "seed": "deadpan humor"
@@ -6958,15 +7018,27 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to be confident",
-   "impressions": 67,
-   "broadImpressions": 67,
-   "seed": "how to be funny"
+   "query": "christmas greetings messages",
+   "impressions": 68,
+   "broadImpressions": 68,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "funny christmas memes",
+   "impressions": 68,
+   "broadImpressions": 68,
+   "seed": "funny christmas card messages"
   },
   {
    "query": "be better",
    "impressions": 67,
    "broadImpressions": 257,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be confident",
+   "impressions": 67,
+   "broadImpressions": 67,
    "seed": "how to be funny"
   },
   {
@@ -7004,6 +7076,12 @@
    "impressions": 66,
    "broadImpressions": 91,
    "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "secret santa ideas",
+   "impressions": 66,
+   "broadImpressions": 75,
+   "seed": "funny secret santa ideas"
   },
   {
    "query": "the funniest videos",
@@ -7102,19 +7180,25 @@
    "seed": "deadpan humor"
   },
   {
+   "query": "secret santa gifts",
+   "impressions": 61,
+   "broadImpressions": 64,
+   "seed": "funny secret santa ideas"
+  },
+  {
    "query": "how to be a vtuber",
    "impressions": 60,
    "broadImpressions": 60,
    "seed": "how to be funny"
   },
   {
-   "query": "ms joke mha",
+   "query": "joke book",
    "impressions": 60,
    "broadImpressions": 60,
    "seed": "joke structure"
   },
   {
-   "query": "joke book",
+   "query": "ms joke mha",
    "impressions": 60,
    "broadImpressions": 60,
    "seed": "joke structure"
@@ -7204,15 +7288,15 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to get more microsoft points",
-   "impressions": 56,
-   "broadImpressions": 56,
-   "seed": "how to get more views on tiktok"
-  },
-  {
    "query": "how to get more points",
    "impressions": 56,
    "broadImpressions": 216,
+   "seed": "how to get more views on tiktok"
+  },
+  {
+   "query": "how to get more microsoft points",
+   "impressions": 56,
+   "broadImpressions": 56,
    "seed": "how to get more views on tiktok"
   },
   {
@@ -7240,13 +7324,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to be a pilot",
+   "query": "how to be happy in life",
    "impressions": 54,
    "broadImpressions": 54,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be happy in life",
+   "query": "how to be a pilot",
    "impressions": 54,
    "broadImpressions": 54,
    "seed": "how to be funny"
@@ -7264,25 +7348,25 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "how to open a business",
-   "impressions": 54,
-   "broadImpressions": 165,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start ai dropshipping",
    "impressions": 54,
    "broadImpressions": 54,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to get more microsoft rewards points",
+   "query": "how to open a business",
+   "impressions": 54,
+   "broadImpressions": 165,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to get more ram on laptop",
    "impressions": 54,
    "broadImpressions": 54,
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to get more ram on laptop",
+   "query": "how to get more microsoft rewards points",
    "impressions": 54,
    "broadImpressions": 54,
    "seed": "how to get more views on tiktok"
@@ -7378,15 +7462,15 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "short videos funny",
-   "impressions": 51,
-   "broadImpressions": 57,
-   "seed": "funny tiktok ideas"
-  },
-  {
    "query": "funny tiktoks",
    "impressions": 51,
    "broadImpressions": 51,
+   "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "short videos funny",
+   "impressions": 51,
+   "broadImpressions": 57,
    "seed": "funny tiktok ideas"
   },
   {
@@ -7396,13 +7480,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to start a company",
+   "query": "how to start a sportsbook",
    "impressions": 51,
    "broadImpressions": 51,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start a sportsbook",
+   "query": "how to start a company",
    "impressions": 51,
    "broadImpressions": 51,
    "seed": "how to start stand up comedy"
@@ -7426,15 +7510,15 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "really funny memes",
-   "impressions": 50,
-   "broadImpressions": 50,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "sense of humor meaning",
    "impressions": 50,
    "broadImpressions": 73,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "really funny memes",
+   "impressions": 50,
+   "broadImpressions": 50,
    "seed": "deadpan humor"
   },
   {
@@ -7486,6 +7570,12 @@
    "seed": "tiktok watch time"
   },
   {
+   "query": "funny christmas gifts",
+   "impressions": 49,
+   "broadImpressions": 64,
+   "seed": "funny christmas card messages"
+  },
+  {
    "query": "how to be good at chess",
    "impressions": 48,
    "broadImpressions": 48,
@@ -7522,13 +7612,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to be creative",
+   "query": "how to be a substitute teacher",
    "impressions": 47,
    "broadImpressions": 47,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a substitute teacher",
+   "query": "how to be creative",
    "impressions": 47,
    "broadImpressions": 47,
    "seed": "how to be funny"
@@ -7612,6 +7702,12 @@
    "seed": "joke structure"
   },
   {
+   "query": "secret santa gift ideas",
+   "impressions": 44,
+   "broadImpressions": 44,
+   "seed": "funny secret santa ideas"
+  },
+  {
    "query": "how to be skinny",
    "impressions": 43,
    "broadImpressions": 43,
@@ -7660,13 +7756,13 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "how to tell if a molecule is polar or nonpolar",
+   "query": "how to tell military time",
    "impressions": 41,
    "broadImpressions": 41,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell military time",
+   "query": "how to tell if a molecule is polar or nonpolar",
    "impressions": 41,
    "broadImpressions": 41,
    "seed": "how to tell a story"
@@ -7696,13 +7792,19 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "hilarious videos",
+   "query": "funny christmas sweaters",
+   "impressions": 40,
+   "broadImpressions": 40,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "try not laugh",
    "impressions": 39,
    "broadImpressions": 39,
    "seed": "funny video ideas"
   },
   {
-   "query": "try not laugh",
+   "query": "hilarious videos",
    "impressions": 39,
    "broadImpressions": 39,
    "seed": "funny video ideas"
@@ -7736,6 +7838,12 @@
    "impressions": 38,
    "broadImpressions": 38,
    "seed": "how to tell a story"
+  },
+  {
+   "query": "christmas card sentiments",
+   "impressions": 38,
+   "broadImpressions": 38,
+   "seed": "funny christmas card messages"
   },
   {
    "query": "storytime with ryan and craig",
@@ -7810,13 +7918,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to tell if you have sleep apnea",
+   "query": "tell me a story streaming free",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "how to tell a story"
   },
   {
-   "query": "tell me a story streaming free",
+   "query": "how to tell if you have sleep apnea",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "how to tell a story"
@@ -7924,6 +8032,12 @@
    "seed": "tiktok watch time"
   },
   {
+   "query": "how to be sick",
+   "impressions": 30,
+   "broadImpressions": 30,
+   "seed": "how to be funny"
+  },
+  {
    "query": "how to be a gentleman",
    "impressions": 30,
    "broadImpressions": 30,
@@ -7931,12 +8045,6 @@
   },
   {
    "query": "how to be a redhead",
-   "impressions": 30,
-   "broadImpressions": 30,
-   "seed": "how to be funny"
-  },
-  {
-   "query": "how to be sick",
    "impressions": 30,
    "broadImpressions": 30,
    "seed": "how to be funny"
@@ -7970,6 +8078,24 @@
    "impressions": 30,
    "broadImpressions": 30,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "merry christmas wishes",
+   "impressions": 30,
+   "broadImpressions": 30,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "christmas verses for cards",
+   "impressions": 30,
+   "broadImpressions": 30,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "funny christmas quotes",
+   "impressions": 30,
+   "broadImpressions": 30,
+   "seed": "funny christmas card messages"
   },
   {
    "query": "how to be a heartbreaker lyrics",
@@ -8014,13 +8140,19 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to be a good listener",
+   "query": "funny christmas jokes",
+   "impressions": 29,
+   "broadImpressions": 29,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "how to be a mentalist",
    "impressions": 28,
    "broadImpressions": 28,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a mentalist",
+   "query": "how to be a good listener",
    "impressions": 28,
    "broadImpressions": 28,
    "seed": "how to be funny"
@@ -8086,6 +8218,12 @@
    "seed": "deadpan humor"
   },
   {
+   "query": "christmas messages",
+   "impressions": 26,
+   "broadImpressions": 35,
+   "seed": "funny christmas card messages"
+  },
+  {
    "query": "how to be more ambitious a tutorial for humans with models",
    "impressions": 25,
    "broadImpressions": 25,
@@ -8110,13 +8248,13 @@
    "seed": "open mic tips"
   },
   {
-   "query": "federal rule of evidence 803",
+   "query": "florida rule of judicial administration 2.516",
    "impressions": 25,
    "broadImpressions": 25,
    "seed": "rule of three comedy"
   },
   {
-   "query": "florida rule of judicial administration 2.516",
+   "query": "federal rule of evidence 803",
    "impressions": 25,
    "broadImpressions": 25,
    "seed": "rule of three comedy"
@@ -8134,13 +8272,13 @@
    "seed": "funny tiktok ideas"
   },
   {
-   "query": "how to tell if you are registered to vote",
+   "query": "how to tell if an a17 samsung is lock",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if an a17 samsung is lock",
+   "query": "how to tell if you are registered to vote",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "how to tell a story"
@@ -8284,13 +8422,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to tell if php is installed",
+   "query": "how to tell if you're registered to vote",
    "impressions": 20,
    "broadImpressions": 20,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if you're registered to vote",
+   "query": "how to tell if php is installed",
    "impressions": 20,
    "broadImpressions": 20,
    "seed": "how to tell a story"
@@ -8314,13 +8452,19 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to become smart",
+   "query": "funny christmas movies",
+   "impressions": 20,
+   "broadImpressions": 20,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "how to be a good boyfriend",
    "impressions": 19,
    "broadImpressions": 19,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a good boyfriend",
+   "query": "how to become smart",
    "impressions": 19,
    "broadImpressions": 19,
    "seed": "how to be funny"
@@ -8350,15 +8494,15 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "tiktok videos 2025",
-   "impressions": 18,
-   "broadImpressions": 24,
-   "seed": "funny tiktok ideas"
-  },
-  {
    "query": "shorts funny",
    "impressions": 18,
    "broadImpressions": 831,
+   "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "tiktok videos 2025",
+   "impressions": 18,
+   "broadImpressions": 24,
    "seed": "funny tiktok ideas"
   },
   {
@@ -8402,6 +8546,12 @@
    "impressions": 17,
    "broadImpressions": 17,
    "seed": "tiktok watch time"
+  },
+  {
+   "query": "a christmas wish",
+   "impressions": 17,
+   "broadImpressions": 45,
+   "seed": "funny christmas card messages"
   },
   {
    "query": "how to be an electrician",
@@ -8470,6 +8620,12 @@
    "seed": "how to get more views on tiktok"
   },
   {
+   "query": "funny christmas gifts for adults",
+   "impressions": 15,
+   "broadImpressions": 15,
+   "seed": "funny christmas card messages"
+  },
+  {
    "query": "storytimes",
    "impressions": 14,
    "broadImpressions": 14,
@@ -8530,9 +8686,9 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "chistes humor negro",
+   "query": "humour meaning",
    "impressions": 13,
-   "broadImpressions": 13,
+   "broadImpressions": 14,
    "seed": "deadpan humor"
   },
   {
@@ -8542,15 +8698,15 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "jokes jokes",
+   "query": "chistes humor negro",
    "impressions": 13,
    "broadImpressions": 13,
    "seed": "deadpan humor"
   },
   {
-   "query": "humour meaning",
+   "query": "jokes jokes",
    "impressions": 13,
-   "broadImpressions": 14,
+   "broadImpressions": 13,
    "seed": "deadpan humor"
   },
   {
@@ -8576,6 +8732,12 @@
    "impressions": 13,
    "broadImpressions": 15,
    "seed": "tiktok watch time"
+  },
+  {
+   "query": "christmas card verses",
+   "impressions": 13,
+   "broadImpressions": 13,
+   "seed": "funny christmas card messages"
   },
   {
    "query": "how to be an entrepreneur",
@@ -8644,13 +8806,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "dry humour",
+   "query": "dry jokes",
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "dry humor"
   },
   {
-   "query": "dry jokes",
+   "query": "dry humour",
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "dry humor"
@@ -8692,6 +8854,36 @@
    "seed": "tiktok watch time"
   },
   {
+   "query": "secret santa themes",
+   "impressions": 9,
+   "broadImpressions": 9,
+   "seed": "funny secret santa ideas"
+  },
+  {
+   "query": "secret santa ideas for work",
+   "impressions": 9,
+   "broadImpressions": 9,
+   "seed": "funny secret santa ideas"
+  },
+  {
+   "query": "christmas wish",
+   "impressions": 9,
+   "broadImpressions": 2021,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "christmas messages for cards",
+   "impressions": 9,
+   "broadImpressions": 9,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "merry christmas greeting",
+   "impressions": 9,
+   "broadImpressions": 188,
+   "seed": "funny christmas card messages"
+  },
+  {
    "query": "how to be more ambitious",
    "impressions": 8,
    "broadImpressions": 33,
@@ -8716,13 +8908,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be anonymous on google doc",
+   "query": "how to be a therian",
    "impressions": 7,
    "broadImpressions": 7,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a therian",
+   "query": "how to be anonymous on google doc",
    "impressions": 7,
    "broadImpressions": 7,
    "seed": "how to be funny"
@@ -8734,16 +8926,28 @@
    "seed": "funny video ideas"
   },
   {
+   "query": "how to get more vram",
+   "impressions": 7,
+   "broadImpressions": 7,
+   "seed": "how to get more views on tiktok"
+  },
+  {
    "query": "how to get more fps on fortnite",
    "impressions": 7,
    "broadImpressions": 7,
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to get more vram",
+   "query": "christmas message",
    "impressions": 7,
    "broadImpressions": 7,
-   "seed": "how to get more views on tiktok"
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "funny christmas images",
+   "impressions": 7,
+   "broadImpressions": 7,
+   "seed": "funny christmas card messages"
   },
   {
    "query": "how to be a ninja",
@@ -8762,6 +8966,12 @@
    "impressions": 6,
    "broadImpressions": 6,
    "seed": "self deprecating humor"
+  },
+  {
+   "query": "secret santa theme ideas",
+   "impressions": 6,
+   "broadImpressions": 6,
+   "seed": "funny secret santa ideas"
   },
   {
    "query": "must see comedy show clips",
@@ -8812,13 +9022,13 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "kit tok",
+   "query": "tiktok watch online free without login",
    "impressions": 4,
    "broadImpressions": 4,
    "seed": "tiktok watch time"
   },
   {
-   "query": "tiktok watch online free without login",
+   "query": "kit tok",
    "impressions": 4,
    "broadImpressions": 4,
    "seed": "tiktok watch time"
@@ -8846,6 +9056,12 @@
    "impressions": 3,
    "broadImpressions": 3,
    "seed": "tiktok watch time"
+  },
+  {
+   "query": "funny secret santa gifts",
+   "impressions": 3,
+   "broadImpressions": 3,
+   "seed": "funny secret santa ideas"
   },
   {
    "query": "new comedy stand up specials",
