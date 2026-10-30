@@ -45,7 +45,7 @@ import {
   type ScreenplayElement,
   type VaryKind,
 } from './shared'
-import { bankFromFunniest, dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt, type Technique } from './techniques'
+import { bankFromFunniest, costumeToken, dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt, type Technique } from './techniques'
 
 /* ── the /funniest bank ──
    Built once per process from the published /funniest pages and the
@@ -90,7 +90,12 @@ export { BIT_PROMPT_VERSION }
    PREFERS it: the backup still starts at the hedge, but its answer is only
    used if the primary fails or runs past its cap. Funny is the product; a
    few more seconds is the price. BIT_PREFER_PRIMARY=off restores the pure
-   race. The judge is back on by default (BIT_JUDGE=off turns it off). */
+   race. The judge is back on by default (BIT_JUDGE=off turns it off).
+
+   bit-1.5 (Oct 29 2026): back to a fast writer. In the blind eval gpt-5
+   ran past its 30s cap on 19 of 30 stories and, when it did answer, won
+   2 of 11. Default writer is now google/gemini-3-flash-preview; the judge
+   moves to the other family (openai/gpt-5-mini) with a 10s cap. */
 function budgetMs(name: string, fallback: number): number {
   const n = Number(process.env[name] ?? '')
   return Number.isFinite(n) && n > 0 ? n : fallback
@@ -103,7 +108,7 @@ export const BIT_BUDGET = {
   hedge: () => budgetMs('BIT_HEDGE_MS', 9_000),
   /** backup writer's cap, from the moment it starts */
   backup: () => budgetMs('BIT_BACKUP_MS', 22_000),
-  judge: () => budgetMs('BIT_JUDGE_MS', 6_000),
+  judge: () => budgetMs('BIT_JUDGE_MS', 10_000),
   vary: () => budgetMs('BIT_VARY_MS', 15_000),
 }
 
@@ -115,17 +120,17 @@ export function backupWriterModel(): string {
 }
 
 /** The bit writer's primary model: BIT_WRITER_MODEL, else the card
- *  pipeline's writer when one is set explicitly, else gpt-5. */
+ *  pipeline's writer when one is set explicitly, else a fast Gemini. */
 export function bitWriterModel(): string {
   const own = (process.env['BIT_WRITER_MODEL'] ?? '').trim()
   if (own) return own
   const shared = (process.env['JOKE_WRITER_MODEL'] ?? '').trim()
-  return shared || 'openai/gpt-5'
+  return shared || 'google/gemini-3-flash-preview'
 }
 
 /** The bit judge: must be a different family from the writer. */
 export function bitJudgeModel(): string {
-  const wanted = (process.env['BIT_JUDGE_MODEL'] ?? '').trim() || 'google/gemini-3-flash-preview'
+  const wanted = (process.env['BIT_JUDGE_MODEL'] ?? '').trim() || 'openai/gpt-5-mini'
   const same = wanted.split('/')[0] === bitWriterModel().split('/')[0]
   return same ? (wanted.startsWith('openai/') ? 'google/gemini-3-flash-preview' : 'openai/gpt-5-mini') : wanted
 }
@@ -217,8 +222,47 @@ export function bitFailure(b: BitDraft, story: string, controls: BitControls): s
   if (craft) return craft
   const technique = techniqueCraftFailure([...b.tags, b.button], story)
   if (technique) return technique
+  const once = setupFailure(b, story)
+  if (once) return once
   if (b.hook.split(/\s+/).length > 10) return 'hook over 10 words'
   if (bitWords(b) > maxWords(controls)) return 'over length'
+  return null
+}
+
+/* bit-1.5 · say the situation once. The Oct 29 blind eval: the hook told the
+   story, the setup told it again, and the costume (audit, inventory, merger)
+   sat in the hook where the tag rule never looked. */
+const SETUP_MAX_WORDS = 18
+const ONCE_STOP = new Set(
+  ('a an the and or but so to of in on at for with from by my me i i\'m im she he her him his they them their we our you your ' +
+    'it its it\'s was were is are am be been had has have did do does just that this then there what when who said says ' +
+    'told tell still now every all one up out about after before while like not no').split(' '),
+)
+const contentSet = (s: string) =>
+  new Set(
+    s
+      .toLowerCase()
+      .replace(/[^a-z0-9' ]/g, ' ')
+      .split(/\s+/)
+      .map((w) => w.replace(/^'+|'+$/g, '').replace(/'s$/, ''))
+      .filter((w) => w.length > 2 && !ONCE_STOP.has(w)),
+  )
+
+/** The setup retells what the hook said, runs long, or the hook/setup wear a
+ *  costume on top of one already in the tags. Craft, not safety. */
+export function setupFailure(b: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>, story: string): string | null {
+  if (b.setup.split(/\s+/).filter(Boolean).length > SETUP_MAX_WORDS) return 'setup retells the story (over 18 words)'
+  const hook = contentSet(b.hook)
+  const shared = [...contentSet(b.setup)].filter((w) => hook.has(w))
+  if (shared.length >= 3) return `setup repeats the hook (${shared.slice(0, 4).join(', ')})`
+  // A setup made of the story's own words is the story told again. The exact
+  // words someone said are allowed: quoted text is left out of the count.
+  const own = [...contentSet(b.setup.replace(/"[^"]*"|'[^']{6,}'/g, ' '))]
+  const told = contentSet(story)
+  const retold = own.filter((w) => told.has(w))
+  if (retold.length >= 5 && retold.length >= own.length * 0.6) return `setup retells the story (${retold.slice(0, 4).join(', ')})`
+  const worn = [b.hook, b.setup, ...b.tags, b.button].map((l) => costumeToken(l, story)).filter((t): t is string => !!t)
+  if (worn.length >= 2) return `costume vocabulary: ${worn.join(', ')}`
   return null
 }
 
@@ -231,7 +275,12 @@ export function isSafetyFailure(rule: string): boolean {
 
 /** The bit-1.3 technique rules (labels, costume, copied example). */
 export function isTechniqueFailure(rule: string): boolean {
-  return rule.startsWith('labels, not acts') || rule.startsWith('costume vocabulary') || rule === 'copied a technique example'
+  return (
+    rule.startsWith('labels, not acts') ||
+    rule.startsWith('costume vocabulary') ||
+    rule === 'copied a technique example' ||
+    rule.startsWith('setup ')
+  )
 }
 
 /* ── stage 2 · the bit pass ── */

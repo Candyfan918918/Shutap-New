@@ -295,6 +295,11 @@ export const COSTUME_TOKENS = [
   'committee', 'press office', 'regulator', 'inspector', 'hazardous', 'biohazard', 'crime scene', 'philanthropist',
   'jurisdiction', 'litigation', 'subpoena', 'affidavit', 'verdict', 'presiding', 'clerk', 'branch office',
   'shareholder', 'stakeholder', 'firing squad', 'high-security', 'bunker', 'suspension', 'eviction notice',
+  // bit-1.5: the costumes the Oct 29 blind eval was full of
+  'inventor~', 'merger', 'acquisition', 'liquidat~', 'notari~', 'chain of custody', 'evidence', 'case file',
+  'itemi~', 'municipal', 'transaction', 'purchase agreement', 'actuar~', 'defense attorney', 'jury',
+  'administrative', 'formal', 'officially', 'unauthorized', 'terminate', 'lease', 'paperwork', 'receipt',
+  'filing', 'logged', 'spreadsheet entry', 'annual review', 'performance review',
 ]
 
 function hasWord(text: string, token: string): boolean {

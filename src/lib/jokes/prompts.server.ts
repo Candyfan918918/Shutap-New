@@ -1265,12 +1265,12 @@ export function fill(template: string, vars: Record<string, string | undefined>)
    kept bit as hotter / tighter / escalate.
 
    BIT_PROMPT_VERSION is stamped on every bit. Bump it on ANY edit below. */
-export const BIT_PROMPT_VERSION = 'bit-1.4'
+export const BIT_PROMPT_VERSION = 'bit-1.5'
 
 /** What each audience control changes. The aim never changes: the situation. */
 export const BIT_AUDIENCE: Record<string, string> = {
   social: 'TikTok / Reels / Shorts. The hook has to stop a thumb. Talking-to-camera rhythm, short sentences, every line could be on-screen text.',
-  live: 'An open mic or a set. Spoken rhythm with room for a laugh after each tag. The setup can breathe a little more; the button is the laugh you walk off on.',
+  live: 'An open mic or a set. Spoken rhythm with room for a laugh after each tag. The setup still says the situation once; the button is the laugh you walk off on.',
   office: 'Said at work, to coworkers. Clean: no swearing, nothing HR would forward. Still a full-degree joke, just with its tie on.',
   work: 'A work story told to friends after work. Swearing is fine if it lands; the boss, the meeting and the inbox are fair game.',
   family: 'Told at a family dinner or in the group chat. Clean, warm on the surface, merciless underneath. Nobody at the table should be able to object out loud.',
@@ -1323,11 +1323,15 @@ HOOK — the first two seconds, also the on-screen text. At most 8 words.
   not a pun. "my roommate's girlfriend" works. "she asked ME to keep it
   down" works.
 
-SETUP — the facts, plainly, with their real detail: the time, the number,
-  the exact words someone said. One to three short sentences. The setup is
-  not trying to be funny yet; it is loading the gun. Use the details the
-  story gave and invent none: no new numbers, times or events in the setup.
-  The plainer the setup, the harder the turn lands.
+SETUP — SAY THE SITUATION ONCE. The hook already told them what happened;
+  the setup never says it again. It adds only the one fact the tags need
+  that the hook left out: the time, the number, or the exact words someone
+  said. One short sentence, at most 15 words. If the hook already carries
+  the situation, the setup is just the quote or the detail ("the note said
+  'now you'll be able to find things.'"). Never a second retelling, never
+  a summary of the story. Invent nothing in the setup: no new numbers,
+  times or events. Get the roles right: who did it, to whom, and whose
+  file, note or rule it is, exactly as the story says.
 
 TAGS — 1 to 3 jokes on the SAME premise, each one a step further, each
   shorter than the last. A tag is premise → picture → landing:
@@ -1353,11 +1357,16 @@ ACTS, NOT LABELS — the funniest lines show something HAPPENING: a note
   they are not funny. At most ONE line in a bit may say what someone or
   something is ("he's a ...", "it's a ...").
 
-NO COSTUME — never dress the story in an institution's vocabulary it did
-  not use: audit, consultant, department, protocol, forensic, CEO, officer,
-  committee, verdict, magistrate, legal, corporate, crime scene, bunker.
-  At most one official-sounding line per bit, and only when the technique
-  asks for it (a note in management voice).
+NO COSTUME — the most common way these bits fail. Never dress the story in
+  an institution's vocabulary it did not use: audit, inventory, merger,
+  acquisition, liquidator, receipt, transaction, notarized, evidence, chain
+  of custody, report, case file, filing, itemized, formal, official,
+  municipal, lease, eviction, consultant, department, protocol, forensic,
+  CEO, committee, verdict, jury, legal, corporate, crime scene, bunker.
+  "She audited my kitchen", "he's processing a merger" and "I logged it as
+  evidence" are all the same joke, and nobody laughs at it twice. At most
+  one official-sounding word in the whole bit, hook and setup included,
+  and only when the technique asks for it.
 
 THE TELLER MAY ACT — a tag can say what the teller did next ("so I taped a
   note to the pan"). That is the bit. Never invent the other person's past,
@@ -1462,6 +1471,10 @@ THEN RANK what survives, weighted in this order:
 - ACTS BEAT LABELS. A line that shows something happening (a note left, a
   rule followed to the letter, a number) beats "he's a [job title] of
   [thing]". Institution vocabulary the story never used is a costume.
+- SAID ONCE. A bit whose setup retells what the hook already said, or
+  retells the whole story, ranks down: the audience heard it the first
+  time. A bit that is "she audited / inventoried / merged / filed it" ranks
+  below anything with a real picture.
 - THE HOOK. Would a scrolling thumb stop? Specific and strange beats
   general. Eight words or fewer.
 - THE BUTTON. Does it land on a picture and end the bit, or explain it?
@@ -1506,7 +1519,8 @@ VOICE: {{VOICE}}
 {{KIND_RULE}}
 
 Keep the four parts: hook (at most 8 words, readable on screen in two
-seconds), setup (the facts plainly, no invented ones), 1 to 3 tags (each a
+seconds), setup (one short sentence, only the fact the hook left out: never
+retell the story, no invented facts), 1 to 3 tags (each a
 picture that lands on a thing you can point at), button (the last line, a
 verdict or reversal, never a moral). Same hard rules as always: the joke
 goes at the situation and the other party's behaviour, never at the teller;
