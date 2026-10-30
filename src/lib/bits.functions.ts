@@ -49,6 +49,7 @@ const ControlsSchema = z
     voice: z.enum(VOICES).optional(),
     length: z.enum(LENGTHS).optional(),
     heat: z.number().int().min(1).max(5).optional(),
+    move: z.string().max(120).optional(),
   })
   .optional()
 

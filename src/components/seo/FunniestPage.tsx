@@ -5,6 +5,7 @@ import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
 import { TryItBox } from '@/components/seo/TryItBox'
 import { BitSurface } from '@/pages/home/bit/BitSurface'
 import { FUNNIEST_WRITER } from '@/lib/seo/writer-copy'
+import { WriterBar } from '@/components/seo/WriterBar'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
 import type { FunniestEntry, FunniestSource } from '@/lib/seo/funniest'
 
@@ -194,7 +195,9 @@ export function FunniestPage({
                   href="#bit-write"
                   onClick={(e) => {
                     e.preventDefault()
-                    void import('@/lib/tracking').then((m) => m.trackEvent('move_clicked', { page: `funniest/${entry.slug}`, technique: t.name })).catch(() => {})
+                    const id = `${entry.slug}:${t.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`
+                    window.dispatchEvent(new CustomEvent('shutap:move', { detail: { id, name: t.name } }))
+                    void import('@/lib/tracking').then((m) => m.trackEvent('move_clicked', { page: `funniest/${entry.slug}`, technique: id })).catch(() => {})
                     document.getElementById('bit-write')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     window.setTimeout(() => (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.focus(), 500)
                   }}
@@ -229,6 +232,7 @@ export function FunniestPage({
         )}
 
         <TryItBox page={`funniest/${entry.slug}`} heading="Try these techniques on your own story" anchor />
+        <WriterBar page={`funniest/${entry.slug}`} label={FUNNIEST_WRITER.heading} />
 
         <section style={{ marginBottom: 32 }}>
           <h2 style={{ ...h2Style, fontSize: 18 }}>Sources</h2>

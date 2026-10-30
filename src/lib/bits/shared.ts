@@ -16,6 +16,9 @@ export type BitControls = {
   voice: BitVoice
   length: BitLength
   heat: 1 | 2 | 3 | 4 | 5
+  /** a technique id pinned from a funniest page ("Use this move"): every
+   *  candidate is written with it as its primary move */
+  move?: string
 }
 
 export const DEFAULT_CONTROLS: BitControls = { audience: 'social', voice: 'deadpan', length: '30s', heat: 3 }

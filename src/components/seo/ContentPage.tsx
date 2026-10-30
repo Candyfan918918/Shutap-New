@@ -8,6 +8,7 @@ import type { Crumb } from '@/lib/seo/breadcrumbs'
 import type { BitControls } from '@/lib/bits/shared'
 import type { GuideSample } from '@/lib/seo/guides'
 import { BitSurface } from '@/pages/home/bit/BitSurface'
+import { WriterBar } from '@/components/seo/WriterBar'
 import type { WriterCopy } from '@/lib/seo/writer-copy'
 
 type Section = { heading: string; body: string };
@@ -217,6 +218,7 @@ export function ContentPage({
         )}
 
         {tryIt && <TryItBox page={tryIt} preset={preset} anchor heading={writer?.heading ?? "Write yours above"} />}
+        {tryIt && <WriterBar page={tryIt} label={writer?.heading ?? "Try it on your own story."} />}
 
         <p style={{ marginTop: 40, fontSize: 15 }}>
           <Link

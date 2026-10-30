@@ -209,6 +209,23 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     return () => setSurfacePage('home')
   }, [embed?.page])
 
+  /* "Use this move on your story" on a funniest page pins that technique
+     for the next write. Lives here, not in the saved controls, so it never
+     follows the visitor to the homepage. */
+  const [move, setMove] = useState<{ id: string; name: string } | null>(null)
+  useEffect(() => {
+    if (!embed) return
+    const onMove = (e: Event) => {
+      const d = (e as CustomEvent<{ id: string; name: string }>).detail
+      if (d?.id && d?.name) {
+        setMove(d)
+        jokeTrack('move_pinned', 'guest', { technique: d.id })
+      }
+    }
+    window.addEventListener('shutap:move', onMove)
+    return () => window.removeEventListener('shutap:move', onMove)
+  }, [embed])
+
   const [story, setStory] = useState(() =>
     typeof document === 'undefined' ? '' : ((document.getElementById('bit-story') as HTMLTextAreaElement | null)?.value ?? ''),
   )
@@ -577,7 +594,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
       let timer: number | undefined
       try {
         res = await Promise.race([
-          write({ data: { story: text, controls: ctl, write_id: writeId, ...ctx() } }),
+          write({ data: { story: text, controls: move ? { ...ctl, move: move.id } : ctl, write_id: writeId, ...ctx() } }),
           new Promise<never>((_, reject) => {
             timer = window.setTimeout(() => reject(new Error('timeout')), WRITE_TIME_LIMIT_MS)
           }),
@@ -776,6 +793,16 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 </label>
                 <span className="bt-box-aside">names get removed</span>
               </div>
+              {move && (
+                <div className="bt-move" role="status">
+                  <span>
+                    the move: <b>{move.name}</b>
+                  </span>
+                  <button type="button" className="bt-btn ghost sm" onClick={() => setMove(null)} aria-label="Unpin this move">
+                    unpin
+                  </button>
+                </div>
+              )}
               <textarea
                 suppressHydrationWarning
                 id="bit-story"

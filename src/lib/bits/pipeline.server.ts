@@ -46,7 +46,7 @@ import {
   type VaryKind,
 } from './shared'
 import { houseSignal } from './house.server'
-import { bankFromFunniest, costumeToken, dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt, type Technique } from './techniques'
+import { TECHNIQUES, bankFromFunniest, costumeToken, dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt, type Technique } from './techniques'
 
 /* ── the /funniest bank ──
    Built once per process from the published /funniest pages and the
@@ -531,7 +531,16 @@ export async function writeBitFromStory(
   // One deal per run: both writers in the race get the same techniques, so
   // the bit is the same operation whichever model answers first.
   const house = variant.noTechniques ? { examples: '', weights: {} } : await houseSignal()
-  const dealt = variant.noTechniques ? [] : dealTechniques(4, Math.random, variant.pool ?? (await funniestBank()).line, house.weights)
+  let dealt = variant.noTechniques ? [] : dealTechniques(4, Math.random, variant.pool ?? (await funniestBank()).line, house.weights)
+  // "Use this move" from a funniest page: the pinned technique is every
+  // candidate's primary, so the judge picks the best use of that move
+  // rather than the best of four different moves.
+  if (controls.move && dealt.length) {
+    const fb = await funniestBank()
+    const bank = [...TECHNIQUES, ...fb.line, ...fb.performance]
+    const pinned = bank.find((t) => t.id === controls.move)
+    if (pinned) dealt = dealt.map((d) => ({ ...d, primary: pinned }))
+  }
   const primaryModel = variant.writer ?? bitWriterModel()
   const backupModel = variant.backup ?? backupWriterModel()
   const sortBits = (bits: BitDraft[]) => {

@@ -26,6 +26,12 @@
 .bt-hero-embed { text-align: left; scroll-margin-top: 84px; }
 .bt-hero-embed .bt-h1 { font-size: clamp(26px, 4vw, 34px); }
 .bt-hero-embed .bt-sub { text-align: left; }
+.bt-move { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 22px; background: var(--tint); border-bottom: 1px dashed rgba(184, 69, 107, 0.30); font: 500 var(--fs-small) var(--sora); color: var(--rose-ink); }
+/* the sticky bar on a phone when the writer has scrolled away */
+.bt-sticky { position: fixed; left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); z-index: 60; display: none; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 10px 10px 16px; border-radius: 999px; background: #1d1a1a; color: #fff; font: 600 var(--fs-small) var(--sora); box-shadow: 0 10px 30px rgba(20,16,22,.25); }
+.bt-sticky.on { display: flex; }
+.bt-sticky button { background: var(--rose); color: #fff; border: 0; border-radius: 999px; padding: 8px 14px; font: 600 var(--fs-small) var(--sora); cursor: pointer; white-space: nowrap; }
+@media (min-width: 761px) { .bt-sticky.on { display: none; } }
 .bt-h1 { margin: 0; font-weight: 800; letter-spacing:0; color: var(--wine); line-height: 1.1; font-size:var(--fs-display); }
 .bt-h1 em { font-family: var(--news); font-style: italic; font-weight: 400; color: var(--rose); letter-spacing:0; }
 .bt-h2 { margin: 0; font-weight: 800; letter-spacing:0; color: var(--wine); line-height: 1.1; font-size:var(--fs-h2); }
