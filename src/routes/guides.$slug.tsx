@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { writerCopyFor } from '@/lib/seo/writer-copy'
 import { Route as RootRoute } from "./__root";
 import { ogImageMeta } from "@/lib/seo/meta";
 import { ContentPage } from "@/components/seo/ContentPage";
@@ -120,6 +121,7 @@ function GuideRoute() {
     <ContentPage
       tryIt={`guides/${slug}`}
       preset={g.preset}
+      writer={writerCopyFor(g.topic)}
       sample={g.sample}
       breadcrumbs={[
         { name: "Guides", path: "/guides" },

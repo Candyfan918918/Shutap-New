@@ -37,7 +37,7 @@ import {
 import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { trackEvent } from '@/lib/tracking'
-import { anonSessionId, jokeTrack } from '../joke/jokeClient'
+import { setSurfacePage, anonSessionId, jokeTrack } from '../joke/jokeClient'
 import { ActionIcon } from './icons'
 import { Versions } from './Versions'
 import { Progress } from './Progress'
@@ -182,7 +182,18 @@ const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'e
 
 const SCRIM_GRACE_MS = 900
 
-export function BitSurface() {
+/** The writer on a guide or funniest page (Oct 30 2026): same box, same
+ *  result, no hop to the homepage. The page's own words head it. */
+export type BitEmbed = {
+  /** page id for events, e.g. guides/best-man-speech */
+  page: string
+  heading: string
+  sub?: string
+  placeholder?: string
+  preset?: Partial<BitControls>
+}
+
+export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const navigate = useNavigate()
   const router = useRouter()
   const write = useServerFn(writeBit)
@@ -193,6 +204,11 @@ export function BitSurface() {
   // Start from whatever is already in the server-rendered box: a visitor can
   // type before the app loads, and an empty start value made React clear the
   // box under them the moment it took over (the "flash").
+  useEffect(() => {
+    setSurfacePage(embed?.page ?? 'home')
+    return () => setSurfacePage('home')
+  }, [embed?.page])
+
   const [story, setStory] = useState(() =>
     typeof document === 'undefined' ? '' : ((document.getElementById('bit-story') as HTMLTextAreaElement | null)?.value ?? ''),
   )
@@ -336,7 +352,7 @@ export function BitSurface() {
     // the second mount sees the query already dropped, so it reuses the
     // preset that arrived a moment ago.
     const preset = arrivedPreset && Date.now() - arrivedPreset.at < 5000 ? arrivedPreset.preset : {}
-    setControls({ ...readControls(), ...preset })
+    setControls({ ...readControls(), ...(embed?.preset ?? {}), ...preset })
     if (Object.keys(fromUrl).length) {
       jokeTrack('preset_opened', tier, { ...fromUrl })
       try {
@@ -440,7 +456,7 @@ export function BitSurface() {
   useEffect(() => {
     // The linked bit opens at once, beside the account check, not after it.
     void refresh().then(() => restore())
-    void openFromLink()
+    if (!embed) void openFromLink()
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user.is_anonymous !== true) {
         // Signed in without leaving the page (a popup, as in the preview):
@@ -666,8 +682,9 @@ export function BitSurface() {
       if (!bit) return
       writePending(bit.id, anonSessionId(), signinFrom)
     }
-    try { sessionStorage.setItem('shutap_returnTo', '/') } catch { /* noop */ }
-    setDurableReturn('/')
+    const back = embed ? window.location.pathname : '/'
+    try { sessionStorage.setItem('shutap_returnTo', back) } catch { /* noop */ }
+    setDurableReturn(back)
     jokeTrack('signin_clicked', tier, { method, from })
     // Each button goes straight to its own sign-in: Google and Apple to the
     // provider, email to the email form only. Never to a second chooser.
@@ -683,7 +700,7 @@ export function BitSurface() {
   }
 
   function writeAnother() {
-    if (window.location.search.includes('bit=')) window.history.replaceState(null, '', '/')
+    if (!embed && window.location.search.includes('bit=')) window.history.replaceState(null, '', '/')
     setBit(null)
     setNotice(null)
     setPhase('write')
@@ -736,13 +753,20 @@ export function BitSurface() {
         )}
         {phase === 'write' && !opening && (
           <>
-            <div className="bt-hero">
-              <h1 className="bt-h1">
-                Say it <em>funnier.</em>
-                <span className="bt-h1-kicker">Your humor, amplified.</span>
-              </h1>
-              <p className="bt-sub">Type what happened. Get the video, the caption, the bit. In your voice.</p>
-            </div>
+            {embed ? (
+              <div className="bt-hero bt-hero-embed" id="bit-write">
+                <h2 className="bt-h1">{embed.heading}</h2>
+                <p className="bt-sub">{embed.sub ?? 'Type what happened. Get the video, the caption, the bit. Right here, free.'}</p>
+              </div>
+            ) : (
+              <div className="bt-hero">
+                <h1 className="bt-h1">
+                  Say it <em>funnier.</em>
+                  <span className="bt-h1-kicker">Your humor, amplified.</span>
+                </h1>
+                <p className="bt-sub">Type what happened. Get the video, the caption, the bit. In your voice.</p>
+              </div>
+            )}
 
             <div className="bt-box">
               <div className="bt-box-head">
@@ -756,7 +780,7 @@ export function BitSurface() {
                 suppressHydrationWarning
                 id="bit-story"
                 className="bt-paper"
-                placeholder={prompt}
+                placeholder={embed?.placeholder ?? prompt}
                 value={story}
                 maxLength={4000}
                 onChange={(e) => { typed.current = true; setStory(e.target.value) }}

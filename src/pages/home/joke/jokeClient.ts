@@ -42,17 +42,25 @@ export function clearAnonSessionId(): void {
   try { localStorage.removeItem(ANON_KEY) } catch { /* noop */ }
 }
 
+/** Which page the writer is on: 'home', or a guide/funniest page id. Every
+ *  joke event carries it, so the article pages' writers show up as their own
+ *  funnel. */
+let surfacePage = 'home'
+export function setSurfacePage(page: string): void {
+  surfacePage = page
+}
+
 /** Every joke event carries the tier. Situation text never rides along. */
 export function jokeTrack(name: string, tier: JokeTier | BitTier, props: Record<string, unknown> = {}): void {
-  void phCapture(name, { ...props, tier })
+  void phCapture(name, { ...props, tier, surface: surfacePage })
 }
 
 /** A tap on a result control (download, copy, watch), in PostHog AND in the
  *  admin events table, the moment it happens and whatever happens next, so a
  *  guest who taps download and leaves still shows up. */
 export function jokeTap(name: string, tier: JokeTier | BitTier, props: Record<string, unknown> = {}): void {
-  void phCapture(name, { ...props, tier })
-  void trackEvent(name, { ...props, tier })
+  void phCapture(name, { ...props, tier, surface: surfacePage })
+  void trackEvent(name, { ...props, tier, surface: surfacePage })
 }
 
 /** The public link for a card. Kept for link previews; a share hands over the

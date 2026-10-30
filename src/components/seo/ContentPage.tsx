@@ -7,6 +7,8 @@ import { TryItBox } from '@/components/seo/TryItBox'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
 import type { BitControls } from '@/lib/bits/shared'
 import type { GuideSample } from '@/lib/seo/guides'
+import { BitSurface } from '@/pages/home/bit/BitSurface'
+import type { WriterCopy } from '@/lib/seo/writer-copy'
 
 type Section = { heading: string; body: string };
 type Other = { href: string; label: string };
@@ -25,6 +27,7 @@ export function ContentPage({
   tryIt,
   preset,
   sample,
+  writer,
 }: {
   breadcrumbs?: Crumb[];
   h1: string;
@@ -42,6 +45,8 @@ export function ContentPage({
   preset?: Partial<BitControls>;
   /** Tool pages: one real bit from the product, shown under the button. */
   sample?: GuideSample;
+  /** what the inline writer says on this page (heading, sub, placeholder) */
+  writer?: WriterCopy;
 }) {
   return (
     <main
@@ -92,7 +97,11 @@ export function ContentPage({
           {capsule}
         </p>
 
-        {tryIt && <TryItBox page={tryIt} position="top" preset={preset} />}
+        {tryIt && (
+          <div style={{ margin: "0 0 44px" }}>
+            <BitSurface embed={{ page: tryIt, preset, ...(writer ?? { heading: "Try it on your own story.", sub: "Type what happened. Get the video, the caption, the bit. Right here, free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
+          </div>
+        )}
 
         {sample && <SampleBit sample={sample} />}
 
@@ -207,7 +216,7 @@ export function ContentPage({
           </nav>
         )}
 
-        {tryIt && <TryItBox page={tryIt} preset={preset} />}
+        {tryIt && <TryItBox page={tryIt} preset={preset} anchor heading={writer?.heading ?? "Write yours above"} />}
 
         <p style={{ marginTop: 40, fontSize: 15 }}>
           <Link

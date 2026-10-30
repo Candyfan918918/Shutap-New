@@ -22,6 +22,10 @@
 .bt * { box-sizing: border-box; }
 .bt-col { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 .bt-hero { text-align: center; display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+/* the writer on a guide or funniest page: a section heading, not the site's */
+.bt-hero-embed { text-align: left; scroll-margin-top: 84px; }
+.bt-hero-embed .bt-h1 { font-size: clamp(26px, 4vw, 34px); }
+.bt-hero-embed .bt-sub { text-align: left; }
 .bt-h1 { margin: 0; font-weight: 800; letter-spacing:0; color: var(--wine); line-height: 1.1; font-size:var(--fs-display); }
 .bt-h1 em { font-family: var(--news); font-style: italic; font-weight: 400; color: var(--rose); letter-spacing:0; }
 .bt-h2 { margin: 0; font-weight: 800; letter-spacing:0; color: var(--wine); line-height: 1.1; font-size:var(--fs-h2); }

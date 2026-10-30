@@ -22,6 +22,7 @@ export function TryItBox({
   heading = 'Turn your own story into a bit',
   position = 'bottom',
   preset,
+  anchor = false,
 }: {
   page: string
   heading?: string
@@ -29,10 +30,12 @@ export function TryItBox({
   preset?: Partial<BitControls>
   /** where on the page the banner sits; sent with the click event */
   position?: 'top' | 'bottom'
+  /** the writer is on this page: scroll up to it instead of leaving */
+  anchor?: boolean
 }) {
   const track = () => {
     void import('@/lib/tracking')
-      .then((m) => m.trackEvent('seo_cta_clicked', { page, position, kind: preset ? 'preset' : 'banner', ...(preset ?? {}) }))
+      .then((m) => m.trackEvent('seo_cta_clicked', { page, position, kind: anchor ? 'anchor' : preset ? 'preset' : 'banner', ...(preset ?? {}) }))
       .catch(() => {})
   }
 
@@ -55,10 +58,34 @@ export function TryItBox({
       <div style={{ display: 'grid', gap: 4, minWidth: 0, flex: '1 1 220px' }}>
         <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#17131a', lineHeight: 1.3 }}>{heading}</h2>
         <p style={{ margin: 0, fontSize: 15, color: '#443c42', lineHeight: 1.45 }}>
-          Write what happened. Get a bit: hook, setup, tags and button.
+          Write what happened. Get the video, the caption, the bit. Free.
           {preset && presetLabel(preset) ? ` Opens set to ${presetLabel(preset)}; change anything before you write.` : ''}
         </p>
       </div>
+      {anchor ? (
+        <a
+          href="#bit-write"
+          onClick={(e) => {
+            e.preventDefault()
+            track()
+            document.getElementById('bit-write')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            window.setTimeout(() => (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.focus(), 500)
+          }}
+          style={{
+            flex: '0 0 auto',
+            background: '#b8456b',
+            color: '#ffffff',
+            textDecoration: 'none',
+            fontWeight: 600,
+            fontSize: 17,
+            padding: '12px 22px',
+            borderRadius: 999,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Say it funnier ↑
+        </a>
+      ) : (
       <Link
         to="/"
         search={(preset ? presetSearch(preset) : undefined) as never}
@@ -76,8 +103,9 @@ export function TryItBox({
           whiteSpace: 'nowrap',
         }}
       >
-        Create your free joke now →
+        Say it funnier →
       </Link>
+      )}
     </section>
   )
 }
