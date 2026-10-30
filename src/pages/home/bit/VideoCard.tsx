@@ -15,6 +15,7 @@ import {
   anonSessionId,
   canShareFiles,
   isShareAbort,
+  jokeTap,
   jokeTrack,
   saveBlob,
 } from "../joke/jokeClient";
@@ -34,6 +35,7 @@ export function VideoCard({
   resume,
   onResumed,
   right,
+  onWatch,
 }: {
   bitId: string;
   version: BitVersion;
@@ -56,10 +58,13 @@ export function VideoCard({
   /** what sits beside the video (the caption): gets the download button and
    *  the watermark note to place in its own row */
   right?: (downloadButton: ReactNode, note: ReactNode) => ReactNode;
+  /** guests: the video is behind sign-in; this opens the sheet */
+  onWatch?: () => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [spec, setSpec] = useState<VideoSpec>(() => buildSpec(version, story));
-  const [playing, setPlaying] = useState(true);
+  const gated = !!onWatch;
+  const [playing, setPlaying] = useState(!gated);
   const [support, setSupport] = useState<EncodeSupport | null>(null);
   const [busy, setBusy] = useState<number | null>(null);
   const charge = useServerFn(chargeDownload);
@@ -111,13 +116,35 @@ export function VideoCard({
       if (audioRef.current && audioRef.current.state === "running")
         scheduleSfx(audioRef.current, spec, audioRef.current.currentTime + 0.02);
       raf = requestAnimationFrame(tick);
+    } else if (gated) {
+      // a guest sees the first beat only: the hook and the cast, no tags, no
+      // button, under a frosted cover and the ask
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
+      drawFrame(ctx, 0.8, spec, { watermark });
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
+      ctx.fillRect(0, VIDEO_H * 0.42, VIDEO_W, VIDEO_H * 0.58);
     } else {
       ctx.setTransform(scale, 0, 0, scale, 0, 0);
       drawFrame(ctx, 4.6, spec, { watermark });
     }
     return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [spec, playing, watermark]);
+  }, [spec, playing, watermark, gated]);
+
+  useEffect(() => {
+    if (gated) jokeTap("video_gated", tier, { kind: version.kind });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gated, version.id]);
+
+  function tapVideo() {
+    if (gated) {
+      jokeTap("video_gate_tapped", tier, { kind: version.kind });
+      onWatch?.();
+      return;
+    }
+    jokeTap("video_tapped", tier, { kind: version.kind, to: playing ? "pause" : "play" });
+    setPlaying((p) => !p);
+  }
 
   function toggleSound() {
     if (!audioRef.current) {
@@ -135,10 +162,16 @@ export function VideoCard({
   }
 
   async function download(skipConfirm = false) {
+    jokeTap("download_tapped", tier, {
+      kind: "video",
+      state: onSignIn ? "guest" : downloadsLeft === 0 ? "capped" : "ok",
+      resumed: skipConfirm,
+      left: downloadsLeft ?? null,
+    });
     if (onSignIn) return onSignIn();
     if (!skipConfirm && beforeDownload?.()) return;
     if (support === "none") {
-      jokeTrack("video_fallback_picture", tier, { reason: "unsupported" });
+      jokeTap("video_fallback_picture", tier, { reason: "unsupported" });
       say("This browser can't make a video file. Saving the picture instead.");
       return onFallbackPicture();
     }
@@ -153,7 +186,7 @@ export function VideoCard({
         },
       });
     } catch (e) {
-      jokeTrack("download_failed", tier, {
+      jokeTap("download_failed", tier, {
         kind: "video",
         reason: "threw",
         message: e instanceof Error ? e.message.slice(0, 120) : String(e).slice(0, 120),
@@ -163,11 +196,11 @@ export function VideoCard({
     }
     if (!r.ok) {
       if (r.reason === "limited") {
-        jokeTrack("download_blocked", tier, { kind: "video", used: r.used, cap: r.cap });
+        jokeTap("download_blocked", tier, { kind: "video", used: r.used, cap: r.cap });
         say(`That's today's ${r.cap} download${r.cap === 1 ? "" : "s"}.`);
         return onLimit("count");
       }
-      jokeTrack("download_failed", tier, { kind: "video", reason: r.reason });
+      jokeTap("download_failed", tier, { kind: "video", reason: r.reason });
       say(
         r.reason === "sign_in"
           ? "Sign in to download it."
@@ -209,11 +242,11 @@ export function VideoCard({
       say(watermark ? "Saved, with the shutap.com watermark." : "Saved. No watermark.");
     } catch (e) {
       console.warn("[video] encode failed", e);
-      jokeTrack("video_encode_failed", tier, {
+      jokeTap("video_encode_failed", tier, {
         support,
         message: e instanceof Error ? e.message.slice(0, 120) : "unknown",
       });
-      jokeTrack("video_fallback_picture", tier, { reason: "encode_failed" });
+      jokeTap("video_fallback_picture", tier, { reason: "encode_failed" });
       say(
         "Couldn't make the video on this device. Saving the picture instead; it won't count again.",
       );
@@ -240,7 +273,7 @@ export function VideoCard({
     busy !== null
       ? `making the video… ${Math.round(busy * 100)}%`
       : onSignIn
-        ? "sign in to download"
+        ? "sign in to watch + download"
         : left === 0
           ? "that's today's downloads · see plans"
           : `download video${left === null || left === undefined ? "" : ` · ${left} left today`}`;
@@ -309,12 +342,27 @@ export function VideoCard({
                 border: "1px solid var(--line)",
                 cursor: "pointer",
               }}
-              onClick={() => setPlaying((p) => !p)}
-              role="img"
+              onClick={tapVideo}
+              role={gated ? "button" : "img"}
               aria-label={
-                playing ? "The video, playing. Tap to pause." : "The video, paused. Tap to play."
+                gated
+                  ? "The video. Sign in to watch it."
+                  : playing
+                    ? "The video, playing. Tap to pause."
+                    : "The video, paused. Tap to play."
               }
             />
+            {gated && (
+              <button
+                type="button"
+                className="bt-btn sm"
+                onClick={tapVideo}
+                style={{ position: "absolute", left: "50%", top: "62%", transform: "translate(-50%, -50%)", whiteSpace: "nowrap" }}
+              >
+                sign in to watch
+              </button>
+            )}
+            {!gated && (
             <button
               type="button"
               className="bt-btn ghost sm"
@@ -331,6 +379,7 @@ export function VideoCard({
             >
               {audioRef.current && audioRef.current.state === "running" ? "sound on" : "sound"}
             </button>
+            )}
           </div>
           <span className="bt-note" style={{ display: "block", marginTop: 6, textAlign: "center" }}>
             {VIDEO_SECONDS}s · 1080×1920 · {support === "webm" ? "webm" : "mp4"}

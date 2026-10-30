@@ -71,6 +71,7 @@ const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   rewrite: { title: 'Sign in to rewrite it.', sub: 'Free. Hotter, tighter, a new tag, or mix your own. Your bit comes with you.' },
   swap: { title: 'Sign in to swap the tag.', sub: 'Free. Your bit comes with you, with all five spare tags.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
+  watch: { title: 'Sign in to watch the video.', sub: 'Free. The 5-second video, the caption and the hashtags come with you.' },
   download: { title: 'Sign in to download it.', sub: 'Free: one download a day (the video, or the caption and hashtags, or the picture), with a shutap.com watermark.' },
   save: { title: 'Sign in to keep it.', sub: 'Free. It goes in your set list with every version you make.' },
   scene: { title: 'Sign in to see the scene.', sub: 'Free. Your bit comes with you.' },
@@ -90,7 +91,7 @@ const STEPS = ['reading it · names removed', 'finding the angle', 'writing four
 /* ── the note left before sign-in, so the bit comes back after it ── */
 /** What a guest was doing when they were asked to sign in; picked back up
  *  once they're in. */
-type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'caption' | 'save' | 'scene' | 'screenplay' | 'post' | 'sheet'
+type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'caption' | 'watch' | 'save' | 'scene' | 'screenplay' | 'post' | 'sheet'
 function writePending(bitId: string, anon: string, from?: SigninFrom) {
   try {
     localStorage.setItem(PENDING_KEY, JSON.stringify({ bit_id: bitId, anon, from, at: Date.now() }))
@@ -867,6 +868,7 @@ export function BitSurface() {
               tier={tier}
               say={say}
               onSignIn={tier === 'guest' ? () => openSignin('video') : undefined}
+              onWatch={tier === 'guest' ? () => openSignin('watch') : undefined}
               onLimit={(why) => onDownloadLimit(why, 'video')}
               onFallbackPicture={() => setDownloadOpen(true)}
               downloadsLeft={downloadsLeft}

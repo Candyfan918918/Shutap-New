@@ -8,7 +8,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { chargeDownload, downloadUsage, exportBit, type DownloadUsage } from '@/lib/bits.functions'
 import { isPaidTier, type BitTier, type BitVersion } from '@/lib/bits/shared'
 import { PLANS, usd } from '@/lib/pricing'
-import { anonSessionId, canShareFiles, isShareAbort, jokeTrack, saveBlob, svgToPng } from '../joke/jokeClient'
+import { anonSessionId, canShareFiles, isShareAbort, jokeTap, jokeTrack, saveBlob, svgToPng } from '../joke/jokeClient'
 import { scriptPdf } from './screenplay-pdf'
 
 type Format = 'bit' | 'hook' | 'pdf'
@@ -92,6 +92,7 @@ export function DownloadSheet({
   const dlLeft = dl && dl.cap !== null ? Math.max(0, dl.cap - dl.used) : null
   const dlLabel = dl === null ? '' : dl.cap === null ? ' · unlimited' : dlLeft === 0 ? ' · none left today' : ` · ${dlLeft} of ${dl.cap} left today`
   async function save() {
+    jokeTap('download_tapped', tier, { kind: format === 'pdf' ? 'pdf' : 'image', state: ready ? 'ok' : 'not_ready' })
     if (!ready) return
     // One download against today's cap (the picture and the PDF are each a
     // kind; the same kind of the same version again today is free).

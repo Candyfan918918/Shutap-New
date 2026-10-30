@@ -168,7 +168,7 @@ function TermsPage() {
       <p>
         Downloads are counted separately. The video, the caption and hashtags (when copied), and
         the picture or script PDF each count as one download; the same one of the same version
-        again the same day is free. A rewrite is a new version, and its downloads count again. Guests can watch but not download. A free account gets
+        again the same day is free. A rewrite is a new version, and its downloads count again. Guests read the bit; watching or downloading the video takes an account. A free account gets
         <b>one download a day</b>, with a shutap.com watermark on the video and the picture. Basic
         gets <b>three a day</b> with no watermark; Pro has no daily number, within fair use.
       </p>

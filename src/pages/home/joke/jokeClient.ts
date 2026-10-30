@@ -2,6 +2,7 @@
 // tier, the card text and the export size all come from the server. What
 // happens here is only rasterising, packaging and handing the file over.
 import { phCapture } from '@/lib/posthog'
+import { trackEvent } from '@/lib/tracking'
 import type { JokeTier } from '@/lib/jokes/deck'
 import type { BitTier } from '@/lib/bits/shared'
 // The card's faces, as files: the same woff2 the page itself loads. An SVG
@@ -44,6 +45,14 @@ export function clearAnonSessionId(): void {
 /** Every joke event carries the tier. Situation text never rides along. */
 export function jokeTrack(name: string, tier: JokeTier | BitTier, props: Record<string, unknown> = {}): void {
   void phCapture(name, { ...props, tier })
+}
+
+/** A tap on a result control (download, copy, watch), in PostHog AND in the
+ *  admin events table, the moment it happens and whatever happens next, so a
+ *  guest who taps download and leaves still shows up. */
+export function jokeTap(name: string, tier: JokeTier | BitTier, props: Record<string, unknown> = {}): void {
+  void phCapture(name, { ...props, tier })
+  void trackEvent(name, { ...props, tier })
 }
 
 /** The public link for a card. Kept for link previews; a share hands over the
