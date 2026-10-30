@@ -9,6 +9,7 @@ import type { NewestRoom } from '@/lib/newest-rooms.functions'
 import type { DailyIdea } from '@/lib/daily-idea.functions'
 import { TodaysIdea } from './TodaysIdea'
 import { HomePoll } from './HomePoll'
+import { HomeBattle } from './HomeBattle'
 
 export function HomeImmersive({ dailyIdea = null }: { openRoomsCount?: number; newestRooms?: NewestRoom[]; dailyIdea?: DailyIdea | null | Promise<DailyIdea | null> } = {}) {
   return (
@@ -16,6 +17,7 @@ export function HomeImmersive({ dailyIdea = null }: { openRoomsCount?: number; n
       <EyeGradients />
       <main>
         <BitSurface />
+        <HomeBattle />
         <HomePoll />
         {/* Only this section waits for its data; the write box above never does. */}
         {dailyIdea instanceof Promise ? (

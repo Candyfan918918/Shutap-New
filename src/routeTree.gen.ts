@@ -17,6 +17,7 @@ import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AiDisclosureRouteImport } from './routes/ai-disclosure'
 import { Route as AiJokeGeneratorRouteImport } from './routes/ai-joke-generator'
+import { Route as BitDailyRouteImport } from './routes/bit-daily'
 import { Route as BitEvalRouteImport } from './routes/bit-eval'
 import { Route as BitLabRouteImport } from './routes/bit-lab'
 import { Route as BusinessRouteImport } from './routes/business'
@@ -77,6 +78,7 @@ import { Route as WhatHappensSlugRouteImport } from './routes/what-happens.$slug
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
+import { Route as AuthenticatedAdminBattleRouteImport } from './routes/_authenticated/admin.battle'
 import { Route as AuthenticatedAdminEventsRouteImport } from './routes/_authenticated/admin.events'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated/admin.feedback'
 import { Route as AuthenticatedAdminOverviewRouteImport } from './routes/_authenticated/admin.overview'
@@ -134,6 +136,11 @@ const AiDisclosureRoute = AiDisclosureRouteImport.update({
 const AiJokeGeneratorRoute = AiJokeGeneratorRouteImport.update({
   id: '/ai-joke-generator',
   path: '/ai-joke-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BitDailyRoute = BitDailyRouteImport.update({
+  id: '/bit-daily',
+  path: '/bit-daily',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BitEvalRoute = BitEvalRouteImport.update({
@@ -440,6 +447,12 @@ const AuthenticatedAdminAnalyticsRoute =
     path: '/admin/analytics',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminBattleRoute =
+  AuthenticatedAdminBattleRouteImport.update({
+    id: '/admin/battle',
+    path: '/admin/battle',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminEventsRoute =
   AuthenticatedAdminEventsRouteImport.update({
     id: '/admin/events',
@@ -554,6 +567,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
   '/ai-joke-generator': typeof AiJokeGeneratorRoute
+  '/bit-daily': typeof BitDailyRoute
   '/bit-eval': typeof BitEvalRoute
   '/bit-lab': typeof BitLabRoute
   '/business': typeof BusinessRoute
@@ -614,6 +628,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/battle': typeof AuthenticatedAdminBattleRoute
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
@@ -642,6 +657,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
   '/ai-joke-generator': typeof AiJokeGeneratorRoute
+  '/bit-daily': typeof BitDailyRoute
   '/bit-eval': typeof BitEvalRoute
   '/bit-lab': typeof BitLabRoute
   '/business': typeof BusinessRoute
@@ -702,6 +718,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/battle': typeof AuthenticatedAdminBattleRoute
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
@@ -732,6 +749,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/ai-disclosure': typeof AiDisclosureRoute
   '/ai-joke-generator': typeof AiJokeGeneratorRoute
+  '/bit-daily': typeof BitDailyRoute
   '/bit-eval': typeof BitEvalRoute
   '/bit-lab': typeof BitLabRoute
   '/business': typeof BusinessRoute
@@ -792,6 +810,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/_authenticated/admin/battle': typeof AuthenticatedAdminBattleRoute
   '/_authenticated/admin/events': typeof AuthenticatedAdminEventsRoute
   '/_authenticated/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin/overview': typeof AuthenticatedAdminOverviewRoute
@@ -822,6 +841,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ai-disclosure'
     | '/ai-joke-generator'
+    | '/bit-daily'
     | '/bit-eval'
     | '/bit-lab'
     | '/business'
@@ -882,6 +902,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/analytics'
+    | '/admin/battle'
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/overview'
@@ -910,6 +931,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ai-disclosure'
     | '/ai-joke-generator'
+    | '/bit-daily'
     | '/bit-eval'
     | '/bit-lab'
     | '/business'
@@ -970,6 +992,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/analytics'
+    | '/admin/battle'
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/overview'
@@ -999,6 +1022,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ai-disclosure'
     | '/ai-joke-generator'
+    | '/bit-daily'
     | '/bit-eval'
     | '/bit-lab'
     | '/business'
@@ -1059,6 +1083,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/analytics'
+    | '/_authenticated/admin/battle'
     | '/_authenticated/admin/events'
     | '/_authenticated/admin/feedback'
     | '/_authenticated/admin/overview'
@@ -1089,6 +1114,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AiDisclosureRoute: typeof AiDisclosureRoute
   AiJokeGeneratorRoute: typeof AiJokeGeneratorRoute
+  BitDailyRoute: typeof BitDailyRoute
   BitEvalRoute: typeof BitEvalRoute
   BitLabRoute: typeof BitLabRoute
   BusinessRoute: typeof BusinessRoute
@@ -1215,6 +1241,13 @@ declare module '@tanstack/react-router' {
       path: '/ai-joke-generator'
       fullPath: '/ai-joke-generator'
       preLoaderRoute: typeof AiJokeGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bit-daily': {
+      id: '/bit-daily'
+      path: '/bit-daily'
+      fullPath: '/bit-daily'
+      preLoaderRoute: typeof BitDailyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bit-eval': {
@@ -1637,6 +1670,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAnalyticsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/battle': {
+      id: '/_authenticated/admin/battle'
+      path: '/admin/battle'
+      fullPath: '/admin/battle'
+      preLoaderRoute: typeof AuthenticatedAdminBattleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/events': {
       id: '/_authenticated/admin/events'
       path: '/admin/events'
@@ -1776,6 +1816,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
+  AuthenticatedAdminBattleRoute: typeof AuthenticatedAdminBattleRoute
   AuthenticatedAdminEventsRoute: typeof AuthenticatedAdminEventsRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminOverviewRoute: typeof AuthenticatedAdminOverviewRoute
@@ -1788,6 +1829,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
+  AuthenticatedAdminBattleRoute: AuthenticatedAdminBattleRoute,
   AuthenticatedAdminEventsRoute: AuthenticatedAdminEventsRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminOverviewRoute: AuthenticatedAdminOverviewRoute,
@@ -1831,6 +1873,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AiDisclosureRoute: AiDisclosureRoute,
   AiJokeGeneratorRoute: AiJokeGeneratorRoute,
+  BitDailyRoute: BitDailyRoute,
   BitEvalRoute: BitEvalRoute,
   BitLabRoute: BitLabRoute,
   BusinessRoute: BusinessRoute,

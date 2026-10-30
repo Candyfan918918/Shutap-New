@@ -45,6 +45,8 @@ Disallow: /subscribe
 Disallow: /admin
 Disallow: /set-list
 Disallow: /bit-lab
+Disallow: /bit-daily
+Disallow: /bit-eval
 Disallow: /lovable/
 Disallow: /.lovable/
 Disallow: /checkin

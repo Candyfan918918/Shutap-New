@@ -76,6 +76,9 @@ function BitLab() {
         <p className="fd-muted" style={{ margin: 0 }}>
           Admin only. Runs the real pipeline (scrub, guard, premises, four bits, judge) without charging the daily five.
         </p>
+        <p style={{ margin: 0, fontWeight: 700 }}>
+          To rate jokes: <a href="/bit-daily">daily humor training</a> (every day) · <a href="/bit-eval">blind eval</a> (to measure)
+        </p>
 
         <label htmlFor="lab-story" className="fd-faint" style={{ fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase' }}>
           story

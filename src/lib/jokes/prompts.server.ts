@@ -1348,7 +1348,7 @@ THE TECHNIQUES — each bit is built on its own technique, dealt below. The
   story: copy the operation, never its words, nouns or numbers.
 
 {{TECHNIQUES}}
-
+{{HOUSE}}
 ACTS, NOT LABELS — the funniest lines show something HAPPENING: a note
   left, a reply sent, a rule followed to the letter, an object doing
   something, a number someone could check. "He's a philanthropist of the
