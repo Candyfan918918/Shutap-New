@@ -50,3 +50,28 @@ test('a learned weight of zero-ish still deals; a heavy one is dealt more', () =
   for (let i = 0; i < 400; i++) if (dealTechniques(4, rand, []).some((d) => d.primary.id === heavy)) base++
   assert.ok(hits > base, `${hits} vs ${base}`)
 })
+
+import { battleExamplesFrom, battleWeightsFrom } from './house.server'
+
+test('battle: a technique picked above 1 in 3 is dealt more, below is dealt less', () => {
+  const w = battleWeightsFrom([
+    { technique_id: 'hot', shown: 60, picked: 36 },
+    { technique_id: 'cold', shown: 60, picked: 6 },
+    { technique_id: 'new', shown: 10, picked: 9 },
+  ])
+  assert.ok(Math.abs(w.hot! - 1.8) < 1e-9)
+  assert.equal(w.cold, 0.5)
+  assert.equal(w.new, undefined)
+})
+
+test('battle: only well-tested winners become examples', () => {
+  const out = battleExamplesFrom([
+    { text: 'I found the forks. In the oven.', technique_id: 'a', shown: 40, picked: 30, setup: 'kitchen' },
+    { text: 'barely shown', technique_id: 'b', shown: 5, picked: 5, setup: 'x' },
+    { text: 'lost a lot', technique_id: 'c', shown: 40, picked: 4, setup: 'y' },
+  ])
+  assert.ok(out.includes('I found the forks'))
+  assert.ok(!out.includes('barely shown'))
+  assert.ok(!out.includes('lost a lot'))
+  assert.equal(battleExamplesFrom([]), '')
+})

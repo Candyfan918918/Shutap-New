@@ -31,7 +31,7 @@ function PrivacyPage() {
     <DocLayout
       active="/privacy"
       title="Privacy Policy"
-      subline="Last updated: October 22, 2026 · Controller: Shutap"
+      subline="Last updated: October 29, 2026 · Controller: Shutap"
     >
       <h3>1. The short version</h3>
       <p>
@@ -101,6 +101,14 @@ function PrivacyPage() {
           would see them. Replays are kept for 30 days.
         </li>
         <li>
+          <b>Joke battle:</b> the jokes in the homepage joke battle are written by Shutap, never taken
+          from anyone&rsquo;s story. When you play, we record which line you picked (or that you
+          picked none of them, or skipped), how long you took, and a random ID kept in your browser.
+          If you&rsquo;re signed in, your picks are linked to your account. We use picks to improve how
+          Shutap writes jokes and to show you your own rank, streak and humor type. Other players never
+          see your picks.
+        </li>
+        <li>
           <b>Technical:</b> standard device and log data.
         </li>
       </ul>
@@ -108,7 +116,7 @@ function PrivacyPage() {
       <h3>3. How we use it</h3>
       <p>
         To write your bits and rewrites; to run rooms; to enforce limits; to run the crisis check;
-        to provide the Mirror for Pro members (a private read-back of your activity on Shutap); to bill you; to understand how Shutap is used and fix problems; to keep the
+        to provide the Mirror for Pro members (a private read-back of your activity on Shutap); to bill you; to run the joke battle and learn from its picks which jokes land; to understand how Shutap is used and fix problems; to keep the
         service safe; to improve it using aggregated, de-identified data; and to comply with the
         law.
       </p>

@@ -1,5 +1,5 @@
-// The house signal: what the founder's daily ratings (/bit-daily) teach the
-// writer. Two things, both fail-soft (no table, no rows, no database in the
+// The house signal: what the founder's daily ratings (/bit-daily) and the
+// homepage joke battle teach the writer. Two things, both fail-soft (no table, no rows, no database in the
 // unit tests → the writer runs exactly as before):
 //
 //   examples — the most recent bits she kept or rewrote, shown to the writer
@@ -73,20 +73,69 @@ ${shown.join('\n\n')}
 `
 }
 
+/* ── the joke battle (homepage) ──
+   Each battle version is a line written with a /guides technique; players
+   pick the funniest of three. With three on screen, a fair share is 1/3.
+   A technique picked more than that is dealt more (up to 2x), less is dealt
+   less (down to 0.5x), once it has been shown 30+ times. The most-picked
+   lines (20+ showings) are shown to the writer as what the room picked. */
+export type BattleVersionRow = { text: string; technique_id: string; shown: number; picked: number; setup: string }
+
+export function battleWeightsFrom(rows: Pick<BattleVersionRow, 'technique_id' | 'shown' | 'picked'>[]): Record<string, number> {
+  const t = new Map<string, { shown: number; picked: number }>()
+  for (const r of rows) {
+    const x = t.get(r.technique_id) ?? { shown: 0, picked: 0 }
+    x.shown += r.shown ?? 0
+    x.picked += r.picked ?? 0
+    t.set(r.technique_id, x)
+  }
+  const out: Record<string, number> = {}
+  for (const [id, { shown, picked }] of t) if (shown >= 30) out[id] = Math.min(2, Math.max(0.5, (picked / shown) * 3))
+  return out
+}
+
+export function battleExamplesFrom(rows: BattleVersionRow[]): string {
+  const top = rows
+    .filter((r) => (r.shown ?? 0) >= 20)
+    .map((r) => ({ ...r, share: r.picked / r.shown }))
+    .filter((r) => r.share > 0.45)
+    .sort((a, b) => b.share - a.share)
+    .slice(0, 3)
+  if (!top.length) return ''
+  return `
+WHAT THE ROOM PICKED — one-liners that won the homepage joke battle on OTHER
+  setups. Match how short and concrete they are. Never reuse their words.
+
+${top.map((r, i) => `${i + 1}. setup: ${r.setup.trim()}\n   line: ${r.text.trim()}`).join('\n')}
+`
+}
+
 export async function houseSignal(): Promise<HouseSignal> {
   if (cache && Date.now() - cache.at < TTL_MS) return cache.value
   let value = EMPTY
   try {
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const admin = supabaseAdmin as any
     const since = new Date(Date.now() - 60 * 86_400_000).toISOString()
-    const { data, error } = await (supabaseAdmin as any)
-      .from('bit_daily')
-      .select('story, technique_id, bit, verdict, rewrite, best_line, rated_at')
-      .not('rated_at', 'is', null)
-      .gte('rated_at', since)
-      .order('rated_at', { ascending: false })
-      .limit(400)
-    if (!error && Array.isArray(data)) value = { examples: examplesFrom(data as Row[]), weights: weightsFrom(data as Row[]) }
+    const [daily, battle] = await Promise.all([
+      admin
+        .from('bit_daily')
+        .select('story, technique_id, bit, verdict, rewrite, best_line, rated_at')
+        .not('rated_at', 'is', null)
+        .gte('rated_at', since)
+        .order('rated_at', { ascending: false })
+        .limit(400),
+      admin.from('battle_versions').select('text, technique_id, shown, picked, battle_setups(setup)').eq('active', true).gt('shown', 0).limit(2000),
+    ])
+    const dRows: Row[] = !daily.error && Array.isArray(daily.data) ? daily.data : []
+    const bRows: BattleVersionRow[] =
+      !battle.error && Array.isArray(battle.data)
+        ? battle.data.map((r: any) => ({ text: r.text, technique_id: r.technique_id, shown: r.shown ?? 0, picked: r.picked ?? 0, setup: r.battle_setups?.setup ?? '' }))
+        : []
+    // Both signals multiply: a technique she keeps AND the room picks rises fastest.
+    const weights: Record<string, number> = { ...weightsFrom(dRows) }
+    for (const [id, w] of Object.entries(battleWeightsFrom(bRows))) weights[id] = Math.min(2, Math.max(0.25, (weights[id] ?? 1) * w))
+    value = { examples: examplesFrom(dRows) + battleExamplesFrom(bRows), weights }
   } catch {
     value = EMPTY
   }

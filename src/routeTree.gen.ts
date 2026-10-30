@@ -78,6 +78,7 @@ import { Route as WhatHappensSlugRouteImport } from './routes/what-happens.$slug
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
+import { Route as AuthenticatedAdminBattleRouteImport } from './routes/_authenticated/admin.battle'
 import { Route as AuthenticatedAdminEventsRouteImport } from './routes/_authenticated/admin.events'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated/admin.feedback'
 import { Route as AuthenticatedAdminOverviewRouteImport } from './routes/_authenticated/admin.overview'
@@ -446,6 +447,12 @@ const AuthenticatedAdminAnalyticsRoute =
     path: '/admin/analytics',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminBattleRoute =
+  AuthenticatedAdminBattleRouteImport.update({
+    id: '/admin/battle',
+    path: '/admin/battle',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminEventsRoute =
   AuthenticatedAdminEventsRouteImport.update({
     id: '/admin/events',
@@ -621,6 +628,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/battle': typeof AuthenticatedAdminBattleRoute
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
@@ -710,6 +718,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/battle': typeof AuthenticatedAdminBattleRoute
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
@@ -801,6 +810,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/_authenticated/admin/battle': typeof AuthenticatedAdminBattleRoute
   '/_authenticated/admin/events': typeof AuthenticatedAdminEventsRoute
   '/_authenticated/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin/overview': typeof AuthenticatedAdminOverviewRoute
@@ -892,6 +902,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/analytics'
+    | '/admin/battle'
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/overview'
@@ -981,6 +992,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/analytics'
+    | '/admin/battle'
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/overview'
@@ -1071,6 +1083,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/analytics'
+    | '/_authenticated/admin/battle'
     | '/_authenticated/admin/events'
     | '/_authenticated/admin/feedback'
     | '/_authenticated/admin/overview'
@@ -1657,6 +1670,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAnalyticsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/battle': {
+      id: '/_authenticated/admin/battle'
+      path: '/admin/battle'
+      fullPath: '/admin/battle'
+      preLoaderRoute: typeof AuthenticatedAdminBattleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/events': {
       id: '/_authenticated/admin/events'
       path: '/admin/events'
@@ -1796,6 +1816,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
+  AuthenticatedAdminBattleRoute: typeof AuthenticatedAdminBattleRoute
   AuthenticatedAdminEventsRoute: typeof AuthenticatedAdminEventsRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminOverviewRoute: typeof AuthenticatedAdminOverviewRoute
@@ -1808,6 +1829,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
+  AuthenticatedAdminBattleRoute: AuthenticatedAdminBattleRoute,
   AuthenticatedAdminEventsRoute: AuthenticatedAdminEventsRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminOverviewRoute: AuthenticatedAdminOverviewRoute,
