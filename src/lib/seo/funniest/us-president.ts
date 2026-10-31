@@ -7,7 +7,7 @@ const entry: FunniestEntry = {
   title: "Who Was the Funniest US President? 4 Techniques | Shutap",
   h1: "Who was the funniest US president?",
   description:
-    "Abraham Lincoln is the president most often named the funniest, with Ronald Reagan the usual modern pick. What made them funny, and four techniques creators and comedians can use today.",
+    "Abraham Lincoln is the president most often named the funniest, with Ronald Reagan the usual modern pick. What made them funny, and four techniques you can use today.",
   answer:
     "The funniest US president was Abraham Lincoln, according to NPR's roundup of Bob Dole's book Great Presidential Wit (2012), because his jokes were stories about human nature, told in exaggerated country voices, with a sarcastic streak he kept on a leash.",
   capsule:

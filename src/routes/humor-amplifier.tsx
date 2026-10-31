@@ -5,7 +5,7 @@ import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
 
 const PATH = '/humor-amplifier'
 const TITLE = 'The Humor Amplifier — Turn What Happened Into a Post | Shutap'
-const DESCRIPTION = 'Shutap, the humor amplifier: type what happened and get a bit in your voice, a 5-second video, a caption and hashtags. Hook, setup, tags and button. For creators, short videos and stand-up.'
+const DESCRIPTION = 'Shutap, the humor amplifier: type what happened and get a bit in your voice, a 5-second video, a caption and hashtags. Hook, setup, tags and button. For a post, the stage, a toast, a talk or a meeting.'
 
 export const Route = createFileRoute('/humor-amplifier')({
   head: () => ({
@@ -48,8 +48,8 @@ function HumorAmplifierPage() {
           body: 'Write what happened in the story box. Include who did what, the exact words you remember and the small detail that made it ridiculous; leave real names out. Choose your audience, voice, length and how wild, then let Shutap write the bit. Read the draft out loud and decide what fits your delivery. You can make it hotter, tighter, change the tags or mix your own version. Each version gets its own 5-second video, caption and hashtags.',
         },
         {
-          heading: 'For creators and comedians',
-          body: 'Content creators can turn a storytime premise into material for TikTok, Instagram Reels or YouTube Shorts. Comedians can use a familiar experience as the starting point for a stand-up bit to rehearse and refine. Choose a social or live audience to suit the delivery. Deadpan, storyteller and dry voices offer different ways to tell the same situation without borrowing another performer’s lines.',
+          heading: 'For anyone who needs to say it funnier',
+          body: 'Creators can turn a storytime premise into a post for TikTok, Instagram Reels or YouTube Shorts. Comedians can use a familiar experience as the starting point for a stand-up bit to rehearse and refine. Anyone with a toast, a speech, a presentation or a meeting coming up can find the funny version of what happened. Choose a social, live, office, work, family or school audience to suit the room. Deadpan, storyteller and dry voices offer different ways to tell the same situation without borrowing another performer’s lines.',
         },
         {
           heading: 'From draft to post',

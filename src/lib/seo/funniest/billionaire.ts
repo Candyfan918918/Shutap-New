@@ -7,7 +7,7 @@ const entry: FunniestEntry = {
   title: "Who Is the Funniest Billionaire? 5 Techniques | Shutap",
   h1: "Who is the funniest billionaire?",
   description:
-    "Warren Buffett is the billionaire whose humor gets cited most, thanks to decades of one-liners in his shareholder letters. What made him funny, and five techniques creators and comedians can use.",
+    "Warren Buffett is the billionaire whose humor gets cited most, thanks to decades of one-liners in his shareholder letters. What made him funny, and five techniques you can use.",
   answer:
     "The funniest billionaire is Warren Buffett, according to Fortune's roundup of the zingers in his annual shareholder letter (2015), because he turns dry money topics into homespun pictures: an ugly comparison, a beach metaphor, a two-word sales pitch.",
   capsule:

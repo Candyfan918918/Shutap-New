@@ -7,7 +7,7 @@ const entry: FunniestEntry = {
   title: "Who Is the Funniest Scientist? 5 Techniques | Shutap",
   h1: "Who is the funniest scientist?",
   description:
-    "Richard Feynman is the scientist most often written up for his humor, with George Gamow, Niels Bohr and Neil deGrasse Tyson close behind. Five techniques creators and comedians can use.",
+    "Richard Feynman is the scientist most often written up for his humor, with George Gamow, Niels Bohr and Neil deGrasse Tyson close behind. Five techniques you can use.",
   answer:
     "The funniest scientist was Richard Feynman, according to MIT Libraries' 2011 profile of his memoir Surely You're Joking, Mr. Feynman!, because he treated serious official settings, from Los Alamos security to his own Nobel Prize, as a game and described his biggest moments in small, plain words.",
   capsule:

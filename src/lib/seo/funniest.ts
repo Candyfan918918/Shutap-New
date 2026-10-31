@@ -1,5 +1,5 @@
 // "The funniest ..." series: who is widely considered the funniest person in a
-// category, and the techniques creators and comedians can take from them.
+// category, and the techniques you can take from them.
 //
 // One entry per file in ./funniest/<slug>.ts (default export: FunniestEntry).
 // The daily agent adds one file per pull request, so PRs never conflict.

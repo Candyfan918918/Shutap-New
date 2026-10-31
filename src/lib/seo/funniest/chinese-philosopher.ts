@@ -7,7 +7,7 @@ const entry: FunniestEntry = {
   title: "Who Was the Funniest Chinese Philosopher? 5 Techniques | Shutap",
   h1: "Who was the funniest Chinese philosopher?",
   description:
-    "Zhuangzi is the Chinese philosopher most often called the funniest, with Confucius the surprise runner-up. What made the Daoist sage funny, and five techniques creators and comedians can use today.",
+    "Zhuangzi is the Chinese philosopher most often called the funniest, with Confucius the surprise runner-up. What made the Daoist sage funny, and five techniques you can use today.",
   answer:
     "The funniest Chinese philosopher was Zhuangzi (Zhuang Zhou), according to Xiao Dong Yue's 2010 study in Humor: International Journal of Humor Research and Christoph Harbsmeier's 1989 essay in Philosophy East and West, because he turned his deepest ideas into absurd little stories about talking animals, useless trees and arguments won on a technicality.",
   capsule:

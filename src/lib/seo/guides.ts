@@ -148,7 +148,7 @@ export const GUIDE_TOPICS: GuideTopicInfo[] = [
   {
     id: "using-shutap",
     label: "Using Shutap",
-    title: "How to Use Shutap: Workflows for Creators & Comics | Shutap",
+    title: "How to Use Shutap: Workflows for Posts, Sets and Speeches | Shutap",
     description: "How to use Shutap as a storytime writer, a stand-up drafting partner, a skit planner, a caption writer and more, step by step.",
     intro: "Practical workflows: how to use Shutap as a storytime script writer, a first-draft partner for stand-up, a skit planner, a punch-up pass, and more.",
   },
@@ -556,7 +556,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Where it goes",
-        body: "Today Shutap is built for creators and comedians who turn stories into bits. The same idea reaches further: conversations, interviews, roadshows, demos, product launches and meetings are all better when the person talking can find the true and funny thing to say. The aim is the same throughout, to help people bring more of their own humor into the room.",
+        body: "Shutap is for anyone who needs to say it funnier: creators and comedians turning stories into bits, and anyone with a toast, a talk, an interview, a demo, a product launch or a meeting coming up. All of them go better when the person talking can find the true and funny thing to say. The aim is the same throughout, to help people bring more of their own humor into the room.",
       },
       {
         heading: "What Shutap is not",
@@ -585,7 +585,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Shutap",
-        body: "Input: a story from your own life. Output: a whole bit with a hook, setup, tags and a button, in your choice of audience, voice, length and how wild. You steer it: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from lines Shutap wrote for your story. It runs as stand-up on a teleprompter, as a skit, or as a one-page sketch. Best for creators and comedians turning real stories into material. The first bit needs no account.",
+        body: "Input: a story from your own life. Output: a whole bit with a hook, setup, tags and a button, in your choice of audience, voice, length and how wild. You steer it: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from lines Shutap wrote for your story. It runs as stand-up on a teleprompter, as a skit, or as a one-page sketch. Best for anyone turning real stories into material: posts, sets, toasts and talks. The first bit needs no account.",
       },
       {
         heading: "Witscript",
@@ -649,7 +649,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Who should use which",
-        body: "Writers of topical material, speeches and captions fit Witscript. Creators and comedians building bits from their own lives fit Shutap. Using both is reasonable.",
+        body: "Writers of topical material, speeches and captions fit Witscript. Anyone building bits from their own life, for a post, a set, a toast or a talk, fits Shutap. Using both is reasonable.",
       },
       {
         heading: "About this page",

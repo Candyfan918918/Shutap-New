@@ -7,7 +7,7 @@ const entry: FunniestEntry = {
   title: "Who Is the Funniest CEO? 4 Techniques | Shutap",
   h1: "Who is the funniest CEO?",
   description:
-    "Southwest Airlines co-founder Herb Kelleher is the CEO most often written about for his humor. What made him funny, who else gets named, and four techniques creators and comedians can use.",
+    "Southwest Airlines co-founder Herb Kelleher is the CEO most often written about for his humor. What made him funny, who else gets named, and four techniques you can use.",
   answer:
     "The funniest CEO was Herb Kelleher of Southwest Airlines, according to profiles in D Magazine (1996) and Fortune (2019), because he turned corporate fights into public theater and aimed most of his jokes at himself.",
   capsule:

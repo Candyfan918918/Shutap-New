@@ -7,7 +7,7 @@ const entry: FunniestEntry = {
   title: "Who Is the Funniest Hollywood Actress? 4 Techniques | Shutap",
   h1: "Who is the funniest Hollywood actress?",
   description:
-    "Carol Burnett is the actress most often voted the funniest, with Lucille Ball the usual other answer. What made them funny, and four techniques creators and comedians can use today.",
+    "Carol Burnett is the actress most often voted the funniest, with Lucille Ball the usual other answer. What made them funny, and four techniques you can use today.",
   answer:
     "The funniest Hollywood actress is Carol Burnett, according to Ranker's crowd-voted list of the funniest female comedians (2025), because she commits to a sight gag past the point of reason and fires back quick, unplanned answers to her own audience.",
   capsule:

@@ -7,7 +7,7 @@ const entry: FunniestEntry = {
   title: "Who Was the Funniest Zen Monk? 4 Techniques | Shutap",
   h1: "Who was the funniest Zen monk?",
   description:
-    "Ikkyū Sōjun is the Zen monk most often named the funniest, with Sengai and Ryōkan close behind. What made them funny, and four techniques creators and comedians can use today.",
+    "Ikkyū Sōjun is the Zen monk most often named the funniest, with Sengai and Ryōkan close behind. What made them funny, and four techniques you can use today.",
   answer:
     "The funniest Zen monk was Ikkyū Sōjun, according to Carl Olson's study of him as a clown figure in the Journal of Dharma (1999), because he used props and stunts, like a fake sword and a skull on a pole, to mock monks who wore the robes without the practice.",
   capsule:

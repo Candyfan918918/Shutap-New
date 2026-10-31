@@ -7,7 +7,7 @@ const entry: FunniestEntry = {
   title: "Who Is the Funniest Author? 4 Techniques | Shutap",
   h1: "Who is the funniest author?",
   description:
-    "P.G. Wodehouse is the author most often named the funniest, with Mark Twain the classic American pick. What made them funny, and four techniques creators and comedians can use today.",
+    "P.G. Wodehouse is the author most often named the funniest, with Mark Twain the classic American pick. What made them funny, and four techniques you can use today.",
   answer:
     "The funniest author was P.G. Wodehouse, according to an AbeBooks poll of British readers reported by The Christian Science Monitor (2009), because his jokes live in the sentences: words bent out of shape and comparisons you can picture.",
   capsule:

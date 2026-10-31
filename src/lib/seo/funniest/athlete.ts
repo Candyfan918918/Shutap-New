@@ -7,7 +7,7 @@ const entry: FunniestEntry = {
   title: "Who Is the Funniest Athlete? 4 Techniques | Shutap",
   h1: "Who is the funniest athlete?",
   description:
-    "Charles Barkley is the one athlete who makes every major funniest-athletes list, with Shaquille O'Neal, Yogi Berra and Peyton Manning close behind. Four techniques creators and comedians can use.",
+    "Charles Barkley is the one athlete who makes every major funniest-athletes list, with Shaquille O'Neal, Yogi Berra and Peyton Manning close behind. Four techniques you can use.",
   answer:
     "The funniest athlete is Charles Barkley, according to rankings by Bleacher Report (2026), 24/7 Wall St. (2018) and Ranker's crowd vote (2025), which all place him in their top three, because he says the blunt thing a careful broadcaster would leave out and refuses to take it back.",
   capsule:

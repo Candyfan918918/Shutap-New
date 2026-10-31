@@ -7,7 +7,7 @@ const entry: FunniestEntry = {
   title: "Funniest British Prime Minister? 4 Techniques | Shutap",
   h1: "Who was the funniest British prime minister?",
   description:
-    "Winston Churchill is the British prime minister most often named the wittiest, with Benjamin Disraeli and Harold Wilson close behind. What made him funny, and four techniques creators and comedians can use today.",
+    "Winston Churchill is the British prime minister most often named the wittiest, with Benjamin Disraeli and Harold Wilson close behind. What made him funny, and four techniques you can use today.",
   answer:
     "The funniest British prime minister was Winston Churchill, according to a 2007 poll of 3,000 people for the TV channel Dave, reported by Chortle, that placed him fifth among Britain's greatest wits and highest of any prime minister, because he met high stakes with understatement and self-mockery.",
   capsule:
