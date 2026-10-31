@@ -91,7 +91,7 @@ const guide: Guide = {
       url: "https://en.wikipedia.org/wiki/Jeff_Ross_Presents_Roast_Battle",
     },
   ],
-  related: ["roast-lines", "ai-roast-generator", "open-mic-night"],
+  related: ["roast-lines", "ai-roast-tools-compared", "open-mic-night"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-25",
 };

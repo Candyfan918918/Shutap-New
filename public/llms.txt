@@ -16,15 +16,15 @@ The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Sign
 
 - [The humor amplifier](https://shutap.com/humor-amplifier): Turn what happened into a post: a bit in your voice, a 5-second video, a caption and hashtags.
 - [All guides and tools](https://shutap.com/guides): Index of the pages below.
-- [Storytime script generator](https://shutap.com/guides/storytime-script-generator): Turn a story into a script with a hook, setup, tags and a button.
-- [Stand-up bit writer](https://shutap.com/guides/stand-up-bit-generator): A first draft of a bit from a real story.
-- [POV and skit generator](https://shutap.com/guides/pov-skit-generator): See a bit as a scene, beat by beat.
+- [Storytime script writer](https://shutap.com/guides/storytime-script-writer): Turn a story into a script with a hook, setup, tags and a button.
+- [Stand-up bit writer](https://shutap.com/guides/stand-up-bit-writer): A first draft of a bit from a real story.
+- [POV and skit writer](https://shutap.com/guides/pov-skit-writer): See a bit as a scene, beat by beat.
 - [Teleprompter for comedy](https://shutap.com/guides/comedy-teleprompter): Run any bit full-screen and read it to camera.
-- [Comedy screenplay page generator](https://shutap.com/guides/comedy-screenplay-format): A bit laid out as a script page.
+- [Comedy screenplay page formatter](https://shutap.com/guides/comedy-screenplay-format): A bit laid out as a script page.
 - [How Shutap is built](https://shutap.com/guides/how-shutap-is-built): Observations, whole bits, rules in code, a judge model, and hotter/tighter/storytelling/mix-your-own controls.
 - [Shutap vs Punchlines.ai](https://shutap.com/guides/shutap-vs-punchlines-ai): One-liners from headlines versus a whole bit from your own story.
 - [Humor is wisdom](https://shutap.com/guides/humor-is-wisdom): The founder's vision and why Shutap exists.
-- [AI joke tools compared](https://shutap.com/guides/ai-joke-generators-compared): Shutap, Witscript, Punchlines.ai and ChatGPT side by side.
+- [AI joke tools compared](https://shutap.com/guides/ai-joke-tools-compared): Shutap, Witscript, Punchlines.ai and ChatGPT side by side.
 - [Shutap vs Witscript](https://shutap.com/guides/shutap-vs-witscript): Setup-to-jokes versus story-to-bit.
 - [Shutap vs ChatGPT and Claude for jokes](https://shutap.com/guides/shutap-vs-chatgpt-for-jokes): General assistants versus a tool built for bits.
 - [Shutap vs Claude for jokes](https://shutap.com/guides/shutap-vs-claude-for-jokes): A general assistant versus a tool built for bits, with daily ideas and technique guides.

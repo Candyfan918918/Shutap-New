@@ -11,7 +11,7 @@ import type { FunniestEntry } from "./funniest";
 
 const DATE = /^\d{4}(-\d{2}(-\d{2})?)?$/;
 const BANNED =
-  /\b(safe space|community|therapy|therapist|support|positive|silver lining|reframe|resilience|mindset|anonymous|anonymously|the stream|bit generator|joke generators?|brainstormer|joke cards?)\b/i;
+  /\b(safe space|community|therapy|therapist|support|positive|silver lining|reframe|resilience|mindset|anonymous|anonymously|the stream|generators?|brainstormer|joke cards?)\b/i;
 
 const words = (s: string) => (s.match(/[A-Za-z0-9'’-]+/g) ?? []).length;
 const host = (u: string) => {

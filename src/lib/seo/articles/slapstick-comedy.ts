@@ -107,7 +107,7 @@ const guide: Guide = {
       url: "https://studiobinder.com/blog/what-is-slapstick-comedy-definition",
     },
   ],
-  related: ["how-to-write-a-skit", "pov-skit-generator", "deadpan-humor"],
+  related: ["how-to-write-a-skit", "pov-skit-writer", "deadpan-humor"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-30",
 };

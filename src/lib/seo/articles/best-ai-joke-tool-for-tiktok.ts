@@ -1,7 +1,7 @@
 import type { Guide } from "../guides";
 
 const guide: Guide = {
-  slug: "best-ai-joke-generator-for-tiktok",
+  slug: "best-ai-joke-tool-for-tiktok",
   kind: "guide",
   topic: "shutap-vs-other-tools",
   keyword: "best ai joke tool for tiktok",
@@ -20,7 +20,7 @@ const guide: Guide = {
     },
     {
       heading: "Why generic jokes lose on a feed",
-      body: "Ask a general AI for \"a funny joke\" and you'll probably get one people have heard. In a 2023 study, researchers Sophie Jentzsch and Kristian Kersting asked ChatGPT for jokes 1,008 times, and over 90% were the same 25, led by the scarecrow who was outstanding in his field. That was an older model, and newer ones vary more, but the lesson for a feed holds. Every creator using the same tool with the same vague request is pulling from the same shelf. The fix isn't a cleverer generator. It's feeding the tool something nobody else has, which is what happened to you on Tuesday.",
+      body: "Ask a general AI for \"a funny joke\" and you'll probably get one people have heard. In a 2023 study, researchers Sophie Jentzsch and Kristian Kersting asked ChatGPT for jokes 1,008 times, and over 90% were the same 25, led by the scarecrow who was outstanding in his field. That was an older model, and newer ones vary more, but the lesson for a feed holds. Every creator using the same tool with the same vague request is pulling from the same shelf. The fix isn't a cleverer joke tool. It's feeding the tool something nobody else has, which is what happened to you on Tuesday.",
     },
     {
       heading: "One story, weak hook and strong hook",

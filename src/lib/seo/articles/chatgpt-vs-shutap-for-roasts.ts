@@ -74,7 +74,7 @@ const guide: Guide = {
     { label: "Amanda Caswell, Tom's Guide (Apr 24, 2025), \"Everyone's asking ChatGPT to roast them, here's how to try it\"", url: "https://tomsguide.com/ai/everyones-asking-chatgpt-to-roast-them-heres-how-to-try-it" },
     { label: "Benzinga (Oct 2023), \"This ChatGPT jailbreak lets you get AI's help to roast people\"", url: "https://www.benzinga.com/news/23/10/35244404/this-chatgpt-jailbreak-lets-you-get-ais-help-to-roast-people" },
   ],
-  related: ["ai-roast-generator", "roast-lines", "roast-battle"],
+  related: ["ai-roast-tools-compared", "roast-lines", "roast-battle"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-26",
 };

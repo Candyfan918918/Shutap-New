@@ -91,7 +91,7 @@ const guide: Guide = {
       url: "https://nofilmschool.com/how-to-write-sketch-comedy",
     },
   ],
-  related: ["pov-skit-generator", "comedy-screenplay-format", "rule-of-three"],
+  related: ["pov-skit-writer", "comedy-screenplay-format", "rule-of-three"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-29",
 };

@@ -31,7 +31,7 @@ const guide: Guide = {
     },
     {
       heading: "Step four: getting it ready to film or perform",
-      body: "A script that reads well can still trip you up on camera. Shutap formats a bit as a teleprompter, a scene laid out beat by beat with shots and on-screen text, or a one-page sketch for scenes with more than one character. Texta's comedy generator page says it adds delivery notes on pacing and callbacks and exports a script, a caption or tweet-length lines. Whatever you use, read it out loud twice before you hit record. Any line you stumble on both times gets cut or rewritten in words you'd actually say.",
+      body: "A script that reads well can still trip you up on camera. Shutap formats a bit as a teleprompter, a scene laid out beat by beat with shots and on-screen text, or a one-page sketch for scenes with more than one character. Texta's comedy tool page says it adds delivery notes on pacing and callbacks and exports a script, a caption or tweet-length lines. Whatever you use, read it out loud twice before you hit record. Any line you stumble on both times gets cut or rewritten in words you'd actually say.",
     },
     {
       heading: "What to look for in any comedy tool",
@@ -71,9 +71,9 @@ const guide: Guide = {
     { label: "Tars, comedic script writing assistant", url: "https://hellotars.com/ai-agents/comedian-script-writing-ai-agent" },
     { label: "Comedeez AI, official site", url: "https://www.comedeez.ai" },
     { label: "Witscript by Joe Toplyn, official site", url: "https://witscript.joetoplyn.com" },
-    { label: "Texta, free AI comedy generator page", url: "https://www.texta.ai/ai-tools/free-ai-comedy-generator" },
+    { label: "Texta, free AI comedy tool page", url: "https://www.texta.ai/ai-tools/free-ai-comedy-generator" },
   ],
-  related: ["ai-joke-generators-compared", "how-to-turn-a-story-into-a-bit", "shutap-vs-chatgpt-for-jokes"],
+  related: ["ai-joke-tools-compared", "how-to-turn-a-story-into-a-bit", "shutap-vs-chatgpt-for-jokes"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-20",
 };

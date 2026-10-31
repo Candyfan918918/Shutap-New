@@ -20,7 +20,7 @@ const guide: Guide = {
     },
     {
       heading: "Why most joke apps can't use your story",
-      body: "Most joke tools are built around a topic, not a memory. Joking: AI Joke Generator on the App Store has you pick a style (Clean, Playful or Savage) and a category like Office Humor or Puns, and its listing puts \"personal context\" behind the Premium plan. Witscript, from former late-night head writer Joe Toplyn, is a web app that takes a single setup sentence, such as a headline or an observation, and returns several jokes on it. It's a paid monthly subscription and, per its site, only available in the United States. Both are good at what they're for. Neither starts from a whole story with a beginning, a middle and a moment you'd rather forget.",
+      body: "Most joke tools are built around a topic, not a memory. The Joking app on the App Store has you pick a style (Clean, Playful or Savage) and a category like Office Humor or Puns, and its listing puts \"personal context\" behind the Premium plan. Witscript, from former late-night head writer Joe Toplyn, is a web app that takes a single setup sentence, such as a headline or an observation, and returns several jokes on it. It's a paid monthly subscription and, per its site, only available in the United States. Both are good at what they're for. Neither starts from a whole story with a beginning, a middle and a moment you'd rather forget.",
     },
     {
       heading: "What a story-to-joke tool has to get right",
@@ -71,7 +71,7 @@ const guide: Guide = {
   ],
   sources: [
     {
-      label: "Apple App Store, Joking: AI Joke Generator (NEW VERSION LIMITED), app listing",
+      label: "Apple App Store, Joking app listing",
       url: "https://apps.apple.com/us/app/-/id6753122535",
     },
     {

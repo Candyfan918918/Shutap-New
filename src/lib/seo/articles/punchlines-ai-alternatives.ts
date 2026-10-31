@@ -27,7 +27,7 @@ const guide: Guide = {
     },
     {
       heading: "Texta and Tars: templates and guided chats",
-      body: "Texta's free comedy generator page has you pick a template (one-liners, observational, sketch, roast, satire and more), a tone such as deadpan or absurdist, a length, a sensitivity level and a target platform. It keeps setup and punchline separate and adds delivery notes. Tars offers a comedic script writing assistant that walks you through format, audience, tone and premise in a conversation, and says its output is a starting point to edit. Both suit someone with a topic and no structure yet. Neither page lists detailed pricing beyond a free start.",
+      body: "Texta's free comedy tool page has you pick a template (one-liners, observational, sketch, roast, satire and more), a tone such as deadpan or absurdist, a length, a sensitivity level and a target platform. It keeps setup and punchline separate and adds delivery notes. Tars offers a comedic script writing assistant that walks you through format, audience, tone and premise in a conversation, and says its output is a starting point to edit. Both suit someone with a topic and no structure yet. Neither page lists detailed pricing beyond a free start.",
     },
     {
       heading: "ChatGPT, Claude and Gemini: flexible if you steer",
@@ -72,13 +72,13 @@ const guide: Guide = {
     { label: "Punchlines.ai, official site", url: "https://punchlines.ai" },
     { label: "Witscript by Joe Toplyn, official site (pricing, US-only availability)", url: "https://witscript.joetoplyn.com" },
     { label: "Comedeez AI, official site (features and plans)", url: "https://www.comedeez.ai" },
-    { label: "Texta, free AI comedy generator page", url: "https://www.texta.ai/ai-tools/free-ai-comedy-generator" },
+    { label: "Texta, free AI comedy tool page", url: "https://www.texta.ai/ai-tools/free-ai-comedy-generator" },
     { label: "Tars, comedic script writing assistant", url: "https://hellotars.com/ai-agents/comedian-script-writing-ai-agent" },
     { label: "ChatGPT pricing", url: "https://chatgpt.com/pricing/" },
     { label: "Claude pricing", url: "https://claude.com/pricing" },
     { label: "Google Gemini subscriptions", url: "https://gemini.google/subscriptions/" },
   ],
-  related: ["shutap-vs-punchlines-ai", "ai-joke-generators-compared", "shutap-vs-witscript"],
+  related: ["shutap-vs-punchlines-ai", "ai-joke-tools-compared", "shutap-vs-witscript"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-20",
 };

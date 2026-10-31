@@ -75,7 +75,7 @@ const guide: Guide = {
     { label: "Creative Workflow Lab, \"How I'm prompting Claude AI to maximize engagement for short-form videos\"", url: "https://creativeworkflowlab.substack.com/p/how-im-prompting-claude-ai-to-maximize" },
     { label: "Blockchain Council (Apr 20, 2026), \"Claude AI for TikTok script writing\"", url: "https://www.blockchain-council.org/claude-ai/claude-ai-for-tiktok-script-writing/" },
   ],
-  related: ["shutap-vs-claude-for-jokes", "best-ai-joke-generator-for-tiktok", "how-long-should-a-tiktok-bit-be"],
+  related: ["shutap-vs-claude-for-jokes", "best-ai-joke-tool-for-tiktok", "how-long-should-a-tiktok-bit-be"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-26",
 };

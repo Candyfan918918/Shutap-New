@@ -8,10 +8,10 @@ const guide: Guide = {
   title: "Best AI for Wedding Toast Jokes, and Where It Stops | Shutap",
   h1: "The best AI for wedding toast jokes, and where it stops",
   description:
-    "Which AI writes the best wedding toast jokes: speech generators, ChatGPT and Claude, or Shutap. What each is good for, with a worked example from a real story.",
+    "Which AI writes the best wedding toast jokes: speech writers, ChatGPT and Claude, or Shutap. What each is good for, with a worked example from a real story.",
   capsule:
-    "The best AI for wedding toast jokes is whichever one you feed a specific true story about the couple, because the laugh comes from the story, not the tool. Speech generators like Joy and ToastWiz are good for the whole outline, chatbots for the sincere parts, and Shutap for turning one story into a short funny stretch. The ending, and the final call on every joke, stays with you.",
-  blurb: "Speech generators, chatbots and Shutap for the funny part of a toast, with a worked example.",
+    "The best AI for wedding toast jokes is whichever one you feed a specific true story about the couple, because the laugh comes from the story, not the tool. Speech writers like Joy and ToastWiz are good for the whole outline, chatbots for the sincere parts, and Shutap for turning one story into a short funny stretch. The ending, and the final call on every joke, stays with you.",
+  blurb: "Speech writers, chatbots and Shutap for the funny part of a toast, with a worked example.",
   preset: { audience: "family", voice: "storyteller", length: "60s", heat: 2 },
   sections: [
     {
@@ -19,8 +19,8 @@ const guide: Guide = {
       body: "A toast isn't a comedy set. It's a few minutes, mostly warm, said in front of the couple's grandparents, coworkers and at least one ex-roommate who knows too much. Bridebook suggests about five minutes for a best man, four to six for a maid of honor and seven to nine for a father of the bride. Inside that, you want maybe two or three real laughs, all built from things that happened, and none that need explaining to Aunt Carol. So the question isn't which AI is funniest. It's which one helps you find the funny part of a true story and leaves the rest sounding like you.",
     },
     {
-      heading: "Wedding speech generators",
-      body: "These write the whole speech from a short form. Joy's Writer's Block asks who the toast is from and a story to highlight, each in 180 characters, then a style such as a friend, a pirate, a pessimistic ex or a TikToker. ToastWiz builds a speech from a questionnaire and is a paid tool. Generators are good at the skeleton: thank the hosts, introduce yourself, tell a story, raise a glass. The jokes are where they thin out. A 180-character story is a headline, not a scene, so the humor tends to come from the style gimmick rather than from anything the groom actually did.",
+      heading: "Wedding speech writers",
+      body: "These write the whole speech from a short form. Joy's Writer's Block asks who the toast is from and a story to highlight, each in 180 characters, then a style such as a friend, a pirate, a pessimistic ex or a TikToker. ToastWiz builds a speech from a questionnaire and is a paid tool. Speech writers are good at the skeleton: thank the hosts, introduce yourself, tell a story, raise a glass. The jokes are where they thin out. A 180-character story is a headline, not a scene, so the humor tends to come from the style gimmick rather than from anything the groom actually did.",
     },
     {
       heading: "ChatGPT and Claude",
@@ -40,7 +40,7 @@ const guide: Guide = {
     },
     {
       heading: "A workflow that uses each tool for its job",
-      body: "Start with a list of five true stories about the person, written as you'd tell them, details and all. Use a generator or a chatbot to rough out the outline and your opening. Pick the one story that makes people who know them laugh, and run it through Shutap at family, storyteller, heat 2 to get a draft of the funny stretch. Rewrite that draft into your own words. Write the sincere ending yourself, ideally as a callback to the story. Then read the whole thing aloud with a timer, twice, and cut whatever made you stumble.",
+      body: "Start with a list of five true stories about the person, written as you'd tell them, details and all. Use a speech writer or a chatbot to rough out the outline and your opening. Pick the one story that makes people who know them laugh, and run it through Shutap at family, storyteller, heat 2 to get a draft of the funny stretch. Rewrite that draft into your own words. Write the sincere ending yourself, ideally as a callback to the story. Then read the whole thing aloud with a timer, twice, and cut whatever made you stumble.",
     },
   ],
   faq: [
@@ -49,8 +49,8 @@ const guide: Guide = {
       a: "Yes, as a drafting help. Use it to organize notes, suggest structure or draft a funny story, then rewrite it so it sounds like you. The memories, the sincere parts and the judgment about what's appropriate for that family should be yours.",
     },
     {
-      q: "What is the best AI wedding speech generator?",
-      a: "For a full outline from a short form, generators like Joy's Writer's Block or ToastWiz work. For the funny part built from one real story, Shutap drafts a short bit you can rewrite. For editing sincere lines, ChatGPT or Claude are flexible.",
+      q: "What is the best AI wedding speech writer?",
+      a: "For a full outline from a short form, speech writers like Joy's Writer's Block or ToastWiz work. For the funny part built from one real story, Shutap drafts a short bit you can rewrite. For editing sincere lines, ChatGPT or Claude are flexible.",
     },
     {
       q: "How long should a funny wedding toast be?",
@@ -70,7 +70,7 @@ const guide: Guide = {
     { label: "The Yes Girls (Jun 5, 2026), \"Is it okay to use AI for a wedding speech?\"", url: "https://theyesgirls.com/is-it-okay-to-use-ai-for-a-wedding-speech/" },
     { label: "Joy, Writer's Block wedding writing tool, fetched Oct 2026", url: "https://withjoy.com/writersblock/" },
     { label: "The AI Report tool database, ToastWiz (updated Oct 27, 2025)", url: "https://www.theaireport.ai/tooldatabase/toastwiz" },
-    { label: "Morning Dough (Feb 23, 2024), \"9 best AI wedding speech generators\"", url: "https://www.morningdough.com/?p=37319" },
+    { label: "Morning Dough (Feb 23, 2024), \"9 best AI wedding speech writers\"", url: "https://www.morningdough.com/?p=37319" },
   ],
   related: ["funny-wedding-toast", "self-deprecating-humor", "ai-comedy-writing-tools"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },

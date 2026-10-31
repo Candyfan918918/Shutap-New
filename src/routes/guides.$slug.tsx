@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { writerCopyFor } from '@/lib/seo/writer-copy'
 import { Route as RootRoute } from "./__root";
 import { ogImageMeta } from "@/lib/seo/meta";
@@ -6,11 +6,15 @@ import { ContentPage } from "@/components/seo/ContentPage";
 import { SeoPage } from "@/components/seo/SeoPage";
 import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
-import { GUIDES, getGuide, getTopic, guidePath, topicPath } from "@/lib/seo/guides";
+import { GUIDES, GUIDE_SLUG_REDIRECTS, getGuide, getTopic, guidePath, topicPath } from "@/lib/seo/guides";
 
 export const Route = createFileRoute("/guides/$slug")({
   // Keep boundary options in the registered route; only the page is lazy.
   codeSplitGroupings: [["component"]],
+  beforeLoad: ({ params }) => {
+    const moved = GUIDE_SLUG_REDIRECTS[params.slug];
+    if (moved) throw redirect({ to: "/guides/$slug", params: { slug: moved }, statusCode: 301 });
+  },
   loader: ({ params }) => {
     const guide = getGuide(params.slug);
     if (!guide) throw notFound({ routeId: "/guides/$slug" });

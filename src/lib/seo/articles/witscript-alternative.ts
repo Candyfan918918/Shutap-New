@@ -80,7 +80,7 @@ const guide: Guide = {
     { label: "ChatGPT pricing, fetched Oct 2026", url: "https://chatgpt.com/pricing/" },
     { label: "Claude pricing, fetched Oct 2026", url: "https://claude.com/pricing" },
   ],
-  related: ["punchlines-ai-alternatives", "ai-roast-generator", "ai-comedy-writing-tools"],
+  related: ["punchlines-ai-alternatives", "ai-roast-tools-compared", "ai-comedy-writing-tools"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-26",
 };

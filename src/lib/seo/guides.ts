@@ -1,6 +1,6 @@
 // Shutap-written guides and tool pages. This is the public, indexable content
 // of the site: nothing here comes from what members write. Every page is one
-// search intent, one answer, and one route into the generator.
+// search intent, one answer, and one route into the humor amplifier.
 //
 // Voice: terse, concrete. No card counts, no wellness vocabulary, no claims
 // about features that are not in the product.
@@ -235,15 +235,15 @@ const PUBLISHED = "2026-10-17";
 const BASE_GUIDES: Guide[] = [
   // ---- tools ----------------------------------------------------------
   {
-    slug: "storytime-script-generator",
+    slug: "storytime-script-writer",
     kind: "tool",
     preset: { audience: "social", voice: "storyteller", length: "60s" },
-    title: "Storytime Script Generator for TikTok & Reels | Shutap",
-    h1: "Storytime script generator",
+    title: "Storytime Script Writer for TikTok & Reels | Shutap",
+    h1: "Storytime script writer",
     description:
       "Turn the story you were going to tell anyway into a storytime script with a hook, setup, tags and a button. First bit needs no account. Film it off the teleprompter.",
     capsule:
-      "Shutap is a storytime script generator. Write what happened, pick a voice and a length, and it returns a script with a hook, a setup, tags and a button, ready to read off the teleprompter. Your first one needs no account.",
+      "Shutap turns your storytime into a script. Write what happened, pick a voice and a length, and it returns a script with a hook, a setup, tags and a button, ready to read off the teleprompter. Your first one needs no account.",
     blurb: "Turn what happened into a script with a hook, setup, tags and a button.",
     sections: [
       {
@@ -272,7 +272,7 @@ const BASE_GUIDES: Guide[] = [
     published: PUBLISHED,
   },
   {
-    slug: "stand-up-bit-generator",
+    slug: "stand-up-bit-writer",
     kind: "tool",
     preset: { audience: "live", voice: "deadpan", length: "2m" },
     title: "Stand-Up Bit Writer: First Drafts From Your Stories | Shutap",
@@ -309,11 +309,11 @@ const BASE_GUIDES: Guide[] = [
     published: PUBLISHED,
   },
   {
-    slug: "pov-skit-generator",
+    slug: "pov-skit-writer",
     kind: "tool",
     preset: { audience: "social", voice: "deadpan", length: "30s" },
-    title: "POV & Skit Script Generator for Creators | Shutap",
-    h1: "POV and skit generator",
+    title: "POV & Skit Script Writer | Shutap",
+    h1: "POV and skit writer",
     description:
       "Turn a real situation into a POV or skit laid out beat by beat. Shutap writes the bit, then shows it as a scene you can shoot.",
     capsule:
@@ -337,7 +337,7 @@ const BASE_GUIDES: Guide[] = [
         body: "Skits built on something that really happened read as specific, and specific is what gets shared. Write the real version first. Shutap handles the structure and keeps your details.",
       },
     ],
-    related: ["comedy-screenplay-format", "how-to-turn-a-story-into-a-bit", "storytime-script-generator"],
+    related: ["comedy-screenplay-format", "how-to-turn-a-story-into-a-bit", "storytime-script-writer"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -370,7 +370,7 @@ const BASE_GUIDES: Guide[] = [
         body: "A 15 second bit is a few dozen words. A 2 minute bit is a few hundred. Pick the length before you write, so the script fits the video and you are not cutting on the fly.",
       },
     ],
-    related: ["how-long-should-a-tiktok-bit-be", "storytime-script-generator", "stand-up-bit-generator"],
+    related: ["how-long-should-a-tiktok-bit-be", "storytime-script-writer", "stand-up-bit-writer"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -378,8 +378,8 @@ const BASE_GUIDES: Guide[] = [
     slug: "comedy-screenplay-format",
     kind: "tool",
     preset: { audience: "social", voice: "dry", length: "60s" },
-    title: "Comedy Scene & Screenplay Page Generator | Shutap",
-    h1: "Comedy screenplay page generator",
+    title: "Comedy Scene & Screenplay Page Formatter | Shutap",
+    h1: "Comedy screenplay page formatter",
     description:
       "Shutap formats your bit as a screenplay page, with characters and action, ready to shoot, share or hand to someone else.",
     capsule:
@@ -403,7 +403,7 @@ const BASE_GUIDES: Guide[] = [
         body: "Treat the page as a draft. Cut what you would not say, add what you would, and keep the lines that already sound like you.",
       },
     ],
-    related: ["pov-skit-generator", "stand-up-bit-generator", "how-to-turn-a-story-into-a-bit"],
+    related: ["pov-skit-writer", "stand-up-bit-writer", "how-to-turn-a-story-into-a-bit"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -470,7 +470,7 @@ const BASE_GUIDES: Guide[] = [
         body: "Every bit is stamped with the version of the prompts that wrote it. Changes to the writing are checked against a fixed set of test stories that are never used as examples. Shutap is written by AI and gets things wrong, so you decide what to perform. Test it on a real audience before you trust it.",
       },
     ],
-    related: ["ai-joke-generators-compared", "shutap-vs-chatgpt-for-jokes", "humor-is-wisdom"],
+    related: ["ai-joke-tools-compared", "shutap-vs-chatgpt-for-jokes", "humor-is-wisdom"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -499,7 +499,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Who is the writer",
-        body: "With a one-liner generator you pick from lines. With Shutap you keep steering. Make the bit hotter, tighter, or told as a story, swap in a crowd-work angle, or mix your own from the hooks, tags and buttons Shutap wrote for your story. The material is yours, and so is the final call.",
+        body: "With a one-liner tool you pick from lines. With Shutap you keep steering. Make the bit hotter, tighter, or told as a story, swap in a crowd-work angle, or mix your own from the hooks, tags and buttons Shutap wrote for your story. The material is yours, and so is the final call.",
       },
       {
         heading: "What you can do with the result",
@@ -518,7 +518,7 @@ const BASE_GUIDES: Guide[] = [
         body: "The description of Punchlines.ai comes from its public pages and third-party listings as of October 2026, and tools change. Check its own site for what it does today.",
       },
     ],
-    related: ["how-shutap-is-built", "stand-up-bit-generator", "how-to-turn-a-story-into-a-bit"],
+    related: ["how-shutap-is-built", "stand-up-bit-writer", "how-to-turn-a-story-into-a-bit"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -569,7 +569,7 @@ const BASE_GUIDES: Guide[] = [
   },
 
   {
-    slug: "ai-joke-generators-compared",
+    slug: "ai-joke-tools-compared",
     kind: "guide",
     title: "AI Joke Tools Compared: Shutap, Witscript, Punchlines.ai, ChatGPT | Shutap",
     h1: "AI joke tools compared",
@@ -656,7 +656,7 @@ const BASE_GUIDES: Guide[] = [
         body: "Witscript details come from its public site as of October 2026 and may have changed. Check witscript.joetoplyn.com for the current offer.",
       },
     ],
-    related: ["ai-joke-generators-compared", "how-shutap-is-built", "shutap-vs-punchlines-ai"],
+    related: ["ai-joke-tools-compared", "how-shutap-is-built", "shutap-vs-punchlines-ai"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -700,7 +700,7 @@ const BASE_GUIDES: Guide[] = [
         body: "Both are AI and both get things wrong. In either case you decide what to perform, and a real audience is the final test.",
       },
     ],
-    related: ["ai-joke-generators-compared", "how-shutap-is-built", "shutap-vs-witscript"],
+    related: ["ai-joke-tools-compared", "how-shutap-is-built", "shutap-vs-witscript"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -860,7 +860,7 @@ const BASE_GUIDES: Guide[] = [
         body: "Both are AI and both get things wrong. You decide what to perform, and a real audience is the final test.",
       },
     ],
-    related: ["shutap-vs-chatgpt-for-jokes", "ai-joke-generators-compared", "how-shutap-is-built"],
+    related: ["shutap-vs-chatgpt-for-jokes", "ai-joke-tools-compared", "how-shutap-is-built"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -905,7 +905,7 @@ const BASE_GUIDES: Guide[] = [
         body: "Shutap does these steps for you. Write the story as it happened and it returns a hook, setup, tags and a button in your voice and length. Edit it until it sounds like you.",
       },
     ],
-    related: ["how-to-write-comedy-tags", "how-long-should-a-tiktok-bit-be", "storytime-script-generator"],
+    related: ["how-to-write-comedy-tags", "how-long-should-a-tiktok-bit-be", "storytime-script-writer"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -945,7 +945,7 @@ const BASE_GUIDES: Guide[] = [
         body: "Decide the length before you write. In Shutap you choose 15s, 30s, 60s or 2m up front, so the script is written to fit the video.",
       },
     ],
-    related: ["comedy-teleprompter", "how-to-turn-a-story-into-a-bit", "storytime-script-generator"],
+    related: ["comedy-teleprompter", "how-to-turn-a-story-into-a-bit", "storytime-script-writer"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -985,7 +985,7 @@ const BASE_GUIDES: Guide[] = [
         body: "Every bit Shutap writes includes tags. Use them as a starting list, cross out the ones that sound like anyone could have said them, and write your own in their place.",
       },
     ],
-    related: ["how-to-turn-a-story-into-a-bit", "stand-up-bit-generator", "how-long-should-a-tiktok-bit-be"],
+    related: ["how-to-turn-a-story-into-a-bit", "stand-up-bit-writer", "how-long-should-a-tiktok-bit-be"],
     cta: CTA,
     published: PUBLISHED,
   },
@@ -1002,7 +1002,7 @@ const ARTICLES: Guide[] = Object.values(
 // Topics for the hand-written guides (kept here so their objects stay untouched).
 const BASE_TOPICS: Record<string, GuideTopic> = {
   "shutap-vs-punchlines-ai": "shutap-vs-other-tools",
-  "ai-joke-generators-compared": "shutap-vs-other-tools",
+  "ai-joke-tools-compared": "shutap-vs-other-tools",
   "shutap-vs-witscript": "shutap-vs-other-tools",
   "shutap-vs-chatgpt-for-jokes": "shutap-vs-other-tools",
   "shutap-vs-claude-for-jokes": "shutap-vs-other-tools",
@@ -1030,6 +1030,17 @@ export function guidesInTopic(id: GuideTopic): Guide[] {
     (a, b) => (b.updated ?? b.published).localeCompare(a.updated ?? a.published) || a.h1.localeCompare(b.h1),
   );
 }
+
+/** Old guide addresses that had "generator" in them (retired Oct 30 2026).
+ *  They redirect, so links and search results keep working. */
+export const GUIDE_SLUG_REDIRECTS: Record<string, string> = {
+  "storytime-script-generator": "storytime-script-writer",
+  "stand-up-bit-generator": "stand-up-bit-writer",
+  "pov-skit-generator": "pov-skit-writer",
+  "ai-joke-generators-compared": "ai-joke-tools-compared",
+  "best-ai-joke-generator-for-tiktok": "best-ai-joke-tool-for-tiktok",
+  "ai-roast-generator": "ai-roast-tools-compared",
+};
 
 export function getGuide(slug: string): Guide | undefined {
   return GUIDES.find((g) => g.slug === slug);

@@ -22,7 +22,7 @@ const ROOT = new URL("../../", import.meta.url).pathname;
 const ROUTES = join(ROOT, "src/routes");
 const SITE = process.env.SITE_URL || "https://shutap.com";
 const MIN_WORDS = Number(process.env.SSR_MIN_WORDS || 150);
-const LIVE_PREFIXES = ["/funniest", "/guides", "/how-it-works", "/about", "/faq", "/ai-joke-generator"];
+const LIVE_PREFIXES = ["/funniest", "/guides", "/how-it-works", "/about", "/faq", "/humor-amplifier"];
 const LIVE_LIMIT = Number(process.env.SSR_LIVE_LIMIT || 80);
 const BOT_UA = "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; OAI-SearchBot/1.3; +https://openai.com/searchbot)";
 

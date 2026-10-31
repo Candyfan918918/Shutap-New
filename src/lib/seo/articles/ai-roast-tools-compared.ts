@@ -1,22 +1,22 @@
 import type { Guide } from "../guides";
 
 const guide: Guide = {
-  slug: "ai-roast-generator",
+  slug: "ai-roast-tools-compared",
   kind: "guide",
   preset: { voice: "roast", heat: 4 },
   topic: "shutap-vs-other-tools",
-  keyword: "ai roast generator",
-  title: "AI Roast Generators Compared: Roast the Situation | Shutap",
-  h1: "AI roast generators compared, and how to roast a situation",
+  keyword: "ai roast tools",
+  title: "AI Roast Tools Compared: Roast the Situation | Shutap",
+  h1: "AI roast tools compared, and how to roast a situation",
   description:
-    "AI roast generators compared: photo roast apps, free text tools, ChatGPT and Shutap's roast voice. What each takes in, costs and aims at, and what works best.",
+    "AI roast tools compared: photo roast apps, free text tools, ChatGPT and Shutap's roast voice. What each takes in, costs and aims at, and what works best.",
   capsule:
-    "Most AI roast generators take a photo or a description of a person and return a few savage lines, usually with a style menu and an intensity dial. That's fun for a group chat and risky anywhere else. To roast a situation instead, like the landlord's text or the meeting that ran long, start from what happened, not who it happened to. Shutap's roast voice works that way, with the draft yours to rewrite.",
+    "Most AI roast tools take a photo or a description of a person and return a few savage lines, usually with a style menu and an intensity dial. That's fun for a group chat and risky anywhere else. To roast a situation instead, like the landlord's text or the meeting that ran long, start from what happened, not who it happened to. Shutap's roast voice works that way, with the draft yours to rewrite.",
   blurb: "Photo roast apps, free roast tools, chatbots and Shutap's roast voice, side by side.",
   sections: [
     {
-      heading: "What most AI roast generators do",
-      body: "Search for an AI roast generator and you'll mostly find two kinds of tool. Phone apps that roast a selfie or a friend's photo, and free web pages with one text box for a name or description. Nearly all of them aim at a person. Settings are a style menu (savage, Shakespearean, pirate, Gen Z) plus some kind of intensity or creativity dial, and you get three to five lines per go. None of the ones below ask a follow-up question about what you typed, so the lines are only as specific as your input.",
+      heading: "What most AI roast tools do",
+      body: "Search for an AI roast tool and you'll mostly find two kinds of tool. Phone apps that roast a selfie or a friend's photo, and free web pages with one text box for a name or description. Nearly all of them aim at a person. Settings are a style menu (savage, Shakespearean, pirate, Gen Z) plus some kind of intensity or creativity dial, and you get three to five lines per go. None of the ones below ask a follow-up question about what you typed, so the lines are only as specific as your input.",
     },
     {
       heading: "Photo roast apps on iOS",
@@ -24,7 +24,7 @@ const guide: Guide = {
     },
     {
       heading: "Free web roast tools",
-      body: "AIFreeBox's AI Roast Generator is free with no sign-up, per its page. One text box, 17 style presets such as Dry British Humor and Techie & Nerdy, a creativity slider from 1 to 10, and output in many languages. Its page asks you to avoid personal tragedies and health issues. SEOroast, which mainly sells SEO video audits, also hosts a roast generator: 500 characters in, three roasts out, six styles, and a note to keep it playful and not use it for harassment. Tars has a Roast AI app that builds roasts from someone's personality, quirks and hobbies, marketed to comedians.",
+      body: "AIFreeBox's free roast tool is free with no sign-up, per its page. One text box, 17 style presets such as Dry British Humor and Techie & Nerdy, a creativity slider from 1 to 10, and output in many languages. Its page asks you to avoid personal tragedies and health issues. SEOroast, which mainly sells SEO video audits, also hosts a roast tool: 500 characters in, three roasts out, six styles, and a note to keep it playful and not use it for harassment. Tars has a Roast AI app that builds roasts from someone's personality, quirks and hobbies, marketed to comedians.",
     },
     {
       heading: "ChatGPT, Claude and other chatbots",
@@ -49,12 +49,12 @@ const guide: Guide = {
   ],
   faq: [
     {
-      q: "What is the best AI roast generator?",
+      q: "What is the best AI roast tool?",
       a: "It depends on the input. For a friend's photo, iOS apps like Roast Bot are built for it. For a free one-line roast, AIFreeBox has no sign-up. To roast a situation from your own story as a video bit, Shutap's roast voice is designed for that.",
     },
     {
-      q: "Is there a free AI roast generator?",
-      a: "Yes. AIFreeBox's AI Roast Generator says it's free with no sign-up, most iOS roast apps have limited free roasts, ChatGPT and Claude have free plans, and Shutap's first bit needs no account, with 2 a day free once you sign in.",
+      q: "Is there a free AI roast tool?",
+      a: "Yes. AIFreeBox's free roast tool says it's free with no sign-up, most iOS roast apps have limited free roasts, ChatGPT and Claude have free plans, and Shutap's first bit needs no account, with 2 a day free once you sign in.",
     },
     {
       q: "Can ChatGPT roast me?",
@@ -73,13 +73,13 @@ const guide: Guide = {
     { label: "Roast Bot: AI Insult & Joke App (Lit Games Publishing), App Store", url: "https://apps.apple.com/us/app/-/id6648794141" },
     { label: "Roast Bot: Savage Comebacks (Monroy Industries), App Store", url: "https://apps.apple.com/us/app/-/id6744312924" },
     { label: "Roast App: AI Roast Bot (Creator View), App Store", url: "https://apps.apple.com/us/app/-/id6743675883" },
-    { label: "AIFreeBox, AI Roast Generator", url: "https://aifreebox.com/list/ai-roast-generator" },
-    { label: "SEOroast, AI roast generator", url: "https://seoroast.com/tools/ai-roast-generator" },
+    { label: "AIFreeBox, free roast tool page", url: "https://aifreebox.com/list/ai-roast-generator" },
+    { label: "SEOroast, roast tool page", url: "https://seoroast.com/tools/ai-roast-generator" },
     { label: "Tars, Roast AI", url: "https://hellotars.com/ai-apps/roast-ai" },
     { label: "ChatGPT pricing", url: "https://chatgpt.com/pricing/" },
     { label: "Claude pricing", url: "https://claude.com/pricing" },
   ],
-  related: ["roast-lines", "ai-joke-generators-compared", "shutap-vs-chatgpt-for-jokes"],
+  related: ["roast-lines", "ai-joke-tools-compared", "shutap-vs-chatgpt-for-jokes"],
   cta: { label: "Type what happened. Say it funnier.", href: "/" },
   published: "2026-10-20",
 };
