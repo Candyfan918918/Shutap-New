@@ -142,7 +142,7 @@ export interface AdminPollReport {
   total: number
   options: Array<{ key: PollOptionKey; label: string; count: number; pct: number; topFollowUp: string | null }>
   /** Distinct browser sessions per step since the poll opened, from site events. */
-  funnel: Array<{ step: string; label: string; sessions: number }>
+  funnel: Array<{ step: string; label: string; sessions: number; guests: number; signedIn: number }>
   /** Which option people tapped (before any sign-in), distinct browser
    *  sessions per option since the poll opened. A session that tapped two
    *  options counts under each. */
@@ -213,15 +213,31 @@ export const adminPollReport = createServerFn({ method: 'GET' })
     }
     const pct = toPercents(counts)
 
+    // Oct 30 2026: split every step by signed in vs not, and ignore taps on
+    // options this poll doesn't have (pages still open on the previous poll
+    // sent its old options and made the steps disagree with the per-option
+    // counts). "vote counted" comes from the votes themselves, so a vote cast
+    // where site events aren't recorded (the editor preview) still counts.
     const funnel = await Promise.all(
       FUNNEL.map(async (f) => {
-        const sessions = new Set<string>()
+        if (f.step === 'poll_voted') {
+          const n = new Set(votes.filter((v) => pollOption(v.option_key)).map((v) => v.user_id)).size
+          return { step: f.step, label: f.label, sessions: n, guests: 0, signedIn: n }
+        }
+        const all = new Set<string>(), guests = new Set<string>(), signedIn = new Set<string>()
         for (let from = 0; from < 50_000; from += 1000) {
-          const { data } = await client.from('events').select('session_id').eq('name', f.step).gte('ts', p.opened_at).range(from, from + 999)
-          for (const r of (data ?? []) as Array<{ session_id: string | null }>) if (r.session_id) sessions.add(r.session_id)
+          const { data } = await client.from('events').select('session_id, properties').eq('name', f.step).gte('ts', p.opened_at).range(from, from + 999)
+          for (const r of (data ?? []) as Array<{ session_id: string | null; properties: Record<string, unknown> | null }>) {
+            if (!r.session_id) continue
+            const opt = r.properties?.['option']
+            if (opt != null && !pollOption(String(opt))) continue
+            all.add(r.session_id)
+            if (r.properties?.['signed_in'] === true) signedIn.add(r.session_id)
+            else guests.add(r.session_id)
+          }
           if (!data || data.length < 1000) break
         }
-        return { step: f.step, label: f.label, sessions: sessions.size }
+        return { step: f.step, label: f.label, sessions: all.size, guests: guests.size, signedIn: signedIn.size }
       }),
     )
 

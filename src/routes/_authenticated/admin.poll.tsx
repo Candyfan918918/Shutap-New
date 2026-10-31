@@ -125,6 +125,9 @@ function AdminPollPage() {
               <div key={f.step} style={{ ...card, background: '#f7f6f4', border: 0 }}>
                 <div style={{ fontSize: 12, color: '#6b4a5c' }}>{f.label}</div>
                 <div style={{ fontSize: 22, fontWeight: 800, marginTop: 4, fontVariantNumeric: 'tabular-nums' }}>{f.sessions}</div>
+                {f.step !== 'poll_voted' && (
+                  <div style={{ fontSize: 12, color: '#6b4a5c', marginTop: 4 }}>{f.guests} not signed in · {f.signedIn} signed in</div>
+                )}
               </div>
             ))}
           </div>
