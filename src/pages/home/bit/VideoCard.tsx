@@ -9,6 +9,7 @@ import { chargeDownload, type DownloadCharge } from "@/lib/bits.functions";
 import { isPaidTier, type BitTier, type BitVersion } from "@/lib/bits/shared";
 import { buildSpec, VIDEO_H, VIDEO_SECONDS, VIDEO_W, type VideoSpec } from "@/lib/bits/video/spec";
 import { drawFrame } from "@/lib/bits/video/draw";
+import { PLANS, usd } from "@/lib/pricing";
 import { scheduleSfx } from "@/lib/bits/video/sfx";
 import { canEncodeVideo, encodeVideo, type EncodeSupport } from "@/lib/bits/video/encode";
 import {
@@ -301,7 +302,7 @@ export function VideoCard({
       }}
       onClick={() => onLimit("watermark")}
     >
-      video with the shutap.com watermark · remove it, Basic $1.99
+      video with the shutap.com watermark · remove it, Basic {usd(PLANS.basic.amount)}
     </button>
   ) : (
     <span className="bt-note">video clean, no watermark</span>

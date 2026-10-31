@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start';
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
 import { requireRealUser } from './require-real-user';
-import { type StripeEnv, createStripeClient, getStripeErrorMessage } from '@/lib/stripe.server';
-import { PLANS, isCheckoutPriceId, planFromPriceId, productIdForPrice } from '@/lib/pricing';
+import { type StripeEnv, createStripeClient, getStripeErrorMessage, priceForLookupKey } from '@/lib/stripe.server';
+import { PLANS, isCheckoutPriceId, planByPriceId, planFromPriceId, productIdForPrice } from '@/lib/pricing';
 import { bestPlan, rowIsActive } from '@/lib/plan.server';
 
 type CheckoutResult = { clientSecret: string } | { error: string };
@@ -65,9 +65,9 @@ export const createMirrorCheckout = createServerFn({ method: 'POST' })
       if ((existing ?? []).some((r) => rowIsActive(r))) return { error: 'already_subscribed' };
       const { data: { user } } = await supabase.auth.getUser();
       const stripe = createStripeClient(data.environment);
-      const prices = await stripe.prices.list({ lookup_keys: [data.priceId] });
-      if (!prices.data.length) throw new Error('Price not found');
-      const stripePrice = prices.data[0];
+      const plan = planByPriceId(data.priceId);
+      if (!plan) throw new Error('Invalid priceId');
+      const stripePrice = await priceForLookupKey(stripe, data.priceId, plan);
       const customerId = await resolveOrCreateCustomer(stripe, { email: user?.email ?? undefined, userId });
       // The database learns about a subscription from the webhook, a moment
       // after payment. Ask Stripe too, so a second tab (or coming straight
@@ -227,9 +227,7 @@ export const changePlanToPro = createServerFn({ method: 'POST' })
       const sub = await stripe.subscriptions.retrieve(basic.stripe_subscription_id);
       const item = sub.items.data[0];
       if (!item) return { ok: false, error: 'no_subscription_item' };
-      const prices = await stripe.prices.list({ lookup_keys: [PLANS.pro.priceId] });
-      const proPrice = prices.data[0];
-      if (!proPrice) return { ok: false, error: 'Price not found' };
+      const proPrice = await priceForLookupKey(stripe, PLANS.pro.priceId, PLANS.pro);
       // Upgrading means staying: a Basic plan that was set to end is
       // un-cancelled as part of the same change.
       const undoCancel = sub.cancel_at_period_end ? { cancel_at_period_end: false } : sub.cancel_at ? { cancel_at: '' as const } : {};

@@ -144,7 +144,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             price: "0",
             priceCurrency: "USD",
             description:
-              "Free to use. Basic is $1.99/month; Pro is $7.99/month.",
+              "Free to use. Basic is $7.99/month; Pro is $49.99/month.",
           },
         }),
       },
