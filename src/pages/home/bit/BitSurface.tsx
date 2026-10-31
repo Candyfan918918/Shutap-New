@@ -42,8 +42,8 @@ import { ActionIcon } from './icons'
 import { Versions } from './Versions'
 import { Progress } from './Progress'
 import { MixYourOwn } from './MixYourOwn'
-import { Prompter } from './Prompter'
-import { SceneView, ScreenplayView } from './Layouts'
+import { Standup } from './Standup'
+import { SkitView, SketchView } from './Layouts'
 import { DownloadSheet } from './DownloadSheet'
 import { PostSheet } from './PostSheet'
 import { PaywallBody, UpgradeBody, type PaywallWhere } from './PlanSheets'
@@ -69,17 +69,18 @@ type ShownBit = Bit & { locked: boolean }
  *  they just tapped. The bit comes back with them either way. */
 const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   rewrite: { title: 'Sign in to rewrite it.', sub: 'Free. Hotter, tighter, a new tag, or mix your own. Your bit comes with you.' },
-  swap: { title: 'Sign in to swap the tag.', sub: 'Free. Your bit comes with you, with all five spare tags.' },
+  swap: { title: 'Sign in to swap in a crowd-work angle.', sub: 'Free. Your bit comes with you, with all five angles.' },
+  standup: { title: 'Sign in to run it as stand-up.', sub: 'Free. The teleprompter, at talking pace.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
   watch: { title: 'Sign in to watch the video.', sub: 'Free. The 5-second video, the caption and the hashtags come with you.' },
   download: { title: 'Sign in to download it.', sub: 'Free: one download a day (the video, or the caption and hashtags, or the picture), with a shutap.com watermark.' },
   save: { title: 'Sign in to keep it.', sub: 'Free. It goes in your set list with every version you make.' },
-  scene: { title: 'Sign in to see the scene.', sub: 'Free. Your bit comes with you.' },
-  screenplay: { title: 'Sign in for the screenplay.', sub: 'Free. Your bit comes with you.' },
+  skit: { title: 'Sign in for the skit.', sub: 'Free. A shot list you film alone, every role yours.' },
+  sketch: { title: 'Sign in for the sketch.', sub: 'Free. One page in script format.' },
   post: { title: 'Sign in to post it.', sub: 'Free. Your bit comes with you.' },
   sheet: { title: 'Sign in to use this.', sub: 'Free. One tap with Google or Apple.' },
 }
-type Phase = 'write' | 'writing' | 'bit' | 'mix' | 'scene' | 'screenplay' | 'crisis'
+type Phase = 'write' | 'writing' | 'bit' | 'mix' | 'skit' | 'sketch' | 'crisis'
 type Notice = { text: string; swaps: string[] }
 
 /** Longest a visitor waits on one try. The server's own limits add up to
@@ -91,7 +92,7 @@ const STEPS = ['reading it · names removed', 'finding the angle', 'writing four
 /* ── the note left before sign-in, so the bit comes back after it ── */
 /** What a guest was doing when they were asked to sign in; picked back up
  *  once they're in. */
-type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'caption' | 'watch' | 'save' | 'scene' | 'screenplay' | 'post' | 'sheet'
+type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'caption' | 'watch' | 'save' | 'standup' | 'skit' | 'sketch' | 'post' | 'sheet'
 function writePending(bitId: string, anon: string, from?: SigninFrom) {
   try {
     localStorage.setItem(PENDING_KEY, JSON.stringify({ bit_id: bitId, anon, from, at: Date.now() }))
@@ -248,7 +249,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const [toast, setToast] = useState<string | null>(null)
   /** a bit from the set list is on its way in: show that, not an empty box */
   const [opening, setOpening] = useState(false)
-  const [prompter, setPrompter] = useState<BitVersion | null>(null)
+  const [standup, setStandup] = useState<BitVersion | null>(null)
   const [downloadOpen, setDownloadOpen] = useState(false)
   /** downloads used today, for the labels on the video and caption */
   const [dlUsage, setDlUsage] = useState<DownloadUsage | null>(null)
@@ -307,8 +308,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
 
   function addVersion(v: BitVersion) {
     setBit((b) => (b ? { ...b, versions: [...b.versions, v] } : b))
-    // A hotter/tighter/escalate can land after the visitor has moved on (to
-    // Mix your own, a scene...). Switching the bit then changes what they are
+    // A hotter/tighter/storytelling can land after the visitor has moved on (to
+    // Mix your own, a skit...). Switching the bit then changes what they are
     // working on under their thumb, so it waits in the versions row instead.
     if (phaseRef.current === 'bit') setCurrentId(v.id)
     else say(`${v.kind} version ready · it's in your versions`)
@@ -666,7 +667,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     jokeTrack('bit_written', res.tier, { ms: res.ms, seconds: res.bit.versions[0]?.est_seconds ?? null })
   }
 
-  /* The gate, for what needs an account: scene, screenplay, posting, and a
+  /* The gate, for what needs an account: every action on the result, and a
      guest's second bit. Google and Apple go straight to the provider; email
      goes to the email form. Either way the visitor comes back to "/" and the
      bit (or the story they were about to write) comes back with them. */
@@ -943,19 +944,21 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 <button
                   className="bt-act"
                   onClick={() => {
-                    setPrompter(version)
-                    jokeTrack('prompter_opened', tier, { kind: version.kind })
+                    // Every action on the result takes an account (Oct 30 2026).
+                    if (tier === 'guest') return openSignin('standup')
+                    setStandup(version)
+                    jokeTrack('standup_opened', tier, { kind: version.kind })
                   }}
                 >
-                  <ActionIcon name="prompter" />
-                  prompter
+                  <ActionIcon name="standup" />
+                  stand-up
                 </button>
-                {(['scene', 'screenplay'] as const).map((k) => (
+                {(['sketch', 'skit'] as const).map((k) => (
                   <button
                     key={k}
                     className="bt-act"
                     onClick={() => {
-                      // Scene and screenplay are written on request: account only.
+                      // Sketch and skit are written on request: account only.
                       if (tier === 'guest') return openSignin(k)
                       setPhase(k)
                       jokeTrack(`${k}_opened`, tier, { kind: version.kind })
@@ -1070,20 +1073,20 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               jokeTrack('mix_done', tier)
             }}
             onBack={backToBit}
-            onPrompter={(v) => {
-              setPrompter(v)
-              jokeTrack('prompter_opened', tier, { kind: 'mix' })
+            onStandup={(v) => {
+              setStandup(v)
+              jokeTrack('standup_opened', tier, { kind: 'mix' })
             }}
           />
         </div>
       )}
 
-      {(phase === 'scene' || phase === 'screenplay') && bit && version && (
+      {(phase === 'skit' || phase === 'sketch') && bit && version && (
         <div className="bt-col">
-          {phase === 'scene' ? (
-            <SceneView bitId={bit.id} version={version} onBack={backToBit} onPrompter={() => setPrompter(version)} say={say} />
+          {phase === 'skit' ? (
+            <SkitView bitId={bit.id} version={version} onBack={backToBit} onStandup={() => setStandup(version)} say={say} />
           ) : (
-            <ScreenplayView bitId={bit.id} version={version} onBack={backToBit} say={say} watermark={!isPaidTier(tier)} />
+            <SketchView bitId={bit.id} version={version} onBack={backToBit} say={say} watermark={!isPaidTier(tier)} />
           )}
         </div>
       )}
@@ -1103,7 +1106,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         />
       )}
 
-      {prompter && <Prompter bit={prompter} onClose={() => setPrompter(null)} />}
+      {standup && <Standup bit={standup} onClose={() => setStandup(null)} />}
 
       {toast && (
         <div role="status" className="bt-toast">

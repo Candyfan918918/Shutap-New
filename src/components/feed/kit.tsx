@@ -5,7 +5,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { rememberReturnTo } from '@/lib/auth'
 import { reportPost, toggleLike, toggleSave, toggleFollow, deletePost } from '@/lib/feed.functions'
 import { REPORT_REASONS, TOPIC_LABEL, ago, type FeedPost, type ReportReason } from '@/lib/feed-shared'
-import { Prompter } from '@/pages/home/bit/Prompter'
+import { Standup } from '@/pages/home/bit/Standup'
 import './feed.css'
 
 export function goSignIn() {
@@ -47,7 +47,7 @@ export function Sheet({ open, onClose, children }: { open: boolean; onClose: () 
 }
 
 const I = {
-  prompter: (
+  standup: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
       <rect x="3" y="4" width="18" height="13" rx="2" />
       <path d="M7 9h10M7 12h6M9 21h6M12 17v4" />
@@ -186,13 +186,13 @@ export async function sharePost(id: string, joke: string, say: (m: string) => vo
   }
 }
 
-/** A bit post: the four parts, labelled. A scene post: the numbered beats. */
+/** A bit post: the four parts, labelled. A skit post: the numbered beats. */
 export function PostBody({ post }: { post: FeedPost }) {
-  if (post.kind === 'scene' && post.scene) {
-    const sc = post.scene
+  if (post.kind === 'skit' && post.skit) {
+    const sc = post.skit
     return (
       <div className="fd-bit">
-        <span className="fd-pill">scene · ~{sc.secs}s</span>
+        <span className="fd-pill">skit · ~{sc.secs}s</span>
         <p className="fd-hook">{sc.hook}</p>
         <ol className="fd-beats">
           {sc.beats.map((b, i) => (
@@ -356,8 +356,8 @@ export function PostCard({
         </button>
         <span className="fd-spacer" />
         {p.kind !== 'card' ? (
-          <button className="fd-act" aria-label="open in teleprompter" onClick={() => setPrompting(true)}>
-            {I.prompter}
+          <button className="fd-act" aria-label="run it as stand-up" onClick={() => setPrompting(true)}>
+            {I.standup}
           </button>
         ) : null}
         <button className="fd-act" aria-label="more" onClick={() => setMenu(true)}>
@@ -393,13 +393,13 @@ export function PostCard({
           cancel
         </button>
       </Sheet>
-      {prompting && (p.bit || p.scene) ? (
-        <Prompter
+      {prompting && (p.bit || p.skit) ? (
+        <Standup
           bit={
             p.bit ?? {
-              hook: p.scene!.hook,
+              hook: p.skit!.hook,
               setup: '',
-              tags: p.scene!.beats.filter((b) => /^me\b/i.test(b.speaker)).map((b) => b.line),
+              tags: p.skit!.beats.filter((b) => /^me\b/i.test(b.speaker)).map((b) => b.line),
               button: '',
             }
           }

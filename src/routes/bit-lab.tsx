@@ -173,7 +173,7 @@ function RunCard({ story, busy, result, error }: { story: string; busy: boolean;
           {ok.lab.judge_why && <div className="fd-muted">judge: {ok.lab.judge_why}</div>}
 
           <div className="fd-row" style={{ flexWrap: 'wrap' }}>
-            {(['hotter', 'tighter', 'escalate'] as const).map((k) => (
+            {(['hotter', 'tighter', 'storytelling'] as const).map((k) => (
               <button key={k} className="fd-btn ghost sm" disabled={!!varying} onClick={() => vary(k)}>
                 {varying === k ? '…' : k}
               </button>
@@ -208,7 +208,7 @@ function RunCard({ story, busy, result, error }: { story: string; busy: boolean;
                 ))}
               </ol>
               <div className="fd-faint">
-                spare tags: {ok.bit.alt_tags.join(' / ') || 'none'} · writer {ok.lab.writer_model} · judge {ok.lab.judge_model}
+                crowd-work angles: {ok.bit.crowd_work.join(' / ') || 'none'} · writer {ok.lab.writer_model} · judge {ok.lab.judge_model}
               </div>
             </div>
           </details>

@@ -52,7 +52,7 @@ type RoomRow = {
   body: string
   topic: Topic | null
   created_at: string
-  post_kind?: 'card' | 'bit' | 'scene' | null
+  post_kind?: 'card' | 'bit' | 'skit' | 'scene' | null
   post_data?: any
 }
 
@@ -98,9 +98,9 @@ async function hydrate(db: any, rows: RoomRow[], uid: string | null): Promise<Fe
       saved: saved.has(r.id),
       mine: !!uid && r.author_id === uid,
       following: following.has(r.author_id),
-      kind: r.post_kind ?? 'card',
+      kind: (r.post_kind === 'scene' ? 'skit' : r.post_kind) ?? 'card',
       bit: r.post_kind === 'bit' && r.post_data ? (r.post_data as FeedPost['bit']) : null,
-      scene: r.post_kind === 'scene' && r.post_data ? (r.post_data as FeedPost['scene']) : null,
+      skit: (r.post_kind === 'skit' || r.post_kind === 'scene') && r.post_data ? (r.post_data as FeedPost['skit']) : null,
     }
   })
 }

@@ -78,9 +78,9 @@ export const PLAN_COMPARE: CompareRow[] = [
 export const EVERY_PLAN = [
   'A full bit: hook, setup, tags and button',
   'A 5-second video of it',
-  'Hotter, tighter, escalate (each is a new bit and a new video), mix and tag swap',
-  'Teleprompter',
-  'Scene and screenplay',
+  'Hotter, tighter, storytelling (each is a new bit and a new video), mix and crowd-work angles',
+  'Stand-up on the teleprompter',
+  'Sketch and skit',
   'Caption and hashtags',
   'Set list of every bit',
 ] as const

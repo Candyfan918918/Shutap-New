@@ -9,7 +9,7 @@ import { chargeDownload, downloadUsage, exportBit, type DownloadUsage } from '@/
 import { isPaidTier, type BitTier, type BitVersion } from '@/lib/bits/shared'
 import { PLANS, usd } from '@/lib/pricing'
 import { anonSessionId, canShareFiles, isShareAbort, jokeTap, jokeTrack, saveBlob, svgToPng } from '../joke/jokeClient'
-import { scriptPdf } from './screenplay-pdf'
+import { scriptPdf } from './sketch-pdf'
 
 type Format = 'bit' | 'hook' | 'pdf'
 const FORMATS: { key: Format; label: string }[] = [

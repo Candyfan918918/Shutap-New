@@ -48,10 +48,10 @@ export type FeedPost = {
   saved: boolean
   mine: boolean
   following: boolean
-  /** 'card' is the retired single-joke post; new posts are a whole bit or scene */
-  kind: 'card' | 'bit' | 'scene'
+  /** 'card' is the retired single-joke post; new posts are a whole bit or skit */
+  kind: 'card' | 'bit' | 'skit'
   bit: PostBit | null
-  scene: PostScene | null
+  skit: PostScene | null
 }
 
 export type FeedComment = {
@@ -77,6 +77,6 @@ export function ago(iso: string): string {
   return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-/** What a bit or scene post carries, snapshotted when it was posted. */
+/** What a bit or skit post carries, snapshotted when it was posted. */
 export type PostBit = { hook: string; setup: string; tags: string[]; button: string; secs: number }
 export type PostScene = { hook: string; beats: { shot: string; speaker: string; line: string; on_screen: string }[]; secs: number }

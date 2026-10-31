@@ -23,8 +23,8 @@ import {
   BIT_VOICES,
   BIT_ANGLE_FINDER,
   CAPTION_PROMPT,
-  SCENE_PROMPT,
-  SCREENPLAY_PROMPT,
+  SKIT_PROMPT,
+  SKETCH_PROMPT,
   fill,
 } from '@/lib/jokes/prompts.server'
 import {
@@ -36,13 +36,13 @@ import {
   type Premise,
 } from '@/lib/jokes/pipeline.server'
 import {
-  SCREENPLAY_TYPES,
+  SKETCH_TYPES,
   WORDS_PER_SECOND,
   bitWords,
   type BitControls,
   type BitDraft,
-  type SceneBeat,
-  type ScreenplayElement,
+  type SkitBeat,
+  type SketchElement,
   type VaryKind,
 } from './shared'
 import { houseSignal } from './house.server'
@@ -290,7 +290,7 @@ export type BitPass = {
   bits: BitDraft[]
   /** each bit's position in the writer's output = the technique it was dealt */
   slots?: number[]
-  altTags: string[]
+  crowdWork: string[]
   angles: string[]
   model: string
   error?: string
@@ -319,17 +319,19 @@ export async function runBitPass(
     signal: opts.signal,
     messages: [{ role: 'user', content: prompt }],
   })
-  if (res.error) return { bits: [], altTags: [], angles: [], model: res.model, error: res.error }
-  const parsed = tryParseJson<{ bits?: unknown; alt_tags?: unknown; angles?: unknown }>(res.text)
+  if (res.error) return { bits: [], crowdWork: [], angles: [], model: res.model, error: res.error }
+  const parsed = tryParseJson<{ bits?: unknown; crowd_work?: unknown; angles?: unknown }>(res.text)
   const cleaned = (Array.isArray(parsed?.bits) ? parsed!.bits : []).map(cleanBit)
   const slots = cleaned.flatMap((b, i) => (b ? [i] : []))
   const bits = cleaned.filter((b): b is BitDraft => !!b)
-  const altTags = (Array.isArray(parsed?.alt_tags) ? parsed!.alt_tags : [])
+  // the frozen bit-1.2 eval prompt still answers with the old key
+  const crowdRaw = (parsed as { crowd_work?: unknown; alt_tags?: unknown } | null)?.crowd_work ?? (parsed as { alt_tags?: unknown } | null)?.alt_tags
+  const crowdWork = (Array.isArray(crowdRaw) ? crowdRaw : [])
     .map(tidy)
     .filter((t) => t && !hardRuleFailure(t, story, 'the_roast', { ignoreLength: true }))
     .slice(0, 5)
   const angles = (Array.isArray(parsed?.angles) ? parsed!.angles : []).map(tidy).filter(Boolean).slice(0, 6)
-  return { bits, slots, altTags, angles, model: res.model, ...(bits.length ? {} : { error: 'no bits parsed' }) }
+  return { bits, slots, crowdWork, angles, model: res.model, ...(bits.length ? {} : { error: 'no bits parsed' }) }
 }
 
 /* ── stage 3 · the judge ── */
@@ -485,7 +487,7 @@ export type BitFailure = { rejected: { hook: string; rule: string }[]; error: st
 export type WrittenBit = {
   /** best first; [0] is the bit the user sees */
   ranked: BitDraft[]
-  altTags: string[]
+  crowdWork: string[]
   premises: Premise[]
   judgeWhy: string | null
   writerModel: string
@@ -568,7 +570,7 @@ export async function writeBitFromStory(
     },
   })
   const t2 = Date.now()
-  const pass = (race.winner ?? race.last ?? { bits: [], altTags: [], angles: [], model: primaryModel, error: 'no attempt' }) as BitPass
+  const pass = (race.winner ?? race.last ?? { bits: [], crowdWork: [], angles: [], model: primaryModel, error: 'no attempt' }) as BitPass
   for (const b of pass.bits) {
     const f = bitFailure(b, story, controls)
     if (f) rejected.push({ hook: b.hook, rule: f })
@@ -598,7 +600,7 @@ export async function writeBitFromStory(
 
   return {
     ranked,
-    altTags: pass.altTags,
+    crowdWork: pass.crowdWork,
     premises: premises.length ? premises : pass.angles.map((t) => ({ t, used: true })),
     judgeWhy: verdict.why,
     writerModel: pass.model,
@@ -681,7 +683,7 @@ export function heatFor(kind: VaryKind | 'original', controls: BitControls): num
   return kind === 'hotter' ? Math.min(5, controls.heat + 2) : controls.heat
 }
 
-/* ── phase 5: scene and screenplay ── */
+/* ── the bit laid out: skit (shot list) and sketch (one page) ── */
 
 
 function bitAsText(b: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>): string {
@@ -707,8 +709,8 @@ async function layout<T>(template: string, story: string, bit: Pick<BitDraft, 'h
   return null
 }
 
-export function writeScene(story: string, bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>): Promise<SceneBeat[] | null> {
-  return layout(SCENE_PROMPT, story, bit, (raw) => {
+export function writeSkit(story: string, bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>): Promise<SkitBeat[] | null> {
+  return layout(SKIT_PROMPT, story, bit, (raw) => {
     const list = Array.isArray((raw as any)?.beats) ? ((raw as any).beats as any[]) : []
     const beats = list
       .map((b) => ({
@@ -723,12 +725,12 @@ export function writeScene(story: string, bit: Pick<BitDraft, 'hook' | 'setup' |
   })
 }
 
-export function writeScreenplay(story: string, bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>): Promise<ScreenplayElement[] | null> {
-  return layout(SCREENPLAY_PROMPT, story, bit, (raw) => {
+export function writeSketch(story: string, bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>): Promise<SketchElement[] | null> {
+  return layout(SKETCH_PROMPT, story, bit, (raw) => {
     const list = Array.isArray((raw as any)?.elements) ? ((raw as any).elements as any[]) : []
     const els = list
-      .map((e) => ({ type: String(e?.type ?? '') as ScreenplayElement['type'], text: tidy(e?.text).slice(0, 800) }))
-      .filter((e) => SCREENPLAY_TYPES.includes(e.type) && e.text && !toneFailure(e.text))
+      .map((e) => ({ type: String(e?.type ?? '') as SketchElement['type'], text: tidy(e?.text).slice(0, 800) }))
+      .filter((e) => SKETCH_TYPES.includes(e.type) && e.text && !toneFailure(e.text))
       .slice(0, 60)
     const hasDialogue = els.some((e) => e.type === 'dialogue')
     return els.length >= 4 && hasDialogue ? els : null

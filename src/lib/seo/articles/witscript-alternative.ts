@@ -24,7 +24,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap: when the material is your own story",
-      body: "Shutap, the humor amplifier, starts from something that happened to you rather than a headline. You type the story, pick an audience (social, live, office, work, family or school), a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and a heat from 1 to 5. You get a draft of the whole bit: hook, setup, tags and a button. Then you run it in a teleprompter, lay it out as a scene, or format it as a screenplay page. Your first bit each day needs no account. Signed in, you get 2 new bits a day free.",
+      body: "Shutap, the humor amplifier, starts from something that happened to you rather than a headline. You type the story, pick an audience (social, live, office, work, family or school), a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and a heat from 1 to 5. You get a draft of the whole bit: hook, setup, tags and a button. Then you run it as stand-up on a teleprompter, lay it out as a skit, or format it as a one-page sketch. Your first bit each day needs no account. Signed in, you get 2 new bits a day free.",
     },
     {
       heading: "What the difference looks like on the page",

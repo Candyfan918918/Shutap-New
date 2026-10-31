@@ -1,4 +1,4 @@
-/* The teleprompter: the bit, full screen, dark, big type, scrolling at
+/* Stand-up: the bit on the teleprompter, full screen, dark, big type, scrolling at
  * talking pace so it can be read to camera.
  *
  *   3-2-1 countdown, then it rolls at 2.6 words a second
@@ -17,7 +17,7 @@ import './bit.css'
 
 type WakeLockSentinelLike = { release: () => Promise<void> }
 
-export function Prompter({ bit, onClose }: { bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>; onClose: () => void }) {
+export function Standup({ bit, onClose }: { bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>; onClose: () => void }) {
   const lines = [bit.hook, bit.setup, ...bit.tags, bit.button].filter(Boolean)
   const words = bitWords(bit)
   const [speed, setSpeed] = useState(WORDS_PER_SECOND)
@@ -147,10 +147,10 @@ export function Prompter({ bit, onClose }: { bit: Pick<BitDraft, 'hook' | 'setup
     state === 'rolling' ? 'pause' : state === 'paused' ? 'resume' : state === 'done' ? 'again' : state === 'counting' ? '…' : 'start'
 
   return createPortal(
-    <div data-ph-private className="bt-stage" role="dialog" aria-modal="true" aria-label="Teleprompter">
+    <div data-ph-private className="bt-stage" role="dialog" aria-modal="true" aria-label="Stand-up teleprompter">
       <div className="bt-between">
         <span className="bt-lbl" style={{ color: '#b9a7ae' }}>
-          teleprompter · ~{Math.round(words / speed)}s at this pace
+          stand-up · ~{Math.round(words / speed)}s at this pace
         </span>
         <button className="bt-stage-btn" onClick={onClose}>
           close

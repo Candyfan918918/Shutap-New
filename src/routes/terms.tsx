@@ -41,7 +41,7 @@ function TermsPage() {
       <p>
         Shutap is the humor amplifier: it amplifies your own story into a bit. You type what
         happened. Shutap removes identifying details and writes comedy from it, in your voice, with
-        a short video, a caption and hashtags, and teleprompter, scene and screenplay views. You
+        a short video, a caption and hashtags, and the stand-up, sketch and skit formats. You
         can download, share or post what it writes. Shutap amplifies your humor; it never replaces
         it. Shutap is for entertainment only.
       </p>
@@ -160,7 +160,7 @@ function TermsPage() {
       <p>
         A guest can write <b>one new bit a day</b> without an account. Signing in is free and allows
         <b>two new bits a day</b> in total, counting any bit written as a guest that day. Basic allows
-        five a day; Pro has no daily number, within fair use. A rewrite (hotter, tighter, escalate)
+        five a day; Pro has no daily number, within fair use. A rewrite (hotter, tighter, storytelling)
         is a new bit: it is written again and its video is rendered again, so it counts as one.
         Swapping a tag or mixing your own does not. Signing in keeps your bits
         in your set list and lets you post them.

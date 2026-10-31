@@ -1,9 +1,9 @@
-/* Under the bit: the version chips, the five spare tags, and the way into
+/* Under the bit: the version chips, the five crowd-work angles, and the way into
  * Mix your own. Every version is saved the moment it is made, so there is no
  * separate keep step; a chip switches the bit above to that version. */
 import { useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
-import { swapTag, varyBit } from '@/lib/bits.functions'
+import { swapAngle, varyBit } from '@/lib/bits.functions'
 import { VARY_KINDS, type Bit, type BitTier, type BitVersion, type VaryKind } from '@/lib/bits/shared'
 import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 
@@ -48,7 +48,7 @@ export function Versions({
   onCharged?: () => void
 }) {
   const vary = useServerFn(varyBit)
-  const swap = useServerFn(swapTag)
+  const swap = useServerFn(swapAngle)
   const [busy, setBusy] = useState<VaryKind | null>(null)
   const [swapping, setSwapping] = useState<number | null>(null)
   /** swap version id → the version it was made from, so a second tap undoes it */
@@ -83,7 +83,7 @@ export function Versions({
     }
   }
 
-  async function pickTag(alt: number) {
+  async function pickAngle(alt: number) {
     if (activeSwap && activeSwap.alt === alt) return onSelect(activeSwap.from)
     if (onSignIn) return onSignIn('swap')
     const from = activeSwap ? activeSwap.from : current.id
@@ -155,17 +155,18 @@ export function Versions({
         </div>
       </section>
 
-      {bit.alt_tags.length > 0 && (
-        <section data-ph-private style={{ display: 'flex', flexDirection: 'column', gap: 8 }} aria-label="Spare tags">
-          <span className="bt-lbl">{bit.alt_tags.length} more tags · tap to swap into tag 1</span>
-          {bit.alt_tags.map((t, i) => (
+      {bit.crowd_work.length > 0 && (
+        <section data-ph-private style={{ display: 'flex', flexDirection: 'column', gap: 8 }} aria-label="Crowd-work angles">
+          <span className="bt-lbl">crowd-work angles · tap to swap into tag 1</span>
+          <span className="bt-note" style={{ marginTop: -4 }}>five quick angles on the same situation, the way a comic riffs off an answer from the crowd</span>
+          {bit.crowd_work.map((t, i) => (
             <button
               key={i}
               className="bt-opt"
               aria-pressed={activeSwap?.alt === i}
               aria-busy={swapping === i || undefined}
               disabled={swapping !== null}
-              onClick={() => void pickTag(i)}
+              onClick={() => void pickAngle(i)}
             >
               {t}
             </button>

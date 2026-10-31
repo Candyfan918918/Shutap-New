@@ -14,7 +14,7 @@ const ITEMS: Item[] = [
   {
     href: "/how-it-works",
     label: "How it works",
-    sub: "type what happened, get the bit: teleprompter, scene, screenplay page. what\u2019s free and what Basic and Pro add.",
+    sub: "type what happened, get the bit: stand-up, sketch, skit. what\u2019s free and what Basic and Pro add.",
   },
   {
     href: "/faq",

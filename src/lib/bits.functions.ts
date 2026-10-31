@@ -9,7 +9,7 @@
 // thrown away unread. Any path that ends without a bit gives the budget back.
 //
 // Daily new bits: guest 1 · free 2 (counting that day's guest bit) · basic 5 ·
-// pro fair-use. New bits and rewrites (hotter/tighter/escalate) count; tag swap and mix are free.
+// pro fair-use. New bits and rewrites (hotter/tighter/storytelling) count; angle swap and mix are free of the cap but need an account.
 // Everyone sees the whole bit. Bits are server-only rows; ownership is checked
 // here: the signed-in user, or the guest's own browser id.
 import { createServerFn } from '@tanstack/react-start'
@@ -35,8 +35,8 @@ import {
   type BitTier,
   type BitUsage,
   type BitVersion,
-  type SceneBeat,
-  type ScreenplayElement,
+  type SkitBeat,
+  type SketchElement,
   type VersionKind,
   isPaidTier,
 } from './bits/shared'
@@ -58,6 +58,24 @@ const ControlsSchema = z
 async function adminDb(): Promise<any> {
   const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
   return supabaseAdmin
+}
+
+/* The comedy-formats rename (Oct 30 2026) moved three columns: bits.alt_tags →
+   crowd_work, bit_versions.scene → skit, bit_versions.screenplay → sketch
+   (migration 20261031000000). Until that migration has run, the old names
+   still work: checked once a minute, so a deploy that lands before the SQL
+   keeps writing bits. */
+type Cols = { crowd: 'crowd_work' | 'alt_tags'; skit: 'skit' | 'scene'; sketch: 'sketch' | 'screenplay' }
+const NEW_COLS: Cols = { crowd: 'crowd_work', skit: 'skit', sketch: 'sketch' }
+const OLD_COLS: Cols = { crowd: 'alt_tags', skit: 'scene', sketch: 'screenplay' }
+let colsCache: { at: number; cols: Cols } | null = null
+async function cols(admin: any): Promise<Cols> {
+  if (colsCache && Date.now() - colsCache.at < 60_000) return colsCache.cols
+  const { error } = await admin.from('bits').select('crowd_work').limit(1)
+  const c = error ? OLD_COLS : NEW_COLS
+  if (error) console.warn('[bits] crowd_work column missing: migration 20261031000000 not run yet, using the old column names')
+  colsCache = { at: Date.now(), cols: c }
+  return c
 }
 
 /** Guest or account, for the per-network layer (no database read). */
@@ -98,7 +116,7 @@ type BitRow = {
   anon_key: string | null
   story_clean: string
   controls: BitControls
-  alt_tags: string[]
+  crowd_work: string[]
   created_at: string
 }
 
@@ -119,7 +137,7 @@ type VersionRow = {
 function toVersion(v: VersionRow): BitVersion {
   return {
     id: v.id,
-    kind: v.kind,
+    kind: ((v.kind as string) === 'escalate' ? 'storytelling' : v.kind) as VersionKind,
     hook: v.hook,
     setup: v.setup,
     tags: v.tags,
@@ -138,7 +156,7 @@ function toBit(row: BitRow, versions: VersionRow[]): Bit & { locked: boolean } {
     id: row.id,
     story: row.story_clean,
     controls: { ...DEFAULT_CONTROLS, ...(row.controls ?? {}) },
-    alt_tags: row.alt_tags ?? [],
+    crowd_work: row.crowd_work ?? [],
     versions: versions.map((v) => toVersion(v)),
     created_at: row.created_at,
     locked: false,
@@ -146,13 +164,14 @@ function toBit(row: BitRow, versions: VersionRow[]): Bit & { locked: boolean } {
 }
 
 async function loadOwnedBit(admin: any, bitId: string, id: JokeIdentity): Promise<BitRow | null> {
+  const c = await cols(admin)
   const { data } = await admin
     .from('bits')
-    .select('id, user_id, anon_key, story_clean, controls, alt_tags, created_at')
+    .select(`id, user_id, anon_key, story_clean, controls, ${c.crowd}, created_at`)
     .eq('id', bitId)
     .maybeSingle()
-  const row = data as BitRow | null
-  if (!row) return null
+  if (!data) return null
+  const row = { ...data, crowd_work: data[c.crowd] ?? [] } as BitRow
   const anon = anonKey(id)
   const owns = id.userId ? row.user_id === id.userId : !row.user_id && !!anon && row.anon_key === anon
   return owns ? row : null
@@ -174,11 +193,13 @@ async function insertVersion(
   draft: BitDraft,
   heat: number,
 ): Promise<VersionRow> {
+  // before migration 20261031000000 the kind check still says 'escalate'
+  const legacy = (await cols(admin)).crowd === 'alt_tags'
   const { data, error } = await admin
     .from('bit_versions')
     .insert({
       bit_id: bitId,
-      kind,
+      kind: legacy && kind === 'storytelling' ? 'escalate' : kind,
       hook: draft.hook,
       setup: draft.setup,
       tags: draft.tags,
@@ -372,7 +393,7 @@ async function writeCore(
       controls,
       premises: written.premises,
       candidates: written.ranked,
-      alt_tags: written.altTags,
+      [(await cols(supabaseAdmin)).crowd]: written.crowdWork,
       prompt_version: written.promptVersion,
       writer_model: written.writerModel,
       judge_model: written.judgeModel,
@@ -443,7 +464,7 @@ async function writeCore(
       anon_key: anon,
       story_clean: clean,
       controls,
-      alt_tags: written.altTags,
+      crowd_work: written.crowdWork,
       created_at: original.created_at,
     }
     return {
@@ -536,7 +557,7 @@ export type VersionResult =
   | { ok: false; reason: 'not_found' | 'sign_in' | 'too_many' | 'rate_limited' | 'failed' }
   | { ok: false; reason: 'daily'; tier: BitTier }
 
-/** Hotter, tighter or escalate, rewritten from the version the user is on.
+/** Hotter, tighter or storytelling, rewritten from the version the user is on.
  *  A rewrite is a model call, so since Oct 29 2026 it counts as a new bit
  *  against the daily cap (tag swap and mix your own stay free: no model). */
 export const varyBit = createServerFn({ method: 'POST' })
@@ -588,7 +609,7 @@ export const varyBit = createServerFn({ method: 'POST' })
   })
 
 /** Put one of the five spare tags into a tag slot. No model call. */
-export const swapTag = createServerFn({ method: 'POST' })
+export const swapAngle = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) =>
     z
       .object({
@@ -609,7 +630,7 @@ export const swapTag = createServerFn({ method: 'POST' })
     const versions = await loadVersions(supabaseAdmin, row.id)
     if (versions.length >= MAX_VERSIONS) return { ok: false, reason: 'too_many' }
     const from = versions.find((v) => v.id === data.from_version_id) ?? versions[0]
-    const alt = row.alt_tags?.[data.alt]
+    const alt = row.crowd_work?.[data.alt]
     if (!from || !alt) return { ok: false, reason: 'not_found' }
     const tags = [...from.tags]
     tags[Math.min(data.index, tags.length - 1)] = alt
@@ -719,11 +740,12 @@ function uniq(xs: string[]): string[] {
  *  story, plus the spare tags. Read from the server copy on save too, so a
  *  mix can only ever be made of lines the pipeline actually wrote. */
 async function mixPool(admin: any, bitId: string): Promise<MixPool> {
-  const { data } = await admin.from('bits').select('candidates, alt_tags').eq('id', bitId).maybeSingle()
+  const c = await cols(admin)
+  const { data } = await admin.from('bits').select(`candidates, ${c.crowd}`).eq('id', bitId).maybeSingle()
   const cands = (Array.isArray(data?.candidates) ? data.candidates : []) as BitDraft[]
   return {
     hooks: uniq(cands.map((c) => c.hook)),
-    tags: uniq([...cands.flatMap((c) => c.tags ?? []), ...((data?.alt_tags ?? []) as string[])]),
+    tags: uniq([...cands.flatMap((c) => c.tags ?? []), ...((data?.[c.crowd] ?? []) as string[])]),
     buttons: uniq(cands.map((c) => c.button)),
   }
 }
@@ -779,12 +801,12 @@ export const saveMix = createServerFn({ method: 'POST' })
     return { ok: true, version: toVersion(saved) }
   })
 
-/* ───────────────────────── scene + screenplay ───────────────────────── */
+/* ───────────────────────── skit + sketch ───────────────────────── */
 
 export type LayoutResult<T> = { ok: true; data: T } | { ok: false; reason: 'sign_in' | 'not_found' | 'rate_limited' | 'failed' }
 
 async function layoutFor<T>(
-  kind: 'scene' | 'screenplay',
+  kind: 'skit' | 'sketch',
   bitId: string,
   versionId: string,
   anonSessionId: string | null,
@@ -794,31 +816,32 @@ async function layoutFor<T>(
   if (!id.userId) return { ok: false, reason: 'sign_in' }
   const row = await loadOwnedBit(supabaseAdmin, bitId, id)
   if (!row) return { ok: false, reason: 'not_found' }
+  const col = (await cols(supabaseAdmin))[kind]
   const { data: v } = await supabaseAdmin
     .from('bit_versions')
-    .select(`id, hook, setup, tags, button, ${kind}`)
+    .select(`id, hook, setup, tags, button, ${col}`)
     .eq('id', versionId)
     .eq('bit_id', row.id)
     .maybeSingle()
   if (!v) return { ok: false, reason: 'not_found' }
-  if (v[kind]) return { ok: true, data: v[kind] as T }
+  if (v[col]) return { ok: true, data: v[col] as T }
   if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
-  const { writeScene, writeScreenplay } = await import('./bits/pipeline.server')
-  const made = kind === 'scene' ? await writeScene(row.story_clean, v) : await writeScreenplay(row.story_clean, v)
+  const { writeSkit, writeSketch } = await import('./bits/pipeline.server')
+  const made = kind === 'skit' ? await writeSkit(row.story_clean, v) : await writeSketch(row.story_clean, v)
   if (!made) return { ok: false, reason: 'failed' }
-  await supabaseAdmin.from('bit_versions').update({ [kind]: made } as never).eq('id', v.id)
+  await supabaseAdmin.from('bit_versions').update({ [col]: made } as never).eq('id', v.id)
   return { ok: true, data: made as T }
 }
 
 const LayoutInput = z.object({ bit_id: z.string().uuid(), version_id: z.string().uuid(), ...Ctx })
 
-export const getScene = createServerFn({ method: 'POST' })
+export const getSkit = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => LayoutInput.parse(d))
-  .handler(({ data }) => layoutFor<SceneBeat[]>('scene', data.bit_id, data.version_id, data.anon_session_id ?? null))
+  .handler(({ data }) => layoutFor<SkitBeat[]>('skit', data.bit_id, data.version_id, data.anon_session_id ?? null))
 
-export const getScreenplay = createServerFn({ method: 'POST' })
+export const getSketch = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => LayoutInput.parse(d))
-  .handler(({ data }) => layoutFor<ScreenplayElement[]>('screenplay', data.bit_id, data.version_id, data.anon_session_id ?? null))
+  .handler(({ data }) => layoutFor<SketchElement[]>('sketch', data.bit_id, data.version_id, data.anon_session_id ?? null))
 
 /* ───────────────────────── download ───────────────────────── */
 
@@ -938,9 +961,9 @@ export const exportBit = createServerFn({ method: 'POST' })
 
 export type PostResult =
   | { ok: true; room_id: string; already: boolean }
-  | { ok: false; reason: 'sign_in' | 'not_found' | 'names' | 'crisis' | 'no_scene' | 'failed' }
+  | { ok: false; reason: 'sign_in' | 'not_found' | 'names' | 'crisis' | 'no_skit' | 'failed' }
 
-/** A post is a whole bit or a whole scene, never a single joke. The content
+/** A post is a whole bit or a whole skit, never a single joke. The content
  *  is snapshotted on the room so a later version never changes a post that
  *  already has likes and comments. */
 export const postBitToRoom = createServerFn({ method: 'POST' })
@@ -949,7 +972,7 @@ export const postBitToRoom = createServerFn({ method: 'POST' })
       .object({
         bit_id: z.string().uuid(),
         version_id: z.string().uuid(),
-        kind: z.enum(['bit', 'scene']),
+        kind: z.enum(['bit', 'skit']),
         topic: z.enum(['office', 'work', 'family', 'school', 'live', 'social']),
         ...Ctx,
       })
@@ -961,9 +984,10 @@ export const postBitToRoom = createServerFn({ method: 'POST' })
     if (!id.userId) return { ok: false, reason: 'sign_in' }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
+    const skitCol = (await cols(supabaseAdmin)).skit
     const { data: v } = await supabaseAdmin
       .from('bit_versions')
-      .select('id, hook, setup, tags, button, est_seconds, scene')
+      .select(`id, hook, setup, tags, button, est_seconds, ${skitCol}`)
       .eq('id', data.version_id)
       .eq('bit_id', row.id)
       .maybeSingle()
@@ -980,13 +1004,13 @@ export const postBitToRoom = createServerFn({ method: 'POST' })
 
     let postData: Record<string, unknown>
     let body: string
-    if (data.kind === 'scene') {
-      let beats = v.scene as SceneBeat[] | null
+    if (data.kind === 'skit') {
+      let beats = v[skitCol] as SkitBeat[] | null
       if (!beats) {
-        const { writeScene } = await import('./bits/pipeline.server')
-        beats = await writeScene(row.story_clean, v)
-        if (!beats) return { ok: false, reason: 'no_scene' }
-        await supabaseAdmin.from('bit_versions').update({ scene: beats } as never).eq('id', v.id)
+        const { writeSkit } = await import('./bits/pipeline.server')
+        beats = await writeSkit(row.story_clean, v)
+        if (!beats) return { ok: false, reason: 'no_skit' }
+        await supabaseAdmin.from('bit_versions').update({ [skitCol]: beats } as never).eq('id', v.id)
       }
       postData = { hook: v.hook, beats, secs: v.est_seconds }
       body = beats.map((b, i) => `${i + 1}. ${b.shot} · ${b.speaker}: ${b.line}`).join('\n')
@@ -1060,7 +1084,7 @@ export type CaptionResult =
 
 /** The text under the video: a teaser caption and five hashtags, written on
  *  first ask and cached on the version. Signed in only: it's a model call
- *  written on request, like the scene and screenplay. */
+ *  written on request, like the skit and the sketch. */
 export const getCaption = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => LayoutInput.parse(d))
   .handler(async ({ data }): Promise<CaptionResult> => {

@@ -1,4 +1,4 @@
-// A screenplay page as a PDF, built in the browser with no library.
+// The sketch (one screenplay-format page) as a PDF, built in the browser with no library.
 //
 // US Letter, Courier 12 (one of the fourteen fonts every PDF reader carries,
 // so nothing is embedded), standard margins and indents:
@@ -7,7 +7,7 @@
 //   parenthetical            3.1in, 25 characters
 //   dialogue                 2.5in, 35 characters
 //   transition               right-aligned to 7.5in
-import type { ScreenplayElement } from '@/lib/bits/shared'
+import type { SketchElement } from '@/lib/bits/shared'
 
 const PT = 72
 const CHAR_W = 7.2 // Courier 12pt advance
@@ -16,7 +16,7 @@ const TOP = 792 - PT
 const BOTTOM = PT
 
 type Spec = { x: number; width: number; upper?: boolean; right?: boolean }
-const SPECS: Record<ScreenplayElement['type'], Spec> = {
+const SPECS: Record<SketchElement['type'], Spec> = {
   scene_heading: { x: 1.5 * PT, width: 60, upper: true },
   action: { x: 1.5 * PT, width: 60 },
   character: { x: 3.7 * PT, width: 38, upper: true },
@@ -74,17 +74,17 @@ function markOps(): string[] {
 
 /** Blank line before an element, except inside a speech (character →
  *  parenthetical → dialogue). */
-function gapBefore(prev: ScreenplayElement['type'] | null, cur: ScreenplayElement['type']): number {
+function gapBefore(prev: SketchElement['type'] | null, cur: SketchElement['type']): number {
   if (!prev) return 0
   if (prev === 'character' && (cur === 'dialogue' || cur === 'parenthetical')) return 0
   if (prev === 'parenthetical' && cur === 'dialogue') return 0
   return 1
 }
 
-export function screenplayPdf(elements: ScreenplayElement[], title: string, opts: { watermark?: boolean } = {}): Blob {
+export function sketchPdf(elements: SketchElement[], title: string, opts: { watermark?: boolean } = {}): Blob {
   const pages: string[][] = [[]]
   let y = TOP
-  let prev: ScreenplayElement['type'] | null = null
+  let prev: SketchElement['type'] | null = null
 
   const put = (x: number, text: string) => {
     if (y < BOTTOM) {
@@ -139,12 +139,12 @@ export function screenplayPdf(elements: ScreenplayElement[], title: string, opts
 
 export function pdfFilename(hook: string): string {
   const slug = ascii(hook).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48)
-  return `${slug || 'bit'}-screenplay.pdf`
+  return `${slug || 'bit'}-sketch.pdf`
 }
 
 /** The bit itself as a plain script page: hook, setup, tags, button. */
 export function scriptPdf(v: { hook: string; setup: string; tags: string[]; button: string }, watermark: boolean): Blob {
-  const els: ScreenplayElement[] = [
+  const els: SketchElement[] = [
     { type: 'scene_heading', text: 'THE BIT' },
     { type: 'character', text: 'HOOK' },
     { type: 'dialogue', text: v.hook },
@@ -157,5 +157,5 @@ export function scriptPdf(v: { hook: string; setup: string; tags: string[]; butt
     { type: 'character', text: 'BUTTON' },
     { type: 'dialogue', text: v.button },
   ]
-  return screenplayPdf(els, v.hook, { watermark })
+  return sketchPdf(els, v.hook, { watermark })
 }

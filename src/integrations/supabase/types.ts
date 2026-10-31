@@ -256,8 +256,8 @@ export type Database = {
           hook: string
           id: string
           kind: string
-          scene: Json | null
-          screenplay: Json | null
+          skit: Json | null
+          sketch: Json | null
           setup: string
           tags: string[]
           why: string | null
@@ -272,8 +272,8 @@ export type Database = {
           hook: string
           id?: string
           kind: string
-          scene?: Json | null
-          screenplay?: Json | null
+          skit?: Json | null
+          sketch?: Json | null
           setup: string
           tags?: string[]
           why?: string | null
@@ -288,8 +288,8 @@ export type Database = {
           hook?: string
           id?: string
           kind?: string
-          scene?: Json | null
-          screenplay?: Json | null
+          skit?: Json | null
+          sketch?: Json | null
           setup?: string
           tags?: string[]
           why?: string | null
@@ -306,7 +306,7 @@ export type Database = {
       }
       bits: {
         Row: {
-          alt_tags: string[]
+          crowd_work: string[]
           anon_key: string | null
           candidates: Json
           controls: Json
@@ -323,7 +323,7 @@ export type Database = {
           writer_model: string | null
         }
         Insert: {
-          alt_tags?: string[]
+          crowd_work?: string[]
           anon_key?: string | null
           candidates?: Json
           controls?: Json
@@ -340,7 +340,7 @@ export type Database = {
           writer_model?: string | null
         }
         Update: {
-          alt_tags?: string[]
+          crowd_work?: string[]
           anon_key?: string | null
           candidates?: Json
           controls?: Json

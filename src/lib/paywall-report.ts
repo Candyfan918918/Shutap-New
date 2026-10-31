@@ -43,7 +43,7 @@ function signinBucket(where: string): SigninWhere {
   if (where === 'rewrite' || where === 'swap' || where === 'mix') return 'rewrite'
   if (where === 'download') return 'download'
   if (where === 'save') return 'keep'
-  return 'other' // scene, screenplay, post, or anything new
+  return 'other' // stand-up, sketch, skit, post, or anything new
 }
 
 const pct = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 1000) / 10 : null)
