@@ -2,13 +2,13 @@
 
 > Shutap is the humor amplifier. Type what happened and Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, a caption and hashtags, then runs it as stand-up, lays it out as a skit, or formats it as a one-page sketch. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or bring it to a toast, a talk or a meeting. Shutap amplifies your humor; it never replaces it. Your stories and jokes stay yours. Identifying details are removed from stories before storage, and Shutap never uses your content to train AI. Its writing is guided by the Shutap Humor Amplifier Lab dataset, an in-house joke dataset the Shutap team writes, selects and rates. The Humor Amplifier Lab is Shutap's research arm: the dataset, The funniest series and the work behind Shutap Enterprise.
 
-The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Signing in is free and lets you rewrite and download it; Basic ($1.99/month) and Pro ($7.99/month) remove the watermark on downloads. A "wild" setting runs from 1 (true to your story) to 5 (goes wild). Shutap writes jokes about the situation, never about a real person someone could identify. It is an entertainment tool, not a healthcare, mental-health, crisis or legal service. 18+.
+The brand line is "SHUTAP. Say it funnier." The first bit needs no account. Signing in is free and lets you rewrite and download it; Basic ($7.99/month) and Pro ($49.99/month) remove the watermark on downloads. A "wild" setting runs from 1 (true to your story) to 5 (goes wild). Shutap writes jokes about the situation, never about a real person someone could identify. It is an entertainment tool, not a healthcare, mental-health, crisis or legal service. 18+.
 
 ## Core
 
 - [What Shutap is](https://shutap.com/about): The humor amplifier — storytime, POV, talking-head and skit videos, first drafts for stand-up, toasts and talks. It amplifies your humor; it never replaces it.
 - [How it works](https://shutap.com/how-it-works): Type what happened, names and places are removed, get the bit with its video, caption and hashtags, then pick stand-up, sketch or skit.
-- [Pricing](https://shutap.com/pricing): Free to write, with one watermarked download a day; Basic ($1.99/mo) gives 3 clean downloads a day, Pro ($7.99/mo) unlimited downloads and the Mirror.
+- [Pricing](https://shutap.com/pricing): Free to write, with one watermarked download a day; Basic ($7.99/mo) gives 3 clean downloads a day, Pro ($49.99/mo) unlimited downloads and the Mirror.
 - [FAQ](https://shutap.com/faq): Is it free, can I use the bits in my own videos and sets, is my name on anything, what can I post.
 - [Trust & privacy](https://shutap.com/trust): Names and places removed from stories before saving, private until you post, never used to train AI, takedown path.
 

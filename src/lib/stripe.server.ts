@@ -75,3 +75,45 @@ export async function verifyWebhook(req: Request, env: StripeEnv): Promise<{ typ
   if (!v1.includes(expected)) throw new Error('Invalid webhook signature');
   return JSON.parse(body);
 }
+
+/** The Stripe price for a lookup key, at the amount the code lists.
+ *
+ *  src/lib/pricing.ts is the source of truth for list prices. Stripe prices
+ *  are immutable, so when the price behind a lookup key no longer matches
+ *  (a price change), a new price is created on the same product, the lookup
+ *  key moves to it (transfer_lookup_key), and the old price is archived.
+ *  Existing subscribers stay on the old price object until they change
+ *  plan; the old price keeps metadata.lovable_external_id = the lookup key,
+ *  so the webhook still maps them to the right plan (see priceIdFrom). */
+export async function priceForLookupKey(
+  stripe: Stripe,
+  lookupKey: string,
+  expected: { amount: number; interval: 'month' | 'year' },
+): Promise<Stripe.Price> {
+  const cents = Math.round(expected.amount * 100);
+  const found = await stripe.prices.list({ lookup_keys: [lookupKey], active: true, limit: 1 });
+  const current = found.data[0];
+  if (!current) throw new Error('Price not found');
+  if (current.unit_amount === cents && current.recurring?.interval === expected.interval) return current;
+
+  const productId = typeof current.product === 'string' ? current.product : current.product.id;
+  const metadata = { ...(current.metadata ?? {}), lovable_external_id: lookupKey };
+  const next = await stripe.prices.create({
+    product: productId,
+    currency: current.currency,
+    unit_amount: cents,
+    recurring: { interval: expected.interval },
+    tax_behavior: current.tax_behavior ?? undefined,
+    nickname: current.nickname ?? undefined,
+    lookup_key: lookupKey,
+    transfer_lookup_key: true,
+    metadata,
+  });
+  console.log('[stripe] price updated to match pricing.ts', { lookupKey, from: current.unit_amount, to: cents, old: current.id, new: next.id });
+  try {
+    await stripe.prices.update(current.id, { active: false, metadata });
+  } catch (e) {
+    console.error('[stripe] could not archive old price', { id: current.id, error: getStripeErrorMessage(e) });
+  }
+  return next;
+}

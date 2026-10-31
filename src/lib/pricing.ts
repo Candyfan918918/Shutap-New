@@ -26,8 +26,8 @@ export type PlanEntry = {
 }
 
 export const PLANS: Record<PlanKey, PlanEntry> = {
-  basic: { key: 'basic', priceId: 'basic_monthly', name: 'Basic', amount: 1.99, interval: 'month', tier: 'basic', shown: true },
-  pro: { key: 'pro', priceId: 'mirror_monthly', name: 'Pro', amount: 7.99, interval: 'month', tier: 'pro', shown: true },
+  basic: { key: 'basic', priceId: 'basic_monthly', name: 'Basic', amount: 7.99, interval: 'month', tier: 'basic', shown: true },
+  pro: { key: 'pro', priceId: 'mirror_monthly', name: 'Pro', amount: 49.99, interval: 'month', tier: 'pro', shown: true },
   // Hidden from new buyers for now. Anyone already on it is Pro.
   pro_annual: { key: 'pro_annual', priceId: 'mirror_annual', name: 'Pro annual', amount: 49.99, interval: 'year', tier: 'pro', shown: false },
 }
