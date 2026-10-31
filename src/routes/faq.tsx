@@ -9,7 +9,7 @@ const PATH = "/faq";
 const URL = `${SITE_URL}/faq`;
 const TITLE = "Shutap FAQ — The Humor Amplifier";
 const DESCRIPTION =
-  "Answers about Shutap, the humor amplifier: is it free, the teleprompter, scene and screenplay views, TikTok and stand-up, who owns the bits, privacy and pricing.";
+  "Answers about Shutap, the humor amplifier: is it free, stand-up, sketch and skit, TikTok, who owns the bits, privacy and pricing.";
 const CAPSULE =
   "Everything people ask about Shutap, the humor amplifier that turns a real story into a bit for TikTok, Reels, YouTube Shorts and the stage.";
 

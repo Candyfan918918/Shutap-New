@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Rewrite, then rewrite again",
-      body: "First drafts of skits usually have a line that explains the joke, a character who's only there to say \"what?\", and a beat that's sideways instead of bigger. Cut all three. Read it to one person who'll be blunt and watch where they stop smiling. Shutap, the humor amplifier, can help at this stage: write the situation, pick a voice and a length, and use the scene view or the screenplay page as a draft to push against. Keep the beats that sound like you, cross out the rest, and rewrite them in your own words before you shoot.",
+      body: "First drafts of skits usually have a line that explains the joke, a character who's only there to say \"what?\", and a beat that's sideways instead of bigger. Cut all three. Read it to one person who'll be blunt and watch where they stop smiling. Shutap, the humor amplifier, can help at this stage: write the situation, pick a voice and a length, and use the skit or the sketch as a draft to push against. Keep the beats that sound like you, cross out the rest, and rewrite them in your own words before you shoot.",
     },
   ],
   faq: [

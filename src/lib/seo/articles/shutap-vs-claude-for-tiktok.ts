@@ -36,11 +36,11 @@ const guide: Guide = {
     },
     {
       heading: "What Shutap does instead",
-      body: "Shutap runs that routine for you, starting from your story. It reads the story for observations, writes the bit from them, drops lines that would work on anyone's story, blocks advice and jokes aimed at you, and has a second model rank the drafts. You set the audience to social, a voice (deadpan, storyteller, roast or dry), a length of 15, 30 or 60 seconds or 2 minutes, and a heat from 1 to 5. Then you steer: hotter, tighter, escalate, swap a tag, or mix your own from the lines you liked. It's still a draft. You rewrite it until it sounds like you talking.",
+      body: "Shutap runs that routine for you, starting from your story. It reads the story for observations, writes the bit from them, drops lines that would work on anyone's story, blocks advice and jokes aimed at you, and has a second model rank the drafts. You set the audience to social, a voice (deadpan, storyteller, roast or dry), a length of 15, 30 or 60 seconds or 2 minutes, and a heat from 1 to 5. Then you steer: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from the lines you liked. It's still a draft. You rewrite it until it sounds like you talking.",
     },
     {
       heading: "From script to camera",
-      body: "This is where the two differ most for TikTok. A Claude chat ends in text, which you copy into whatever teleprompter or notes app you film with. Shutap's bit opens in a full-screen teleprompter that scrolls at talking pace, so you can prop the phone up and read it in one take. There's also a scene view that lays the bit out beat by beat, handy for spotting the setup line that runs long, and a screenplay page if you're shooting a two-person skit. Shutap is a website rather than a phone app, so you open it in the browser and film from there.",
+      body: "This is where the two differ most for TikTok. A Claude chat ends in text, which you copy into whatever teleprompter or notes app you film with. Shutap's bit opens in a full-screen teleprompter that scrolls at talking pace, so you can prop the phone up and read it in one take. There's also the skit, which lays the bit out beat by beat, handy for spotting the setup line that runs long, and a one-page sketch if you're shooting a two-person skit. Shutap is a website rather than a phone app, so you open it in the browser and film from there.",
     },
     {
       heading: "Which one to open",

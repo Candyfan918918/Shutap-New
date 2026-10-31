@@ -53,7 +53,7 @@ function HumorAmplifierPage() {
         },
         {
           heading: 'From draft to post',
-          body: 'Download the video with its caption and hashtags and post it, or read the bit to camera in the teleprompter, lay it out beat by beat as a scene, or format it as a screenplay page. The format changes how you use the material; the story remains the starting point. Edit anything you would not naturally say, and rehearse the pauses before recording or performing.',
+          body: 'Download the video with its caption and hashtags and post it, or run the bit as stand-up on the teleprompter, lay it out as a skit you film alone, or format it as a one-page sketch. The format changes how you use the material; the story remains the starting point. Edit anything you would not naturally say, and rehearse the pauses before recording or performing.',
         },
       ]}
       others={[

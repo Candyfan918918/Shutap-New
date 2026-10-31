@@ -7,9 +7,9 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 const PATH = "/about";
 const TITLE = "About — Shutap Humor Amplifier Lab";
 const DESCRIPTION =
-  "Shutap is the humor amplifier. Type what happened, get a bit in your voice with a hook, setup, tags and button, a 5-second video, caption and hashtags, then run it in the teleprompter, as a scene or a screenplay page.";
+  "Shutap is the humor amplifier. Type what happened, get a bit in your voice with a hook, setup, tags and button, a 5-second video, caption and hashtags, then Run it as stand-up, a sketch or a skit.";
 const CAPSULE =
-  "Shutap is the humor amplifier. Type what happened. Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, a caption and hashtags, then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. It amplifies your humor; it never replaces it.";
+  "Shutap is the humor amplifier. Type what happened. Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, a caption and hashtags, then runs it as stand-up, lays it out as a skit, or formats it as a one-page sketch. It amplifies your humor; it never replaces it.";
 const SECTIONS = [
   {
     heading: "Our goal: say it funnier",
@@ -28,8 +28,8 @@ const SECTIONS = [
     body: "Stand-up starts with a premise and lives on tags. Shutap gives you a first draft of the bit — setup, tags, button — to push against your own instincts. Use it to get unstuck, find a new tag, or warm up before a writing session, then rehearse it on the prompter.",
   },
   {
-    heading: "Teleprompter, scene and screenplay",
-    body: "Every bit comes in three views. The teleprompter scrolls it full-screen for filming to camera. The scene lays it out beat by beat for a POV or sketch. The screenplay page formats it like a script, with characters and action, ready to shoot or share.",
+    heading: "Stand-up, sketch and skit",
+    body: "Every bit comes in the formats comics actually perform. Stand-up runs it on a teleprompter, full-screen, at talking pace. The sketch is one page in script format, with characters and action. The skit is a shot list for a short vertical video you film alone, playing every role. Each takes a free account.",
   },
   {
     heading: "What to post today",
@@ -49,7 +49,7 @@ const SECTIONS = [
   },
   {
     heading: "Why Shutap is different",
-    body: "Shutap writes a whole bit from your own story, then lets you steer it: hotter, tighter, escalate, or mix your own lines. It sits on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. Around the tool you get a daily idea of what to post and a library of techniques taken from funny people. To our knowledge, no other joke tool pairs all of these, and the aim is simple: you get funnier, and the voice stays yours.",
+    body: "Shutap writes a whole bit from your own story, then lets you steer it: hotter, tighter, storytelling, or mix your own lines. It sits on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. Around the tool you get a daily idea of what to post and a library of techniques taken from funny people. To our knowledge, no other joke tool pairs all of these, and the aim is simple: you get funnier, and the voice stays yours.",
   },
   {
     heading: "Post the best one to a room",

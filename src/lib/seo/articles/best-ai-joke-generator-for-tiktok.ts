@@ -40,7 +40,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap, for talking-to-camera bits",
-      body: "Shutap is the humor amplifier, and it starts where a TikTok comic starts: with what happened. You type the story, keep the audience on social, pick a voice (deadpan, storyteller, roast or dry), a length of 15, 30 or 60 seconds or 2 minutes, and a heat from 1 to 5. You get a draft of the bit with a hook, setup, tags and a button. Then you push on it: hotter, tighter, escalate, swap a tag, or mix your own from lines you liked. The teleprompter scrolls it full screen at talking pace, so you can film it in one take. Your first bit each day needs no account, and paid plans remove the download watermark.",
+      body: "Shutap is the humor amplifier, and it starts where a TikTok comic starts: with what happened. You type the story, keep the audience on social, pick a voice (deadpan, storyteller, roast or dry), a length of 15, 30 or 60 seconds or 2 minutes, and a heat from 1 to 5. You get a draft of the bit with a hook, setup, tags and a button. Then you push on it: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from lines you liked. The teleprompter scrolls it full screen at talking pace, so you can film it in one take. Your first bit each day needs no account, and paid plans remove the download watermark.",
     },
     {
       heading: "Captions are a separate job",

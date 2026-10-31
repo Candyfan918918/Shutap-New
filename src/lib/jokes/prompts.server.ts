@@ -1262,7 +1262,7 @@ export function fill(template: string, vars: Record<string, string | undefined>)
    as is, cached on bits.premises), the BIT PASS below (four whole bits in one
    call, each built on a different premise, plus five spare tags), and the
    BIT JUDGE (a different model family) ranking whole bits. VARY rewrites a
-   kept bit as hotter / tighter / escalate.
+   kept bit as hotter / tighter / storytelling.
 
    BIT_PROMPT_VERSION is stamped on every bit. Bump it on ANY edit below. */
 export const BIT_PROMPT_VERSION = 'bit-1.5'
@@ -1408,8 +1408,9 @@ genuinely different, not rewordings. PUT THE STRONGEST BIT FIRST: the
 first one is the one the performer sees, so judge them against the rules
 above before you order them — an act beats a label, a picture beats a
 finding, a landing you can point at beats an abstraction, a button that
-ends it beats one that explains it. Then write FIVE spare tags for the first bit's angle: lines
-that could replace a tag in it.
+ends it beats one that explains it. Then write FIVE crowd-work angles for the first bit's angle: quick lines
+that could replace a tag in it, the way a comic riffs off an answer from
+the crowd.
 
 For each bit, "why" is one plain sentence naming its technique and what
 makes it work on this story only. No jargon.
@@ -1419,7 +1420,7 @@ bit is built on, in the same order as the bits):
 {"angles":["...","...","...","..."],
  "bits":[{"hook":"...","setup":"...","tags":["...","..."],"button":"...","why":"..."},
          {...},{...},{...}],
- "alt_tags":["...","...","...","...","..."]}`
+ "crowd_work":["...","...","...","...","..."]}`
 
 /** Filled in as {{PREMISES}} when no separate premise pass ran (the default
  *  since bit-1.1): the writer finds its own angles, with the premise pass's
@@ -1499,9 +1500,9 @@ only at the situation and the other party's behaviour.`,
   tighter: `TIGHTER: about 60% of the words. Keep the best tag only and cut
 everything that is not load-bearing. The hook may get shorter. The button
 lands on the sharpest contradiction in the story.`,
-  escalate: `ESCALATE: each tag moves the situation one step further along the
-same line (a week, a month, a year; a guest, a tenant, a landlord) and the
-button flips who is in charge.`,
+  storytelling: `STORYTELLING: tell it as a story with beats. Each tag moves the situation
+one step further along the same line (a week, a month, a year; a guest, a
+tenant, a landlord) and the button flips who is in charge.`,
 }
 
 export const BIT_VARY_PROMPT = `You rewrite a comedy bit. The person who wrote the story performs it
@@ -1537,12 +1538,12 @@ The word that does the turning is the last word of its line.
 Return only JSON:
 {"hook":"...","setup":"...","tags":["..."],"button":"...","why":"..."}`
 
-/* ───────────────────────── bit → scene, bit → screenplay ─────────────────────────
+/* ───────────────────────── bit → skit, bit → sketch ─────────────────────────
    Phase 5. Both take a finished bit version and lay it out for filming; they
-   do not write new jokes. Cached per version on bit_versions.scene /
-   bit_versions.screenplay. Same version stamp as the bit prompts. */
+   do not write new jokes. Cached per version on bit_versions.skit /
+   bit_versions.sketch. Same version stamp as the bit prompts. */
 
-export const SCENE_PROMPT = `You turn a finished comedy bit into a shot list for a short vertical video
+export const SKIT_PROMPT = `You turn a finished comedy bit into a skit: a shot list for a short vertical video
 (TikTok, Reels, Shorts). The person who wrote the story performs it, first
 person, as ME. Do not write new jokes and do not improve the old ones: every
 line ME says comes from the bit, in order, close to word for word.
@@ -1571,7 +1572,7 @@ No real names. No advice, no therapy words.
 Return only JSON:
 {"beats":[{"shot":"...","speaker":"...","line":"...","on_screen":"..."}]}`
 
-export const SCREENPLAY_PROMPT = `You format a finished comedy bit as one screenplay page in standard format.
+export const SKETCH_PROMPT = `You format a finished comedy bit as a sketch: one page in standard screenplay format.
 The person who wrote the story performs it, first person, as ME. Do not
 write new jokes and do not improve the old ones: ME's dialogue is the bit,
 in order, close to word for word.

@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Using slapstick in a skit today",
-      body: "Backstage notes that slapstick has become seasoning in modern comedy rather than the main course, and short video follows that pattern. A storytime about a bad first day lands harder with one physical beat, like the reenacted moment you sat in a chair that wasn't there, than with ten. If you have a real moment where something physical went wrong, Shutap, the humor amplifier, can take what you type and lay it out as a scene or a screenplay page, with a 5-second video and a caption. Treat it as a draft: you choose the beats, cut what isn't yours and perform the fall, safely, yourself.",
+      body: "Backstage notes that slapstick has become seasoning in modern comedy rather than the main course, and short video follows that pattern. A storytime about a bad first day lands harder with one physical beat, like the reenacted moment you sat in a chair that wasn't there, than with ten. If you have a real moment where something physical went wrong, Shutap, the humor amplifier, can take what you type and lay it out as a skit or a one-page sketch, with a 5-second video and a caption. Treat it as a draft: you choose the beats, cut what isn't yours and perform the fall, safely, yourself.",
     },
   ],
   faq: [

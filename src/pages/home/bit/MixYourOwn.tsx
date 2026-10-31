@@ -39,13 +39,13 @@ export function MixYourOwn({
   from,
   onSaved,
   onBack,
-  onPrompter,
+  onStandup,
 }: {
   bit: Bit
   from: BitVersion
   onSaved: (v: BitVersion) => void
   onBack: () => void
-  onPrompter: (v: BitVersion) => void
+  onStandup: (v: BitVersion) => void
 }) {
   const options = useServerFn(getMixOptions)
   const save = useServerFn(saveMix)
@@ -174,8 +174,8 @@ export function MixYourOwn({
             <p className="bt-v">{result.button}</p>
           </div>
         </article>
-        <button className="bt-btn block" onClick={() => onPrompter(result)}>
-          open in teleprompter
+        <button className="bt-btn block" onClick={() => onStandup(result)}>
+          run it as stand-up
         </button>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 8 }}>
           <button className="bt-btn ghost" onClick={onBack}>

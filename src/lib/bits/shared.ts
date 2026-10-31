@@ -3,7 +3,7 @@
 export const AUDIENCES = ['social', 'live', 'office', 'work', 'family', 'school'] as const
 export const VOICES = ['deadpan', 'storyteller', 'roast', 'dry'] as const
 export const LENGTHS = ['15s', '30s', '60s', '2m'] as const
-export const VARY_KINDS = ['hotter', 'tighter', 'escalate'] as const
+export const VARY_KINDS = ['hotter', 'tighter', 'storytelling'] as const
 
 export type Audience = (typeof AUDIENCES)[number]
 export type BitVoice = (typeof VOICES)[number]
@@ -74,7 +74,8 @@ export type Bit = {
   id: string
   story: string
   controls: BitControls
-  alt_tags: string[]
+  /** five spare angles on the same situation, swappable into tag 1 */
+  crowd_work: string[]
   versions: BitVersion[]
   created_at: string
 }
@@ -114,10 +115,10 @@ export function estSeconds(b: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button
   return Math.max(1, Math.round(bitWords(b) / WORDS_PER_SECOND))
 }
 
-/* ── phase 5: the bit laid out for filming ── */
-export type SceneBeat = { shot: string; speaker: string; line: string; on_screen: string }
-export type ScreenplayElement = {
+/* ── the bit laid out as a skit (shot list) or a sketch (one page) ── */
+export type SkitBeat = { shot: string; speaker: string; line: string; on_screen: string }
+export type SketchElement = {
   type: 'scene_heading' | 'action' | 'character' | 'parenthetical' | 'dialogue' | 'transition'
   text: string
 }
-export const SCREENPLAY_TYPES: ScreenplayElement['type'][] = ['scene_heading', 'action', 'character', 'parenthetical', 'dialogue', 'transition']
+export const SKETCH_TYPES: SketchElement['type'][] = ['scene_heading', 'action', 'character', 'parenthetical', 'dialogue', 'transition']

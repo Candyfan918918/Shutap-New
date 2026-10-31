@@ -26,9 +26,9 @@ export type PaywallWhere = 'bit_3' | 'daily_limit' | 'download' | 'download_coun
 const EVERY_ICON: Record<(typeof EVERY_PLAN)[number], FeatureIcon> = {
   'A full bit: hook, setup, tags and button': 'bit',
   'A 5-second video of it': 'post',
-  'Hotter, tighter, escalate (each is a new bit and a new video), mix and tag swap': 'rewrite',
-  Teleprompter: 'prompter',
-  'Scene and screenplay': 'screenplay',
+  'Hotter, tighter, storytelling (each is a new bit and a new video), mix and crowd-work angles': 'rewrite',
+  'Stand-up on the teleprompter': 'standup',
+  'Sketch and skit': 'sketch',
   'Caption and hashtags': 'hash',
   'Set list of every bit': 'list',
 }
@@ -64,16 +64,16 @@ function Compare({ tiers, you }: { tiers: CompareTier[]; you?: CompareTier }) {
   )
 }
 
-type FeatureIcon = 'bit' | 'prompter' | 'screenplay' | 'rewrite' | 'list' | 'hash' | 'post'
+type FeatureIcon = 'bit' | 'standup' | 'sketch' | 'rewrite' | 'list' | 'hash' | 'post'
 
 function Icon({ name }: { name: FeatureIcon }) {
   const c = { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.9, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true } as const
   switch (name) {
     case 'bit':
       return (<svg {...c}><rect x="4" y="3" width="16" height="18" rx="2.5" /><path d="M8 8h8M8 12h8M8 16h5" /></svg>)
-    case 'prompter':
+    case 'standup':
       return (<svg {...c}><rect x="3" y="4" width="18" height="13" rx="2" /><path d="M7 9h10M7 12.5h6M9 21h6M12 17v4" /></svg>)
-    case 'screenplay':
+    case 'sketch':
       return (<svg {...c}><path d="M6 3h9l4 4v14H6z" /><path d="M14 3v5h5M9 12h7M9 15.5h5" /></svg>)
     case 'rewrite':
       return (<svg {...c}><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.7" /><path d="M20 4v4.7h-4.7M20 12a8 8 0 0 1-13.7 5.6L4 15.3" /><path d="M4 20v-4.7h4.7" /></svg>)

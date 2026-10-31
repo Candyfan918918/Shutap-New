@@ -138,7 +138,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           url: "https://shutap.com",
           image: "https://shutap.com/og/shutap-og-v4.png",
           description:
-            "Shutap is the humor amplifier. Type what happened and Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, a caption and hashtags, then runs it in the teleprompter, lays it out as a scene, or formats it as a screenplay page. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or bring it to a toast, a talk or a meeting. Shutap amplifies your humor; it never replaces it. Your stories and jokes stay yours. Identifying details are removed from stories before storage, and Shutap never uses your content to train AI. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
+            "Shutap is the humor amplifier. Type what happened and Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, a caption and hashtags, then runs it as stand-up, lays it out as a skit, or formats it as a one-page sketch. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or bring it to a toast, a talk or a meeting. Shutap amplifies your humor; it never replaces it. Your stories and jokes stay yours. Identifying details are removed from stories before storage, and Shutap never uses your content to train AI. Shutap makes jokes about situations, never about the person telling the story, and it does not give advice.",
           offers: {
             "@type": "Offer",
             price: "0",

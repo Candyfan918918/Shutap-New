@@ -8,9 +8,9 @@ import { GUIDES, GUIDE_TOPICS, guidePath, guidesInTopic, topicPath } from "@/lib
 const PATH = "/guides";
 const TITLE = "Guides & Tools for Writing Funnier Videos and Sets | Shutap";
 const DESCRIPTION =
-  "Guides and tools from the Shutap Humor Amplifier Lab: storytime scripts, stand-up bits, POV skits, toasts, captions, teleprompter and screenplay pages, plus how to write a hook, tags and a button. Every technique here feeds the humor amplifier.";
+  "Guides and tools from the Shutap Humor Amplifier Lab: storytime scripts, stand-up bits, POV skits, toasts, captions, stand-up, sketch and skit, plus how to write a hook, tags and a button. Every technique here feeds the humor amplifier.";
 const CAPSULE =
-  "Shutap is the humor amplifier. These guides cover the craft: how to turn a story into a bit, how long a TikTok bit should be, and how to write tags, plus the tools for scripts, skits, teleprompter and screenplay pages.";
+  "Shutap is the humor amplifier. These guides cover the craft: how to turn a story into a bit, how long a TikTok bit should be, and how to write tags, plus the tools for scripts, skits, stand-up, sketch and skit.";
 
 const toItems = (kind: "tool" | "guide" | "business") =>
   GUIDES.filter((g) => g.kind === kind).map((g) => ({

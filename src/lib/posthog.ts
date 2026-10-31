@@ -36,7 +36,7 @@ export function initPostHog(): Promise<void> {
         autocapture: false,
         // Session replay shows Shutap's own pages (menus, buttons, site copy)
         // but never a person's content: every input is masked, every element
-        // tagged data-ph-private (bits, the scrub notice, sheets, prompter,
+        // tagged data-ph-private (bits, the scrub notice, sheets, stand-up,
         // set list, Mirror, profile, admin, names) has its text masked, and
         // .ph-no-capture (profile pictures) is not recorded at all. The
         // privacy policy §2 promises this; tag any new surface that shows a

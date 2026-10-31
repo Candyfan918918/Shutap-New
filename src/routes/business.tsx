@@ -34,7 +34,7 @@ const VALUE = [
   },
   {
     h: 'Your people stay in charge',
-    b: 'Shutap drafts and your speakers decide. Make a line hotter, tighter or more escalated, or build your own from the lines written for your material.',
+    b: 'Shutap drafts and your speakers decide. Make a line hotter, tighter, or tell it as a story, or build your own from the lines written for your material.',
   },
   {
     h: 'Built with guardrails',

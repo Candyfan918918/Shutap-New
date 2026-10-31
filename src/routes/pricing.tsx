@@ -11,12 +11,12 @@ const BASIC = PLANS.basic.amount
 const PRO = PLANS.pro.amount
 
 const TITLE = `Pricing — Shutap, the Humor Amplifier, plans from ${usd(BASIC)}/mo`
-const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video, caption and hashtags from your story, with teleprompter, scene and screenplay views. Free: one download a day with a watermark. Basic is ${usd(BASIC)}/month: 5 new bits and 3 clean downloads a day. Pro is ${usd(PRO)}/month: unlimited bits and downloads, no watermark, and the Mirror. Cancel anytime.`
+const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video, caption and hashtags from your story, with stand-up, sketch and skit formats. Free: one download a day with a watermark. Basic is ${usd(BASIC)}/month: 5 new bits and 3 clean downloads a day. Pro is ${usd(PRO)}/month: unlimited bits and downloads, no watermark, and the Mirror. Cancel anytime.`
 
 const QA = [
-  { q: 'Is Shutap really free?', a: 'Yes. Your first bit needs no account to read. Signing in is free: it plays the video, lets you rewrite the bit, and gives you one download a day: the video, or the caption and hashtags, or the picture (video and picture carry a shutap.com watermark), and gives you 2 new bits a day. A rewrite (hotter, tighter, escalate) is written again and its video is rendered again, so it counts as a new bit; tag swap and mix your own are free.' },
+  { q: 'Is Shutap really free?', a: 'Yes. Your first bit needs no account to read. Signing in is free: it plays the video, lets you rewrite the bit, and gives you one download a day: the video, or the caption and hashtags, or the picture (video and picture carry a shutap.com watermark), and gives you 2 new bits a day. A rewrite (hotter, tighter, storytelling) is written again and its video is rendered again, so it counts as a new bit; crowd-work angles and mix your own do not count against the day.' },
   { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 5 new bits a day and 3 downloads a day with no watermark. Pro is ${usd(PRO)} a month: unlimited bits, unlimited downloads with no watermark, and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
-  { q: 'What counts toward the daily limit?', a: 'New bits, rewrites and downloads. A rewrite (hotter, tighter, escalate) is a new bit: written again, video rendered again. The video is one download; copying the caption and hashtags is another; the picture or script PDF another; a rewrite\'s downloads count again. Tag swap and mix your own are free. Limits reset at midnight Pacific.' },
+  { q: 'What counts toward the daily limit?', a: 'New bits, rewrites and downloads. A rewrite (hotter, tighter, storytelling) is a new bit: written again, video rendered again. The video is one download; copying the caption and hashtags is another; the picture or script PDF another; a rewrite\'s downloads count again. Crowd-work angles and mix your own do not count. Limits reset at midnight Pacific.' },
   { q: 'Can I move from Basic to Pro?', a: 'Yes, any time. You pay the difference for the rest of the month, and Pro starts right away.' },
   { q: 'Is there a free trial?', a: 'No trial. The free plan is the trial: write your bits before you decide.' },
   { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your account; you keep your plan until the end of the period you paid for. Payments are handled by Stripe.' },
@@ -44,7 +44,7 @@ export const Route = createFileRoute('/pricing')({
           '@context': 'https://schema.org',
           '@type': 'Product',
           name: 'Shutap',
-          description: 'The humor amplifier: a bit, a 5-second video, caption and hashtags from your own story, with teleprompter, scene and screenplay views.',
+          description: 'The humor amplifier: a bit, a 5-second video, caption and hashtags from your own story, with stand-up, sketch and skit formats.',
           brand: { '@type': 'Brand', name: 'Shutap' },
           url: SITE_URL,
           offers: [

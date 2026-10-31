@@ -100,7 +100,7 @@ export const TEMPLATES: Record<TemplateId, TemplateEntry> = {
     htmlDesign: welcomeHtml,
     buildBodyText: (v) => `${g(v)}
 
-you're in. type what happened and shutap amplifies it into a bit in your voice — hook, setup, tags and button. run it in the teleprompter, as a scene or a screenplay page.
+you're in. type what happened and shutap amplifies it into a bit in your voice — hook, setup, tags and button. run it as stand-up, a sketch or a skit.
 
 your profile shows the name and picture from your sign-in. you can change both in your profile.
 

@@ -1,4 +1,4 @@
-/* Post to rooms: the whole bit or the whole scene, never a single joke.
+/* Post to rooms: the whole bit or the whole skit, never a single joke.
  * Pick which, pick a topic, see exactly what will post, post it under the
  * Shutap name. The server checks again for names and for a crisis before
  * anything goes public. */
@@ -13,7 +13,7 @@ import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 const FAIL: Record<string, string> = {
   names: 'That has a phone number, email or link in it. Edit the story and write it again.',
   crisis: "This one can't be posted.",
-  no_scene: "Couldn't lay out the scene. Try posting the bit.",
+  no_skit: "Couldn't lay out the skit. Try posting the bit.",
   sign_in: 'Sign in to post.',
   not_found: "Couldn't find that version.",
   failed: "Couldn't post that. Try again.",
@@ -33,7 +33,7 @@ export function PostSheet({
   onClose: () => void
 }) {
   const post = useServerFn(postBitToRoom)
-  const [kind, setKind] = useState<'bit' | 'scene'>('bit')
+  const [kind, setKind] = useState<'bit' | 'skit'>('bit')
   const [topic, setTopic] = useState<Topic>((TOPICS as readonly string[]).includes(audience) ? (audience as Topic) : 'social')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -82,8 +82,8 @@ export function PostSheet({
               <button className="bt-chip" aria-pressed={kind === 'bit'} onClick={() => setKind('bit')}>
                 the full bit
               </button>
-              <button className="bt-chip" aria-pressed={kind === 'scene'} onClick={() => setKind('scene')}>
-                the scene
+              <button className="bt-chip" aria-pressed={kind === 'skit'} onClick={() => setKind('skit')}>
+                the skit
               </button>
             </div>
             <div className="bt-post-prev">

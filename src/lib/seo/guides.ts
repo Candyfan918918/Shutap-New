@@ -297,7 +297,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Rehearse it",
-        body: "Run the bit in the teleprompter to hear the timing out loud, or format it as a screenplay page to mark it up. Then say it to a room. A bit is not finished until an audience has told you where it is slow.",
+        body: "Run the bit in the teleprompter to hear the timing out loud, or format it as a one-page sketch to mark it up. Then say it to a room. A bit is not finished until an audience has told you where it is slow.",
       },
       {
         heading: "What it will not do",
@@ -326,7 +326,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "The scene view",
-        body: "Every bit Shutap writes can be shown as a scene. The scene view breaks it into beats in order, so you can see the setup, the escalation and the button as separate shots instead of one block of text.",
+        body: "Every bit Shutap writes can be shown as a skit. The skit breaks it into beats in order, so you can see the setup, the escalation and the button as separate shots instead of one block of text.",
       },
       {
         heading: "Shooting it",
@@ -359,7 +359,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "How it works",
-        body: "Write your story and get the bit. Open the teleprompter view and the script runs full-screen. Put your phone or camera where you can see it, start the scroll, and read to the lens.",
+        body: "Write your story and get the bit. Open stand-up and the script runs full-screen on the teleprompter. Put your phone or camera where you can see it, start the scroll, and read to the lens.",
       },
       {
         heading: "Rehearsing a set",
@@ -416,9 +416,9 @@ const BASE_GUIDES: Guide[] = [
     title: "How Shutap Is Built: The Humor Amplifier You Steer | Shutap",
     h1: "How Shutap is built",
     description:
-      "How Shutap turns your story into a bit: twelve observations, four whole bits, rules in code, a second model as judge, then hotter, tighter, escalate and mix-your-own controls so you stay the writer.",
+      "How Shutap turns your story into a bit: twelve observations, four whole bits, rules in code, a second model as judge, then hotter, tighter, storytelling and mix-your-own controls so you stay the writer.",
     capsule:
-      "Shutap writes a draft from your own story, then hands it back for you to steer. Twelve observations come first, four whole bits are written from different ones, rules written in code filter them, a second AI model ranks what is left, and you can make the winner hotter, tighter or more escalated, or rebuild it from lines Shutap wrote for your story.",
+      "Shutap writes a draft from your own story, then hands it back for you to steer. Twelve observations come first, four whole bits are written from different ones, rules written in code filter them, a second AI model ranks what is left, and you can make the winner hotter, tighter, or told as a story, or rebuild it from lines Shutap wrote for your story.",
     blurb: "The pipeline in detail: observations, whole bits, rules, a judge, and the steering controls.",
     sections: [
       {
@@ -435,7 +435,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Step two: write whole bits, not lines",
-        body: "Four complete bits are written in one pass, each built on a different observation, plus five spare tags. Every bit has a hook of eight words or fewer that can sit on screen for two seconds, a setup that states the facts plainly, one to three tags that each end on something you can picture, and a button. Four controls shape the writing: audience (social, live, office, work, family or school), voice (deadpan, storyteller, roast or dry), length (15 seconds to 2 minutes) and how wild, from 1 (true to your story) to 5 (goes wild). It sets how far the jokes stray from the facts, never who they're aimed at.",
+        body: "Four complete bits are written in one pass, each built on a different observation, plus five crowd-work angles: spare lines on the same situation. Every bit has a hook of eight words or fewer that can sit on screen for two seconds, a setup that states the facts plainly, one to three tags that each end on something you can picture, and a button. Four controls shape the writing: audience (social, live, office, work, family or school), voice (deadpan, storyteller, roast or dry), length (15 seconds to 2 minutes) and how wild, from 1 (true to your story) to 5 (goes wild). It sets how far the jokes stray from the facts, never who they're aimed at.",
       },
       {
         heading: "Step three: rules in code, then a judge",
@@ -463,7 +463,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Then film it",
-        body: "Each bit can run in a full-screen teleprompter, as a scene laid out beat by beat with shots, speakers and on-screen text, or as a screenplay page with scene headings, action, character names and dialogue. Length is estimated from the word count at about 2.6 words a second.",
+        body: "Each bit can run in a full-screen teleprompter, as a scene laid out beat by beat with shots, speakers and on-screen text (the skit), or as a one-page sketch with scene headings, action, character names and dialogue. Length is estimated from the word count at about 2.6 words a second.",
       },
       {
         heading: "Versioned, tested, and honest about limits",
@@ -499,11 +499,11 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Who is the writer",
-        body: "With a one-liner generator you pick from lines. With Shutap you keep steering. Make the bit hotter, tighter or more escalated, swap a tag, or mix your own from the hooks, tags and buttons Shutap wrote for your story. The material is yours, and so is the final call.",
+        body: "With a one-liner generator you pick from lines. With Shutap you keep steering. Make the bit hotter, tighter, or told as a story, swap in a crowd-work angle, or mix your own from the hooks, tags and buttons Shutap wrote for your story. The material is yours, and so is the final call.",
       },
       {
         heading: "What you can do with the result",
-        body: "A one-liner goes into a caption or a monologue. A Shutap bit runs in a full-screen teleprompter, lays out as a scene beat by beat, or formats as a screenplay page, so it is ready to film or take to an open mic.",
+        body: "A one-liner goes into a caption or a monologue. A Shutap bit runs as stand-up on a full-screen teleprompter, lays out as a skit beat by beat, or formats as a one-page sketch, so it is ready to film or take to an open mic.",
       },
       {
         heading: "Beyond the bit",
@@ -548,7 +548,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Technology that enhances, not replaces",
-        body: "Shutap does not write your bit for you and send you off. It reads your story, offers observations and drafts, and hands the pen back: hotter, tighter, escalate, or mix your own lines. The point is that you get funnier, and the voice stays yours. A tool that makes you better at being funny is a different thing from a tool that is funny instead of you.",
+        body: "Shutap does not write your bit for you and send you off. It reads your story, offers observations and drafts, and hands the pen back: hotter, tighter, storytelling, or mix your own lines. The point is that you get funnier, and the voice stays yours. A tool that makes you better at being funny is a different thing from a tool that is funny instead of you.",
       },
       {
         heading: "Learn from the funniest",
@@ -585,7 +585,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Shutap",
-        body: "Input: a story from your own life. Output: a whole bit with a hook, setup, tags and a button, in your choice of audience, voice, length and how wild. You steer it: hotter, tighter, escalate, swap a tag, or mix your own from lines Shutap wrote for your story. It views as a teleprompter, a scene or a screenplay page. Best for creators and comedians turning real stories into material. The first bit needs no account.",
+        body: "Input: a story from your own life. Output: a whole bit with a hook, setup, tags and a button, in your choice of audience, voice, length and how wild. You steer it: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from lines Shutap wrote for your story. It runs as stand-up on a teleprompter, as a skit, or as a one-page sketch. Best for creators and comedians turning real stories into material. The first bit needs no account.",
       },
       {
         heading: "Witscript",
@@ -637,7 +637,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does",
-        body: "You write a real story. Shutap lists observations about it, writes four whole bits, checks them with rules in code, and has a second AI model from a different family rank them. You get a hook, a setup, tags and a button, then steer: hotter, tighter, escalate, swap a tag, or mix your own from lines it wrote for your story.",
+        body: "You write a real story. Shutap lists observations about it, writes four whole bits, checks them with rules in code, and has a second AI model from a different family rank them. You get a hook, a setup, tags and a button, then steer: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from lines it wrote for your story.",
       },
       {
         heading: "Input and output",
@@ -689,7 +689,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Formats",
-        body: "A chatbot returns text. Shutap returns a bit you can run as a full-screen teleprompter, read as a beat-by-beat scene, or print as a screenplay page.",
+        body: "A chatbot returns text. Shutap returns a bit you can run as stand-up on a full-screen teleprompter, read as a skit beat by beat, or print as a one-page sketch.",
       },
       {
         heading: "Who should use which",
@@ -721,7 +721,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap is building",
-        body: "The same engine that turns a story into a bit is being shaped for work: finding what is actually funny in your material, writing candidate lines in your voice, and letting you make them hotter, tighter or more escalated. The plan covers presentations and slides, roadshows and investor pitches, product demos and launches, and everyday conversations and meetings.",
+        body: "The same engine that turns a story into a bit is being shaped for work: finding what is actually funny in your material, writing candidate lines in your voice, and letting you make them hotter, tighter, or tell them as a story. The plan covers presentations and slides, roadshows and investor pitches, product demos and launches, and everyday conversations and meetings.",
       },
       {
         heading: "You stay the speaker",
@@ -841,7 +841,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does for you",
-        body: "Shutap finds observations in your story first, writes four whole bits from different ones, removes lines that would work on anyone's story, blocks advice and jokes at the teller, and ranks the rest with a second model from a different family. Then you steer: audience, voice, length, wild, hotter, tighter, escalate, swap a tag, or mix your own.",
+        body: "Shutap finds observations in your story first, writes four whole bits from different ones, removes lines that would work on anyone's story, blocks advice and jokes at the teller, and ranks the rest with a second model from a different family. Then you steer: audience, voice, length, wild, hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own.",
       },
       {
         heading: "What only Shutap has around the tool",
@@ -849,7 +849,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Formats",
-        body: "Shutap returns a bit you can run as a full-screen teleprompter, read as a beat-by-beat scene, or print as a screenplay page.",
+        body: "Shutap returns a bit you can run as stand-up on a full-screen teleprompter, read as a skit beat by beat, or print as a one-page sketch.",
       },
       {
         heading: "Who should use which",

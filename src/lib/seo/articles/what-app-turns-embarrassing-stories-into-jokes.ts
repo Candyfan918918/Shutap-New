@@ -28,7 +28,7 @@ const guide: Guide = {
     },
     {
       heading: "How it works in Shutap",
-      body: "Type what happened. Choose an audience (social, live, office, work, family or school), a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes, and how wild, from 1 for true to your story to 5 for goes wild. Shutap reads the story for what's odd about it first, then writes the bit. From there you steer it: hotter, tighter, escalate, or swap a tag you don't like. When it's close, run it in the teleprompter to film to camera, open the scene view to shoot it as a skit, or lay it out as a screenplay page.",
+      body: "Type what happened. Choose an audience (social, live, office, work, family or school), a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes, and how wild, from 1 for true to your story to 5 for goes wild. Shutap reads the story for what's odd about it first, then writes the bit. From there you steer it: hotter, tighter, storytelling, or swap in a crowd-work angle you like better. When it's close, run it as stand-up to film to camera, open the skit to shoot it alone, or lay it out as a screenplay page.",
     },
     {
       heading: "Embarrassing doesn't mean the joke is on you",
@@ -58,7 +58,7 @@ const guide: Guide = {
     },
     {
       q: "Is Shutap an app?",
-      a: "No. Shutap is a website at shutap.com, so there's nothing to install. It runs in the browser on a phone or a computer, and the teleprompter view works full-screen on a phone for filming.",
+      a: "No. Shutap is a website at shutap.com, so there's nothing to install. It runs in the browser on a phone or a computer, and stand-up runs full-screen on the teleprompter on a phone for filming.",
     },
     {
       q: "Will my real name or other people's names be saved?",

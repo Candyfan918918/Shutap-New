@@ -36,11 +36,11 @@ const guide: Guide = {
     },
     {
       heading: "What Shutap does differently",
-      body: "Shutap builds those steps in so you don't have to prompt for them. It reads your story for observations first, writes the bit from those, drops lines that would fit anyone's story, blocks advice and jokes aimed at you, and has a second model rank the drafts so the writer isn't grading itself. You set the audience (live, for a club), a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and a heat from 1 to 5. Then you steer it: hotter, tighter, escalate, swap a tag, or mix your own version from the lines you liked. It's a draft to push against. You still cut, rewrite and decide what goes on stage.",
+      body: "Shutap builds those steps in so you don't have to prompt for them. It reads your story for observations first, writes the bit from those, drops lines that would fit anyone's story, blocks advice and jokes aimed at you, and has a second model rank the drafts so the writer isn't grading itself. You set the audience (live, for a club), a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and a heat from 1 to 5. Then you steer it: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own version from the lines you liked. It's a draft to push against. You still cut, rewrite and decide what goes on stage.",
     },
     {
       heading: "Rehearsing the bit, not just reading it",
-      body: "A chat window gives you a block of text, and stand-up isn't read, it's said. Shutap shows the bit three ways. The teleprompter scrolls it full screen at talking pace, so you can run it out loud in your kitchen and hear where it drags. The scene view lays it out beat by beat, which makes it easy to see a setup that runs two sentences too long. The screenplay page formats it for printing if you like marking up paper with a pen before a mic. None of this makes a joke funnier. It does make it faster to find out which line is the problem.",
+      body: "A chat window gives you a block of text, and stand-up isn't read, it's said. Shutap shows the bit three ways. The teleprompter scrolls it full screen at talking pace, so you can run it out loud in your kitchen and hear where it drags. The skit lays it out beat by beat, which makes it easy to see a setup that runs two sentences too long. The sketch formats it as a page for printing if you like marking up paper with a pen before a mic. None of this makes a joke funnier. It does make it faster to find out which line is the problem.",
     },
     {
       heading: "Which one to open, and when",
