@@ -6,9 +6,9 @@ import { FUNNIEST, FUNNIEST_HUB, funniestPath } from "@/lib/seo/funniest";
 
 const newest = (dates: (string | undefined)[]) => dates.filter(Boolean).sort().at(-1) as string | undefined;
 
-/** Sitewide reposition to "the humor amplifier" (PRs #105–#122): every page's
+/** Sitewide reposition to "the humor amplifier" (PRs #105–#122), then Oct 30: audience is everyone, no "generator" anywhere: every page's
  *  header, CTA and copy changed that day, so no lastmod is older than this. */
-const REPOSITIONED = "2026-10-29";
+const REPOSITIONED = "2026-10-30";
 const fresh = (d: string | undefined) => newest([d, REPOSITIONED]);
 
 /**
