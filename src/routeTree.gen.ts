@@ -96,6 +96,7 @@ import { Route as ApiPublicHooksDispatchCheckinsRouteImport } from './routes/api
 import { Route as ApiPublicHooksMirrorEvolutionRouteImport } from './routes/api/public/hooks/mirror-evolution'
 import { Route as ApiPublicHooksReengagementEmailsRouteImport } from './routes/api/public/hooks/reengagement-emails'
 import { Route as ApiPublicHooksTrialEndingEmailsRouteImport } from './routes/api/public/hooks/trial-ending-emails'
+import { Route as ApiPublicPaymentsPricesRouteImport } from './routes/api/public/payments/prices'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as HallsHallRegionWindowRouteImport } from './routes/halls.$hall.$region.$window'
 
@@ -547,6 +548,11 @@ const ApiPublicHooksTrialEndingEmailsRoute =
     path: '/api/public/hooks/trial-ending-emails',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicPaymentsPricesRoute = ApiPublicPaymentsPricesRouteImport.update({
+  id: '/api/public/payments/prices',
+  path: '/api/public/payments/prices',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -646,6 +652,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
+  '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/halls/$hall/$region/$window': typeof HallsHallRegionWindowRoute
 }
@@ -736,6 +743,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
+  '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/halls/$hall/$region/$window': typeof HallsHallRegionWindowRoute
 }
@@ -828,6 +836,7 @@ export interface FileRoutesById {
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
+  '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/halls/$hall/$region/$window': typeof HallsHallRegionWindowRoute
 }
@@ -920,6 +929,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reengagement-emails'
     | '/api/public/hooks/trial-ending-emails'
+    | '/api/public/payments/prices'
     | '/api/public/payments/webhook'
     | '/halls/$hall/$region/$window'
   fileRoutesByTo: FileRoutesByTo
@@ -1010,6 +1020,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reengagement-emails'
     | '/api/public/hooks/trial-ending-emails'
+    | '/api/public/payments/prices'
     | '/api/public/payments/webhook'
     | '/halls/$hall/$region/$window'
   id:
@@ -1101,6 +1112,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reengagement-emails'
     | '/api/public/hooks/trial-ending-emails'
+    | '/api/public/payments/prices'
     | '/api/public/payments/webhook'
     | '/halls/$hall/$region/$window'
   fileRoutesById: FileRoutesById
@@ -1182,6 +1194,7 @@ export interface RootRouteChildren {
   ApiPublicHooksMirrorEvolutionRoute: typeof ApiPublicHooksMirrorEvolutionRoute
   ApiPublicHooksReengagementEmailsRoute: typeof ApiPublicHooksReengagementEmailsRoute
   ApiPublicHooksTrialEndingEmailsRoute: typeof ApiPublicHooksTrialEndingEmailsRoute
+  ApiPublicPaymentsPricesRoute: typeof ApiPublicPaymentsPricesRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -1796,6 +1809,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksTrialEndingEmailsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/payments/prices': {
+      id: '/api/public/payments/prices'
+      path: '/api/public/payments/prices'
+      fullPath: '/api/public/payments/prices'
+      preLoaderRoute: typeof ApiPublicPaymentsPricesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -1942,6 +1962,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksMirrorEvolutionRoute: ApiPublicHooksMirrorEvolutionRoute,
   ApiPublicHooksReengagementEmailsRoute: ApiPublicHooksReengagementEmailsRoute,
   ApiPublicHooksTrialEndingEmailsRoute: ApiPublicHooksTrialEndingEmailsRoute,
+  ApiPublicPaymentsPricesRoute: ApiPublicPaymentsPricesRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
