@@ -121,6 +121,7 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
 
         const body = (await request.json().catch(() => ({}))) as { only?: unknown; status_of?: unknown; internal_to?: unknown }
         const only = typeof body.only === 'string' ? body.only.trim().toLowerCase() : ''
+        const internalTo = typeof body.internal_to === 'string' ? body.internal_to.trim().toLowerCase() : ''
 
         if (typeof body.status_of === 'string' && /^[\w-]{8,80}$/.test(body.status_of)) {
           return Response.json({ ok: true, resend: await resendStatus(body.status_of) })
@@ -128,7 +129,7 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
 
         const { pacificDay } = await import('@/lib/pacific-day')
         const day = pacificDay()
-        if (!only) {
+        if (!only && !internalTo) {
           const hour = pacificHour()
           if (hour < SEND_FROM_PACIFIC_HOUR) return Response.json({ ok: true, skipped: 'before 8am Pacific', day })
           if (hour >= SEND_UNTIL_PACIFIC_HOUR) return Response.json({ ok: true, skipped: 'after 2pm Pacific', day })
@@ -148,7 +149,6 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
         if (ideaErr) return Response.json({ error: ideaErr.message }, { status: 500 })
         if (!idea?.bit || !idea?.hook) return Response.json({ ok: true, skipped: 'no idea for today yet', day })
 
-        const internalTo = typeof body.internal_to === 'string' ? body.internal_to.trim().toLowerCase() : ''
         if (internalTo) {
           if (!/^[a-z0-9._+-]+@shutap\.com$/.test(internalTo)) {
             return Response.json({ error: 'internal_to must be a @shutap.com address' }, { status: 400 })
