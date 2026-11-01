@@ -82,7 +82,7 @@ function assertLinks(html: string) {
     const href = anchor.match(/href\s*=\s*["']([^"']*)["']/i)?.[1];
     expect(href).toMatch(/^(https:\/\/|mailto:)/);
   }
-  expect(html).toContain("2261 Market St");
+  expect(html).toContain("1300 El Camino Real, Menlo Park, CA 94025");
 }
 
 describe("all registered email templates", () => {
