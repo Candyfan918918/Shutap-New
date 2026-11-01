@@ -1265,7 +1265,7 @@ export function fill(template: string, vars: Record<string, string | undefined>)
    kept bit as hotter / tighter / storytelling.
 
    BIT_PROMPT_VERSION is stamped on every bit. Bump it on ANY edit below. */
-export const BIT_PROMPT_VERSION = 'bit-1.5'
+export const BIT_PROMPT_VERSION = 'bit-1.6'
 
 /** What each audience control changes. The aim never changes: the situation. */
 export const BIT_AUDIENCE: Record<string, string> = {
@@ -1312,7 +1312,7 @@ VOICE: {{VOICE}}
 {{HEAT}}
 LENGTH: about {{SECONDS}} seconds spoken, which is about {{WORDS}} words for the
 whole bit at talking pace. Never more than {{MAX_WORDS}} words.
-
+{{JOB}}
 A BIT HAS FOUR PARTS:
 
 HOOK — the first two seconds, also the on-screen text. At most 8 words.
@@ -1348,7 +1348,7 @@ THE TECHNIQUES — each bit is built on its own technique, dealt below. The
   story: copy the operation, never its words, nouns or numbers.
 
 {{TECHNIQUES}}
-{{HOUSE}}
+{{STANDARD}}{{HOUSE}}{{PERSON}}
 ACTS, NOT LABELS — the funniest lines show something HAPPENING: a note
   left, a reply sent, a rule followed to the letter, an object doing
   something, a number someone could check. "He's a philanthropist of the
@@ -1451,7 +1451,7 @@ STORY:
 {{SITUATION}}
 
 AUDIENCE: {{AUDIENCE}}
-
+{{STANDARD}}
 BITS:
 {{BITS}}
 

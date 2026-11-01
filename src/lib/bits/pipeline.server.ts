@@ -46,6 +46,8 @@ import {
   type VaryKind,
 } from './shared'
 import { houseSignal } from './house.server'
+import { judgeStandard, standardBlock, standardLines } from './taste-bank'
+import { jobBlock } from './jobs'
 import { TECHNIQUES, bankFromFunniest, costumeToken, dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt, type Technique } from './techniques'
 
 /* ── the /funniest bank ──
@@ -96,7 +98,17 @@ export { BIT_PROMPT_VERSION }
    bit-1.5 (Oct 29 2026): back to a fast writer. In the blind eval gpt-5
    ran past its 30s cap on 19 of 30 stories and, when it did answer, won
    2 of 11. Default writer is now google/gemini-3-flash-preview; the judge
-   moves to the other family (openai/gpt-5-mini) with a 10s cap. */
+   moves to the other family (openai/gpt-5-mini) with a 10s cap.
+
+   bit-1.6 (Nov 1 2026): the standard, the person and the job. Six lines
+   from the Lab's rated dataset go to the writer and four to the judge as
+   the bar (taste-bank.ts); a returning user's own kept lines and rewrite
+   habits go in as THIS PERSON (person.server.ts); the audience + length
+   pair adds the rules of the job (jobs.ts). The writer goes back up to
+   openai/gpt-5, at MINIMAL reasoning this time (the 1.4 timeouts were at
+   'low'), with a 40s cap and the fast backup still racing from 9s; the
+   judge is google/gemini-3-flash-preview. BIT_WRITER_MODEL,
+   BIT_WRITER_EFFORT, BIT_JUDGE_MODEL and BIT_WRITE_MS override. */
 function budgetMs(name: string, fallback: number): number {
   const n = Number(process.env[name] ?? '')
   return Number.isFinite(n) && n > 0 ? n : fallback
@@ -104,7 +116,7 @@ function budgetMs(name: string, fallback: number): number {
 export const BIT_BUDGET = {
   premises: () => budgetMs('BIT_PREMISE_MS', 7_000),
   /** primary writer's own cap; it keeps running while the backup races it */
-  write: () => budgetMs('BIT_WRITE_MS', 30_000),
+  write: () => budgetMs('BIT_WRITE_MS', 40_000),
   /** when the backup writer joins the race */
   hedge: () => budgetMs('BIT_HEDGE_MS', 9_000),
   /** backup writer's cap, from the moment it starts */
@@ -126,19 +138,24 @@ export function bitWriterModel(): string {
   const own = (process.env['BIT_WRITER_MODEL'] ?? '').trim()
   if (own) return own
   const shared = (process.env['JOKE_WRITER_MODEL'] ?? '').trim()
-  return shared || 'google/gemini-3-flash-preview'
+  return shared || 'openai/gpt-5'
 }
 
 /** The bit judge: must be a different family from the writer. */
 export function bitJudgeModel(): string {
-  const wanted = (process.env['BIT_JUDGE_MODEL'] ?? '').trim() || 'openai/gpt-5-mini'
+  const wanted = (process.env['BIT_JUDGE_MODEL'] ?? '').trim() || 'google/gemini-3-flash-preview'
   const same = wanted.split('/')[0] === bitWriterModel().split('/')[0]
   return same ? (wanted.startsWith('openai/') ? 'google/gemini-3-flash-preview' : 'openai/gpt-5-mini') : wanted
 }
 
-/** Reasoning models take an effort level instead of a temperature. */
-function reasoning(model: string): 'low' | undefined {
-  return /^openai\/(gpt-5|o[1-9])/i.test(model) ? 'low' : undefined
+/** Reasoning models take an effort level instead of a temperature. The
+ *  writer runs at BIT_WRITER_EFFORT (default minimal: the thinking is in the
+ *  prompt, the model's job is the lines); the judge at low. */
+function reasoning(model: string, role: 'writer' | 'judge' = 'writer'): 'minimal' | 'low' | 'medium' | undefined {
+  if (!/^openai\/(gpt-5|o[1-9])/i.test(model)) return undefined
+  if (role === 'judge') return 'low'
+  const e = (process.env['BIT_WRITER_EFFORT'] ?? '').trim().toLowerCase()
+  return e === 'low' || e === 'medium' ? e : 'minimal'
 }
 
 /* ── controls → prompt text ── */
@@ -300,7 +317,7 @@ export async function runBitPass(
   story: string,
   premises: Premise[],
   controls: BitControls,
-  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal; dealt?: Dealt[]; prompt?: string; angleFinder?: string; house?: string } = {},
+  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal; dealt?: Dealt[]; prompt?: string; angleFinder?: string; house?: string; standard?: string; person?: string } = {},
 ): Promise<BitPass> {
   const model = opts.model ?? bitWriterModel()
   const prompt = fill(opts.prompt ?? BIT_PROMPT, {
@@ -308,6 +325,9 @@ export async function runBitPass(
     PREMISES: premises.length ? formatPremisesForBit(premises) : (opts.angleFinder ?? BIT_ANGLE_FINDER),
     TECHNIQUES: formatTechniques(opts.dealt ?? dealTechniques(4)),
     HOUSE: opts.house ?? '',
+    STANDARD: opts.standard ?? standardBlock(standardLines(6)),
+    PERSON: opts.person ?? '',
+    JOB: jobBlock(controls),
     ...controlVars(controls),
   })
   const res = await callAgent({
@@ -354,7 +374,7 @@ export async function runBitJudge(story: string, controls: BitControls, bits: Bi
   const res = await callAgent({
     model,
     temperature: 0,
-    reasoningEffort: reasoning(model),
+    reasoningEffort: reasoning(model, 'judge'),
     maxTokens: 3000,
     timeoutMs: BIT_BUDGET.judge(),
     messages: [
@@ -363,6 +383,7 @@ export async function runBitJudge(story: string, controls: BitControls, bits: Bi
         content: fill(BIT_JUDGE_PROMPT, {
           SITUATION: story.slice(0, 2000),
           AUDIENCE: BIT_AUDIENCE[controls.audience] ?? BIT_AUDIENCE.social,
+          STANDARD: judgeStandard(standardLines(4)),
           BITS: formatBits(bits),
         }),
       },
@@ -514,6 +535,10 @@ export type BitVariant = {
   pool?: Technique[]
   /** no technique deal at all (bit-1.2 behaviour) */
   noTechniques?: boolean
+  /** THIS PERSON block from their own past bits ('' for a guest or a first bit) */
+  person?: string
+  /** leave THE STANDARD out (the bit-1.5 behaviour, for the eval's before side) */
+  noStandard?: boolean
 }
 
 export async function writeBitFromStory(
@@ -545,6 +570,9 @@ export async function writeBitFromStory(
   }
   const primaryModel = variant.writer ?? bitWriterModel()
   const backupModel = variant.backup ?? backupWriterModel()
+  // One standard per run, like the deal: both writers in the race see the
+  // same six lines, so the bit is the same operation whichever answers.
+  const standard = variant.noStandard ? '' : standardBlock(standardLines(6))
   const sortBits = (bits: BitDraft[]) => {
     const ok: BitDraft[] = []
     const craftOnly: BitDraft[] = []
@@ -563,7 +591,7 @@ export async function writeBitFromStory(
     hedgeMs: BIT_BUDGET.hedge(),
     deadlineMs: BIT_BUDGET.write() + 5_000,
     preferPrimary: variant.preferPrimary ?? preferPrimaryOn(),
-    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal, dealt, prompt: variant.prompt, angleFinder: variant.angleFinder, house: house.examples }),
+    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal, dealt, prompt: variant.prompt, angleFinder: variant.angleFinder, house: house.examples, standard, person: variant.person ?? '' }),
     usable: (p) => {
       const s = sortBits(p.bits as BitDraft[])
       return s.ok.length + s.craftOnly.length > 0
