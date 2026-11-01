@@ -90,6 +90,15 @@ export const Route = createFileRoute('/api/public/bit-health')({
           detail.error = e instanceof Error ? e.message : String(e)
         }
         const ms = Date.now() - t0
+        // The download ledger must be readable, or the daily download caps
+        // silently stop counting (Nov 1 2026). Checked here so it is caught
+        // even on a day nobody downloads. Reported, not counted as a bit fail.
+        const { error: ledgerErr } = await db.from('bit_downloads').select('id', { count: 'exact', head: true }).limit(1)
+        detail.download_ledger = ledgerErr ? `error: ${ledgerErr.message}` : 'ok'
+        if (ledgerErr) {
+          const { alertDownloadUncounted } = await import('@/lib/bits/alert.server')
+          await alertDownloadUncounted({ kind: 'health_check', tier: '-', why: ledgerErr.message })
+        }
         await db.from('bit_health').insert({ source: fresh ? 'manual' : 'scheduled', ok, ms, model, detail })
         if (!ok) await alertBitFailure('health_check_failed', { ms, ...detail })
         return Response.json({ cached: false, ok, ms, model, detail }, { status: ok ? 200 : 503 })

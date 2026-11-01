@@ -43,3 +43,35 @@ export async function alertBitFailure(kind: BitAlertKind, detail: Record<string,
     console.error('[bit-alert] failed', e instanceof Error ? e.message : e)
   }
 }
+
+/* Download ledger alert (Nov 1 2026). For three days every download went
+ * through uncounted because the ledger table was missing, and nobody was
+ * told: the code lets the download through on purpose, so the person is
+ * never blocked, but the founder must hear about it. One email per 30
+ * minutes, with the same quiet window kept per alert kind. */
+export async function alertDownloadUncounted(detail: { kind: string; tier: string; why: string }): Promise<void> {
+  try {
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const db = supabaseAdmin as any
+    const since = new Date(Date.now() - QUIET_MS).toISOString()
+    const { count } = await db.from('bit_alerts').select('id', { count: 'exact', head: true }).eq('kind', 'download_uncounted').gte('created_at', since)
+    const summary = JSON.stringify(detail, null, 2).slice(0, 2000)
+    await db.from('bit_alerts').insert({ kind: 'download_uncounted', detail: summary })
+    if ((count ?? 0) > 0) return
+
+    const hour = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+    const { count: misses } = await db.from('events').select('id', { count: 'exact', head: true }).eq('name', 'download_ledger_error').gte('ts', hour)
+    const esc = (s: string) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]!)
+    const text = `A download just went through without being counted toward the daily limit.\n\nThe person still got their download. But while this keeps happening, the Free and Basic download limits aren't enforced.\n\nLast hour: ${misses ?? 0} uncounted download(s).\n\nDetail:\n${summary}\n\nOne email per 30 minutes while it keeps happening.`
+    const res = await sendResendEmail({
+      to: ALERT_TO,
+      from: ALERT_FROM,
+      subject: `Shutap: downloads aren't being counted (${misses ?? 0} in the last hour)`,
+      text,
+      html: `<pre style="font:14px/1.5 ui-monospace,monospace;white-space:pre-wrap">${esc(text)}</pre>`,
+    })
+    if (!res.ok) console.error('[download-alert] email failed', res.error)
+  } catch (e) {
+    console.error('[download-alert] failed', e instanceof Error ? e.message : e)
+  }
+}

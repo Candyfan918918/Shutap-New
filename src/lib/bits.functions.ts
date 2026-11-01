@@ -905,6 +905,9 @@ export const chargeDownload = createServerFn({ method: 'POST' })
         .from('events')
         .insert({ user_id: id.userId, session_id: null, name: 'download_ledger_error', properties: { kind: data.kind, tier, why: why.slice(0, 200) } as never } as never)
         .then(() => {}, () => {})
+      // Tell the founder (Nov 1 2026: a missing table went unnoticed 3 days).
+      const { alertDownloadUncounted } = await import('./bits/alert.server')
+      await alertDownloadUncounted({ kind: data.kind, tier, why: why.slice(0, 300) })
       return { ok: true, used: 0, cap, watermarked, tier, repeat: false }
     }
     try {
