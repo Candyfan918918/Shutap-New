@@ -40,6 +40,7 @@ const DIGEST_TEMPLATES = new Set<TemplateId>([
   'popular_today',
   'hall_updates',
   'reengagement',
+  'daily_idea',
 ])
 
 function suppressionFromPrefs(

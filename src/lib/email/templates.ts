@@ -18,6 +18,7 @@ import mirrorCancelledHtml from './designs/mirror-cancelled.html?raw'
 import mirrorTrialEndingHtml from './designs/mirror-trial-ending.html?raw'
 import newFollowerHtml from './designs/new-follower.html?raw'
 import enterpriseReceivedHtml from './designs/enterprise-received.html?raw'
+import dailyIdeaHtml from './designs/daily-idea.html?raw'
 
 import type { EmailClass, IdentityId } from './identities'
 
@@ -42,6 +43,7 @@ export type TemplateId =
   | 'mirror_trial_ending'
   | 'new_follower'
   | 'enterprise_received'
+  | 'daily_idea'
 
 export type TemplateVars = {
   alias?: string
@@ -318,5 +320,30 @@ until then, try it on your own material: https://shutap.com
 talk soon,
 Candy Fan
 Founder, Shutap`,
+  },
+
+  // Daily "what to post today" email (hook: /api/public/hooks/daily-idea-emails).
+  // The body has one link, the button; the signature email is plain text.
+  daily_idea: {
+    id: 'daily_idea',
+    identity: 'hello',
+    emailClass: 'nontransactional',
+    subject: (v) => `What to post today: ${v.hook_plain ?? ''}`.trim(),
+    preview: () => 'A finished bit for today. Make it yours.',
+    cta: 'Make it yours',
+    htmlDesign: dailyIdeaHtml,
+    buildBodyText: (v) => `Hey ${v.first_name_plain ?? ''}, here's a bit you can post today.
+
+What to post today (${(v.day_label ?? '').replace(/\u00a0/g, ' ')}): ${v.hook_plain ?? ''}
+
+${v.bit_plain ?? ''}
+${v.tag_plain ? `\nTag: ${v.tag_plain}\n` : ''}
+Now make it yours. Swap in what happened to you, and Shutap builds your version with the video and the caption.
+
+Make it yours: ${v.cta_url ?? 'https://shutap.com/?utm_source=hello_shutap&utm_medium=email&utm_campaign=daily_idea'}
+
+Say it funnier,
+Candy Fan
+Founder, Shutap · hello@shutap.com`,
   },
 }
