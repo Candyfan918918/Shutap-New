@@ -44,7 +44,7 @@ const guide: Guide = {
     },
     {
       heading: "Which one to open",
-      body: "Open Claude when you want to build and refine a repeatable system, when you're writing a series with fixed rules, when you want a joke explained, or when the job isn't comedy at all. Open Shutap when something happened today, you can tell it in a few sentences, and you want a timed draft you can film in the next ten minutes. Plenty of creators will use both, Claude for the series bible and Shutap for the story of the week. Your first Shutap bit each day needs no account. Either way, film the version you rewrote, not the version the tool wrote.",
+      body: "Open Claude when you want to build and refine a repeatable system, when you're writing a series with fixed rules, when you want a joke explained, or when the job isn't comedy at all. Open Shutap when something happened today, you can tell it in a few sentences, and you want a timed draft you can film in the next ten minutes. Plenty of creators will use both, Claude for the series bible and Shutap for the story of the week. A free Shutap account gets one bit a day. Either way, film the version you rewrote, not the version the tool wrote.",
     },
   ],
   faq: [

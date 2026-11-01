@@ -36,7 +36,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap's roast voice",
-      body: "Shutap, the humor amplifier, starts from a story rather than a photo. You write what happened, pick the roast voice (or deadpan, storyteller or dry), choose a length from 15 seconds to 2 minutes and how wild, from 1 (true to your story) to 5 (goes wild), and get a draft of the bit with a hook, setup, tags and a button. The jokes go at the situation and how people behaved in it, not at your body or anyone's looks. The draft runs in a teleprompter or as a scene for filming. Your first bit needs no account, and every line is yours to cut or rewrite.",
+      body: "Shutap, the humor amplifier, starts from a story rather than a photo. You write what happened, pick the roast voice (or deadpan, storyteller or dry), choose a length from 15 seconds to 2 minutes and how wild, from 1 (true to your story) to 5 (goes wild), and get a draft of the bit with a hook, setup, tags and a button. The jokes go at the situation and how people behaved in it, not at your body or anyone's looks. The draft runs in a teleprompter or as a scene for filming. A free account gets one bit a day, and every line is yours to cut or rewrite.",
     },
     {
       heading: "Which roast tool to use",
@@ -54,7 +54,7 @@ const guide: Guide = {
     },
     {
       q: "Is there a free AI roast tool?",
-      a: "Yes. AIFreeBox's free roast tool says it's free with no sign-up, most iOS roast apps have limited free roasts, ChatGPT and Claude have free plans, and Shutap's first bit needs no account, with 2 a day free once you sign in.",
+      a: "Yes. AIFreeBox's free roast tool says it's free with no sign-up, most iOS roast apps have limited free roasts, ChatGPT and Claude have free plans, and Shutap gives a free account one bit a day.",
     },
     {
       q: "Can ChatGPT roast me?",

@@ -65,7 +65,7 @@ const SECTIONS = [
   },
   {
     heading: "Free to start",
-    body: "Your first bit needs no account. Signing in is free, lets you rewrite it and download once a day (the video, or the caption and hashtags, or the picture) with a shutap.com watermark, keeps every bit in your set list and lets you post. Basic: 5 bits and 3 clean downloads a day. Pro: unlimited bits and downloads, no watermark, and the Mirror.",
+    body: "A free account (one tap with Google or Apple) gets one bit a day with its video, caption and hashtags, stand-up, sketch and skit, and one download a day with a shutap.com watermark. Basic adds rewrites, crowd-work swaps and mix your own: 3 bits and 3 clean downloads a day. Pro: unlimited bits, rewrites and downloads, no watermark, and the Mirror.",
   },
   {
     heading: "Who makes Shutap",

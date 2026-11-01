@@ -31,7 +31,7 @@ function TermsPage() {
     <DocLayout
       active="/terms"
       title="Terms of Service"
-      subline="Last updated: October 17, 2026 · Operator: Shutap"
+      subline="Last updated: November 1, 2026 · Operator: Shutap"
     >
       <p>
         These terms are an agreement between you and Shutap. By using Shutap, you agree to them.
@@ -158,17 +158,17 @@ function TermsPage() {
 
       <h3 id="plans">12. Free use and daily limits</h3>
       <p>
-        A guest can write <b>one new bit a day</b> without an account. Signing in is free and allows
-        <b>two new bits a day</b> in total, counting any bit written as a guest that day. Basic allows
-        five a day; Pro has no daily number, within fair use. A rewrite (hotter, tighter, storytelling)
-        is a new bit: it is written again and its video is rendered again, so it counts as one.
-        Swapping a tag or mixing your own does not. Signing in keeps your bits
-        in your set list and lets you post them.
+        Writing a bit takes an account. A free account allows <b>one new bit a day</b>, as written,
+        with stand-up, sketch and skit. Rewrites (hotter, tighter, storytelling), swapping in a
+        crowd-work angle and mixing your own are part of the paid plans. Basic allows
+        <b>three new bits a day</b>; a rewrite is a new bit (it is written again and its video is
+        rendered again), so it counts as one, while a swap or a mix does not. Pro has no daily
+        number, within fair use. Your bits are kept in your set list and you can post them.
       </p>
       <p>
         Downloads are counted separately. The video, the caption and hashtags (when copied), and
         the picture or script PDF each count as one download; the same one of the same version
-        again the same day is free. A rewrite is a new version, and its downloads count again. Guests read the bit; watching or downloading the video takes an account. A free account gets
+        again the same day is free. A rewrite is a new version, and its downloads count again. A free account gets
         <b>one download a day</b>, with a shutap.com watermark on the video and the picture. Basic
         gets <b>three a day</b> with no watermark; Pro has no daily number, within fair use.
       </p>
@@ -180,9 +180,10 @@ function TermsPage() {
 
       <h3 id="refunds">13. Paid plans, billing and refunds</h3>
       <p>
-        <b>Basic</b> costs <b>US$7.99 per month</b> and allows five new bits a day and three
-        downloads a day with no watermark. <b>Pro</b> costs <b>US$49.99 per month</b> and allows unlimited new bits and downloads within fair use, no
-        watermark, and the Mirror. Prices are plus
+        <b>Basic</b> costs <b>US$7.99 per month</b> and allows three new bits a day (a rewrite
+        counts as one), crowd-work swaps and mixing your own, and three downloads a day with no
+        watermark. <b>Pro</b> costs <b>US$49.99 per month</b> and allows unlimited new bits,
+        rewrites and downloads within fair use, no watermark, and the Mirror. Prices are plus
         any taxes, billed through Stripe. Moving from Basic to Pro charges the prorated difference
         for the current period at the time you switch.
       </p>

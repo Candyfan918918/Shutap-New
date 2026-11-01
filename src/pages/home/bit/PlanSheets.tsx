@@ -1,11 +1,12 @@
 /* The paywall and the Pro upgrade, shown inside the writer's bottom sheet.
  *
- *   PaywallBody   a free account at its daily limit (bit 3), or anyone
+ *   PaywallBody   a free account at its daily limit (bit 2), a free account
+ *                 asking for a rewrite, swap or mix, or anyone
  *                 past the free download or removing the watermark. Free, Basic and
  *                 Pro side by side on the same rows as the pricing page,
  *                 Pro first to buy, then what every plan keeps. Checkout is
  *                 /subscribe.
- *   UpgradeBody   a Basic account at its daily limit (bit 6): Pro on the same
+ *   UpgradeBody   a Basic account at its daily limit (bit 4): Pro on the same
  *                 subscription, the difference charged now.
  *
  * Prices and plan lines come from @/lib/pricing, the same numbers checkout
@@ -15,18 +16,21 @@ import { useServerFn } from '@tanstack/react-start'
 import { changePlanToPro } from '@/lib/payments.functions'
 import { getStripeEnvironment } from '@/lib/stripe'
 import { EVERY_PLAN, PLANS, PLAN_COMPARE, usd, type CompareTier, type PaidPlan } from '@/lib/pricing'
+import { BIT_CAPS, DOWNLOAD_CAPS } from '@/lib/bits/plans'
 
-/** Where the plans opened from. 'download' = remove the watermark;
+/** Where the plans opened from. 'bit_3' = a free account out of bits today
+ *  (the key predates the Nov 1 2026 limits; it's the second bit now);
+ *  'rewrite' = a free account asking for a rewrite, swap or mix;
+ *  'download' = remove the watermark;
  *  'download_count' = a free account out of downloads today;
  *  'download_limit' = a Basic account out of downloads today (Pro only). */
-export type PaywallWhere = 'bit_3' | 'daily_limit' | 'download' | 'download_count' | 'download_limit'
+export type PaywallWhere = 'bit_3' | 'rewrite' | 'daily_limit' | 'download' | 'download_count' | 'download_limit'
 
 /** What every plan keeps, Free included (the same list as the pricing
  *  page), so a paywall never reads as "pay to use Shutap". */
 const EVERY_ICON: Record<(typeof EVERY_PLAN)[number], FeatureIcon> = {
   'A full bit: hook, setup, tags and button': 'bit',
   'A 5-second video of it': 'post',
-  'Hotter, tighter, storytelling (each is a new bit and a new video), mix and crowd-work angles': 'rewrite',
   'Stand-up on the teleprompter': 'standup',
   'Sketch and skit': 'sketch',
   'Caption and hashtags': 'hash',
@@ -101,13 +105,17 @@ export function PaywallBody({
       ? 'Download it clean.'
       : where === 'download_count'
         ? "That's today's free download."
-        : "That's today's free bits."
+        : where === 'rewrite'
+          ? 'Rewrites are on Basic and Pro.'
+          : "That's today's free bit."
   const sub =
     where === 'download'
       ? 'Free downloads carry the shutap.com watermark. Basic gets 3 clean downloads a day; Pro has no limit.'
       : where === 'download_count'
         ? 'Free is one download a day: the video, or the caption and hashtags, or the picture. Basic gets 3 a day with no watermark; Pro has no limit. More at midnight Pacific.'
-        : 'A rewrite is a new bit and a new video. Want to keep going tonight?'
+        : where === 'rewrite'
+          ? `Free gets one bit a day, as written. Hotter, tighter, storytelling, a crowd-work swap or your own mix come with Basic (${BIT_CAPS.basic} bits a day, rewrites included) and Pro (no limit).`
+          : `Free is one bit a day. Basic writes ${BIT_CAPS.basic} a day with rewrites; Pro has no limit. Want to keep going tonight?`
   return (
     <div className="pw">
       <div className="pw-head">
@@ -192,7 +200,7 @@ export function UpgradeBody({
 
   return (
     <>
-      <h3 id="bit-sheet-title">{why === 'downloads' ? "That's 3 downloads for today." : "That's 5 for today."}</h3>
+      <h3 id="bit-sheet-title">{why === 'downloads' ? `That's ${DOWNLOAD_CAPS.basic} downloads for today.` : `That's ${BIT_CAPS.basic} for today.`}</h3>
       <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
         {why === 'downloads' ? 'Pro downloads as many as you want.' : 'Pro writes as many as you want.'}
       </p>

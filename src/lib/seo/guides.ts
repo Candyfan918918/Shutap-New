@@ -241,9 +241,9 @@ const BASE_GUIDES: Guide[] = [
     title: "Storytime Script Writer for TikTok & Reels | Shutap",
     h1: "Storytime script writer",
     description:
-      "Turn the story you were going to tell anyway into a storytime script with a hook, setup, tags and a button. First bit needs no account. Film it off the teleprompter.",
+      "Turn the story you were going to tell anyway into a storytime script with a hook, setup, tags and a button. Free with an account. Film it off the teleprompter.",
     capsule:
-      "Shutap turns your storytime into a script. Write what happened, pick a voice and a length, and it returns a script with a hook, a setup, tags and a button, ready to read off the teleprompter. Your first one needs no account.",
+      "Shutap turns your storytime into a script. Write what happened, pick a voice and a length, and it returns a script with a hook, a setup, tags and a button, ready to read off the teleprompter. A free account gets one a day.",
     blurb: "Turn what happened into a script with a hook, setup, tags and a button.",
     sections: [
       {
@@ -495,7 +495,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does",
-        body: "You write a real story. Shutap lists observations about it, writes four whole bits, filters them with rules written in code, and has a second AI model pick the best. The unit of output is a bit: a hook, a setup, tags and a button, in your choice of audience, voice, length and how wild. The first one needs no account.",
+        body: "You write a real story. Shutap lists observations about it, writes four whole bits, filters them with rules written in code, and has a second AI model pick the best. The unit of output is a bit: a hook, a setup, tags and a button, in your choice of audience, voice, length and how wild. A free account gets one a day.",
       },
       {
         heading: "Who is the writer",
@@ -585,7 +585,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Shutap",
-        body: "Input: a story from your own life. Output: a whole bit with a hook, setup, tags and a button, in your choice of audience, voice, length and how wild. You steer it: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from lines Shutap wrote for your story. It runs as stand-up on a teleprompter, as a skit, or as a one-page sketch. Best for anyone turning real stories into material: posts, sets, toasts and talks. The first bit needs no account.",
+        body: "Input: a story from your own life. Output: a whole bit with a hook, setup, tags and a button, in your choice of audience, voice, length and how wild. You steer it: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from lines Shutap wrote for your story. It runs as stand-up on a teleprompter, as a skit, or as a one-page sketch. Best for anyone turning real stories into material: posts, sets, toasts and talks. A free account gets one bit a day.",
       },
       {
         heading: "Witscript",

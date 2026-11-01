@@ -16,7 +16,7 @@ const guide: Guide = {
   sections: [
     {
       heading: "The short answer",
-      body: "If you want to type out the thing that happened at the party and get jokes about that exact thing, you need a tool that takes a story as its input. Shutap does. You write it the way you'd tell a friend, pick who it's for and how it should sound, and get back a draft of the bit. It's a website rather than an app store download, which means it opens in any phone browser and your first bit needs no account. The rest of this page covers what else is out there and how to get a good result from any of them.",
+      body: "If you want to type out the thing that happened at the party and get jokes about that exact thing, you need a tool that takes a story as its input. Shutap does. You write it the way you'd tell a friend, pick who it's for and how it should sound, and get back a draft of the bit. It's a website rather than an app store download, which means it opens in any phone browser, and a free account gets one bit a day. The rest of this page covers what else is out there and how to get a good result from any of them.",
     },
     {
       heading: "Why most joke apps can't use your story",
@@ -50,7 +50,7 @@ const guide: Guide = {
   faq: [
     {
       q: "Is there an app that makes jokes from your own stories?",
-      a: "Shutap is built for that: you write what happened and get a bit with a hook, setup, tags and a button. It's a website rather than an app store download, so it works in a phone browser and the first bit needs no account.",
+      a: "Shutap is built for that: you write what happened and get a bit with a hook, setup, tags and a button. It's a website rather than an app store download, so it works in a phone browser, and a free account gets one bit a day.",
     },
     {
       q: "Can AI make my embarrassing moment funny?",
