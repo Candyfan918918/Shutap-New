@@ -352,7 +352,7 @@ export const MagicLinkEmail = ({ confirmationUrl }: MagicLinkEmailProps) => (
                     color: "#9e8a94",
                   }}
                 >
-                  {"Shutap, Inc.  ·  2261 Market St #4512, San Francisco, CA 94114"}
+                  {"Shutap, Inc.  ·  1300 El Camino Real, Menlo Park, CA 94025"}
                 </td>
                 {"\n"}
               </tr>
