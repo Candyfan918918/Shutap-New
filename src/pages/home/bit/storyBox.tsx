@@ -78,6 +78,9 @@ export function storyFuel(text: string): StoryFuel {
 }
 
 export function FuelMeter({ fuel }: { fuel: StoryFuel }) {
+  // Nov 1 2026: nothing until they start typing, so the button stays in
+  // view on a phone; the box was too tall with an empty meter in it.
+  if (!fuel.pct) return null
   return (
     <div className="bt-fuel" aria-live="polite">
       <div className="bt-fuel-top">
