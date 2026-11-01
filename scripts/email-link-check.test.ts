@@ -53,6 +53,15 @@ const vars: TemplateVars = {
   scan_prompt: "What happened at the coffee machine?",
   unsubscribe_url: "https://shutap.com/email/unsubscribe?token=t",
   preferences_url: "https://shutap.com/email/preferences?token=t",
+  day_label: "Sun\u00a0Nov\u00a01",
+  hook: "Black Friday started. It&#39;s November 1st.",
+  hook_plain: "Black Friday started. It's November 1st.",
+  topic: "black friday already started",
+  why_now: "Retailers already kicked off holiday deal events in October.",
+  bit_html: "Got an email at 6 a.m.<br>There&#39;s still a pumpkin on my porch.",
+  bit_plain: "Got an email at 6 a.m.\nThere's still a pumpkin on my porch.",
+  tag: "Day three, the air fryer emailed me.",
+  tag_plain: "Day three, the air fryer emailed me.",
 };
 for (let n = 1; n <= 3; n += 1) {
   vars[`room${n}_title`] = `Office story ${n}`;
@@ -104,6 +113,34 @@ describe("all registered email templates", () => {
       });
     }
   }
+});
+
+describe("daily_idea email", () => {
+  const cta = "https://shutap.com/?utm_source=hello_shutap&utm_medium=email&utm_campaign=daily_idea";
+  it("greets by name, has one body link plus unsubscribe and preferences", () => {
+    const { html, subject, text } = renderTemplate("daily_idea", { ...vars, cta_url: cta, deep_link: cta });
+    assertLinks(html);
+    expect(html).toContain("Hey Candy, here");
+    expect(subject).toBe("What to post today: Black Friday started. It's November 1st.");
+    const hrefs = [...html.matchAll(/<a\s[^>]*href="([^"]*)"/g)].map((m) => m[1]);
+    expect(hrefs).toEqual([
+      cta,
+      "https://shutap.com/email/unsubscribe?token=t",
+      "https://shutap.com/email/preferences?token=t",
+    ]);
+    expect(html).not.toContain("mailto:");
+    expect(text).toContain("Hey Candy, here's a bit you can post today.");
+    expect(text).toContain("Tag: Day three");
+    expect(text).toContain(`Make it yours: ${cta}`);
+  });
+  it("drops the why-today and tag rows when empty, keeps the bit", () => {
+    const { html, text } = renderTemplate("daily_idea", { ...vars, why_now: "", tag: "", tag_plain: "" });
+    assertLinks(html);
+    expect(html).not.toContain("Why today:");
+    expect(html).not.toContain("Tag:</b>");
+    expect(html).toContain("pumpkin on my porch");
+    expect(text).not.toContain("Tag:");
+  });
 });
 
 describe("ported auth templates", () => {

@@ -92,6 +92,7 @@ import { Route as ApiPublicJokeCardRouteImport } from './routes/api/public/joke-
 import { Route as GuidesTopicTopicRouteImport } from './routes/guides.topic.$topic'
 import { Route as StoryPillarSlugRouteImport } from './routes/story.$pillar.$slug'
 import { Route as ApiPublicHooksBillingReceiptsRouteImport } from './routes/api/public/hooks/billing-receipts'
+import { Route as ApiPublicHooksDailyIdeaEmailsRouteImport } from './routes/api/public/hooks/daily-idea-emails'
 import { Route as ApiPublicHooksDispatchCheckinsRouteImport } from './routes/api/public/hooks/dispatch-checkins'
 import { Route as ApiPublicHooksMirrorEvolutionRouteImport } from './routes/api/public/hooks/mirror-evolution'
 import { Route as ApiPublicHooksReengagementEmailsRouteImport } from './routes/api/public/hooks/reengagement-emails'
@@ -526,6 +527,12 @@ const ApiPublicHooksBillingReceiptsRoute =
     path: '/api/public/hooks/billing-receipts',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksDailyIdeaEmailsRoute =
+  ApiPublicHooksDailyIdeaEmailsRouteImport.update({
+    id: '/api/public/hooks/daily-idea-emails',
+    path: '/api/public/hooks/daily-idea-emails',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksDispatchCheckinsRoute =
   ApiPublicHooksDispatchCheckinsRouteImport.update({
     id: '/api/public/hooks/dispatch-checkins',
@@ -660,6 +667,7 @@ export interface FileRoutesByFullPath {
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
+  '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
@@ -753,6 +761,7 @@ export interface FileRoutesByTo {
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
+  '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
@@ -848,6 +857,7 @@ export interface FileRoutesById {
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
+  '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
@@ -943,6 +953,7 @@ export interface FileRouteTypes {
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
     | '/api/public/hooks/billing-receipts'
+    | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reengagement-emails'
@@ -1036,6 +1047,7 @@ export interface FileRouteTypes {
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
     | '/api/public/hooks/billing-receipts'
+    | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reengagement-emails'
@@ -1130,6 +1142,7 @@ export interface FileRouteTypes {
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
     | '/api/public/hooks/billing-receipts'
+    | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reengagement-emails'
@@ -1214,6 +1227,7 @@ export interface RootRouteChildren {
   GuidesTopicTopicRoute: typeof GuidesTopicTopicRoute
   StoryPillarSlugRoute: typeof StoryPillarSlugRoute
   ApiPublicHooksBillingReceiptsRoute: typeof ApiPublicHooksBillingReceiptsRoute
+  ApiPublicHooksDailyIdeaEmailsRoute: typeof ApiPublicHooksDailyIdeaEmailsRoute
   ApiPublicHooksDispatchCheckinsRoute: typeof ApiPublicHooksDispatchCheckinsRoute
   ApiPublicHooksMirrorEvolutionRoute: typeof ApiPublicHooksMirrorEvolutionRoute
   ApiPublicHooksReengagementEmailsRoute: typeof ApiPublicHooksReengagementEmailsRoute
@@ -1807,6 +1821,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksBillingReceiptsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/daily-idea-emails': {
+      id: '/api/public/hooks/daily-idea-emails'
+      path: '/api/public/hooks/daily-idea-emails'
+      fullPath: '/api/public/hooks/daily-idea-emails'
+      preLoaderRoute: typeof ApiPublicHooksDailyIdeaEmailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/dispatch-checkins': {
       id: '/api/public/hooks/dispatch-checkins'
       path: '/api/public/hooks/dispatch-checkins'
@@ -1998,6 +2019,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuidesTopicTopicRoute: GuidesTopicTopicRoute,
   StoryPillarSlugRoute: StoryPillarSlugRoute,
   ApiPublicHooksBillingReceiptsRoute: ApiPublicHooksBillingReceiptsRoute,
+  ApiPublicHooksDailyIdeaEmailsRoute: ApiPublicHooksDailyIdeaEmailsRoute,
   ApiPublicHooksDispatchCheckinsRoute: ApiPublicHooksDispatchCheckinsRoute,
   ApiPublicHooksMirrorEvolutionRoute: ApiPublicHooksMirrorEvolutionRoute,
   ApiPublicHooksReengagementEmailsRoute: ApiPublicHooksReengagementEmailsRoute,
