@@ -10,7 +10,7 @@ export const Route = createFileRoute('/api/public/payments/prices')({
   server: {
     handlers: {
       GET: async () => {
-        const { PLANS, STRIPE_DESCRIPTIONS } = await import('@/lib/pricing')
+        const { PLANS, STRIPE_DESCRIPTIONS, STRIPE_NAMES } = await import('@/lib/pricing')
         const { createStripeClient, priceForLookupKey, getStripeErrorMessage } = await import('@/lib/stripe.server')
         const out: Record<string, unknown>[] = []
         for (const env of ['sandbox', 'live'] as const) {
@@ -26,8 +26,10 @@ export const Route = createFileRoute('/api/public/payments/prices')({
               const price = await priceForLookupKey(stripe, plan.priceId, plan)
               const productId = typeof price.product === 'string' ? price.product : price.product.id
               let product = await stripe.products.retrieve(productId)
-              const wanted = STRIPE_DESCRIPTIONS[plan.tier]
-              if (product.description !== wanted) product = await stripe.products.update(productId, { description: wanted })
+              const wanted = { name: STRIPE_NAMES[plan.tier], description: STRIPE_DESCRIPTIONS[plan.tier] }
+              if (product.name !== wanted.name || product.description !== wanted.description) {
+                product = await stripe.products.update(productId, wanted)
+              }
               out.push({
                 env,
                 plan: plan.name,
