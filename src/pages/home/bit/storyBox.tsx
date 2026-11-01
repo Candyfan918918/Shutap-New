@@ -5,13 +5,18 @@
 import { useEffect, useState } from 'react'
 
 /** Placeholder prompts. Nov 1 2026: not only stories any more. Each one is
- *  a thing people need to say funnier: a post, a sketch, a presentation, a
- *  toast, a brainstorm. Questions, never example text. */
+ *  a thing people need to say funnier, with the speeches people give often
+ *  (maid of honor, best man, toasts, Toastmasters, wedding DJs and hosts).
+ *  Questions, never example text. */
 export const STORY_PROMPTS = [
   'a post you want people to stop scrolling for…',
+  'your maid of honor speech: who is she, and the story everyone knows?',
   'the slide in your presentation that needs a laugh…',
+  'best man speech? the groom, and the one story you can tell in public…',
   "a sketch idea that isn't funny yet…",
-  'a toast, a caption, a pitch: what are you saying?',
+  'a toast for the party, the retirement, the birthday: who for?',
+  'your next Toastmasters speech: the topic, and what happened…',
+  'hosting tonight? the crowd, and what you need to say between songs…',
   "brainstorming this week's posts? start with the topic…",
   'what happened today that deserves a punchline?',
 ] as const

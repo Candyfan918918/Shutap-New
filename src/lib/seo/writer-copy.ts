@@ -7,8 +7,8 @@ export type WriterCopy = { heading: string; sub: string; placeholder: string }
 
 const DEFAULT: WriterCopy = {
   heading: 'Try it on what you want to say.',
-  sub: 'A post, a sketch, a presentation, a toast. Get the bit, the video, the caption. Right here, free.',
-  placeholder: 'a post, a sketch, a slide, a toast: what do you want to say funnier?',
+  sub: 'A post, a speech, a toast, a sketch, a presentation. Get the bit, the video, the caption. Right here, free.',
+  placeholder: 'a post, a speech, a toast, a slide: what do you want to say funnier?',
 }
 
 const BY_CATEGORY: Partial<Record<GuideTopic, WriterCopy>> = {
@@ -70,5 +70,5 @@ export function writerCopyFor(category: GuideTopic | undefined): WriterCopy {
 export const FUNNIEST_WRITER: WriterCopy = {
   heading: 'Try the move on your own material.',
   sub: 'Same technique, your material. Get the video, the caption, the bit. Right here, free.',
-  placeholder: 'a post, a sketch, a slide, a toast: what do you want to say funnier?',
+  placeholder: 'a post, a speech, a toast, a slide: what do you want to say funnier?',
 }
