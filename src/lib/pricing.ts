@@ -32,6 +32,13 @@ export const PLANS: Record<PlanKey, PlanEntry> = {
   pro_annual: { key: 'pro_annual', priceId: 'mirror_annual', name: 'Pro annual', amount: 49.99, interval: 'year', tier: 'pro', shown: false },
 }
 
+/** The product description Stripe shows at checkout, kept in step with
+ *  the plans by /api/public/payments/prices. */
+export const STRIPE_DESCRIPTIONS: Record<PaidPlan, string> = {
+  basic: `Shutap Basic: ${BIT_CAPS.basic} new bits a day (a rewrite counts as one), rewrites, crowd-work swaps and mix your own, and ${DOWNLOAD_CAPS.basic} downloads a day with no watermark.`,
+  pro: 'Shutap Pro: unlimited bits, rewrites and downloads with no watermark, plus the Mirror.',
+}
+
 /** What each plan gives, in the same words on every surface. */
 export const PLAN_LINES: Record<PaidPlan, string[]> = {
   basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${DOWNLOAD_CAPS.basic} downloads a day, no watermark`],
