@@ -1,16 +1,5 @@
 import * as React from 'react'
-
-import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Link,
-  Preview,
-  Text,
-} from '@react-email/components'
+import { Html, Head, Body } from '@react-email/components'
 
 interface SignupEmailProps {
   siteName: string
@@ -19,77 +8,10 @@ interface SignupEmailProps {
   confirmationUrl: string
 }
 
-export const SignupEmail = ({
-  siteName,
-  siteUrl,
-  recipient,
-  confirmationUrl,
-}: SignupEmailProps) => (
-  <Html lang="en" dir="ltr">
-    <Head>
-      <style>{darkModeCss}</style>
-    </Head>
-    <Preview>Confirm your email for {siteName}</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>Confirm your email</Heading>
-        <Text style={text}>
-          Thanks for signing up for{' '}
-          <Link href={siteUrl} style={link}>
-            <strong>{siteName}</strong>
-          </Link>
-          !
-        </Text>
-        <Text style={text}>
-          Please confirm your email address (
-          <Link href={`mailto:${recipient}`} style={link}>
-            {recipient}
-          </Link>
-          ) by clicking the button below:
-        </Text>
-        <Button className="dm-btn" style={button} href={confirmationUrl}>
-          Verify Email
-        </Button>
-        <Text style={footer}>
-          If you didn't create an account, you can safely ignore this email.
-        </Text>
-      </Container>
-    </Body>
-  </Html>
+export const SignupEmail = ({ confirmationUrl }: SignupEmailProps) => (
+<Html lang="en">{"\n"}<Head>{"\n"}<meta charSet="utf-8" />{"\n"}<meta content="width=device-width, initial-scale=1" name="viewport" />{"\n"}<meta content="IE=edge" httpEquiv="X-UA-Compatible" />{"\n"}<meta content="light" name="color-scheme" />{"\n"}<meta content="light" name="supported-color-schemes" />{"\n"}<title>{"confirm your email"}</title>{"\n"}{/*[if mso]>
+<style>* {font-family: Arial, sans-serif !important;}</style>
+<![endif]*/}{"\n"}<style>{"\n  600;700;800&family=Newsreader:ital,opsz@1,6..72&display=swap');\n  body { margin:0; padding:0; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }\n  table { border-collapse:collapse; }\n  img { border:0; line-height:100%; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; }\n  @media only screen and (max-width:640px) { .card { width:100% !important; } .px { padding-left:22px !important; padding-right:22px !important; } .h1 { font-size:28px !important; } }"}</style>{"\n"}<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz@1,18&display=swap" rel="stylesheet" />{"\n"}</Head>{"\n"}<Body style={{"margin": "0", "padding": "0", "backgroundColor": "#ffffff"}}>{"\n"}<div style={{"display": "none", "maxHeight": "0", "overflow": "hidden", "msoHide": "all", "opacity": "0", "color": "transparent", "height": "0", "width": "0"}}>{"one click and you're in.​ ​ ​ ​ ​ ​"}</div>{"\n"}<table border="0" cellPadding="0" cellSpacing="0" role="presentation" style={{"backgroundColor": "#ffffff"}} width="100%">{"\n"}<tr>{"\n"}<td align="left" style={{"padding": "28px 12px 40px"}}>{"\n"}<table border="0" cellPadding="0" cellSpacing="0" className="card" role="presentation" style={{"width": "600px", "maxWidth": "600px"}} width="600">{"\n"}{/* accent rule */}{"\n"}{/* HEADER */}{"\n"}<tr>{"\n"}<td align="left" className="px" style={{"padding": "4px 40px 22px", "borderBottom": "1px solid #f0e6ea"}}>{"\n"}<img alt="shutap" height="29" src="https://shutap.com/email/shutap-wordmark.png" style={{"display": "block", "width": "104px", "height": "29px"}} width="104" />{"\n"}</td>{"\n"}</tr>{"\n"}{/* BODY */}{"\n"}<tr>{"\n"}<td className="px" style={{"padding": "26px 40px 0"}}>{"\n"}<div style={{"fontFamily": "'Sora',Arial,sans-serif", "fontWeight": "700", "fontSize": "12px", "letterSpacing": "0.12em", "textTransform": "uppercase", "color": "#c1216b", "textAlign": "left"}}>{"SHUTAP · confirm your email"}</div>{"\n"}<div className="h1" style={{"fontFamily": "'Sora',Arial,sans-serif", "fontWeight": "800", "fontSize": "32px", "lineHeight": "1.15", "letterSpacing": "-0.02em", "color": "#0b080f", "textAlign": "left", "marginTop": "10px"}}>{"one click and you're in."}</div>{"\n"}<p style={{"fontFamily": "'Inter',Arial,sans-serif", "fontSize": "16.5px", "lineHeight": "1.7", "color": "#2a2329", "textAlign": "left", "margin": "16px 4px 0"}}>{"confirm this is your email and shutap opens up — your bits, your drafts, every rewrite kept."}</p>{"\n"}</td>{"\n"}</tr>{"\n"}{/* ACTION */}{"\n"}<tr>{"\n"}<td align="left" className="px" style={{"padding": "26px 40px 0"}}>{"\n"}<table border="0" cellPadding="0" cellSpacing="0" role="presentation" style={{"margin": "0"}}>{"\n"}<tr>{"\n"}<td align="left" bgColor="#c1216b" style={{"borderRadius": "10px", "background": "#c1216b"}}>{"\n"}<a href={confirmationUrl} style={{"display": "inline-block", "padding": "14px 26px", "fontFamily": "'Sora',Arial,sans-serif", "fontSize": "15px", "fontWeight": "700", "color": "#ffffff", "textDecoration": "none", "borderRadius": "10px"}}>{"confirm email →"}</a>{"\n"}</td>{"\n"}</tr>{"\n"}</table>{"\n"}<table border="0" cellPadding="0" cellSpacing="0" role="presentation" width="100%">{"\n"}<tr>{"\n"}<td>{"\n"}<p style={{"fontFamily": "'Inter',Arial,sans-serif", "fontSize": "16.5px", "lineHeight": "1.7", "color": "#2a2329", "textAlign": "left", "margin": "22px 0 0"}}>{"button not working? paste this into your browser:"}<br />{"\n"}<a href={confirmationUrl} style={{"color": "#c1216b", "textDecoration": "underline", "wordBreak": "break-all"}}>{confirmationUrl}</a>{"\n"}</p>{"\n"}</td>{"\n"}</tr>{"\n"}</table>{"\n"}</td>{"\n"}</tr>{"\n"}{/* SAFETY LINE */}{"\n"}<tr>{"\n"}<td className="px" style={{"padding": "24px 40px 0"}}>{"\n"}<p style={{"fontFamily": "'Inter',Arial,sans-serif", "fontSize": "16.5px", "lineHeight": "1.7", "color": "#2a2329", "textAlign": "left", "margin": "0"}}>{"didn't sign up? ignore this. nothing happens without the click."}</p>{"\n"}</td>{"\n"}</tr>{"\n"}{/* SIGNATURE */}{"\n"}<tr>{"\n"}<td className="px" style={{"padding": "30px 40px 26px"}}>{"\n"}<div style={{"fontFamily": "'Inter',Arial,sans-serif", "fontSize": "16px", "lineHeight": "1.65", "color": "#2a2329"}}>{"Say it funnier,"}</div>{"\n"}<div style={{"fontFamily": "'Sora',Arial,sans-serif", "fontSize": "15px", "fontWeight": "700", "color": "#0b080f", "marginTop": "6px"}}>{"Candy Fan"}</div>{"\n"}<div style={{"fontFamily": "'Inter',Arial,sans-serif", "fontSize": "13px", "lineHeight": "1.5", "color": "#6f666c"}}>{"Founder, Shutap · "}<a href="mailto:hello@shutap.com" style={{"color": "#c1216b"}}>{"hello@shutap.com"}</a>{"\n"}</div>{"\n"}</td>{"\n"}</tr>{"\n"}<tr>{"\n"}<td className="px" style={{"padding": "26px 40px 0", "borderTop": "1px solid #f0e6ea", "fontFamily": "'Inter',Arial,sans-serif", "fontSize": "12px", "lineHeight": "1.65", "color": "#9e8a94"}}>{"\n"}<a href="https://shutap.com" style={{"color": "#9e8a94", "textDecoration": "underline"}}>{"shutap.com"}</a>{" · you're getting this because someone used this address on shutap."}</td>{"\n"}</tr>{"\n"}<tr>{"\n"}<td className="px" style={{"padding": "2px 40px 0", "fontFamily": "'Inter',Arial,sans-serif", "fontSize": "12px", "lineHeight": "1.65", "color": "#9e8a94"}}>{"Shutap, Inc.  ·  2261 Market St #4512, San Francisco, CA 94114"}</td>{"\n"}</tr>{"\n"}</table>{"\n"}{/* FOOTER */}{"\n"}</td>{"\n"}</tr>{"\n"}</table>{"\n"}</Body>{"\n"}</Html>
 )
 
 export default SignupEmail
-
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 20px',
-}
-const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
-}
-const link = { color: 'inherit', textDecoration: 'underline' }
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  border: '1px solid #000000',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
-// Rendered as a text child, which React may HTML-escape: keep this CSS free of >, &, and quotes.
-const darkModeCss = `
-  @media (prefers-color-scheme: dark) {
-    .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
-  }
-  [data-ogsc] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
-  [data-ogsb] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
-`
