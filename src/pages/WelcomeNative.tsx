@@ -41,6 +41,27 @@ async function signInMethod(): Promise<string> {
   }
 }
 
+/** Accounts younger than this when they land on /welcome are new sign-ups. */
+const NEW_ACCOUNT_MS = 30 * 60_000
+
+/** Fires sign_up_completed exactly once for a brand-new account. */
+async function trackSignUpOnce(): Promise<void> {
+  const { data } = await supabase.auth.getSession()
+  const u = data.session?.user as ({ id: string; created_at?: string; is_anonymous?: boolean; user_metadata?: Record<string, unknown> } | undefined)
+  if (!u || u.is_anonymous || !u.created_at) return
+  if (Date.now() - new Date(u.created_at).getTime() > NEW_ACCOUNT_MS) return
+  const key = `shutap_signup_tracked_${u.id}`
+  try {
+    if (localStorage.getItem(key)) return
+    localStorage.setItem(key, '1')
+  } catch { /* storage blocked: still count it */ }
+  const method = await signInMethod()
+  const meta = u.user_metadata ?? {}
+  const has_photo = Boolean(meta['avatar_url'] || meta['picture'])
+  const m = await import('@/lib/tracking')
+  await m.trackEvent('sign_up_completed', { method, has_photo })
+}
+
 export function WelcomeNativePage() {
   useNoIndex()
 
@@ -94,6 +115,12 @@ export function WelcomeNativePage() {
         const m = await import('@/lib/tracking')
         m.trackEvent('sign_in_completed', { method })
       })().catch(() => {})
+      // New account? Decided from when the account was created, not from
+      // which branch below runs: on Nov 1 a page refresh mid-way made the
+      // second pass find the profile the first pass had just made, and the
+      // sign-up was never counted. Fires once per account, whatever button
+      // or page the person signed up from.
+      void trackSignUpOnce().catch(() => {})
       // Lazy-import server-fn modules so cold /welcome doesn't ship them.
       const [{ recordLegalAcceptance }, { getMyAlias }] = await Promise.all([
         import('@/lib/legal.functions'),
@@ -152,13 +179,11 @@ export function WelcomeNativePage() {
             return
           }
           const a: AliasResult = { emotion: '', nation: '', creature: '', emoji: saved.emoji ?? '', display_name: saved.display_name }
-          const [{ setAlias }, tracking, welcome] = await Promise.all([
+          const [{ setAlias }, welcome] = await Promise.all([
             import('@/lib/auth'),
-            import('@/lib/tracking').catch(() => null),
             import('@/lib/welcome-email.functions').catch(() => null),
           ])
           setAlias({ name: a.display_name, emoji: a.emoji, avatar: saved.avatar_url })
-          void signInMethod().then((method) => tracking?.trackEvent('sign_up_completed', { has_photo: !!saved.avatar_url, method }))
           void welcome?.sendWelcomeEmail().catch(() => {})
           setFinalAlias(a)
           setStep('welcome')
