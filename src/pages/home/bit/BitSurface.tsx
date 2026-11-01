@@ -776,6 +776,18 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
 
   const fuel = storyFuel(story)
   const prompt = useTypingPrompt(phase === 'write' && !story)
+  // Nov 1 2026: short when empty, grows with what they type (up to the CSS
+  // max-height, then it scrolls), shrinks back when cleared.
+  const paperRef = useRef<HTMLTextAreaElement | null>(null)
+  useEffect(() => {
+    const el = paperRef.current
+    if (!el) return
+    el.style.height = ''
+    if (!story) return
+    const min = el.offsetHeight
+    el.style.height = 'auto'
+    el.style.height = `${Math.max(min, el.scrollHeight + 2)}px`
+  }, [story, phase])
 
   // Pro has no cap shown (null), so no count.
   const left = usage && usage.cap !== null ? Math.max(0, usage.cap - usage.used) : null
@@ -826,6 +838,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               <textarea
                 suppressHydrationWarning
                 id="bit-story"
+                ref={paperRef}
                 className="bt-paper"
                 placeholder={embed?.placeholder ?? prompt}
                 value={story}
