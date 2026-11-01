@@ -18,9 +18,12 @@ export default defineConfig({
     plugins: [mcpPlugin()],
     resolve: {
       alias: {
+        // Pin only the v4-style subpaths (html-to-text 8 under @react-email/render)
+        // to the top-level entities@4.5.0. Never alias bare "entities": htmlparser2@10
+        // imports "entities/decode", which must resolve to its nested entities@7 copy
+        // (v4.5.0 has no ./decode export — aliasing it broke the build).
         "entities/lib/decode.js": fileURLToPath(new URL("./node_modules/entities/lib/decode.js", import.meta.url)),
         "entities/lib/encode.js": fileURLToPath(new URL("./node_modules/entities/lib/encode.js", import.meta.url)),
-        entities: fileURLToPath(new URL("./node_modules/entities", import.meta.url)),
       },
     },
     // Keep every client chunk well under ~750KB: Vite's bundled import scanner
