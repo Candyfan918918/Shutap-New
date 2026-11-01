@@ -68,7 +68,7 @@ export const EmailChangeEmail = ({
       </div>
       {"\n"}
       <table
-        border="0"
+        border={0}
         cellPadding={0}
         cellSpacing={0}
         role="presentation"
@@ -81,7 +81,7 @@ export const EmailChangeEmail = ({
           <td align="center" style={{ padding: "28px 12px 40px" }}>
             {"\n"}
             <table
-              border="0"
+              border={0}
               cellPadding={0}
               cellSpacing={0}
               className="card"
@@ -178,7 +178,7 @@ export const EmailChangeEmail = ({
                 <td align="left" className="px" style={{ padding: "26px 40px 0" }}>
                   {"\n"}
                   <table
-                    border="0"
+                    border={0}
                     cellPadding={0}
                     cellSpacing={0}
                     role="presentation"
@@ -212,7 +212,7 @@ export const EmailChangeEmail = ({
                   </table>
                   {"\n"}
                   <table
-                    border="0"
+                    border={0}
                     cellPadding={0}
                     cellSpacing={0}
                     role="presentation"
