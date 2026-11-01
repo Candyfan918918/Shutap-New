@@ -9,7 +9,10 @@
 // sendEmail (notif_all_opt_out, notif_digest_opt_out).
 //
 // Test mode: POST {"only": "<email>"} sends today's email to that one account
-// (same rules, same once-a-day claim), ignoring the hour window and FIRST_DAY.
+// (same rules, same once-a-day claim), ignoring the hour window and FIRST_DAY,
+// and returns Resend's id and delivery status for it.
+// Status check: POST {"status_of": "<resend email id>"} returns Resend's record
+// for that email (last_event: delivered / bounced / suppressed / complained ...).
 import { createFileRoute } from '@tanstack/react-router'
 
 const SEND_FROM_PACIFIC_HOUR = 8
@@ -70,6 +73,23 @@ function firstNameFor(metaName: string | null | undefined, alias: any): string |
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
+// Resend's own record for one email: who it went to, from, subject, last_event.
+async function resendStatus(id: string): Promise<unknown> {
+  const key = process.env.RESEND_API_KEY
+  if (!key) return { error: 'RESEND_API_KEY missing' }
+  try {
+    const r = await fetch(`https://api.resend.com/emails/${encodeURIComponent(id)}`, {
+      headers: { authorization: `Bearer ${key}` },
+    })
+    const j = (await r.json().catch(() => ({}))) as Record<string, unknown>
+    if (!r.ok) return { error: `resend ${r.status}`, body: j }
+    const { to, from, subject, created_at, last_event } = j
+    return { id, to, from, subject, created_at, last_event }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'fetch failed' }
+  }
+}
+
 export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
   server: {
     handlers: {
@@ -80,8 +100,12 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
           return new Response('Unauthorized', { status: 401 })
         }
 
-        const body = (await request.json().catch(() => ({}))) as { only?: unknown }
+        const body = (await request.json().catch(() => ({}))) as { only?: unknown; status_of?: unknown }
         const only = typeof body.only === 'string' ? body.only.trim().toLowerCase() : ''
+
+        if (typeof body.status_of === 'string' && /^[\w-]{8,80}$/.test(body.status_of)) {
+          return Response.json({ ok: true, resend: await resendStatus(body.status_of) })
+        }
 
         const { pacificDay } = await import('@/lib/pacific-day')
         const day = pacificDay()
@@ -145,6 +169,7 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
         }
 
         let sent = 0, suppressed = 0, failed = 0, noName = 0, noUnsubscribe = 0
+        const tests: { to: string; id: string | null; ok: boolean; suppressed: boolean; reason: string | null; resend?: unknown }[] = []
         for (const u of batch) {
           const a: any = aliasOf.get(u.id)
           if (a?.email_suppressed) { suppressed++; continue }
@@ -160,6 +185,7 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
           if (claimErr) continue // already claimed (unique user_id + day)
 
           const res = await sendEmail('hello', 'daily_idea', { ...vars, first_name: esc(firstName), first_name_plain: firstName }, u.email)
+          if (only) tests.push({ to: u.email, id: res.id ?? null, ok: res.ok, suppressed: !!res.suppressed, reason: res.reason ?? res.error ?? null })
           if (res.ok && res.suppressed) suppressed++
           else if (res.ok) sent++
           else {
@@ -170,7 +196,15 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
           await sleep(RESEND_GAP_MS)
         }
 
-        return Response.json({ ok: true, day, sent, suppressed, failed, noName, noUnsubscribe, remaining: Math.max(0, users.length - batch.length) })
+        if (only && tests[0]?.id) {
+          await sleep(4000)
+          tests[0].resend = await resendStatus(tests[0].id)
+        }
+        return Response.json({
+          ok: true, day, sent, suppressed, failed, noName, noUnsubscribe,
+          remaining: Math.max(0, users.length - batch.length),
+          ...(only ? { tests } : {}),
+        })
       },
     },
   },
