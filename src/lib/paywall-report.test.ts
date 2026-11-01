@@ -47,7 +47,7 @@ test('unique people per step; admins and no-email accounts left out', () => {
     ev('signin_prompt_seen', { user_id: ADMIN }, { where: 'save' }),
   ]
   const r = aggregatePaywall(rows, include)
-  assert.deepEqual(r.seen, { bit_3: 1, daily_limit: 1, download: 2, total: 4 })
+  assert.deepEqual(r.seen, { bit_3: 1, rewrite: 0, daily_limit: 1, download: 2, total: 4 })
   assert.deepEqual(r.plan_chosen, { basic: 1, pro: 1 })
   assert.deepEqual(r.checkout_started, { basic: 1, pro: 1 })
   assert.deepEqual(r.paid, { basic: 1, pro: 1 })

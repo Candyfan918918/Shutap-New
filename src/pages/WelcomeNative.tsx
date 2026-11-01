@@ -8,6 +8,7 @@ import { clearPendingAuthReturn } from '@/lib/auth-guard'
 import { friendlyOAuthError } from '@/lib/oauth-signin'
 import { useNoIndex } from '@/components/NoIndex'
 import { AuthStep } from './welcome/AuthStep'
+import { signInMethod, trackSignUpOnce } from '@/lib/after-signin'
 import { BG, TEXT, EyeMark, SOFT } from './welcome/shared'
 import type { AliasResult } from './welcome/AliasStep'
 
@@ -24,42 +25,6 @@ function StepFallback() {
       </div>
     </div>
   )
-}
-
-/** Which way this sign-in came in: the identity used most recently
- *  ('google' | 'apple' | 'email'), so completions can be split by method. */
-async function signInMethod(): Promise<string> {
-  try {
-    const { data } = await supabase.auth.getSession()
-    const u = data.session?.user
-    if (!u) return 'unknown'
-    const ids = [...(u.identities ?? [])].sort((a, b) =>
-      String(b.last_sign_in_at ?? '').localeCompare(String(a.last_sign_in_at ?? '')))
-    return ids[0]?.provider ?? (u.app_metadata as { provider?: string } | undefined)?.provider ?? 'unknown'
-  } catch {
-    return 'unknown'
-  }
-}
-
-/** Accounts younger than this when they land on /welcome are new sign-ups. */
-const NEW_ACCOUNT_MS = 30 * 60_000
-
-/** Fires sign_up_completed exactly once for a brand-new account. */
-async function trackSignUpOnce(): Promise<void> {
-  const { data } = await supabase.auth.getSession()
-  const u = data.session?.user as ({ id: string; created_at?: string; is_anonymous?: boolean; user_metadata?: Record<string, unknown> } | undefined)
-  if (!u || u.is_anonymous || !u.created_at) return
-  if (Date.now() - new Date(u.created_at).getTime() > NEW_ACCOUNT_MS) return
-  const key = `shutap_signup_tracked_${u.id}`
-  try {
-    if (localStorage.getItem(key)) return
-    localStorage.setItem(key, '1')
-  } catch { /* storage blocked: still count it */ }
-  const method = await signInMethod()
-  const meta = u.user_metadata ?? {}
-  const has_photo = Boolean(meta['avatar_url'] || meta['picture'])
-  const m = await import('@/lib/tracking')
-  await m.trackEvent('sign_up_completed', { method, has_photo })
 }
 
 export function WelcomeNativePage() {

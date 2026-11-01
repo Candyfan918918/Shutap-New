@@ -38,7 +38,7 @@ const FROM_KEY = 'shutap_paywall_from'
  *  session last stored. */
 const FROM_TTL_MS = 30 * 60 * 1000
 function paywallFrom(raw: string | null): string | null {
-  const ok = (v: unknown) => (v === 'bit_3' || v === 'daily_limit' || v === 'download' ? v : null)
+  const ok = (v: unknown) => (v === 'bit_3' || v === 'rewrite' || v === 'daily_limit' || v === 'download' ? v : null)
   const v = ok(raw)
   try {
     if (v) {
@@ -304,7 +304,7 @@ export function SubscribePage() {
               ? 'No watermark on either. Pro adds unlimited bits and the Mirror.'
               : plan.tier === 'pro'
                 ? 'As many bits as you want, no watermark, and the Mirror.'
-                : 'Five new bits a day and no watermark.'}
+                : 'Three new bits a day with rewrites, and no watermark.'}
           </p>
           {cameFromDeck ? (
             <p style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic', fontSize: 14, lineHeight: 1.5, color: MUTED, margin: '-10px 0 22px', maxWidth: '38ch' }}>
@@ -561,7 +561,7 @@ export function SubscribeReturnPage() {
     : state === 'incomplete' ? 'we couldn\'t confirm your subscription yet.'
     : 'no checkout session found.'
   const body = state === 'ok'
-    ? (isPro ? 'unlimited bits, no watermark, and the Mirror.' : 'five new bits a day, no watermark.')
+    ? (isPro ? 'unlimited bits, no watermark, and the Mirror.' : 'three new bits a day with rewrites, no watermark.')
     : state === 'checking' ? 'one moment while stripe finalizes.'
     : state === 'incomplete' ? 'if you completed payment, it should appear on your profile within a minute. otherwise, try again.'
     : 'try starting checkout again.'

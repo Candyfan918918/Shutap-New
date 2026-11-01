@@ -20,7 +20,9 @@ export type PaywallReport = {
   signin_prompt_seen: number
   /** the same people, by what they tapped (one person can be in several) */
   signin_by_where: Record<SigninWhere, number>
-  seen: { bit_3: number; daily_limit: number; download: number; total: number }
+  /** bit_3 = a free account out of bits (the second bit since Nov 1 2026);
+   *  rewrite = a free account asking for a rewrite, swap or mix */
+  seen: { bit_3: number; rewrite: number; daily_limit: number; download: number; total: number }
   plan_chosen: { basic: number; pro: number }
   /** opened checkout coming from the paywall (a direct visit to /subscribe
    *  isn't counted here) */
@@ -36,7 +38,7 @@ export type PaywallReport = {
   paid_rate_pct: number | null
 }
 
-const PAYWALL_WHERE = new Set(['bit_3', 'daily_limit', 'download'])
+const PAYWALL_WHERE = new Set(['bit_3', 'rewrite', 'daily_limit', 'download'])
 
 function signinBucket(where: string): SigninWhere {
   if (where === 'bit_2') return 'bit_2'
@@ -72,7 +74,7 @@ export function aggregatePaywall(rows: PaywallEventRow[], include: (userId: stri
         break
       case 'paywall_seen':
         add('seen', who)
-        if (where === 'bit_3' || where === 'daily_limit' || where === 'download') add(`seen:${where}`, who)
+        if (PAYWALL_WHERE.has(where)) add(`seen:${where}`, who)
         break
       case 'plan_chosen':
         if (plan === 'basic' || plan === 'pro') add(`plan_chosen:${plan}`, who)
@@ -110,7 +112,7 @@ export function aggregatePaywall(rows: PaywallEventRow[], include: (userId: stri
       keep: n('signin:keep'),
       other: n('signin:other'),
     },
-    seen: { bit_3: n('seen:bit_3'), daily_limit: n('seen:daily_limit'), download: n('seen:download'), total: seenTotal },
+    seen: { bit_3: n('seen:bit_3'), rewrite: n('seen:rewrite'), daily_limit: n('seen:daily_limit'), download: n('seen:download'), total: seenTotal },
     plan_chosen: { basic: n('plan_chosen:basic'), pro: n('plan_chosen:pro') },
     checkout_started: { basic: n('checkout_started:basic'), pro: n('checkout_started:pro') },
     paid: { basic: n('paid:basic'), pro: n('paid:pro') },

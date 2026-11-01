@@ -8,8 +8,9 @@
 // starts beside the Guard to save time; if the Guard fires, its result is
 // thrown away unread. Any path that ends without a bit gives the budget back.
 //
-// Daily new bits: guest 1 · free 2 (counting that day's guest bit) · basic 5 ·
-// pro fair-use. New bits and rewrites (hotter/tighter/storytelling) count; angle swap and mix are free of the cap but need an account.
+// Daily new bits: guest 0 (sign in first) · free 1 · basic 3 · pro fair-use.
+// New bits and rewrites (hotter/tighter/storytelling) count. Rewrites, angle
+// swap and mix your own are paid only (free gets the bit as written).
 // Everyone sees the whole bit. Bits are server-only rows; ownership is checked
 // here: the signed-in user, or the guest's own browser id.
 import { createServerFn } from '@tanstack/react-start'
@@ -273,6 +274,10 @@ async function writeCore(
   const { day, resetsAt } = today()
   const subject = id.subjectKey
   const usageNow = async () => usageView(tier, await readUsed(supabaseAdmin, subject, day).catch(() => 0), resetsAt)
+
+  // Nov 1 2026: signing in comes before the first bit. A guest's press opens
+  // the sign-in sheet, and the story is written right after sign-in.
+  if (!lab && !id.userId) return { status: 'limited', reason: 'daily', tier, usage: usageView(tier, 0, resetsAt) }
 
   // A press of "write" carries one id, reused on the client's silent retry
   // and when the sign-in return replays it. If that bit already exists, this
@@ -569,9 +574,11 @@ export const varyBit = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<VersionResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
-    // A guest reads their first bit; rewriting it takes a (free) account.
-    // MAX_VERSIONS is the per-bit safety limit.
+    // Rewriting takes an account, and (Nov 1 2026) a paid plan: free gets the
+    // bit as written. MAX_VERSIONS is the per-bit safety limit.
     if (!id.userId) return { ok: false, reason: 'sign_in' }
+    const tier = await resolveTier(supabaseAdmin, id)
+    if (tier === 'free' || tier === 'guest') return { ok: false, reason: 'daily', tier }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
@@ -580,7 +587,6 @@ export const varyBit = createServerFn({ method: 'POST' })
     if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
     // The rewrite is a new bit against today's cap. Charged under a fresh
     // id so a retry of the same press is still one charge.
-    const tier = await resolveTier(supabaseAdmin, id)
     const chargeId = crypto.randomUUID()
     let used: number
     try {
@@ -625,6 +631,9 @@ export const swapAngle = createServerFn({ method: 'POST' })
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
     if (!id.userId) return { ok: false, reason: 'sign_in' }
+    // Free gets the bit as written; swaps are Basic and Pro.
+    const tier = await resolveTier(supabaseAdmin, id)
+    if (tier === 'free' || tier === 'guest') return { ok: false, reason: 'daily', tier }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
@@ -780,6 +789,9 @@ export const saveMix = createServerFn({ method: 'POST' })
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
     if (!id.userId) return { ok: false, reason: 'sign_in' }
+    // Free gets the bit as written; mix your own is Basic and Pro.
+    const tier = await resolveTier(supabaseAdmin, id)
+    if (tier === 'free' || tier === 'guest') return { ok: false, reason: 'daily', tier }
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)

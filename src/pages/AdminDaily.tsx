@@ -147,7 +147,7 @@ export function DailyReportSection() {
             <Stat
               label="saw the paywall"
               value={r.paywall.seen.total}
-              sub={`bit 3: ${r.paywall.seen.bit_3} · limit: ${r.paywall.seen.daily_limit} · download: ${r.paywall.seen.download}`}
+              sub={`out of bits: ${r.paywall.seen.bit_3} · rewrite: ${r.paywall.seen.rewrite} · limit: ${r.paywall.seen.daily_limit} · download: ${r.paywall.seen.download}`}
             />
             <Stat label="picked a plan" value={r.paywall.plan_chosen.basic + r.paywall.plan_chosen.pro} sub={`basic ${r.paywall.plan_chosen.basic} · pro ${r.paywall.plan_chosen.pro}`} />
             <Stat

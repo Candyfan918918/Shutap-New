@@ -1,6 +1,6 @@
 // The daily budget of NEW bits, per person (or guest browser) per Pacific day.
 //
-//   guest 1 · free 2 (counting that day's guest bit) · basic 5 · pro fair-use
+//   guest 0 (sign in first) · free 1 · basic 3 · pro fair-use
 //
 // Every change goes through the bit_usage functions (migration
 // 20261022190000_bit-usage.sql): one locked write each, keyed by bit id, so
