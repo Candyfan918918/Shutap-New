@@ -4,12 +4,16 @@
 // prompts live in the placeholder only, never as prefilled text or chips.
 import { useEffect, useState } from 'react'
 
-/** Placeholder prompts. Questions that pull details, never example stories. */
+/** Placeholder prompts. Nov 1 2026: not only stories any more. Each one is
+ *  a thing people need to say funnier: a post, a sketch, a presentation, a
+ *  toast, a brainstorm. Questions, never example text. */
 export const STORY_PROMPTS = [
-  "what's still bugging you from today?",
-  'who said what? word for word is funnier.',
-  "the thing you'd only tell your group chat…",
-  'what happened right before it went wrong?',
+  'a post you want people to stop scrolling for…',
+  'the slide in your presentation that needs a laugh…',
+  "a sketch idea that isn't funny yet…",
+  'a toast, a caption, a pitch: what are you saying?',
+  "brainstorming this week's posts? start with the topic…",
+  'what happened today that deserves a punchline?',
 ] as const
 
 /** Types the prompts out and back in the placeholder while the box is empty.

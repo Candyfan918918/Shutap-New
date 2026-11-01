@@ -801,7 +801,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   Say it <em>funnier.</em>
                   <span className="bt-h1-kicker">Your humor, amplified.</span>
                 </h1>
-                <p className="bt-sub">Type what happened. Get the video, the caption, the bit. In your voice.</p>
+                <p className="bt-sub">A post, a sketch, a presentation, a toast. Get the bit, the video, the caption. In your voice.</p>
               </div>
             )}
 
@@ -809,7 +809,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               <div className="bt-box-head">
                 <label htmlFor="bit-story" className="bt-box-title">
                   <span className="bt-rec" aria-hidden="true" />
-                  tell it like you'd tell your funniest friend
+                  what do you want to say funnier?
                 </label>
                 <span className="bt-box-aside">names get removed</span>
               </div>

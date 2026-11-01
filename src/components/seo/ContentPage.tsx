@@ -100,7 +100,7 @@ export function ContentPage({
 
         {tryIt && (
           <div style={{ margin: "0 0 44px" }}>
-            <BitSurface embed={{ page: tryIt, preset, ...(writer ?? { heading: "Try it on your own story.", sub: "Type what happened. Get the video, the caption, the bit. Right here, free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
+            <BitSurface embed={{ page: tryIt, preset, ...(writer ?? { heading: "Try it on what you want to say.", sub: "A post, a sketch, a presentation, a toast. Get the bit, the video, the caption. Right here, free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
           </div>
         )}
 
@@ -218,7 +218,7 @@ export function ContentPage({
         )}
 
         {tryIt && <TryItBox page={tryIt} preset={preset} anchor heading={writer?.heading ?? "Write yours above"} />}
-        {tryIt && <WriterBar page={tryIt} label={writer?.heading ?? "Try it on your own story."} />}
+        {tryIt && <WriterBar page={tryIt} label={writer?.heading ?? "Try it on what you want to say."} />}
 
         <p style={{ marginTop: 40, fontSize: 15 }}>
           <Link

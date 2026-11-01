@@ -6,9 +6,9 @@ import type { GuideTopic } from '@/lib/seo/guides'
 export type WriterCopy = { heading: string; sub: string; placeholder: string }
 
 const DEFAULT: WriterCopy = {
-  heading: 'Try it on your own story.',
-  sub: 'Type what happened. Get the video, the caption, the bit. Right here, free.',
-  placeholder: 'what happened, the way you\'d tell your funniest friend…',
+  heading: 'Try it on what you want to say.',
+  sub: 'A post, a sketch, a presentation, a toast. Get the bit, the video, the caption. Right here, free.',
+  placeholder: 'a post, a sketch, a slide, a toast: what do you want to say funnier?',
 }
 
 const BY_CATEGORY: Partial<Record<GuideTopic, WriterCopy>> = {
@@ -59,7 +59,7 @@ const BY_CATEGORY: Partial<Record<GuideTopic, WriterCopy>> = {
   },
   'using-shutap': { heading: 'Write one now.', sub: DEFAULT.sub, placeholder: DEFAULT.placeholder },
   'shutap-vs-other-tools': { heading: 'Try it before you compare.', sub: DEFAULT.sub, placeholder: DEFAULT.placeholder },
-  'ai-writing-partner': { heading: 'Try it on your own story.', sub: DEFAULT.sub, placeholder: DEFAULT.placeholder },
+  'ai-writing-partner': { heading: 'Try it on what you want to say.', sub: DEFAULT.sub, placeholder: DEFAULT.placeholder },
 }
 
 export function writerCopyFor(category: GuideTopic | undefined): WriterCopy {
@@ -68,7 +68,7 @@ export function writerCopyFor(category: GuideTopic | undefined): WriterCopy {
 
 /** The funniest pages: the technique is the hook. */
 export const FUNNIEST_WRITER: WriterCopy = {
-  heading: 'Try the move on your own story.',
+  heading: 'Try the move on your own material.',
   sub: 'Same technique, your material. Get the video, the caption, the bit. Right here, free.',
-  placeholder: 'what happened, the way you\'d tell your funniest friend…',
+  placeholder: 'a post, a sketch, a slide, a toast: what do you want to say funnier?',
 }
