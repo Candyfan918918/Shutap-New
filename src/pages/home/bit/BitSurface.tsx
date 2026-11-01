@@ -36,6 +36,7 @@ import {
 } from '@/lib/bits/shared'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
+import { promptOneTap, cancelOneTap, oneTapAvailable } from '@/lib/google-one-tap'
 import { trackEvent } from '@/lib/tracking'
 import { setSurfacePage, anonSessionId, jokeTrack } from '../joke/jokeClient'
 import { ActionIcon } from './icons'
@@ -92,7 +93,7 @@ const STEPS = ['reading it · names removed', 'finding the angle', 'writing four
 /* ── the note left before sign-in, so the bit comes back after it ── */
 /** What a guest was doing when they were asked to sign in; picked back up
  *  once they're in. */
-type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'caption' | 'watch' | 'save' | 'standup' | 'skit' | 'sketch' | 'post' | 'sheet'
+type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'caption' | 'watch' | 'save' | 'standup' | 'skit' | 'sketch' | 'post' | 'sheet' | 'one_tap'
 function writePending(bitId: string, anon: string, from?: SigninFrom) {
   try {
     localStorage.setItem(PENDING_KEY, JSON.stringify({ bit_id: bitId, anon, from, at: Date.now() }))
@@ -446,6 +447,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         else if (note.from === 'video' || note.from === 'caption') setResume(note.from)
         else if (note.from === 'save') say('Kept. It\'s in your set list.')
         else if (note.from === 'rewrite' || note.from === 'swap' || note.from === 'mix') say("You're in. Rewrite away.")
+        else if (note.from === 'one_tap') say("You're in. This bit is saved to your set list.")
       }
     } catch {
       restoring.current = false
@@ -494,6 +496,25 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     // onWrite reads the current story and controls; run once when they land
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [story, phase, opening])
+
+  /* Google One Tap: about 2 seconds after a guest's bit lands, Google offers
+     "Continue as <name>" to anyone already signed in to Google in this
+     browser. One tap signs in on the page; the SIGNED_IN listener above
+     claims the bit and reopens it. Never over a sign-in sheet, the paywall
+     or any other sheet; a sheet opening takes the card away. */
+  const bitIdForOneTap = bit?.id ?? null
+  useEffect(() => {
+    if (embed || phase !== 'bit' || tier !== 'guest' || !bitIdForOneTap || sheet || !oneTapAvailable()) return
+    const id = bitIdForOneTap
+    const t = window.setTimeout(() => {
+      void promptOneTap({
+        where: 'result',
+        onCredential: () => writePending(id, anonSessionId(), 'one_tap'),
+        onError: (m) => say(m),
+      })
+    }, 2000)
+    return () => { window.clearTimeout(t); cancelOneTap() }
+  }, [embed, phase, tier, bitIdForOneTap, sheet, say])
 
   /* A guest's sign-in page is fetched ahead, so the email button opens it
      instantly when the sheet asks for it. */
