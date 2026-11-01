@@ -21,6 +21,7 @@ import { runClassifyCrisis } from './agents/guard.functions'
 import { requestAnonId, resolveJokeIdentity, type JokeIdentity } from './jokes/session.server'
 import { activePlan } from './plan.server'
 import { heatFor, varyBitDraft, writeBitFromStory, type BitFailure } from './bits/pipeline.server'
+import { forgetPerson, personSignal } from './bits/person.server'
 import { NO_CAP, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
 import { DOWNLOAD_CAPS, DOWNLOAD_KINDS } from './bits/plans'
 import {
@@ -345,7 +346,10 @@ async function writeCore(
     // or shown, and the help block is all that comes back.
     const controls = { ...DEFAULT_CONTROLS, ...(controlsIn ?? {}) } as BitControls
     const sink: { failure?: BitFailure } = {}
-    const writing = writeBitFromStory(clean, controls, undefined, sink).catch((e) => {
+    // THIS PERSON: their own kept lines and rewrite habits (a quick read,
+    // cached five minutes; '' for a first bit)
+    const person = await personSignal(supabaseAdmin, id.userId).catch(() => '')
+    const writing = writeBitFromStory(clean, controls, undefined, sink, { person }).catch((e) => {
       sink.failure = { rejected: [], error: e instanceof Error ? e.message : 'threw' }
       return null
     })
@@ -611,6 +615,7 @@ export const varyBit = createServerFn({ method: 'POST' })
       return { ok: false, reason: 'failed' }
     }
     const saved = await insertVersion(supabaseAdmin, row.id, data.kind, draft, heatFor(data.kind, controls))
+    forgetPerson(id.userId)
     return { ok: true, version: toVersion(saved) }
   })
 
@@ -935,6 +940,7 @@ export const chargeDownload = createServerFn({ method: 'POST' })
         .from('events')
         .insert({ user_id: id.userId, session_id: null, name: 'download', properties: { kind: data.kind, tier, watermarked, bit_id: row.id, version_id: data.version_id } as never } as never)
         .then(() => {}, () => {})
+      forgetPerson(id.userId)
       return { ok: true, used: used + 1, cap, watermarked, tier, repeat: false }
     } catch (e) {
       return allowUncounted(e instanceof Error ? e.message : String(e))
