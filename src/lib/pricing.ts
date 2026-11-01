@@ -32,6 +32,14 @@ export const PLANS: Record<PlanKey, PlanEntry> = {
   pro_annual: { key: 'pro_annual', priceId: 'mirror_annual', name: 'Pro annual', amount: 49.99, interval: 'year', tier: 'pro', shown: false },
 }
 
+/** The product name Stripe shows at checkout, receipts and invoices. The Pro
+ *  product was first made as "The Mirror"; the lookup keys never change,
+ *  only these labels. Kept in step by /api/public/payments/prices. */
+export const STRIPE_NAMES: Record<PaidPlan, string> = {
+  basic: 'Shutap Basic',
+  pro: 'Shutap Pro',
+}
+
 /** The product description Stripe shows at checkout, kept in step with
  *  the plans by /api/public/payments/prices. */
 export const STRIPE_DESCRIPTIONS: Record<PaidPlan, string> = {
