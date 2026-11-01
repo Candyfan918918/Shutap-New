@@ -27,6 +27,7 @@ export function Versions({
   onMix,
   say,
   onSignIn,
+  onPaywall,
   onLimit,
   left,
   onCharged,
@@ -40,6 +41,9 @@ export function Versions({
   /** Set for a guest: rewriting takes a free account, so every rewrite
    *  control opens the sign-in sheet instead. */
   onSignIn?: (from: 'rewrite' | 'swap' | 'mix') => void
+  /** Set for a free account: free gets the bit as written (Nov 1 2026), so a
+   *  new rewrite, a crowd-work swap or a mix opens the plans instead. */
+  onPaywall?: (from: 'rewrite' | 'swap' | 'mix') => void
   /** A rewrite counts as a new bit: at the daily cap, open the limit sheet. */
   onLimit?: (tier: BitTier) => void
   /** bits left today (null = no cap), shown on the rewrite chips */
@@ -63,6 +67,10 @@ export function Versions({
     const made = latestOf(k)
     if (made) return onSelect(made.id)
     if (onSignIn) return onSignIn('rewrite')
+    if (onPaywall) {
+      jokeTrack('rewrite_blocked', 'free', { kind: k })
+      return onPaywall('rewrite')
+    }
     setBusy(k)
     try {
       const r = await vary({ data: { bit_id: bit.id, from_version_id: original.id, kind: k, anon_session_id: anonSessionId() } })
@@ -86,6 +94,10 @@ export function Versions({
   async function pickAngle(alt: number) {
     if (activeSwap && activeSwap.alt === alt) return onSelect(activeSwap.from)
     if (onSignIn) return onSignIn('swap')
+    if (onPaywall) {
+      jokeTrack('rewrite_blocked', 'free', { kind: 'tag_swap' })
+      return onPaywall('swap')
+    }
     const from = activeSwap ? activeSwap.from : current.id
     setSwapping(alt)
     try {
@@ -106,7 +118,11 @@ export function Versions({
       <section className="bt-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }} aria-label="Versions">
         <span className="bt-lbl">
           versions
-          {left !== undefined && left !== null && !onSignIn ? (
+          {onPaywall ? (
+            <span className="bt-note" style={{ marginLeft: 8, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>
+              rewrites, swaps and your own mix · Basic and Pro
+            </span>
+          ) : left !== undefined && left !== null && !onSignIn ? (
             <span className="bt-note" style={{ marginLeft: 8, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>
               a rewrite is a new bit and a new video · {left === 0 ? 'none left today' : `${left} left today`}
             </span>
@@ -127,7 +143,7 @@ export function Versions({
                 disabled={!!busy}
                 onClick={() => void pickKind(k)}
               >
-                {busy === k ? 'writing…' : left === 0 && !onSignIn ? `${k} · limit` : k}
+                {busy === k ? 'writing…' : left === 0 && !onSignIn && !onPaywall ? `${k} · limit` : k}
               </button>
             )
           })}

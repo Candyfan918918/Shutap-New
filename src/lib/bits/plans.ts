@@ -1,14 +1,16 @@
 // New bits per Pacific day, by tier. Safe to import in the browser.
-// Only new bits count: hotter, tighter, storytelling, mix and angle swap are free on
-// any bit the person made (each bit is capped at MAX_VERSIONS versions).
+// Nov 1 2026: signing in comes before the first bit (guests write none).
+// Free is one bit a day, as written: rewrites (hotter, tighter, storytelling),
+// crowd-work swaps and mix your own are Basic and Pro only. On Basic a
+// rewrite counts as a new bit (swap and mix don't; no model call).
 // Pro's fair-use cap lives on the server only (usage.server.ts), so the
 // browser never shows a number for "unlimited".
 import type { BitTier } from './shared'
 
 export const BIT_CAPS: Record<Exclude<BitTier, 'pro'>, number> = {
-  guest: 1,
-  free: 2, // counting the bit written as a guest earlier that day
-  basic: 5,
+  guest: 0, // sign in first
+  free: 1,
+  basic: 3,
 }
 
 /** Downloads a day. A download is one of: the caption + hashtags (copied),

@@ -9,7 +9,7 @@
 // `priceId` is the Stripe lookup key. mirror_monthly / mirror_annual never
 // change name (they are Pro). basic_monthly is the Basic plan.
 import type { BitTier } from './bits/shared'
-import { BIT_CAPS } from './bits/plans'
+import { BIT_CAPS, DOWNLOAD_CAPS } from './bits/plans'
 
 export type PlanKey = 'basic' | 'pro' | 'pro_annual'
 export type PaidPlan = 'basic' | 'pro'
@@ -34,8 +34,8 @@ export const PLANS: Record<PlanKey, PlanEntry> = {
 
 /** What each plan gives, in the same words on every surface. */
 export const PLAN_LINES: Record<PaidPlan, string[]> = {
-  basic: [`${BIT_CAPS.basic} new bits a day`, '3 downloads a day, no watermark'],
-  pro: ['Unlimited bits', 'Unlimited downloads, no watermark', 'The Mirror'],
+  basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${DOWNLOAD_CAPS.basic} downloads a day, no watermark`],
+  pro: ['Unlimited bits and rewrites', 'Unlimited downloads, no watermark', 'The Mirror'],
 }
 
 /** The plans side by side: the same rows on every surface that compares
@@ -55,11 +55,20 @@ export const PLAN_COMPARE: CompareRow[] = [
     },
   },
   {
+    label: 'Rewrites (hotter, tighter, storytelling), crowd-work swaps, mix your own',
+    short: 'Rewrites',
+    cells: {
+      free: { value: 'Not included', short: '—', on: false },
+      basic: { value: 'Included (a rewrite counts as a bit)', short: '✓', on: true },
+      pro: { value: 'Included', short: '✓', on: true },
+    },
+  },
+  {
     label: 'Downloads a day (the video, and the caption + hashtags, each count as one)',
     short: 'Downloads',
     cells: {
-      free: { value: '1, watermarked', short: '1 · mark', on: false },
-      basic: { value: '3, no watermark', short: '3 · clean', on: true },
+      free: { value: `${DOWNLOAD_CAPS.free}, watermarked`, short: `${DOWNLOAD_CAPS.free} · mark`, on: false },
+      basic: { value: `${DOWNLOAD_CAPS.basic}, no watermark`, short: `${DOWNLOAD_CAPS.basic} · clean`, on: true },
       pro: { value: 'Unlimited, no watermark', short: '∞ · clean', on: true },
     },
   },
@@ -74,11 +83,11 @@ export const PLAN_COMPARE: CompareRow[] = [
   },
 ]
 
-/** What every plan has, Free included. Listed once, beside the comparison. */
+/** What every plan has, Free included (with a free account). Listed once,
+ *  beside the comparison. Rewrites are Basic and Pro since Nov 1 2026. */
 export const EVERY_PLAN = [
   'A full bit: hook, setup, tags and button',
   'A 5-second video of it',
-  'Hotter, tighter, storytelling (each is a new bit and a new video), mix and crowd-work angles',
   'Stand-up on the teleprompter',
   'Sketch and skit',
   'Caption and hashtags',

@@ -5,11 +5,11 @@ import assert from 'node:assert/strict'
 import { capFor, chargeBit, chargeNetwork, mergeGuestUsage, proCap, refundBit, today, usageView } from './usage.server'
 import { atCap, isPaidTier } from './shared'
 
-test('caps: guest 1, free 2, basic 5, pro 50 by default', () => {
+test('caps: guest 0 (sign in first), free 1, basic 3, pro 50 by default', () => {
   delete process.env['BIT_PRO_DAILY_CAP']
-  assert.equal(capFor('guest'), 1)
-  assert.equal(capFor('free'), 2)
-  assert.equal(capFor('basic'), 5)
+  assert.equal(capFor('guest'), 0)
+  assert.equal(capFor('free'), 1)
+  assert.equal(capFor('basic'), 3)
   assert.equal(capFor('pro'), 50)
 })
 
@@ -25,8 +25,8 @@ test('pro cap reads BIT_PRO_DAILY_CAP and ignores junk', () => {
 
 test('the old one-number override does not flatten the tiers', () => {
   process.env['JOKE_DAILY_SETS'] = '5'
-  assert.equal(capFor('guest'), 1)
-  assert.equal(capFor('free'), 2)
+  assert.equal(capFor('guest'), 0)
+  assert.equal(capFor('free'), 1)
   delete process.env['JOKE_DAILY_SETS']
 })
 
@@ -34,10 +34,11 @@ test('the browser never sees the pro cap', () => {
   const u = usageView('pro', 12, '2026-10-23T07:00:00.000Z')
   assert.equal(u.cap, null)
   assert.equal(atCap(u), false)
-  assert.deepEqual(usageView('free', 2, 'x'), { used: 2, cap: 2, resets_at: 'x' })
-  assert.equal(atCap(usageView('free', 2, 'x')), true)
-  assert.equal(atCap(usageView('free', 1, 'x')), false)
-  assert.equal(atCap(usageView('guest', 1, 'x')), true)
+  assert.deepEqual(usageView('free', 1, 'x'), { used: 1, cap: 1, resets_at: 'x' })
+  assert.equal(atCap(usageView('free', 1, 'x')), true)
+  assert.equal(atCap(usageView('free', 0, 'x')), false)
+  // a guest is always "at cap": the first press opens sign-in
+  assert.equal(atCap(usageView('guest', 0, 'x')), true)
   assert.equal(atCap(null), false)
 })
 

@@ -35,7 +35,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap: when the material is your own story",
-      body: "Shutap, the humor amplifier, starts where most of these don't: with something that actually happened to you. You write the story, pick a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and how wild, from 1 (true to your story) to 5 (goes wild), and you get a draft of the bit with a hook, setup, tags and a button. It runs as stand-up on a teleprompter, lays out as a skit, or formats as a one-page sketch. Your first bit needs no account. The draft is something to push against: cut the tags that aren't you and rewrite the rest.",
+      body: "Shutap, the humor amplifier, starts where most of these don't: with something that actually happened to you. You write the story, pick a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and how wild, from 1 (true to your story) to 5 (goes wild), and you get a draft of the bit with a hook, setup, tags and a button. It runs as stand-up on a teleprompter, lays out as a skit, or formats as a one-page sketch. A free account gets one bit a day. The draft is something to push against: cut the tags that aren't you and rewrite the rest.",
     },
     {
       heading: "Pick by what you start with",
@@ -53,7 +53,7 @@ const guide: Guide = {
     },
     {
       q: "Is there a free alternative to Punchlines.ai?",
-      a: "Yes. ChatGPT, Claude and Gemini all list free plans, Comedeez AI has a free plan with three AI uses a day, and Texta's comedy page says it has a free tier. Shutap's first bit needs no account, with 2 a day free once you sign in.",
+      a: "Yes. ChatGPT, Claude and Gemini all list free plans, Comedeez AI has a free plan with three AI uses a day, and Texta's comedy page says it has a free tier. Shutap gives a free account one bit a day.",
     },
     {
       q: "Can ChatGPT write jokes as well as Punchlines.ai?",

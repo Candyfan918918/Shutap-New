@@ -1,10 +1,10 @@
 /* Google One Tap on the result page (designed Nov 1 2026, canvas
  * "Shutap — Google One Tap on the result page").
  *
- * A guest who is already signed in to Google in this browser gets Google's
- * own "Continue as <name>" card about 2 seconds after their first bit
- * finishes. One tap signs them in without leaving the page; the bit stays,
- * is claimed into their set list, and everything on the result unlocks.
+ * Since Nov 1 2026 a bit takes an account, so the card is offered while a
+ * guest writes their story (see BitSurface): anyone already signed in to
+ * Google in this browser gets Google's own "Continue as <name>" card. One
+ * tap signs them in without leaving the page; the story stays in the box.
  * Everyone else keeps the normal sign-in buttons.
  *
  * Google draws and words the card; we only decide when to ask. Google itself

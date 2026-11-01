@@ -11,12 +11,12 @@ const BASIC = PLANS.basic.amount
 const PRO = PLANS.pro.amount
 
 const TITLE = `Pricing — Shutap, the Humor Amplifier, plans from ${usd(BASIC)}/mo`
-const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video, caption and hashtags from your story, with stand-up, sketch and skit formats. Free: one download a day with a watermark. Basic is ${usd(BASIC)}/month: 5 new bits and 3 clean downloads a day. Pro is ${usd(PRO)}/month: unlimited bits and downloads, no watermark, and the Mirror. Cancel anytime.`
+const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video, caption and hashtags from your story, with stand-up, sketch and skit formats. Free with an account: one bit and one watermarked download a day. Basic is ${usd(BASIC)}/month: 3 new bits a day with rewrites, and 3 clean downloads. Pro is ${usd(PRO)}/month: unlimited bits, rewrites and downloads, no watermark, and the Mirror. Cancel anytime.`
 
 const QA = [
-  { q: 'Is Shutap really free?', a: 'Yes. Your first bit needs no account to read. Signing in is free: it plays the video, lets you rewrite the bit, and gives you one download a day: the video, or the caption and hashtags, or the picture (video and picture carry a shutap.com watermark), and gives you 2 new bits a day. A rewrite (hotter, tighter, storytelling) is written again and its video is rendered again, so it counts as a new bit; crowd-work angles and mix your own do not count against the day.' },
-  { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 5 new bits a day and 3 downloads a day with no watermark. Pro is ${usd(PRO)} a month: unlimited bits, unlimited downloads with no watermark, and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
-  { q: 'What counts toward the daily limit?', a: 'New bits, rewrites and downloads. A rewrite (hotter, tighter, storytelling) is a new bit: written again, video rendered again. The video is one download; copying the caption and hashtags is another; the picture or script PDF another; a rewrite\'s downloads count again. Crowd-work angles and mix your own do not count. Limits reset at midnight Pacific.' },
+  { q: 'Is Shutap really free?', a: 'Yes, with a free account. Sign in first (one tap with Google or Apple), then you get one new bit a day, as written, with its 5-second video, caption and hashtags, and stand-up, sketch and skit. You also get one download a day: the video (with a shutap.com watermark) or the caption and hashtags. Rewrites (hotter, tighter, storytelling), crowd-work swaps and mix your own come with Basic and Pro.' },
+  { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 3 new bits a day (a rewrite counts as one), crowd-work swaps and mix your own, and 3 downloads a day with no watermark. Pro is ${usd(PRO)} a month: unlimited bits and rewrites, unlimited downloads with no watermark, and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
+  { q: 'What counts toward the daily limit?', a: 'New bits, rewrites and downloads. A rewrite (hotter, tighter, storytelling) is a new bit: written again, video rendered again. The video is one download; copying the caption and hashtags is another; the picture or script PDF another; a rewrite\'s downloads count again. Crowd-work swaps and mix your own don\'t count against the day. Limits reset at midnight Pacific.' },
   { q: 'Can I move from Basic to Pro?', a: 'Yes, any time. You pay the difference for the rest of the month, and Pro starts right away.' },
   { q: 'Is there a free trial?', a: 'No trial. The free plan is the trial: write your bits before you decide.' },
   { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your account; you keep your plan until the end of the period you paid for. Payments are handled by Stripe.' },
@@ -166,7 +166,7 @@ function PricingPage() {
             ))}
           </ul>
           <p className="fd-faint" style={{ margin: 0 }}>
-            Your first bit needs no account. Sign in free to rewrite it and download the video.
+            Sign in free for your first bit. Rewrites, swaps and your own mix come with Basic and Pro.
           </p>
         </section>
 

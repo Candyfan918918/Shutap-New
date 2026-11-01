@@ -8,7 +8,7 @@ export const Route = createFileRoute('/welcome')({
     meta: [
       ...pageMeta(
         'Sign in — Shutap',
-        'Sign in to Shutap to keep your bits, download the video, the caption and hashtags, and rewrite as much as you like.',
+        'Sign in to Shutap to write your bit: a free account gets one a day with its 5-second video, caption and hashtags, kept in your set list.',
         '/welcome',
       ),
       { name: 'robots', content: 'noindex' },

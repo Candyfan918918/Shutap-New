@@ -44,7 +44,7 @@ const guide: Guide = {
     },
     {
       heading: "Which one to open, and when",
-      body: "Open ChatGPT when you don't have a story yet and want to wander a topic, when you need forty alternate wordings for one line, or when you want someone to play a heckler. Open Shutap when something happened this week, you can describe it in a few sentences, and you want a shaped draft at a set length for a set room. Lots of comics will use both: Shutap for the first pass on a story, a chatbot for one stubborn tag. Your first Shutap bit each day needs no account, and signing in is free for more. After either tool, the real test is the same: say it to strangers and listen.",
+      body: "Open ChatGPT when you don't have a story yet and want to wander a topic, when you need forty alternate wordings for one line, or when you want someone to play a heckler. Open Shutap when something happened this week, you can describe it in a few sentences, and you want a shaped draft at a set length for a set room. Lots of comics will use both: Shutap for the first pass on a story, a chatbot for one stubborn tag. A free Shutap account gets one bit a day; paid plans add more and rewrites. After either tool, the real test is the same: say it to strangers and listen.",
     },
   ],
   faq: [
@@ -66,7 +66,7 @@ const guide: Guide = {
     },
     {
       q: "Is Shutap free to try?",
-      a: "Yes. Your first bit each day needs no account, and you see the whole bit. Signing in is free and gives you two new bits a day. Paid plans add more bits and remove the watermark from downloads.",
+      a: "Yes. A free account (one tap with Google or Apple) gets one bit a day. Paid plans add more bits, rewrites, and downloads with no watermark.",
     },
   ],
   sources: [

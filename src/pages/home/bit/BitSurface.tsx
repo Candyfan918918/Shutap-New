@@ -6,7 +6,7 @@
  *            action row. Everyone sees the whole bit, guests included;
  *            a guest signs in (free) to rewrite or save it.
  *
- * New bits a day: guest 1 · free 2 (counting the guest bit) · basic 5 · pro.
+ * New bits a day: guest 0 (sign in first) · free 1 · basic 3 · pro.
  * At the limit, "write" opens the next step instead: a guest gets the
  * sign-in sheet (the story is kept and written right after sign-in), a
  * free account the plans, Pro the fair-use note.
@@ -483,7 +483,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         // the sign-in sheet has done its job, so it goes, and the bit they
         // asked for is written underneath it.
         setSheet((s) => (s === 'signin' || s === 'signin_write' ? null : s))
-        void restore()
+        // restore() re-reads the tier when a return note exists; One Tap on the
+        // write box leaves none, so read it here too.
+        void restore().finally(() => void refresh())
       }
     })
     return () => sub.subscription.unsubscribe()
@@ -497,24 +499,20 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [story, phase, opening])
 
-  /* Google One Tap: about 2 seconds after a guest's bit lands, Google offers
-     "Continue as <name>" to anyone already signed in to Google in this
-     browser. One tap signs in on the page; the SIGNED_IN listener above
-     claims the bit and reopens it. Never over a sign-in sheet, the paywall
-     or any other sheet; a sheet opening takes the card away. */
-  const bitIdForOneTap = bit?.id ?? null
+  /* Google One Tap. Since Nov 1 2026 signing in comes before the first bit,
+     so the card is offered while a guest writes their story: about 1.5s
+     after they've typed a line, to anyone already signed in to Google in
+     this browser. One tap signs in on the page; the story stays in the box.
+     Never over a sign-in sheet or any other sheet (a sheet opening takes the
+     card away). */
+  const typedALine = story.trim().length >= 12
   useEffect(() => {
-    if (embed || phase !== 'bit' || tier !== 'guest' || !bitIdForOneTap || sheet || !oneTapAvailable()) return
-    const id = bitIdForOneTap
+    if (phase !== 'write' || tier !== 'guest' || !typedALine || sheet || !oneTapAvailable()) return
     const t = window.setTimeout(() => {
-      void promptOneTap({
-        where: 'result',
-        onCredential: () => writePending(id, anonSessionId(), 'one_tap'),
-        onError: (m) => say(m),
-      })
-    }, 2000)
+      void promptOneTap({ where: embed ? 'write_box_page' : 'write_box', onCredential: () => {}, onError: (m) => say(m) })
+    }, 1500)
     return () => { window.clearTimeout(t); cancelOneTap() }
-  }, [embed, phase, tier, bitIdForOneTap, sheet, say])
+  }, [embed, phase, tier, typedALine, sheet, say])
 
   /* A guest's sign-in page is fetched ahead, so the email button opens it
      instantly when the sheet asks for it. */
@@ -879,7 +877,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               </p>
             )}
             <p className="bt-note" style={{ textAlign: 'center' }}>
-              {tier === 'guest' ? (left === 0 ? 'sign in free for your next bit · ' : 'first bit free, no account needed · ') : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
+              {tier === 'guest' ? 'free with one tap: sign in with Google or Apple · ' : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
               names removed before anything is saved · ⌘↵ to write it
             </p>
           </>
@@ -1018,12 +1016,14 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 onSelect={(id) => setCurrentId(id)}
                 onAdd={addVersion}
                 onMix={() => {
+                  if (tier === 'free') return openPaywall('rewrite')
                   setMixFromId(version.id)
                   setPhase('mix')
                   toTop()
                 }}
                 say={say}
                 onSignIn={tier === 'guest' ? (from) => openSignin(from) : undefined}
+                onPaywall={tier === 'free' ? () => openPaywall('rewrite') : undefined}
                 onLimit={showLimit}
                 left={left}
                 onCharged={() => setUsage((u) => (u && u.cap !== null ? { ...u, used: Math.min(u.cap, u.used + 1) } : u))}
@@ -1151,9 +1151,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
           <div className={`bt-sheet${sheet === 'paywall' ? ' wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="bit-sheet-title">
             {(sheet === 'signin' || sheet === 'signin_write') && (
               <>
-                <h3 id="bit-sheet-title">{sheet === 'signin_write' ? 'Sign in to write this one.' : SIGNIN_COPY[signinFrom].title}</h3>
+                <h3 id="bit-sheet-title">{sheet === 'signin_write' ? 'Sign in to get your bit.' : SIGNIN_COPY[signinFrom].title}</h3>
                 <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  {sheet === 'signin_write' ? 'Free. Your story stays in the box.' : SIGNIN_COPY[signinFrom].sub}
+                  {sheet === 'signin_write' ? 'Free. Your story stays in the box, and the bit is written the moment you’re in.' : SIGNIN_COPY[signinFrom].sub}
                 </p>
                 <GoogleButton onClick={() => void signInForBit('google', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />
                 <AppleButton onClick={() => void signInForBit('apple', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />
