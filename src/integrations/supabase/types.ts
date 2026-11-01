@@ -89,6 +89,208 @@ export type Database = {
         }
         Relationships: []
       }
+      battle_players: {
+        Row: {
+          created_at: string
+          humor: Json
+          internal: boolean
+          last_day: string | null
+          last_seen_at: string | null
+          linked_at: string | null
+          picks: number
+          player_id: string
+          rounds_served: number
+          served_day: string | null
+          served_today: number
+          streak_days: number
+          test_failed: number
+          test_passed: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          humor?: Json
+          internal?: boolean
+          last_day?: string | null
+          last_seen_at?: string | null
+          linked_at?: string | null
+          picks?: number
+          player_id: string
+          rounds_served?: number
+          served_day?: string | null
+          served_today?: number
+          streak_days?: number
+          test_failed?: number
+          test_passed?: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          humor?: Json
+          internal?: boolean
+          last_day?: string | null
+          last_seen_at?: string | null
+          linked_at?: string | null
+          picks?: number
+          player_id?: string
+          rounds_served?: number
+          served_day?: string | null
+          served_today?: number
+          streak_days?: number
+          test_failed?: number
+          test_passed?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      battle_rounds: {
+        Row: {
+          control_text: string | null
+          flag: string | null
+          id: string
+          is_test: boolean
+          ms: number | null
+          options: string[]
+          pick: string | null
+          picked_at: string | null
+          player_id: string
+          served_at: string
+          setup_id: string
+          shown: string[]
+          user_id: string | null
+        }
+        Insert: {
+          control_text?: string | null
+          flag?: string | null
+          id?: string
+          is_test?: boolean
+          ms?: number | null
+          options: string[]
+          pick?: string | null
+          picked_at?: string | null
+          player_id: string
+          served_at?: string
+          setup_id: string
+          shown: string[]
+          user_id?: string | null
+        }
+        Update: {
+          control_text?: string | null
+          flag?: string | null
+          id?: string
+          is_test?: boolean
+          ms?: number | null
+          options?: string[]
+          pick?: string | null
+          picked_at?: string | null
+          player_id?: string
+          served_at?: string
+          setup_id?: string
+          shown?: string[]
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "battle_rounds_setup_id_fkey"
+            columns: ["setup_id"]
+            isOneToOne: false
+            referencedRelation: "battle_setups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      battle_setups: {
+        Row: {
+          active: boolean
+          archived: boolean
+          created_at: string
+          id: string
+          live: boolean
+          n: number
+          nones: number
+          picks: number
+          setup: string
+          topic: string
+          topups: number
+        }
+        Insert: {
+          active?: boolean
+          archived?: boolean
+          created_at?: string
+          id?: string
+          live?: boolean
+          n: number
+          nones?: number
+          picks?: number
+          setup: string
+          topic?: string
+          topups?: number
+        }
+        Update: {
+          active?: boolean
+          archived?: boolean
+          created_at?: string
+          id?: string
+          live?: boolean
+          n?: number
+          nones?: number
+          picks?: number
+          setup?: string
+          topic?: string
+          topups?: number
+        }
+        Relationships: []
+      }
+      battle_versions: {
+        Row: {
+          active: boolean
+          created_at: string
+          guide_slug: string | null
+          guide_title: string | null
+          id: string
+          picked: number
+          setup_id: string
+          shown: number
+          technique_id: string
+          technique_name: string
+          text: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          guide_slug?: string | null
+          guide_title?: string | null
+          id?: string
+          picked?: number
+          setup_id: string
+          shown?: number
+          technique_id: string
+          technique_name: string
+          text: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          guide_slug?: string | null
+          guide_title?: string | null
+          id?: string
+          picked?: number
+          setup_id?: string
+          shown?: number
+          technique_id?: string
+          technique_name?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "battle_versions_setup_id_fkey"
+            columns: ["setup_id"]
+            isOneToOne: false
+            referencedRelation: "battle_setups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       behavioral_events: {
         Row: {
           created_at: string
@@ -155,6 +357,132 @@ export type Database = {
           detail?: string | null
           id?: number
           kind?: string
+        }
+        Relationships: []
+      }
+      bit_daily: {
+        Row: {
+          best_line: string | null
+          bit: Json | null
+          created_at: string
+          day: string
+          id: string
+          meta: Json | null
+          note: string | null
+          page_slug: string | null
+          rated_at: string | null
+          rewrite: string | null
+          story: string
+          story_id: string
+          technique_id: string
+          technique_name: string
+          verdict: string | null
+        }
+        Insert: {
+          best_line?: string | null
+          bit?: Json | null
+          created_at?: string
+          day: string
+          id?: string
+          meta?: Json | null
+          note?: string | null
+          page_slug?: string | null
+          rated_at?: string | null
+          rewrite?: string | null
+          story: string
+          story_id: string
+          technique_id: string
+          technique_name: string
+          verdict?: string | null
+        }
+        Update: {
+          best_line?: string | null
+          bit?: Json | null
+          created_at?: string
+          day?: string
+          id?: string
+          meta?: Json | null
+          note?: string | null
+          page_slug?: string | null
+          rated_at?: string | null
+          rewrite?: string | null
+          story?: string
+          story_id?: string
+          technique_id?: string
+          technique_name?: string
+          verdict?: string | null
+        }
+        Relationships: []
+      }
+      bit_daily_days: {
+        Row: {
+          created_at: string
+          day: string
+          page_slug: string | null
+          stories: Json
+        }
+        Insert: {
+          created_at?: string
+          day: string
+          page_slug?: string | null
+          stories: Json
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          page_slug?: string | null
+          stories?: Json
+        }
+        Relationships: []
+      }
+      bit_eval_pairs: {
+        Row: {
+          controls: Json
+          created_at: string
+          id: string
+          left_bit: Json | null
+          left_meta: Json | null
+          left_variant: string
+          note: string | null
+          rated_at: string | null
+          right_bit: Json | null
+          right_meta: Json | null
+          round: string
+          story: string
+          story_id: string
+          verdict: string | null
+        }
+        Insert: {
+          controls: Json
+          created_at?: string
+          id?: string
+          left_bit?: Json | null
+          left_meta?: Json | null
+          left_variant: string
+          note?: string | null
+          rated_at?: string | null
+          right_bit?: Json | null
+          right_meta?: Json | null
+          round: string
+          story: string
+          story_id: string
+          verdict?: string | null
+        }
+        Update: {
+          controls?: Json
+          created_at?: string
+          id?: string
+          left_bit?: Json | null
+          left_meta?: Json | null
+          left_variant?: string
+          note?: string | null
+          rated_at?: string | null
+          right_bit?: Json | null
+          right_meta?: Json | null
+          round?: string
+          story?: string
+          story_id?: string
+          verdict?: string | null
         }
         Relationships: []
       }
@@ -256,8 +584,8 @@ export type Database = {
           hook: string
           id: string
           kind: string
-          skit: Json | null
-          sketch: Json | null
+          scene: Json | null
+          screenplay: Json | null
           setup: string
           tags: string[]
           why: string | null
@@ -272,8 +600,8 @@ export type Database = {
           hook: string
           id?: string
           kind: string
-          skit?: Json | null
-          sketch?: Json | null
+          scene?: Json | null
+          screenplay?: Json | null
           setup: string
           tags?: string[]
           why?: string | null
@@ -288,8 +616,8 @@ export type Database = {
           hook?: string
           id?: string
           kind?: string
-          skit?: Json | null
-          sketch?: Json | null
+          scene?: Json | null
+          screenplay?: Json | null
           setup?: string
           tags?: string[]
           why?: string | null
@@ -306,7 +634,7 @@ export type Database = {
       }
       bits: {
         Row: {
-          crowd_work: string[]
+          alt_tags: string[]
           anon_key: string | null
           candidates: Json
           controls: Json
@@ -323,7 +651,7 @@ export type Database = {
           writer_model: string | null
         }
         Insert: {
-          crowd_work?: string[]
+          alt_tags?: string[]
           anon_key?: string | null
           candidates?: Json
           controls?: Json
@@ -340,7 +668,7 @@ export type Database = {
           writer_model?: string | null
         }
         Update: {
-          crowd_work?: string[]
+          alt_tags?: string[]
           anon_key?: string | null
           candidates?: Json
           controls?: Json

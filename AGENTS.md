@@ -24,3 +24,4 @@
 - The root layout's GlobalHeader is the only site header; page shells (SeoPage, DocLayout) must not render their own top bar, and the header holds a neutral placeholder until sign-in status is known so the sign-in pill never flashes.
 - Links preload on intent (router defaultPreload) and the homepage loader has a staleTime, so Write opens without waiting on fresh server reads each click.
 - Guide routes split only their page component; boundary options stay eager and missing-resource errors target the matching guide route so 404 handling does not depend on a separate boundary chunk.
+- Email actions and footer lines have independent innermost table rows so the renderer's missing-variable pruning cannot hide neighboring prose or the company address; auth JSX ports retain the scaffold's prop contracts and secure callback wiring.

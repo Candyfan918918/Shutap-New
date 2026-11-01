@@ -6,6 +6,7 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/tanstack/vite";
+import { fileURLToPath } from "node:url";
 
 export default defineConfig({
   tanstackStart: {
@@ -15,6 +16,13 @@ export default defineConfig({
   },
   vite: {
     plugins: [mcpPlugin()],
+    resolve: {
+      alias: {
+        "entities/lib/decode.js": fileURLToPath(new URL("./node_modules/entities/lib/decode.js", import.meta.url)),
+        "entities/lib/encode.js": fileURLToPath(new URL("./node_modules/entities/lib/encode.js", import.meta.url)),
+        entities: fileURLToPath(new URL("./node_modules/entities", import.meta.url)),
+      },
+    },
     // Keep every client chunk well under ~750KB: Vite's bundled import scanner
     // crashes ("Parse error @:1:1") on larger chunks in fresh installs.
     environments: {
