@@ -11,6 +11,8 @@
 // Test mode: POST {"only": "<email>"} sends today's email to that one account
 // (same rules, same once-a-day claim), ignoring the hour window and FIRST_DAY,
 // and returns Resend's id and delivery status for it.
+// Delivery check: POST {"internal_to": "<name>@shutap.com"} sends today's email to
+// that shutap.com mailbox (no account needed, no claim), to prove Resend delivers.
 // Status check: POST {"status_of": "<resend email id>"} returns Resend's record
 // for that email (last_event: delivered / bounced / suppressed / complained ...).
 import { createFileRoute } from '@tanstack/react-router'
@@ -73,6 +75,23 @@ function firstNameFor(metaName: string | null | undefined, alias: any): string |
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
+type IdeaRow = { topic: string | null; hook: string; bit: string; tag: string | null; why_now: string | null }
+function ideaVars(idea: IdeaRow, day: string) {
+  return {
+    day_label: dayLabel(day),
+    topic: esc(idea.topic ?? ''),
+    hook: esc(idea.hook),
+    hook_plain: idea.hook,
+    bit_html: esc(idea.bit).replace(/\r?\n/g, '<br>'),
+    bit_plain: idea.bit,
+    tag: esc(idea.tag ?? ''),
+    tag_plain: idea.tag ?? '',
+    why_now: esc(shortWhy(idea.why_now ?? '')),
+    cta_url: CTA,
+    deep_link: CTA,
+  }
+}
+
 // Resend's own record for one email: who it went to, from, subject, last_event.
 async function resendStatus(id: string): Promise<unknown> {
   const key = process.env.RESEND_API_KEY
@@ -100,7 +119,7 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
           return new Response('Unauthorized', { status: 401 })
         }
 
-        const body = (await request.json().catch(() => ({}))) as { only?: unknown; status_of?: unknown }
+        const body = (await request.json().catch(() => ({}))) as { only?: unknown; status_of?: unknown; internal_to?: unknown }
         const only = typeof body.only === 'string' ? body.only.trim().toLowerCase() : ''
 
         if (typeof body.status_of === 'string' && /^[\w-]{8,80}$/.test(body.status_of)) {
@@ -129,6 +148,15 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
         if (ideaErr) return Response.json({ error: ideaErr.message }, { status: 500 })
         if (!idea?.bit || !idea?.hook) return Response.json({ ok: true, skipped: 'no idea for today yet', day })
 
+        const internalTo = typeof body.internal_to === 'string' ? body.internal_to.trim().toLowerCase() : ''
+        if (internalTo) {
+          if (!/^[a-z0-9._+-]+@shutap\.com$/.test(internalTo)) {
+            return Response.json({ error: 'internal_to must be a @shutap.com address' }, { status: 400 })
+          }
+          const res = await sendEmail('hello', 'daily_idea', { ...ideaVars(idea, day), first_name: 'Candy', first_name_plain: 'Candy' }, internalTo)
+          return Response.json({ ok: true, day, internal_test: { to: internalTo, ...res } })
+        }
+
         // Everyone already emailed today.
         const { data: done } = await db.from('daily_idea_emails').select('user_id').eq('day', day)
         const already = new Set((done ?? []).map((r: { user_id: string }) => r.user_id))
@@ -154,19 +182,7 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
           .in('user_id', batch.map((u) => u.id))
         const aliasOf = new Map((aliases ?? []).map((a: any) => [a.user_id, a]))
 
-        const vars = {
-          day_label: dayLabel(day),
-          topic: esc(idea.topic ?? ''),
-          hook: esc(idea.hook),
-          hook_plain: idea.hook,
-          bit_html: esc(idea.bit).replace(/\r?\n/g, '<br>'),
-          bit_plain: idea.bit,
-          tag: esc(idea.tag ?? ''),
-          tag_plain: idea.tag ?? '',
-          why_now: esc(shortWhy(idea.why_now ?? '')),
-          cta_url: CTA,
-          deep_link: CTA,
-        }
+        const vars = ideaVars(idea, day)
 
         let sent = 0, suppressed = 0, failed = 0, noName = 0, noUnsubscribe = 0
         const tests: { to: string; id: string | null; ok: boolean; suppressed: boolean; reason: string | null; resend?: unknown }[] = []
