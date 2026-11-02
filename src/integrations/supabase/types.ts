@@ -435,6 +435,42 @@ export type Database = {
         }
         Relationships: []
       }
+      bit_downloads: {
+        Row: {
+          bit_id: string
+          created_at: string
+          day: string
+          id: string
+          kind: string
+          tier: string
+          user_id: string
+          version_id: string
+          watermarked: boolean
+        }
+        Insert: {
+          bit_id: string
+          created_at?: string
+          day: string
+          id?: string
+          kind: string
+          tier: string
+          user_id: string
+          version_id: string
+          watermarked?: boolean
+        }
+        Update: {
+          bit_id?: string
+          created_at?: string
+          day?: string
+          id?: string
+          kind?: string
+          tier?: string
+          user_id?: string
+          version_id?: string
+          watermarked?: boolean
+        }
+        Relationships: []
+      }
       bit_eval_pairs: {
         Row: {
           controls: Json
@@ -924,6 +960,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      daily_idea_emails: {
+        Row: {
+          day: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          day: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          day?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       daily_ideas: {
         Row: {
