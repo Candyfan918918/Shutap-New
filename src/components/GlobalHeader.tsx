@@ -222,6 +222,7 @@ export function GlobalHeader() {
           <img
             src={dark ? '/shutap-logo-dark.png' : '/shutap-logo.png'}
             alt="Shutap"
+            data-gh-logo=""
             width={92}
             height={25}
             style={{ display: 'block', height: 25, width: 'auto' }}
@@ -229,11 +230,12 @@ export function GlobalHeader() {
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}@media (max-width: 420px){[data-gh-pill]{padding:7px 12px !important}}@media (max-width: 480px){[data-gh-wide]{display:none !important}}`}</style>
+          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}@media (max-width: 420px){[data-gh-pill]{padding:7px 12px !important}}@media (max-width: 520px){[data-gh-wide]{display:none !important}}@media (max-width: 340px){[data-gh-nav] a{padding:6px 2px !important;font-size:12px !important}[data-gh-pill]{padding:6px 10px !important}[data-gh-logo]{height:20px !important}}`}</style>
           <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {navLink('/', 'write')}
             {navLink('/guides', 'guides')}
-            {navLink('/funniest', 'funniest')}
+            {/* Phones: funniest and enterprise live in the footer so the header fits (Nov 2 2026). */}
+            <span data-gh-wide="" style={{ display: 'contents' }}>{navLink('/funniest', 'funniest')}</span>
             {navLink('/pricing', 'pricing')}
             {/* Hidden on phones so the nav fits; enterprise is still in the footer. */}
             <span data-gh-wide="" style={{ display: 'contents' }}>{navLink('/business', 'enterprise')}</span>
