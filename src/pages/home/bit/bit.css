@@ -164,7 +164,7 @@
 .bt-why { font-family: var(--news); font-style: italic; color: var(--muted); background: var(--tint); border-radius: 12px; padding: 10px 12px; font-size:var(--fs-body); margin: 8px 0 0; }
 .bt-acts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
 .bt-act { display: flex; flex-direction: column; align-items: center; gap: 4px; border: 1px solid var(--line); background: var(--card); border-radius: 14px; padding: 10px 2px; font: 500 var(--fs-label) var(--sora); letter-spacing:0; color: var(--ink-2); cursor: pointer; min-height: 60px; overflow: hidden; }
-.bt-act svg { width: 20px; height: 20px; color: var(--rose); }
+.bt-act svg { width: 24px; height: 24px; }
 .bt-act:disabled { opacity: 0.45; cursor: default; }
 .bt-notice { background: var(--card); border: 1.5px solid rgba(184, 69, 107, 0.35); border-radius: 18px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
 .bt-swaps { display: flex; gap: 6px; flex-wrap: wrap; }
