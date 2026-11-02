@@ -1,3 +1,4 @@
+import { AiDirectoryBadge } from './AiDirectoryBadge'
 import { FazierBadge } from './FazierBadge'
 import { LaunchNestBadge } from './LaunchNestBadge'
 import { MegaLaunchBadge } from './MegaLaunchBadge'
