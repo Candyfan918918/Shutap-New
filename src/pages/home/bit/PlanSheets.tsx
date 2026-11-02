@@ -11,6 +11,7 @@
  *
  * Prices and plan lines come from @/lib/pricing, the same numbers checkout
  * charges. The story in the box is kept (sessionStorage) while they pay. */
+import { ActionIcon } from './icons'
 import { useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { changePlanToPro } from '@/lib/payments.functions'
@@ -76,9 +77,9 @@ function Icon({ name }: { name: FeatureIcon }) {
     case 'bit':
       return (<svg {...c}><rect x="4" y="3" width="16" height="18" rx="2.5" /><path d="M8 8h8M8 12h8M8 16h5" /></svg>)
     case 'standup':
-      return (<svg {...c}><rect x="3" y="4" width="18" height="13" rx="2" /><path d="M7 9h10M7 12.5h6M9 21h6M12 17v4" /></svg>)
+      return <ActionIcon name="standup" />
     case 'sketch':
-      return (<svg {...c}><path d="M6 3h9l4 4v14H6z" /><path d="M14 3v5h5M9 12h7M9 15.5h5" /></svg>)
+      return <ActionIcon name="sketch" />
     case 'rewrite':
       return (<svg {...c}><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.7" /><path d="M20 4v4.7h-4.7M20 12a8 8 0 0 1-13.7 5.6L4 15.3" /><path d="M4 20v-4.7h4.7" /></svg>)
     case 'list':
