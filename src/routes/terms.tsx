@@ -31,7 +31,7 @@ function TermsPage() {
     <DocLayout
       active="/terms"
       title="Terms of Service"
-      subline="Last updated: November 1, 2026 · Operator: Shutap"
+      subline="Last updated: November 2, 2026 · Operator: Shutap"
     >
       <p>
         These terms are an agreement between you and Shutap. By using Shutap, you agree to them.
@@ -96,6 +96,14 @@ function TermsPage() {
         AI models, and we never add it to the Shutap joke dataset, which the Shutap team writes,
         selects and rates in-house. The license for a post ends when you delete it, except for copies we
         must keep by law and copies others already downloaded or shared.
+      </p>
+      <p>
+        <b>This promise does not expire and cannot be changed by a later version of these terms.</b>{' '}
+        Nothing you typed or made on Shutap before any change to these terms can ever be used to
+        train or tune an AI model, added to the Shutap dataset, or used in our own content, and no
+        future version of these terms can grant that use retroactively. If we ever wanted to ask
+        for more, we would have to ask you, in plain words, for new content only, and you could say
+        no and keep using Shutap.
       </p>
       <p>
         The jokes Shutap writes for you are yours to save, share and post, including in your
@@ -244,7 +252,9 @@ function TermsPage() {
       <h3>20. Changes</h3>
       <p>
         We may update these terms. We&rsquo;ll post the new version with a new date and ask you to
-        accept material changes.
+        accept material changes. Section 6&rsquo;s promise about your content is the exception: no
+        update can reach back to what you already wrote, and no update can turn your content into
+        training or dataset material without a separate, explicit yes from you.
       </p>
 
       <h3>21. Contact</h3>
