@@ -29,6 +29,7 @@ export function LaunchBadges({
       <LaunchNestBadge align="center" />
       <MegaLaunchBadge align="center" />
       <PostYourStartupBadge align="center" />
+      <AiDirectoryBadge align="center" />
     </div>
   )
 }
