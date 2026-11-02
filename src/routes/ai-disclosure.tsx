@@ -119,8 +119,10 @@ function AiDisclosurePage() {
         Every bit starts from the story you type. Writing a bit doesn&rsquo;t search the internet
         or pull from a library of other people&rsquo;s jokes, and no comedian&rsquo;s lines are in
         Shutap&rsquo;s instructions. The AI models were trained by Google and OpenAI, not by
-        Shutap, and AI can produce a line close to an existing joke by accident, so check anything
-        you rely on commercially.
+        Shutap, on data those companies chose; we can&rsquo;t change what they trained on, and we
+        don&rsquo;t pretend otherwise. What we control is what goes in from here: our own in-house
+        dataset, written by people we pay, and never a word of yours. AI can produce a line close
+        to an existing joke by accident, so check anything you rely on commercially.
       </p>
       <h3>Your content stays yours</h3>
       <p>
