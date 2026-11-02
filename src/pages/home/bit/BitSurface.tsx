@@ -891,7 +891,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             )}
             <p className="bt-note" style={{ textAlign: 'center' }}>
               {tier === 'guest' ? 'free with one tap: sign in with Google or Apple · ' : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
-              names removed before anything is saved · ⌘↵ to write it
+              names removed before anything is saved · nobody at shutap reads it · ⌘↵ to write it
             </p>
           </>
         )}
