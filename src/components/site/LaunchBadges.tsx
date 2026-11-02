@@ -1,4 +1,5 @@
 import { AiDirectoryBadge } from './AiDirectoryBadge'
+import { DangBadge } from './DangBadge'
 import { FazierBadge } from './FazierBadge'
 import { LaunchNestBadge } from './LaunchNestBadge'
 import { MegaLaunchBadge } from './MegaLaunchBadge'
@@ -30,6 +31,7 @@ export function LaunchBadges({
       <MegaLaunchBadge align="center" />
       <PostYourStartupBadge align="center" />
       <AiDirectoryBadge align="center" />
+      <DangBadge align="center" />
     </div>
   )
 }
