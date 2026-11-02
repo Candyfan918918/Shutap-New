@@ -20,8 +20,8 @@ export function AiDirectoryBadge({
         flexDirection: 'column',
         alignItems: 'flex-start',
         background: '#0a0a0a',
-        borderRadius: 10,
-        padding: '8px 16px 10px',
+        borderRadius: 6,
+        padding: '4px 8px 5px',
         textDecoration: 'none',
         border: '1px solid #2a2a2a',
         alignSelf: align,
@@ -34,12 +34,12 @@ export function AiDirectoryBadge({
       <span
         style={{
           fontFamily: 'Arial, sans-serif',
-          fontSize: 10,
+          fontSize: 6,
           color: '#888',
           letterSpacing: '0.09em',
           textTransform: 'uppercase',
           lineHeight: 1,
-          marginBottom: 7,
+          marginBottom: 3,
           display: 'block',
         }}
       >
@@ -48,10 +48,10 @@ export function AiDirectoryBadge({
       <img
         src="https://theaidirectory.ai/assets/boton.png"
         alt="The AI Directory"
-        height={28}
+        height={12}
         loading="lazy"
         decoding="async"
-        style={{ display: 'block' }}
+        style={{ display: 'block', height: 12, width: 'auto' }}
       />
     </a>
   )
