@@ -2,6 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { setRouterRef } from "./lib/router-ref";
+import { isStaleRouteError, reloadOntoNewBuild } from "./lib/stale-build";
 
 
 export const getRouter = () => {
@@ -43,28 +44,14 @@ let staleReloadInstalled = false
 function installStaleBuildReload() {
   if (staleReloadInstalled) return
   staleReloadInstalled = true
-  const KEY = "shutap_stale_reload_at"
-  /** Reloads onto the new build, at most once a minute. Returns false when
-   *  it won't (too soon, or storage blocked so it can't remember). */
-  const reload = (): boolean => {
-    try {
-      const last = Number(sessionStorage.getItem(KEY) || 0)
-      if (Date.now() - last < 60_000) return false
-      sessionStorage.setItem(KEY, String(Date.now()))
-    } catch {
-      return false // storage blocked: no way to remember the reload, so don't risk a loop
-    }
-    window.location.reload()
-    return true
-  }
+  const reload = reloadOntoNewBuild
   window.addEventListener("vite:preloadError", (e) => {
     // Only swallow the error when the page is actually reloading. Swallowing
     // it otherwise makes the import resolve to nothing, and the caller breaks
     // on an empty module (Oct 22: "Cannot destructure 'recordVisitOnce'").
     if (reload()) e.preventDefault()
   })
-  const stale = (msg: string) =>
-    /Importing a module script failed|Failed to fetch dynamically imported module|error loading dynamically imported module/i.test(msg)
+  const stale = isStaleRouteError
   window.addEventListener("unhandledrejection", (e) => {
     const r = (e as PromiseRejectionEvent).reason
     if (stale(r instanceof Error ? r.message : String(r ?? ""))) reload()

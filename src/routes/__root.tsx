@@ -26,6 +26,7 @@ import * as posthogLib from "@/lib/posthog";
 import * as tracking from "@/lib/tracking";
 
 import { useNavigate } from "@/compat/router";
+import { isStaleRouteError, reloadOntoNewBuild } from "@/lib/stale-build";
 
 function NotFoundComponent() {
   return (
@@ -53,6 +54,10 @@ function ErrorComponent({ error, reset }: { error: unknown; reset: () => void })
   console.error(error);
   const router = useRouter();
   useEffect(() => {
+    // An old copy of the site asking for a page file a deploy removed:
+    // reload onto the current build instead of showing "didn't load".
+    const msg = error instanceof Error ? error.message : String(error ?? "");
+    if (isStaleRouteError(msg) && reloadOntoNewBuild()) return;
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
     void posthogLib.phCaptureException(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
