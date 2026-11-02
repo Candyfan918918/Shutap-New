@@ -4,14 +4,14 @@ const guide: Guide = {
   slug: "funny-trivia-host-banter",
   kind: "guide",
   topic: "how-to-be-funny",
-  keyword: "funny trivia host banter",
+  keyword: "trivia host jokes between rounds",
   preset: { audience: "live", voice: "dry", length: "15s", heat: 3 },
-  title: "Funny Trivia Host Banter: Lines for Every Round | Shutap",
-  h1: "Funny trivia host banter: lines for every moment of the night",
+  title: "Trivia Host Jokes Between Rounds, and Banter | Shutap",
+  h1: "Trivia host jokes between rounds: lines for every moment of the night",
   description:
-    "Funny trivia host banter you can use tonight: openers, rule lines, answer reveals, team-name riffs, standings and dead-air saves, each with a fill-in template.",
+    "Trivia host jokes for between rounds, plus openers, rule lines, answer reveals, team-name riffs and dead-air saves, each with a fill-in template.",
   capsule:
-    "Funny trivia host banter is a set of short lines, ten seconds or less, said in the gaps the game already has: the opener, the rules, the answer reveal, the standings and the dead air when the mic dies. The best lines aim at the questions, the wrong answers, the scoring and the host, never at a player, because the laugh should speed the game up instead of stopping it.",
+    "The best trivia host jokes between rounds are short lines, ten seconds or less, said in the gaps the game already has: the opener, the rules, the answer reveal, the standings and the dead air when the mic dies. The best lines aim at the questions, the wrong answers, the scoring and the host, never at a player, because the laugh should speed the game up instead of stopping it.",
   blurb: "Openers, rule lines, answer reveals, team-name riffs and dead-air saves, each with a template you can fill in tonight.",
   sections: [
     {
