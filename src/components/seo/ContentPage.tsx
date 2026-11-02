@@ -9,6 +9,7 @@ import type { BitControls } from '@/lib/bits/shared'
 import type { GuideSample } from '@/lib/seo/guides'
 import { BitSurface } from '@/pages/home/bit/BitSurface'
 import { WriterBar } from '@/components/seo/WriterBar'
+import { WhoDoesWhat } from '@/components/site/WhoDoesWhat'
 import type { WriterCopy } from '@/lib/seo/writer-copy'
 
 type Section = { heading: string; body: string };
@@ -29,6 +30,7 @@ export function ContentPage({
   preset,
   sample,
   writer,
+  whoDoesWhat,
 }: {
   breadcrumbs?: Crumb[];
   h1: string;
@@ -48,6 +50,8 @@ export function ContentPage({
   sample?: GuideSample;
   /** what the inline writer says on this page (heading, sub, placeholder) */
   writer?: WriterCopy;
+  /** the "you type · Shutap does · Shutap never" block, above the sections */
+  whoDoesWhat?: boolean;
 }) {
   return (
     <main
@@ -105,6 +109,8 @@ export function ContentPage({
         )}
 
         {sample && <SampleBit sample={sample} />}
+
+        {whoDoesWhat && <WhoDoesWhat />}
 
         {sections.map((s) => (
           <section key={s.heading} style={{ marginBottom: 36 }}>

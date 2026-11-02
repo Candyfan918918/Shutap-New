@@ -117,6 +117,7 @@ export const Route = createFileRoute("/about")({
       h1="About Shutap, the humor amplifier"
       capsule={CAPSULE}
       sections={SECTIONS}
+      whoDoesWhat
       others={OTHERS}
     />
   ),

@@ -11,6 +11,7 @@ const DESCRIPTION =
 const CAPSULE =
   "Type what happened. Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, a caption and hashtags. Post it, read it off the teleprompter, shoot it as a scene, or take the screenplay page.";
 const STEPS = [
+  { heading: "What you type, and what Shutap does", body: "You type the situation: the meeting, the text, the thing your kid said. Not your jokes; you don't need any. Shutap drafts the bit from its own in-house jokes and techniques, written and rated by people at the Lab, and lays it out as a video, a caption, stand-up, a sketch or a skit. Nobody at Shutap reads your story or your bit, and neither is ever added to the dataset or used to train a model. Your material stays yours; the drafting is ours." },
   { heading: "1. Type what happened", body: "One box, any story: the meeting that should have been an email, the text from your mom, the roommate's girlfriend who never left. More detail means a better bit. What they actually said, word for word, is usually the funniest part." },
   { heading: "2. Shutap removes names and places", body: "Before anything is saved, names, addresses, places, phone numbers and emails are taken out. Only the cleaned text is kept, so the bit is about the situation, not a person someone could look up." },
   { heading: "3. Get the bit, the video, the caption", body: "Shutap writes your story as a bit: a hook for the first two seconds, a setup that tells it straight, tags that keep it going, and a button to end on. Each draft is built on one comedy technique from the Humor Amplifier Lab bank; several are written and a second model ranks them, so you see the strongest one. With it come a 5-second video in the Shutap style, a caption under 100 characters and five hashtags." },
@@ -78,6 +79,7 @@ export const Route = createFileRoute("/how-it-works")({
       capsule={CAPSULE}
       sections={SECTIONS}
       others={OTHERS}
+      whoDoesWhat
     />
   ),
 });

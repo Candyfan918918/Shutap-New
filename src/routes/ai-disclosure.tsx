@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { WhoDoesWhat } from '@/components/site/WhoDoesWhat'
 import { ogImageMeta } from "@/lib/seo/meta";
 import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
@@ -6,7 +7,7 @@ import { SITE_URL } from '@/lib/site'
 const URL = `${SITE_URL}/ai-disclosure`
 const TITLE = "AI Disclosure — How Shutap's Humor Amplifier Works"
 const DESCRIPTION =
-  "Every bit on Shutap is written and ranked by AI (Google Gemini and OpenAI models, via the Lovable AI Gateway), starting from your own story. Shutap never uses your content to train AI. AI can be wrong or offensive; you decide what to post."
+  "You type what happened; Shutap drafts the bit with AI (Google Gemini and OpenAI models, via the Lovable AI Gateway) from its own in-house jokes and techniques, never from your material. Nobody at Shutap reads your story or bit, and neither is used to train AI. AI can be wrong or offensive; you decide what to post."
 
 export const Route = createFileRoute('/ai-disclosure')({
   head: () => ({
@@ -31,7 +32,7 @@ function AiDisclosurePage() {
     <DocLayout
       active="/ai-disclosure"
       title="AI disclosure"
-      subline="what writes your jokes"
+      subline="what you type, what shutap does, what it never does"
     >
       <div
         style={{
@@ -88,11 +89,22 @@ function AiDisclosurePage() {
             color: '#e4dfe2',
           }}
         >
-          your jokes are written by ai, not a person. it can get things wrong, miss the joke, or
-          say something offensive. it&rsquo;s not therapy, and it can&rsquo;t give medical,
-          mental-health or legal advice. you decide what to post.
+          you type what happened. shutap drafts the bit with ai, from its own in-house jokes and
+          techniques, not from yours. nobody at shutap reads your story or your bit, and neither is
+          ever used to train anything. ai can get things wrong, miss the joke, or say something
+          offensive. it&rsquo;s not therapy or advice. you decide what to post.
         </div>
       </div>
+      <WhoDoesWhat />
+      <h3>What you type is not your material</h3>
+      <p>
+        You don&rsquo;t hand Shutap your jokes. You type the situation: what happened, who said
+        what, the thing you&rsquo;re still annoyed about. Shutap drafts the bit from that, using its
+        own in-house dataset of jokes written and rated by people at the Lab and the techniques on
+        its /funniest and /guides pages. Your comedic chops never go in, and nothing of yours ever
+        comes out to anyone else. If you do type your own lines, the same rules apply: they stay
+        yours, unread by staff, out of the dataset, out of training.
+      </p>
       <p>
         Shutap uses AI models from Google (Gemini) and OpenAI, through the Lovable AI Gateway, to
         remove identifying details, run the crisis check, write and rank your bits, write rewrites,
