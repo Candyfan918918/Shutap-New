@@ -71,6 +71,7 @@ export function AuthStep() {
   void tick
 
   const doEmail = async (resend = false) => {
+    if (busy) return // Enter pressed again while the code is sending
     const nameTrim = name.trim().replace(/\s+/g, ' ')
     const v = normEmail()
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { setMsg({ kind: 'err', text: 'enter a valid email' }); return }
@@ -136,6 +137,7 @@ export function AuthStep() {
 
 
   const verifyEmailCode = async () => {
+    if (busy) return // Enter pressed again while checking
     const token = code.trim()
     // The code's length is set in the auth settings (it is 8 today), so take
     // whatever length the email carries rather than assuming 6.
@@ -224,8 +226,9 @@ export function AuthStep() {
               <button
                 onClick={() => void doEmail()}
                 disabled={busy}
-                style={{ padding: '13px 18px', background: ACCENT, border: 'none', borderRadius: 12, color: '#fff', fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: 14, cursor: 'pointer', whiteSpace: 'nowrap' }}
-              >go →</button>
+                aria-busy={busy}
+                style={{ padding: '13px 18px', background: ACCENT, border: 'none', borderRadius: 12, color: '#fff', fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: 14, cursor: busy ? 'progress' : 'pointer', opacity: busy ? 0.75 : 1, whiteSpace: 'nowrap' }}
+              >{busy ? 'sending…' : 'go →'}</button>
             </div>
             {msg && msg.kind === 'err' && (
               <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 13, color: ACCENT }}>{msg.text}</div>
@@ -249,8 +252,9 @@ export function AuthStep() {
               <button
                 onClick={verifyEmailCode}
                 disabled={busy}
-                style={{ padding: '13px 18px', background: ACCENT, border: 'none', borderRadius: 12, color: '#fff', fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: 14, cursor: 'pointer', whiteSpace: 'nowrap' }}
-              >verify →</button>
+                aria-busy={busy}
+                style={{ padding: '13px 18px', background: ACCENT, border: 'none', borderRadius: 12, color: '#fff', fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: 14, cursor: busy ? 'progress' : 'pointer', opacity: busy ? 0.75 : 1, whiteSpace: 'nowrap' }}
+              >{busy ? 'checking…' : 'verify →'}</button>
             </div>
             <button
               type="button"

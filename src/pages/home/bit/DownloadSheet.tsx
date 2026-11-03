@@ -91,9 +91,19 @@ export function DownloadSheet({
   }, [bitId, version.id])
   const dlLeft = dl && dl.cap !== null ? Math.max(0, dl.cap - dl.used) : null
   const dlLabel = dl === null ? '' : dl.cap === null ? ' · unlimited' : dlLeft === 0 ? ' · none left today' : ` · ${dlLeft} of ${dl.cap} left today`
+  const [saving, setSaving] = useState(false)
   async function save() {
+    if (saving) return
     jokeTap('download_tapped', tier, { kind: format === 'pdf' ? 'pdf' : 'image', state: ready ? 'ok' : 'not_ready' })
     if (!ready) return
+    setSaving(true)
+    try {
+      await saveNow(ready)
+    } finally {
+      setSaving(false)
+    }
+  }
+  async function saveNow(ready: Ready) {
     // One download against today's cap (the picture and the PDF are each a
     // kind; the same kind of the same version again today is free).
     let r: Awaited<ReturnType<typeof chargeDownload>>
@@ -163,8 +173,8 @@ export function DownloadSheet({
             </button>
           ))}
         </div>
-        <button className="bt-btn block" disabled={!ready} onClick={() => void save()}>
-          {dlLeft === 0 ? `that's today's downloads · see plans` : `download${dlLabel}`}
+        <button className="bt-btn block" disabled={!ready || saving} aria-busy={busy || saving} onClick={() => void save()}>
+          {dlLeft === 0 ? `that's today's downloads · see plans` : saving ? 'saving…' : !ready && busy ? 'getting it ready…' : `download${dlLabel}`}
         </button>
         <p className="bt-note" style={{ textAlign: 'center', margin: 0 }}>
           each kind is one download: the picture, the PDF, the caption + hashtags, the video. The same one again today is free. A rewrite makes a new version, and its downloads count again.

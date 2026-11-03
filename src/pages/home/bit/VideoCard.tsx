@@ -68,6 +68,10 @@ export function VideoCard({
   const [playing, setPlaying] = useState(!gated);
   const [support, setSupport] = useState<EncodeSupport | null>(null);
   const [busy, setBusy] = useState<number | null>(null);
+  // Nov 3 2026: between the tap and the video starting, the button looked
+  // idle and people tapped again. Locked and labelled from the first tap.
+  const [starting, setStarting] = useState(false);
+  const startingRef = useRef(false);
   const charge = useServerFn(chargeDownload);
   const watermark = !isPaidTier(tier);
   const audioRef = useRef<AudioContext | null>(null);
@@ -170,6 +174,7 @@ export function VideoCard({
       left: downloadsLeft ?? null,
     });
     if (onSignIn) return onSignIn();
+    if (startingRef.current || busy !== null) return;
     if (!skipConfirm && beforeDownload?.()) return;
     if (support === "none") {
       jokeTap("video_fallback_picture", tier, { reason: "unsupported" });
@@ -177,6 +182,8 @@ export function VideoCard({
       return onFallbackPicture();
     }
     let r: DownloadCharge;
+    startingRef.current = true;
+    setStarting(true);
     try {
       r = await charge({
         data: {
@@ -194,6 +201,9 @@ export function VideoCard({
       });
       say("Couldn't start the download. Try again.");
       return;
+    } finally {
+      startingRef.current = false;
+      setStarting(false);
     }
     if (!r.ok) {
       if (r.reason === "limited") {
@@ -273,6 +283,8 @@ export function VideoCard({
   const label =
     busy !== null
       ? `making the video… ${Math.round(busy * 100)}%`
+      : starting
+        ? "getting your video ready…"
       : onSignIn
         ? "sign in to watch + download"
         : left === 0
@@ -282,7 +294,8 @@ export function VideoCard({
   const downloadButton = (
     <button
       className="bt-btn"
-      disabled={busy !== null || support === null}
+      disabled={busy !== null || starting || support === null}
+      aria-busy={busy !== null || starting}
       onClick={() => void download()}
     >
       {label}

@@ -67,7 +67,10 @@ export function CaptionBox({
 
   // Copying the caption or the hashtags is one download (the first copy of
   // this version today; later copies of the same version are free).
+  const [copying, setCopying] = useState(false);
+  const copyingRef = useRef(false);
   async function copy(text: string, what: string, skipConfirm = false) {
+    if (copyingRef.current) return;
     jokeTap("download_tapped", tier, {
       kind: "caption",
       state: downloadsLeft === 0 ? "capped" : "ok",
@@ -76,6 +79,8 @@ export function CaptionBox({
     });
     if (!skipConfirm && beforeCopy?.()) return;
     let r: Awaited<ReturnType<typeof chargeDownload>>;
+    copyingRef.current = true;
+    setCopying(true);
     try {
       r = await charge({
         data: {
@@ -93,6 +98,9 @@ export function CaptionBox({
       });
       say("Couldn't copy. Try again.");
       return;
+    } finally {
+      copyingRef.current = false;
+      setCopying(false);
     }
     if (!r.ok) {
       if (r.reason === "limited") {
@@ -153,12 +161,13 @@ export function CaptionBox({
     state && typeof state === "object" ? (
       <button
         className="bt-btn sm"
-        disabled={downloadsLeft === 0}
+        disabled={downloadsLeft === 0 || copying}
+        aria-busy={copying}
         onClick={() =>
           void copy(`${state.caption}\n\n${state.hashtags.join(" ")}`, "Caption and hashtags")
         }
       >
-        {downloadsLeft === 0 ? "that's today's downloads" : "copy caption + hashtags"}
+        {downloadsLeft === 0 ? "that's today's downloads" : copying ? "copying…" : "copy caption + hashtags"}
       </button>
     ) : null;
 
