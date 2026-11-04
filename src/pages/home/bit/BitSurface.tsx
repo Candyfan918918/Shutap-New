@@ -64,6 +64,40 @@ const PENDING_TTL = 60 * 60 * 1000
 const PENDING_WRITE_KEY = 'shutap_pending_write'
 const PENDING_WRITE_TTL = 30 * 60 * 1000
 
+/* A write in progress, visible to every tab (Nov 4 2026). A new account had
+   the site open in two tabs: the story they signed in for was written in the
+   background tab, and in the tab they were looking at "make it funnier" hit
+   the day's limit, which that background write had already used, so the
+   paywall showed before their first bit. Now any tab sees a write already
+   under way and joins it (same id: the server charges once and hands back
+   the same bit) instead of starting a second one. */
+const INFLIGHT_KEY = 'shutap_write_inflight'
+const INFLIGHT_TTL = 2 * 60 * 1000
+type Inflight = { id: string; key: string; story: string; controls: BitControls; at: number }
+function readInflight(): Inflight | null {
+  try {
+    const raw = localStorage.getItem(INFLIGHT_KEY)
+    if (!raw) return null
+    const f = JSON.parse(raw) as Partial<Inflight>
+    if (typeof f?.id !== 'string' || typeof f.key !== 'string' || typeof f.story !== 'string' || typeof f.at !== 'number' || Date.now() - f.at > INFLIGHT_TTL) {
+      localStorage.removeItem(INFLIGHT_KEY)
+      return null
+    }
+    return { id: f.id, key: f.key, story: f.story, controls: { ...DEFAULT_CONTROLS, ...(f.controls ?? {}) }, at: f.at }
+  } catch {
+    return null
+  }
+}
+function setInflight(f: Inflight) {
+  try { localStorage.setItem(INFLIGHT_KEY, JSON.stringify(f)) } catch { /* noop */ }
+}
+function clearInflight(id: string) {
+  try {
+    const raw = localStorage.getItem(INFLIGHT_KEY)
+    if (raw && (JSON.parse(raw) as { id?: string }).id === id) localStorage.removeItem(INFLIGHT_KEY)
+  } catch { /* noop */ }
+}
+
 type ShownBit = Bit & { locked: boolean }
 
 /** The sign-in sheet says what signing in unlocks, in the words of what
@@ -408,7 +442,30 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     if (restoring.current) return
     const pending = readPendingWrite()
     const note = readPending()
-    if (!pending && !note) return
+    if (!pending && !note) {
+      // Another tab already started the story they signed in for: show it
+      // writing here and join that write (same id, charged once).
+      const f = readInflight()
+      if (f && !writingRef.current && phaseRef.current === 'write') {
+        jokeTrack('bit_write_joined', tier, { age_ms: Date.now() - f.at, via: 'another_tab' })
+        typed.current = true
+        setStory(f.story)
+        setControls(f.controls)
+        await onWriteRef.current({ text: f.story, controls: f.controls, writeId: f.id, fromSignIn: true })
+      }
+      return
+    }
+    // A tab in the background (one they left open) must not take the story:
+    // the tab they are looking at writes it. A hidden tab waits until shown.
+    if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+      const onShow = () => {
+        if (document.visibilityState !== 'visible') return
+        document.removeEventListener('visibilitychange', onShow)
+        void restoreRef.current?.()
+      }
+      document.addEventListener('visibilitychange', onShow)
+      return
+    }
     // Claimed before the first wait, so a second call (load + SIGNED_IN)
     // can't run alongside this one.
     restoring.current = true
@@ -453,6 +510,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
       restoring.current = false
     }
   }, [claim, fetchBit, refresh, ctx, say])
+  const restoreRef = useRef<(() => Promise<void>) | null>(null)
+  restoreRef.current = restore
 
   /* /?bit=<id> reopens a bit from the set list (or a reload). */
   const openFromLink = useCallback(async () => {
@@ -566,6 +625,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
 
   /** One write at a time: a double tap (or the sign-in return racing a tap)
    *  must not start two bits. */
+  const inflightId = useRef<string | null>(null)
   async function onWrite(opts?: WriteOpts) {
     if (writingRef.current) return
     writingRef.current = true
@@ -573,6 +633,10 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
       await writeOnce(opts)
     } finally {
       writingRef.current = false
+      // However the write ended (bit, limit, crisis, error), it is no longer
+      // in progress for the other tabs.
+      if (inflightId.current) clearInflight(inflightId.current)
+      inflightId.current = null
     }
   }
 
@@ -581,16 +645,23 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     const ctl = opts?.controls ?? controls
     if (!text || phaseRef.current === 'writing') return
     setError(null)
+    const key = JSON.stringify([text, ctl])
+    // The same story already being written (in this tab or another): join
+    // it rather than spending a second bit on it.
+    const inflight = readInflight()
+    const joining = !opts?.writeId && inflight?.key === key ? inflight : null
     // Right after sign-in the tier and count in state are stale; the server
     // checks the limit either way.
-    if (!opts?.fromSignIn && atCap(usage)) {
+    if (!opts?.fromSignIn && !joining && atCap(usage)) {
       showLimit(tier)
       return
     }
     // One id per press of "write", reused by the silent retry below, so a
     // retry of a write that landed returns the same bit and costs nothing.
-    const key = JSON.stringify([text, ctl])
-    const writeId = opts?.writeId ?? (unsureWrite.current?.key === key ? unsureWrite.current.id : newWriteId())
+    const writeId = opts?.writeId ?? joining?.id ?? (unsureWrite.current?.key === key ? unsureWrite.current.id : newWriteId())
+    if (joining) jokeTrack('bit_write_joined', tier, { age_ms: Date.now() - joining.at, via: 'press' })
+    setInflight({ id: writeId, key, story: text, controls: ctl, at: joining?.at ?? Date.now() })
+    inflightId.current = writeId
     unsureWrite.current = null
     setPhase('writing')
     setNotice(null)
