@@ -1,0 +1,38 @@
+name: Prod smoke (write a bit)
+
+# Writes one real bit on shutap.com as the smoke account after every merge
+# to main (give Lovable a few minutes to publish first) and every morning.
+# Fails if the box, the write or the result is broken. See scripts/smoke/.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 14 * * *" # 06:17 Pacific
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Wait for the publish
+        if: github.event_name == 'push'
+        run: sleep 300
+      - run: npm i --no-save playwright @supabase/supabase-js && npx playwright install --with-deps chromium
+      - run: node scripts/smoke/write-bit.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          SMOKE_EMAIL: ${{ secrets.SMOKE_EMAIL }}
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: smoke-failure
+          path: smoke-failure.png
+          if-no-files-found: ignore
