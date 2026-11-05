@@ -3,7 +3,7 @@
  * it on the device, charges one download of kind 'video', and shares on
  * phones or saves on desktop. A phone that cannot encode gets the picture
  * instead, without a second charge. */
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { chargeDownload, type DownloadCharge } from "@/lib/bits.functions";
 import { isPaidTier, type BitTier, type BitVersion } from "@/lib/bits/shared";
@@ -35,7 +35,6 @@ export function VideoCard({
   beforeDownload,
   resume,
   onResumed,
-  right,
   onWatch,
 }: {
   bitId: string;
@@ -56,9 +55,6 @@ export function VideoCard({
   /** finish the download now (after the confirm, sign-in or payment) */
   resume?: boolean;
   onResumed?: () => void;
-  /** what sits beside the video (the caption): gets the download button and
-   *  the watermark note to place in its own row */
-  right?: (downloadButton: ReactNode, note: ReactNode) => ReactNode;
   /** guests: the video is behind sign-in; this opens the sheet */
   onWatch?: () => void;
 }) {
@@ -324,13 +320,13 @@ export function VideoCard({
   return (
     <section
       className="bt-card"
-      aria-label="The 5-second video and the caption"
+      aria-label="The 5-second video"
       data-ph-private
       style={{ display: "flex", flexDirection: "column", gap: 12 }}
     >
       <div className="bt-between">
         <span className="bt-lbl">
-          post it · video + caption · {version.kind === "original" ? "this bit" : version.kind}
+          post it · the video · {version.kind === "original" ? "this bit" : version.kind}
         </span>
         <span className="bt-note">
           {downloadsLeft === null
@@ -400,16 +396,10 @@ export function VideoCard({
           </span>
         </div>
         <div className="bt-vc-right">
-          {right ? (
-            right(downloadButton, note)
-          ) : (
-            <>
-              {downloadButton}
-              {note}
-            </>
-          )}
+          {downloadButton}
+          {note}
           <span className="bt-note">
-            A rewrite makes a new video and caption, and counts as a new bit.
+            A rewrite makes a new video and counts as a new bit.
           </span>
         </div>
       </div>

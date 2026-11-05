@@ -11,12 +11,12 @@ const BASIC = PLANS.basic.amount
 const PRO = PLANS.pro.amount
 
 const TITLE = `Pricing — Shutap, the Humor Amplifier, plans from ${usd(BASIC)}/mo`
-const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video, caption and hashtags from your story, with stand-up, sketch and skit formats. Free with an account: one bit and one watermarked download a day. Basic is ${usd(BASIC)}/month: 3 new bits a day with rewrites, and 3 clean downloads. Pro is ${usd(PRO)}/month: unlimited bits, rewrites and downloads, no watermark, and the Mirror. Cancel anytime.`
+const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video from your story, with stand-up, sketch and skit formats. Free with an account: one bit and one watermarked download a day. Basic is ${usd(BASIC)}/month: 3 new bits a day with rewrites, and 3 clean downloads. Pro is ${usd(PRO)}/month: unlimited bits, rewrites and downloads, no watermark, and the Mirror. Cancel anytime.`
 
 const QA = [
-  { q: 'Is Shutap really free?', a: 'Yes, with a free account. Sign in first (one tap with Google or Apple), then you get one new bit a day, as written, with its 5-second video, caption and hashtags, and stand-up, sketch and skit. You also get one download a day: the video (with a shutap.com watermark) or the caption and hashtags. Rewrites (hotter, tighter, storytelling), crowd-work swaps and mix your own come with Basic and Pro.' },
+  { q: 'Is Shutap really free?', a: 'Yes, with a free account. Sign in first (one tap with Google or Apple), then you get one new bit a day, as written, with its 5-second video, and stand-up, sketch and skit. You also get one download a day: the video (with a shutap.com watermark) or the picture. Rewrites (hotter, tighter, storytelling), crowd-work swaps and mix your own come with Basic and Pro.' },
   { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 3 new bits a day (a rewrite counts as one), crowd-work swaps and mix your own, and 3 downloads a day with no watermark. Pro is ${usd(PRO)} a month: unlimited bits and rewrites, unlimited downloads with no watermark, and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
-  { q: 'What counts toward the daily limit?', a: 'New bits, rewrites and downloads. A rewrite (hotter, tighter, storytelling) is a new bit: written again, video rendered again. The video is one download; copying the caption and hashtags is another; the picture or script PDF another; a rewrite\'s downloads count again. Crowd-work swaps and mix your own don\'t count against the day. Limits reset at midnight Pacific.' },
+  { q: 'What counts toward the daily limit?', a: 'New bits, rewrites and downloads. A rewrite (hotter, tighter, storytelling) is a new bit: written again, video rendered again. The video is one download; the picture or script PDF another; a rewrite\'s downloads count again. Crowd-work swaps and mix your own don\'t count against the day. Limits reset at midnight Pacific.' },
   { q: 'Can I move from Basic to Pro?', a: 'Yes, any time. You pay the difference for the rest of the month, and Pro starts right away.' },
   { q: 'Is there a free trial?', a: 'No trial. The free plan is the trial: write your bits before you decide.' },
   { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your account; you keep your plan until the end of the period you paid for. Payments are handled by Stripe.' },
@@ -44,7 +44,7 @@ export const Route = createFileRoute('/pricing')({
           '@context': 'https://schema.org',
           '@type': 'Product',
           name: 'Shutap',
-          description: 'The humor amplifier: a bit, a 5-second video, caption and hashtags from your own story, with stand-up, sketch and skit formats.',
+          description: 'The humor amplifier: a bit, a 5-second video from your own story, with stand-up, sketch and skit formats.',
           brand: { '@type': 'Brand', name: 'Shutap' },
           url: SITE_URL,
           offers: [
@@ -146,7 +146,7 @@ function PricingPage() {
             Free to use. {usd(BASIC)} to download clean.
           </h1>
           <p className="fd-muted" style={{ fontSize: 16, maxWidth: 560, margin: 0 }}>
-            Every bit comes with a 5-second video, a caption and hashtags. Free downloads one a day with a watermark. Basic removes it. Pro downloads as much as you want and adds the Mirror.
+            Every bit comes with a 5-second video. Free downloads one a day with a watermark. Basic removes it. Pro downloads as much as you want and adds the Mirror.
           </p>
         </div>
 

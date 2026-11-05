@@ -746,7 +746,7 @@ export type DownloadsPayload = {
   recent: { created_at: string; kind: string; tier: string; watermarked: boolean; user_id: string }[]
 }
 
-/** The download ledger (bit_downloads): caption + hashtags, picture, PDF,
+/** The download ledger (bit_downloads): picture, PDF, video (caption kept for history),
  *  video — each its own download. Counts by kind and tier, and the last 30. */
 export const adminDownloads = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])

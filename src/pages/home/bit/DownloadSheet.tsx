@@ -177,7 +177,7 @@ export function DownloadSheet({
           {dlLeft === 0 ? `that's today's downloads · see plans` : saving ? 'saving…' : !ready && busy ? 'getting it ready…' : `download${dlLabel}`}
         </button>
         <p className="bt-note" style={{ textAlign: 'center', margin: 0 }}>
-          each kind is one download: the picture, the PDF, the caption + hashtags, the video. The same one again today is free. A rewrite makes a new version, and its downloads count again.
+          each kind is one download: the picture, the PDF, the video. The same one again today is free. A rewrite makes a new version, and its downloads count again.
         </p>
         {!paid && (
           <button

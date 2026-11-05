@@ -13,7 +13,7 @@ export const BIT_CAPS: Record<Exclude<BitTier, 'pro'>, number> = {
   basic: 3,
 }
 
-/** Downloads a day. A download is one of: the caption + hashtags (copied),
+/** Downloads a day. A download is one of ('caption' stays in the kind list for the ledger's history):
  *  the picture or script PDF, the 5-second video. Each kind counts on its
  *  own; a second copy of the same version in the same day is free. Pro has
  *  no cap. Guests can't download at all (sign-in first). */

@@ -338,7 +338,7 @@ What to post today (${(v.day_label ?? '').replace(/\u00a0/g, ' ')}): ${v.hook_pl
 
 ${v.bit_plain ?? ''}
 ${v.tag_plain ? `\nTag: ${v.tag_plain}\n` : ''}
-Now make it yours. Swap in what happened to you, and Shutap builds your version with the video and the caption.
+Now make it yours. Swap in what happened to you, and Shutap builds your version with the video.
 
 Make it yours: ${v.cta_url ?? 'https://shutap.com/?utm_source=hello_shutap&utm_medium=email&utm_campaign=daily_idea'}
 

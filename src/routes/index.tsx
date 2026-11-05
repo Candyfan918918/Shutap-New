@@ -6,9 +6,9 @@ import { listDailyIdea } from '@/lib/daily-idea.functions'
 
 const HOME_TITLE = "Shutap Humor Amplifier Lab"
 const HOME_DESCRIPTION =
-  "Shutap is the humor amplifier. Type what happened and get a bit in your voice: hook, setup, tags and button, with a 5-second video, caption and hashtags. Run it as stand-up, a sketch or a skit."
+  "Shutap is the humor amplifier. Type what happened and get a bit in your voice: hook, setup, tags and button, with a 5-second video. Run it as stand-up, a sketch or a skit."
 const HOME_OG_DESCRIPTION =
-  "Shutap is the humor amplifier. Type what happened and get a bit in your voice: hook, setup, tags and button, with a 5-second video, caption and hashtags. Run it as stand-up, a sketch or a skit."
+  "Shutap is the humor amplifier. Type what happened and get a bit in your voice: hook, setup, tags and button, with a 5-second video. Run it as stand-up, a sketch or a skit."
 
 const HOME_URL = `${SITE_URL}/`
 
@@ -32,7 +32,7 @@ export const Route = createFileRoute('/')({
       { property: "og:url", content: HOME_URL },
       ...ogImageMeta(),
       { name: "twitter:title", content: "Shutap Humor Amplifier Lab" },
-      { name: "twitter:description", content: "Shutap is the humor amplifier. Type what happened and get a bit in your voice: hook, setup, tags and button, with a 5-second video, caption and hashtags. Run it as stand-up, a sketch or a skit." },
+      { name: "twitter:description", content: "Shutap is the humor amplifier. Type what happened and get a bit in your voice: hook, setup, tags and button, with a 5-second video. Run it as stand-up, a sketch or a skit." },
     ],
     links: [
       { rel: "canonical", href: HOME_URL },

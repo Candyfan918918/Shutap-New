@@ -34,7 +34,6 @@ const EVERY_ICON: Record<(typeof EVERY_PLAN)[number], FeatureIcon> = {
   'A 5-second video of it': 'post',
   'Stand-up on the teleprompter': 'standup',
   'Sketch and skit': 'sketch',
-  'Caption and hashtags': 'hash',
   'Set list of every bit': 'list',
 }
 
@@ -113,7 +112,7 @@ export function PaywallBody({
     where === 'download'
       ? 'Free downloads carry the shutap.com watermark. Basic gets 3 clean downloads a day; Pro has no limit.'
       : where === 'download_count'
-        ? 'Free is one download a day: the video, or the caption and hashtags, or the picture. Basic gets 3 a day with no watermark; Pro has no limit. More at midnight Pacific.'
+        ? 'Free is one download a day: the video, or the picture. Basic gets 3 a day with no watermark; Pro has no limit. More at midnight Pacific.'
         : where === 'rewrite'
           ? `Free gets one bit a day, as written. Hotter, tighter, storytelling, a crowd-work swap or your own mix come with Basic (${BIT_CAPS.basic} bits a day, rewrites included) and Pro (no limit).`
           : `Free is one bit a day. Basic writes ${BIT_CAPS.basic} a day with rewrites; Pro has no limit. Want to keep going tonight?`
