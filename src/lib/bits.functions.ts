@@ -20,24 +20,28 @@ import { hasContactDetails, runScrub } from './agents/scrubber.functions'
 import { runClassifyCrisis } from './agents/guard.functions'
 import { requestAnonId, resolveJokeIdentity, type JokeIdentity } from './jokes/session.server'
 import { activePlan } from './plan.server'
-import { heatFor, varyBitDraft, writeBitFromStory, type BitFailure } from './bits/pipeline.server'
+import { heatFor, touchLineDraft, varyBitDraft, writeBitFromStory, type BitFailure, type TouchOption } from './bits/pipeline.server'
 import { forgetPerson, personSignal } from './bits/person.server'
 import { NO_CAP, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
 import { DOWNLOAD_KINDS } from './bits/plans'
-import { limitFor } from './entitlements'
+import { can, limitFor } from './entitlements'
 import {
   AUDIENCES,
   DEFAULT_CONTROLS,
   LENGTHS,
+  SLOTS,
   VARY_KINDS,
   VOICES,
   estSeconds,
+  readSlot,
+  writeSlot,
   type Bit,
   type BitControls,
   type BitDraft,
   type BitTier,
   type BitUsage,
   type BitVersion,
+  type Slot,
   type SkitBeat,
   type SketchElement,
   type VersionKind,
@@ -213,6 +217,9 @@ async function insertVersion(
     } as never)
     .select('id, bit_id, kind, hook, setup, tags, button, why, est_seconds, heat, created_at')
     .single()
+  // 'edited' (Nov 5 2026) needs migration 20261105230000; until it runs the
+  // kind check refuses it, so the version is kept as a mix (also "theirs").
+  if (error && kind === 'edited' && String((error as any).code) === '23514') return insertVersion(admin, bitId, 'mix', draft, heat)
   if (error || !data) throw new Error(error?.message ?? 'could not save that version')
   return data as VersionRow
 }
@@ -573,7 +580,7 @@ export type VersionResult =
 export const varyBit = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) =>
     z
-      .object({ bit_id: z.string().uuid(), from_version_id: z.string().uuid().optional(), kind: z.enum(VARY_KINDS), ...Ctx })
+      .object({ bit_id: z.string().uuid(), from_version_id: z.string().uuid().optional(), kind: z.enum(VARY_KINDS), locked: z.array(z.enum(SLOTS)).max(6).optional(), ...Ctx })
       .parse(d),
   )
   .handler(async ({ data }): Promise<VersionResult> => {
@@ -605,16 +612,14 @@ export const varyBit = createServerFn({ method: 'POST' })
     const from = versions.find((v) => v.id === data.from_version_id) ?? versions[0]
     if (!from) return { ok: false, reason: 'not_found' }
     const controls = { ...DEFAULT_CONTROLS, ...(row.controls ?? {}) } as BitControls
-    const draft = await varyBitDraft(
-      row.story_clean,
-      { hook: from.hook, setup: from.setup, tags: from.tags, button: from.button, why: from.why ?? '' },
-      controls,
-      data.kind,
-    )
+    const fromDraft = { hook: from.hook, setup: from.setup, tags: from.tags, button: from.button, why: from.why ?? '' }
+    let draft = await varyBitDraft(row.story_clean, fromDraft, controls, data.kind, data.locked ?? [])
     if (!draft) {
       await refund()
       return { ok: false, reason: 'failed' }
     }
+    // Locked lines (AI on demand) come through untouched whatever the writer did.
+    for (const sl of data.locked ?? []) if (readSlot(fromDraft, sl)) draft = writeSlot(draft, sl, readSlot(fromDraft, sl))
     const saved = await insertVersion(supabaseAdmin, row.id, data.kind, draft, heatFor(data.kind, controls))
     forgetPerson(id.userId)
     return { ok: true, version: toVersion(saved) }
@@ -862,6 +867,87 @@ export const getSketch = createServerFn({ method: 'POST' })
   .handler(({ data }) => layoutFor<SketchElement[]>('sketch', data.bit_id, data.version_id, data.anon_session_id ?? null))
 
 /* ───────────────────────── download ───────────────────────── */
+
+/* ───────────────────────── AI on demand: one line, funnier · keep an edited version ───────────────────────── */
+
+export type TouchResult =
+  | { ok: true; options: TouchOption[]; used: number; cap: number | null }
+  | { ok: false; reason: 'sign_in' | 'not_found' | 'rate_limited' | 'failed' }
+  | { ok: false; reason: 'limited'; used: number; cap: number; tier: BitTier }
+
+const DraftIn = z.object({
+  hook: z.string().max(300),
+  setup: z.string().max(600),
+  tags: z.array(z.string().max(600)).max(3),
+  button: z.string().max(600),
+})
+
+/** Three versions of one line of the bit as it stands on the page (edits
+ *  included), the rest held still. A touch, not a bit: Free 3 a day, paid
+ *  unlimited, counted in bit_usage under touch:<user>. Nothing is stored. */
+export const touchLine = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) =>
+    z.object({ bit_id: z.string().uuid(), draft: DraftIn, slot: z.enum(SLOTS), avoid: z.array(z.string().max(600)).max(12).optional(), ...Ctx }).parse(d),
+  )
+  .handler(async ({ data }): Promise<TouchResult> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
+    const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
+    if (!row) return { ok: false, reason: 'not_found' }
+    const tier = await resolveTier(supabaseAdmin, id)
+    const { day } = today()
+    if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+    const subject = `touch:${id.userId}`
+    const limit = limitFor('touch', tier)
+    const chargeId = crypto.randomUUID()
+    let used: number
+    try {
+      used = await chargeBit(supabaseAdmin, subject, day, limit.cap ?? NO_CAP, chargeId)
+    } catch {
+      return { ok: false, reason: 'failed' }
+    }
+    if (used === -1) return { ok: false, reason: 'limited', used: limit.cap ?? 0, cap: limit.cap ?? 0, tier }
+    const controls = { ...DEFAULT_CONTROLS, ...(row.controls ?? {}) } as BitControls
+    // Typed lines are the person's own text: names come out before a model sees them.
+    const clean = { ...data.draft, why: '' }
+    for (const sl of SLOTS) {
+      const v = readSlot(clean, sl)
+      if (v && hasContactDetails(v)) Object.assign(clean, writeSlot(clean, sl, (await runScrub(v)).clean_text))
+    }
+    const options = await touchLineDraft(row.story_clean, clean, data.slot, controls, data.avoid ?? [])
+    if (!options) {
+      await refundBit(supabaseAdmin, subject, day, chargeId)
+      return { ok: false, reason: 'failed' }
+    }
+    return { ok: true, options, used, cap: limit.cap }
+  })
+
+/** Keep the bit as it stands on the page (typed lines, picked lines) as a
+ *  version of its own. The person's words are scrubbed like a story; the
+ *  version is theirs, never used anywhere else. No model call, no charge. */
+export const keepVersion = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) => z.object({ bit_id: z.string().uuid(), draft: DraftIn, ...Ctx }).parse(d))
+  .handler(async ({ data }): Promise<VersionResult> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return { ok: false, reason: 'sign_in' }
+    const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
+    if (!row) return { ok: false, reason: 'not_found' }
+    const versions = await loadVersions(supabaseAdmin, row.id)
+    if (versions.length >= MAX_VERSIONS) return { ok: false, reason: 'too_many' }
+    let draft = { ...data.draft, tags: data.draft.tags.map((t) => t.trim()).filter(Boolean), why: 'kept as written by you' }
+    draft = { ...draft, hook: draft.hook.trim(), setup: draft.setup.trim(), button: draft.button.trim() }
+    if (!draft.hook || !draft.setup || !draft.button || !draft.tags.length) return { ok: false, reason: 'failed' }
+    for (const sl of SLOTS) {
+      const v = readSlot(draft, sl)
+      if (v && hasContactDetails(v)) draft = writeSlot(draft, sl, (await runScrub(v)).clean_text)
+    }
+    const controls = { ...DEFAULT_CONTROLS, ...(row.controls ?? {}) } as BitControls
+    const saved = await insertVersion(supabaseAdmin, row.id, 'edited', draft, controls.heat)
+    forgetPerson(id.userId)
+    return { ok: true, version: toVersion(saved) }
+  })
 
 export type DownloadCharge =
   | { ok: true; used: number; cap: number | null; watermarked: boolean; tier: BitTier; repeat: boolean }

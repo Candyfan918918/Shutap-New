@@ -9,7 +9,23 @@ export type Audience = (typeof AUDIENCES)[number]
 export type BitVoice = (typeof VOICES)[number]
 export type BitLength = (typeof LENGTHS)[number]
 export type VaryKind = (typeof VARY_KINDS)[number]
-export type VersionKind = 'original' | VaryKind | 'mix' | 'tag_swap'
+export type VersionKind = 'original' | VaryKind | 'mix' | 'tag_swap' | 'edited'
+
+/** The lines of a bit a person can point at (AI on demand, Nov 5 2026). */
+export const SLOTS = ['hook', 'setup', 'tag0', 'tag1', 'tag2', 'button'] as const
+export type Slot = (typeof SLOTS)[number]
+export function slotLabel(s: Slot): string {
+  return s.startsWith('tag') ? `tag ${Number(s.slice(3)) + 1}` : s
+}
+export function readSlot(d: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>, s: Slot): string {
+  if (s === 'hook' || s === 'setup' || s === 'button') return d[s]
+  return d.tags[Number(s.slice(3))] ?? ''
+}
+export function writeSlot<T extends Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>>(d: T, s: Slot, line: string): T {
+  if (s === 'hook' || s === 'setup' || s === 'button') return { ...d, [s]: line }
+  const tags = [...d.tags]; tags[Number(s.slice(3))] = line
+  return { ...d, tags }
+}
 
 export type BitControls = {
   audience: Audience

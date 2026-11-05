@@ -18,6 +18,7 @@ import {
   BIT_PROMPT,
   BIT_PROMPT_VERSION,
   BIT_SECONDS,
+  BIT_TOUCH_PROMPT,
   BIT_VARY_PROMPT,
   BIT_VARY_RULES,
   BIT_VOICES,
@@ -38,10 +39,14 @@ import {
   SKETCH_TYPES,
   WORDS_PER_SECOND,
   bitWords,
+  readSlot,
+  slotLabel,
+  writeSlot,
   type BitControls,
   type BitDraft,
   type SkitBeat,
   type SketchElement,
+  type Slot,
   type VaryKind,
 } from './shared'
 import { houseSignal } from './house.server'
@@ -664,8 +669,10 @@ export async function varyBitDraft(
   bit: BitDraft,
   controls: BitControls,
   kind: VaryKind,
+  locked: Slot[] = [],
 ): Promise<BitDraft | null> {
-  const asText = `HOOK: ${bit.hook}\nSETUP: ${bit.setup}\n${bit.tags.map((t, j) => `TAG ${j + 1}: ${t}`).join('\n')}\nBUTTON: ${bit.button}`
+  const lockMark = (s: Slot) => (locked.includes(s) ? ' [LOCKED: keep this line word for word]' : '')
+  const asText = `HOOK: ${bit.hook}${lockMark('hook')}\nSETUP: ${bit.setup}${lockMark('setup')}\n${bit.tags.map((t, j) => `TAG ${j + 1}: ${t}${lockMark(`tag${j}` as Slot)}`).join('\n')}\nBUTTON: ${bit.button}${lockMark('button')}`
   const cv = controlVars(controls)
   // A rewrite that only misses the bit-1.3 technique rules (a second label
   // line, costume vocabulary) is kept as a last resort: better a rewrite
@@ -704,6 +711,67 @@ export async function varyBitDraft(
     console.warn('[bit-vary] failed a rule', { kind, rule: f })
   }
   return craftMiss
+}
+
+/* ── one line, funnier (AI on demand, Nov 5 2026) ── */
+
+export type TouchOption = { line: string; move: string }
+
+/** Three versions of ONE line, the rest of the bit held still. `avoid` are
+ *  lines already offered this session, so "three more" brings new ones. */
+export async function touchLineDraft(
+  story: string,
+  bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>,
+  slot: Slot,
+  controls: BitControls,
+  avoid: string[] = [],
+): Promise<TouchOption[] | null> {
+  const current = readSlot(bit, slot)
+  const mark = (s: Slot, text: string) => (s === slot ? `>>> ${text}` : text)
+  const asText = [
+    `HOOK: ${mark('hook', bit.hook)}`,
+    `SETUP: ${mark('setup', bit.setup)}`,
+    ...bit.tags.map((t, j) => `TAG ${j + 1}: ${mark(`tag${j}` as Slot, t)}`),
+    `BUTTON: ${mark('button', bit.button)}`,
+  ].join('\n')
+  const cv = controlVars(controls)
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const model = attempt === 0 ? bitWriterModel() : backupWriterModel()
+    const res = await callAgent({
+      model,
+      temperature: 1.0,
+      reasoningEffort: reasoning(model),
+      maxTokens: 900,
+      timeoutMs: BIT_BUDGET.vary(),
+      messages: [
+        {
+          role: 'user',
+          content: fill(BIT_TOUCH_PROMPT, {
+            SITUATION: story.slice(0, 2000),
+            BIT: asText,
+            SLOT: slotLabel(slot).toUpperCase(),
+            LINE: current,
+            AUDIENCE: cv.AUDIENCE,
+            VOICE: cv.VOICE,
+            AVOID: avoid.length ? `ALREADY OFFERED (write different ones):\n${avoid.map((a) => `- ${a}`).join('\n')}\n` : '',
+          }),
+        },
+      ],
+    })
+    if (res.error) {
+      console.warn('[bit-touch] gateway error', { slot, error: res.error })
+      continue
+    }
+    const raw = tryParseJson<{ options?: unknown }>(res.text)
+    const opts = (Array.isArray(raw?.options) ? raw!.options : [])
+      .map((o) => ({ line: tidy((o as any)?.line).replace(/^["']|["']$/g, ''), move: tidy((o as any)?.move).slice(0, 60) }))
+      .filter((o) => o.line && o.line.toLowerCase() !== current.toLowerCase() && !avoid.some((a) => a.toLowerCase() === o.line.toLowerCase()))
+    // every option must pass the same rules as the bit it goes into
+    const ok = opts.filter((o) => !bitFailure(writeSlot({ ...bit, why: '' }, slot, o.line), story, { ...controls, length: '2m' }))
+    if (ok.length >= 2) return ok.slice(0, 3)
+    console.warn('[bit-touch] too few options passed', { slot, got: opts.length, ok: ok.length })
+  }
+  return null
 }
 
 export function heatFor(kind: VaryKind | 'original', controls: BitControls): number {

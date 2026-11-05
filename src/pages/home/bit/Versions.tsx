@@ -4,10 +4,14 @@
 import { useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { swapAngle, varyBit } from '@/lib/bits.functions'
-import { VARY_KINDS, type Bit, type BitTier, type BitVersion, type VaryKind } from '@/lib/bits/shared'
+import { VARY_KINDS, type Bit, type BitTier, type BitVersion, type Slot, type VaryKind } from '@/lib/bits/shared'
 import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 
 export function chipLabel(v: BitVersion, all: BitVersion[]): string {
+  if (v.kind === 'edited' || (v.kind === 'mix' && v.why === 'kept as written by you')) {
+    const kept = all.filter((x) => x.kind === 'edited' || (x.kind === 'mix' && x.why === 'kept as written by you'))
+    return kept.length > 1 ? `yours ${kept.indexOf(v) + 1}` : 'yours'
+  }
   if (v.kind === 'mix') {
     const mixes = all.filter((x) => x.kind === 'mix')
     return mixes.length > 1 ? `your mix ${mixes.indexOf(v) + 1}` : 'your mix'
@@ -31,6 +35,7 @@ export function Versions({
   onLimit,
   left,
   onCharged,
+  locked,
 }: {
   bit: Bit
   current: BitVersion
@@ -50,6 +55,8 @@ export function Versions({
   left?: number | null
   /** a rewrite was charged: the parent refreshes the count */
   onCharged?: () => void
+  /** AI on demand: lines a rewrite must leave word for word */
+  locked?: Slot[]
 }) {
   const vary = useServerFn(varyBit)
   const swap = useServerFn(swapAngle)
@@ -73,7 +80,7 @@ export function Versions({
     }
     setBusy(k)
     try {
-      const r = await vary({ data: { bit_id: bit.id, from_version_id: original.id, kind: k, anon_session_id: anonSessionId() } })
+      const r = await vary({ data: { bit_id: bit.id, from_version_id: original.id, kind: k, locked: locked?.length ? locked : undefined, anon_session_id: anonSessionId() } })
       if (r.ok) {
         onAdd(r.version)
         onCharged?.()

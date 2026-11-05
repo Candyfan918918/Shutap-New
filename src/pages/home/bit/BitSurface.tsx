@@ -49,6 +49,10 @@ import { DownloadSheet } from './DownloadSheet'
 import { PostSheet } from './PostSheet'
 import { PaywallBody, UpgradeBody, type PaywallWhere } from './PlanSheets'
 import { VideoCard } from './VideoCard'
+import { EditableBit, draftOf, type Draft } from './EditableBit'
+import { getFlags } from '@/lib/flags.functions'
+import { NO_FLAGS, type Flags } from '@/lib/flags'
+import type { Slot } from '@/lib/bits/shared'
 import { downloadUsage, type DownloadUsage } from '@/lib/bits.functions'
 import { FuelMeter, storyFuel, useTypingPrompt } from './storyBox'
 import './bit.css'
@@ -280,6 +284,14 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const [signinFrom, setSigninFrom] = useState<SigninFrom>('sheet')
   const [error, setError] = useState<string | null>(null)
   const [currentId, setCurrentId] = useState<string | null>(null)
+  /** feature flags, read once from the server (AI on demand is behind one) */
+  const [flags, setFlags] = useState<Flags>(NO_FLAGS)
+  const flagsFn = useServerFn(getFlags)
+  useEffect(() => { flagsFn().then(setFlags).catch(() => {}) }, [flagsFn])
+  /** AI on demand: the page as edited, which lines are locked, which are theirs */
+  const [draft, setDraft] = useState<Draft | null>(null)
+  const [locked, setLocked] = useState<Slot[]>([])
+  const [yours, setYours] = useState<Slot[]>([])
   const [toast, setToast] = useState<string | null>(null)
   /** a bit from the set list is on its way in: show that, not an empty box */
   const [opening, setOpening] = useState(false)
@@ -315,6 +327,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
 
   const ctx = useCallback(() => ({ anon_session_id: anonSessionId() }), [])
   const version: BitVersion | null = bit ? (bit.versions.find((v) => v.id === currentId) ?? bit.versions[0] ?? null) : null
+  // a new version on the page starts a fresh draft (locks stay: they are the person's choice)
+  useEffect(() => { setDraft(version ? draftOf(version) : null); setYours([]) }, [version?.id])
 
   const phaseRef = useRef(phase)
   phaseRef.current = phase
@@ -1007,6 +1021,23 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 the bit · ~{version.est_seconds}s · wild {version.heat} · {bit.controls.audience}
               </span>
 
+              {flags.ondemand && draft ? (
+                <EditableBit
+                  bitId={bit.id}
+                  version={version}
+                  tier={tier}
+                  say={say}
+                  draft={draft}
+                  onDraft={(d) => { setDraft(d); jokeTrack('line_edited', tier, {}) }}
+                  locked={locked}
+                  onLocked={setLocked}
+                  yours={yours}
+                  onYours={setYours}
+                  onKept={addVersion}
+                  onSignIn={tier === 'guest' ? () => openSignin('rewrite') : undefined}
+                  onLimit={() => openPaywall('rewrite')}
+                />
+              ) : (
               <article className="bt-card" aria-label="The bit" data-ph-private style={{ paddingTop: 8 }}>
                 <div className="bt-slot">
                   <span className="bt-lbl r">hook · on screen, first 2 seconds</span>
@@ -1027,6 +1058,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   <p className="bt-v" style={{ fontWeight: 400 }}>{version.button}</p>
                 </div>
               </article>
+              )}
 
               <div className="bt-acts" role="group" aria-label="Keep the bit">
                 <button
@@ -1068,6 +1100,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 onLimit={showLimit}
                 left={left}
                 onCharged={() => setUsage((u) => (u && u.cap !== null ? { ...u, used: Math.min(u.cap, u.used + 1) } : u))}
+                locked={flags.ondemand ? locked : undefined}
               />
 
               <div className="bt-row">
