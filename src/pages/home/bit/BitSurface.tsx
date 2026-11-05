@@ -1128,7 +1128,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   onLimit={(why) => onDownloadLimit(why, 'video')}
                   onFallbackPicture={() => setDownloadOpen(true)}
                   downloadsLeft={downloadsLeft}
-                  onCharged={(r) => setDlUsage({ used: r.used, cap: r.cap, tier: r.tier })}
+                  period={dlUsage?.period ?? 'day'}
+                  onCharged={(r) => setDlUsage((u) => ({ used: r.used, cap: r.cap, tier: r.tier, period: u?.period ?? 'day' }))}
                   resume={resume === 'video'}
                   onResumed={() => setResume(null)}
                 />

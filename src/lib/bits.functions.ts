@@ -24,7 +24,7 @@ import { heatFor, touchLineDraft, varyBitDraft, writeBitFromStory, type BitFailu
 import { forgetPerson, personSignal } from './bits/person.server'
 import { NO_CAP, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
 import { DOWNLOAD_KINDS } from './bits/plans'
-import { can, limitFor } from './entitlements'
+import { limitFor } from './entitlements'
 import {
   AUDIENCES,
   DEFAULT_CONTROLS,
@@ -949,12 +949,54 @@ export const keepVersion = createServerFn({ method: 'POST' })
     return { ok: true, version: toVersion(saved) }
   })
 
+/** The usage bar (Nov 5 2026): what this account has used of its plan, for
+ *  the header pill and the profile. Pro reads unlimited (null caps). */
+export type MyUsage = {
+  tier: BitTier
+  bits: { used: number; cap: number | null; resets_at: string }
+  downloads: { used: number; cap: number | null; period: 'day' | 'month' }
+  touches: { used: number; cap: number | null }
+}
+export const myUsage = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) => z.object({ ...Ctx }).parse(d ?? {}))
+  .handler(async ({ data }): Promise<MyUsage | null> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId) return null
+    const tier = await resolveTier(supabaseAdmin, id)
+    const { day, resetsAt } = today()
+    const [bitsUsed, dl, touchesUsed] = await Promise.all([
+      readUsed(supabaseAdmin, id.subjectKey, day).catch(() => 0),
+      downloadsUsed(supabaseAdmin, id.userId, tier).catch(() => 0),
+      readUsed(supabaseAdmin, `touch:${id.userId}`, day).catch(() => 0),
+    ])
+    const d = limitFor('download', tier)
+    return {
+      tier,
+      bits: { used: bitsUsed, cap: limitFor('bit', tier).cap, resets_at: resetsAt },
+      downloads: { used: dl, cap: d.cap, period: d.period === 'ever' ? 'day' : d.period },
+      touches: { used: touchesUsed, cap: limitFor('touch', tier).cap },
+    }
+  })
+
 export type DownloadCharge =
   | { ok: true; used: number; cap: number | null; watermarked: boolean; tier: BitTier; repeat: boolean }
   | { ok: false; reason: 'sign_in' | 'not_found' | 'failed' }
   | { ok: false; reason: 'limited'; used: number; cap: number; tier: BitTier }
 
-export type DownloadUsage = { used: number; cap: number | null; tier: BitTier }
+export type DownloadUsage = { used: number; cap: number | null; tier: BitTier; period: 'day' | 'month' }
+
+/** How many downloads this account has taken in the plan's period: today for
+ *  Free, the calendar month (Pacific) for Basic (Nov 5 2026). */
+async function downloadsUsed(admin: any, userId: string, tier: BitTier): Promise<number> {
+  const { period } = limitFor('download', tier)
+  const day = today().day
+  let q = admin.from('bit_downloads').select('id', { count: 'exact', head: true }).eq('user_id', userId)
+  q = period === 'month' ? q.gte('day', `${day.slice(0, 7)}-01`) : q.eq('day', day)
+  const { count, error } = await q
+  if (error) throw new Error(error.message)
+  return count ?? 0
+}
 
 /** How many downloads this account has used today, for the labels. */
 export const downloadUsage = createServerFn({ method: 'POST' })
@@ -963,10 +1005,10 @@ export const downloadUsage = createServerFn({ method: 'POST' })
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
     const tier = await resolveTier(supabaseAdmin, id)
-    const cap = limitFor('download', tier).cap
-    if (!id.userId) return { used: 0, cap, tier }
-    const { count } = await supabaseAdmin.from('bit_downloads').select('id', { count: 'exact', head: true }).eq('user_id', id.userId).eq('day', today().day)
-    return { used: count ?? 0, cap, tier }
+    const { cap, period } = limitFor('download', tier)
+    if (!id.userId) return { used: 0, cap, tier, period: period === 'ever' ? 'day' : period }
+    const used = await downloadsUsed(supabaseAdmin, id.userId, tier).catch(() => 0)
+    return { used, cap, tier, period: period === 'ever' ? 'day' : period }
   })
 
 /** One download against today's cap. The picture, the
@@ -1003,9 +1045,12 @@ export const chargeDownload = createServerFn({ method: 'POST' })
       return { ok: true, used: 0, cap, watermarked, tier, repeat: false }
     }
     try {
-      const { count: usedBefore, error: readErr } = await supabaseAdmin.from('bit_downloads').select('id', { count: 'exact', head: true }).eq('user_id', id.userId).eq('day', day)
-      if (readErr) return allowUncounted(readErr.message)
-      const used = usedBefore ?? 0
+      let used: number
+      try {
+        used = await downloadsUsed(supabaseAdmin, id.userId, tier)
+      } catch (e) {
+        return allowUncounted(e instanceof Error ? e.message : String(e))
+      }
       const { count: sameCount } = await supabaseAdmin
         .from('bit_downloads')
         .select('id', { count: 'exact', head: true })

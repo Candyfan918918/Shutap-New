@@ -90,7 +90,8 @@ export function DownloadSheet({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bitId, version.id])
   const dlLeft = dl && dl.cap !== null ? Math.max(0, dl.cap - dl.used) : null
-  const dlLabel = dl === null ? '' : dl.cap === null ? ' · unlimited' : dlLeft === 0 ? ' · none left today' : ` · ${dlLeft} of ${dl.cap} left today`
+  const per = dl?.period === 'month' ? 'this month' : 'today'
+  const dlLabel = dl === null ? '' : dl.cap === null ? ' · unlimited' : dlLeft === 0 ? ` · none left ${per}` : ` · ${dlLeft} of ${dl.cap} left ${per}`
   const [saving, setSaving] = useState(false)
   async function save() {
     if (saving) return

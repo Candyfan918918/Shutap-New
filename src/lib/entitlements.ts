@@ -5,12 +5,12 @@
 //
 //   kind       what it counts                               guest free basic pro
 //   bit        a new story, or hotter/tighter/storytelling   0     1    3     ∞ (server fair-use)
-//   download   the video, picture, PDF or a copied line      0     1    3     ∞
+//   download   the video, picture, PDF or a copied line      0     1/day 20/month ∞
 //   touch      "funnier" on one line (AI on demand)          0     3    ∞     ∞
 //   kit        a realtor kit (6 downloads)                   0     1    —     ∞
 // The usage pool and the monthly realtor counts land with the pricing slice;
 // the shape here is what they'll fill in.
-import { BIT_CAPS, DOWNLOAD_CAPS } from './bits/plans'
+import { BIT_CAPS, DOWNLOAD_CAPS, DOWNLOAD_PERIOD } from './bits/plans'
 import type { BitTier } from './bits/shared'
 
 export type EntitlementKind = 'bit' | 'download' | 'touch' | 'kit'
@@ -24,7 +24,7 @@ export function limitFor(kind: EntitlementKind, tier: BitTier): Limit {
     case 'bit':
       return { cap: tier === 'pro' ? null : BIT_CAPS[tier], period: 'day' }
     case 'download':
-      return { cap: tier === 'pro' ? null : tier === 'guest' ? 0 : DOWNLOAD_CAPS[tier], period: 'day' }
+      return tier === 'pro' ? { cap: null, period: 'month' } : tier === 'guest' ? { cap: 0, period: 'day' } : { cap: DOWNLOAD_CAPS[tier], period: DOWNLOAD_PERIOD[tier] }
     case 'touch':
       return { cap: tier === 'guest' ? 0 : tier === 'free' ? 3 : null, period: 'day' }
     case 'kit':

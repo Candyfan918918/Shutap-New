@@ -9,6 +9,7 @@ import { Link, useRouterState, useNavigate } from '@tanstack/react-router'
 import { rememberReturnTo, signOut as doSignOut } from '@/lib/auth'
 import { useCurrentAlias, useIsAdmin } from '@/hooks/use-current-alias'
 import { UserAvatar } from '@/components/UserAvatar'
+import { useMyUsage, usageLine } from '@/components/UsageBar'
 import { myAlias } from '@/lib/feed.functions'
 
 type Variant = 'light' | 'dark'
@@ -80,6 +81,7 @@ export function GlobalHeader() {
   // a fresh account's name is minted a moment after sign-in, and the header
   // must never say "sign in" to someone who already is.
   const alias = aliasRow ?? (userId ? { name: '', emoji: '', avatar: null } : null)
+  const usage = useMyUsage(!!userId)
   const admin = useIsAdmin()
   const [menuOpen, setMenuOpen] = useState(false)
   const areaRef = useRef<HTMLDivElement>(null)
@@ -285,6 +287,7 @@ export function GlobalHeader() {
                     }}
                   >
                     <div data-ph-private style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name || 'signed in'}</div>
+                    {usage && <Link to="/profile" style={{ ...menuItem, fontSize: 12, color: inkMuted }} onClick={() => setMenuOpen(false)}>{usageLine(usage)}</Link>}
                     <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link>
                     <Link to="/set-list" style={menuItem} onClick={() => setMenuOpen(false)}>set list</Link>
                     {admin && (

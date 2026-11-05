@@ -11,6 +11,9 @@
 import type { BitTier } from './bits/shared'
 import { BIT_CAPS, DOWNLOAD_CAPS } from './bits/plans'
 
+/** Prices changed Nov 5 2026: Basic $7.99 → $19.99 (20 downloads a month,
+ *  AI on demand unlimited). Pro unchanged. Lookup keys never change. */
+
 export type PlanKey = 'basic' | 'pro' | 'pro_annual'
 export type PaidPlan = 'basic' | 'pro'
 
@@ -26,7 +29,7 @@ export type PlanEntry = {
 }
 
 export const PLANS: Record<PlanKey, PlanEntry> = {
-  basic: { key: 'basic', priceId: 'basic_monthly', name: 'Basic', amount: 7.99, interval: 'month', tier: 'basic', shown: true },
+  basic: { key: 'basic', priceId: 'basic_monthly', name: 'Basic', amount: 19.99, interval: 'month', tier: 'basic', shown: true },
   pro: { key: 'pro', priceId: 'mirror_monthly', name: 'Pro', amount: 49.99, interval: 'month', tier: 'pro', shown: true },
   // Hidden from new buyers for now. Anyone already on it is Pro.
   pro_annual: { key: 'pro_annual', priceId: 'mirror_annual', name: 'Pro annual', amount: 49.99, interval: 'year', tier: 'pro', shown: false },
@@ -49,7 +52,7 @@ export const STRIPE_DESCRIPTIONS: Record<PaidPlan, string> = {
 
 /** What each plan gives, in the same words on every surface. */
 export const PLAN_LINES: Record<PaidPlan, string[]> = {
-  basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${DOWNLOAD_CAPS.basic} downloads a day, no watermark`],
+  basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${DOWNLOAD_CAPS.basic} downloads a month, no watermark`, 'AI on demand: funnier, line by line, unlimited'],
   pro: ['Unlimited bits and rewrites', 'Unlimited downloads, no watermark', 'The Mirror'],
 }
 
@@ -79,12 +82,21 @@ export const PLAN_COMPARE: CompareRow[] = [
     },
   },
   {
-    label: 'Downloads a day (the video, or the picture)',
+    label: 'Downloads (the video, the picture, a copied line)',
     short: 'Downloads',
     cells: {
-      free: { value: `${DOWNLOAD_CAPS.free}, watermarked`, short: `${DOWNLOAD_CAPS.free} · mark`, on: false },
-      basic: { value: `${DOWNLOAD_CAPS.basic}, no watermark`, short: `${DOWNLOAD_CAPS.basic} · clean`, on: true },
+      free: { value: `${DOWNLOAD_CAPS.free} a day, watermarked`, short: `${DOWNLOAD_CAPS.free}/day · mark`, on: false },
+      basic: { value: `${DOWNLOAD_CAPS.basic} a month, no watermark`, short: `${DOWNLOAD_CAPS.basic}/mo · clean`, on: true },
       pro: { value: 'Unlimited, no watermark', short: '∞ · clean', on: true },
+    },
+  },
+  {
+    label: 'AI on demand: "funnier" on any one line, lock a line, keep your edits',
+    short: 'Line by line',
+    cells: {
+      free: { value: '3 touches a day', short: '3/day', on: true },
+      basic: { value: 'Unlimited', short: '∞', on: true },
+      pro: { value: 'Unlimited', short: '∞', on: true },
     },
   },
   {
