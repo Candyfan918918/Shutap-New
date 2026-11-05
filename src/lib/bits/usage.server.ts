@@ -11,7 +11,7 @@
 // is deliberately ignored here: it would flatten the tier caps.
 import { nextPacificMidnight, pacificDay } from '@/lib/pacific-day'
 import { ipFlipLimit, ipSubjectKey } from '@/lib/jokes/session.server'
-import { BIT_CAPS } from './plans'
+import { limitFor } from '../entitlements'
 import type { BitTier, BitUsage } from './shared'
 
 const PRO_DEFAULT_CAP = 50
@@ -23,7 +23,7 @@ export function proCap(): number {
 }
 
 export function capFor(tier: BitTier): number {
-  return tier === 'pro' ? proCap() : BIT_CAPS[tier]
+  return limitFor('bit', tier).cap ?? proCap()
 }
 
 /** Today's key and when it resets, both in Los Angeles time. */

@@ -4,6 +4,7 @@
 import { recordVisit, trackEventFn, upsertMyProfile } from './tracking.functions'
 import { phCapture, posthogIdentify } from './posthog'
 import { isProdHost } from './env'
+import { DEFAULT_PRODUCT, type Product } from './product'
 
 
 const SESSION_KEY = 'shutap_session_id'
@@ -24,12 +25,16 @@ export function getSessionId(): string {
   }
 }
 
+/** Every event names its product (Nov 5 2026): bits unless the caller says
+ *  otherwise, so admin and PostHog can tell the realtor kits apart later. */
 export async function trackEvent(name: string, properties: Record<string, unknown> = {}): Promise<void> {
   if (!isProdHost()) return
   const session_id = getSessionId()
-  void phCapture(name, properties)
+  const props: Record<string, unknown> = { product: DEFAULT_PRODUCT as Product, ...properties }
+  try { if (window.localStorage.getItem('shutap_smoke') === '1') props.smoke = true } catch { /* noop */ }
+  void phCapture(name, props)
   try {
-    await trackEventFn({ data: { session_id, name, properties } })
+    await trackEventFn({ data: { session_id, name, properties: props } })
   } catch { /* noop */ }
 }
 

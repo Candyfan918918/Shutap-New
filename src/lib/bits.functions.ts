@@ -23,7 +23,8 @@ import { activePlan } from './plan.server'
 import { heatFor, varyBitDraft, writeBitFromStory, type BitFailure } from './bits/pipeline.server'
 import { forgetPerson, personSignal } from './bits/person.server'
 import { NO_CAP, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
-import { DOWNLOAD_CAPS, DOWNLOAD_KINDS } from './bits/plans'
+import { DOWNLOAD_KINDS } from './bits/plans'
+import { limitFor } from './entitlements'
 import {
   AUDIENCES,
   DEFAULT_CONTROLS,
@@ -876,7 +877,7 @@ export const downloadUsage = createServerFn({ method: 'POST' })
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
     const tier = await resolveTier(supabaseAdmin, id)
-    const cap = tier === 'pro' ? null : tier === 'guest' ? 0 : DOWNLOAD_CAPS[tier]
+    const cap = limitFor('download', tier).cap
     if (!id.userId) return { used: 0, cap, tier }
     const { count } = await supabaseAdmin.from('bit_downloads').select('id', { count: 'exact', head: true }).eq('user_id', id.userId).eq('day', today().day)
     return { used: count ?? 0, cap, tier }
@@ -899,7 +900,7 @@ export const chargeDownload = createServerFn({ method: 'POST' })
     if (!row) return { ok: false, reason: 'not_found' }
     const tier = await resolveTier(supabaseAdmin, id)
     const { day } = today()
-    const cap = tier === 'pro' ? null : tier === 'guest' ? 0 : DOWNLOAD_CAPS[tier]
+    const cap = limitFor('download', tier).cap
     const watermarked = !isPaidTier(tier)
     // The ledger is bookkeeping. Whatever goes wrong with it (table not
     // there yet, a bad connection), the download goes through uncounted and
@@ -938,7 +939,7 @@ export const chargeDownload = createServerFn({ method: 'POST' })
       }
       await supabaseAdmin
         .from('events')
-        .insert({ user_id: id.userId, session_id: null, name: 'download', properties: { kind: data.kind, tier, watermarked, bit_id: row.id, version_id: data.version_id } as never } as never)
+        .insert({ user_id: id.userId, session_id: null, name: 'download', properties: { product: 'bits', kind: data.kind, tier, watermarked, bit_id: row.id, version_id: data.version_id } as never } as never)
         .then(() => {}, () => {})
       forgetPerson(id.userId)
       return { ok: true, used: used + 1, cap, watermarked, tier, repeat: false }
