@@ -2,9 +2,9 @@
 // Shared by the poll section, its server functions and the admin page, so
 // the words a person tapped and the words the admin reads never drift.
 
-export const POLL_KEY = 'humor-amplifier-2026-10'
+export const POLL_KEY = 'post-kit-2026-11'
 
-export type PollOptionKey = 'all' | 'caption' | 'bit' | 'none'
+export type PollOptionKey = 'video' | 'perform' | 'lines' | 'none'
 
 export interface PollFollowUp {
   question: string
@@ -19,25 +19,28 @@ export interface PollOption {
   followUp: PollFollowUp
 }
 
+// Nov 5 2026: third poll. The caption and hashtags are gone from the post
+// kit, so the question is what people would actually use. The earlier polls
+// keep their rows and votes under their own keys for the admin page.
 export const POLL = {
-  title: 'The humor amplifier: what would you actually post?',
-  description: 'every bit comes with a 5-second video, a caption and five hashtags. tell us straight. sign in to vote and see the split.',
+  title: 'The humor amplifier: what would you actually use?',
+  description: 'every bit comes with a 5-second video and the stand-up, sketch and skit formats. tell us straight. sign in to vote and see the split.',
   privacy: 'your vote is linked to your account, never shown publicly. we may email you about your answer.',
   options: [
     {
-      key: 'all',
-      label: 'the whole post: video, caption and hashtags',
+      key: 'video',
+      label: 'the 5-second video, posted as is',
       followUp: { question: 'where would it go?', chips: ['TikTok', 'Reels', 'Shorts', 'all three'] },
     },
     {
-      key: 'caption',
-      label: 'the caption and hashtags; I film my own video',
-      followUp: { question: 'what keeps you from the video?', chips: ['I want my face in it', 'not my style', 'too short', 'the cartoon'] },
+      key: 'perform',
+      label: 'the bit, performed by me: stand-up, sketch or skit',
+      followUp: { question: 'which one?', chips: ['stand-up', 'sketch', 'skit', 'all of them'] },
     },
     {
-      key: 'bit',
-      label: 'the bit only; I write my own caption',
-      followUp: { question: "what's off about the caption?", chips: ['not my voice', 'too generic', 'wrong hashtags', 'I just prefer mine'] },
+      key: 'lines',
+      label: 'a line or two from it, in my own post or speech',
+      followUp: { question: 'where does it go?', chips: ['a post', 'a speech or toast', 'a message', 'work'] },
     },
     {
       key: 'none',

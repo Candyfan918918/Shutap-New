@@ -21,8 +21,14 @@ type PollRow = { key: string; title: string; opened_at: string; closes_at: strin
 type VoteRow = { option_key: string; follow_up: string | null }
 
 async function loadPoll(): Promise<PollRow | null> {
-  const { data } = await (await db()).from('polls').select('key, title, opened_at, closes_at').eq('key', POLL_KEY).maybeSingle()
-  return (data as PollRow | null) ?? null
+  const client = await db()
+  const { data } = await client.from('polls').select('key, title, opened_at, closes_at').eq('key', POLL_KEY).maybeSingle()
+  if (data) return data as PollRow
+  // A new poll key (Nov 5 2026): make its row on first read, so the poll
+  // opens with the deploy and no migration has to run first.
+  await client.from('polls').insert({ key: POLL_KEY, title: POLL.title } as never)
+  const again = await client.from('polls').select('key, title, opened_at, closes_at').eq('key', POLL_KEY).maybeSingle()
+  return (again.data as PollRow | null) ?? null
 }
 
 const isOpen = (p: PollRow) => !p.closes_at || new Date(p.closes_at).getTime() > Date.now()
