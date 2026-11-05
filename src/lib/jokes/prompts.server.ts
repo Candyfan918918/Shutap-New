@@ -1538,6 +1538,40 @@ The word that does the turning is the last word of its line.
 Return only JSON:
 {"hook":"...","setup":"...","tags":["..."],"button":"...","why":"..."}`
 
+/* ───────────────────────── one line, funnier (AI on demand) ─────────────────────────
+   Nov 5 2026. The person taps "funnier" on ONE line of the bit; nothing else
+   moves. Three versions of that line, each built on a different move, so
+   they can pick or keep their own. Same stamp as the bit prompts. */
+export const BIT_TOUCH_PROMPT = `You sharpen one line of a comedy bit. The person who wrote the story
+performs it, first person. Everything but the one line stays exactly as it is;
+you write three versions of that line only.
+
+STORY:
+{{SITUATION}}
+
+THE BIT (the line to change is marked >>>):
+{{BIT}}
+
+THE LINE: {{SLOT}}
+AS IT IS: {{LINE}}
+AUDIENCE: {{AUDIENCE}}
+VOICE: {{VOICE}}
+{{AVOID}}
+Three versions, each on a DIFFERENT move: pick three of — a more specific
+picture; an escalation (the third item turns it); a reversal (the other party
+gets the line); a cut (fewer words, the turn as the last word); an act instead
+of a label (something happening, not what someone "is"); a callback to a word
+from the hook. Every version must fit its place: the hook at most 8 words and
+readable in two seconds; a setup only states the one fact the hook left out,
+never retells the story; a tag lands on a thing you can point at; the button
+is a verdict or a reversal, never a moral. The joke goes at the situation,
+never at the teller; no advice, no therapy words, no names, nothing about
+bodies, age, looks or intelligence, no facts the story does not give.
+No two versions may share their last three words.
+
+Return only JSON:
+{"options":[{"line":"...","move":"a specific picture"},{"line":"...","move":"..."},{"line":"...","move":"..."}]}`
+
 /* ───────────────────────── bit → skit, bit → sketch ─────────────────────────
    Phase 5. Both take a finished bit version and lay it out for filming; they
    do not write new jokes. Cached per version on bit_versions.skit /
