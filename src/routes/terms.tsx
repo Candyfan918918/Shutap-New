@@ -188,8 +188,8 @@ function TermsPage() {
 
       <h3 id="refunds">13. Paid plans, billing and refunds</h3>
       <p>
-        <b>Basic</b> costs <b>US$7.99 per month</b> and allows three new bits a day (a rewrite
-        counts as one), crowd-work swaps and mixing your own, and three downloads a day with no
+        <b>Basic</b> costs <b>US$19.99 per month</b> and allows three new bits a day (a rewrite
+        counts as one), crowd-work swaps and mixing your own, and twenty downloads a month with no
         watermark. <b>Pro</b> costs <b>US$49.99 per month</b> and allows unlimited new bits,
         rewrites and downloads within fair use, no watermark, and the Mirror. Prices are plus
         any taxes, billed through Stripe. Moving from Basic to Pro charges the prorated difference

@@ -13,13 +13,19 @@ export const BIT_CAPS: Record<Exclude<BitTier, 'pro'>, number> = {
   basic: 3,
 }
 
-/** Downloads a day. A download is one of ('caption' stays in the kind list for the ledger's history):
- *  the picture or script PDF, the 5-second video. Each kind counts on its
- *  own; a second copy of the same version in the same day is free. Pro has
- *  no cap. Guests can't download at all (sign-in first). */
+/** Downloads. Free: 1 a day, watermarked. Basic (Nov 5 2026): a pool of 20 a
+ *  month, shared by everything a person takes (a video, a picture, a PDF, a
+ *  copied line; later a realtor kit = 6). Pro: no cap. A download is one of
+ *  ('caption' stays in the kind list for the ledger's history) the picture,
+ *  the PDF, the video. The same kind on the same version the same day is
+ *  free. Guests can't download at all (sign-in first). */
 export const DOWNLOAD_CAPS: Record<Exclude<BitTier, 'pro' | 'guest'>, number> = {
   free: 1,
-  basic: 3,
+  basic: 20,
+}
+export const DOWNLOAD_PERIOD: Record<Exclude<BitTier, 'pro' | 'guest'>, 'day' | 'month'> = {
+  free: 'day',
+  basic: 'month',
 }
 export const DOWNLOAD_KINDS = ['caption', 'image', 'pdf', 'video'] as const
 export type DownloadKind = (typeof DOWNLOAD_KINDS)[number]

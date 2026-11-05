@@ -31,6 +31,7 @@ export function VideoCard({
   onLimit,
   onFallbackPicture,
   downloadsLeft,
+  period = 'day',
   onCharged,
   beforeDownload,
   resume,
@@ -49,6 +50,8 @@ export function VideoCard({
   /** this device cannot make a video file: open the picture download instead */
   onFallbackPicture: () => void;
   downloadsLeft: number | null | undefined;
+  /** the plan's download period, for the label */
+  period?: 'day' | 'month';
   onCharged: (r: Extract<DownloadCharge, { ok: true }>) => void;
   /** returns true when a confirm sheet took over; the download waits for `resume` */
   beforeDownload?: () => boolean;
@@ -285,7 +288,7 @@ export function VideoCard({
         ? "sign in to watch + download"
         : left === 0
           ? "that's today's downloads · see plans"
-          : `download video${left === null || left === undefined ? "" : ` · ${left} left today`}`;
+          : `download video${left === null || left === undefined ? "" : ` · ${left} left ${period === 'month' ? 'this month' : 'today'}`}`;
 
   const downloadButton = (
     <button
@@ -333,7 +336,7 @@ export function VideoCard({
             ? "unlimited downloads"
             : downloadsLeft === undefined
               ? ""
-              : `each is one download · ${downloadsLeft} left today`}
+              : `each is one download · ${downloadsLeft} left ${period === 'month' ? 'this month' : 'today'}`}
         </span>
       </div>
       <div className="bt-vc">

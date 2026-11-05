@@ -22,6 +22,7 @@ import { useNoIndex } from '@/components/NoIndex'
 import { trackEvent } from '@/lib/tracking'
 import { myBattleBadges, setRankPicture, type MyBadges } from '@/lib/battle.functions'
 import { RANKS, rankAvatarPath, type RankKey } from '@/lib/battle'
+import { UsageCard, useMyUsage } from '@/components/UsageBar'
 
 type Profile = { display_name: string; emoji: string; avatar_url: string | null }
 
@@ -62,6 +63,7 @@ export function ProfilePage() {
   const fetchBilling = useServerFn(getMyBillingStatus)
   const openPortalFn = useServerFn(createMirrorPortal)
   const setCancelFn = useServerFn(setPlanCancellation)
+  const usage = useMyUsage(true)
   const upgradeFn = useServerFn(changePlanToPro)
   const deleteAccountFn = useServerFn(deleteMyAccount)
   const loadBadges = useServerFn(myBattleBadges)
@@ -288,6 +290,9 @@ export function ProfilePage() {
 
         {/* humor wisdom badges, from the joke battle */}
         <BadgesCard badges={badges} busy={badgeBusy} onUse={(k) => void onUseRankPicture(k)} />
+
+        {/* usage */}
+        {usage && <UsageCard usage={usage} />}
 
         {/* plan */}
         <BillingCard billing={billing} onOpenPortal={openPortal} portalBusy={portalBusy} navigate={navigate} onCancellation={changeCancellation} onUpgrade={upgrade} />
