@@ -41,7 +41,7 @@ function TermsPage() {
       <p>
         Shutap is the humor amplifier: it amplifies your own story into a bit. You type what
         happened. Shutap removes identifying details and writes comedy from it, in your voice, with
-        a short video, a caption and hashtags, and the stand-up, sketch and skit formats. You
+        a short video, and the stand-up, sketch and skit formats. You
         can download, share or post what it writes. Shutap amplifies your humor; it never replaces
         it. Shutap is for entertainment only.
       </p>
@@ -174,8 +174,8 @@ function TermsPage() {
         number, within fair use. Your bits are kept in your set list and you can post them.
       </p>
       <p>
-        Downloads are counted separately. The video, the caption and hashtags (when copied), and
-        the picture or script PDF each count as one download; the same one of the same version
+        Downloads are counted separately. The video, and
+        the picture or script PDF, each count as one download; the same one of the same version
         again the same day is free. A rewrite is a new version, and its downloads count again. A free account gets
         <b>one download a day</b>, with a shutap.com watermark on the video and the picture. Basic
         gets <b>three a day</b> with no watermark; Pro has no daily number, within fair use.

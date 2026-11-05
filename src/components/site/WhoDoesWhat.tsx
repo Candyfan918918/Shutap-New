@@ -15,7 +15,7 @@ const COLS: { title: string; lines: string[] }[] = [
     lines: [
       'Removes names and places before anything is saved.',
       'Drafts the bit from its own in-house jokes and techniques, written and rated by people at the Lab.',
-      'Lays it out as a video, a caption, stand-up, a sketch, a skit, a toast.',
+      'Lays it out as a video, stand-up, a sketch, a skit.',
     ],
   },
   {

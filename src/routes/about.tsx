@@ -7,9 +7,9 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 const PATH = "/about";
 const TITLE = "About — Shutap Humor Amplifier Lab";
 const DESCRIPTION =
-  "Shutap is the humor amplifier. Type what happened, get a bit in your voice with a hook, setup, tags and button, a 5-second video, caption and hashtags, then Run it as stand-up, a sketch or a skit.";
+  "Shutap is the humor amplifier. Type what happened, get a bit in your voice with a hook, setup, tags and button, a 5-second video, then Run it as stand-up, a sketch or a skit.";
 const CAPSULE =
-  "Shutap is the humor amplifier. Type what happened. Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, a caption and hashtags, then runs it as stand-up, lays it out as a skit, or formats it as a one-page sketch. It amplifies your humor; it never replaces it.";
+  "Shutap is the humor amplifier. Type what happened. Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, then runs it as stand-up, lays it out as a skit, or formats it as a one-page sketch. It amplifies your humor; it never replaces it.";
 const SECTIONS = [
   {
     heading: "Our goal: say it funnier",
@@ -21,7 +21,7 @@ const SECTIONS = [
   },
   {
     heading: "Built for content creators",
-    body: "Storytime, POV, talking-head and skit videos all run on the same structure. Type the story you were going to tell anyway, get the bit with its 5-second video, caption and hashtags, and post it, or read it straight off the teleprompter while you film for TikTok, Instagram Reels or YouTube Shorts.",
+    body: "Storytime, POV, talking-head and skit videos all run on the same structure. Type the story you were going to tell anyway, get the bit with its 5-second video, and post it, or read it straight off the teleprompter while you film for TikTok, Instagram Reels or YouTube Shorts.",
   },
   {
     heading: "Built for comedians",
@@ -37,7 +37,7 @@ const SECTIONS = [
   },
   {
     heading: "Your post, in five seconds",
-    body: "Every bit comes with a 5-second vertical video in the Shutap style, a caption under 100 characters and five hashtags, so what happened to you is ready to post without opening an editor. Watching and downloading it takes a free account; free downloads carry a shutap.com watermark, Basic and Pro remove it.",
+    body: "Every bit comes with a 5-second vertical video in the Shutap style, so what happened to you is ready to post without opening an editor. Watching and downloading it takes a free account; free downloads carry a shutap.com watermark, Basic and Pro remove it.",
   },
   {
     heading: "The Shutap Humor Amplifier Lab",
@@ -65,7 +65,7 @@ const SECTIONS = [
   },
   {
     heading: "Free to start",
-    body: "A free account (one tap with Google or Apple) gets one bit a day with its video, caption and hashtags, stand-up, sketch and skit, and one download a day with a shutap.com watermark. Basic adds rewrites, crowd-work swaps and mix your own: 3 bits and 3 clean downloads a day. Pro: unlimited bits, rewrites and downloads, no watermark, and the Mirror.",
+    body: "A free account (one tap with Google or Apple) gets one bit a day with its video, stand-up, sketch and skit, and one download a day with a shutap.com watermark. Basic adds rewrites, crowd-work swaps and mix your own: 3 bits and 3 clean downloads a day. Pro: unlimited bits, rewrites and downloads, no watermark, and the Mirror.",
   },
   {
     heading: "Who makes Shutap",

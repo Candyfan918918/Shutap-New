@@ -57,20 +57,28 @@
   .bt-result { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); }
   .bt-result-side { position: sticky; top: 16px; order: 0; }
 }
-/* the five actions wrap to two rows when the column is narrow, never clip */
+/* the actions wrap when the column is narrow, never clip */
 .bt-acts { grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); }
+/* the formats (Nov 5 2026): stand-up, sketch, skit as rows in the slot the
+   caption used to take, under the video */
+.bt-fmts { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.bt-fmt { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 10px 12px; min-height: 56px; text-align: left; }
+.bt-fmt > svg { flex-shrink: 0; }
+.bt-fmt .t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.bt-fmt .t b { font-weight: 600; }
+.bt-fmt .t .bt-note { white-space: normal; }
+.bt-fmt .arrow { margin-left: auto; color: var(--faint); }
 .bt-vc { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
 .bt-vc-video { width: 180px; flex-shrink: 0; }
 .bt-vc-right { flex: 1 1 240px; min-width: 0; display: flex; flex-direction: column; gap: 12px; align-self: stretch; justify-content: center; }
 .bt-result-side { container-type: inline-size; }
 @container (max-width: 520px) {
-  /* the post card when narrow: a small video beside the caption, the
-     hashtags and buttons full width under both */
-  .bt-vc { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 10px 12px; }
-  .bt-vc-video { width: 120px; grid-column: 1; grid-row: 1 / span 2; }
+  /* the post card when narrow: a small video, the download button and the
+     notes beside it */
+  .bt-vc { gap: 12px; flex-wrap: nowrap; }
+  .bt-vc-video { width: 120px; }
   .bt-vc-video canvas { width: 120px !important; height: 213px !important; }
-  .bt-vc-right, .bt-vc-right > .bt-cap-in { display: contents !important; }
-  .bt-vc .bt-chips, .bt-vc > .bt-note, .bt-vc .bt-cap-in > .bt-note, .bt-vc-right > .bt-note { grid-column: 1 / -1; }
+  .bt-vc-right { flex: 1 1 0; min-height: 213px; }
 }
 .bt-box { background: var(--card); border: 1.5px solid rgba(184, 69, 107, 0.28); border-radius: 26px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 30px 70px -40px rgba(160, 50, 90, 0.55); }
 .bt-box-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 22px; border-bottom: 1px dashed rgba(184, 69, 107, 0.30); background: #fdf7f9; }
@@ -254,12 +262,6 @@
 .bt-sheet .bt-lbl.r { color: #b8456b; }
 .bt-sheet .bt-note { margin: 0; color: #7d7277; }
 .bt-sheet .bt-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-
-/* caption + hashtags */
-.bt-cap { border: 1px solid rgba(90,30,50,.12); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; background: #fff; }
-.bt-cap .cap, .bt-cap-in .cap { margin: 0; font-size:var(--fs-body); line-height: 1.4; color: #1a1418; }
-.bt-cap-in .bt-chip { height: 30px; padding: 0 10px; }
-.bt-cap .tags { margin: 0; font-size:var(--fs-small); font-weight: 500; color: #9b3559; line-height: 1.5; word-break: break-word; }
 
 /* One homepage type system, including sheets opened from the write box. */
 .bt {font-size:var(--fs-body);font-weight:500;line-height:1.5;}

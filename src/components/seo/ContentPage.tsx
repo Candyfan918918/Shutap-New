@@ -104,7 +104,7 @@ export function ContentPage({
 
         {tryIt && (
           <div style={{ margin: "0 0 44px" }}>
-            <BitSurface embed={{ page: tryIt, preset, ...(writer ?? { heading: "Try it on what you want to say.", sub: "A post, a speech, a toast, a sketch, a presentation. Get the bit, the video, the caption. Right here, free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
+            <BitSurface embed={{ page: tryIt, preset, ...(writer ?? { heading: "Try it on what you want to say.", sub: "A post, a speech, a toast, a sketch, a presentation. Get the bit and the video. Right here, free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
           </div>
         )}
 

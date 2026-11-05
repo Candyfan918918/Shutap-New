@@ -5,7 +5,7 @@ import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
 
 const PATH = '/humor-amplifier'
 const TITLE = 'The Humor Amplifier — Turn What Happened Into a Post | Shutap'
-const DESCRIPTION = 'Shutap, the humor amplifier: type what happened and get a bit in your voice, a 5-second video, a caption and hashtags. Hook, setup, tags and button. For a post, the stage, a toast, a talk or a meeting.'
+const DESCRIPTION = 'Shutap, the humor amplifier: type what happened and get a bit in your voice, a 5-second video. Hook, setup, tags and button. For a post, the stage, a toast, a talk or a meeting.'
 
 export const Route = createFileRoute('/humor-amplifier')({
   head: () => ({
@@ -32,7 +32,7 @@ function HumorAmplifierPage() {
       tryIt="humor-amplifier"
       breadcrumbs={[{ name: 'The humor amplifier', path: PATH }]}
       h1="The humor amplifier: turn what happened into a post"
-      capsule="Shutap amplifies your own story into a complete bit — hook, setup, tags and button — in your voice, with a 5-second video, a caption and five hashtags, ready to post. Start with what happened to you, not a request for a random joke. It amplifies your humor; it never replaces it."
+      capsule="Shutap amplifies your own story into a complete bit — hook, setup, tags and button — in your voice, with a 5-second video, ready to post. Start with what happened to you, not a request for a random joke. It amplifies your humor; it never replaces it."
       cta={{ label: 'Type what happened. Say it funnier.', href: '/' }}
       sections={[
         {
@@ -45,7 +45,7 @@ function HumorAmplifierPage() {
         },
         {
           heading: 'How to amplify your own story',
-          body: 'Write what happened in the story box. Include who did what, the exact words you remember and the small detail that made it ridiculous; leave real names out. Choose your audience, voice, length and how wild, then let Shutap write the bit. Read the draft out loud and decide what fits your delivery. You can make it hotter, tighter, change the tags or mix your own version. Each version gets its own 5-second video, caption and hashtags.',
+          body: 'Write what happened in the story box. Include who did what, the exact words you remember and the small detail that made it ridiculous; leave real names out. Choose your audience, voice, length and how wild, then let Shutap write the bit. Read the draft out loud and decide what fits your delivery. You can make it hotter, tighter, change the tags or mix your own version. Each version gets its own 5-second video.',
         },
         {
           heading: 'For anyone who needs to say it funnier',
@@ -53,7 +53,7 @@ function HumorAmplifierPage() {
         },
         {
           heading: 'From draft to post',
-          body: 'Download the video with its caption and hashtags and post it, or run the bit as stand-up on the teleprompter, lay it out as a skit you film alone, or format it as a one-page sketch. The format changes how you use the material; the story remains the starting point. Edit anything you would not naturally say, and rehearse the pauses before recording or performing.',
+          body: 'Download the video and post it, or run the bit as stand-up on the teleprompter, lay it out as a skit you film alone, or format it as a one-page sketch. The format changes how you use the material; the story remains the starting point. Edit anything you would not naturally say, and rehearse the pauses before recording or performing.',
         },
       ]}
       others={[

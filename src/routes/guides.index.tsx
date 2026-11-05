@@ -82,7 +82,7 @@ export const Route = createFileRoute("/guides/")({
       sections={[]}
       linkGroups={[
         { heading: "Tools", items: [
-          { href: "/humor-amplifier", label: "The humor amplifier", blurb: "Turn what happened into a post: a bit in your voice, a 5-second video, a caption and hashtags — not random one-liners." },
+          { href: "/humor-amplifier", label: "The humor amplifier", blurb: "Turn what happened into a post: a bit in your voice, a 5-second video — not random one-liners." },
           ...toItems("tool"),
         ] },
         ...topicGroups(),

@@ -22,7 +22,6 @@ import {
   BIT_VARY_RULES,
   BIT_VOICES,
   BIT_ANGLE_FINDER,
-  CAPTION_PROMPT,
   SKIT_PROMPT,
   SKETCH_PROMPT,
   fill,
@@ -765,41 +764,3 @@ export function writeSketch(story: string, bit: Pick<BitDraft, 'hook' | 'setup' 
   })
 }
 
-/* ── caption + hashtags ── */
-
-export type BitCaption = { caption: string; hashtags: string[] }
-
-export async function writeCaption(
-  story: string,
-  bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>,
-  audience: string,
-): Promise<BitCaption | null> {
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const res = await callAgent({
-      model: attempt === 0 ? writerModel() : backupWriterModel(),
-      temperature: 0.9,
-      maxTokens: 600,
-      timeoutMs: BIT_BUDGET.vary(),
-      messages: [
-        {
-          role: 'user',
-          content: fill(CAPTION_PROMPT, {
-            SITUATION: story.slice(0, 2000),
-            BIT: bitAsText(bit),
-            AUDIENCE: BIT_AUDIENCE[audience] ?? BIT_AUDIENCE.social,
-          }),
-        },
-      ],
-    })
-    if (res.error) continue
-    const raw = tryParseJson<{ caption?: unknown; hashtags?: unknown }>(res.text)
-    const caption = tidy(raw?.caption).slice(0, 120)
-    const hashtags = (Array.isArray(raw?.hashtags) ? raw!.hashtags : [])
-      .map((h) => '#' + tidy(h).replace(/^#+/, '').replace(/[^\p{L}\p{N}_]/gu, ''))
-      .filter((h) => h.length > 2 && h.length < 40)
-      .filter((h, i, a) => a.findIndex((x) => x.toLowerCase() === h.toLowerCase()) === i)
-      .slice(0, 5)
-    if (caption && !toneFailure(caption) && hashtags.length >= 3) return { caption, hashtags }
-  }
-  return null
-}

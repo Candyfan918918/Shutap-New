@@ -39,7 +39,7 @@ import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signi
 import { promptOneTap, cancelOneTap, oneTapAvailable } from '@/lib/google-one-tap'
 import { trackEvent } from '@/lib/tracking'
 import { setSurfacePage, anonSessionId, jokeTrack } from '../joke/jokeClient'
-import { ActionIcon } from './icons'
+import { ActionIcon, ACTION_COLORS } from './icons'
 import { Versions } from './Versions'
 import { Progress } from './Progress'
 import { MixYourOwn } from './MixYourOwn'
@@ -49,7 +49,6 @@ import { DownloadSheet } from './DownloadSheet'
 import { PostSheet } from './PostSheet'
 import { PaywallBody, UpgradeBody, type PaywallWhere } from './PlanSheets'
 import { VideoCard } from './VideoCard'
-import { CaptionBox } from './CaptionBox'
 import { downloadUsage, type DownloadUsage } from '@/lib/bits.functions'
 import { FuelMeter, storyFuel, useTypingPrompt } from './storyBox'
 import './bit.css'
@@ -107,8 +106,8 @@ const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   swap: { title: 'Sign in to swap in a crowd-work angle.', sub: 'Free. Your bit comes with you, with all five angles.' },
   standup: { title: 'Sign in to run it as stand-up.', sub: 'Free. The teleprompter, at talking pace.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
-  watch: { title: 'Sign in to watch the video.', sub: 'Free. The 5-second video, the caption and the hashtags come with you.' },
-  download: { title: 'Sign in to download it.', sub: 'Free: one download a day (the video, or the caption and hashtags, or the picture), with a shutap.com watermark.' },
+  watch: { title: 'Sign in to watch the video.', sub: 'Free. The 5-second video comes with you.' },
+  download: { title: 'Sign in to download it.', sub: 'Free: one download a day (the video, or the picture), with a shutap.com watermark.' },
   save: { title: 'Sign in to keep it.', sub: 'Free. It goes in your set list with every version you make.' },
   skit: { title: 'Sign in for the skit.', sub: 'Free. A shot list you film alone, every role yours.' },
   sketch: { title: 'Sign in for the sketch.', sub: 'Free. One page in script format.' },
@@ -122,12 +121,12 @@ type Notice = { text: string; swaps: string[] }
  *  about 50s in the worst case (scrub + writer race); a normal bit is 10-20s. */
 const WRITE_TIME_LIMIT_MS = 60_000
 
-const STEPS = ['reading it · names removed', 'finding the angle', 'writing four, ranking them', 'timing it at talking pace', 'drawing the video + caption']
+const STEPS = ['reading it · names removed', 'finding the angle', 'writing four, ranking them', 'timing it at talking pace', 'drawing the video']
 
 /* ── the note left before sign-in, so the bit comes back after it ── */
 /** What a guest was doing when they were asked to sign in; picked back up
  *  once they're in. */
-type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'caption' | 'watch' | 'save' | 'standup' | 'skit' | 'sketch' | 'post' | 'sheet' | 'one_tap'
+type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'watch' | 'save' | 'standup' | 'skit' | 'sketch' | 'post' | 'sheet' | 'one_tap'
 function writePending(bitId: string, anon: string, from?: SigninFrom) {
   try {
     localStorage.setItem(PENDING_KEY, JSON.stringify({ bit_id: bitId, anon, from, at: Date.now() }))
@@ -275,7 +274,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   /** signin: a feature that needs an account · signin_write: a guest's
    *  second bit · paywall: Basic and Pro (free at its limit, or removing the
    *  watermark) · upgrade: Basic at its limit · fair: Pro's fair-use cap */
-  const [sheet, setSheet] = useState<null | 'signin' | 'signin_write' | 'paywall' | 'upgrade' | 'rate' | 'fair' | 'first_download'>(null)
+  const [sheet, setSheet] = useState<null | 'signin' | 'signin_write' | 'paywall' | 'upgrade' | 'rate' | 'fair'>(null)
   const sheetOpenedAt = useRef(0)
   const [paywallWhere, setPaywallWhere] = useState<PaywallWhere>('bit_3')
   const [signinFrom, setSigninFrom] = useState<SigninFrom>('sheet')
@@ -286,7 +285,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const [opening, setOpening] = useState(false)
   const [standup, setStandup] = useState<BitVersion | null>(null)
   const [downloadOpen, setDownloadOpen] = useState(false)
-  /** downloads used today, for the labels on the video and caption */
+  /** downloads used today, for the labels on the video */
   const [dlUsage, setDlUsage] = useState<DownloadUsage | null>(null)
   const dlFn = useServerFn(downloadUsage)
   const dlRef = useRef(dlFn)
@@ -295,22 +294,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     dlRef.current({ data: { anon_session_id: anonSessionId() } }).then(setDlUsage).catch(() => {})
   }, [])
   const downloadsLeft = dlUsage ? (dlUsage.cap === null ? null : Math.max(0, dlUsage.cap - dlUsage.used)) : undefined
-  /** a download to finish once the person is back (after sign-in or payment), or after the first-download confirm */
-  const [resume, setResume] = useState<'video' | 'caption' | null>(null)
-  /** the first-download-of-the-day confirm: which action asked, so the sheet can finish it */
-  const [firstAsk, setFirstAsk] = useState<'video' | 'caption' | null>(null)
-  /** Free accounts get one download a day: before the first one, ask which.
-   *  Returns true when the sheet took over (the caller stops). */
-  const confirmFirst = useCallback(
-    (kind: 'video' | 'caption'): boolean => {
-      if (tier !== 'free' || !dlUsage || dlUsage.used !== 0 || resume === kind) return false
-      setFirstAsk(kind)
-      setSheet('first_download')
-      jokeTrack('download_first_confirm', tier, { kind })
-      return true
-    },
-    [tier, dlUsage, resume],
-  )
+  /** a download to finish once the person is back (after sign-in or payment) */
+  const [resume, setResume] = useState<'video' | null>(null)
   useEffect(() => {
     if (phase === 'bit' && tier !== 'guest') refreshDownloads()
   }, [phase, tier, refreshDownloads])
@@ -501,7 +486,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
         // Pick up where they were.
         if (note.from === 'download') setDownloadOpen(true)
-        else if (note.from === 'video' || note.from === 'caption') setResume(note.from)
+        else if (note.from === 'video') setResume(note.from)
         else if (note.from === 'save') say('Kept. It\'s in your set list.')
         else if (note.from === 'rewrite' || note.from === 'swap' || note.from === 'mix') say("You're in. Rewrite away.")
         else if (note.from === 'one_tap') say("You're in. This bit is saved to your set list.")
@@ -605,7 +590,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
 
   /** Out of downloads, or wants the watermark gone. The note makes
    *  /subscribe/return land back here and finish the download. */
-  function onDownloadLimit(why: 'count' | 'watermark', kind: 'video' | 'caption' = 'video') {
+  function onDownloadLimit(why: 'count' | 'watermark', kind: 'video' = 'video') {
     if (tier === 'pro') return
     if (bit) writePending(bit.id, anonSessionId(), kind)
     if (why === 'watermark') return openPaywall('download')
@@ -617,7 +602,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     const note = readPending()
     clearPending()
     await refresh()
-    if (note && (note.from === 'video' || note.from === 'caption')) setResume(note.from)
+    if (note && note.from === 'video') setResume(note.from)
     say("You're on Pro. Write as many as you want.")
   }
 
@@ -876,7 +861,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             {embed ? (
               <div className="bt-hero bt-hero-embed" id="bit-write">
                 <h2 className="bt-h1">{embed.heading}</h2>
-                <p className="bt-sub">{embed.sub ?? 'Type what happened. Get the video, the caption, the bit. Right here, free.'}</p>
+                <p className="bt-sub">{embed.sub ?? 'Type what happened. Get the bit and the video. Right here, free.'}</p>
               </div>
             ) : (
               <div className="bt-hero">
@@ -884,7 +869,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   Say it <em>funnier.</em>
                   <span className="bt-h1-kicker">Your humor, amplified.</span>
                 </h1>
-                <p className="bt-sub">A post, a speech, a toast, a sketch, a presentation. Get the bit, the video, the caption. In your voice.</p>
+                <p className="bt-sub">A post, a speech, a toast, a sketch, a presentation. Get the bit and the video. In your voice.</p>
               </div>
             )}
 
@@ -1043,35 +1028,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 </div>
               </article>
 
-              <div className="bt-acts" role="group" aria-label="Use the bit">
-                <button
-                  className="bt-act"
-                  onClick={() => {
-                    // Every action on the result takes an account (Oct 30 2026).
-                    if (tier === 'guest') return openSignin('standup')
-                    setStandup(version)
-                    jokeTrack('standup_opened', tier, { kind: version.kind })
-                  }}
-                >
-                  <ActionIcon name="standup" />
-                  stand-up
-                </button>
-                {(['sketch', 'skit'] as const).map((k) => (
-                  <button
-                    key={k}
-                    className="bt-act"
-                    onClick={() => {
-                      // Sketch and skit are written on request: account only.
-                      if (tier === 'guest') return openSignin(k)
-                      setPhase(k)
-                      jokeTrack(`${k}_opened`, tier, { kind: version.kind })
-                      toTop()
-                    }}
-                  >
-                    <ActionIcon name={k} />
-                    {k}
-                  </button>
-                ))}
+              <div className="bt-acts" role="group" aria-label="Keep the bit">
                 <button
                   className="bt-act"
                   onClick={() => {
@@ -1139,28 +1096,57 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   onFallbackPicture={() => setDownloadOpen(true)}
                   downloadsLeft={downloadsLeft}
                   onCharged={(r) => setDlUsage({ used: r.used, cap: r.cap, tier: r.tier })}
-                  beforeDownload={() => confirmFirst('video')}
                   resume={resume === 'video'}
                   onResumed={() => setResume(null)}
-                  right={(downloadButton, note) => (
-                    <CaptionBox
-                      embedded
-                      actions={downloadButton}
-                      note={note}
-                      bitId={bit.id}
-                      versionId={version.id}
-                      tier={tier}
-                      say={say}
-                      onSignIn={tier === 'guest' ? () => openSignin('caption') : undefined}
-                      onLimit={() => onDownloadLimit('count', 'caption')}
-                      downloadsLeft={downloadsLeft}
-                      onCharged={(used, cap) => setDlUsage((u) => (u ? { ...u, used, cap } : { used, cap, tier }))}
-                      beforeCopy={() => confirmFirst('caption')}
-                      resume={resume === 'caption'}
-                      onResumed={() => setResume(null)}
-                    />
-                  )}
                 />
+                {/* Nov 5 2026: the formats take the slot the caption used to have */}
+                <section className="bt-card" aria-label="Perform it">
+                  <span className="bt-lbl">perform it · pick a format</span>
+                  <div className="bt-fmts" role="group" aria-label="Formats">
+                    <button
+                      className="bt-act bt-fmt"
+                      onClick={() => {
+                        // Every action on the result takes an account (Oct 30 2026).
+                        if (tier === 'guest') return openSignin('standup')
+                        setStandup(version)
+                        jokeTrack('standup_opened', tier, { kind: version.kind })
+                      }}
+                    >
+                      <ActionIcon name="standup" />
+                      <span className="t">
+                        <b style={{ color: ACTION_COLORS.standup }}>stand-up</b>
+                        <span className="bt-note">the bit on a teleprompter · ~{version.est_seconds}s</span>
+                      </span>
+                      <span className="arrow" aria-hidden>→</span>
+                    </button>
+                    {(
+                      [
+                        ['sketch', 'screenplay page · two voices · game of the scene · blackout'],
+                        ['skit', 'one scene, you play both parts'],
+                      ] as const
+                    ).map(([k, d]) => (
+                      <button
+                        key={k}
+                        className="bt-act bt-fmt"
+                        onClick={() => {
+                          // Sketch and skit are written on request: account only.
+                          if (tier === 'guest') return openSignin(k)
+                          setPhase(k)
+                          jokeTrack(`${k}_opened`, tier, { kind: version.kind })
+                          toTop()
+                        }}
+                      >
+                        <ActionIcon name={k} />
+                        <span className="t">
+                          <b style={{ color: ACTION_COLORS[k] }}>{k}</b>
+                          <span className="bt-note">{d}</span>
+                        </span>
+                        <span className="arrow" aria-hidden>→</span>
+                      </button>
+                    ))}
+                  </div>
+                  <span className="bt-note" style={{ display: 'block', marginTop: 8 }}>each format opens on its own page · sign-in required</span>
+                </section>
               </aside>
             </div>
           </>
@@ -1270,36 +1256,6 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   setSheet(null)
                 }}
               />
-            )}
-            {sheet === 'first_download' && (
-              <>
-                <h3 id="bit-sheet-title">Your one free download today.</h3>
-                <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  Free accounts get one a day: the video (with the shutap.com watermark), or the caption and hashtags. Which one?
-                </p>
-                <button
-                  className="bt-btn block"
-                  onClick={() => {
-                    setSheet(null)
-                    setResume('video')
-                  }}
-                >
-                  {firstAsk === 'video' ? 'download the video' : 'the video instead'}
-                </button>
-                <button
-                  className="bt-btn ghost block"
-                  onClick={() => {
-                    setSheet(null)
-                    setResume('caption')
-                  }}
-                >
-                  {firstAsk === 'caption' ? 'copy caption + hashtags' : 'the caption + hashtags instead'}
-                </button>
-                <p className="bt-note" style={{ textAlign: 'center' }}>Basic gets 3 a day with no watermark · Pro has no limit</p>
-                <button className="bt-btn ghost sm block" onClick={() => setSheet(null)}>
-                  not now
-                </button>
-              </>
             )}
             {sheet === 'fair' && (
               <>

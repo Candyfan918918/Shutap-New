@@ -79,7 +79,7 @@ export const PLAN_COMPARE: CompareRow[] = [
     },
   },
   {
-    label: 'Downloads a day (the video, and the caption + hashtags, each count as one)',
+    label: 'Downloads a day (the video, or the picture)',
     short: 'Downloads',
     cells: {
       free: { value: `${DOWNLOAD_CAPS.free}, watermarked`, short: `${DOWNLOAD_CAPS.free} · mark`, on: false },
@@ -105,7 +105,6 @@ export const EVERY_PLAN = [
   'A 5-second video of it',
   'Stand-up on the teleprompter',
   'Sketch and skit',
-  'Caption and hashtags',
   'Set list of every bit',
 ] as const
 

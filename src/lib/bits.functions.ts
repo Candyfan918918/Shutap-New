@@ -882,7 +882,7 @@ export const downloadUsage = createServerFn({ method: 'POST' })
     return { used: count ?? 0, cap, tier }
   })
 
-/** One download against today's cap. Caption + hashtags, the picture, the
+/** One download against today's cap. The picture, the
  *  PDF and the video are each their own download; the same kind on the same
  *  version the same day is free (a retry, a second copy). Logged to
  *  bit_downloads (the admin ledger) and to events (the admin feed); the
@@ -1097,35 +1097,3 @@ export const postBitToRoom = createServerFn({ method: 'POST' })
     return { ok: true, room_id: room.id as string, already: false }
   })
 
-/* ───────────────────────── caption + hashtags ───────────────────────── */
-
-export type CaptionResult =
-  | { ok: true; caption: string; hashtags: string[] }
-  | { ok: false; reason: 'sign_in' | 'not_found' | 'rate_limited' | 'failed' }
-
-/** The text under the video: a teaser caption and five hashtags, written on
- *  first ask and cached on the version. Signed in only: it's a model call
- *  written on request, like the skit and the sketch. */
-export const getCaption = createServerFn({ method: 'POST' })
-  .inputValidator((d: unknown) => LayoutInput.parse(d))
-  .handler(async ({ data }): Promise<CaptionResult> => {
-    const supabaseAdmin = await adminDb()
-    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
-    if (!id.userId) return { ok: false, reason: 'sign_in' }
-    const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
-    if (!row) return { ok: false, reason: 'not_found' }
-    const { data: v } = await supabaseAdmin
-      .from('bit_versions')
-      .select('id, hook, setup, tags, button, caption')
-      .eq('id', data.version_id)
-      .eq('bit_id', row.id)
-      .maybeSingle()
-    if (!v) return { ok: false, reason: 'not_found' }
-    if (v.caption?.caption) return { ok: true, caption: v.caption.caption, hashtags: (v.caption.hashtags ?? []).slice(0, 5) }
-    if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
-    const { writeCaption } = await import('./bits/pipeline.server')
-    const made = await writeCaption(row.story_clean, v, (row.controls as BitControls)?.audience ?? 'social')
-    if (!made) return { ok: false, reason: 'failed' }
-    await supabaseAdmin.from('bit_versions').update({ caption: made } as never).eq('id', v.id)
-    return { ok: true, ...made }
-  })

@@ -58,7 +58,7 @@ export function TryItBox({
       <div style={{ display: 'grid', gap: 4, minWidth: 0, flex: '1 1 220px' }}>
         <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#17131a', lineHeight: 1.3 }}>{heading}</h2>
         <p style={{ margin: 0, fontSize: 15, color: '#443c42', lineHeight: 1.45 }}>
-          Write what happened. Get the video, the caption, the bit. Free.
+          Write what happened. Get the bit and the video. Free.
           {preset && presetLabel(preset) ? ` Opens set to ${presetLabel(preset)}; change anything before you write.` : ''}
         </p>
       </div>
