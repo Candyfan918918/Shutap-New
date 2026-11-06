@@ -57,7 +57,7 @@ function Toasts() {
           </div>
         </div>
         <div className="rl-grid">
-          {[['Your stories, not a template', 'You type the three stories everyone knows and the one only you know. Shutap writes the toast around them, in your words, and only touches the lines you point at.'], ['The teleprompter', 'Big text on your phone, one line at a time, scrolls at your pace. A clock that turns red at two minutes thirty.'], ['Yours to keep', 'Edit it until it sounds like you, then lock it. The speech, cue cards and prompter download as often as you like, forever, from My creations. Pro members write toasts at no extra charge.']].map(([h, p]) => <div key={h} className="rl-tile"><h3>{h}</h3><p>{p}</p></div>)}
+          {[['Your stories, not a template', 'You type the three stories everyone knows and the one only you know. Shutap writes the toast around them, in your words, and only touches the lines you point at.'], ['The teleprompter', 'Big text on your phone, one line at a time, scrolls at your pace. A clock that turns red at two minutes thirty.'], ['Yours to keep', 'Edit it until it sounds like you, then lock it. The speech, cue cards and prompter download as often as you like, forever, from My creations. Basic includes 1 toast a month; Pro, unlimited.']].map(([h, p]) => <div key={h} className="rl-tile"><h3>{h}</h3><p>{p}</p></div>)}
         </div>
       </div>
       <Footer />

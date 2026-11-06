@@ -14,12 +14,17 @@
 //   kit        a realtor kit written (a rewrite is one too)  0     1 ever 20/month  ∞
 //   download   the video, picture, PDF or a copied line      0     ∞ mark ∞         ∞     (never counted)
 //   touch      "funnier" on one line (AI on demand)          0     ∞      ∞         ∞
+// Toasts (when they open, Nov 6 2026): Free the first toast, Basic 1 a month,
+// Pro unlimited; one toast on its own is $12.99.
 // A kit bought on its own ($12.99, before or after it's written) never counts.
 import { BIT_CAPS } from './bits/plans'
 import type { BitTier } from './bits/shared'
 
 /** Realtor kits written, by plan (Nov 6 2026): Free 1 ever, Basic 20 a month. */
 export const KIT_CAPS = { free: 1, basic: 20 } as const
+
+/** Toasts written, by plan (Nov 6 2026, for when Toasts opens): Free the first one ever, Basic 1 a month, Pro unlimited. */
+export const TOAST_CAPS = { free: 1, basic: 1 } as const
 
 export type EntitlementKind = 'bit' | 'download' | 'touch' | 'kit'
 export type Period = 'day' | 'month' | 'ever'
