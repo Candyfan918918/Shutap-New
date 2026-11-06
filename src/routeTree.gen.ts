@@ -52,6 +52,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StreamRouteImport } from './routes/stream'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as ToastLabRouteImport } from './routes/toast-lab'
 import { Route as ToastsRouteImport } from './routes/toasts'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
@@ -322,6 +323,11 @@ const SubscribeRoute = SubscribeRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToastLabRoute = ToastLabRouteImport.update({
+  id: '/toast-lab',
+  path: '/toast-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToastsRoute = ToastsRouteImport.update({
@@ -669,6 +675,7 @@ export interface FileRoutesByFullPath {
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
+  '/toast-lab': typeof ToastLabRoute
   '/toasts': typeof ToastsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
@@ -770,6 +777,7 @@ export interface FileRoutesByTo {
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
+  '/toast-lab': typeof ToastLabRoute
   '/toasts': typeof ToastsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
@@ -873,6 +881,7 @@ export interface FileRoutesById {
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
+  '/toast-lab': typeof ToastLabRoute
   '/toasts': typeof ToastsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
@@ -976,6 +985,7 @@ export interface FileRouteTypes {
     | '/stream'
     | '/subscribe'
     | '/terms'
+    | '/toast-lab'
     | '/toasts'
     | '/trust'
     | '/unsubscribe'
@@ -1077,6 +1087,7 @@ export interface FileRouteTypes {
     | '/stream'
     | '/subscribe'
     | '/terms'
+    | '/toast-lab'
     | '/toasts'
     | '/trust'
     | '/unsubscribe'
@@ -1179,6 +1190,7 @@ export interface FileRouteTypes {
     | '/stream'
     | '/subscribe'
     | '/terms'
+    | '/toast-lab'
     | '/toasts'
     | '/trust'
     | '/unsubscribe'
@@ -1282,6 +1294,7 @@ export interface RootRouteChildren {
   StreamRoute: typeof StreamRoute
   SubscribeRoute: typeof SubscribeRouteWithChildren
   TermsRoute: typeof TermsRoute
+  ToastLabRoute: typeof ToastLabRoute
   ToastsRoute: typeof ToastsRoute
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
@@ -1630,6 +1643,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/toast-lab': {
+      id: '/toast-lab'
+      path: '/toast-lab'
+      fullPath: '/toast-lab'
+      preLoaderRoute: typeof ToastLabRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/toasts': {
@@ -2129,6 +2149,7 @@ const rootRouteChildren: RootRouteChildren = {
   StreamRoute: StreamRoute,
   SubscribeRoute: SubscribeRouteWithChildren,
   TermsRoute: TermsRoute,
+  ToastLabRoute: ToastLabRoute,
   ToastsRoute: ToastsRoute,
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
