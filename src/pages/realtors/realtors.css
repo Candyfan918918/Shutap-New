@@ -117,3 +117,10 @@
 .pr-top > div { flex: none; }
 .pr-top a, .pr-top button { white-space: nowrap; }
 @media (max-width: 420px) { .pr-top a, .pr-top button { padding: 6px 10px; font-size: 12px; } }
+
+/* /realtors hero: the paste box up front (Nov 6 2026) */
+.rl-hero-paste { display: grid; grid-template-columns: 1fr auto; gap: 8px; max-width: 640px; margin: 18px auto 0; padding: 8px; border-radius: 20px; background: var(--card); border: 1px solid var(--line-2); box-shadow: 0 18px 40px -28px rgba(160,50,90,.55); }
+.rl-hero-paste .rl-input { border: 0; height: 50px; font-size: 16px; }
+.rl-hero-paste .rl-btn { height: 50px; }
+.rl-hero-paste-foot { grid-column: 1 / -1; padding: 0 8px 4px; text-align: left; }
+@media (max-width: 520px) { .rl-hero-paste { grid-template-columns: 1fr; } .rl-hero-paste .rl-input { border: 1.5px solid var(--line-2); } .rl-hero-paste .rl-btn { width: 100%; } }

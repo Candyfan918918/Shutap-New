@@ -1,4 +1,6 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { useState } from 'react'
+import { trackEvent } from '@/lib/tracking'
 import { pageMeta } from '@/lib/seo/page-meta'
 import { KIT_ONCE, PLANS, usd } from '@/lib/pricing'
 import { Footer } from '@/components/feed/Footer'
@@ -31,6 +33,40 @@ const QA = [
   ['How do I film it?', 'Open shoot mode on the phone you read from: big text, one line at a time, scrolls by itself. Record with a second phone or a laptop. Shutap never opens your camera.'],
 ]
 
+/** Nov 6 2026: the paste box up front. The link goes to the kit page, which
+ *  reads it (after sign-in for a new visitor; the link is kept). */
+function PasteBox() {
+  const navigate = useNavigate()
+  const [url, setUrl] = useState('')
+  const [bad, setBad] = useState(false)
+  function go(e?: React.FormEvent) {
+    e?.preventDefault()
+    const u = url.trim()
+    if (!/^https?:\/\/\S+\.\S+/i.test(u)) { setBad(true); return }
+    void trackEvent('realtors_landing_paste', { host: (() => { try { return new URL(u).hostname } catch { return null } })() })
+    void navigate({ to: '/realtors/kit', search: { url: u } as never })
+  }
+  return (
+    <form className="rl-hero-paste" onSubmit={go}>
+      <input
+        className="rl-input"
+        type="url"
+        inputMode="url"
+        autoComplete="off"
+        placeholder="paste the listing link · https://…"
+        aria-label="Listing link"
+        value={url}
+        onChange={(e) => { setUrl(e.target.value); setBad(false) }}
+        onPaste={(e) => { const t = e.clipboardData.getData('text').trim(); if (/^https?:\/\//i.test(t)) { e.preventDefault(); setUrl(t); setTimeout(() => go(), 0) } }}
+      />
+      <button type="submit" className="rl-btn">start my kit →</button>
+      <div className="rl-hero-paste-foot">
+        {bad ? <span className="rl-note" style={{ color: '#b3261e' }}>paste the full link, starting with https://</span> : <span className="rl-note">No link? <Link to="/realtors/kit" search={{ text: '1' } as never} className="rl-note" style={{ textDecoration: 'underline' }}>paste the listing text instead</Link></span>}
+      </div>
+    </form>
+  )
+}
+
 function Landing() {
   return (
     <div className="fd rl">
@@ -39,11 +75,8 @@ function Landing() {
           <p className="rl-kicker">shutap for realtors</p>
           <h1 className="rl-h1">Your listing, <em>funnier.</em></h1>
           <p className="rl-lead">Paste the listing link. Get the walkthrough to shoot, the voiceover, the hooks, the open-house kit and the posts, in your tone. You film it; Shutap writes the shoot.</p>
-          <div className="rl-row" style={{ justifyContent: 'center', marginTop: 16 }}>
-            <Link to="/realtors/kit" className="rl-btn">paste a listing · first kit free</Link>
-            <Link to="/pricing" className="rl-btn ghost">pricing</Link>
-          </div>
-          <p className="rl-note" style={{ textAlign: 'center', marginTop: 10 }}>MLS portal links, your brokerage page, or paste the listing text · nothing is made up: the kit uses only what the listing says</p>
+          <PasteBox />
+          <p className="rl-note" style={{ textAlign: 'center', marginTop: 10 }}>MLS portal links, your brokerage page, Zillow, Redfin, Realtor.com · first kit free · nothing is made up: the kit uses only what the listing says · <Link to="/pricing" className="rl-note">pricing</Link></p>
         </div>
 
         <div>
