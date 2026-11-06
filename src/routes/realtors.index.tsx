@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { pageMeta } from '@/lib/seo/page-meta'
 import { KIT_ONCE, PLANS, usd } from '@/lib/pricing'
 import { Footer } from '@/components/feed/Footer'
+import { SampleKit } from '@/pages/realtors/SampleKit'
 import '@/components/feed/feed.css'
 import '@/pages/realtors/realtors.css'
 
@@ -43,6 +44,11 @@ function Landing() {
             <Link to="/pricing" className="rl-btn ghost">pricing</Link>
           </div>
           <p className="rl-note" style={{ textAlign: 'center', marginTop: 10 }}>MLS portal links, your brokerage page, or paste the listing text · nothing is made up: the kit uses only what the listing says</p>
+        </div>
+
+        <div>
+          <p className="rl-kicker" style={{ textAlign: 'left' }}>this is the kit you get</p>
+          <div style={{ marginTop: 8 }}><SampleKit /></div>
         </div>
 
         <div>
