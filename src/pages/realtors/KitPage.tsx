@@ -4,6 +4,7 @@
  *   3. write the kit → KitView (copy, PDF, shoot mode, edits, rewrite)
  * ?kit=<id> opens a kit already written. Signed in only; a guest sees the
  * box and is sent to sign in on the first write, the link kept for after. */
+import type React from 'react'
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useCurrentAlias } from '@/hooks/use-current-alias'
@@ -52,7 +53,7 @@ function Chips({ label, hint, value, onChange }: { label: string; hint: string; 
   )
 }
 
-export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { kitId?: string; sessionId?: string; prepaidSession?: string; urlIn?: string; textIn?: boolean }) {
+export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, children }: { kitId?: string; sessionId?: string; prepaidSession?: string; urlIn?: string; textIn?: boolean; /** the demos and the page's own sections, shown under the box while nothing is open */ children?: React.ReactNode }) {
   const { userId, ready } = useCurrentAlias()
   const navigate = useNavigate()
   const [url, setUrl] = useState('')
@@ -88,7 +89,7 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { k
     if (!ready || !userId || !autoRead.current || autoRead.current !== url) return
     autoRead.current = null
     void read()
-    void navigate({ to: '/realtors/kit', replace: true })
+    void navigate({ to: '/realtors', replace: true })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, userId, url])
   useEffect(() => {
@@ -106,7 +107,7 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { k
         kitPaidStatus({ data: { kitId, sessionId, environment: getStripeEnvironment() } })
           .then((r) => { if (r.paid) { say('this kit is yours · no limits, no marks'); track('kit_bought_seen', {}) } })
           .catch(() => {})
-          .finally(() => { void load(); void navigate({ to: '/realtors/kit', search: { kit: kitId } as never, replace: true }) })
+          .finally(() => { void load(); void navigate({ to: '/realtors', search: { kit: kitId } as never, replace: true }) })
       } else void load()
     }
   }, [ready, userId, kitId, sessionId])
@@ -127,7 +128,7 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { k
         autoWrite.current = true
       })
       .catch(() => {})
-      .finally(() => { void navigate({ to: '/realtors/kit', replace: true }) })
+      .finally(() => { void navigate({ to: '/realtors', replace: true }) })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, userId, prepaidSession])
   useEffect(() => {
@@ -144,7 +145,7 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { k
   }
 
   async function fetchPrepaySecret(): Promise<string> {
-    const r = await createKitPrepayCheckout({ data: { environment: getStripeEnvironment(), returnUrl: `${window.location.origin}/realtors/kit?prepaid={CHECKOUT_SESSION_ID}` } })
+    const r = await createKitPrepayCheckout({ data: { environment: getStripeEnvironment(), returnUrl: `${window.location.origin}/realtors?prepaid={CHECKOUT_SESSION_ID}` } })
     if ('error' in r && r.error) { setCheckoutError('checkout could not open · try again'); throw new Error(r.error) }
     if (!('clientSecret' in r) || !r.clientSecret) throw new Error('no client secret')
     return r.clientSecret
@@ -152,7 +153,7 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { k
 
   async function fetchClientSecret(): Promise<string> {
     if (!kit) throw new Error('no kit')
-    const r = await createKitCheckout({ data: { kitId: kit.id, environment: getStripeEnvironment(), returnUrl: `${window.location.origin}/realtors/kit?kit=${kit.id}&session_id={CHECKOUT_SESSION_ID}` } })
+    const r = await createKitCheckout({ data: { kitId: kit.id, environment: getStripeEnvironment(), returnUrl: `${window.location.origin}/realtors?kit=${kit.id}&session_id={CHECKOUT_SESSION_ID}` } })
     if ('error' in r && r.error) { setCheckoutError(r.error === 'already_paid' ? 'this kit is already yours' : 'checkout could not open · try again'); throw new Error(r.error) }
     if (!('clientSecret' in r) || !r.clientSecret) throw new Error('no client secret')
     return r.clientSecret
@@ -184,8 +185,8 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { k
   }
 
   function gate() {
-    setDurableReturn('/realtors/kit')
-    try { sessionStorage.setItem('shutap_returnTo', '/realtors/kit') } catch { /* noop */ }
+    setDurableReturn('/realtors')
+    try { sessionStorage.setItem('shutap_returnTo', '/realtors') } catch { /* noop */ }
     setSheet('signin')
     track('signin_prompt_seen', { where: 'realtors_kit' })
   }
@@ -207,7 +208,7 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { k
       try { sessionStorage.removeItem(PREPAY_KEY) } catch { /* noop */ }
       setMine((m) => [{ id: r.kit.id, address: r.kit.listing.address, city: r.kit.listing.city, price: r.kit.listing.price, tone: r.kit.tone, created_at: r.kit.created_at }, ...m])
       try { sessionStorage.removeItem(DRAFT_KEY) } catch { /* noop */ }
-      void navigate({ to: '/realtors/kit', search: { kit: r.kit.id } as never, replace: true })
+      void navigate({ to: '/realtors', search: { kit: r.kit.id } as never, replace: true })
       requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       track('kit_written', { tone: r.kit.tone, rewrite: !!existing, shots: r.kit.versions[0]?.content.walkthrough.shots.length ?? 0 })
     } finally {
@@ -234,14 +235,14 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { k
 
         {kit ? (
           <>
-            <KitView data={kit} usage={usage ?? { tier: 'free', kits: { used: 0, cap: 1, period: 'ever' }, credits: 0, downloads: { used: 0, cap: null, period: 'month' } }} onUsage={setUsage} onLimit={() => setSheet('limit')} onBuy={() => { setCheckoutError(''); setSheet('buy') }} onTouchLimit={() => setSheet('touch_limit')} onRewrite={() => { setListing(kit.listing); setNote(kit.listing.note); setControls(kit.controls); setKit(null); void navigate({ to: '/realtors/kit', replace: true }); track('kit_rewrite_opened', {}) }} say={say} />
+            <div data-ph-private style={{ display: 'contents' }}><KitView data={kit} usage={usage ?? { tier: 'free', kits: { used: 0, cap: 1, period: 'ever' }, credits: 0, downloads: { used: 0, cap: null, period: 'month' } }} onUsage={setUsage} onLimit={() => setSheet('limit')} onBuy={() => { setCheckoutError(''); setSheet('buy') }} onTouchLimit={() => setSheet('touch_limit')} onRewrite={() => { setListing(kit.listing); setNote(kit.listing.note); setControls(kit.controls); setKit(null); void navigate({ to: '/realtors', replace: true }); track('kit_rewrite_opened', {}) }} say={say} /></div>
             <div className="rl-row" style={{ justifyContent: 'space-between' }}>
-              <button className="rl-btn ghost sm" onClick={() => { setKit(null); setListing(null); setUrl(''); setText(''); setNote(''); void navigate({ to: '/realtors/kit', replace: true }) }}>another listing</button>
+              <button className="rl-btn ghost sm" onClick={() => { setKit(null); setListing(null); setUrl(''); setText(''); setNote(''); void navigate({ to: '/realtors', replace: true }) }}>another listing</button>
               {usage && <span className="rl-note">{usage.kits.cap === null ? 'kits: unlimited' : `kits: ${usage.kits.used} of ${usage.kits.cap}${usage.kits.period === 'month' ? ' this month' : ' free'}`}{usage.credits > 0 ? ` · ${usage.credits} bought, ready` : ''} · copies and downloads: unlimited</span>}
             </div>
           </>
         ) : (
-          <div className="rl-box">
+          <div className="rl-box" data-ph-private>
             <div className="rl-box-head">
               <span>● {listing ? 'the listing' : pasteText ? 'paste the listing text' : 'paste the listing link'}</span>
               <span style={{ fontWeight: 500, color: 'var(--muted)' }}>{usage ? (usage.kits.cap === null ? 'unlimited kits' : `${kitsLeft} of ${usage.kits.cap} kit${usage.kits.cap === 1 ? '' : 's'} left${usage.kits.period === 'month' ? ' this month' : ''}${usage.credits > 0 ? ` · +${usage.credits} bought` : ''}`) : 'first kit free'}</span>
@@ -300,20 +301,17 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { k
           </div>
         )}
 
+        {/* Nov 6 2026: kits live in My creations, under the profile */}
         {!kit && !listing && mine.length > 0 && (
-          <div className="rl-card">
-            <span className="rl-lbl">your kits</span>
-            <div className="rl-row">
-              {mine.slice(0, 12).map((k) => (
-                <Link key={k.id} to="/realtors/kit" search={{ kit: k.id } as never} className="rl-chip" onClick={() => setKit(null)}>{k.address ?? 'listing'}{k.city ? ` · ${k.city}` : ''} · {TONE_LABEL[k.tone].split(' ')[0]}</Link>
-              ))}
-            </div>
-          </div>
+          <p className="rl-note" style={{ textAlign: 'center' }}>
+            {mine.length} {mine.length === 1 ? 'kit' : 'kits'} of yours · <Link to="/creations" search={{ show: 'kits' } as never} className="rl-note" style={{ textDecoration: 'underline' }}>open them in My creations →</Link>
+          </p>
         )}
 
         {!listing && <p className="rl-note" style={{ textAlign: 'center' }}>
           first kit free with an account · one kit {usd(KIT_ONCE.amount)} · Basic {usd(PLANS.basic.amount)}/mo: 20 kits a month · Pro {usd(PLANS.pro.amount)}/mo: unlimited · copies and downloads always unlimited · <Link to="/pricing" className="rl-note">pricing</Link>
         </p>}
+        {!kit && !listing && children}
       </div>
 
       {toast && <div className="rl-toast" role="status">{toast}</div>}

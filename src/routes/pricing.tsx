@@ -115,7 +115,7 @@ function PricingPage() {
 
         <section className="fd-post" style={{ padding: '16px 20px', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
           <span style={{ fontSize: 15.5 }}><b>Just need one?</b> <span className="fd-muted">{ONE_TIME_LINE}</span></span>
-          <Link to="/realtors/kit" className="fd-btn ghost">buy one kit · {usd(KIT_ONCE.amount)}</Link>
+          <Link to="/realtors" className="fd-btn ghost">buy one kit · {usd(KIT_ONCE.amount)}</Link>
         </section>
 
         <p className="fd-muted" style={{ textAlign: 'center', margin: 0 }}>

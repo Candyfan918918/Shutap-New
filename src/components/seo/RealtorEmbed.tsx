@@ -12,7 +12,7 @@ export function RealtorEmbed({ page }: { page: string }) {
   const ok = /^https?:\/\//i.test(url.trim())
   const go = (text?: boolean) => {
     void trackEvent('seo_cta_clicked', { page, product: 'realtors', kind: text ? 'paste_text' : 'listing_link' })
-    void navigate({ to: '/realtors/kit', search: (ok && !text ? { url: url.trim() } : text ? { text: '1' } : {}) as never })
+    void navigate({ to: '/realtors', search: (ok && !text ? { url: url.trim() } : text ? { text: '1' } : {}) as never })
   }
   return (
     <div className="rl" id="bit-write" style={{ margin: '0 0 44px' }}>

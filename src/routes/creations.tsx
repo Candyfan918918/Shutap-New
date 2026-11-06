@@ -106,7 +106,7 @@ function Creations() {
           <h1 className="fd-h1" style={{ fontSize: 28 }}>My creations</h1>
           <div style={{ display: 'flex', gap: 6 }}>
             <Link to="/" className="fd-btn sm">+ bit</Link>
-            <Link to="/realtors/kit" className="fd-btn sm ghost">+ kit</Link>
+            <Link to="/realtors" className="fd-btn sm ghost">+ kit</Link>
             <Link to="/toasts" className="fd-btn sm ghost">+ toast</Link>
           </div>
         </div>
@@ -161,7 +161,7 @@ function Creations() {
               <span className="fd-muted">Everything you make lands here, newest first, with every version.</span>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
                 {(kind === 'all' || kind === 'bits') && <Link to="/" className="fd-btn">write a bit</Link>}
-                {(kind === 'all' || kind === 'kits') && <Link to="/realtors/kit" className="fd-btn ghost">paste a listing</Link>}
+                {(kind === 'all' || kind === 'kits') && <Link to="/realtors" className="fd-btn ghost">paste a listing</Link>}
                 {(kind === 'all' || kind === 'toasts') && <Link to="/toasts" className={kind === 'toasts' ? 'fd-btn' : 'fd-btn ghost'}>write a toast</Link>}
               </div>
             </div>
@@ -207,7 +207,7 @@ function Creations() {
               ) : (
                 <Link
                   key={`k${it.kit.id}`}
-                  to="/realtors/kit"
+                  to="/realtors"
                   search={{ kit: it.kit.id } as never}
                   className="fd-post"
                   style={{ textDecoration: 'none', color: 'inherit', gap: 6 }}

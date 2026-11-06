@@ -1,6 +1,7 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import { trackEvent } from '@/lib/tracking'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { z } from 'zod'
+import { KitPage } from '@/pages/realtors/KitPage'
+import { PrompterDemo } from '@/pages/realtors/PrompterDemo'
 import { pageMeta } from '@/lib/seo/page-meta'
 import { KIT_ONCE, PLANS, usd } from '@/lib/pricing'
 import { Footer } from '@/components/feed/Footer'
@@ -14,6 +15,8 @@ const TITLE = 'Shutap for Realtors — your listing, funnier. The walkthrough, v
 const DESC = 'Paste the listing link. Shutap writes the walkthrough to shoot, the voiceover for text-to-voice, the hooks, the open-house kit, the posts and the straight copy, in your tone: professional, funny, luxury or young. Fair-housing checked, nothing made up. First kit free.'
 
 export const Route = createFileRoute('/realtors/')({
+  // Nov 6 2026: /realtors is the tool (the old /realtors/kit redirects here).
+  validateSearch: (s: Record<string, unknown>) => z.object({ kit: z.string().uuid().optional(), session_id: z.string().max(200).optional(), prepaid: z.string().max(200).optional(), url: z.string().max(2000).optional(), text: z.string().max(2).optional() }).parse(s),
   head: () => ({ meta: pageMeta(TITLE, DESC, '/realtors') }),
   component: Landing,
 })
@@ -33,55 +36,20 @@ const QA = [
   ['How do I film it?', 'Open shoot mode on the phone you read from: big text, one line at a time, scrolls by itself. Record with a second phone or a laptop. Shutap never opens your camera.'],
 ]
 
-/** Nov 6 2026: the paste box up front. The link goes to the kit page, which
- *  reads it (after sign-in for a new visitor; the link is kept). */
-function PasteBox() {
-  const navigate = useNavigate()
-  const [url, setUrl] = useState('')
-  const [bad, setBad] = useState(false)
-  function go(e?: React.FormEvent) {
-    e?.preventDefault()
-    const u = url.trim()
-    if (!/^https?:\/\/\S+\.\S+/i.test(u)) { setBad(true); return }
-    void trackEvent('realtors_landing_paste', { host: (() => { try { return new URL(u).hostname } catch { return null } })() })
-    void navigate({ to: '/realtors/kit', search: { url: u } as never })
-  }
-  return (
-    <form className="rl-hero-paste" onSubmit={go}>
-      <input
-        className="rl-input"
-        type="url"
-        inputMode="url"
-        autoComplete="off"
-        placeholder="paste the listing link · https://…"
-        aria-label="Listing link"
-        value={url}
-        onChange={(e) => { setUrl(e.target.value); setBad(false) }}
-        onPaste={(e) => { const t = e.clipboardData.getData('text').trim(); if (/^https?:\/\//i.test(t)) { e.preventDefault(); setUrl(t); setTimeout(() => go(), 0) } }}
-      />
-      <button type="submit" className="rl-btn">start my kit →</button>
-      <div className="rl-hero-paste-foot">
-        {bad ? <span className="rl-note" style={{ color: '#b3261e' }}>paste the full link, starting with https://</span> : <span className="rl-note">No link? <Link to="/realtors/kit" search={{ text: '1' } as never} className="rl-note" style={{ textDecoration: 'underline' }}>paste the listing text instead</Link></span>}
-      </div>
-    </form>
-  )
-}
-
 function Landing() {
+  const { kit, session_id, prepaid, url, text } = Route.useSearch()
   return (
     <div className="fd rl">
-      <div className="rl-col" style={{ gap: 28 }}>
-        <div>
-          <p className="rl-kicker">shutap for realtors</p>
-          <h1 className="rl-h1">Your listing, <em>funnier.</em></h1>
-          <p className="rl-lead">Paste the listing link. Get the walkthrough to shoot, the voiceover, the hooks, the open-house kit and the posts, in your tone. You film it; Shutap writes the shoot.</p>
-          <PasteBox />
-          <p className="rl-note" style={{ textAlign: 'center', marginTop: 10 }}>MLS portal links, your brokerage page, Zillow, Redfin, Realtor.com · first kit free · nothing is made up: the kit uses only what the listing says · <Link to="/pricing" className="rl-note">pricing</Link></p>
-        </div>
-
-        <div>
-          <p className="rl-kicker" style={{ textAlign: 'left' }}>this is the kit you get</p>
-          <div style={{ marginTop: 8 }}><SampleKit /></div>
+      <KitPage kitId={kit} sessionId={session_id} prepaidSession={prepaid} urlIn={url} textIn={text === '1'}>
+        <div className="rl-demos">
+          <div>
+            <p className="rl-kicker" style={{ textAlign: 'left' }}>the demo · a real listing, all six outputs</p>
+            <div style={{ marginTop: 8 }}><SampleKit /></div>
+          </div>
+          <div>
+            <p className="rl-kicker" style={{ textAlign: 'left' }}>the demo · shoot mode on your phone</p>
+            <div style={{ marginTop: 8 }}><PrompterDemo /></div>
+          </div>
         </div>
 
         <div>
@@ -113,7 +81,7 @@ function Landing() {
           <p className="rl-kicker" style={{ textAlign: 'left' }}>questions</p>
           {QA.map(([q, a]) => <div key={q} style={{ marginTop: 10 }}><h3 style={{ margin: '0 0 3px', font: '700 15px var(--sora)', color: 'var(--wine)' }}>{q}</h3><p className="rl-note" style={{ fontSize: 14, color: 'var(--ink-2)' }}>{a}</p></div>)}
         </div>
-      </div>
+      </KitPage>
       <Footer />
     </div>
   )

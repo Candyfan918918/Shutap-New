@@ -102,7 +102,7 @@ export function Prompter({ kitId }: { kitId: string }) {
       </div>
     </div>
   )
-  if (err) return <div className="pr"><div className="pr-top"><span>{err}</span><Link to="/realtors/kit">the kit page</Link></div></div>
+  if (err) return <div className="pr"><div className="pr-top"><span>{err}</span><Link to="/realtors">the kit page</Link></div></div>
   if (!kit) return <div className="pr"><div className="pr-top"><span>opening…</span></div></div>
 
   return (
@@ -112,7 +112,7 @@ export function Prompter({ kitId }: { kitId: string }) {
         <div style={{ display: 'flex', gap: 6 }}>
           <button onClick={() => { setWhich((w) => (w === 'walkthrough' ? 'voiceover' : 'walkthrough')); setIdx(0); setRunning(false) }}>{which === 'walkthrough' ? 'voiceover' : 'walkthrough'}</button>
           <button onClick={() => { setRunning(false); setSecond(true); void phCapture('kit_shoot_second_phone', { product: 'realtors' }) }}>other phone</button>
-          <Link to="/realtors/kit" search={{ kit: kit.id } as never}>close</Link>
+          <Link to="/realtors" search={{ kit: kit.id } as never}>close</Link>
         </div>
       </div>
       <div className="pr-scroll" onClick={() => setRunning((r) => !r)}>
