@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
+import { getFlags } from '@/lib/flags.functions'
+import { NO_FLAGS, type Flags } from '@/lib/flags'
 import { ogImageMeta } from '@/lib/seo/meta'
 import { SITE_URL } from '@/lib/site'
 import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
-import { EVERY_PLAN, PLANS, PLAN_COMPARE, usd, type CompareTier } from '@/lib/pricing'
+import { EVERY_PLAN, KIT_ONCE, PLANS, PLAN_COMPARE, usd, type CompareTier } from '@/lib/pricing'
 import { Footer } from '@/components/feed/Footer'
 import '@/components/feed/feed.css'
 
@@ -137,18 +140,97 @@ function PlanCard({ plan }: { plan: 'free' | 'basic' | 'pro' }) {
   )
 }
 
+/** One pricing page for every product (Nov 6 2026, behind newnav): a tab
+ *  row jumps to the product; every product's plans stay on the page. */
+const PRODUCT_TABS = [['bits', 'Bits'], ['realtors', 'Realtors'], ['toasts', 'Toasts'], ['enterprise', 'Enterprise']] as const
+function ProductTabs({ active, onPick }: { active: string; onPick: (k: string) => void }) {
+  return (
+    <div role="tablist" style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap' }}>
+      {PRODUCT_TABS.map(([k, l]) => (
+        <a key={k} role="tab" href={`#${k}`} aria-selected={active === k} className="fd-chip" onClick={() => onPick(k)} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', ...(active === k ? { background: 'var(--rose)', color: '#fff', borderColor: 'var(--rose)' } : {}) }}>{l}</a>
+      ))}
+    </div>
+  )
+}
+function Tile({ name, price, per, lines, cta, href, best }: { name: string; price: string; per?: string; lines: string[]; cta: string; href: string; best?: boolean }) {
+  return (
+    <section className="fd-post" style={{ gap: 12, padding: 20, ...(best ? { borderColor: 'var(--rose)' } : {}) }}>
+      <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800 }}>{name}</h3>
+      <div><span style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-.04em' }}>{price}</span>{per && <span className="fd-muted"> {per}</span>}</div>
+      <ul style={{ margin: 0, padding: '0 0 0 18px', fontSize: 14, lineHeight: 1.5, color: 'var(--ink-2)' }}>{lines.map((l) => <li key={l}>{l}</li>)}</ul>
+      <a href={href} className={`fd-btn block${best ? '' : ' ghost'}`} style={{ marginTop: 'auto' }}>{cta}</a>
+    </section>
+  )
+}
+function OtherProducts() {
+  return (
+    <>
+      <section id="realtors" style={{ display: 'flex', flexDirection: 'column', gap: 12, scrollMarginTop: 90 }}>
+        <div>
+          <h2 className="fd-h1" style={{ fontSize: 24, marginBottom: 4 }}>Shutap for Realtors</h2>
+          <p className="fd-muted" style={{ margin: 0, fontSize: 15 }}>Paste the listing link; get the walkthrough to shoot, the voiceover, the hooks, the open-house kit, the posts and the straight copy, in your tone. One account with Bits: Basic and Pro cover both.</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 14 }}>
+          <Tile name="First kit" price="free" lines={['one listing, all six outputs, every tone to try', 'each output ends with "— shutap.com"', 'sign in with Google or Apple']} cta="paste a listing" href="/realtors/kit" />
+          <Tile name="One kit" price={usd(KIT_ONCE.amount)} per="once" lines={['one listing, no subscription', 'copy and download without limits or marks', 'rewrite it for 30 days']} cta="buy from the kit page" href="/realtors/kit" />
+          <Tile name="Basic" price={usd(PLANS.basic.amount)} per="/month" lines={['3 kits a day (a rewrite is one)', '20 downloads a month: a copied output is 1, the kit PDF is 6', 'funnier on any line, unlimited', 'everything in Bits Basic']} cta={`get Basic · ${usd(PLANS.basic.amount)}`} href="/subscribe?plan=basic&from=pricing_realtors" best />
+          <Tile name="Pro" price={usd(PLANS.pro.amount)} per="/month" lines={['unlimited kits, rewrites and downloads', 'nothing marked', 'everything in Bits Pro']} cta={`get Pro · ${usd(PLANS.pro.amount)}`} href="/subscribe?plan=pro&from=pricing_realtors" />
+        </div>
+      </section>
+      <section id="toasts" style={{ display: 'flex', flexDirection: 'column', gap: 12, scrollMarginTop: 90 }}>
+        <div>
+          <h2 className="fd-h1" style={{ fontSize: 24, marginBottom: 4 }}>Shutap Toasts <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--rose-ink)', background: 'var(--surface)', borderRadius: 999, padding: '3px 8px', verticalAlign: 'middle' }}>soon</span></h2>
+          <p className="fd-muted" style={{ margin: 0, fontSize: 15 }}>Best man, maid of honor, parents, retirement, birthday: your stories about them, said funnier, with a teleprompter and a clock. Pricing lands when it opens; Pro members will write toasts at no extra charge.</p>
+        </div>
+        <div><Link to="/toasts" className="fd-btn ghost">join the list</Link></div>
+      </section>
+      <section id="enterprise" style={{ display: 'flex', flexDirection: 'column', gap: 12, scrollMarginTop: 90 }}>
+        <div>
+          <h2 className="fd-h1" style={{ fontSize: 24, marginBottom: 4 }}>Shutap Enterprise</h2>
+          <p className="fd-muted" style={{ margin: 0, fontSize: 15 }}>Say it funnier in the deck, the all-hands and the sales call; the Shutap dataset and techniques for your team. Name, title, company, and we reply within a day.</p>
+        </div>
+        <div><Link to="/business" className="fd-btn ghost">request pricing</Link></div>
+      </section>
+      <section aria-label="What counts" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <h2 className="fd-h1" style={{ fontSize: 20 }}>What counts</h2>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+            <thead><tr style={{ textAlign: 'left', color: 'var(--muted)' }}><th style={{ padding: '8px 6px' }}>Product</th><th style={{ padding: '8px 6px' }}>What's metered</th><th style={{ padding: '8px 6px' }}>Free</th><th style={{ padding: '8px 6px' }}>Basic</th><th style={{ padding: '8px 6px' }}>Pro</th></tr></thead>
+            <tbody>
+              {[
+                ['Bits', 'new bits (a rewrite is one); downloads (video, picture, PDF, a copied line); touches', '1 bit a day · 1 download a day, marked · 3 touches', '3 bits a day · 20 downloads a month · unlimited touches', 'unlimited'],
+                ['Realtors', 'kits (a rewrite is one); copies from the download pool (a copied output 1, the kit PDF 6)', '1 kit, outputs marked', '3 kits a day · the same 20 downloads', 'unlimited'],
+                ['One kit', `${usd(KIT_ONCE.amount)} once`, '—', 'never counted, never marked', '—'],
+                ['Toasts', 'speeches · soon', '—', '—', 'included'],
+                ['Enterprise', 'seats and decks', '—', '—', 'quoted'],
+              ].map((r) => <tr key={r[0]} style={{ borderTop: '1px solid var(--line)' }}>{r.map((c, i) => <td key={i} style={{ padding: '8px 6px', verticalAlign: 'top', fontWeight: i === 0 ? 700 : 400 }}>{c}</td>)}</tr>)}
+            </tbody>
+          </table>
+        </div>
+        <p className="fd-faint" style={{ margin: 0 }}>Limits reset at midnight Pacific; monthly downloads on the 1st. The same download again the same day is free.</p>
+      </section>
+    </>
+  )
+}
+
 function PricingPage() {
+  const [flags, setFlags] = useState<Flags>(NO_FLAGS)
+  const [tab, setTab] = useState('bits')
+  useEffect(() => { getFlags().then(setFlags).catch(() => {}) }, [])
+  useEffect(() => { const h = window.location.hash.replace('#', ''); if (PRODUCT_TABS.some(([k]) => k === h)) setTab(h) }, [])
   return (
     <div className="fd">
       <div className="fd-col" style={{ maxWidth: 980, gap: 22, paddingTop: 36 }}>
         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
           <h1 className="fd-h1" style={{ fontSize: 'clamp(30px,5vw,46px)' }}>
-            Free to use. {usd(BASIC)} to download clean.
+            {flags.newnav ? <>One account. Every product.</> : <>Free to use. {usd(BASIC)} to download clean.</>}
           </h1>
           <p className="fd-muted" style={{ fontSize: 16, maxWidth: 560, margin: 0 }}>
-            Every bit comes with a 5-second video. Free downloads one a day with a watermark. Basic removes it. Pro downloads as much as you want and adds the Mirror.
+            {flags.newnav ? 'Pick what you need to be funny for. One plan covers Bits and Realtors; Toasts is next. Prices in US dollars, limits reset at midnight Pacific, cancel anytime.' : 'Every bit comes with a 5-second video. Free downloads one a day with a watermark. Basic removes it. Pro downloads as much as you want and adds the Mirror.'}
           </p>
+          {flags.newnav && <ProductTabs active={tab} onPick={setTab} />}
         </div>
+        {flags.newnav && <h2 id="bits" className="fd-h1" style={{ fontSize: 24, margin: '6px 0 -8px', scrollMarginTop: 90 }}>Shutap Bits</h2>}
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 14 }}>
           <PlanCard plan="free" />
@@ -173,6 +255,7 @@ function PricingPage() {
         <p className="fd-faint" style={{ textAlign: 'center', margin: 0 }}>
           Prices in USD. Tax may apply. No free trial. Cancel anytime. Limits reset at midnight Pacific. Payments by Stripe.
         </p>
+        {flags.newnav && <OtherProducts />}
 
         <section style={{ marginTop: 16 }}>
           <h2 className="fd-h1" style={{ fontSize: 22, marginBottom: 10 }}>

@@ -11,6 +11,16 @@ import { useCurrentAlias, useIsAdmin } from '@/hooks/use-current-alias'
 import { UserAvatar } from '@/components/UserAvatar'
 import { useMyUsage, usageLine } from '@/components/UsageBar'
 import { myAlias } from '@/lib/feed.functions'
+import { getFlags } from '@/lib/flags.functions'
+import { NO_FLAGS, type Flags } from '@/lib/flags'
+
+/** The products menu (Nov 6 2026, behind the newnav flag). */
+export const PRODUCTS: Array<{ to: string; name: string; sub: string; soon?: boolean }> = [
+  { to: '/bits', name: 'Shutap Bits', sub: 'for creators and comedians · what happened → the bit, the video, stand-up, sketch, skit' },
+  { to: '/realtors', name: 'Shutap for Realtors', sub: 'paste the listing → the shoot kit: walkthrough, voiceover, hooks, open house, posts' },
+  { to: '/toasts', name: 'Shutap Toasts', sub: 'best man, maid of honor, retirement · join the list', soon: true },
+  { to: '/business', name: 'Shutap Enterprise', sub: 'request pricing · the deck, the all-hands, the dataset' },
+]
 
 type Variant = 'light' | 'dark'
 
@@ -83,6 +93,18 @@ export function GlobalHeader() {
   const alias = aliasRow ?? (userId ? { name: '', emoji: '', avatar: null } : null)
   const usage = useMyUsage(!!userId)
   const admin = useIsAdmin()
+  const [flags, setFlags] = useState<Flags>(NO_FLAGS)
+  useEffect(() => { getFlags().then(setFlags).catch(() => {}) }, [])
+  const [productsOpen, setProductsOpen] = useState(false)
+  const productsRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!productsOpen) return
+    const close = (e: MouseEvent) => { if (!productsRef.current?.contains(e.target as Node)) setProductsOpen(false) }
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setProductsOpen(false) }
+    document.addEventListener('click', close); document.addEventListener('keydown', esc)
+    return () => { document.removeEventListener('click', close); document.removeEventListener('keydown', esc) }
+  }, [productsOpen])
+  useEffect(() => { setProductsOpen(false) }, [pathname])
   const [menuOpen, setMenuOpen] = useState(false)
   const areaRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
@@ -234,13 +256,44 @@ export function GlobalHeader() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}@media (max-width: 420px){[data-gh-pill]{padding:7px 12px !important}}@media (max-width: 520px){[data-gh-wide]{display:none !important}}@media (max-width: 340px){[data-gh-nav] a{padding:6px 2px !important;font-size:12px !important}[data-gh-pill]{padding:6px 10px !important}[data-gh-logo]{height:20px !important}}`}</style>
           <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {navLink('/', 'write')}
+            {flags.newnav ? (
+              <div ref={productsRef} style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  aria-haspopup="menu"
+                  aria-expanded={productsOpen}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    const r = (e.currentTarget as HTMLElement).getBoundingClientRect()
+                    productsRef.current?.style.setProperty('--gh-menu-x', `${Math.round(r.left)}px`)
+                    productsRef.current?.style.setProperty('--gh-menu-y', `${Math.round(r.bottom + 8)}px`)
+                    setProductsOpen((v) => !v)
+                  }}
+                  style={{ fontFamily: "'Sora',system-ui,sans-serif", fontWeight: isHome ? 500 : 600, fontSize: isHome ? 'var(--fs-body)' : 14, color: productsOpen || ['/bits', '/realtors', '/toasts', '/business'].some((p) => pathname.startsWith(p)) ? inkActive : inkMuted, background: 'transparent', border: 0, padding: '6px 10px', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                >
+                  products <span aria-hidden style={{ fontSize: 10 }}>{productsOpen ? '▴' : '▾'}</span>
+                </button>
+                {productsOpen && (
+                  <div role="menu" style={{ position: 'fixed', left: 'max(12px, min(var(--gh-menu-x, 12px), calc(100vw - 372px)))', top: 'var(--gh-menu-y, 56px)', width: 'min(360px, calc(100vw - 24px))', background: '#fff', color: '#111', borderRadius: 16, boxShadow: '0 24px 60px -24px rgba(60,20,40,.45)', border: '1px solid rgba(90,30,50,.12)', padding: 8, zIndex: 50 }}>
+                    {PRODUCTS.map((pr) => (
+                      <Link key={pr.to} to={pr.to} role="menuitem" onClick={() => setProductsOpen(false)} style={{ display: 'block', padding: '10px 12px', borderRadius: 12, textDecoration: 'none', color: '#111', whiteSpace: 'normal' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: "'Sora',system-ui,sans-serif", fontWeight: 700, fontSize: 14 }}>
+                          {pr.name}
+                          {pr.soon && <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: '#9b3559', background: '#f6e9ee', borderRadius: 999, padding: '2px 7px' }}>soon</span>}
+                        </span>
+                        <span style={{ display: 'block', fontSize: 12.5, color: '#6e6468', lineHeight: 1.4, marginTop: 2, whiteSpace: 'normal' }}>{pr.sub}</span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : navLink('/', 'write')}
             {navLink('/guides', 'guides')}
             {/* Phones: funniest and enterprise live in the footer so the header fits (Nov 2 2026). */}
             <span data-gh-wide="" style={{ display: 'contents' }}>{navLink('/funniest', 'funniest')}</span>
             {navLink('/pricing', 'pricing')}
             {/* Hidden on phones so the nav fits; enterprise is still in the footer. */}
-            <span data-gh-wide="" style={{ display: 'contents' }}>{navLink('/business', 'enterprise')}</span>
+            {!flags.newnav && <span data-gh-wide="" style={{ display: 'contents' }}>{navLink('/business', 'enterprise')}</span>}
           </span>
           {alias ? (
             <Link to="/activity" aria-label={unread ? `activity, ${unread} new` : 'activity'} style={{ position: 'relative', display: 'grid', placeItems: 'center', width: 36, height: 36, borderRadius: 999, color: pathname.startsWith('/activity') ? inkActive : inkMuted }}>

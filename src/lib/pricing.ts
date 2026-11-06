@@ -50,14 +50,14 @@ export const STRIPE_NAMES: Record<PaidPlan, string> = {
 /** The product description Stripe shows at checkout, kept in step with
  *  the plans by /api/public/payments/prices. */
 export const STRIPE_DESCRIPTIONS: Record<PaidPlan, string> = {
-  basic: `Shutap Basic: ${BIT_CAPS.basic} new bits a day (a rewrite counts as one), rewrites, crowd-work swaps and mix your own, and ${DOWNLOAD_CAPS.basic} downloads a day with no watermark.`,
-  pro: 'Shutap Pro: unlimited bits, rewrites and downloads with no watermark, plus the Mirror.',
+  basic: `Shutap Basic: ${BIT_CAPS.basic} new bits a day (a rewrite counts as one), AI on demand on every line, 3 realtor kits a day, and ${DOWNLOAD_CAPS.basic} downloads a month with no watermark.`,
+  pro: 'Shutap Pro: unlimited bits, rewrites, realtor kits and downloads with no watermark, plus the Mirror.',
 }
 
 /** What each plan gives, in the same words on every surface. */
 export const PLAN_LINES: Record<PaidPlan, string[]> = {
-  basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${DOWNLOAD_CAPS.basic} downloads a month, no watermark`, 'AI on demand: funnier, line by line, unlimited'],
-  pro: ['Unlimited bits and rewrites', 'Unlimited downloads, no watermark', 'The Mirror'],
+  basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${DOWNLOAD_CAPS.basic} downloads a month, no watermark`, 'AI on demand: funnier, line by line, unlimited', '3 realtor kits a day'],
+  pro: ['Unlimited bits and rewrites', 'Unlimited downloads, no watermark', 'Unlimited realtor kits', 'The Mirror'],
 }
 
 /** The plans side by side: the same rows on every surface that compares
@@ -100,6 +100,15 @@ export const PLAN_COMPARE: CompareRow[] = [
     cells: {
       free: { value: '3 touches a day', short: '3/day', on: true },
       basic: { value: 'Unlimited', short: '∞', on: true },
+      pro: { value: 'Unlimited', short: '∞', on: true },
+    },
+  },
+  {
+    label: 'Realtor kits (paste a listing, get the shoot kit)',
+    short: 'Realtor kits',
+    cells: {
+      free: { value: 'First kit free, outputs marked', short: '1 · mark', on: true },
+      basic: { value: '3 a day; copies from the download pool', short: '3/day', on: true },
       pro: { value: 'Unlimited', short: '∞', on: true },
     },
   },
