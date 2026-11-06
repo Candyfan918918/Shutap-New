@@ -75,3 +75,18 @@
 .ts-plan p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
 .ts-crisis ul { margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.7; color: var(--ink); }
 .rl-sheet.ts-sheet { max-height: 92vh; overflow: auto; }
+
+/* the prompter (boards 5, 6): on top of the realtor prompter's .pr styles */
+.tp-scroll .pr-seg .line { font-size: calc(clamp(26px, 6vw, 44px) * var(--tp-scale, 1)); }
+.tp-marks { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.tp-marks span { font: 700 13px var(--sora, system-ui); color: #f2a7c3; border: 1px solid #f2a7c3; border-radius: 999px; padding: 4px 11px; }
+.tp-marks span.fill { background: #f2a7c3; color: #0e0a0c; }
+.pr-bar button.tp-skip { background: #e7548a; border-color: #e7548a; color: #0e0a0c; font-weight: 800; padding: 0 20px; }
+.pr-bar button:disabled { opacity: .4; }
+.tp-lights { display: flex; gap: 10px; align-items: center; padding: 10px 16px 0; }
+.tp-lights span { width: 30px; height: 30px; border-radius: 50%; }
+.tp-lights span.g { background: #1d3a29; } .tp-lights span.y { background: #3a3220; } .tp-lights span.r { background: #3a2024; }
+.tp-lights span.on.g { background: #2fb36b; box-shadow: 0 0 24px #2fb36b; width: 42px; height: 42px; }
+.tp-lights span.on.y { background: #f2c94c; box-shadow: 0 0 24px #f2c94c; width: 42px; height: 42px; }
+.tp-lights span.on.r { background: #eb5757; box-shadow: 0 0 24px #eb5757; width: 42px; height: 42px; }
+.tp-lights b { font: 700 14px var(--sora, system-ui); color: #c9b8bf; }

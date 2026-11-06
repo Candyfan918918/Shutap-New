@@ -52,6 +52,7 @@ Disallow: /kit-lab
 Disallow: /toast-lab
 Disallow: /realtors/kit
 Disallow: /toasts/edit
+Disallow: /toasts/prompter
 Disallow: /lovable/
 Disallow: /.lovable/
 Disallow: /checkin

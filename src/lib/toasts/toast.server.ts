@@ -240,7 +240,8 @@ export function checkToast(t: Toast, form: ToastForm): ToastCheck[] {
   const [lo, hi] = lengthWindow(form)
   const secs = toastSeconds(t.lines)
   if (secs > hi) fails.push({ rule: `runs long: ${secs}s, target ${form.length}s`, where: 'speech', line: '', fatal: true })
-  else if (secs < lo) fails.push({ rule: `runs short: ${secs}s, target ${form.length}s`, where: 'speech', line: '', fatal: false })
+  // well under the target (less than 60% of it) is rewritten; a little under is only noted
+  else if (secs < lo) fails.push({ rule: `runs short: ${secs}s, target ${form.length}s`, where: 'speech', line: '', fatal: secs < Math.round(form.length * 0.6) })
   if (!t.text_after) fails.push({ rule: 'no text after', where: 'the text after', line: '', fatal: false })
   if (t.cards.length < 2) fails.push({ rule: 'too few cue cards', where: 'cards', line: '', fatal: false })
   for (const f of t.flags) fails.push({ rule: `writer's flag: ${f.why}`, where: 'flag', line: f.line, fatal: false })
@@ -264,6 +265,7 @@ function promptFor(form: ToastForm): string {
     TONE: TOAST_TONES[form.tone] ?? TOAST_TONES.warm_funny!,
     SECONDS: String(form.length),
     WORDS: String(targetWords(form.length)),
+    MIN_WORDS: String(Math.round(targetWords(form.length) * 0.85)),
     MUST_SAY: form.must_say.length ? form.must_say.map((w) => `"${w}"`).join(', ') : '(none)',
     NEVER_SAY: form.never_say.length ? form.never_say.map((w) => `"${w}"`).join(', ') : '(none)',
     CHECK: checkLine(form),
@@ -305,7 +307,7 @@ export async function writeToast(form: ToastForm): Promise<ToastResult | null> {
     })
     if (candidates.some((c) => !c.checks.some((f) => f.fatal))) break
     if (!fails.length) break
-    feedback = `\n\nYOUR LAST ATTEMPT BROKE THESE RULES. Fix every one; everything else may stay:\n${[...new Set(fails)].slice(0, 12).join('\n')}\nThe stories and the true thing go in word for word. Never add a number, an event or a fact the speaker did not give. Count the words: about ${targetWords(form.length)}.`
+    feedback = `\n\nYOUR LAST ATTEMPT BROKE THESE RULES. Fix every one; everything else may stay:\n${[...new Set(fails)].slice(0, 12).join('\n')}\nThe stories and the true thing go in word for word. Never add a number, an event or a fact the speaker did not give. Count the words: about ${targetWords(form.length)}, never fewer than ${Math.round(targetWords(form.length) * 0.85)}.`
   }
   const pool = candidates.filter((c) => !c.checks.some((f) => f.fatal))
   if (!pool.length) return null

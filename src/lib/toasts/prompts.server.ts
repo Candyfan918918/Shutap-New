@@ -4,7 +4,9 @@
 // story, a fact or a person. Same bones as the realtor kit: two writers, a
 // judge from another model family, checks before anyone sees it.
 // TOAST_PROMPT_VERSION is stamped on every toast; bump on any edit.
-export const TOAST_PROMPT_VERSION = 'toast-0.2'
+export const TOAST_PROMPT_VERSION = 'toast-0.3'
+// 0.3 (Nov 6 2026): speeches ran short (the first lab runs: 47–102s on a
+// 2-minute target); the writer gets a word floor and a short speech is rewritten.
 // 0.2 (Nov 6 2026, Candy): the 60-second cut is on demand, written only when
 // the speaker taps "make a 60-second version" (TOAST_CUT_PROMPT), not with every speech.
 
@@ -42,7 +44,7 @@ THE TRUE THING (the line the toast ends on before the glasses, word for word):
 {{TRUE_THING}}
 
 TONE: {{TONE}}
-LENGTH: about {{SECONDS}} seconds said aloud, which is about {{WORDS}} words (count your words; a toast that runs long gets cut).
+LENGTH: about {{SECONDS}} seconds said aloud, which is about {{WORDS}} words and never fewer than {{MIN_WORDS}} (count your words: a toast that runs long gets cut, one that runs short leaves the speaker standing there). With few stories, fill the time with what the speaker gave: a fuller opener, a second tag on a story, the turn, the lines to the room. Still never a new story or fact.
 MUST SAY: {{MUST_SAY}}
 NEVER SAY: {{NEVER_SAY}}
 {{CHECK}}
