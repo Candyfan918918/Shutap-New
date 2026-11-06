@@ -48,6 +48,14 @@ export function initPostHog(): Promise<void> {
         // Error tracking: uncaught errors and unhandled promise rejections
         // become $exception events, grouped into issues in PostHog.
         capture_exceptions: true,
+        // Nov 6 2026: Microsoft's email link scanner (Outlook Safe Links /
+        // Defender) opens links from emails in a headless Chrome and throws
+        // "Object Not Found Matching Id:N, MethodName:update, ParamCount:4"
+        // from its own injected script, a dozen at a time. Not ours; dropped.
+        before_send: (ev) => {
+          if (ev && ev.event === '$exception' && /Object Not Found Matching Id/i.test(JSON.stringify(ev.properties?.$exception_list ?? ev.properties?.$exception_values ?? ''))) return null
+          return ev
+        },
       })
       _ph = mod.default
       console.log('PostHog initialized')
