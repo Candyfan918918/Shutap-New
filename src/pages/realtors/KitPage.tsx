@@ -65,6 +65,7 @@ export function KitPage({ kitId, sessionId }: { kitId?: string; sessionId?: stri
   const [usage, setUsage] = useState<KitUsage | null>(null)
   const [mine, setMine] = useState<KitSummary[]>([])
   const [sheet, setSheet] = useState<null | 'signin' | 'limit' | 'touch_limit' | 'off' | 'buy'>(null)
+  const [moreOpen, setMoreOpen] = useState(false)
   const [checkoutError, setCheckoutError] = useState('')
   const [toast, setToast] = useState<string | null>(null)
   const toastTimer = useRef<number | undefined>(undefined)
@@ -175,7 +176,7 @@ export function KitPage({ kitId, sessionId }: { kitId?: string; sessionId?: stri
         <div>
           <p className="rl-kicker">shutap for realtors</p>
           <h1 className="rl-h1">Your listing, <em>funnier.</em></h1>
-          <p className="rl-lead">Paste the listing link. Get the walkthrough to shoot, the voiceover, the hooks, the open-house kit, the posts and the straight copy, in your tone. You film it; Shutap writes the shoot.</p>
+          {!kit && !listing && <p className="rl-lead">One link in. The walkthrough, voiceover, hooks, open-house kit, posts and straight copy out, in your tone.</p>}
         </div>
 
         {kit ? (
@@ -189,17 +190,21 @@ export function KitPage({ kitId, sessionId }: { kitId?: string; sessionId?: stri
         ) : (
           <div className="rl-box">
             <div className="rl-box-head">
-              <span>● the listing</span>
+              <span>● {listing ? 'the listing' : pasteText ? 'paste the listing text' : 'paste the listing link'}</span>
               <span style={{ fontWeight: 500, color: 'var(--muted)' }}>{usage ? (usage.kits.cap === null ? 'unlimited kits' : `${kitsLeft} of ${usage.kits.cap} kit${usage.kits.cap === 1 ? '' : 's'} left${usage.kits.period === 'day' ? ' today' : ''}`) : 'first kit free'}</span>
             </div>
             <div className="rl-box-body">
               {!listing ? (
                 <>
                   {!pasteText ? (
-                    <div className="rl-row">
-                      <input className="rl-input" style={{ flex: '1 1 320px' }} placeholder="paste the listing link: MLS portal, your brokerage page, Zillow, Redfin…" value={url} onChange={(e) => setUrl(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') void read() }} inputMode="url" />
-                      <button className="rl-btn" disabled={reading || !url.trim()} onClick={() => void read()}>{reading ? 'reading…' : 'read the listing'}</button>
-                    </div>
+                    <>
+                      <p className="rl-note" style={{ fontSize: 14, color: 'var(--ink-2)' }}>Open the listing in your browser, copy the web address from the address bar (it starts with <b>https://</b>) and paste it here. MLS portal links, your brokerage page, Zillow, Redfin, Realtor.com all work.</p>
+                      <div className="rl-row">
+                        <input className="rl-input" style={{ flex: '1 1 320px' }} placeholder="https://…" value={url} onChange={(e) => setUrl(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') void read() }} inputMode="url" autoComplete="off" />
+                        <button className="rl-btn" disabled={reading || !/^https?:\/\//i.test(url.trim())} onClick={() => void read()}>{reading ? 'reading…' : 'read the listing →'}</button>
+                      </div>
+                      {url.trim() && !/^https?:\/\//i.test(url.trim()) && <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>that doesn't look like a web address · it should start with https://</p>}
+                    </>
                   ) : (
                     <>
                       <textarea className="rl-textarea" placeholder="paste the listing text: address, price, beds, baths, sqft, the description, the open house…" value={text} onChange={(e) => setText(e.target.value)} />
@@ -207,7 +212,7 @@ export function KitPage({ kitId, sessionId }: { kitId?: string; sessionId?: stri
                     </>
                   )}
                   {readNote && <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{readNote}</p>}
-                  {!pasteText && <p className="rl-note">Zillow and Redfin often refuse automated reads: if the link fails, <button type="button" className="rl-mini" onClick={() => setPasteText(true)}>paste the listing text</button>. Nothing is made up: the kit uses only what the listing says and what you add.</p>}
+                  {!pasteText && <p className="rl-note">No link? <button type="button" className="rl-mini" onClick={() => setPasteText(true)}>paste the listing text instead</button></p>}
                 </>
               ) : (
                 <>
@@ -216,7 +221,6 @@ export function KitPage({ kitId, sessionId }: { kitId?: string; sessionId?: stri
                     <button className="rl-mini" onClick={() => setListing(null)}>read another</button>
                   </div>
                   <div className="rl-facts">{listingFacts(listing).map((f) => <span key={f} className="rl-fact">{f}</span>)}</div>
-                  {listing.description && <p className="rl-note" style={{ fontFamily: 'var(--news)', fontSize: 15, color: 'var(--ink-2)' }}>{listing.description.slice(0, 400)}{listing.description.length > 400 ? '…' : ''}</p>}
                   <div>
                     <span className="rl-lbl">the one thing about it</span>
                     <textarea className="rl-textarea" style={{ minHeight: 56 }} placeholder="the thing a buyer notices first: the balcony that fits one chair, the train, the 1957 kitchen…" value={note} onChange={(e) => setNote(e.target.value.slice(0, 600))} />
@@ -225,20 +229,25 @@ export function KitPage({ kitId, sessionId }: { kitId?: string; sessionId?: stri
                     <span className="rl-lbl">tone · one per kit</span>
                     <div className="rl-tone" style={{ marginTop: 6 }}>{TONES.map(toneBtn)}</div>
                   </div>
-                  <div className="rl-row">{toggle('roast_house', 'roast the house')}{toggle('roast_neighborhood', 'roast the neighborhood')}{toggle('mention_price', 'mention the price in the jokes')}</div>
-                  <Chips label="must say" hint="type and press Enter: the brokerage, the open house, a feature…" value={controls.must_say} onChange={(v) => setControls((c) => ({ ...c, must_say: v }))} />
-                  <Chips label="never say" hint="words that must not appear" value={controls.never_say} onChange={(v) => setControls((c) => ({ ...c, never_say: v }))} />
+                  <button type="button" className="rl-mini" aria-expanded={moreOpen} onClick={() => setMoreOpen((v) => !v)} style={{ alignSelf: 'flex-start' }}>{moreOpen ? 'fewer options ▴' : 'more options: roast, must say, never say ▾'}</button>
+                  {moreOpen && (
+                    <>
+                      <div className="rl-row">{toggle('roast_house', 'roast the house')}{toggle('roast_neighborhood', 'roast the neighborhood')}{toggle('mention_price', 'mention the price in the jokes')}</div>
+                      <Chips label="must say" hint="type and press Enter: the brokerage, the open house, a feature…" value={controls.must_say} onChange={(v) => setControls((c) => ({ ...c, must_say: v }))} />
+                      <Chips label="never say" hint="words that must not appear" value={controls.never_say} onChange={(v) => setControls((c) => ({ ...c, never_say: v }))} />
+                    </>
+                  )}
                 </>
               )}
             </div>
             <div className="rl-box-foot">
-              <span>fair-housing check on every line · the joke goes at the house, the market, the commute, never a person · nobody at shutap reads your listings</span>
+              <span>{listing ? 'fair-housing check on every line · nothing added beyond the listing' : 'nobody at shutap reads your listings · nothing is made up'}</span>
               {listing && <button className="rl-btn" disabled={writing} onClick={() => void write()}>{writing ? 'writing the kit… 20–40s' : 'write the kit →'}</button>}
             </div>
           </div>
         )}
 
-        {!kit && mine.length > 0 && (
+        {!kit && !listing && mine.length > 0 && (
           <div className="rl-card">
             <span className="rl-lbl">your kits</span>
             <div className="rl-row">
@@ -249,9 +258,9 @@ export function KitPage({ kitId, sessionId }: { kitId?: string; sessionId?: stri
           </div>
         )}
 
-        <p className="rl-note" style={{ textAlign: 'center' }}>
+        {!listing && <p className="rl-note" style={{ textAlign: 'center' }}>
           first kit free with an account · Basic {usd(PLANS.basic.amount)}/mo: 3 kits a day, 20 downloads a month · Pro {usd(PLANS.pro.amount)}/mo: unlimited · <Link to="/pricing" className="rl-note">pricing</Link>
-        </p>
+        </p>}
       </div>
 
       {toast && <div className="rl-toast" role="status">{toast}</div>}

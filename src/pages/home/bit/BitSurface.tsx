@@ -936,9 +936,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             {flags.newnav && (
               <div className="bt-ptabs" role="tablist" aria-label="What are you saying funnier?">
                 <button type="button" role="tab" aria-selected className="bt-ptab on">✎ what happened</button>
-                <Link to="/realtors/kit" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'realtors' })}>🏠 a listing</Link>
+                <Link to="/realtors/kit" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'realtors' })}>🏠 a realtor listing</Link>
                 <Link to="/toasts" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'toasts' })}>🥂 a toast <small>soon</small></Link>
-                <button type="button" role="tab" className={`bt-ptab${controls.audience === 'office' ? ' on' : ''}`} onClick={() => { setControls((c) => ({ ...c, audience: 'office' })); jokeTrack('product_tab', tier, { tab: 'presentation' }); (document.getElementById('bit-story') ?? document.querySelector('.bt-lline [contenteditable]'))?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }}>▦ a presentation</button>
+                <Link to="/business" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'enterprise' })}>▦ a presentation</Link>
               </div>
             )}
             <div className="bt-box">
