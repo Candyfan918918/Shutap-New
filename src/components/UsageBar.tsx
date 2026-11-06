@@ -37,7 +37,7 @@ export function UsageMini({ u, dark = false }: { u: MyUsage; dark?: boolean }) {
   const track = dark ? 'rgba(255,255,255,.12)' : '#f1e6eb'
   const plan = u.tier === 'pro' ? 'Pro' : u.tier === 'basic' ? 'Basic' : 'Free'
   return (
-    <div style={{ display: 'grid', gap: 8, fontFamily: "'Sora',system-ui,sans-serif" }}>
+    <div style={{ display: 'grid', gap: 8, minWidth: 0, fontFamily: "'Sora',system-ui,sans-serif" }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
         <span style={{ fontSize: 13, fontWeight: 700, color: ink }}>{plan} plan</span>
         <span style={{ fontSize: 11.5, color: muted }}>{u.tier === 'pro' ? 'unlimited' : 'what\u2019s left'}</span>
@@ -58,15 +58,15 @@ export function UsageMini({ u, dark = false }: { u: MyUsage; dark?: boolean }) {
         {parts.map((p) => {
           const left = p.cap === null ? null : Math.max(0, p.cap - p.used)
           return (
-            <div key={p.key} style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12, color: muted }}>
+            <div key={p.key} style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12, color: muted, minWidth: 0 }}>
               <span aria-hidden style={{ width: 8, height: 8, borderRadius: 999, background: USAGE_COLORS[p.key], flex: 'none' }} />
-              <span style={{ flex: 1, whiteSpace: 'nowrap' }}>{p.label}</span>
-              <span style={{ whiteSpace: 'nowrap' }}><b style={{ color: left === 0 ? '#b3261e' : ink, fontWeight: 600 }}>{left === null ? '\u221e' : `${left} of ${p.cap}`}</b>{left === null ? '' : ` · ${p.when}`}</span>
+              <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.label}{left === null || !p.when ? '' : <span style={{ opacity: 0.8 }}> · {p.when.replace('this ', '')}</span>}</span>
+              <b style={{ flex: 'none', color: left === 0 ? '#b3261e' : ink, fontWeight: 600 }}>{left === null ? '\u221e' : `${left} of ${p.cap}`}</b>
             </div>
           )
         })}
         {u.kits.credits > 0 && <div style={{ fontSize: 12, color: muted, paddingLeft: 15 }}>+ {u.kits.credits} bought kit{u.kits.credits === 1 ? '' : 's'} ready to write</div>}
-        <div style={{ fontSize: 12, color: muted, paddingTop: 2 }}>downloads, copies, funnier: <b style={{ color: ink, fontWeight: 600 }}>unlimited</b>{u.tier === 'free' ? ' · marked' : ''}</div>
+        <div style={{ fontSize: 12, lineHeight: 1.4, color: muted, paddingTop: 2, whiteSpace: 'normal' }}>downloads, copies, funnier: <b style={{ color: ink, fontWeight: 600 }}>unlimited</b>{u.tier === 'free' ? ' · marked' : ''}</div>
       </div>
     </div>
   )

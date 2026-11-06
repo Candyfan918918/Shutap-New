@@ -331,8 +331,8 @@ export function GlobalHeader() {
                       position: 'absolute',
                       top: 'calc(100% + 9px)',
                       right: 0,
-                      width: 244,
-                      maxWidth: "calc(100vw - 24px)",
+                      width: 'min(264px, calc(100vw - 24px))',
+                      boxSizing: 'border-box',
                       background: menuBg,
                       border: menuBorder,
                       borderRadius: 16,
@@ -343,7 +343,7 @@ export function GlobalHeader() {
                   >
                     <div data-ph-private style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name || 'signed in'}</div>
                     {usage && (
-                      <Link to="/profile" aria-label="your plan: what's left" style={{ display: 'block', margin: '2px 4px 6px', padding: '10px 11px', borderRadius: 12, background: dark ? 'rgba(255,255,255,.05)' : '#faf5f7', border: `1px solid ${dark ? 'rgba(255,255,255,.08)' : 'rgba(90,30,50,.08)'}`, textDecoration: 'none' }} onClick={() => setMenuOpen(false)}>
+                      <Link to="/profile" aria-label="your plan: what's left" style={{ display: 'block', boxSizing: 'border-box', minWidth: 0, margin: '2px 4px 6px', padding: '10px 11px', borderRadius: 12, background: dark ? 'rgba(255,255,255,.05)' : '#faf5f7', border: `1px solid ${dark ? 'rgba(255,255,255,.08)' : 'rgba(90,30,50,.08)'}`, textDecoration: 'none' }} onClick={() => setMenuOpen(false)}>
                         <UsageMini u={usage} dark={dark} />
                       </Link>
                     )}
