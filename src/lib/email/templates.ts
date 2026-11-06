@@ -252,7 +252,7 @@ view your invoice: ${v.invoice_url ?? ''}`,
     htmlDesign: mirrorCancelledHtml,
     buildBodyText: (v) => `${g(v)}
 
-you've cancelled. ${v.plan_name ?? 'your plan'} stays on until ${v.access_until ?? 'the end of your billing period'}, with no more charges after that. your jokes stay in your set list, and writing jokes stays free.
+you've cancelled. ${v.plan_name ?? 'your plan'} stays on until ${v.access_until ?? 'the end of your billing period'}, with no more charges after that. your bits stay in My creations, and writing jokes stays free.
 
 changed your mind? resume anytime: ${v.resume_url ?? 'https://shutap.com/subscribe'}`,
   },

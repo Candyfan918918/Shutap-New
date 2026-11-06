@@ -94,7 +94,7 @@ function PrivacyPage() {
         <li>
           <b>Session replay (PostHog):</b> recordings of clicks, scrolling and the pages you move
           through, used to find and fix problems. Replays show Shutap&rsquo;s own pages, menus and
-          buttons. Everything you type, the text of your stories and bits, your set list, Mirror
+          buttons. Everything you type, the text of your stories and bits, My creations, Mirror
           and profile, and your name in the menu are hidden, and profile pictures and bit images
           are not recorded. Public pages, such as rooms and posted bits, are recorded as anyone
           would see them. Replays are kept for 30 days.

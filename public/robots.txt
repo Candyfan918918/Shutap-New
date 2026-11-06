@@ -44,6 +44,7 @@ Disallow: /mirror
 Disallow: /subscribe
 Disallow: /admin
 Disallow: /set-list
+Disallow: /creations
 Disallow: /bit-lab
 Disallow: /bit-daily
 Disallow: /bit-eval

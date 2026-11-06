@@ -34,7 +34,7 @@ const EVERY_ICON: Record<(typeof EVERY_PLAN)[number], FeatureIcon> = {
   'A 5-second video of it': 'post',
   'Stand-up on the teleprompter': 'standup',
   'Sketch and skit': 'sketch',
-  'Set list of every bit': 'list',
+  'My creations: every bit and kit in one place': 'list',
 }
 
 /** The comparison table: one column per plan, the same rows everywhere.

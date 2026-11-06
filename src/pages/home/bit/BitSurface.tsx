@@ -120,7 +120,7 @@ const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
   watch: { title: 'Sign in to watch the video.', sub: 'Free. The 5-second video comes with you.' },
   download: { title: 'Sign in to download it.', sub: 'Free: one download a day (the video, or the picture), with a shutap.com watermark.' },
-  save: { title: 'Sign in to keep it.', sub: 'Free. It goes in your set list with every version you make.' },
+  save: { title: 'Sign in to keep it.', sub: 'Free. It goes in My creations with every version you make.' },
   skit: { title: 'Sign in for the skit.', sub: 'Free. A shot list you film alone, every role yours.' },
   sketch: { title: 'Sign in for the sketch.', sub: 'Free. One page in script format.' },
   post: { title: 'Sign in to post it.', sub: 'Free. Your bit comes with you.' },
@@ -525,9 +525,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         // Pick up where they were.
         if (note.from === 'download') setDownloadOpen(true)
         else if (note.from === 'video') setResume(note.from)
-        else if (note.from === 'save') say('Kept. It\'s in your set list.')
+        else if (note.from === 'save') say('Kept. It\'s in My creations.')
         else if (note.from === 'rewrite' || note.from === 'swap' || note.from === 'mix') say("You're in. Rewrite away.")
-        else if (note.from === 'one_tap') say("You're in. This bit is saved to your set list.")
+        else if (note.from === 'one_tap') say("You're in. This bit is saved to My creations.")
       }
     } catch {
       restoring.current = false
@@ -1216,7 +1216,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   write another
                 </button>
                 {tier !== 'guest' ? (
-                  <span className="bt-note">kept to your set list</span>
+                  <span className="bt-note">kept in My creations</span>
                 ) : (
                   <button className="bt-btn sm" onClick={() => openSignin('save')}>
                     keep it · sign in free

@@ -254,7 +254,7 @@ export function GlobalHeader() {
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <style>{`@media (max-width: 640px){[data-gh-nav] a{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a{padding:6px 3px !important;font-size:12.5px !important}}@media (max-width: 420px){[data-gh-pill]{padding:7px 12px !important}}@media (max-width: 520px){[data-gh-wide]{display:none !important}}@media (max-width: 340px){[data-gh-nav] a{padding:6px 2px !important;font-size:12px !important}[data-gh-pill]{padding:6px 10px !important}[data-gh-logo]{height:20px !important}}`}</style>
+          <style>{`@media (max-width: 640px){[data-gh-nav] a,[data-gh-nav] button{padding:6px 5px !important;font-size:13px !important}}@media (max-width: 420px){[data-gh-nav] a,[data-gh-nav] button{padding:6px 3px !important;font-size:12.5px !important}}@media (max-width: 420px){[data-gh-pill]{padding:7px 12px !important}}@media (max-width: 520px){[data-gh-wide]{display:none !important}}@media (max-width: 360px){[data-gh-mid]{display:none !important}}@media (max-width: 340px){[data-gh-nav] a,[data-gh-nav] button{padding:6px 2px !important;font-size:12px !important}[data-gh-pill]{padding:6px 10px !important}[data-gh-logo]{height:20px !important}}`}</style>
           <span data-gh-nav="" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {flags.newnav ? (
               <div ref={productsRef} style={{ position: 'relative' }}>
@@ -288,7 +288,8 @@ export function GlobalHeader() {
                 )}
               </div>
             ) : navLink('/', 'write')}
-            {navLink('/guides', 'guides')}
+            {/* Under 360px guides goes too (footer and products menu have it) so sign in fits. */}
+            <span data-gh-mid="" style={{ display: 'contents' }}>{navLink('/guides', 'guides')}</span>
             {/* Phones: funniest and enterprise live in the footer so the header fits (Nov 2 2026). */}
             <span data-gh-wide="" style={{ display: 'contents' }}>{navLink('/funniest', 'funniest')}</span>
             {navLink('/pricing', 'pricing')}
@@ -342,7 +343,7 @@ export function GlobalHeader() {
                     <div data-ph-private style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name || 'signed in'}</div>
                     {usage && <Link to="/profile" style={{ ...menuItem, fontSize: 12, color: inkMuted }} onClick={() => setMenuOpen(false)}>{usageLine(usage)}</Link>}
                     <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link>
-                    <Link to="/set-list" style={menuItem} onClick={() => setMenuOpen(false)}>set list</Link>
+                    <Link to="/creations" style={menuItem} onClick={() => setMenuOpen(false)}>my creations</Link>
                     {admin && (
                       <Link to="/admin" style={menuItem} onClick={() => setMenuOpen(false)}>
                         admin

@@ -40,7 +40,7 @@ function BitsPage() {
         { heading: 'Line by line, your words first', body: 'The box is already a bit: hook, setup, two tags, button. Write any line yourself, lock the ones you like, and "finish the bit" writes only what you left empty, around yours. Nothing on the page changes until you tap.' },
         { heading: 'What a complete bit is', body: 'The hook opens with a reason to listen, in the first two seconds. The setup gives just enough of the story to follow the turn. Tags add laughs after the turn without restarting the story. The button is the last line, the one you can stop on.' },
         { heading: 'The video, the stage, the page', body: 'Every bit comes with a 5-second cartoon whose cast and room match the story. Run it as stand-up on the teleprompter, lay it out as a skit you can film alone, or as a one-page sketch in screenplay format.' },
-        { heading: 'Hotter, tighter, swapped, mixed', body: 'Rewrites go hotter or tighter, swap the crowd-work line, or let you mix your own from every candidate. The set list keeps every version. Free writes one bit a day; Basic three with rewrites; Pro without limits.' },
+        { heading: 'Hotter, tighter, swapped, mixed', body: 'Rewrites go hotter or tighter, swap the crowd-work line, or let you mix your own from every candidate. My creations keeps every version. Free writes one bit a day; Basic three with rewrites; Pro without limits.' },
         { heading: 'Who it is for', body: 'Creators with a storytime that needs a post. Comedians working a premise into a bit to rehearse. Social media managers, hosts, podcasters and speakers who have to be funny on a schedule. Nobody at Shutap reads your stories, and they never train anything.' },
       ]}
       others={[

@@ -134,7 +134,7 @@ export const EVERY_PLAN = [
   'A 5-second video of it',
   'Stand-up on the teleprompter',
   'Sketch and skit',
-  'Set list of every bit',
+  'My creations: every bit and kit in one place',
 ] as const
 
 const BY_PRICE: Record<string, PlanEntry> = Object.fromEntries(Object.values(PLANS).map((p) => [p.priceId, p]))

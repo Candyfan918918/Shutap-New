@@ -288,6 +288,17 @@ export function ProfilePage() {
           </div>
         </section>
 
+        {/* Nov 6 2026: everything they made, in one place */}
+        <section className="fd-post" style={{ gap: 0, padding: '4px 16px' }} aria-label="My creations">
+          <button className="fd-link pf-row" onClick={() => navigate('/creations')}>
+            <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
+              <b>My creations</b>
+              <span className="fd-faint" style={{ fontSize: 12.5 }}>bits · realtor kits · toasts and presentations soon</span>
+            </span>
+            <span aria-hidden className="fd-faint">→</span>
+          </button>
+        </section>
+
         {/* humor wisdom badges, from the joke battle */}
         <BadgesCard badges={badges} busy={badgeBusy} onUse={(k) => void onUseRankPicture(k)} />
 
@@ -299,11 +310,7 @@ export function ProfilePage() {
 
         {/* elsewhere */}
         <section className="fd-post" style={{ gap: 0, padding: '4px 16px' }} aria-label="More">
-          <button className="fd-link pf-row" onClick={() => navigate('/set-list')}>
-            <span>Your set list</span>
-            <span aria-hidden className="fd-faint">→</span>
-          </button>
-          <button className="fd-link pf-row" onClick={() => void signOut()} style={{ borderTop: '1px solid var(--line)' }}>
+          <button className="fd-link pf-row" onClick={() => void signOut()}>
             <span>Sign out</span>
             <span aria-hidden className="fd-faint">→</span>
           </button>

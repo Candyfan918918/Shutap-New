@@ -171,7 +171,7 @@ function TermsPage() {
         crowd-work angle and mixing your own are part of the paid plans. Basic allows
         <b>three new bits a day</b>; a rewrite is a new bit (it is written again and its video is
         rendered again), so it counts as one, while a swap or a mix does not. Pro has no daily
-        number, within fair use. Your bits are kept in your set list and you can post them.
+        number, within fair use. Your bits are kept in My creations and you can post them.
       </p>
       <p>
         Downloads are counted separately. The video, and
@@ -199,7 +199,7 @@ function TermsPage() {
         <b>There is no free trial. You are charged when you subscribe.</b> A paid plan renews
         automatically each period at the price shown at checkout until you cancel. You can cancel
         anytime. You keep access until the end of the paid period, then return to the free plan.
-        Your set list stays. <b>Payments already made are not refunded</b>, except where the law
+        My creations stays. <b>Payments already made are not refunded</b>, except where the law
         requires it.
       </p>
 
