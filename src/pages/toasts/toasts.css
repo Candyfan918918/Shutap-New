@@ -1,0 +1,77 @@
+/* Shutap Toasts (Nov 6 2026): the form, board 1. Sits on realtors.css (the
+   rl-* tokens and buttons); only what's new for toasts is here. */
+.ts-wrap { max-width: 1180px; margin: 0 auto; padding: 24px 16px 72px; display: flex; flex-direction: column; gap: 22px; }
+.ts-cols { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 22px; align-items: start; }
+@media (max-width: 920px) { .ts-cols { grid-template-columns: minmax(0, 1fr); } }
+.ts-sec { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ts-sec > legend { font: 700 12px var(--sora); letter-spacing: .12em; text-transform: uppercase; color: var(--rose-ink); margin-bottom: 8px; padding: 0; }
+.ts-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 640px) { .ts-grid3 { grid-template-columns: minmax(0, 1fr); } }
+.ts-field { display: flex; flex-direction: column; gap: 6px; font: 600 13px var(--sora); color: var(--ink-2); min-width: 0; }
+.ts-seg { display: flex; gap: 6px; }
+.ts-seg button { flex: 1; height: 46px; border-radius: 14px; border: 1.5px solid var(--line-2); background: var(--card); color: var(--ink-2); font: 600 14px var(--sora); cursor: pointer; }
+.ts-seg button[aria-pressed='true'] { border-color: var(--rose); background: var(--surface); color: var(--rose-ink); font-weight: 700; }
+.ts-names { display: flex; gap: 10px; align-items: center; background: #f6f7f2; border: 1px solid #d7e3d9; border-radius: 14px; padding: 10px 14px; font-size: 13px; color: #2f4a37; line-height: 1.45; }
+
+/* the instruction bar above the story lines: changes with the state */
+.ts-bar { display: flex; gap: 10px; align-items: center; background: var(--wine); color: #fff; border-radius: 14px; padding: 11px 14px; font: 600 14px/1.4 var(--sora); }
+.ts-bar.done { background: #2f6a45; }
+.ts-bar b.dot { flex: 0 0 26px; height: 26px; border-radius: 50%; background: #fff; color: var(--wine); font: 800 13px/26px var(--sora); text-align: center; }
+.ts-bar.done b.dot { color: #2f6a45; }
+
+/* a story line: an obvious box (dashed empty, pink while typing, green when locked) */
+.ts-line-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.ts-line-head b { font: 700 14px var(--sora); color: var(--ink); }
+.ts-line-head b span { font-weight: 500; color: var(--muted); }
+.ts-line-head i { font: 600 12.5px var(--sora); font-style: normal; color: var(--ink-2); }
+.ts-box { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; min-height: 58px; border-radius: 14px; padding: 6px 8px 6px 16px; box-sizing: border-box; }
+.ts-box.empty { border: 2px dashed var(--rose); background: #fffafc; }
+.ts-box.typing { border: 2px solid var(--rose); background: var(--card); box-shadow: 0 0 0 4px rgba(184, 69, 107, .12); }
+.ts-box.locked { border: 2px solid #2f8a55; background: #f3f8f4; }
+.ts-box textarea { border: 0; background: transparent; font: 400 19px/1.35 var(--news); color: var(--ink); min-width: 0; resize: none; padding: 8px 0; field-sizing: content; min-height: 1.35em; outline: none; }
+.ts-box textarea::placeholder { color: #a39ca0; }
+.ts-pill { height: 40px; padding: 0 14px; border-radius: 999px; font: 700 13px var(--sora); display: inline-flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; }
+.ts-pill.funnier { border: 1px solid var(--line-2); background: var(--card); color: var(--rose-ink); font-weight: 600; }
+.ts-pill.lock { border: 1.5px solid #2f8a55; background: var(--card); color: #2f6a45; }
+.ts-pill.locked { border: 0; background: #2f8a55; color: #fff; }
+.ts-pill:disabled { opacity: .45; cursor: default; }
+.ts-help { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+.ts-optional { font: 600 12px var(--sora); color: var(--muted); padding-right: 8px; }
+
+.ts-tones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.ts-tones button { text-align: left; border-radius: 14px; padding: 10px 12px; cursor: pointer; background: var(--card); border: 1.5px solid var(--line-2); }
+.ts-tones button[aria-pressed='true'] { background: var(--surface); border-color: var(--rose); }
+.ts-tones b { display: block; font: 700 14px var(--sora); color: var(--ink); }
+.ts-tones span { font-size: 12px; color: var(--muted); line-height: 1.35; }
+.ts-lens { display: flex; gap: 8px; }
+.ts-lens button { flex: 1; height: 52px; border-radius: 14px; border: 1.5px solid var(--line-2); background: var(--card); font: 700 15px var(--sora); color: var(--ink-2); cursor: pointer; }
+.ts-lens button[aria-pressed='true'] { border-color: var(--rose); background: var(--surface); color: var(--rose-ink); }
+.ts-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+@media (max-width: 640px) { .ts-two { grid-template-columns: minmax(0, 1fr); } }
+
+.ts-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.ts-foot p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; max-width: 440px; }
+.ts-go { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.ts-go .rl-btn { height: 52px; padding: 0 26px; font-size: 16px; }
+.ts-go span { font: 600 12.5px var(--sora); color: var(--rose-ink); }
+
+.ts-side { display: flex; flex-direction: column; gap: 16px; }
+.ts-gets { display: grid; grid-template-columns: 26px 1fr; gap: 10px; }
+.ts-gets > span { font: 800 15px var(--sora); color: var(--rose); }
+.ts-gets b { display: block; font: 700 14.5px var(--sora); color: var(--ink); }
+.ts-gets p { margin: 0; font-size: 13px; line-height: 1.45; color: var(--ink-2); }
+.ts-how { background: var(--surface); border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.ts-how p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.ts-price { font: 700 22px var(--sora); color: var(--wine); }
+.ts-price span { font: 500 13px var(--sora); color: var(--muted); }
+
+/* paywall 1 (board 10) */
+.ts-plan { text-align: left; border: 1.5px solid var(--line-2); background: var(--card); border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; width: 100%; box-sizing: border-box; font: inherit; color: inherit; text-decoration: none; }
+.ts-plan[aria-pressed='true'] { border: 2px solid var(--rose); background: var(--surface); }
+.ts-plan .top { display: flex; justify-content: space-between; align-items: baseline; }
+.ts-plan .top b { font: 800 17px var(--sora); color: var(--ink); }
+.ts-plan .top em { font: 800 21px var(--sora); font-style: normal; color: var(--wine); }
+.ts-plan .top em small { font: 500 12.5px var(--sora); color: var(--muted); }
+.ts-plan p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+.ts-crisis ul { margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.7; color: var(--ink); }
+.rl-sheet.ts-sheet { max-height: 92vh; overflow: auto; }

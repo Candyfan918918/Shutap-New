@@ -1,20 +1,52 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { z } from 'zod'
 import { pageMeta } from '@/lib/seo/page-meta'
 import { joinWaitlist } from '@/lib/waitlist.functions'
 import { trackEvent } from '@/lib/tracking'
 import { Footer } from '@/components/feed/Footer'
+import { useIsAdmin } from '@/hooks/use-current-alias'
+import { ToastForm } from '@/pages/toasts/ToastForm'
+import { OCCASIONS as TOAST_OCCASIONS, type Occasion } from '@/lib/toasts/shared'
 import '@/components/feed/feed.css'
 import '@/pages/realtors/realtors.css'
 
-// Shutap Toasts (Nov 6 2026): the product is next; this page is the list.
+// Shutap Toasts (Nov 6 2026). /toasts is the product: the form (board 1).
+// Behind the toasts flag; while it's dark, visitors get the waitlist (its
+// emails stay in product_waitlist) and admins get the form. ?occasion=
+// presets the form (the landing pages); ?prepaid= is the $12.99 return.
 const TITLE = 'Shutap Toasts — your wedding speech, best man or maid of honor toast, funnier. Coming soon'
 const DESC = 'Shutap Toasts: your stories about them, said funnier, with a teleprompter and a running clock. Best man, maid of honor, parent of the bride or groom, retirement, birthday. Join the list to hear the day it opens.'
 
-export const Route = createFileRoute('/toasts')({
+export const Route = createFileRoute('/toasts/')({
+  validateSearch: (s: Record<string, unknown>) => z.object({ occasion: z.enum(TOAST_OCCASIONS).optional().catch(undefined), prepaid: z.string().max(200).optional().catch(undefined) }).parse(s),
+  loader: async () => {
+    const { getFlags } = await import('@/lib/flags.functions')
+    const f = await getFlags().catch(() => null)
+    return { open: !!f?.toasts }
+  },
   head: () => ({ meta: pageMeta(TITLE, DESC, '/toasts') }),
-  component: Toasts,
+  component: ToastsPage,
 })
+
+function ToastsPage() {
+  const { open } = Route.useLoaderData()
+  const { occasion, prepaid } = Route.useSearch()
+  const admin = useIsAdmin()
+  // admins see the product while it's dark; checked in the browser after load
+  const [adminView, setAdminView] = useState(false)
+  useEffect(() => { if (admin) setAdminView(true) }, [admin])
+  if (open || adminView) {
+    return (
+      <div className="fd">
+        {!open && <p style={{ margin: 0, padding: '8px 16px', textAlign: 'center', font: '600 12.5px var(--sora, sans-serif)', background: '#1a1418', color: '#fff' }}>admin view · Toasts is dark: visitors see the waitlist</p>}
+        <ToastForm occasionIn={occasion as Occasion | undefined} prepaidSession={prepaid} />
+        <Footer />
+      </div>
+    )
+  }
+  return <Toasts />
+}
 
 const OCCASIONS = [['best_man', 'best man'], ['maid_of_honor', 'maid of honor'], ['parent', 'parent of the bride or groom'], ['retirement', 'retirement'], ['birthday', 'birthday'], ['toastmasters', 'Toastmasters'], ['other', 'something else']] as const
 

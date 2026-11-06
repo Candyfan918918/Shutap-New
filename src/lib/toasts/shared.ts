@@ -202,3 +202,50 @@ export function lengthWindow(form: Pick<ToastForm, 'occasion' | 'length'>): [num
   if (spec.range) return spec.range
   return [Math.round(form.length * 0.65), Math.round(form.length * 1.08)]
 }
+
+/** What each story box asks for, and the example shown under it. */
+export type StoryPrompt = { sub: string; example: string }
+const WEDDING_STORIES = (p: 'he' | 'she', them: string): StoryPrompt[] => [
+  { sub: `one thing ${p} did`, example: `“In college ${p} color-coded the fridge.” One thing, one line, the way you’d tell it at the bar.` },
+  { sub: `a time ${p} went all in`, example: `“${p === 'he' ? 'He' : 'She'} once drove four hours to return a borrowed drill.”` },
+  { sub: `how ${p} met ${them} (optional)`, example: `“The night ${p} met them, ${p} called me to ask if ‘nice to meet you’ was too formal.”` },
+]
+export const STORY_PROMPTS: Record<Occasion, StoryPrompt[]> = {
+  best_man: WEDDING_STORIES('he', '{partner}'),
+  maid_of_honor: WEDDING_STORIES('she', '{partner}'),
+  parent: [
+    { sub: 'them as a kid', example: '“When he was seven he tried to sell our lawn to the neighbors.”' },
+    { sub: 'them grown up', example: '“She called home every Sunday in college, mostly to ask how to do laundry.”' },
+    { sub: 'the day you knew about their partner (optional)', example: '“The first time he brought her home, he cleaned the car. He has never cleaned the car.”' },
+  ],
+  thanksgiving: [{ sub: 'one story the whole table knows', example: '“Last year the turkey caught fire and we ate pizza on the good plates.”' }],
+  holiday_party: [{ sub: 'the year’s big win', example: '“We shipped the new app in March and the servers stayed up.”' }],
+  new_years: [{ sub: 'the year in one line', example: '“This year half of us moved and one of us learned to make sourdough.”' }],
+  retirement: [
+    { sub: 'what they’re known for at work', example: '“She answered every email within four minutes for fifteen years.”' },
+    { sub: 'a small thing everyone noticed', example: '“He kept a drawer of snacks for anyone having a bad day.”' },
+    { sub: 'what they did for you (optional)', example: '“She trained half the people in this room, including me.”' },
+  ],
+  birthday: [
+    { sub: 'one habit only they have', example: '“He reads the instructions after he has built the furniture.”' },
+    { sub: 'a time they made you laugh', example: '“She once waved back at a stranger for a full block.”' },
+    { sub: 'why they matter to you (optional)', example: '“He drove me to every early shift the year my car died.”' },
+  ],
+  toastmasters: [
+    { sub: 'what happened', example: '“I asked my group chat to help me name my dog and got 140 messages and no name.”' },
+    { sub: 'how it got worse', example: '“One friend made a poll. Another made a counter-poll.”' },
+    { sub: 'how it ended (optional)', example: '“The dog answered to ‘hey’ for six weeks.”' },
+  ],
+  other: [
+    { sub: 'one thing they did', example: '“He made us run laps for being early because early was showing off.”' },
+    { sub: 'a time they went all in', example: '“She learned every kid’s middle name and used it when we messed up.”' },
+    { sub: 'one more (optional)', example: '“He still has the whistle from 1998.”' },
+  ],
+}
+
+/** The lengths a person sees, in words. */
+export function lengthLabel(o: Occasion, seconds: number): string {
+  const r = OCCASION[o].range
+  if (r) return `${Math.round(r[0] / 60)}–${Math.round(r[1] / 60)} min`
+  return seconds < 60 ? `${seconds}s` : seconds % 60 === 0 ? `${seconds / 60} min` : `${seconds}s`
+}
