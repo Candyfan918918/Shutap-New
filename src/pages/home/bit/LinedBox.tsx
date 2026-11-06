@@ -25,6 +25,9 @@ const PLACEHOLDER: Record<string, string> = {
   tag1: 'another tag, or skip it',
   button: 'a verdict or a reversal, never a moral',
 }
+const LockIcon = ({ open, color }: { open?: boolean; color: string }) => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.4" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d={open ? 'M8 11V7a4 4 0 0 1 7.5-2' : 'M8 11V7a4 4 0 0 1 8 0v4'} /></svg>
+)
 const SUB: Record<string, string> = { hook: 'first 2 seconds', tag1: 'optional', button: 'the last line' }
 
 /** The lines as one story (what the writing card shows, what the key is). */
@@ -73,6 +76,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
   const [touching, setTouching] = useState(false)
   const [touches, setTouches] = useState<{ used: number; cap: number | null } | null>(null)
   const offered = useRef<Record<string, string[]>>({})
+  const [focusSlot, setFocusSlot] = useState<Slot | null>(null)
   const guide = guideLine(lines, locked)
   const written = writtenSlots(lines)
 
@@ -140,36 +144,47 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
         const has = !!value.trim()
         const isHook = s === 'hook'
         const label = slotLabel(s)
+        // Nov 6 2026: each line drawn like the toast stories: a title with its
+        // status, a dashed box to type in (solid while typing, green once
+        // locked), funnier and lock inside the box, the hint underneath.
+        const state = isLocked ? 'locked' : has || focusSlot === s ? 'typing' : 'empty'
+        const title = label.charAt(0).toUpperCase() + label.slice(1)
+        const status = isLocked ? 'locked · kept word for word' : has ? 'not locked yet' : isHook ? 'empty' : 'empty · optional'
         return (
-          <div key={s} className={`bt-eslot bt-lline${open === s ? ' open' : ''}`}>
-            <div className="bt-eslot-main">
-              <span className={`bt-lbl${isHook || s === 'button' ? ' r' : ''}`}>
-                {label}
-                {SUB[s] && <small>{SUB[s]}</small>}
-                {isLocked && <span className="bt-mark lock">locked</span>}
-                {has && !isLocked && <span className="bt-mark yours">yours</span>}
-              </span>
+          <div key={s} className={`bt-tline${open === s ? ' open' : ''}`}>
+            <div className="bt-tline-head">
+              <b>{title}{SUB[s] && s !== 'tag1' ? <span> · {SUB[s]}</span> : null}</b>
+              <i>{status}</i>
+            </div>
+            <div className={`bt-tbox ${state}`}>
               <p
                 className={`bt-v${isHook ? ' hook' : ''} bt-etext${has ? '' : ' empty'}`}
                 contentEditable={!isLocked && !busy}
                 suppressContentEditableWarning
                 spellCheck={false}
-                data-placeholder={PLACEHOLDER[s]}
-                onBlur={(e) => onType(s, e.currentTarget)}
+                data-placeholder={`type the ${label} here…`}
+                onFocus={() => setFocusSlot(s)}
+                onBlur={(e) => { setFocusSlot((f) => (f === s ? null : f)); onType(s, e.currentTarget) }}
                 onKeyDown={keyDown}
                 aria-label={`${label}, type it`}
                 style={s === 'button' ? { fontWeight: 400 } : undefined}
               >
                 {value}
               </p>
-            </div>
-            <div className="bt-ectl">
-              <button type="button" className={`bt-mini${open === s ? ' on' : ''}`} disabled={busy || (touching && open === s)} onClick={() => void funnier(s)}>
-                {touching && open === s ? '…' : 'funnier'}
-              </button>
-              <button type="button" className={`bt-mini lock${isLocked ? ' on' : ''}${has ? '' : ' ghost'}`} aria-pressed={isLocked} disabled={busy || !has} onClick={() => toggleLock(s)}>
-                {isLocked ? 'locked' : 'lock'}
-              </button>
+              {state === 'empty' && !written.length ? (
+                <span className="bt-topt">{isHook ? 'start here' : 'optional'}</span>
+              ) : (
+                <span className="bt-tpills">
+                  <button type="button" className={`bt-tpill funnier${open === s ? ' on' : ''}`} disabled={busy || (touching && open === s)} onClick={() => void funnier(s)}>
+                    {touching && open === s ? 'three ways…' : 'funnier'}
+                  </button>
+                  {isLocked ? (
+                    <button type="button" className="bt-tpill locked" aria-pressed="true" disabled={busy} onClick={() => toggleLock(s)}><LockIcon color="#fff" />locked</button>
+                  ) : (
+                    <button type="button" className="bt-tpill lock" aria-pressed="false" disabled={busy || !has} onClick={() => toggleLock(s)}><LockIcon open color="#2f6a45" />lock</button>
+                  )}
+                </span>
+              )}
             </div>
             {open === s && options && (
               <div className="bt-pop" role="dialog" aria-label={`${label}, three ways`}>
@@ -192,6 +207,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
                 </div>
               </div>
             )}
+            <span className="bt-thelp">{PLACEHOLDER[s]}</span>
           </div>
         )
       })}
