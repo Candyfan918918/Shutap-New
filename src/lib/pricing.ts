@@ -10,7 +10,7 @@
 // change name (they are Pro). basic_monthly is the Basic plan.
 import type { BitTier } from './bits/shared'
 import { BIT_CAPS } from './bits/plans'
-import { KIT_CAPS } from './entitlements'
+import { KIT_CAPS, TOAST_CAPS } from './entitlements'
 
 /** Prices changed Nov 5 2026: Basic $7.99 → $19.99. Pro unchanged. Lookup
  *  keys never change. Nov 6 2026 (Candy): pay to create, never to use. Only
@@ -56,14 +56,14 @@ export const STRIPE_NAMES: Record<PaidPlan, string> = {
 /** The product description Stripe shows at checkout, kept in step with
  *  the plans by /api/public/payments/prices. */
 export const STRIPE_DESCRIPTIONS: Record<PaidPlan, string> = {
-  basic: `Shutap Basic: ${BIT_CAPS.basic} new bits a day (a rewrite counts as one) and ${KIT_CAPS.basic} realtor kits a month. Downloads, copies and "funnier" unlimited, no watermark.`,
-  pro: 'Shutap Pro: unlimited bits, rewrites and realtor kits, downloads and copies unlimited with no watermark, plus the Mirror.',
+  basic: `Shutap Basic: ${BIT_CAPS.basic} new bits a day (a rewrite counts as one), ${KIT_CAPS.basic} realtor kits a month and ${TOAST_CAPS.basic} toast a month. Downloads, copies and "funnier" unlimited, no watermark.`,
+  pro: 'Shutap Pro: unlimited bits, rewrites, realtor kits and toasts. Downloads and copies unlimited with no watermark, plus the Mirror.',
 }
 
 /** What each plan gives, in the same words on every surface. */
 export const PLAN_LINES: Record<PaidPlan, string[]> = {
-  basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${KIT_CAPS.basic} realtor kits a month`, 'Unlimited downloads and copies, no watermark', 'Unlimited "funnier", line by line'],
-  pro: ['Unlimited bits and rewrites', 'Unlimited realtor kits', 'Unlimited downloads and copies, no watermark', 'The Mirror'],
+  basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${KIT_CAPS.basic} realtor kits a month`, `${TOAST_CAPS.basic} toast a month`, 'Unlimited downloads and copies, no watermark', 'Unlimited "funnier", line by line'],
+  pro: ['Unlimited bits and rewrites', 'Unlimited realtor kits and toasts', 'Unlimited downloads and copies, no watermark', 'The Mirror'],
 }
 
 /** The plans side by side: the same rows on every surface that compares
@@ -115,6 +115,15 @@ export const PLAN_COMPARE: CompareRow[] = [
     cells: {
       free: { value: 'First kit free (marked); then $12.99 a kit', short: '1 · mark', on: true },
       basic: { value: `${KIT_CAPS.basic} a month; then $12.99 a kit`, short: `${KIT_CAPS.basic}/mo`, on: true },
+      pro: { value: 'Unlimited', short: '∞', on: true },
+    },
+  },
+  {
+    label: 'Toasts (best man, maid of honor, holidays…) · opening soon',
+    short: 'Toasts',
+    cells: {
+      free: { value: 'First toast free (marked); then $12.99 a toast', short: '1 · mark', on: true },
+      basic: { value: `${TOAST_CAPS.basic} a month; then $12.99 a toast`, short: `${TOAST_CAPS.basic}/mo`, on: true },
       pro: { value: 'Unlimited', short: '∞', on: true },
     },
   },
