@@ -1002,6 +1002,8 @@ export type MyUsage = {
   bits: { used: number; cap: number | null; resets_at: string }
   downloads: { used: number; cap: number | null; period: 'day' | 'month' }
   touches: { used: number; cap: number | null }
+  /** realtor kits written: Free 1 ever, Basic 3 a day, Pro unlimited */
+  kits: { used: number; cap: number | null; period: 'day' | 'ever' }
 }
 export const myUsage = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => z.object({ ...Ctx }).parse(d ?? {}))
@@ -1011,10 +1013,18 @@ export const myUsage = createServerFn({ method: 'POST' })
     if (!id.userId) return null
     const tier = await resolveTier(supabaseAdmin, id)
     const { day, resetsAt } = today()
-    const [bitsUsed, dl, touchesUsed] = await Promise.all([
+    const k = limitFor('kit', tier)
+    const kitsQ = async () => {
+      let q = supabaseAdmin.from('kits').select('id', { count: 'exact', head: true }).eq('user_id', id.userId).eq('paid', false)
+      if (k.period === 'day') q = q.eq('day', day)
+      const { count } = await q
+      return count ?? 0
+    }
+    const [bitsUsed, dl, touchesUsed, kitsUsed] = await Promise.all([
       readUsed(supabaseAdmin, id.subjectKey, day).catch(() => 0),
       downloadsUsed(supabaseAdmin, id.userId, tier).catch(() => 0),
       readUsed(supabaseAdmin, `touch:${id.userId}`, day).catch(() => 0),
+      kitsQ().catch(() => 0),
     ])
     const d = limitFor('download', tier)
     return {
@@ -1022,6 +1032,7 @@ export const myUsage = createServerFn({ method: 'POST' })
       bits: { used: bitsUsed, cap: limitFor('bit', tier).cap, resets_at: resetsAt },
       downloads: { used: dl, cap: d.cap, period: d.period === 'ever' ? 'day' : d.period },
       touches: { used: touchesUsed, cap: limitFor('touch', tier).cap },
+      kits: { used: kitsUsed, cap: k.cap, period: k.period === 'ever' ? 'ever' : 'day' },
     }
   })
 

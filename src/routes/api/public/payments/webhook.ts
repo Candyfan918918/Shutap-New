@@ -229,6 +229,17 @@ export const Route = createFileRoute('/api/public/payments/webhook')({
               await handleInvoicePaid(event.data.object, env); break;
             case 'invoice.payment_failed':
               await handleInvoicePaymentFailed(event.data.object, env); break;
+            case 'checkout.session.completed': {
+              // the one-time realtor kit (Nov 6 2026); subscriptions arrive
+              // through their own events above
+              const s = event.data.object;
+              if (s?.mode === 'payment' && s?.metadata?.kind === 'kit_once' && s?.payment_status === 'paid' && s.metadata.kitId && s.metadata.userId) {
+                const { markKitPaid } = await import('@/lib/payments.functions');
+                const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+                await markKitPaid(supabaseAdmin as any, s.metadata.kitId, s.metadata.userId, s.id, env);
+              }
+              break;
+            }
             default:
               console.log('Unhandled:', event.type);
           }

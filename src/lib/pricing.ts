@@ -14,6 +14,10 @@ import { BIT_CAPS, DOWNLOAD_CAPS } from './bits/plans'
 /** Prices changed Nov 5 2026: Basic $7.99 → $19.99 (20 downloads a month,
  *  AI on demand unlimited). Pro unchanged. Lookup keys never change. */
 
+/** One realtor kit, bought on its own (Nov 6 2026): a one-time Stripe price
+ *  behind the lookup key kit_once. The kit is then never counted or marked. */
+export const KIT_ONCE = { priceId: 'kit_once', amount: 12.99, name: 'Shutap for Realtors · one kit', description: 'One listing kit: the walkthrough, voiceover, hooks, open-house kit, posts and straight copy, in one tone. Yours to copy and download without limits or marks.' } as const
+
 export type PlanKey = 'basic' | 'pro' | 'pro_annual'
 export type PaidPlan = 'basic' | 'pro'
 

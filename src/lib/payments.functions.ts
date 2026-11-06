@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start';
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
 import { requireRealUser } from './require-real-user';
-import { type StripeEnv, createStripeClient, getStripeErrorMessage, priceForLookupKey } from '@/lib/stripe.server';
-import { PLANS, isCheckoutPriceId, planByPriceId, planFromPriceId, productIdForPrice } from '@/lib/pricing';
+import { type StripeEnv, createStripeClient, getStripeErrorMessage, oneTimePriceForLookupKey, priceForLookupKey } from '@/lib/stripe.server';
+import { KIT_ONCE, PLANS, isCheckoutPriceId, planByPriceId, planFromPriceId, productIdForPrice } from '@/lib/pricing';
 import { bestPlan, rowIsActive } from '@/lib/plan.server';
 
 type CheckoutResult = { clientSecret: string } | { error: string };
@@ -263,3 +263,83 @@ export const changePlanToPro = createServerFn({ method: 'POST' })
       return { ok: false, error: getStripeErrorMessage(error) };
     }
   });
+
+/** One realtor kit, bought on its own (Nov 6 2026): an embedded one-time
+ *  checkout for the kit on the page. The webhook marks the kit paid when
+ *  the session completes; a paid kit is never counted or marked. */
+export const createKitCheckout = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .inputValidator((data: { kitId: string; returnUrl: string; environment: StripeEnv }) => {
+    if (!/^[0-9a-f-]{36}$/i.test(data.kitId)) throw new Error('Invalid kit');
+    if (data.environment !== 'sandbox' && data.environment !== 'live') throw new Error('Invalid environment');
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<CheckoutResult> => {
+    try {
+      const { userId, supabase } = context;
+      const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+      const { data: kit } = await (supabaseAdmin as any).from('kits').select('id, paid').eq('id', data.kitId).eq('user_id', userId).maybeSingle();
+      if (!kit) return { error: 'not_found' };
+      if (kit.paid) return { error: 'already_paid' };
+      const { data: { user } } = await supabase.auth.getUser();
+      const stripe = createStripeClient(data.environment);
+      const price = await oneTimePriceForLookupKey(stripe, KIT_ONCE.priceId, KIT_ONCE);
+      const customerId = await resolveOrCreateCustomer(stripe, { email: user?.email ?? undefined, userId });
+      const session = await stripe.checkout.sessions.create({
+        line_items: [{ price: price.id, quantity: 1 }],
+        mode: 'payment',
+        ui_mode: 'embedded_page',
+        locale: 'en',
+        return_url: data.returnUrl,
+        customer: customerId,
+        automatic_tax: { enabled: true },
+        customer_update: { name: 'auto', address: 'auto' },
+        invoice_creation: { enabled: true },
+        metadata: { userId, kitId: data.kitId, kind: 'kit_once' },
+        payment_intent_data: { metadata: { userId, kitId: data.kitId, kind: 'kit_once' } },
+      });
+      return { clientSecret: session.client_secret ?? '' };
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+/** After the return: is this kit paid yet? The webhook usually lands first;
+ *  if not, the session is asked directly so the page never waits on it. */
+export const kitPaidStatus = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { kitId: string; sessionId?: string; environment: StripeEnv }) => {
+    if (!/^[0-9a-f-]{36}$/i.test(data.kitId)) throw new Error('Invalid kit');
+    if (data.sessionId && !/^cs_[A-Za-z0-9_]+$/.test(data.sessionId)) throw new Error('Invalid session');
+    if (data.environment !== 'sandbox' && data.environment !== 'live') throw new Error('Invalid environment');
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<{ paid: boolean }> => {
+    const { userId } = context as { userId: string };
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const admin = supabaseAdmin as any;
+    const { data: kit } = await admin.from('kits').select('id, paid').eq('id', data.kitId).eq('user_id', userId).maybeSingle();
+    if (!kit) return { paid: false };
+    if (kit.paid) return { paid: true };
+    if (!data.sessionId) return { paid: false };
+    try {
+      const stripe = createStripeClient(data.environment);
+      const s = await stripe.checkout.sessions.retrieve(data.sessionId);
+      if (s.payment_status === 'paid' && s.metadata?.kitId === data.kitId && s.metadata?.userId === userId) {
+        await markKitPaid(admin, data.kitId, userId, s.id, data.environment);
+        return { paid: true };
+      }
+    } catch (e) {
+      console.error('[kit checkout] status read failed', getStripeErrorMessage(e));
+    }
+    return { paid: false };
+  });
+
+/** The one place a kit becomes paid: idempotent, logged to the admin feed. */
+export async function markKitPaid(admin: any, kitId: string, userId: string, sessionId: string, env: StripeEnv): Promise<void> {
+  const { data: kit } = await admin.from('kits').select('id, paid').eq('id', kitId).eq('user_id', userId).maybeSingle();
+  if (!kit || kit.paid) return;
+  const { error } = await admin.from('kits').update({ paid: true }).eq('id', kitId).eq('user_id', userId);
+  if (error) { console.error('[kit checkout] could not mark paid', error.message); return; }
+  await admin.from('events').insert({ user_id: userId, session_id: null, name: 'kit_bought', properties: { product: 'realtors', kit_id: kitId, amount: KIT_ONCE.amount, stripe_session: sessionId, env } as never } as never).then(() => {}, () => {});
+}

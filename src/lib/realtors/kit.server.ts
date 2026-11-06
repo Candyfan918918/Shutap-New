@@ -6,7 +6,7 @@ import { callAgent, tryParseJson } from '@/lib/agents/gateway'
 import { fill } from '@/lib/jokes/prompts.server'
 import { backupWriterModel, bitJudgeModel, bitWriterModel, BIT_BUDGET } from '@/lib/bits/pipeline.server'
 import { judgeStandard, standardBlock, standardLines } from '@/lib/bits/taste-bank'
-import { KIT_JUDGE_PROMPT, KIT_PROMPT, KIT_RULES, KIT_TONES } from './prompts.server'
+import { KIT_JUDGE_PROMPT, KIT_PROMPT, KIT_RULES, KIT_TONES, KIT_TOUCH_PROMPT } from './prompts.server'
 import { fairHousingHit, listingFacts, type Kit, type Labeled, type Listing, type ListingControls, type Shot } from './listing'
 
 export type KitCheck = { rule: string; where: string; line: string }
@@ -169,4 +169,54 @@ export async function writeKit(l: Listing, c: ListingControls): Promise<KitResul
   }
   const w = pool[winner]!
   return { kit: w.kit, skipped: w.skipped, candidates, winner: candidates.indexOf(w), why, ms: Date.now() - t0 }
+}
+
+/* ── AI on demand inside a kit: one line, three ways ── */
+export type KitTouchOption = { line: string; move: string }
+
+/** The one-line checks: fair housing, never-say, numbers not the listing's. */
+export function checkLine(line: string, l: Listing, c: ListingControls): string | null {
+  const fh = fairHousingHit(line)
+  if (fh) return `fair housing: "${fh}"`
+  const lower = line.toLowerCase()
+  for (const w of c.never_say.map((x) => x.toLowerCase()).filter(Boolean)) if (lower.includes(w)) return `never say: "${w}"`
+  const nums = allowedNumbers(l, c)
+  for (const m of line.match(/\d[\d,]*/g) ?? []) {
+    const n = m.replace(/,/g, '')
+    if (n.length <= 1 || nums.has(n)) continue
+    if (/^\d{1,2}$/.test(n) && Number(n) <= 60) continue
+    return `number not on the listing: ${m}`
+  }
+  return null
+}
+
+export async function touchKitLine(l: Listing, c: ListingControls, where: string, context: string, current: string, avoid: string[] = []): Promise<KitTouchOption[] | null> {
+  const prompt = fill(KIT_TOUCH_PROMPT, {
+    LISTING: listingBlock(l),
+    NOTE: l.note || '(none)',
+    TONE: KIT_TONES[c.tone] ?? KIT_TONES.funny,
+    ROAST_HOUSE: c.roast_house ? 'on' : 'off: never a joke at the property itself',
+    ROAST_NEIGHBORHOOD: c.roast_neighborhood ? 'on' : 'off: nothing against the area',
+    MENTION_PRICE: c.mention_price ? 'on' : 'off: the price is never the joke',
+    MUST_SAY: c.must_say.length ? c.must_say.join(' · ') : '(none)',
+    NEVER_SAY: c.never_say.length ? c.never_say.join(' · ') : '(none)',
+    RULES: KIT_RULES,
+    WHERE: where,
+    CONTEXT: context.slice(0, 1500),
+    LINE: current || '(empty: write it fresh)',
+    AVOID: avoid.length ? `ALREADY OFFERED (write different ones):\n${avoid.map((a) => `- ${a}`).join('\n')}\n` : '',
+  })
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const model = attempt === 0 ? bitWriterModel() : backupWriterModel()
+    const res = await callAgent({ model, temperature: 1.0, maxTokens: 900, timeoutMs: BIT_BUDGET.vary(), messages: [{ role: 'user', content: prompt }], reasoningEffort: /^openai\/gpt-5/.test(model) ? 'minimal' : undefined })
+    if (res.error) { console.warn('[kit-touch] gateway error', res.error); continue }
+    const raw = tryParseJson<{ options?: unknown }>(res.text)
+    const opts = (Array.isArray(raw?.options) ? raw!.options : [])
+      .map((o: any) => ({ line: tidy(o?.line).replace(/^["'“]|["'”]$/g, ''), move: tidy(o?.move).slice(0, 60) }))
+      .filter((o) => o.line && o.line.toLowerCase() !== current.toLowerCase() && !avoid.some((a) => a.toLowerCase() === o.line.toLowerCase()))
+      .filter((o) => !checkLine(o.line, l, c))
+    if (opts.length >= 2) return opts.slice(0, 3)
+    console.warn('[kit-touch] too few options passed', { got: opts.length })
+  }
+  return null
 }

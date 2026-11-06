@@ -24,7 +24,8 @@ export function usageLine(u: MyUsage): string {
   const bits = u.bits.cap === null ? 'bits ∞' : `${u.bits.used}/${u.bits.cap} bits today`
   const per = u.downloads.period === 'month' ? 'this month' : 'today'
   const dl = u.downloads.cap === null ? 'downloads ∞' : `${u.downloads.used}/${u.downloads.cap} downloads ${per}`
-  return `${bits} · ${dl}`
+  const kits = u.kits.cap === null ? 'kits ∞' : `${u.kits.used}/${u.kits.cap} kit${u.kits.cap === 1 ? '' : 's'}${u.kits.period === 'day' ? ' today' : ''}`
+  return `${bits} · ${dl} · ${kits}`
 }
 
 function Row({ label, used, cap, note }: { label: string; used: number; cap: number | null; note?: string }) {
@@ -62,9 +63,10 @@ export function UsageCard({ usage }: { usage: MyUsage }) {
         cap={usage.downloads.cap}
         note={kitsLeft !== null && usage.downloads.period === 'month' ? `${kitsLeft} realtor kit${kitsLeft === 1 ? '' : 's'} left` : undefined}
       />
+      <Row label={usage.kits.period === 'day' ? 'Realtor kits today' : 'Realtor kit (free, once)'} used={usage.kits.used} cap={usage.kits.cap} />
       <Row label="AI on demand touches today" used={usage.touches.used} cap={usage.touches.cap} />
       <p style={{ margin: 0, fontSize: 12.5, color: '#8f898d' }}>
-        A download is a video, a picture, a PDF or a copied line; a realtor kit is six. The same one again on the same day is free. Bits and touches reset at midnight Pacific; monthly downloads on the 1st.
+        A download is a video, a picture, a PDF or a copied kit output; the kit PDF is six. A bought kit is never counted. The same one again on the same day is free. Bits and touches reset at midnight Pacific; monthly downloads on the 1st.
       </p>
     </section>
   )
