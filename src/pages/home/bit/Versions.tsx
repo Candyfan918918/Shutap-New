@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { swapAngle, varyBit } from '@/lib/bits.functions'
-import { VARY_KINDS, type Bit, type BitTier, type BitVersion, type Slot, type VaryKind } from '@/lib/bits/shared'
+import { VARY_KINDS, readSlot, type Bit, type BitTier, type BitVersion, type Slot, type VaryKind } from '@/lib/bits/shared'
 import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 
 export function chipLabel(v: BitVersion, all: BitVersion[]): string {
