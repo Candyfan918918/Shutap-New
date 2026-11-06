@@ -8,6 +8,9 @@ import { Link } from '@tanstack/react-router'
 import { getRealtorKit, type KitView } from '@/lib/realtors.functions'
 import { kitTitle } from '@/lib/realtors/kit-text'
 import { phCapture } from '@/lib/posthog'
+import { supabase } from '@/integrations/supabase/client'
+import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
+import { setDurableReturn } from '@/lib/auth-guard'
 
 type Seg = { cue: string; sub?: string; act?: string; line: string }
 
@@ -29,10 +32,32 @@ export function Prompter({ kitId }: { kitId: string }) {
   const timer = useRef<number | undefined>(undefined)
   const segRefs = useRef<(HTMLDivElement | null)[]>([])
 
+  /** Nov 6 2026: the phone that scanned the QR is usually signed out. Ask it
+   *  to sign in (same account), then come straight back here, ready. */
+  const [signedIn, setSignedIn] = useState<boolean | null>(null)
+  const opening = useOAuthPending()
   useEffect(() => {
-    getRealtorKit({ data: { kit_id: kitId } }).then((r) => { if (r.kit) setKit(r.kit); else setErr('that kit is not yours, or it is gone') }).catch(() => setErr('could not open the kit · sign in on this phone first'))
+    void supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session && data.session.user.is_anonymous !== true))
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => { if (session && session.user.is_anonymous !== true) setSignedIn(true) })
+    return () => sub.subscription.unsubscribe()
+  }, [])
+  useEffect(() => {
+    if (!signedIn) return
+    getRealtorKit({ data: { kit_id: kitId } }).then((r) => { if (r.kit) setKit(r.kit); else setErr('this kit belongs to another account · sign in here with the account you made it with') }).catch(() => setErr('could not open the kit · try again'))
     void phCapture('kit_shoot_opened', { product: 'realtors' })
-  }, [kitId])
+  }, [kitId, signedIn])
+  function comeBackHere() {
+    const back = window.location.pathname
+    try { sessionStorage.setItem('shutap_returnTo', back) } catch { /* noop */ }
+    setDurableReturn(back)
+  }
+  async function signIn(method: 'google' | 'apple' | 'email') {
+    comeBackHere()
+    void phCapture('kit_shoot_signin', { product: 'realtors', method })
+    if (method === 'email') { window.location.assign('/welcome?method=email'); return }
+    const e = await startOAuth(method)
+    if (e) setErr(e)
+  }
 
   // keep the screen on while it runs
   useEffect(() => {
@@ -57,6 +82,17 @@ export function Prompter({ kitId }: { kitId: string }) {
     return () => window.clearTimeout(timer.current)
   }, [running, idx, wps, segs])
 
+  if (signedIn === false) return (
+    <div className="pr">
+      <div className="pr-gate">
+        <h1>Sign in to open your kit on this phone.</h1>
+        <p>Use the same account you made the kit with. The teleprompter opens right after, ready to roll.</p>
+        <button className="main" disabled={!!opening} onClick={() => void signIn('google')}>{oauthButtonLabel('google', opening)}</button>
+        <button disabled={!!opening} onClick={() => void signIn('apple')}>{oauthButtonLabel('apple', opening)}</button>
+        <button onClick={() => void signIn('email')}>continue with email</button>
+      </div>
+    </div>
+  )
   if (err) return <div className="pr"><div className="pr-top"><span>{err}</span><Link to="/realtors/kit">the kit page</Link></div></div>
   if (!kit) return <div className="pr"><div className="pr-top"><span>opening…</span></div></div>
 

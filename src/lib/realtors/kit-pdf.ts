@@ -63,7 +63,11 @@ class Doc {
     const lead = size * 1.35
     for (const line of lines) {
       this.need(lead)
-      this.page.push(`BT ${opts.color ?? '0 g'} /${opts.bold ? 'F2' : 'F1'} ${size} Tf ${(opts.x ?? M).toFixed(1)} ${this.y.toFixed(1)} Td (${esc(line)}) Tj ET`)
+      // y is the top of the line; the baseline sits one cap-height below it.
+      // (Nov 6 2026: baselines at y made a 20pt heading rise into the 8.5pt
+      // "1 OF 6" label above it.)
+      const base = this.y - size * 0.92
+      this.page.push(`BT ${opts.color ?? '0 g'} /${opts.bold ? 'F2' : 'F1'} ${size} Tf ${(opts.x ?? M).toFixed(1)} ${base.toFixed(1)} Td (${esc(line)}) Tj ET`)
       this.y -= lead
     }
     this.y -= opts.gapAfter ?? 0

@@ -70,6 +70,10 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
   const [touching, setTouching] = useState(false)
   const offered = useRef<Record<string, string[]>>({})
   const qrRef = useRef<HTMLCanvasElement | null>(null)
+  /** a phone (touch, narrow): shoot mode opens right here; the QR is for a second phone */
+  const [onPhone, setOnPhone] = useState(false)
+  const [qrOnPhone, setQrOnPhone] = useState(false)
+  useEffect(() => { try { setOnPhone(window.matchMedia('(pointer: coarse) and (max-width: 820px)').matches) } catch { /* noop */ } }, [])
   const free = usage.tier === 'free' && !data.paid
   const marked = free
 
@@ -79,7 +83,7 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
   useEffect(() => {
     if (!shareOpen || !qrRef.current || !shootUrl) return
     QRCode.toCanvas(qrRef.current, shootUrl, { width: 160, margin: 1, color: { dark: '#1a1418', light: '#ffffff' } }).catch(() => {})
-  }, [shareOpen, shootUrl])
+  }, [shareOpen, shootUrl, onPhone, qrOnPhone])
 
   /** the ledger first; false means stop */
   async function charge(output: KitDownloadKind): Promise<{ ok: true; watermarked: boolean } | { ok: false }> {
@@ -288,15 +292,34 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
       </div>
       {shareOpen && (
         <div className="rl-share">
-          <canvas ref={qrRef} width={160} height={160} aria-label="QR code to shoot mode" />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span className="rl-lbl r">shoot mode on your phone</span>
-            <p className="rl-note" style={{ maxWidth: 360 }}>Scan with the phone you'll read from, or open the link there. Big text, one line at a time, scrolls by itself. Record with a second phone or a laptop: this page never opens a camera.</p>
-            <div className="rl-row">
-              <Link to="/realtors/kit/$id/shoot" params={{ id: data.id }} className="rl-btn sm ghost">open here</Link>
-              <button className="rl-mini" onClick={async () => { const ok = await toClipboard(shootUrl); say(ok ? 'link copied' : shootUrl) }}>copy link</button>
+          {onPhone && !qrOnPhone ? (
+            /* Nov 6 2026: on a phone, this is the phone. Open it here; a QR only if they want another phone. */
+            <div className="rl-share-body">
+              <span className="rl-lbl r">this phone is the teleprompter</span>
+              <p className="rl-note">Open it here, prop the phone by the lens, and record with a second phone or a laptop. Big text, one line at a time, scrolls by itself.</p>
+              <div className="rl-row">
+                <Link to="/realtors/kit/$id/shoot" params={{ id: data.id }} className="rl-btn" onClick={() => track('kit_shoot_open_here', { device: 'phone' })}>▶ open the teleprompter</Link>
+                <button className="rl-mini" onClick={() => setQrOnPhone(true)}>read on another phone</button>
+              </div>
             </div>
-          </div>
+          ) : (
+            <>
+              <canvas ref={qrRef} width={160} height={160} aria-label="QR code to shoot mode" />
+              <div className="rl-share-body">
+                <span className="rl-lbl r">shoot mode on your phone</span>
+                <ol>
+                  <li>Scan this with the phone you'll read from (or send it the link).</li>
+                  <li>Sign in on that phone with the same account you use here: Google, Apple or email.</li>
+                  <li>The teleprompter opens with this kit, ready to roll.</li>
+                </ol>
+                <p className="rl-note">Record with a second phone or a laptop: shoot mode never opens a camera.</p>
+                <div className="rl-row">
+                  <button className="rl-mini" onClick={async () => { const ok = await toClipboard(shootUrl); say(ok ? 'link copied · open it on the phone' : shootUrl) }}>copy link</button>
+                  <Link to="/realtors/kit/$id/shoot" params={{ id: data.id }} className="rl-mini">open here</Link>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       )}
       <p className="rl-note">a copy is one download · the PDF is six · the same output copied again today is free · "funnier" rewrites that one line only · nobody at shutap reads your listings · saved to your kits</p>
