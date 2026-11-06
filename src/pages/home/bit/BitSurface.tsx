@@ -51,6 +51,7 @@ import { PostSheet } from './PostSheet'
 import { PaywallBody, UpgradeBody, type PaywallWhere } from './PlanSheets'
 import { VideoCard } from './VideoCard'
 import { EditableBit, draftOf, type Draft } from './EditableBit'
+import { PerformIt } from './PerformIt'
 import { EMPTY_LINES, LinedBox, linesText, writtenSlots } from './LinedBox'
 import { getFlags } from '@/lib/flags.functions'
 import { NO_FLAGS, type Flags } from '@/lib/flags'
@@ -1240,54 +1241,18 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   resume={resume === 'video'}
                   onResumed={() => setResume(null)}
                 />
-                {/* Nov 5 2026: the formats take the slot the caption used to have */}
-                <section className="bt-card" aria-label="Perform it">
-                  <span className="bt-lbl">perform it · pick a format</span>
-                  <div className="bt-fmts" role="group" aria-label="Formats">
-                    <button
-                      className="bt-act bt-fmt"
-                      onClick={() => {
-                        // Every action on the result takes an account (Oct 30 2026).
-                        if (tier === 'guest') return openSignin('standup')
-                        setStandup(version)
-                        jokeTrack('standup_opened', tier, { kind: version.kind })
-                      }}
-                    >
-                      <ActionIcon name="standup" />
-                      <span className="t">
-                        <b style={{ color: ACTION_COLORS.standup }}>stand-up</b>
-                        <span className="bt-note">the bit on a teleprompter · ~{version.est_seconds}s</span>
-                      </span>
-                      <span className="arrow" aria-hidden>→</span>
-                    </button>
-                    {(
-                      [
-                        ['sketch', 'screenplay page · two voices · game of the scene · blackout'],
-                        ['skit', 'one scene, you play both parts'],
-                      ] as const
-                    ).map(([k, d]) => (
-                      <button
-                        key={k}
-                        className="bt-act bt-fmt"
-                        onClick={() => {
-                          // Sketch and skit are written on request: account only.
-                          if (tier === 'guest') return openSignin(k)
-                          setPhase(k)
-                          jokeTrack(`${k}_opened`, tier, { kind: version.kind })
-                          toTop()
-                        }}
-                      >
-                        <ActionIcon name={k} />
-                        <span className="t">
-                          <b style={{ color: ACTION_COLORS[k] }}>{k}</b>
-                          <span className="bt-note">{d}</span>
-                        </span>
-                        <span className="arrow" aria-hidden>→</span>
-                      </button>
-                    ))}
-                  </div>
-                  <span className="bt-note" style={{ display: 'block', marginTop: 8 }}>each format opens on its own page · sign-in required</span>
-                </section>
+                {/* Nov 6 2026: the formats as preview tiles built from this version's lines */}
+                <PerformIt
+                  version={version}
+                  onStandup={() => {
+                    // Every action on the result takes an account (Oct 30 2026).
+                    if (tier === 'guest') return openSignin('standup')
+                    setStandup(version)
+                    jokeTrack('standup_opened', tier, { kind: version.kind })
+                  }}
+                  onSketch={() => { if (tier === 'guest') return openSignin('sketch'); setPhase('sketch'); jokeTrack('sketch_opened', tier, { kind: version.kind }); toTop() }}
+                  onSkit={() => { if (tier === 'guest') return openSignin('skit'); setPhase('skit'); jokeTrack('skit_opened', tier, { kind: version.kind }); toTop() }}
+                />
               </aside>
             </div>
           </>
