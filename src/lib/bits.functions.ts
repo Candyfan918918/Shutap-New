@@ -92,7 +92,7 @@ function guestOrAccount(id: JokeIdentity): BitTier {
 
 /** The caller's tier for bits, from their subscription rows: Basic or Pro
  *  by the price they pay. A read error counts as free, never as paid. */
-async function resolveTier(admin: any, id: JokeIdentity): Promise<BitTier> {
+export async function resolveTier(admin: any, id: JokeIdentity): Promise<BitTier> {
   if (!id.userId) return 'guest'
   return (await activePlan(admin, id.userId)) ?? 'free'
 }
@@ -1046,7 +1046,20 @@ async function downloadsUsed(admin: any, userId: string, tier: BitTier): Promise
   q = period === 'month' ? q.gte('day', `${day.slice(0, 7)}-01`) : q.eq('day', day)
   const { count, error } = await q
   if (error) throw new Error(error.message)
-  return count ?? 0
+  // the realtor kit's copies and PDFs share the pool (Nov 6 2026)
+  let kitUnits = 0
+  try {
+    let k = admin.from('kit_downloads').select('units').eq('user_id', userId).eq('watermarked', false)
+    k = period === 'month' ? k.gte('day', `${day.slice(0, 7)}-01`) : k.eq('day', day)
+    const { data: rows } = await k
+    kitUnits = (rows ?? []).reduce((n: number, r: any) => n + (Number(r.units) || 0), 0)
+  } catch { /* the kit ledger may not exist yet */ }
+  return (count ?? 0) + kitUnits
+}
+export { downloadsUsed, today }
+/** The tier by user id alone (the realtor functions carry no guest identity). */
+export async function kitTier(admin: any, userId: string): Promise<BitTier> {
+  return (await activePlan(admin, userId)) ?? 'free'
 }
 
 /** How many downloads this account has used today, for the labels. */

@@ -1,0 +1,231 @@
+/* The kit on the page (Nov 6 2026): six tabs, every line editable by typing,
+ * copy per output, the voiceover as .txt, the whole kit as one Letter PDF,
+ * and the shoot-mode link + QR for the phone. Every copy and download goes
+ * through chargeKitDownload first; the number left shows after each. */
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import QRCode from 'qrcode'
+import { chargeKitDownload, keepKitEdit, type KitDownloadKind, type KitUsage, type KitView as KitData } from '@/lib/realtors.functions'
+import { OUTPUT_LABEL, OUTPUTS, TONE_LABEL, listingFacts, type Kit, type Output } from '@/lib/realtors/listing'
+import { copyText, fileStem, kitTitle, voiceoverTxt } from '@/lib/realtors/kit-text'
+import { trackEvent } from '@/lib/tracking'
+import { phCapture } from '@/lib/posthog'
+
+type Props = {
+  data: KitData
+  usage: KitUsage
+  onUsage: (u: KitUsage) => void
+  onLimit: () => void
+  onRewrite: () => void
+  say: (m: string) => void
+}
+
+const track = (name: string, props: Record<string, unknown>) => {
+  void phCapture(name, { product: 'realtors', ...props })
+  void trackEvent(name, { product: 'realtors', ...props })
+}
+
+function download(blob: Blob, name: string) {
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = name
+  document.body.appendChild(a)
+  a.click()
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove() }, 2000)
+}
+
+async function toClipboard(text: string): Promise<boolean> {
+  try { await navigator.clipboard.writeText(text); return true } catch { return false }
+}
+
+export function KitView({ data, usage, onUsage, onLimit, onRewrite, say }: Props) {
+  const latest = data.versions[data.versions.length - 1]!
+  const [versionId, setVersionId] = useState(latest.id)
+  const [kit, setKit] = useState<Kit>(latest.content)
+  const [tab, setTab] = useState<Output>('walkthrough')
+  const [dirty, setDirty] = useState(false)
+  const [keeping, setKeeping] = useState(false)
+  const [busy, setBusy] = useState<string | null>(null)
+  const [shareOpen, setShareOpen] = useState(false)
+  const qrRef = useRef<HTMLCanvasElement | null>(null)
+  const free = usage.tier === 'free' && !data.paid
+  const marked = free
+
+  useEffect(() => { setKit(latest.content); setVersionId(latest.id); setDirty(false) }, [data.id, latest.id, latest.content])
+
+  const shootUrl = useMemo(() => (typeof window === 'undefined' ? '' : `${window.location.origin}/realtors/kit/${data.id}/shoot`), [data.id])
+  useEffect(() => {
+    if (!shareOpen || !qrRef.current || !shootUrl) return
+    QRCode.toCanvas(qrRef.current, shootUrl, { width: 160, margin: 1, color: { dark: '#1a1418', light: '#ffffff' } }).catch(() => {})
+  }, [shareOpen, shootUrl])
+
+  /** the ledger first; false means stop */
+  async function charge(output: KitDownloadKind): Promise<{ ok: true; watermarked: boolean } | { ok: false }> {
+    if (dirty) { say('keep your edits first (the button below the kit)'); return { ok: false } }
+    setBusy(output)
+    try {
+      const r = await chargeKitDownload({ data: { kit_id: data.id, version_id: versionId, output } })
+      if (!r.ok) {
+        if (r.reason === 'limited') { track('kit_download_blocked', { output, used: r.used, cap: r.cap, tier: r.tier }); onLimit(); return { ok: false } }
+        say('could not count that · try again')
+        return { ok: false }
+      }
+      onUsage({ ...usage, downloads: { ...usage.downloads, used: r.used } })
+      track('kit_download', { output, tier: r.tier, watermarked: r.watermarked, repeat: r.repeat })
+      return { ok: true, watermarked: r.watermarked }
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  async function copyOutput(o: Output) {
+    const r = await charge(o)
+    if (!r.ok) return
+    const ok = await toClipboard(copyText(kit, o, r.watermarked))
+    say(ok ? `${OUTPUT_LABEL[o]} copied${left()}` : 'copy blocked by the browser · select the text and copy')
+  }
+
+  async function voiceoverFile() {
+    const r = await charge('txt')
+    if (!r.ok) return
+    download(new Blob([voiceoverTxt(kit, r.watermarked)], { type: 'text/plain' }), `${fileStem(data.listing)} - voiceover.txt`)
+    say(`voiceover .txt saved${left()}`)
+  }
+
+  async function pdf() {
+    const r = await charge('pdf')
+    if (!r.ok) return
+    const { kitPdf } = await import('@/lib/realtors/kit-pdf')
+    download(kitPdf(kit, data.listing, data.controls, { marked: r.watermarked }), `${fileStem(data.listing)} - the kit.pdf`)
+    say(`the kit PDF saved${left()}`)
+  }
+
+  function left(): string {
+    const d = usage.downloads
+    return d.cap === null ? '' : ` · ${Math.max(0, d.cap - d.used)} of ${d.cap} left this ${d.period}`
+  }
+
+  async function keep() {
+    setKeeping(true)
+    try {
+      const r = await keepKitEdit({ data: { kit_id: data.id, content: kit } })
+      if (!r.ok) return say(r.reason === 'too_many' ? 'this kit has all the versions it can hold' : 'could not keep it · try again')
+      data.versions.push(r.version)
+      setVersionId(r.version.id)
+      setKit(r.version.content)
+      setDirty(false)
+      track('kit_edit_kept', { tone: data.tone })
+      say('kept · your edits are the kit now')
+    } finally {
+      setKeeping(false)
+    }
+  }
+
+  /** a typed line: the kit on the page changes; nothing is sent until kept */
+  function edit(update: (k: Kit) => Kit) { setKit((k) => update(structuredClone(k))); setDirty(true) }
+  const onLine = (apply: (k: Kit, text: string) => void) => (e: React.FocusEvent<HTMLElement>) => {
+    const text = (e.currentTarget.innerText ?? '').replace(/\s+/g, ' ').trim()
+    edit((k) => { apply(k, text); return k })
+  }
+  const line = (text: string, apply: (k: Kit, t: string) => void, cls = 'rl-line') => (
+    <p className={cls} contentEditable suppressContentEditableWarning spellCheck={false} onBlur={onLine(apply)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); (e.target as HTMLElement).blur() } }}>{text}</p>
+  )
+
+  const d = usage.downloads
+  const count = d.cap === null ? (data.paid ? 'this kit is yours · nothing counted' : 'unlimited') : `${Math.max(0, d.cap - d.used)} of ${d.cap} left this ${d.period}`
+
+  return (
+    <section className="rl-card" aria-label="The kit" data-ph-private>
+      <div className="rl-row" style={{ justifyContent: 'space-between' }}>
+        <div>
+          <span className="rl-lbl r">the kit · {TONE_LABEL[data.tone]}</span>
+          <h2 style={{ margin: '2px 0 0', font: '800 22px var(--sora)', color: 'var(--wine)', letterSpacing: '-0.03em' }}>{kitTitle(data.listing)}</h2>
+        </div>
+        <span className="rl-note">{free ? 'free kit · every output ends with "— shutap.com"' : count}</span>
+      </div>
+      <div className="rl-facts">{listingFacts(data.listing).map((f) => <span key={f} className="rl-fact">{f}</span>)}</div>
+
+      <div className="rl-tabs" role="tablist">
+        {OUTPUTS.map((o) => <button key={o} role="tab" className="rl-tab" aria-selected={tab === o} onClick={() => { setTab(o); track('kit_tab', { output: o }) }}>{OUTPUT_LABEL[o]}</button>)}
+      </div>
+
+      {tab === 'walkthrough' && (
+        <div>
+          <p className="rl-note">{kit.walkthrough.shots.length} shots · one take on a phone · say the line, then move · tap any line to change it</p>
+          {kit.walkthrough.shots.map((s, i) => (
+            <div key={i} className="rl-item">
+              <span className="n">{i + 1}</span>
+              <div>
+                <div className="meta">{s.where} · {s.seconds}s{s.fact ? ` · ${s.fact}` : ''}</div>
+                {line(s.action, (k, t) => { k.walkthrough.shots[i]!.action = t }, 'rl-line sm')}
+                {line(`“${s.line}”`, (k, t) => { k.walkthrough.shots[i]!.line = t.replace(/^[“"]|[”"]$/g, '') })}
+              </div>
+            </div>
+          ))}
+          {kit.walkthrough.cut15 && <p className="rl-note" style={{ marginTop: 8 }}><b>15s cut:</b> {kit.walkthrough.cut15}</p>}
+          {kit.walkthrough.cut60 && <p className="rl-note"><b>60s cut:</b> {kit.walkthrough.cut60}</p>}
+        </div>
+      )}
+      {tab === 'voiceover' && (
+        <div>
+          <p className="rl-note">read it on camera, or paste it into text-to-voice</p>
+          {kit.voiceover.map((v, i) => (
+            <div key={i} className="rl-item"><span className="n">{i + 1}</span><div>{v.label && <div className="meta">{v.label}</div>}{line(v.text, (k, t) => { k.voiceover[i]!.text = t })}</div></div>
+          ))}
+        </div>
+      )}
+      {tab === 'hooks' && (
+        <div>
+          <p className="rl-note">the first two seconds, on screen and spoken</p>
+          {kit.hooks.map((h, i) => (
+            <div key={i} className="rl-item"><span className="n">{i + 1}</span><div>{line(h.line, (k, t) => { k.hooks[i]!.line = t })}{h.move && <div className="meta" style={{ marginTop: 4 }}>{h.move}</div>}</div></div>
+          ))}
+        </div>
+      )}
+      {(tab === 'open_house' || tab === 'posts') && (
+        <div>
+          {(tab === 'posts' ? kit.posts : kit.open_house).map((x, i) => (
+            <div key={i} className="rl-item"><span className="n">{i + 1}</span><div><div className="meta">{x.label}</div>{line(x.text, (k, t) => { (tab === 'posts' ? k.posts : k.open_house)[i]!.text = t }, 'rl-line sm')}</div>
+              <div className="ctl"><button className="rl-mini" disabled={busy !== null} onClick={async () => { const r = await charge(tab); if (!r.ok) return; const ok = await toClipboard((r.watermarked ? x.text + ' — shutap.com' : x.text)); say(ok ? `copied${left()}` : 'copy blocked · select the text') }}>copy</button></div>
+            </div>
+          ))}
+        </div>
+      )}
+      {tab === 'straight' && (
+        <div>
+          <p className="rl-note">the MLS-ready description, no jokes, so the kit is complete</p>
+          {line(kit.straight, (k, t) => { k.straight = t }, 'rl-line sm')}
+        </div>
+      )}
+
+      {dirty && (
+        <div className="rl-row" style={{ justifyContent: 'space-between', background: 'var(--surface)', borderRadius: 12, padding: '8px 12px' }}>
+          <span className="rl-note">you changed a line · keep it to copy or download this version</span>
+          <button className="rl-btn sm" disabled={keeping} onClick={() => void keep()}>{keeping ? 'keeping…' : 'keep my edits'}</button>
+        </div>
+      )}
+
+      <div className="rl-dl">
+        <button className="rl-btn" disabled={busy !== null} onClick={() => void copyOutput(tab)}>copy {OUTPUT_LABEL[tab]}<small>this tab · 1 download</small></button>
+        {tab === 'voiceover' && <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void voiceoverFile()}>voiceover .txt<small>for text-to-voice · 1</small></button>}
+        <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void pdf()}>kit PDF<small>all six, one file · 6</small></button>
+        <button className="rl-btn ghost" onClick={() => { setShareOpen((v) => !v); track('kit_shoot_link', {}) }}>▶ shoot mode<small>teleprompter on your phone</small></button>
+        <button className="rl-btn ghost" onClick={onRewrite}>rewrite<small>new tone or controls · 1 kit</small></button>
+      </div>
+      {shareOpen && (
+        <div className="rl-share">
+          <canvas ref={qrRef} width={160} height={160} aria-label="QR code to shoot mode" />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <span className="rl-lbl r">shoot mode on your phone</span>
+            <p className="rl-note" style={{ maxWidth: 360 }}>Scan with the phone you'll read from, or open the link there. Big text, one line at a time, scrolls by itself. Record with a second phone or a laptop: this page never opens a camera.</p>
+            <div className="rl-row">
+              <Link to="/realtors/kit/$id/shoot" params={{ id: data.id }} className="rl-btn sm ghost">open here</Link>
+              <button className="rl-mini" onClick={async () => { const ok = await toClipboard(shootUrl); say(ok ? 'link copied' : shootUrl) }}>copy link</button>
+            </div>
+          </div>
+        </div>
+      )}
+      <p className="rl-note">a copy is one download · the PDF is six · the same output copied again today is free · nobody at shutap reads your listings · saved to your kits</p>
+    </section>
+  )
+}

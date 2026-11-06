@@ -64,6 +64,7 @@ import { Route as FunniestSlugRouteImport } from './routes/funniest.$slug'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as IsItNormalSlugRouteImport } from './routes/is-it-normal.$slug'
+import { Route as RealtorsIndexRouteImport } from './routes/realtors.index'
 import { Route as RoomsIndexRouteImport } from './routes/rooms.index'
 import { Route as RoomsIdRouteImport } from './routes/rooms.$id'
 import { Route as SitemapsCoreDotxmlRouteImport } from './routes/sitemaps/core[.]xml'
@@ -91,6 +92,7 @@ import { Route as ApiFeedbackEventsRouteImport } from './routes/api/feedback/eve
 import { Route as ApiPublicBitHealthRouteImport } from './routes/api/public/bit-health'
 import { Route as ApiPublicJokeCardRouteImport } from './routes/api/public/joke-card'
 import { Route as GuidesTopicTopicRouteImport } from './routes/guides.topic.$topic'
+import { Route as RealtorsKitIndexRouteImport } from './routes/realtors.kit.index'
 import { Route as StoryPillarSlugRouteImport } from './routes/story.$pillar.$slug'
 import { Route as ApiPublicHooksBillingReceiptsRouteImport } from './routes/api/public/hooks/billing-receipts'
 import { Route as ApiPublicHooksDailyIdeaEmailsRouteImport } from './routes/api/public/hooks/daily-idea-emails'
@@ -103,6 +105,7 @@ import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/publi
 import { Route as HallsHallRegionWindowRouteImport } from './routes/halls.$hall.$region.$window'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as RealtorsKitIdShootRouteImport } from './routes/realtors.kit.$id.shoot'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -380,6 +383,11 @@ const IsItNormalSlugRoute = IsItNormalSlugRouteImport.update({
   path: '/is-it-normal/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RealtorsIndexRoute = RealtorsIndexRouteImport.update({
+  id: '/realtors/',
+  path: '/realtors/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoomsIndexRoute = RoomsIndexRouteImport.update({
   id: '/rooms/',
   path: '/rooms/',
@@ -522,6 +530,11 @@ const GuidesTopicTopicRoute = GuidesTopicTopicRouteImport.update({
   path: '/guides/topic/$topic',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RealtorsKitIndexRoute = RealtorsKitIndexRouteImport.update({
+  id: '/realtors/kit/',
+  path: '/realtors/kit/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StoryPillarSlugRoute = StoryPillarSlugRouteImport.update({
   id: '/story/$pillar/$slug',
   path: '/story/$pillar/$slug',
@@ -587,6 +600,11 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
 const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
   id: '/lovable/email/auth/webhook',
   path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RealtorsKitIdShootRoute = RealtorsKitIdShootRouteImport.update({
+  id: '/realtors/kit/$id/shoot',
+  path: '/realtors/kit/$id/shoot',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -656,6 +674,7 @@ export interface FileRoutesByFullPath {
   '/what-happens/$slug': typeof WhatHappensSlugRoute
   '/funniest/': typeof FunniestIndexRoute
   '/guides/': typeof GuidesIndexRoute
+  '/realtors/': typeof RealtorsIndexRoute
   '/rooms/': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -673,6 +692,7 @@ export interface FileRoutesByFullPath {
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
+  '/realtors/kit/': typeof RealtorsKitIndexRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
@@ -684,6 +704,7 @@ export interface FileRoutesByFullPath {
   '/halls/$hall/$region/$window': typeof HallsHallRegionWindowRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/realtors/kit/$id/shoot': typeof RealtorsKitIdShootRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -751,6 +772,7 @@ export interface FileRoutesByTo {
   '/what-happens/$slug': typeof WhatHappensSlugRoute
   '/funniest': typeof FunniestIndexRoute
   '/guides': typeof GuidesIndexRoute
+  '/realtors': typeof RealtorsIndexRoute
   '/rooms': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -768,6 +790,7 @@ export interface FileRoutesByTo {
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
+  '/realtors/kit': typeof RealtorsKitIndexRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
@@ -779,6 +802,7 @@ export interface FileRoutesByTo {
   '/halls/$hall/$region/$window': typeof HallsHallRegionWindowRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/realtors/kit/$id/shoot': typeof RealtorsKitIdShootRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -848,6 +872,7 @@ export interface FileRoutesById {
   '/what-happens/$slug': typeof WhatHappensSlugRoute
   '/funniest/': typeof FunniestIndexRoute
   '/guides/': typeof GuidesIndexRoute
+  '/realtors/': typeof RealtorsIndexRoute
   '/rooms/': typeof RoomsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -865,6 +890,7 @@ export interface FileRoutesById {
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
+  '/realtors/kit/': typeof RealtorsKitIndexRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
@@ -876,6 +902,7 @@ export interface FileRoutesById {
   '/halls/$hall/$region/$window': typeof HallsHallRegionWindowRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/realtors/kit/$id/shoot': typeof RealtorsKitIdShootRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -945,6 +972,7 @@ export interface FileRouteTypes {
     | '/what-happens/$slug'
     | '/funniest/'
     | '/guides/'
+    | '/realtors/'
     | '/rooms/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -962,6 +990,7 @@ export interface FileRouteTypes {
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
+    | '/realtors/kit/'
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
@@ -973,6 +1002,7 @@ export interface FileRouteTypes {
     | '/halls/$hall/$region/$window'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
+    | '/realtors/kit/$id/shoot'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1040,6 +1070,7 @@ export interface FileRouteTypes {
     | '/what-happens/$slug'
     | '/funniest'
     | '/guides'
+    | '/realtors'
     | '/rooms'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1057,6 +1088,7 @@ export interface FileRouteTypes {
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
+    | '/realtors/kit'
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
@@ -1068,6 +1100,7 @@ export interface FileRouteTypes {
     | '/halls/$hall/$region/$window'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
+    | '/realtors/kit/$id/shoot'
   id:
     | '__root__'
     | '/'
@@ -1136,6 +1169,7 @@ export interface FileRouteTypes {
     | '/what-happens/$slug'
     | '/funniest/'
     | '/guides/'
+    | '/realtors/'
     | '/rooms/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1153,6 +1187,7 @@ export interface FileRouteTypes {
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
+    | '/realtors/kit/'
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
@@ -1164,6 +1199,7 @@ export interface FileRouteTypes {
     | '/halls/$hall/$region/$window'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
+    | '/realtors/kit/$id/shoot'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1231,6 +1267,7 @@ export interface RootRouteChildren {
   WhatHappensSlugRoute: typeof WhatHappensSlugRoute
   FunniestIndexRoute: typeof FunniestIndexRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
+  RealtorsIndexRoute: typeof RealtorsIndexRoute
   RoomsIndexRoute: typeof RoomsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -1239,6 +1276,7 @@ export interface RootRouteChildren {
   ApiPublicJokeCardRoute: typeof ApiPublicJokeCardRoute
   GuidesTopicTopicRoute: typeof GuidesTopicTopicRoute
   StoryPillarSlugRoute: typeof StoryPillarSlugRoute
+  RealtorsKitIndexRoute: typeof RealtorsKitIndexRoute
   ApiPublicHooksBillingReceiptsRoute: typeof ApiPublicHooksBillingReceiptsRoute
   ApiPublicHooksDailyIdeaEmailsRoute: typeof ApiPublicHooksDailyIdeaEmailsRoute
   ApiPublicHooksDispatchCheckinsRoute: typeof ApiPublicHooksDispatchCheckinsRoute
@@ -1249,6 +1287,7 @@ export interface RootRouteChildren {
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
+  RealtorsKitIdShootRoute: typeof RealtorsKitIdShootRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1638,6 +1677,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IsItNormalSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/realtors/': {
+      id: '/realtors/'
+      path: '/realtors'
+      fullPath: '/realtors/'
+      preLoaderRoute: typeof RealtorsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rooms/': {
       id: '/rooms/'
       path: '/rooms'
@@ -1827,6 +1873,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuidesTopicTopicRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/realtors/kit/': {
+      id: '/realtors/kit/'
+      path: '/realtors/kit'
+      fullPath: '/realtors/kit/'
+      preLoaderRoute: typeof RealtorsKitIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/story/$pillar/$slug': {
       id: '/story/$pillar/$slug'
       path: '/story/$pillar/$slug'
@@ -1909,6 +1962,13 @@ declare module '@tanstack/react-router' {
       path: '/lovable/email/auth/webhook'
       fullPath: '/lovable/email/auth/webhook'
       preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/realtors/kit/$id/shoot': {
+      id: '/realtors/kit/$id/shoot'
+      path: '/realtors/kit/$id/shoot'
+      fullPath: '/realtors/kit/$id/shoot'
+      preLoaderRoute: typeof RealtorsKitIdShootRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -2031,6 +2091,7 @@ const rootRouteChildren: RootRouteChildren = {
   WhatHappensSlugRoute: WhatHappensSlugRoute,
   FunniestIndexRoute: FunniestIndexRoute,
   GuidesIndexRoute: GuidesIndexRoute,
+  RealtorsIndexRoute: RealtorsIndexRoute,
   RoomsIndexRoute: RoomsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
@@ -2039,6 +2100,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicJokeCardRoute: ApiPublicJokeCardRoute,
   GuidesTopicTopicRoute: GuidesTopicTopicRoute,
   StoryPillarSlugRoute: StoryPillarSlugRoute,
+  RealtorsKitIndexRoute: RealtorsKitIndexRoute,
   ApiPublicHooksBillingReceiptsRoute: ApiPublicHooksBillingReceiptsRoute,
   ApiPublicHooksDailyIdeaEmailsRoute: ApiPublicHooksDailyIdeaEmailsRoute,
   ApiPublicHooksDispatchCheckinsRoute: ApiPublicHooksDispatchCheckinsRoute,
@@ -2049,6 +2111,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
+  RealtorsKitIdShootRoute: RealtorsKitIdShootRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
