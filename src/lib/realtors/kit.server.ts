@@ -80,7 +80,12 @@ export function checkKit(kit: Kit, l: Listing, c: ListingControls): KitCheck[] {
       if (n.length <= 1 || nums.has(n)) continue
       if (/^\d{1,2}$/.test(n) && Number(n) <= 60) continue // seconds, counts, hours
       if (/^(1[5-9]|20)\d{2}$/.test(n) && nums.size === 0) continue
-      fails.push({ rule: `added number: ${m}`, where, line })
+      // a dollar figure or a square-footage that is not the listing's is a changed number
+      const at = line.indexOf(m)
+      const before = line.slice(Math.max(0, at - 3), at)
+      const after = line.slice(at + m.length, at + m.length + 16).toLowerCase()
+      const listingLike = /\$\s?$/.test(before) || /^\s*(?:k|m)\b/i.test(after) || /^\s*(?:sq|square|sqft|bed|bath|lot)/.test(after) || n.length >= 5
+      fails.push({ rule: `${listingLike ? 'changed' : 'added'} number: ${m}`, where, line })
     }
   }
   // must-say words: present somewhere in each output that can carry them
@@ -122,20 +127,29 @@ export async function writeKit(l: Listing, c: ListingControls): Promise<KitResul
     RULES: KIT_RULES,
   })
   const models = [bitWriterModel(), backupWriterModel()]
-  const results = await Promise.all(models.map((m) => writeOnce(m, prompt, BIT_BUDGET.write())))
   const candidates: KitDraft[] = []
-  results.forEach((r, i) => {
-    if (!r) return
-    const parsed = parseKit(r.raw)
-    if (!parsed) { console.warn('[kit] unparseable', { model: models[i] }); return }
-    const checks = checkKit(parsed.kit, l, c)
-    candidates.push({ kit: parsed.kit, skipped: parsed.skipped, model: models[i]!, ms: r.ms, checks })
-  })
+  const fatal = (f: KitCheck) => f.rule.startsWith('fair housing') || f.rule.startsWith('never say') || f.rule.startsWith('added number') || f.rule.startsWith('changed number')
+  // Up to two rounds: the second tells each writer exactly which lines broke
+  // which rule, so a changed number or a fair-housing word is corrected,
+  // not merely scored. A realtor's numbers must match the listing exactly.
+  let feedback = ''
+  for (let round = 0; round < 2; round++) {
+    const results = await Promise.all(models.map((m) => writeOnce(m, prompt + feedback, BIT_BUDGET.write())))
+    const roundFails: string[] = []
+    results.forEach((r, i) => {
+      if (!r) return
+      const parsed = parseKit(r.raw)
+      if (!parsed) { console.warn('[kit] unparseable', { model: models[i] }); return }
+      const checks = checkKit(parsed.kit, l, c)
+      candidates.push({ kit: parsed.kit, skipped: parsed.skipped, model: models[i]!, ms: r.ms, checks })
+      for (const f of checks.filter(fatal)) roundFails.push(`- ${f.where}: ${f.rule}${f.line ? ` — "${f.line.slice(0, 140)}"` : ''}`)
+    })
+    if (candidates.some((k) => !k.checks.some(fatal))) break
+    if (!roundFails.length) break
+    feedback = `\n\nYOUR LAST ATTEMPT BROKE THESE RULES. Fix every one; everything else may stay:\n${[...new Set(roundFails)].slice(0, 12).join('\n')}\nEvery number must be exactly as THE LISTING states it (price, beds, baths, square feet, lot, year, HOA, taxes). Never round, convert, estimate or add a number.`
+  }
   if (!candidates.length) return null
-  // a kit with a fair-housing or never-say failure is out; added numbers and
-  // missing must-say are scored, not fatal (the lab shows them)
-  const safe = candidates.filter((k) => !k.checks.some((f) => f.rule.startsWith('fair housing') || f.rule.startsWith('never say')))
-  const pool = safe.length ? safe : []
+  const pool = candidates.filter((k) => !k.checks.some(fatal))
   if (!pool.length) return null
   let winner = 0
   let why = pool.length === 1 ? 'only one kit passed' : ''
