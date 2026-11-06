@@ -117,3 +117,39 @@ export async function priceForLookupKey(
   }
   return next;
 }
+
+/** The one-time price behind a lookup key, created on first use (product
+ *  and price) so nobody has to make it by hand in two Stripe environments.
+ *  Amount drift is fixed the same way as the plans: a new price takes the
+ *  lookup key, the old one is archived. */
+export async function oneTimePriceForLookupKey(
+  stripe: Stripe,
+  lookupKey: string,
+  expected: { amount: number; name: string; description: string },
+): Promise<Stripe.Price> {
+  const cents = Math.round(expected.amount * 100);
+  const found = await stripe.prices.list({ lookup_keys: [lookupKey], active: true, limit: 1 });
+  const current = found.data[0];
+  if (current && current.unit_amount === cents && !current.recurring) return current;
+  let productId: string;
+  if (current) {
+    productId = typeof current.product === 'string' ? current.product : current.product.id;
+  } else {
+    const product = await stripe.products.create({ name: expected.name, description: expected.description, metadata: { lovable_external_id: lookupKey } });
+    productId = product.id;
+  }
+  const next = await stripe.prices.create({
+    product: productId,
+    currency: 'usd',
+    unit_amount: cents,
+    tax_behavior: 'exclusive',
+    lookup_key: lookupKey,
+    transfer_lookup_key: true,
+    metadata: { lovable_external_id: lookupKey },
+  });
+  console.log('[stripe] one-time price ready', { lookupKey, id: next.id, created: !current });
+  if (current) {
+    try { await stripe.prices.update(current.id, { active: false }); } catch (e) { console.error('[stripe] could not archive old price', { id: current.id, error: getStripeErrorMessage(e) }); }
+  }
+  return next;
+}

@@ -75,3 +75,31 @@ THE KITS:
 {{KITS}}
 
 Return only JSON: {"ranking":[<kit numbers best first>],"why":"one sentence on the winner"}`
+
+/** AI on demand inside a kit (Nov 6 2026): three versions of one line, the
+ *  rest of the kit untouched. Same hard rules as the kit. */
+export const KIT_TOUCH_PROMPT = `You sharpen one line of a real estate agent's content kit. The agent performs it, phone in hand. Everything else stays as it is; you write three versions of that one line only.
+
+THE LISTING:
+{{LISTING}}
+
+THE AGENT'S NOTE: {{NOTE}}
+TONE: {{TONE}}
+ROAST THE HOUSE: {{ROAST_HOUSE}}
+ROAST THE NEIGHBORHOOD: {{ROAST_NEIGHBORHOOD}}
+MENTION THE PRICE IN THE JOKES: {{MENTION_PRICE}}
+MUST SAY: {{MUST_SAY}}
+NEVER SAY: {{NEVER_SAY}}
+
+{{RULES}}
+
+WHERE THE LINE SITS: {{WHERE}}
+THE LINES AROUND IT:
+{{CONTEXT}}
+
+THE LINE AS IT IS: {{LINE}}
+{{AVOID}}
+Three versions, each on a different move: a more specific picture from the listing's own facts; an escalation; a reversal (the house, the commute or the market gets the line); a cut (fewer words, the turn as the last word); listing-speak against reality. Every version must fit its place and be sayable in one breath (under 18 words for a spoken line). The tone stays {{TONE}}. No two versions may share their last three words.
+
+Return only JSON:
+{"options":[{"line":"...","move":"a specific picture"},{"line":"...","move":"..."},{"line":"...","move":"..."}]}`

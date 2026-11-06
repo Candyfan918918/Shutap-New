@@ -375,3 +375,36 @@ export const kitUsage = createServerFn({ method: 'POST' })
     const admin = await adminDb()
     return usageFor(admin, userId, await kitTier(admin, userId))
   })
+
+export type KitTouchResult =
+  | { ok: true; options: { line: string; move: string }[]; used: number; cap: number | null }
+  | { ok: false; reason: 'sign_in' | 'not_found' | 'failed' | 'rate_limited' }
+  | { ok: false; reason: 'limited'; used: number; cap: number; tier: BitTier }
+
+/** "funnier" on one line of a kit: three versions, the rest untouched. A
+ *  touch, like a bit line: Free 3 a day, paid unlimited (touch:<user>). */
+export const touchKitLine = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => KitIdIn.extend({ where: z.string().max(80), context: z.string().max(3000), line: z.string().max(600), avoid: z.array(z.string().max(600)).max(12).optional() }).parse(d))
+  .handler(async ({ data, context }): Promise<KitTouchResult> => {
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const kit = await loadKit(admin, data.kit_id, userId)
+    if (!kit) return { ok: false, reason: 'not_found' }
+    const tier = await kitTier(admin, userId)
+    const { chargeBit, refundBit, NO_CAP } = await import('./bits/usage.server')
+    const { day } = today()
+    const subject = `touch:${userId}`
+    const limit = limitFor('touch', tier)
+    const chargeId = crypto.randomUUID()
+    let used: number
+    try { used = await chargeBit(admin, subject, day, limit.cap ?? NO_CAP, chargeId) } catch { return { ok: false, reason: 'failed' } }
+    if (used === -1) return { ok: false, reason: 'limited', used: limit.cap ?? 0, cap: limit.cap ?? 0, tier }
+    const { touchKitLine: touch } = await import('./realtors/kit.server')
+    const { hasContactDetails, runScrub } = await import('./agents/scrubber.functions')
+    const line = data.line && hasContactDetails(data.line) ? (await runScrub(data.line)).clean_text : data.line
+    const options = await touch(kit.listing, kit.controls, data.where, data.context, line, data.avoid ?? [])
+    if (!options) { await refundBit(admin, subject, day, chargeId); return { ok: false, reason: 'failed' } }
+    await admin.from('events').insert({ user_id: userId, session_id: null, name: 'kit_line_touched', properties: { product: 'realtors', where: data.where, tier } as never } as never).then(() => {}, () => {})
+    return { ok: true, options, used, cap: limit.cap }
+  })

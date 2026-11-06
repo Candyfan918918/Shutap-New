@@ -5,7 +5,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import QRCode from 'qrcode'
-import { chargeKitDownload, keepKitEdit, type KitDownloadKind, type KitUsage, type KitView as KitData } from '@/lib/realtors.functions'
+import { chargeKitDownload, keepKitEdit, touchKitLine, type KitDownloadKind, type KitUsage, type KitView as KitData } from '@/lib/realtors.functions'
+import { KIT_ONCE, usd } from '@/lib/pricing'
 import { OUTPUT_LABEL, OUTPUTS, TONE_LABEL, listingFacts, type Kit, type Output } from '@/lib/realtors/listing'
 import { copyText, fileStem, kitTitle, voiceoverTxt } from '@/lib/realtors/kit-text'
 import { trackEvent } from '@/lib/tracking'
@@ -17,12 +18,27 @@ type Props = {
   onUsage: (u: KitUsage) => void
   onLimit: () => void
   onRewrite: () => void
+  /** open the one-kit checkout */
+  onBuy: () => void
+  onTouchLimit: () => void
   say: (m: string) => void
 }
 
 const track = (name: string, props: Record<string, unknown>) => {
   void phCapture(name, { product: 'realtors', ...props })
   void trackEvent(name, { product: 'realtors', ...props })
+}
+
+/** the lines around the one being touched, so the writer keeps the thread */
+function outputContext(kit: Kit, o: Output): string {
+  switch (o) {
+    case 'walkthrough': return kit.walkthrough.shots.map((s, i) => `${i + 1}. ${s.where}: "${s.line}"`).join('\n')
+    case 'voiceover': return kit.voiceover.map((v) => v.text).join('\n')
+    case 'hooks': return kit.hooks.map((h) => h.line).join('\n')
+    case 'open_house': return kit.open_house.map((x) => `${x.label}: ${x.text}`).join('\n')
+    case 'posts': return kit.posts.map((x) => `${x.label}: ${x.text}`).join('\n')
+    case 'straight': return kit.straight
+  }
 }
 
 function download(blob: Blob, name: string) {
@@ -38,7 +54,7 @@ async function toClipboard(text: string): Promise<boolean> {
   try { await navigator.clipboard.writeText(text); return true } catch { return false }
 }
 
-export function KitView({ data, usage, onUsage, onLimit, onRewrite, say }: Props) {
+export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTouchLimit, say }: Props) {
   const latest = data.versions[data.versions.length - 1]!
   const [versionId, setVersionId] = useState(latest.id)
   const [kit, setKit] = useState<Kit>(latest.content)
@@ -47,6 +63,12 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, say }: Props
   const [keeping, setKeeping] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)
   const [shareOpen, setShareOpen] = useState(false)
+  /** "funnier" on one line: which line is open, its options, the pick */
+  const [touch, setTouch] = useState<{ key: string; where: string; apply: (k: Kit, t: string) => void; current: string } | null>(null)
+  const [options, setOptions] = useState<{ line: string; move: string }[] | null>(null)
+  const [picked, setPicked] = useState(-1)
+  const [touching, setTouching] = useState(false)
+  const offered = useRef<Record<string, string[]>>({})
   const qrRef = useRef<HTMLCanvasElement | null>(null)
   const free = usage.tier === 'free' && !data.paid
   const marked = free
@@ -131,6 +153,54 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, say }: Props
     <p className={cls} contentEditable suppressContentEditableWarning spellCheck={false} onBlur={onLine(apply)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); (e.target as HTMLElement).blur() } }}>{text}</p>
   )
 
+  async function funnier(key: string, where: string, current: string, apply: (k: Kit, t: string) => void) {
+    setTouch({ key, where, apply, current }); setOptions(null); setPicked(-1); setTouching(true)
+    track('kit_line_funnier', { where })
+    try {
+      const context = outputContext(kit, tab)
+      const r = await touchKitLine({ data: { kit_id: data.id, where, context, line: current, avoid: offered.current[key] ?? [] } })
+      if (!r.ok) {
+        setTouch(null)
+        if (r.reason === 'limited') return onTouchLimit()
+        return say(r.reason === 'rate_limited' ? 'one at a time · try again in a moment' : 'that one did not come back · try again')
+      }
+      setOptions(r.options)
+      offered.current[key] = [...(offered.current[key] ?? []), ...r.options.map((o) => o.line)].slice(-12)
+    } finally {
+      setTouching(false)
+    }
+  }
+  function useOption() {
+    if (!touch) return
+    if (picked >= 0 && options) {
+      const t = touch
+      const line = options[picked]!.line
+      edit((k) => { t.apply(k, line); return k })
+      track('kit_line_picked', { where: t.where, move: options[picked]!.move })
+    }
+    setTouch(null)
+  }
+  const pop = (key: string) => touch?.key === key && (
+    <div className="rl-pop" role="dialog" aria-label="three ways">
+      <span className="rl-lbl r">funnier · {touch.where} · three ways, {TONE_LABEL[data.tone]}</span>
+      {touching && !options && <p className="rl-note">writing three…</p>}
+      {options && (
+        <>
+          <button className={`rl-opt keep${picked === -1 ? ' on' : ''}`} onClick={() => setPicked(-1)}><b>✓</b><span>{touch.current || <i>leave it empty</i>}<small>keep mine</small></span></button>
+          {options.map((o, i) => <button key={i} className={`rl-opt${picked === i ? ' on' : ''}`} onClick={() => setPicked(i)}><b>{i + 1}</b><span>{o.line}<small>{o.move}</small></span></button>)}
+        </>
+      )}
+      <div className="rl-row">
+        <button className="rl-btn sm" disabled={!options} onClick={useOption}>{picked < 0 ? 'keep mine' : 'use this one'}</button>
+        <button className="rl-mini" disabled={touching} onClick={() => void funnier(key, touch.where, touch.current, touch.apply)}>three more</button>
+        <button className="rl-mini" onClick={() => setTouch(null)}>close</button>
+      </div>
+    </div>
+  )
+  const fun = (key: string, where: string, current: string, apply: (k: Kit, t: string) => void) => (
+    <button className={`rl-mini${touch?.key === key ? ' on' : ''}`} disabled={touching} onClick={() => void funnier(key, where, current, apply)}>{touching && touch?.key === key ? '…' : 'funnier'}</button>
+  )
+
   const d = usage.downloads
   const count = d.cap === null ? (data.paid ? 'this kit is yours · nothing counted' : 'unlimited') : `${Math.max(0, d.cap - d.used)} of ${d.cap} left this ${d.period}`
 
@@ -160,6 +230,8 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, say }: Props
                 {line(s.action, (k, t) => { k.walkthrough.shots[i]!.action = t }, 'rl-line sm')}
                 {line(`“${s.line}”`, (k, t) => { k.walkthrough.shots[i]!.line = t.replace(/^[“"]|[”"]$/g, '') })}
               </div>
+              <div className="ctl">{fun(`w${i}`, `walkthrough shot ${i + 1} · ${s.where}`, s.line, (k, t) => { k.walkthrough.shots[i]!.line = t })}</div>
+              {pop(`w${i}`)}
             </div>
           ))}
           {kit.walkthrough.cut15 && <p className="rl-note" style={{ marginTop: 8 }}><b>15s cut:</b> {kit.walkthrough.cut15}</p>}
@@ -170,7 +242,7 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, say }: Props
         <div>
           <p className="rl-note">read it on camera, or paste it into text-to-voice</p>
           {kit.voiceover.map((v, i) => (
-            <div key={i} className="rl-item"><span className="n">{i + 1}</span><div>{v.label && <div className="meta">{v.label}</div>}{line(v.text, (k, t) => { k.voiceover[i]!.text = t })}</div></div>
+            <div key={i} className="rl-item"><span className="n">{i + 1}</span><div>{v.label && <div className="meta">{v.label}</div>}{line(v.text, (k, t) => { k.voiceover[i]!.text = t })}</div><div className="ctl">{fun(`v${i}`, `voiceover · ${v.label || i + 1}`, v.text, (k, t) => { k.voiceover[i]!.text = t })}</div>{pop(`v${i}`)}</div>
           ))}
         </div>
       )}
@@ -178,7 +250,7 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, say }: Props
         <div>
           <p className="rl-note">the first two seconds, on screen and spoken</p>
           {kit.hooks.map((h, i) => (
-            <div key={i} className="rl-item"><span className="n">{i + 1}</span><div>{line(h.line, (k, t) => { k.hooks[i]!.line = t })}{h.move && <div className="meta" style={{ marginTop: 4 }}>{h.move}</div>}</div></div>
+            <div key={i} className="rl-item"><span className="n">{i + 1}</span><div>{line(h.line, (k, t) => { k.hooks[i]!.line = t })}{h.move && <div className="meta" style={{ marginTop: 4 }}>{h.move}</div>}</div><div className="ctl">{fun(`h${i}`, `hook ${i + 1}`, h.line, (k, t) => { k.hooks[i]!.line = t })}</div>{pop(`h${i}`)}</div>
           ))}
         </div>
       )}
@@ -186,7 +258,8 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, say }: Props
         <div>
           {(tab === 'posts' ? kit.posts : kit.open_house).map((x, i) => (
             <div key={i} className="rl-item"><span className="n">{i + 1}</span><div><div className="meta">{x.label}</div>{line(x.text, (k, t) => { (tab === 'posts' ? k.posts : k.open_house)[i]!.text = t }, 'rl-line sm')}</div>
-              <div className="ctl"><button className="rl-mini" disabled={busy !== null} onClick={async () => { const r = await charge(tab); if (!r.ok) return; const ok = await toClipboard((r.watermarked ? x.text + ' — shutap.com' : x.text)); say(ok ? `copied${left()}` : 'copy blocked · select the text') }}>copy</button></div>
+              <div className="ctl">{fun(`${tab}${i}`, `${OUTPUT_LABEL[tab]} · ${x.label}`, x.text, (k, t) => { (tab === 'posts' ? k.posts : k.open_house)[i]!.text = t })}<button className="rl-mini" disabled={busy !== null} onClick={async () => { const r = await charge(tab); if (!r.ok) return; const ok = await toClipboard((r.watermarked ? x.text + ' — shutap.com' : x.text)); say(ok ? `copied${left()}` : 'copy blocked · select the text') }}>copy</button></div>
+              {pop(`${tab}${i}`)}
             </div>
           ))}
         </div>
@@ -211,6 +284,7 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, say }: Props
         <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void pdf()}>kit PDF<small>all six, one file · 6</small></button>
         <button className="rl-btn ghost" onClick={() => { setShareOpen((v) => !v); track('kit_shoot_link', {}) }}>▶ shoot mode<small>teleprompter on your phone</small></button>
         <button className="rl-btn ghost" onClick={onRewrite}>rewrite<small>new tone or controls · 1 kit</small></button>
+        {!data.paid && usage.tier !== 'pro' && <button className="rl-btn ghost" onClick={() => { track('kit_buy_clicked', { tier: usage.tier }); onBuy() }}>buy this kit · {usd(KIT_ONCE.amount)}<small>no limits, no marks, no subscription</small></button>}
       </div>
       {shareOpen && (
         <div className="rl-share">
@@ -225,7 +299,7 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, say }: Props
           </div>
         </div>
       )}
-      <p className="rl-note">a copy is one download · the PDF is six · the same output copied again today is free · nobody at shutap reads your listings · saved to your kits</p>
+      <p className="rl-note">a copy is one download · the PDF is six · the same output copied again today is free · "funnier" rewrites that one line only · nobody at shutap reads your listings · saved to your kits</p>
     </section>
   )
 }

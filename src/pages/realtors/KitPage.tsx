@@ -9,7 +9,10 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { useCurrentAlias } from '@/hooks/use-current-alias'
 import { getRealtorKit, listMyKits, readListing, writeRealtorKit, type KitSummary, type KitUsage, type KitView as KitData } from '@/lib/realtors.functions'
 import { DEFAULT_LISTING_CONTROLS, TONES, TONE_LABEL, listingFacts, type Listing, type ListingControls, type Tone } from '@/lib/realtors/listing'
-import { PLANS, usd } from '@/lib/pricing'
+import { KIT_ONCE, PLANS, usd } from '@/lib/pricing'
+import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe-js'
+import { getStripe, getStripeEnvironment } from '@/lib/stripe'
+import { createKitCheckout, kitPaidStatus } from '@/lib/payments.functions'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { trackEvent } from '@/lib/tracking'
 import { phCapture } from '@/lib/posthog'
@@ -46,7 +49,7 @@ function Chips({ label, hint, value, onChange }: { label: string; hint: string; 
   )
 }
 
-export function KitPage({ kitId }: { kitId?: string }) {
+export function KitPage({ kitId, sessionId }: { kitId?: string; sessionId?: string }) {
   const { userId, ready } = useCurrentAlias()
   const navigate = useNavigate()
   const [url, setUrl] = useState('')
@@ -61,7 +64,8 @@ export function KitPage({ kitId }: { kitId?: string }) {
   const [kit, setKit] = useState<KitData | null>(null)
   const [usage, setUsage] = useState<KitUsage | null>(null)
   const [mine, setMine] = useState<KitSummary[]>([])
-  const [sheet, setSheet] = useState<null | 'signin' | 'limit' | 'off'>(null)
+  const [sheet, setSheet] = useState<null | 'signin' | 'limit' | 'touch_limit' | 'off' | 'buy'>(null)
+  const [checkoutError, setCheckoutError] = useState('')
   const [toast, setToast] = useState<string | null>(null)
   const toastTimer = useRef<number | undefined>(undefined)
   const topRef = useRef<HTMLDivElement | null>(null)
@@ -82,9 +86,24 @@ export function KitPage({ kitId }: { kitId?: string }) {
     if (!ready || !userId) return
     listMyKits({ data: {} }).then((r) => { setMine(r.kits); setUsage(r.usage) }).catch(() => {})
     if (kitId) {
-      getRealtorKit({ data: { kit_id: kitId } }).then((r) => { if (r.kit) { setKit(r.kit); if (r.usage) setUsage(r.usage) } }).catch(() => {})
+      const load = () => getRealtorKit({ data: { kit_id: kitId } }).then((r) => { if (r.kit) { setKit(r.kit); if (r.usage) setUsage(r.usage) } }).catch(() => {})
+      if (sessionId) {
+        // back from the one-kit checkout: the webhook usually got here first
+        kitPaidStatus({ data: { kitId, sessionId, environment: getStripeEnvironment() } })
+          .then((r) => { if (r.paid) { say('this kit is yours · no limits, no marks'); track('kit_bought_seen', {}) } })
+          .catch(() => {})
+          .finally(() => { void load(); void navigate({ to: '/realtors/kit', search: { kit: kitId } as never, replace: true }) })
+      } else void load()
     }
-  }, [ready, userId, kitId])
+  }, [ready, userId, kitId, sessionId])
+
+  async function fetchClientSecret(): Promise<string> {
+    if (!kit) throw new Error('no kit')
+    const r = await createKitCheckout({ data: { kitId: kit.id, environment: getStripeEnvironment(), returnUrl: `${window.location.origin}/realtors/kit?kit=${kit.id}&session_id={CHECKOUT_SESSION_ID}` } })
+    if ('error' in r && r.error) { setCheckoutError(r.error === 'already_paid' ? 'this kit is already yours' : 'checkout could not open · try again'); throw new Error(r.error) }
+    if (!('clientSecret' in r) || !r.clientSecret) throw new Error('no client secret')
+    return r.clientSecret
+  }
 
   async function read() {
     const u = url.trim()
@@ -161,7 +180,7 @@ export function KitPage({ kitId }: { kitId?: string }) {
 
         {kit ? (
           <>
-            <KitView data={kit} usage={usage ?? { tier: 'free', kits: { used: 0, cap: 1, period: 'ever' }, downloads: { used: 0, cap: 1, period: 'day' } }} onUsage={setUsage} onLimit={() => setSheet('limit')} onRewrite={() => { setListing(kit.listing); setNote(kit.listing.note); setControls(kit.controls); setKit(null); void navigate({ to: '/realtors/kit', replace: true }); track('kit_rewrite_opened', {}) }} say={say} />
+            <KitView data={kit} usage={usage ?? { tier: 'free', kits: { used: 0, cap: 1, period: 'ever' }, downloads: { used: 0, cap: 1, period: 'day' } }} onUsage={setUsage} onLimit={() => setSheet('limit')} onBuy={() => { setCheckoutError(''); setSheet('buy') }} onTouchLimit={() => setSheet('touch_limit')} onRewrite={() => { setListing(kit.listing); setNote(kit.listing.note); setControls(kit.controls); setKit(null); void navigate({ to: '/realtors/kit', replace: true }); track('kit_rewrite_opened', {}) }} say={say} />
             <div className="rl-row" style={{ justifyContent: 'space-between' }}>
               <button className="rl-btn ghost sm" onClick={() => { setKit(null); setListing(null); setUrl(''); setText(''); setNote(''); void navigate({ to: '/realtors/kit', replace: true }) }}>another listing</button>
               {usage && <span className="rl-note">{usage.kits.cap === null ? 'kits: unlimited' : `kits: ${usage.kits.used} of ${usage.kits.cap}${usage.kits.period === 'day' ? ' today' : ' free'}`}{usage.downloads.cap !== null ? ` · downloads: ${usage.downloads.used} of ${usage.downloads.cap} this ${usage.downloads.period}` : ''}</span>}
@@ -255,6 +274,28 @@ export function KitPage({ kitId }: { kitId?: string }) {
                 <a href="/subscribe?plan=basic&from=realtors" className="rl-btn" onClick={() => track('plan_clicked', { plan: 'basic', where: 'realtors_limit' })}>get Basic · {usd(PLANS.basic.amount)}/mo</a>
                 <a href="/subscribe?plan=pro&from=realtors" className="rl-btn ghost" onClick={() => track('plan_clicked', { plan: 'pro', where: 'realtors_limit' })}>get Pro · {usd(PLANS.pro.amount)}/mo</a>
                 <button className="rl-btn ghost" onClick={() => setSheet(null)}>not now</button>
+              </>
+            )}
+            {sheet === 'touch_limit' && (
+              <>
+                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>That's today's three touches.</h3>
+                <p className="rl-note">Free gets three "funnier" touches a day. Basic and Pro: unlimited. You can still type any line yourself.</p>
+                <a href="/subscribe?plan=basic&from=realtors_touch" className="rl-btn">get Basic · {usd(PLANS.basic.amount)}/mo</a>
+                <button className="rl-btn ghost" onClick={() => setSheet(null)}>not now</button>
+              </>
+            )}
+            {sheet === 'buy' && kit && (
+              <>
+                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>One kit · {usd(KIT_ONCE.amount)}</h3>
+                <p className="rl-note">This listing's kit, yours: copy and download it as often as you like, nothing marked, and every rewrite of it for 30 days. No subscription. Tax may be added.</p>
+                {checkoutError ? <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{checkoutError}</p> : (
+                  <div style={{ minHeight: 420 }}>
+                    <EmbeddedCheckoutProvider key={kit.id} stripe={getStripe()} options={{ fetchClientSecret }}>
+                      <EmbeddedCheckout />
+                    </EmbeddedCheckoutProvider>
+                  </div>
+                )}
+                <button className="rl-btn ghost" onClick={() => setSheet(null)}>close</button>
               </>
             )}
             {sheet === 'off' && (

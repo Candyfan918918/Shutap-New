@@ -6,10 +6,10 @@ import '@/components/feed/feed.css'
 
 export const Route = createFileRoute('/realtors/kit/')({
   ssr: false,
-  validateSearch: (s: Record<string, unknown>) => z.object({ kit: z.string().uuid().optional() }).parse(s),
+  validateSearch: (s: Record<string, unknown>) => z.object({ kit: z.string().uuid().optional(), session_id: z.string().max(200).optional() }).parse(s),
   head: () => ({ meta: [...pageMeta('Write the kit — Shutap for Realtors', 'Paste the listing link; get the walkthrough, voiceover, hooks, open-house kit, posts and straight copy in your tone.', '/realtors/kit'), { name: 'robots', content: 'noindex' }] }),
   component: () => {
-    const { kit } = Route.useSearch()
-    return <div className="fd" data-ph-private style={{ display: 'contents' }}><KitPage kitId={kit} /></div>
+    const { kit, session_id } = Route.useSearch()
+    return <div className="fd" data-ph-private style={{ display: 'contents' }}><KitPage kitId={kit} sessionId={session_id} /></div>
   },
 })
