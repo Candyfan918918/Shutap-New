@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import '@/pages/home/bit/bit.css'
 
-export function WriterBar({ page, label }: { page: string; label: string }) {
+export function WriterBar({ page, label, realtor = false }: { page: string; label: string; realtor?: boolean }) {
   const [on, setOn] = useState(false)
   useEffect(() => {
     // The writer mounts a beat after this bar, so look it up on each check
@@ -32,13 +32,13 @@ export function WriterBar({ page, label }: { page: string; label: string }) {
       .then((m) => m.trackEvent('seo_cta_clicked', { page, position: 'sticky', kind: 'anchor' }))
       .catch(() => {})
     document.getElementById('bit-write')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    window.setTimeout(() => (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.focus(), 500)
+    window.setTimeout(() => (document.querySelector('#bit-write input.rl-input, #bit-story, .bt-lline [contenteditable]') as HTMLElement | null)?.focus(), 500)
   }
   return (
     <div className={`bt-sticky${on ? ' on' : ''}`} aria-hidden={!on}>
       <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
       <button type="button" onClick={go}>
-        say it funnier ↑
+        {realtor ? 'paste the listing ↑' : 'say it funnier ↑'}
       </button>
     </div>
   )

@@ -49,7 +49,7 @@ function Chips({ label, hint, value, onChange }: { label: string; hint: string; 
   )
 }
 
-export function KitPage({ kitId, sessionId }: { kitId?: string; sessionId?: string }) {
+export function KitPage({ kitId, sessionId, urlIn, textIn }: { kitId?: string; sessionId?: string; urlIn?: string; textIn?: boolean }) {
   const { userId, ready } = useCurrentAlias()
   const navigate = useNavigate()
   const [url, setUrl] = useState('')
@@ -73,11 +73,21 @@ export function KitPage({ kitId, sessionId }: { kitId?: string; sessionId?: stri
 
   const say = (m: string) => { setToast(m); window.clearTimeout(toastTimer.current); toastTimer.current = window.setTimeout(() => setToast(null), 2800) }
 
-  // a draft held across sign-in
+  // a draft held across sign-in; a link handed over by a guide page wins
   useEffect(() => {
     const d = readDraft()
     if (d) { setUrl(d.url); setText(d.text); setPasteText(!!d.text); setNote(d.note); setControls({ ...DEFAULT_LISTING_CONTROLS, ...d.controls }) }
-  }, [])
+    if (urlIn && /^https?:\/\//i.test(urlIn)) { setUrl(urlIn); setPasteText(false); autoRead.current = urlIn }
+    if (textIn) setPasteText(true)
+  }, [urlIn, textIn])
+  const autoRead = useRef<string | null>(null)
+  useEffect(() => {
+    if (!ready || !userId || !autoRead.current || autoRead.current !== url) return
+    autoRead.current = null
+    void read()
+    void navigate({ to: '/realtors/kit', replace: true })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, userId, url])
   useEffect(() => {
     try { sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ url, text, note, controls } satisfies Draft)) } catch { /* noop */ }
   }, [url, text, note, controls])

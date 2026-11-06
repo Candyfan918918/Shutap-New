@@ -8,6 +8,8 @@ import type { Crumb } from '@/lib/seo/breadcrumbs'
 import type { BitControls } from '@/lib/bits/shared'
 import type { GuideSample } from '@/lib/seo/guides'
 import { BitSurface } from '@/pages/home/bit/BitSurface'
+import { RealtorEmbed } from '@/components/seo/RealtorEmbed'
+import { isRealtorContent } from '@/lib/realtors/is-realtor'
 import { WriterBar } from '@/components/seo/WriterBar'
 import { WhoDoesWhat } from '@/components/site/WhoDoesWhat'
 import type { WriterCopy } from '@/lib/seo/writer-copy'
@@ -53,6 +55,9 @@ export function ContentPage({
   /** the "you type · Shutap does · Shutap never" block, above the sections */
   whoDoesWhat?: boolean;
 }) {
+  // a page about listings, open houses, agents or loan officers gets the
+  // realtor box; its CTAs point at the kit too
+  const realtor = !!tryIt && isRealtorContent(tryIt, h1, capsule)
   return (
     <main
       style={{
@@ -102,7 +107,8 @@ export function ContentPage({
           {capsule}
         </p>
 
-        {tryIt && (
+        {tryIt && realtor && <RealtorEmbed page={tryIt} />}
+        {tryIt && !realtor && (
           <div style={{ margin: "0 0 44px" }}>
             <BitSurface embed={{ page: tryIt, preset, ...(writer ?? { heading: "Try it on what you want to say.", sub: "A post, a speech, a toast, a sketch, a presentation. Get the bit and the video. Right here, free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
           </div>
@@ -223,8 +229,8 @@ export function ContentPage({
           </nav>
         )}
 
-        {tryIt && <TryItBox page={tryIt} preset={preset} anchor heading={writer?.heading ?? "Write yours above"} />}
-        {tryIt && <WriterBar page={tryIt} label={writer?.heading ?? "Try it on what you want to say."} />}
+        {tryIt && <TryItBox page={tryIt} preset={preset} anchor heading={realtor ? "Paste your listing above" : (writer?.heading ?? "Write yours above")} realtor={realtor} />}
+        {tryIt && <WriterBar page={tryIt} label={realtor ? "Paste the listing. Get the kit." : (writer?.heading ?? "Try it on what you want to say.")} realtor={realtor} />}
 
         <p style={{ marginTop: 40, fontSize: 15 }}>
           <Link
