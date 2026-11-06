@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "funny-thanksgiving-toast",
   kind: "guide",
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "funny thanksgiving toast",
   title: "Funny Thanksgiving Toast for the Whole Table | Shutap",
   h1: "A funny Thanksgiving toast your family will actually listen to",

@@ -5,11 +5,11 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/how-it-works";
-const TITLE = "How Shutap Works — Turn a Story Into a Bit With AI";
+const TITLE = "How Shutap works — bits, realtor kits and toasts";
 const DESCRIPTION =
-  "How the humor amplifier works: type what happened, get the bit (hook, setup, tags and button) with a 5-second video, then post it, film it with the teleprompter, shoot it as a scene, or export a screenplay page.";
+  "How the Shutap Humor Amplifier Lab helps you say it funnier, for any occasion, in any format.";
 const CAPSULE =
-  "Type what happened. Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video. Post it, read it off the teleprompter, shoot it as a scene, or take the screenplay page.";
+  "You bring what you want to say: what happened, a listing link, your stories about the person. Shutap drafts it funnier, and you decide what stays. Here is how each one works.";
 const STEPS = [
   { heading: "What you type, and what Shutap does", body: "You type the situation: the meeting, the text, the thing your kid said. Not your jokes; you don't need any. Shutap drafts the bit from its own in-house jokes and techniques, written and rated by people at the Lab, and lays it out as a video, stand-up, a sketch or a skit. Any line you write yourself stays word for word; tap \"funnier\" on one line and it offers three ways for that line only. Nobody at Shutap reads your story or your bit, and neither is ever added to the dataset or used to train a model. Your material stays yours; the drafting is ours." },
   { heading: "1. Type what happened", body: "One box, any story: the meeting that should have been an email, the text from your mom, the roommate's girlfriend who never left. More detail means a better bit. What they actually said, word for word, is usually the funniest part." },
@@ -20,6 +20,9 @@ const STEPS = [
 ];
 const SECTIONS = [
   ...STEPS,
+  { heading: "Realtor kits: paste the listing", body: "Paste the listing's web address (or the listing text). Shutap reads the facts and drafts the walkthrough to shoot, the voiceover, the hooks, the open-house kit, the posts and the straight listing copy, in your tone. Every line is checked for fair-housing words and for numbers that aren't in the listing. Tap \"funnier\" on any one line; shoot mode opens the teleprompter on your phone. Your first kit is free. shutap.com/realtors" },
+  { heading: "Toasts: your stories, in your words", body: "Pick the occasion (best man, maid of honor, parents, Thanksgiving, the holiday party, New Year's, a retirement, a birthday), give three stories in your own words and the one true thing, and choose a tone and length. Shutap builds the toast around your words, kept word for word, with pause marks, a running clock, cue cards and a phone prompter. Names stay in your browser. Your first toast is free. shutap.com/toasts" },
+  { heading: "Enterprise: presentations, by request", body: "Shutap Enterprise brings the same approach to company presentations, drafted from your own material with your speakers deciding every line. It's by request: tell us what you need at shutap.com/business." },
   { heading: "What's free", body: "Sign in first: it's free and one tap with Google or Apple, and your story stays in the box while you do. A free account gets one new bit a day with its 5-second video, stand-up, sketch and skit, My creations with every bit, posting, following, likes and comments, unlimited downloads (the video and the picture, with a shutap.com watermark), unlimited \"funnier\" on any line, and your first realtor kit. You pay to make something new, never to use it. Rewrites, crowd-work swaps and mix your own come with Basic and Pro." },
   { heading: "Daily limit", body: "Free: 1 new bit a day. Basic: 3, and a rewrite (hotter, tighter, storytelling) counts as one, because it is written again and its video rendered again. Pro has no daily number. Crowd-work swaps and mix your own don't count. Downloads count separately: the video is one, the picture or PDF another, a copied realtor-kit output one and the kit PDF six; Basic has 20 a month. Limits reset at midnight Pacific; the monthly pool on the 1st." },
   { heading: "Basic and Pro", body: "Basic is $19.99 a month: 3 new bits a day (a rewrite counts as one), crowd-work swaps and mix your own, 20 realtor kits a month and 1 toast a month, with unlimited downloads and no watermark. Pro is $49.99 a month: unlimited bits, rewrites, kits and toasts, no watermark, and the Mirror, a private read-back of what keeps coming up in your stories. Cancel anytime." },
@@ -27,7 +30,9 @@ const SECTIONS = [
   { heading: "Safety", body: "Bits go at the situation, never at a real person. If what you write reads as a crisis, Shutap writes nothing and shows where to get help instead. Shutap is entertainment, not therapy or advice. 18+." },
 ];
 const OTHERS = [
-  { href: "/", label: "Write jokes" },
+  { href: "/bits", label: "Bits" },
+  { href: "/realtors", label: "Realtors" },
+  { href: "/toasts", label: "Toasts" },
   { href: "/rooms", label: "Rooms" },
   { href: "/faq", label: "FAQ" },
   { href: "/about", label: "About" },
@@ -75,7 +80,7 @@ export const Route = createFileRoute("/how-it-works")({
     <ContentPage
       tryIt="how-it-works"
       breadcrumbs={[{ name: "How it works", path: PATH }]}
-      h1="How the humor amplifier works"
+      h1="How the Shutap Humor Amplifier Lab works"
       capsule={CAPSULE}
       sections={SECTIONS}
       others={OTHERS}

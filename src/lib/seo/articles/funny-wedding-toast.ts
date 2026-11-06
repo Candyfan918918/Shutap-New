@@ -4,7 +4,7 @@ const guide: Guide = {
   slug: "funny-wedding-toast",
   kind: "guide",
   preset: { audience: "family", voice: "storyteller", length: "2m", heat: 2 },
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "funny wedding toast",
   title: "How to Write a Funny Wedding Toast, With Examples | Shutap",
   h1: "How to write a funny wedding toast",

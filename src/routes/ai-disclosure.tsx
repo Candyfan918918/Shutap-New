@@ -5,9 +5,9 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/ai-disclosure`
-const TITLE = "AI Disclosure — How Shutap's Humor Amplifier Works"
+const TITLE = "AI Disclosure — How Shutap Uses AI | Shutap Humor Amplifier Lab"
 const DESCRIPTION =
-  "You type what happened; Shutap drafts the bit with AI (Google Gemini and OpenAI models, via the Lovable AI Gateway) from its own in-house jokes and techniques, never from your material. Nobody at Shutap reads your story or bit, and neither is used to train AI. AI can be wrong or offensive; you decide what to post."
+  "Shutap drafts with AI (Google Gemini and OpenAI models, through the Lovable AI Gateway), working from your material and its own in-house jokes and techniques. Nobody at Shutap reads what you make, and none of it is used to train AI. AI can be wrong; you decide what to use."
 
 export const Route = createFileRoute('/ai-disclosure')({
   head: () => ({
@@ -32,7 +32,7 @@ function AiDisclosurePage() {
     <DocLayout
       active="/ai-disclosure"
       title="AI disclosure"
-      subline="what you type, what shutap does, what it never does"
+      subline="what you bring, what shutap does, what it never does"
     >
       <div
         style={{
@@ -89,46 +89,67 @@ function AiDisclosurePage() {
             color: '#e4dfe2',
           }}
         >
-          you type what happened. shutap drafts the bit with ai, from its own in-house jokes and
-          techniques, not from yours. nobody at shutap reads your story or your bit, and neither is
-          ever used to train anything. ai can get things wrong, miss the joke, or say something
-          offensive. it&rsquo;s not therapy or advice. you decide what to post.
+          you bring the material: what happened, your listing, your stories about the person.
+          shutap drafts with ai from that and from its own in-house jokes and techniques. nobody at
+          shutap reads what you make, and none of it is ever used to train anything. ai can get
+          things wrong, miss the joke or say something offensive. it&rsquo;s not therapy or advice.
+          you decide what to use.
         </div>
       </div>
       <WhoDoesWhat />
-      <h3>What you type is not your material</h3>
+      <h3>What you bring stays yours</h3>
       <p>
-        You don&rsquo;t hand Shutap your jokes. You type the situation: what happened, who said
-        what, the thing you&rsquo;re still annoyed about. Shutap drafts the bit from that, using its
-        own in-house dataset of jokes written and rated by people at the Lab and the techniques on
-        its /funniest and /guides pages. Your comedic chops never go in, and nothing of yours ever
-        comes out to anyone else. If you do type your own lines, the same rules apply: they stay
-        yours, unread by staff, out of the dataset, out of training.
+        You don&rsquo;t hand Shutap your jokes. You give it the situation, the listing or your
+        memories of the person, and it drafts from that, using the Lab&rsquo;s in-house dataset of
+        jokes written and rated by people at the Lab and the techniques on its /funniest and
+        /guides pages. If you do type your own lines, they stay yours: unread by staff, out of the
+        dataset, out of training.
       </p>
       <p>
-        Shutap uses AI models from Google (Gemini) and OpenAI, through the Lovable AI Gateway, to
-        remove identifying details, run the crisis check, write and rank your bits, write rewrites,
-        and build the Mirror. The writer is given one comedy
-        technique per draft from the Shutap Humor Amplifier Lab bank, which is distilled from our own
-        /funniest and /guides pages (the operation, never anyone&rsquo;s material). The short
-        video is not AI-generated: it is drawn from the finished bit by a fixed template on your
-        own device. Removing identifying details uses automated checks and an AI model, and it can
-        miss things. No person writes or reviews a bit before you see it.
+        Shutap uses AI models from Google (Gemini) and OpenAI, through the Lovable AI Gateway. No
+        person writes or reviews anything before you see it. Here is what the AI does in each
+        product.
       </p>
       <p>
-        Every bit starts from the story you type. Writing a bit doesn&rsquo;t search the internet
-        or pull from a library of other people&rsquo;s jokes, and no comedian&rsquo;s lines are in
-        Shutap&rsquo;s instructions. The AI models were trained by Google and OpenAI, not by
-        Shutap, on data those companies chose; we can&rsquo;t change what they trained on, and we
-        don&rsquo;t pretend otherwise. What we control is what goes in from here: our own in-house
-        dataset, written by people we pay, and never a word of yours. AI can produce a line close
-        to an existing joke by accident, so check anything you rely on commercially.
+        <b>Bits.</b> It removes identifying details and runs the crisis check. Then it writes
+        several drafts, each built on one technique from the Shutap Humor Amplifier Lab bank (the
+        operation, never anyone&rsquo;s material), and a second model from a different
+        company&rsquo;s family ranks them. It also writes rewrites, any line you tap
+        &ldquo;funnier&rdquo;, and the Mirror. The 5-second video is not AI-generated: a fixed
+        template draws it from the finished bit on your own device.
+      </p>
+      <p>
+        <b>Realtor kits.</b> Shutap reads the listing page you link, or the text you paste, and
+        pulls out the facts. Anything it can&rsquo;t read stays blank and is never guessed. AI
+        drafts the six outputs in your tone, and every line is checked for fair-housing words, for
+        numbers that aren&rsquo;t in the listing, and for your must-say and never-say words.
+        &ldquo;Funnier&rdquo; changes only the line you tap. No video is made; you shoot it yourself.
+      </p>
+      <p>
+        <b>Toasts.</b> Names stay in your browser, and Shutap never receives them; any left in the
+        text become role labels. The crisis check runs first. Two models draft, and a judge from a
+        different model family picks the better one. Your stories and your one true thing are put
+        back word for word, so the AI can&rsquo;t rewrite them.
+      </p>
+      <p>
+        <b>Enterprise.</b> Not live yet, so nothing is processed. Please don&rsquo;t send company
+        material through the request form.
+      </p>
+      <p>
+        Removing identifying details uses automated checks and an AI model, and it can miss things.
+        Nothing Shutap drafts searches the internet for other people&rsquo;s jokes, and no
+        comedian&rsquo;s lines are in Shutap&rsquo;s instructions. The AI models were trained by
+        Google and OpenAI, not by Shutap, on data those companies chose; we can&rsquo;t change what
+        they trained on, and we don&rsquo;t pretend otherwise. What we control is what goes in from
+        here: our own in-house dataset, written by people we pay, and never a word of yours. AI can
+        produce a line close to an existing joke by accident, so check anything you rely on
+        commercially.
       </p>
       <h3>Your content stays yours</h3>
       <p>
-        <b>Shutap staff don&rsquo;t read the text of your stories or bits, except to fix a problem
-        you report or when the law requires it. Shutap never uses your stories or bits to train AI
-        models, and they are never added to the Shutap joke dataset.</b> Bits you post to a room are
+        <b>Shutap staff don&rsquo;t read what you make (stories, bits, kits or toasts), except to fix a problem
+        you report or when the law requires it. Shutap never uses any of it to train AI
+        models, and it is never added to the Shutap joke dataset.</b> Bits you post to a room are
         public, and we review a post when someone reports it.
       </p>
       <h3>Our own jokes</h3>

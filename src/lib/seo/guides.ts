@@ -35,6 +35,9 @@ export type GuideTopic =
   | "skits-and-sketches"
   | "roasts"
   | "jokes-for-occasions"
+  | "realtors"
+  | "toasts-and-speeches"
+  | "presentations-and-work"
   | "finding-ideas"
   | "growing-views"
   | "watch-time"
@@ -102,6 +105,27 @@ export const GUIDE_TOPICS: GuideTopicInfo[] = [
     title: "Types of Humor Explained: Dry, Dark, Deadpan & More | Shutap",
     description: "Dry, dark, deadpan, sarcastic, absurd and self-deprecating humor: what each one is, how it works, and how to write it.",
     intro: "The registers of funny and how each one works: dry, deadpan, dark, sarcastic, absurd, observational and self-deprecating, with original examples of each.",
+  },
+  {
+    id: "realtors",
+    label: "For realtors",
+    title: "Funny Real Estate Captions, Listing Videos & More | Shutap",
+    description: "How real estate agents make listings people watch to the end: funny captions, listing videos, open-house lines and hooks, fair-housing safe.",
+    intro: "For agents who have to be funny on a schedule: listing videos, captions, open houses and hooks that get a listing noticed without breaking fair-housing rules or making anything up.",
+  },
+  {
+    id: "toasts-and-speeches",
+    label: "Toasts & speeches",
+    title: "Funny Toasts & Speeches: Wedding, Holiday & More | Shutap",
+    description: "How to write a funny toast or speech: best man, maid of honor, wedding vows, Thanksgiving, Christmas, graduation and more, with original example lines.",
+    intro: "Toasts and speeches where you have to be funny in front of people who know the person: weddings, holidays, graduations and family occasions. How to build it from your own stories, and original lines to start from.",
+  },
+  {
+    id: "presentations-and-work",
+    label: "Presentations & work",
+    title: "Funny Presentations, Talks & Work Humor | Shutap",
+    description: "How to be funny at work: presentations, training icebreakers, Toastmasters speeches and emails, with original example lines that fit the room.",
+    intro: "Humor where the room is colleagues, customers or an audience you have to keep: presentations, trainings, Toastmasters and the everyday email. What lands at work and what to leave out.",
   },
   {
     id: "jokes-for-occasions",

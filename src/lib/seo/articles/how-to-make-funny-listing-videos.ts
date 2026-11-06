@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "how-to-make-funny-listing-videos",
   kind: "guide",
-  topic: "comedy-creators",
+  topic: "realtors",
   keyword: "how to make funny listing videos",
   title: "How to Make Funny Listing Videos, With Scripts | Shutap",
   h1: "How to make funny listing videos that still sell the house",

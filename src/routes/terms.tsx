@@ -39,10 +39,12 @@ function TermsPage() {
 
       <h3>1. What Shutap is</h3>
       <p>
-        Shutap is the humor amplifier: it amplifies your own story into a bit. You type what
-        happened. Shutap removes identifying details and writes comedy from it, in your voice, with
-        a short video, and the stand-up, sketch and skit formats. You
-        can download, share or post what it writes. Shutap amplifies your humor; it never replaces
+        Shutap, from the Shutap Humor Amplifier Lab, helps you say it funnier, for any occasion, in
+        any format. You bring the material: what happened (Shutap Bits, with a short video and the
+        stand-up, sketch and skit formats), a real-estate listing (Shutap for Realtors) or your
+        stories about a person (Shutap Toasts). Shutap removes identifying details where it stores
+        text and drafts from your material, in your voice. You can download, share or post what it
+        drafts. Shutap amplifies your humor; it never replaces
         it. Shutap is for entertainment only.
       </p>
       <p>

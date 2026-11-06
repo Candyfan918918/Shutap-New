@@ -4,7 +4,7 @@ const guide: Guide = {
   slug: "funny-wedding-vows",
   kind: "guide",
   preset: { audience: "family", voice: "storyteller", length: "60s", heat: 2 },
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "funny wedding vows",
   title: "Funny Wedding Vows: How to Write Promises That Land | Shutap",
   h1: "Funny wedding vows that still mean it",

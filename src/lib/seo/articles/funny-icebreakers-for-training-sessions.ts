@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "funny-icebreakers-for-training-sessions",
   kind: "guide",
-  topic: "how-to-be-funny",
+  topic: "presentations-and-work",
   keyword: "funny icebreakers for training sessions",
   preset: { audience: "work", voice: "dry", length: "15s", heat: 2 },
   title: "Funny Icebreakers for Training Sessions | Shutap",

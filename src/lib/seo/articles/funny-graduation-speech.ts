@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "funny-graduation-speech",
   kind: "guide",
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "funny graduation speech",
   title: "Funny Graduation Speech: How to Get Real Laughs | Shutap",
   h1: "How to make a graduation speech funny without losing the room",

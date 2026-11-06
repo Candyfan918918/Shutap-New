@@ -7,10 +7,10 @@ export const BRAND = {
   tagline: "SHUTAP. Say it funnier.",
   // The entity sentence (locked) — goes in every machine-read surface.
   entitySentence:
-    "Shutap is the humor amplifier. Type what happened and Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, then runs it as stand-up, lays it out as a skit, or formats it as a one-page sketch. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or bring it to a toast, a talk or a meeting. Shutap amplifies your humor; it never replaces it. Your stories and jokes stay yours.",
+    "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format. You bring what you want to say; Shutap drafts it funnier; you decide what stays. Your stories and words stay yours.",
   // Short variant for title tags.
   entitySentenceShort:
-    "Shutap — the humor amplifier. Type what happened. Say it funnier.",
+    "Shutap Humor Amplifier Lab — say it funnier",
 } as const;
 
 export const PILLARS = [

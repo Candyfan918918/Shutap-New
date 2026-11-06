@@ -5,8 +5,8 @@ const COLS: { title: string; lines: string[] }[] = [
   {
     title: 'You type',
     lines: [
-      'What happened: the meeting, the text, the thing your kid said.',
-      'A topic, an idea, a story. Not your jokes: you don’t need any.',
+      'What happened, a listing link, your stories about the person.',
+      'An idea, a story, a listing. Not your jokes: you don’t need any.',
       'If you do type your own lines, they stay yours too.',
     ],
   },
@@ -14,14 +14,14 @@ const COLS: { title: string; lines: string[] }[] = [
     title: 'Shutap does',
     lines: [
       'Removes names and places before anything is saved.',
-      'Drafts the bit from its own in-house jokes and techniques, written and rated by people at the Lab.',
-      'Lays it out as a video, stand-up, a sketch, a skit.',
+      'Drafts the bit, the kit or the toast from its own in-house jokes and techniques, written and rated by people at the Lab.',
+      'Lays it out as a video, stand-up, a sketch, a skit, a shoot kit or a toast.',
     ],
   },
   {
     title: 'Shutap never',
     lines: [
-      'Reads your story or your bit: no person at Shutap sees either.',
+      'Reads what you make: no person at Shutap sees it.',
       'Puts your words into its dataset, its examples, or any model’s training.',
       'Shows your material to anyone else. Only you see it unless you post it.',
     ],

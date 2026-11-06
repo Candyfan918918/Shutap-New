@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "funny-baby-shower-speech",
   kind: "guide",
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "funny baby shower speech",
   title: "Funny Baby Shower Speech: Short Toasts That Land | Shutap",
   h1: "A funny baby shower speech in two minutes or less",

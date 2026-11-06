@@ -4,7 +4,7 @@ const guide: Guide = {
   slug: "funny-best-man-speech",
   kind: "guide",
   preset: { audience: "family", voice: "storyteller", length: "2m", heat: 2 },
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "funny best man speech",
   title: "How to Write a Funny Best Man Speech, With Examples | Shutap",
   h1: "How to write a funny best man speech",
