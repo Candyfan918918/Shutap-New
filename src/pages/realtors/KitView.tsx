@@ -127,8 +127,7 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
   }
 
   function left(): string {
-    const d = usage.downloads
-    return d.cap === null ? '' : ` · ${Math.max(0, d.cap - d.used)} of ${d.cap} left this ${d.period}`
+    return ''
   }
 
   async function keep() {
@@ -205,8 +204,7 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
     <button className={`rl-mini${touch?.key === key ? ' on' : ''}`} disabled={touching} onClick={() => void funnier(key, where, current, apply)}>{touching && touch?.key === key ? '…' : 'funnier'}</button>
   )
 
-  const d = usage.downloads
-  const count = d.cap === null ? (data.paid ? 'this kit is yours · nothing counted' : 'unlimited') : `${Math.max(0, d.cap - d.used)} of ${d.cap} left this ${d.period}`
+  const count = 'yours to keep · copy, download and shoot as often as you like · in My creations'
 
   return (
     <section className="rl-card" aria-label="The kit" data-ph-private>
@@ -283,12 +281,12 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
       )}
 
       <div className="rl-dl">
-        <button className="rl-btn" disabled={busy !== null} onClick={() => void copyOutput(tab)}>copy {OUTPUT_LABEL[tab]}<small>this tab · 1 download</small></button>
-        {tab === 'voiceover' && <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void voiceoverFile()}>voiceover .txt<small>for text-to-voice · 1</small></button>}
-        <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void pdf()}>kit PDF<small>all six, one file · 6</small></button>
+        <button className="rl-btn" disabled={busy !== null} onClick={() => void copyOutput(tab)}>copy {OUTPUT_LABEL[tab]}<small>this tab · unlimited</small></button>
+        {tab === 'voiceover' && <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void voiceoverFile()}>voiceover .txt<small>for text-to-voice</small></button>}
+        <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void pdf()}>kit PDF<small>all six, one file</small></button>
         <button className="rl-btn ghost" onClick={() => { setShareOpen((v) => !v); track('kit_shoot_link', {}) }}>▶ shoot mode<small>teleprompter on your phone</small></button>
-        <button className="rl-btn ghost" onClick={onRewrite}>rewrite<small>new tone or controls · 1 kit</small></button>
-        {!data.paid && usage.tier !== 'pro' && <button className="rl-btn ghost" onClick={() => { track('kit_buy_clicked', { tier: usage.tier }); onBuy() }}>buy this kit · {usd(KIT_ONCE.amount)}<small>no limits, no marks, no subscription</small></button>}
+        <button className="rl-btn ghost" onClick={onRewrite}>rewrite<small>new tone or controls · a new kit</small></button>
+        {free && <button className="rl-btn ghost" onClick={() => { track('kit_buy_clicked', { tier: usage.tier }); onBuy() }}>remove the mark · {usd(KIT_ONCE.amount)}<small>this kit, clean, forever</small></button>}
       </div>
       {shareOpen && (
         <div className="rl-share">
@@ -322,7 +320,7 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
           )}
         </div>
       )}
-      <p className="rl-note">a copy is one download · the PDF is six · the same output copied again today is free · "funnier" rewrites that one line only · nobody at shutap reads your listings · saved to your kits</p>
+      <p className="rl-note">copies, the PDF and shoot mode are unlimited · find this kit any time under profile → My creations · "funnier" rewrites that one line only · nobody at shutap reads your listings · saved to your kits</p>
     </section>
   )
 }

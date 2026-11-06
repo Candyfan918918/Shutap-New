@@ -14,8 +14,9 @@ export async function resolveTier(admin: any, id: JokeIdentity): Promise<BitTier
   return (await activePlan(admin, id.userId)) ?? 'free'
 }
 
-/** How many downloads this account has taken in the plan's period: today for
- *  Free, the calendar month (Pacific) for Basic (Nov 5 2026). */
+/** How many downloads this account has taken this month (Pacific). Nothing
+ *  is capped any more (Nov 6 2026: pay to create, never to use); the count is
+ *  bookkeeping for the admin views. */
 export async function downloadsUsed(admin: any, userId: string, tier: BitTier): Promise<number> {
   const { period } = limitFor('download', tier)
   const day = today().day
@@ -23,15 +24,7 @@ export async function downloadsUsed(admin: any, userId: string, tier: BitTier): 
   q = period === 'month' ? q.gte('day', `${day.slice(0, 7)}-01`) : q.eq('day', day)
   const { count, error } = await q
   if (error) throw new Error(error.message)
-  // the realtor kit's copies and PDFs share the pool (Nov 6 2026)
-  let kitUnits = 0
-  try {
-    let k = admin.from('kit_downloads').select('units').eq('user_id', userId).eq('watermarked', false)
-    k = period === 'month' ? k.gte('day', `${day.slice(0, 7)}-01`) : k.eq('day', day)
-    const { data: rows } = await k
-    kitUnits = (rows ?? []).reduce((n: number, r: any) => n + (Number(r.units) || 0), 0)
-  } catch { /* the kit ledger may not exist yet */ }
-  return (count ?? 0) + kitUnits
+  return count ?? 0
 }
 
 /** The tier by user id alone (the realtor functions carry no guest identity). */

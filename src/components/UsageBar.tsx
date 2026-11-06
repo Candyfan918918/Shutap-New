@@ -1,8 +1,8 @@
-/* The usage bar (Nov 5 2026): what's used of the plan, always visible to a
- * signed-in person — a short line in the header menu and a card on the
- * profile. Reads myUsage once per mount; the writer's own counters refresh
- * their own labels. "downloads" means everything taken: a video, a picture,
- * a PDF, a copied line, later a realtor kit (= 6). */
+/* The usage bar: what's left of the plan, always visible to a signed-in
+ * person — a card in the header menu and one on the profile. Nov 6 2026
+ * (Candy): pay to create, never to use. Only making something new is
+ * counted (bits, realtor kits); downloads, copies, the prompter and
+ * "funnier" are unlimited, so they get one plain line, not a meter. */
 import { useEffect, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { myUsage, type MyUsage } from '@/lib/bits.functions'
@@ -20,18 +20,17 @@ export function useMyUsage(enabled: boolean): MyUsage | null {
   return u
 }
 
-/** The usage card in the account menu (Nov 6 2026), after Lovable's credit
- *  bar: one bar, a colored segment for each thing (bits rose, downloads
- *  amber, realtor kits blue). Each segment is that thing's share of its own
- *  limit used; a legend under the bar says what's left. */
-export const USAGE_COLORS = { bits: '#c1216b', downloads: '#e0912f', kits: '#3b6fd8' } as const
+/** The usage card in the account menu: one bar, a colored segment for each
+ *  thing you make (bits rose, realtor kits blue), filled with what's left,
+ *  and a legend; then one line saying everything else is unlimited. */
+export const USAGE_COLORS = { bits: '#c1216b', kits: '#3b6fd8' } as const
+
+const kitWhen = (p: string) => (p === 'month' ? 'this month' : 'once')
 
 export function UsageMini({ u, dark = false }: { u: MyUsage; dark?: boolean }) {
-  const per = (p: string) => (p === 'month' ? 'month' : p === 'day' ? 'today' : 'once')
   const parts = [
     { key: 'bits', label: 'bits', used: u.bits.used, cap: u.bits.cap, when: 'today' },
-    { key: 'downloads', label: 'downloads', used: u.downloads.used, cap: u.downloads.cap, when: per(u.downloads.period) },
-    { key: 'kits', label: 'realtor kits', used: u.kits.used, cap: u.kits.cap, when: per(u.kits.period) },
+    { key: 'kits', label: 'realtor kits', used: u.kits.used, cap: u.kits.cap, when: kitWhen(u.kits.period) },
   ] as const
   const ink = dark ? '#ffffff' : '#111111'
   const muted = dark ? '#b5b5b5' : '#6b6b6b'
@@ -66,31 +65,28 @@ export function UsageMini({ u, dark = false }: { u: MyUsage; dark?: boolean }) {
             </div>
           )
         })}
+        {u.kits.credits > 0 && <div style={{ fontSize: 12, color: muted, paddingLeft: 15 }}>+ {u.kits.credits} bought kit{u.kits.credits === 1 ? '' : 's'} ready to write</div>}
+        <div style={{ fontSize: 12, color: muted, paddingTop: 2 }}>downloads, copies, funnier: <b style={{ color: ink, fontWeight: 600 }}>unlimited</b>{u.tier === 'free' ? ' · marked' : ''}</div>
       </div>
     </div>
   )
 }
 
-/** The account menu (Nov 6 2026): one short line per thing, what's left,
- *  so it fits a narrow menu instead of one long line running out of it. */
+/** The account menu as plain lines (what's left). */
 export function usageRows(u: MyUsage): string[] {
-  const left = (used: number, cap: number) => Math.max(0, cap - used)
-  const per = (p: string) => (p === 'month' ? 'this month' : p === 'day' ? 'today' : '')
-  const row = (cap: number | null, used: number, one: string, many: string, period: string) =>
-    cap === null ? `unlimited ${many}` : `${left(used, cap)} of ${cap} ${cap === 1 ? one : many} left${per(period) ? ' ' + per(period) : ''}`
+  const row = (cap: number | null, used: number, one: string, many: string, when: string) =>
+    cap === null ? `unlimited ${many}` : `${Math.max(0, cap - used)} of ${cap} ${cap === 1 ? one : many} left ${when}`
   return [
-    row(u.bits.cap, u.bits.used, 'bit', 'bits', 'day'),
-    row(u.downloads.cap, u.downloads.used, 'download', 'downloads', u.downloads.period),
-    row(u.kits.cap, u.kits.used, 'realtor kit', 'realtor kits', u.kits.period),
+    row(u.bits.cap, u.bits.used, 'bit', 'bits', 'today'),
+    row(u.kits.cap, u.kits.used, 'realtor kit', 'realtor kits', kitWhen(u.kits.period)),
+    'unlimited downloads and copies',
   ]
 }
 
 export function usageLine(u: MyUsage): string {
   const bits = u.bits.cap === null ? 'bits ∞' : `${u.bits.used}/${u.bits.cap} bits today`
-  const per = u.downloads.period === 'month' ? 'this month' : 'today'
-  const dl = u.downloads.cap === null ? 'downloads ∞' : `${u.downloads.used}/${u.downloads.cap} downloads ${per}`
-  const kits = u.kits.cap === null ? 'kits ∞' : `${u.kits.used}/${u.kits.cap} kit${u.kits.cap === 1 ? '' : 's'}${u.kits.period === 'day' ? ' today' : ''}`
-  return `${bits} · ${dl} · ${kits}`
+  const kits = u.kits.cap === null ? 'kits ∞' : `${u.kits.used}/${u.kits.cap} kit${u.kits.cap === 1 ? '' : 's'}${u.kits.period === 'month' ? ' this month' : ''}`
+  return `${bits} · ${kits} · downloads ∞`
 }
 
 function Row({ label, used, cap, note }: { label: string; used: number; cap: number | null; note?: string }) {
@@ -112,26 +108,19 @@ function Row({ label, used, cap, note }: { label: string; used: number; cap: num
 
 /** The profile card. */
 export function UsageCard({ usage }: { usage: MyUsage }) {
-  const kitsLeft = usage.downloads.cap === null ? null : Math.floor(Math.max(0, usage.downloads.cap - usage.downloads.used) / 6)
   return (
     <section className="fd-post" aria-label="Usage" style={{ gap: 12 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: 8 }}>
-        <h2 style={{ margin: 0, fontSize: 16 }}>Your plan this {usage.downloads.period === 'month' ? 'month' : 'day'}</h2>
+        <h2 style={{ margin: 0, fontSize: 16 }}>Your plan</h2>
         <span style={{ fontSize: 12.5, color: '#8f898d' }}>
           {usage.tier === 'free' ? 'Free' : usage.tier === 'basic' ? `Basic · ${usd(PLANS.basic.amount)}/mo` : usage.tier === 'pro' ? `Pro · ${usd(PLANS.pro.amount)}/mo` : ''}
         </span>
       </div>
       <Row label="New bits today" used={usage.bits.used} cap={usage.bits.cap} />
-      <Row
-        label={`Downloads ${usage.downloads.period === 'month' ? 'this month' : 'today'}`}
-        used={usage.downloads.used}
-        cap={usage.downloads.cap}
-        note={kitsLeft !== null && usage.downloads.period === 'month' ? `${kitsLeft} realtor kit${kitsLeft === 1 ? '' : 's'} left` : undefined}
-      />
-      <Row label={usage.kits.period === 'day' ? 'Realtor kits today' : 'Realtor kit (free, once)'} used={usage.kits.used} cap={usage.kits.cap} />
-      <Row label="AI on demand touches today" used={usage.touches.used} cap={usage.touches.cap} />
+      <Row label={usage.kits.period === 'month' ? 'Realtor kits this month' : 'Realtor kit (free, once)'} used={usage.kits.used} cap={usage.kits.cap} note={usage.kits.credits > 0 ? `+ ${usage.kits.credits} bought` : undefined} />
+      <Row label="Downloads, copies, prompter, funnier" used={0} cap={null} />
       <p style={{ margin: 0, fontSize: 12.5, color: '#8f898d' }}>
-        A download is a video, a picture, a PDF or a copied kit output; the kit PDF is six. A bought kit is never counted. The same one again on the same day is free. Bits and touches reset at midnight Pacific; monthly downloads on the 1st.
+        You pay to make something new, never to use it. Everything you made lives in My creations: download, copy and run the prompter as often as you like.{usage.tier === 'free' ? ' Free downloads end with "— shutap.com".' : ''} Bits reset at midnight Pacific; realtor kits on the 1st of the month.
       </p>
     </section>
   )

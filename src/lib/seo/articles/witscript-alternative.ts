@@ -44,7 +44,7 @@ const guide: Guide = {
     },
     {
       heading: "Price and access, side by side",
-      body: "Witscript: $5.99 a month, US only, no free tier listed. Shutap: a free account gets one bit a day and one watermarked download a day, Basic at $19.99 a month for 3 bits a day with rewrites and 20 downloads a month with no watermark, and Pro at $49.99 a month for unlimited bits. Comedeez AI: free plan with 3 AI uses a day, Premium $10 a month. ChatGPT and Claude: free plans, paid tiers above them. Punchlines.ai: no price on its homepage. Of these, only Witscript's own site states a country restriction, so it's the one tool on the list that someone outside the US can't open at all.",
+      body: "Witscript: $5.99 a month, US only, no free tier listed. Shutap: a free account gets one bit a day with unlimited watermarked downloads, Basic at $19.99 a month for 3 bits a day with rewrites and clean downloads, and Pro at $49.99 a month for unlimited bits. Comedeez AI: free plan with 3 AI uses a day, Premium $10 a month. ChatGPT and Claude: free plans, paid tiers above them. Punchlines.ai: no price on its homepage. Of these, only Witscript's own site states a country restriction, so it's the one tool on the list that someone outside the US can't open at all.",
     },
     {
       heading: "Pick by what you start with",

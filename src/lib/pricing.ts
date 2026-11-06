@@ -9,14 +9,20 @@
 // `priceId` is the Stripe lookup key. mirror_monthly / mirror_annual never
 // change name (they are Pro). basic_monthly is the Basic plan.
 import type { BitTier } from './bits/shared'
-import { BIT_CAPS, DOWNLOAD_CAPS } from './bits/plans'
+import { BIT_CAPS } from './bits/plans'
+import { KIT_CAPS } from './entitlements'
 
-/** Prices changed Nov 5 2026: Basic $7.99 → $19.99 (20 downloads a month,
- *  AI on demand unlimited). Pro unchanged. Lookup keys never change. */
+/** Prices changed Nov 5 2026: Basic $7.99 → $19.99. Pro unchanged. Lookup
+ *  keys never change. Nov 6 2026 (Candy): pay to create, never to use. Only
+ *  new bits and new realtor kits are counted; downloads, copies, the
+ *  prompter, "funnier" and lock are unlimited on every plan (Free's carry
+ *  the shutap.com mark). */
 
 /** One realtor kit, bought on its own (Nov 6 2026): a one-time Stripe price
- *  behind the lookup key kit_once. The kit is then never counted or marked. */
-export const KIT_ONCE = { priceId: 'kit_once', amount: 12.99, name: 'Shutap for Realtors · one kit', description: 'One listing kit: the walkthrough, voiceover, hooks, open-house kit, posts and straight copy, in one tone. Yours to copy and download without limits or marks.' } as const
+ *  behind the lookup key kit_once. Bought before it's written (past the
+ *  plan's kits) or after (to take the mark off a free kit); never counted,
+ *  never marked. One toast will be the same price when Toasts opens. */
+export const KIT_ONCE = { priceId: 'kit_once', amount: 12.99, name: 'Shutap for Realtors · one kit', description: 'One listing kit: the walkthrough, voiceover, hooks, open-house kit, posts and straight copy, in one tone. Yours to copy and download without limits or marks, forever.' } as const
 
 export type PlanKey = 'basic' | 'pro' | 'pro_annual'
 export type PaidPlan = 'basic' | 'pro'
@@ -50,14 +56,14 @@ export const STRIPE_NAMES: Record<PaidPlan, string> = {
 /** The product description Stripe shows at checkout, kept in step with
  *  the plans by /api/public/payments/prices. */
 export const STRIPE_DESCRIPTIONS: Record<PaidPlan, string> = {
-  basic: `Shutap Basic: ${BIT_CAPS.basic} new bits a day (a rewrite counts as one), AI on demand on every line, 3 realtor kits a day, and ${DOWNLOAD_CAPS.basic} downloads a month with no watermark.`,
-  pro: 'Shutap Pro: unlimited bits, rewrites, realtor kits and downloads with no watermark, plus the Mirror.',
+  basic: `Shutap Basic: ${BIT_CAPS.basic} new bits a day (a rewrite counts as one) and ${KIT_CAPS.basic} realtor kits a month. Downloads, copies and "funnier" unlimited, no watermark.`,
+  pro: 'Shutap Pro: unlimited bits, rewrites and realtor kits, downloads and copies unlimited with no watermark, plus the Mirror.',
 }
 
 /** What each plan gives, in the same words on every surface. */
 export const PLAN_LINES: Record<PaidPlan, string[]> = {
-  basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${DOWNLOAD_CAPS.basic} downloads a month, no watermark`, 'AI on demand: funnier, line by line, unlimited', '3 realtor kits a day'],
-  pro: ['Unlimited bits and rewrites', 'Unlimited downloads, no watermark', 'Unlimited realtor kits', 'The Mirror'],
+  basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${KIT_CAPS.basic} realtor kits a month`, 'Unlimited downloads and copies, no watermark', 'Unlimited "funnier", line by line'],
+  pro: ['Unlimited bits and rewrites', 'Unlimited realtor kits', 'Unlimited downloads and copies, no watermark', 'The Mirror'],
 }
 
 /** The plans side by side: the same rows on every surface that compares
@@ -86,11 +92,11 @@ export const PLAN_COMPARE: CompareRow[] = [
     },
   },
   {
-    label: 'Downloads (the video, the picture, a copied line)',
+    label: 'Downloads and copies (the video, the picture, a PDF, a copied line, the prompter)',
     short: 'Downloads',
     cells: {
-      free: { value: `${DOWNLOAD_CAPS.free} a day, watermarked`, short: `${DOWNLOAD_CAPS.free}/day · mark`, on: false },
-      basic: { value: `${DOWNLOAD_CAPS.basic} a month, no watermark`, short: `${DOWNLOAD_CAPS.basic}/mo · clean`, on: true },
+      free: { value: 'Unlimited, with the shutap.com mark', short: '∞ · mark', on: true },
+      basic: { value: 'Unlimited, no watermark', short: '∞ · clean', on: true },
       pro: { value: 'Unlimited, no watermark', short: '∞ · clean', on: true },
     },
   },
@@ -98,7 +104,7 @@ export const PLAN_COMPARE: CompareRow[] = [
     label: 'AI on demand: "funnier" on any one line, lock a line, keep your edits',
     short: 'Line by line',
     cells: {
-      free: { value: '3 touches a day', short: '3/day', on: true },
+      free: { value: 'Unlimited', short: '∞', on: true },
       basic: { value: 'Unlimited', short: '∞', on: true },
       pro: { value: 'Unlimited', short: '∞', on: true },
     },
@@ -107,8 +113,8 @@ export const PLAN_COMPARE: CompareRow[] = [
     label: 'Realtor kits (paste a listing, get the shoot kit)',
     short: 'Realtor kits',
     cells: {
-      free: { value: 'First kit free, outputs marked', short: '1 · mark', on: true },
-      basic: { value: '3 a day; copies from the download pool', short: '3/day', on: true },
+      free: { value: 'First kit free (marked); then $12.99 a kit', short: '1 · mark', on: true },
+      basic: { value: `${KIT_CAPS.basic} a month; then $12.99 a kit`, short: `${KIT_CAPS.basic}/mo`, on: true },
       pro: { value: 'Unlimited', short: '∞', on: true },
     },
   },
@@ -125,7 +131,7 @@ export const PLAN_COMPARE: CompareRow[] = [
 
 /** Free in one line (Nov 6 2026, Candy: "free is 1 bit daily with a watermarked download"):
  *  every surface that sums up Free uses these words. */
-export const FREE_LINE = `${BIT_CAPS.free} bit a day + ${DOWNLOAD_CAPS.free} watermarked download a day`
+export const FREE_LINE = `${BIT_CAPS.free} bit a day · downloads unlimited, watermarked`
 
 /** What every plan has, Free included (with a free account). Listed once,
  *  beside the comparison. Rewrites are Basic and Pro since Nov 1 2026. */
@@ -134,7 +140,7 @@ export const EVERY_PLAN = [
   'A 5-second video of it',
   'Stand-up on the teleprompter',
   'Sketch and skit',
-  'My creations: every bit and kit in one place',
+  'My creations: every bit and kit in one place, download again any time',
 ] as const
 
 const BY_PRICE: Record<string, PlanEntry> = Object.fromEntries(Object.values(PLANS).map((p) => [p.priceId, p]))

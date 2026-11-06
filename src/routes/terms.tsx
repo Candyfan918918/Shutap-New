@@ -174,11 +174,12 @@ function TermsPage() {
         number, within fair use. Your bits are kept in My creations and you can post them.
       </p>
       <p>
-        Downloads are counted separately. The video, and
-        the picture or script PDF, each count as one download; the same one of the same version
-        again the same day is free. A rewrite is a new version, and its downloads count again. A free account gets
-        <b>one download a day</b>, with a shutap.com watermark on the video and the picture. Basic
-        gets <b>three a day</b> with no watermark; Pro has no daily number, within fair use.
+        Downloads and copies are not counted. You can download, copy and re-download anything you
+        made, as often as you like, from My creations. A free account's downloads carry a
+        shutap.com watermark on the video, the picture and every copied output; Basic, Pro and
+        anything bought on its own are clean. Realtor kits are counted when they are written:
+        one free kit, 20 a month on Basic, unlimited on Pro, within fair use; a kit can also be
+        bought on its own.
       </p>
       <p>
         Limits reset at midnight Pacific time (Los Angeles) for everyone. Limits are a cost

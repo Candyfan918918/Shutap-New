@@ -12,7 +12,7 @@ import { DEFAULT_LISTING_CONTROLS, TONES, TONE_LABEL, listingFacts, type Listing
 import { KIT_ONCE, PLANS, usd } from '@/lib/pricing'
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe-js'
 import { getStripe, getStripeEnvironment } from '@/lib/stripe'
-import { createKitCheckout, kitPaidStatus } from '@/lib/payments.functions'
+import { confirmKitPrepay, createKitCheckout, createKitPrepayCheckout, kitPaidStatus } from '@/lib/payments.functions'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { trackEvent } from '@/lib/tracking'
 import { phCapture } from '@/lib/posthog'
@@ -20,6 +20,9 @@ import { KitView } from './KitView'
 import './realtors.css'
 
 const DRAFT_KEY = 'shutap_realtor_draft'
+/** the listing read and the choices made, held across the $12.99 checkout (Nov 6 2026) */
+const PREPAY_KEY = 'shutap_realtor_prepay'
+type Prepay = { listing: Listing; note: string; controls: ListingControls }
 const TONE_HINT: Record<Tone, string> = { professional: 'facts first, one dry line', funny: 'the honest listing, full roast', luxury: 'understated, a wink at the end', young: 'fast cuts, POV, text on screen' }
 
 const track = (name: string, props: Record<string, unknown> = {}) => { void phCapture(name, { product: 'realtors', ...props }); void trackEvent(name, { product: 'realtors', ...props }) }
@@ -49,7 +52,7 @@ function Chips({ label, hint, value, onChange }: { label: string; hint: string; 
   )
 }
 
-export function KitPage({ kitId, sessionId, urlIn, textIn }: { kitId?: string; sessionId?: string; urlIn?: string; textIn?: boolean }) {
+export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn }: { kitId?: string; sessionId?: string; prepaidSession?: string; urlIn?: string; textIn?: boolean }) {
   const { userId, ready } = useCurrentAlias()
   const navigate = useNavigate()
   const [url, setUrl] = useState('')
@@ -64,7 +67,7 @@ export function KitPage({ kitId, sessionId, urlIn, textIn }: { kitId?: string; s
   const [kit, setKit] = useState<KitData | null>(null)
   const [usage, setUsage] = useState<KitUsage | null>(null)
   const [mine, setMine] = useState<KitSummary[]>([])
-  const [sheet, setSheet] = useState<null | 'signin' | 'limit' | 'touch_limit' | 'off' | 'buy'>(null)
+  const [sheet, setSheet] = useState<null | 'signin' | 'limit' | 'touch_limit' | 'off' | 'buy' | 'prebuy'>(null)
   const [moreOpen, setMoreOpen] = useState(false)
   const [checkoutError, setCheckoutError] = useState('')
   const [toast, setToast] = useState<string | null>(null)
@@ -107,6 +110,45 @@ export function KitPage({ kitId, sessionId, urlIn, textIn }: { kitId?: string; s
       } else void load()
     }
   }, [ready, userId, kitId, sessionId])
+
+  // back from buying a kit before it's written: confirm the credit, put the
+  // listing back, and write it straight away (it's paid, so it's clean)
+  const autoWrite = useRef(false)
+  useEffect(() => {
+    if (!ready || !userId || !prepaidSession) return
+    confirmKitPrepay({ data: { sessionId: prepaidSession, environment: getStripeEnvironment() } })
+      .then((r) => {
+        if (!r.paid) return say('payment not confirmed yet · if you were charged, your kit is saved for your next write')
+        track('kit_prepaid_seen', {})
+        let p: Prepay | null = null
+        try { const raw = sessionStorage.getItem(PREPAY_KEY); p = raw ? (JSON.parse(raw) as Prepay) : null } catch { /* noop */ }
+        if (!p) return say('your kit is paid · read the listing and write it')
+        setListing(p.listing); setNote(p.note); setControls({ ...DEFAULT_LISTING_CONTROLS, ...p.controls })
+        autoWrite.current = true
+      })
+      .catch(() => {})
+      .finally(() => { void navigate({ to: '/realtors/kit', replace: true }) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, userId, prepaidSession])
+  useEffect(() => {
+    if (!autoWrite.current || !listing || writing) return
+    autoWrite.current = false
+    say('paid · writing your kit')
+    void write()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listing])
+
+  function openPrebuy() {
+    if (listing) { try { sessionStorage.setItem(PREPAY_KEY, JSON.stringify({ listing, note, controls } satisfies Prepay)) } catch { /* noop */ } }
+    setCheckoutError(''); setSheet('prebuy'); track('kit_prebuy_opened', { tier: usage?.tier ?? null })
+  }
+
+  async function fetchPrepaySecret(): Promise<string> {
+    const r = await createKitPrepayCheckout({ data: { environment: getStripeEnvironment(), returnUrl: `${window.location.origin}/realtors/kit?prepaid={CHECKOUT_SESSION_ID}` } })
+    if ('error' in r && r.error) { setCheckoutError('checkout could not open · try again'); throw new Error(r.error) }
+    if (!('clientSecret' in r) || !r.clientSecret) throw new Error('no client secret')
+    return r.clientSecret
+  }
 
   async function fetchClientSecret(): Promise<string> {
     if (!kit) throw new Error('no kit')
@@ -162,6 +204,7 @@ export function KitPage({ kitId, sessionId, urlIn, textIn }: { kitId?: string; s
         return say('could not write the kit · try again, it did not count')
       }
       setKit(r.kit); setUsage(r.usage)
+      try { sessionStorage.removeItem(PREPAY_KEY) } catch { /* noop */ }
       setMine((m) => [{ id: r.kit.id, address: r.kit.listing.address, city: r.kit.listing.city, price: r.kit.listing.price, tone: r.kit.tone, created_at: r.kit.created_at }, ...m])
       try { sessionStorage.removeItem(DRAFT_KEY) } catch { /* noop */ }
       void navigate({ to: '/realtors/kit', search: { kit: r.kit.id } as never, replace: true })
@@ -191,17 +234,17 @@ export function KitPage({ kitId, sessionId, urlIn, textIn }: { kitId?: string; s
 
         {kit ? (
           <>
-            <KitView data={kit} usage={usage ?? { tier: 'free', kits: { used: 0, cap: 1, period: 'ever' }, downloads: { used: 0, cap: 1, period: 'day' } }} onUsage={setUsage} onLimit={() => setSheet('limit')} onBuy={() => { setCheckoutError(''); setSheet('buy') }} onTouchLimit={() => setSheet('touch_limit')} onRewrite={() => { setListing(kit.listing); setNote(kit.listing.note); setControls(kit.controls); setKit(null); void navigate({ to: '/realtors/kit', replace: true }); track('kit_rewrite_opened', {}) }} say={say} />
+            <KitView data={kit} usage={usage ?? { tier: 'free', kits: { used: 0, cap: 1, period: 'ever' }, credits: 0, downloads: { used: 0, cap: null, period: 'month' } }} onUsage={setUsage} onLimit={() => setSheet('limit')} onBuy={() => { setCheckoutError(''); setSheet('buy') }} onTouchLimit={() => setSheet('touch_limit')} onRewrite={() => { setListing(kit.listing); setNote(kit.listing.note); setControls(kit.controls); setKit(null); void navigate({ to: '/realtors/kit', replace: true }); track('kit_rewrite_opened', {}) }} say={say} />
             <div className="rl-row" style={{ justifyContent: 'space-between' }}>
               <button className="rl-btn ghost sm" onClick={() => { setKit(null); setListing(null); setUrl(''); setText(''); setNote(''); void navigate({ to: '/realtors/kit', replace: true }) }}>another listing</button>
-              {usage && <span className="rl-note">{usage.kits.cap === null ? 'kits: unlimited' : `kits: ${usage.kits.used} of ${usage.kits.cap}${usage.kits.period === 'day' ? ' today' : ' free'}`}{usage.downloads.cap !== null ? ` · downloads: ${usage.downloads.used} of ${usage.downloads.cap} this ${usage.downloads.period}` : ''}</span>}
+              {usage && <span className="rl-note">{usage.kits.cap === null ? 'kits: unlimited' : `kits: ${usage.kits.used} of ${usage.kits.cap}${usage.kits.period === 'month' ? ' this month' : ' free'}`}{usage.credits > 0 ? ` · ${usage.credits} bought, ready` : ''} · copies and downloads: unlimited</span>}
             </div>
           </>
         ) : (
           <div className="rl-box">
             <div className="rl-box-head">
               <span>● {listing ? 'the listing' : pasteText ? 'paste the listing text' : 'paste the listing link'}</span>
-              <span style={{ fontWeight: 500, color: 'var(--muted)' }}>{usage ? (usage.kits.cap === null ? 'unlimited kits' : `${kitsLeft} of ${usage.kits.cap} kit${usage.kits.cap === 1 ? '' : 's'} left${usage.kits.period === 'day' ? ' today' : ''}`) : 'first kit free'}</span>
+              <span style={{ fontWeight: 500, color: 'var(--muted)' }}>{usage ? (usage.kits.cap === null ? 'unlimited kits' : `${kitsLeft} of ${usage.kits.cap} kit${usage.kits.cap === 1 ? '' : 's'} left${usage.kits.period === 'month' ? ' this month' : ''}${usage.credits > 0 ? ` · +${usage.credits} bought` : ''}`) : 'first kit free'}</span>
             </div>
             <div className="rl-box-body">
               {!listing ? (
@@ -269,7 +312,7 @@ export function KitPage({ kitId, sessionId, urlIn, textIn }: { kitId?: string; s
         )}
 
         {!listing && <p className="rl-note" style={{ textAlign: 'center' }}>
-          first kit free with an account · Basic {usd(PLANS.basic.amount)}/mo: 3 kits a day, 20 downloads a month · Pro {usd(PLANS.pro.amount)}/mo: unlimited · <Link to="/pricing" className="rl-note">pricing</Link>
+          first kit free with an account · one kit {usd(KIT_ONCE.amount)} · Basic {usd(PLANS.basic.amount)}/mo: 20 kits a month · Pro {usd(PLANS.pro.amount)}/mo: unlimited · copies and downloads always unlimited · <Link to="/pricing" className="rl-note">pricing</Link>
         </p>}
       </div>
 
@@ -288,25 +331,39 @@ export function KitPage({ kitId, sessionId, urlIn, textIn }: { kitId?: string; s
             )}
             {sheet === 'limit' && (
               <>
-                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>{usage?.tier === 'free' ? 'That was your free kit.' : 'That is today\'s kits.'}</h3>
-                <p className="rl-note">{usage?.tier === 'free' ? `Basic is ${usd(PLANS.basic.amount)} a month: 3 kits a day and 20 clean downloads a month (a copied output is one, the kit PDF is six). Pro is ${usd(PLANS.pro.amount)}: no limits.` : `Basic writes 3 kits a day and 20 downloads a month. Pro is ${usd(PLANS.pro.amount)} a month with no limits. More at midnight Pacific.`}</p>
-                <a href="/subscribe?plan=basic&from=realtors" className="rl-btn" onClick={() => track('plan_clicked', { plan: 'basic', where: 'realtors_limit' })}>get Basic · {usd(PLANS.basic.amount)}/mo</a>
-                <a href="/subscribe?plan=pro&from=realtors" className="rl-btn ghost" onClick={() => track('plan_clicked', { plan: 'pro', where: 'realtors_limit' })}>get Pro · {usd(PLANS.pro.amount)}/mo</a>
+                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>{usage?.tier === 'free' ? 'That was your free kit.' : `That's your ${usage?.kits.cap ?? 20} kits this month.`}</h3>
+                <p className="rl-note">Buy this one for {usd(KIT_ONCE.amount)} and Shutap writes it now, clean. Then every copy, the PDF and shoot mode are yours, unlimited, forever: find it under profile → My creations.{usage?.tier === 'free' ? ` Or Basic, ${usd(PLANS.basic.amount)} a month: 20 kits a month.` : ''} Pro, {usd(PLANS.pro.amount)} a month: unlimited.</p>
+                <button className="rl-btn" onClick={openPrebuy}>buy this kit · {usd(KIT_ONCE.amount)}</button>
+                {usage?.tier === 'free' && <a href="/subscribe?plan=basic&from=realtors" className="rl-btn ghost" onClick={() => track('plan_clicked', { plan: 'basic', where: 'realtors_limit' })}>get Basic · {usd(PLANS.basic.amount)}/mo · 20 kits</a>}
+                <a href="/subscribe?plan=pro&from=realtors" className="rl-btn ghost" onClick={() => track('plan_clicked', { plan: 'pro', where: 'realtors_limit' })}>get Pro · {usd(PLANS.pro.amount)}/mo · unlimited</a>
                 <button className="rl-btn ghost" onClick={() => setSheet(null)}>not now</button>
               </>
             )}
             {sheet === 'touch_limit' && (
               <>
-                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>That's today's three touches.</h3>
-                <p className="rl-note">Free gets three "funnier" touches a day. Basic and Pro: unlimited. You can still type any line yourself.</p>
-                <a href="/subscribe?plan=basic&from=realtors_touch" className="rl-btn">get Basic · {usd(PLANS.basic.amount)}/mo</a>
+                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>That's a lot of "funnier" for one day.</h3>
+                <p className="rl-note">"funnier" is unlimited on every plan; this pause only stops runaway use. It's back tomorrow, and you can type any line yourself now.</p>
                 <button className="rl-btn ghost" onClick={() => setSheet(null)}>not now</button>
+              </>
+            )}
+            {sheet === 'prebuy' && (
+              <>
+                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>This kit · {usd(KIT_ONCE.amount)}</h3>
+                <p className="rl-note">Pay once and Shutap writes it right after: clean, no marks. Every copy, the PDF and shoot mode are unlimited, forever, under profile → My creations. A rewrite in a new tone is a new kit. No subscription. Tax may be added.</p>
+                {checkoutError ? <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{checkoutError}</p> : (
+                  <div style={{ minHeight: 420 }}>
+                    <EmbeddedCheckoutProvider key="prepay" stripe={getStripe()} options={{ fetchClientSecret: fetchPrepaySecret }}>
+                      <EmbeddedCheckout />
+                    </EmbeddedCheckoutProvider>
+                  </div>
+                )}
+                <button className="rl-btn ghost" onClick={() => setSheet(null)}>close</button>
               </>
             )}
             {sheet === 'buy' && kit && (
               <>
-                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>One kit · {usd(KIT_ONCE.amount)}</h3>
-                <p className="rl-note">This listing's kit, yours: copy and download it as often as you like, nothing marked, and every rewrite of it for 30 days. No subscription. Tax may be added.</p>
+                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>Remove the mark · {usd(KIT_ONCE.amount)}</h3>
+                <p className="rl-note">This kit, clean: no "— shutap.com" on any copy, the PDF or the voiceover file, forever. It stays in profile → My creations. A rewrite in a new tone is a new kit. No subscription. Tax may be added.</p>
                 {checkoutError ? <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{checkoutError}</p> : (
                   <div style={{ minHeight: 420 }}>
                     <EmbeddedCheckoutProvider key={kit.id} stripe={getStripe()} options={{ fetchClientSecret }}>

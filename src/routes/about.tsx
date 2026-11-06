@@ -65,7 +65,7 @@ const SECTIONS = [
   },
   {
     heading: "Free to start",
-    body: "A free account (one tap with Google or Apple) gets one bit a day with its video, stand-up, sketch and skit, and one download a day with a shutap.com watermark. Basic adds rewrites, crowd-work swaps and mix your own: 3 bits a day and 20 clean downloads a month, with AI on demand on every line. Pro: unlimited bits, rewrites and downloads, no watermark, and the Mirror.",
+    body: "A free account (one tap with Google or Apple) gets one bit a day with its video, stand-up, sketch and skit, with unlimited downloads carrying a shutap.com watermark. Basic adds rewrites, crowd-work swaps and mix your own: 3 bits a day and 20 realtor kits a month, downloads clean. Pro: unlimited bits, rewrites and kits, no watermark, and the Mirror. Downloads and copies are never counted.",
   },
   {
     heading: "Who makes Shutap",
