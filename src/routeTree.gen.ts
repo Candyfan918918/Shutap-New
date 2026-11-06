@@ -78,6 +78,7 @@ import { Route as SitemapsProfilesDotxmlRouteImport } from './routes/sitemaps/pr
 import { Route as SitemapsStoriesDotxmlRouteImport } from './routes/sitemaps/stories[.]xml'
 import { Route as SubscribeReturnRouteImport } from './routes/subscribe.return'
 import { Route as ToastsIndexRouteImport } from './routes/toasts.index'
+import { Route as ToastsSlugRouteImport } from './routes/toasts.$slug'
 import { Route as UPseudonymRouteImport } from './routes/u.$pseudonym'
 import { Route as VentTopicRouteImport } from './routes/vent.$topic'
 import { Route as WhatHappensSlugRouteImport } from './routes/what-happens.$slug'
@@ -459,6 +460,11 @@ const ToastsIndexRoute = ToastsIndexRouteImport.update({
   path: '/toasts/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToastsSlugRoute = ToastsSlugRouteImport.update({
+  id: '/toasts/$slug',
+  path: '/toasts/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UPseudonymRoute = UPseudonymRouteImport.update({
   id: '/u/$pseudonym',
   path: '/u/$pseudonym',
@@ -708,6 +714,7 @@ export interface FileRoutesByFullPath {
   '/sitemaps/profiles.xml': typeof SitemapsProfilesDotxmlRoute
   '/sitemaps/stories.xml': typeof SitemapsStoriesDotxmlRoute
   '/subscribe/return': typeof SubscribeReturnRoute
+  '/toasts/$slug': typeof ToastsSlugRoute
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
@@ -812,6 +819,7 @@ export interface FileRoutesByTo {
   '/sitemaps/profiles.xml': typeof SitemapsProfilesDotxmlRoute
   '/sitemaps/stories.xml': typeof SitemapsStoriesDotxmlRoute
   '/subscribe/return': typeof SubscribeReturnRoute
+  '/toasts/$slug': typeof ToastsSlugRoute
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
@@ -918,6 +926,7 @@ export interface FileRoutesById {
   '/sitemaps/profiles.xml': typeof SitemapsProfilesDotxmlRoute
   '/sitemaps/stories.xml': typeof SitemapsStoriesDotxmlRoute
   '/subscribe/return': typeof SubscribeReturnRoute
+  '/toasts/$slug': typeof ToastsSlugRoute
   '/u/$pseudonym': typeof UPseudonymRoute
   '/vent/$topic': typeof VentTopicRoute
   '/what-happens/$slug': typeof WhatHappensSlugRoute
@@ -1024,6 +1033,7 @@ export interface FileRouteTypes {
     | '/sitemaps/profiles.xml'
     | '/sitemaps/stories.xml'
     | '/subscribe/return'
+    | '/toasts/$slug'
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
@@ -1128,6 +1138,7 @@ export interface FileRouteTypes {
     | '/sitemaps/profiles.xml'
     | '/sitemaps/stories.xml'
     | '/subscribe/return'
+    | '/toasts/$slug'
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
@@ -1233,6 +1244,7 @@ export interface FileRouteTypes {
     | '/sitemaps/profiles.xml'
     | '/sitemaps/stories.xml'
     | '/subscribe/return'
+    | '/toasts/$slug'
     | '/u/$pseudonym'
     | '/vent/$topic'
     | '/what-happens/$slug'
@@ -1337,6 +1349,7 @@ export interface RootRouteChildren {
   SitemapsPostsDotxmlRoute: typeof SitemapsPostsDotxmlRoute
   SitemapsProfilesDotxmlRoute: typeof SitemapsProfilesDotxmlRoute
   SitemapsStoriesDotxmlRoute: typeof SitemapsStoriesDotxmlRoute
+  ToastsSlugRoute: typeof ToastsSlugRoute
   UPseudonymRoute: typeof UPseudonymRoute
   VentTopicRoute: typeof VentTopicRoute
   WhatHappensSlugRoute: typeof WhatHappensSlugRoute
@@ -1853,6 +1866,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToastsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/toasts/$slug': {
+      id: '/toasts/$slug'
+      path: '/toasts/$slug'
+      fullPath: '/toasts/$slug'
+      preLoaderRoute: typeof ToastsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/u/$pseudonym': {
       id: '/u/$pseudonym'
       path: '/u/$pseudonym'
@@ -2209,6 +2229,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapsPostsDotxmlRoute: SitemapsPostsDotxmlRoute,
   SitemapsProfilesDotxmlRoute: SitemapsProfilesDotxmlRoute,
   SitemapsStoriesDotxmlRoute: SitemapsStoriesDotxmlRoute,
+  ToastsSlugRoute: ToastsSlugRoute,
   UPseudonymRoute: UPseudonymRoute,
   VentTopicRoute: VentTopicRoute,
   WhatHappensSlugRoute: WhatHappensSlugRoute,

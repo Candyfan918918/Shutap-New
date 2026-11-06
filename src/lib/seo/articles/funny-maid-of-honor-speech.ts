@@ -84,7 +84,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-wedding-toast", "funny-baby-shower-speech", "how-to-tell-a-funny-story"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Write your maid of honor speech from your stories", href: "/toasts/maid-of-honor" },
   techniques: [
     {
       name: "The color nobody may ask about",

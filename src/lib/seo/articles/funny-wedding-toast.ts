@@ -88,7 +88,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-email-sign-offs", "funny-captions", "turn-a-bad-experience-into-comedy"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Write your wedding toast from your stories", href: "/toasts" },
   published: "2026-10-23",
 };
 

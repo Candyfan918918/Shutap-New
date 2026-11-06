@@ -3,6 +3,7 @@ import type {} from "@tanstack/react-start";
 import { renderUrlset, todayPacific, type SitemapEntry } from "@/lib/seo/sitemap";
 import { GUIDES, GUIDE_TOPICS, guidePath, guidesInTopic, topicPath } from "@/lib/seo/guides";
 import { FUNNIEST, FUNNIEST_HUB, funniestPath } from "@/lib/seo/funniest";
+import { LANDINGS } from "@/lib/toasts/landings";
 
 const newest = (dates: (string | undefined)[]) => dates.filter(Boolean).sort().at(-1) as string | undefined;
 
@@ -24,7 +25,9 @@ export function getCoreEntries(): SitemapEntry[] {
   // Nov 6 2026: the products. /humor-amplifier redirects to /bits.
   { path: "/bits", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.9" },
   { path: "/realtors", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.9" },
-  { path: "/toasts", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.6" },
+  { path: "/toasts", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.9" },
+  // Nov 6 2026: Toasts launched; one landing page per occasion
+  ...LANDINGS.map((l): SitemapEntry => ({ path: `/toasts/${l.slug}`, lastmod: "2026-11-06", changefreq: "monthly", priority: "0.8" })),
   ...GUIDE_TOPICS.filter((t) => guidesInTopic(t.id).length > 0).map((t): SitemapEntry => ({
     path: topicPath(t.id),
     lastmod: fresh(newest(guidesInTopic(t.id).map((g) => g.updated ?? g.published))),

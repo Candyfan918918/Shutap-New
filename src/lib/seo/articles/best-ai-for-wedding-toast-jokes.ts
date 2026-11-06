@@ -73,7 +73,7 @@ const guide: Guide = {
     { label: "Morning Dough (Feb 23, 2024), \"9 best AI wedding speech writers\"", url: "https://www.morningdough.com/?p=37319" },
   ],
   related: ["funny-wedding-toast", "self-deprecating-humor", "ai-comedy-writing-tools"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Write your wedding toast from your stories", href: "/toasts" },
   published: "2026-10-26",
 };
 
