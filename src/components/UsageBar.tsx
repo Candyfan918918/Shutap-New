@@ -20,6 +20,57 @@ export function useMyUsage(enabled: boolean): MyUsage | null {
   return u
 }
 
+/** The usage card in the account menu (Nov 6 2026), after Lovable's credit
+ *  bar: one bar, a colored segment for each thing (bits rose, downloads
+ *  amber, realtor kits blue). Each segment is that thing's share of its own
+ *  limit used; a legend under the bar says what's left. */
+export const USAGE_COLORS = { bits: '#c1216b', downloads: '#e0912f', kits: '#3b6fd8' } as const
+
+export function UsageMini({ u, dark = false }: { u: MyUsage; dark?: boolean }) {
+  const per = (p: string) => (p === 'month' ? 'month' : p === 'day' ? 'today' : 'once')
+  const parts = [
+    { key: 'bits', label: 'bits', used: u.bits.used, cap: u.bits.cap, when: 'today' },
+    { key: 'downloads', label: 'downloads', used: u.downloads.used, cap: u.downloads.cap, when: per(u.downloads.period) },
+    { key: 'kits', label: 'realtor kits', used: u.kits.used, cap: u.kits.cap, when: per(u.kits.period) },
+  ] as const
+  const ink = dark ? '#ffffff' : '#111111'
+  const muted = dark ? '#b5b5b5' : '#6b6b6b'
+  const track = dark ? 'rgba(255,255,255,.12)' : '#f1e6eb'
+  const plan = u.tier === 'pro' ? 'Pro' : u.tier === 'basic' ? 'Basic' : 'Free'
+  return (
+    <div style={{ display: 'grid', gap: 8, fontFamily: "'Sora',system-ui,sans-serif" }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
+        <span style={{ fontSize: 13, fontWeight: 700, color: ink }}>{plan} plan</span>
+        <span style={{ fontSize: 11.5, color: muted }}>{u.tier === 'pro' ? 'unlimited' : 'what\u2019s left'}</span>
+      </div>
+      <div role="img" aria-label={parts.map((p) => `${p.label}: ${p.cap === null ? 'unlimited' : `${Math.max(0, p.cap - p.used)} of ${p.cap} left`}`).join(', ')} style={{ display: 'flex', gap: 3, height: 8 }}>
+        {parts.map((p) => {
+          // filled = what's left, like a credit bar draining as it's used
+          const pct = p.cap === null ? 100 : Math.max(0, Math.min(100, Math.round(((p.cap - p.used) / Math.max(1, p.cap)) * 100)))
+          const c = USAGE_COLORS[p.key]
+          return (
+            <span key={p.key} style={{ flex: 1, borderRadius: 999, background: track, overflow: 'hidden', position: 'relative' }}>
+              <span style={{ position: 'absolute', inset: 0, width: `${pct}%`, background: c, opacity: p.cap === null ? 0.35 : 1, borderRadius: 999, transition: 'width .3s' }} />
+            </span>
+          )
+        })}
+      </div>
+      <div style={{ display: 'grid', gap: 4 }}>
+        {parts.map((p) => {
+          const left = p.cap === null ? null : Math.max(0, p.cap - p.used)
+          return (
+            <div key={p.key} style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12, color: muted }}>
+              <span aria-hidden style={{ width: 8, height: 8, borderRadius: 999, background: USAGE_COLORS[p.key], flex: 'none' }} />
+              <span style={{ flex: 1, whiteSpace: 'nowrap' }}>{p.label}</span>
+              <span style={{ whiteSpace: 'nowrap' }}><b style={{ color: left === 0 ? '#b3261e' : ink, fontWeight: 600 }}>{left === null ? '\u221e' : `${left} of ${p.cap}`}</b>{left === null ? '' : ` · ${p.when}`}</span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 /** The account menu (Nov 6 2026): one short line per thing, what's left,
  *  so it fits a narrow menu instead of one long line running out of it. */
 export function usageRows(u: MyUsage): string[] {

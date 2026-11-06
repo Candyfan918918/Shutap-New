@@ -9,7 +9,7 @@ import { Link, useRouterState, useNavigate } from '@tanstack/react-router'
 import { rememberReturnTo, signOut as doSignOut } from '@/lib/auth'
 import { useCurrentAlias, useIsAdmin } from '@/hooks/use-current-alias'
 import { UserAvatar } from '@/components/UserAvatar'
-import { useMyUsage, usageRows } from '@/components/UsageBar'
+import { useMyUsage, UsageMini } from '@/components/UsageBar'
 import { myAlias } from '@/lib/feed.functions'
 import { getFlags } from '@/lib/flags.functions'
 import { NO_FLAGS, type Flags } from '@/lib/flags'
@@ -343,8 +343,8 @@ export function GlobalHeader() {
                   >
                     <div data-ph-private style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name || 'signed in'}</div>
                     {usage && (
-                      <Link to="/profile" aria-label="what's left on your plan" style={{ ...menuItem, fontSize: 12, lineHeight: 1.45, color: inkMuted, whiteSpace: 'normal', overflowWrap: 'anywhere', display: 'flex', flexDirection: 'column', gap: 1 }} onClick={() => setMenuOpen(false)}>
-                        {usageRows(usage).map((r) => <span key={r}>{r}</span>)}
+                      <Link to="/profile" aria-label="your plan: what's left" style={{ display: 'block', margin: '2px 4px 6px', padding: '10px 11px', borderRadius: 12, background: dark ? 'rgba(255,255,255,.05)' : '#faf5f7', border: `1px solid ${dark ? 'rgba(255,255,255,.08)' : 'rgba(90,30,50,.08)'}`, textDecoration: 'none' }} onClick={() => setMenuOpen(false)}>
+                        <UsageMini u={usage} dark={dark} />
                       </Link>
                     )}
                     <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link>
