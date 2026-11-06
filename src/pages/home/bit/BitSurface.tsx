@@ -1209,6 +1209,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 left={left}
                 onCharged={() => setUsage((u) => (u && u.cap !== null ? { ...u, used: Math.min(u.cap, u.used + 1) } : u))}
                 locked={flags.ondemand ? locked : undefined}
+                draft={flags.ondemand ? draft : undefined}
               />
 
               <div className="bt-row">

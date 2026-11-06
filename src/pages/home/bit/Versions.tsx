@@ -36,6 +36,7 @@ export function Versions({
   left,
   onCharged,
   locked,
+  draft,
 }: {
   bit: Bit
   current: BitVersion
@@ -57,6 +58,8 @@ export function Versions({
   onCharged?: () => void
   /** AI on demand: lines a rewrite must leave word for word */
   locked?: Slot[]
+  /** the lines as edited on screen, so locked edits survive the rewrite */
+  draft?: Pick<BitVersion, 'hook' | 'setup' | 'tags' | 'button'> | null
 }) {
   const vary = useServerFn(varyBit)
   const swap = useServerFn(swapAngle)
@@ -80,7 +83,7 @@ export function Versions({
     }
     setBusy(k)
     try {
-      const r = await vary({ data: { bit_id: bit.id, from_version_id: original.id, kind: k, locked: locked?.length ? locked : undefined, anon_session_id: anonSessionId() } })
+      const r = await vary({ data: { bit_id: bit.id, from_version_id: current.id, kind: k, locked: locked?.length ? locked : undefined, locked_lines: locked?.length && draft ? Object.fromEntries(locked.map((sl) => [sl, readSlot(draft, sl)])) : undefined, anon_session_id: anonSessionId() } })
       if (r.ok) {
         onAdd(r.version)
         onCharged?.()
