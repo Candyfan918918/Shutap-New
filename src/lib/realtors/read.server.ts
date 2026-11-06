@@ -57,14 +57,20 @@ function meta(html: string, name: string): string | null {
 export function factsFromText(text: string): Partial<Listing> {
   const t = text.replace(/\s+/g, ' ')
   const out: Partial<Listing> = {}
-  const price = /\$\s?([0-9]{2,3}(?:,[0-9]{3})+|[0-9]{5,8})(?!\s*(?:\/|per)\s*(?:mo|month|sqft|sq))/i.exec(t)
-  if (price) out.price = '$' + price[1]!.replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  // a home price: at least $50,000, not per month / per sqft; the first one
+  // that looks like a listing price wins (HOA and taxes come later and smaller)
+  const priceRe = /\$\s?([0-9]{2,3}(?:,[0-9]{3})+|[0-9]{5,9})(?!\s*(?:\/|per)\s*(?:mo|month|sqft|sq|yr|year))/gi
+  let pm: RegExpExecArray | null
+  while ((pm = priceRe.exec(t))) {
+    const n = Number(pm[1]!.replace(/,/g, ''))
+    if (n >= 50_000 && n <= 200_000_000) { out.price = '$' + n.toLocaleString('en-US'); break }
+  }
   const beds = /([0-9]+(?:\.[0-9])?)\s*(?:bd|bds|bed|beds|bedrooms?|br)\b/i.exec(t)
   if (beds) out.beds = num(beds[1])
   const baths = /([0-9]+(?:\.[0-9])?)\s*(?:ba|bath|baths|bathrooms?)\b/i.exec(t)
   if (baths) out.baths = num(baths[1])
   const sqft = /([0-9]{3,5}(?:,[0-9]{3})?)\s*(?:sq\.?\s?ft|sqft|square feet)/i.exec(t)
-  if (sqft) out.sqft = num(sqft[1])
+  if (sqft) { const n = num(sqft[1]); if (n && n >= 250 && n <= 30_000) out.sqft = n }
   const built = /(?:built|year built)[:\s]+((?:18|19|20)[0-9]{2})\b/i.exec(t)
   if (built) out.year_built = num(built[1])
   const addr = /\b([0-9]{1,6}[A-Za-z]?\s+[A-Z][A-Za-z0-9.' ]{2,40}\s(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Ct|Court|Ln|Lane|Way|Blvd|Boulevard|Pl|Place|Ter|Terrace|Cir|Circle)\b\.?(?:\s?(?:#|Unit|Apt)\s?[A-Za-z0-9-]+)?)/.exec(t)
@@ -127,12 +133,18 @@ async function tryFetch(url: string, h: string): Promise<ReadResult> {
   const ld = fromJsonLd(jsonLd(html))
   const ogTitle = meta(html, 'og:title')
   const ogDesc = meta(html, 'og:description') ?? meta(html, 'description')
-  const textFacts = factsFromText([ogTitle ?? '', ogDesc ?? '', stripTags(html).slice(0, 20000)].join(' '))
+  // A page that is all script and boilerplate (an MLS portal, a map app)
+  // gives numbers that are not the listing's. Read facts from the page text
+  // only when there is real text; otherwise from the OG tags alone.
+  const bodyText = stripTags(html)
+  const thin = bodyText.split(/\s+/).length < 120
+  const textFacts = factsFromText([ogTitle ?? '', ogDesc ?? '', thin ? '' : bodyText.slice(0, 20000)].join(' '))
   const merged: Listing = { ...base, ...textFacts, ...(ld ? Object.fromEntries(Object.entries(ld).filter(([, v]) => v !== null && v !== '' && !(Array.isArray(v) && !v.length))) : {}) } as Listing
   if (!merged.description) merged.description = ogDesc ?? ''
   if (!merged.address && ogTitle && /\d/.test(ogTitle)) merged.address = ogTitle.split('|')[0]!.trim().slice(0, 120)
   const found = [merged.address, merged.price, merged.beds, merged.description].filter(Boolean).length
-  if (found < 2) return { ok: false, reason: 'nothing_found', host: h }
+  // a thin page with no description and no structured data is a guess, not a read
+  if (found < 2 || (thin && !ld && !merged.description)) return { ok: false, reason: 'nothing_found', host: h }
   return { ok: true, listing: merged, how: ld ? 'jsonld' : 'og' }
 }
 

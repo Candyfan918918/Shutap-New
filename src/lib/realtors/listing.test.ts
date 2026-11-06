@@ -7,6 +7,12 @@ import type { Kit, Listing, ListingControls } from './listing'
 
 const SAMPLE = '4B Alder Court, San Mateo, CA 94401. $749,000. 2 bed 1 bath condo, 870 sq ft, built 1987. Original hardwood, balcony. HOA $410/month. Open house Sunday 1-4.'
 
+test('a price under $50k or an HOA fee is never the listing price', () => {
+  assert.equal(factsFromText('HOA $410/month. Taxes $10,000. Listed at $749,000.').price, '$749,000')
+  assert.equal(factsFromText('Fees $10,000 and 7000 points').price, undefined)
+  assert.equal(factsFromText('lot 7000 sq ft on 40 acres').sqft, 7000)
+})
+
 test('facts come out of pasted text', () => {
   const f = factsFromText(SAMPLE)
   assert.equal(f.price, '$749,000'); assert.equal(f.beds, 2); assert.equal(f.baths, 1); assert.equal(f.sqft, 870); assert.equal(f.year_built, 1987)
