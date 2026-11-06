@@ -47,6 +47,7 @@ Disallow: /set-list
 Disallow: /bit-lab
 Disallow: /bit-daily
 Disallow: /bit-eval
+Disallow: /kit-lab
 Disallow: /lovable/
 Disallow: /.lovable/
 Disallow: /checkin

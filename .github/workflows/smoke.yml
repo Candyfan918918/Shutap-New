@@ -15,16 +15,27 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      HAS_SECRETS: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY != '' && secrets.SUPABASE_URL != '' && secrets.SMOKE_EMAIL != '' }}
     steps:
+      # Until the four repo secrets are added the job skips instead of failing
+      # (Nov 5 2026: it failed and emailed on every push since it was added).
+      - name: Secrets present?
+        if: env.HAS_SECRETS != 'true'
+        run: echo "::notice::Smoke skipped - add SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_PUBLISHABLE_KEY and SMOKE_EMAIL under Settings > Secrets and variables > Actions."
       - uses: actions/checkout@v4
+        if: env.HAS_SECRETS == 'true'
       - uses: actions/setup-node@v4
+        if: env.HAS_SECRETS == 'true'
         with:
           node-version: 22
       - name: Wait for the publish
-        if: github.event_name == 'push'
+        if: env.HAS_SECRETS == 'true' && github.event_name == 'push'
         run: sleep 300
-      - run: npm i --no-save playwright @supabase/supabase-js && npx playwright install --with-deps chromium
-      - run: node scripts/smoke/write-bit.mjs
+      - if: env.HAS_SECRETS == 'true'
+        run: npm i --no-save playwright @supabase/supabase-js && npx playwright install --with-deps chromium
+      - if: env.HAS_SECRETS == 'true'
+        run: node scripts/smoke/write-bit.mjs
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
