@@ -31,6 +31,7 @@ import { Route as GuidelinesRouteImport } from './routes/guidelines'
 import { Route as HallsRouteImport } from './routes/halls'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HumorAmplifierRouteImport } from './routes/humor-amplifier'
+import { Route as KitLabRouteImport } from './routes/kit-lab'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as LivedIntelligenceRouteImport } from './routes/lived-intelligence'
 import { Route as MarriageRouteImport } from './routes/marriage'
@@ -210,6 +211,11 @@ const HowItWorksRoute = HowItWorksRouteImport.update({
 const HumorAmplifierRoute = HumorAmplifierRouteImport.update({
   id: '/humor-amplifier',
   path: '/humor-amplifier',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KitLabRoute = KitLabRouteImport.update({
+  id: '/kit-lab',
+  path: '/kit-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LegalRoute = LegalRouteImport.update({
@@ -606,6 +612,7 @@ export interface FileRoutesByFullPath {
   '/halls': typeof HallsRouteWithChildren
   '/how-it-works': typeof HowItWorksRoute
   '/humor-amplifier': typeof HumorAmplifierRoute
+  '/kit-lab': typeof KitLabRoute
   '/legal': typeof LegalRoute
   '/lived-intelligence': typeof LivedIntelligenceRoute
   '/marriage': typeof MarriageRoute
@@ -700,6 +707,7 @@ export interface FileRoutesByTo {
   '/halls': typeof HallsRouteWithChildren
   '/how-it-works': typeof HowItWorksRoute
   '/humor-amplifier': typeof HumorAmplifierRoute
+  '/kit-lab': typeof KitLabRoute
   '/legal': typeof LegalRoute
   '/lived-intelligence': typeof LivedIntelligenceRoute
   '/marriage': typeof MarriageRoute
@@ -796,6 +804,7 @@ export interface FileRoutesById {
   '/halls': typeof HallsRouteWithChildren
   '/how-it-works': typeof HowItWorksRoute
   '/humor-amplifier': typeof HumorAmplifierRoute
+  '/kit-lab': typeof KitLabRoute
   '/legal': typeof LegalRoute
   '/lived-intelligence': typeof LivedIntelligenceRoute
   '/marriage': typeof MarriageRoute
@@ -892,6 +901,7 @@ export interface FileRouteTypes {
     | '/halls'
     | '/how-it-works'
     | '/humor-amplifier'
+    | '/kit-lab'
     | '/legal'
     | '/lived-intelligence'
     | '/marriage'
@@ -986,6 +996,7 @@ export interface FileRouteTypes {
     | '/halls'
     | '/how-it-works'
     | '/humor-amplifier'
+    | '/kit-lab'
     | '/legal'
     | '/lived-intelligence'
     | '/marriage'
@@ -1081,6 +1092,7 @@ export interface FileRouteTypes {
     | '/halls'
     | '/how-it-works'
     | '/humor-amplifier'
+    | '/kit-lab'
     | '/legal'
     | '/lived-intelligence'
     | '/marriage'
@@ -1177,6 +1189,7 @@ export interface RootRouteChildren {
   HallsRoute: typeof HallsRouteWithChildren
   HowItWorksRoute: typeof HowItWorksRoute
   HumorAmplifierRoute: typeof HumorAmplifierRoute
+  KitLabRoute: typeof KitLabRoute
   LegalRoute: typeof LegalRoute
   LivedIntelligenceRoute: typeof LivedIntelligenceRoute
   MarriageRoute: typeof MarriageRoute
@@ -1392,6 +1405,13 @@ declare module '@tanstack/react-router' {
       path: '/humor-amplifier'
       fullPath: '/humor-amplifier'
       preLoaderRoute: typeof HumorAmplifierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kit-lab': {
+      id: '/kit-lab'
+      path: '/kit-lab'
+      fullPath: '/kit-lab'
+      preLoaderRoute: typeof KitLabRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal': {
@@ -1968,6 +1988,7 @@ const rootRouteChildren: RootRouteChildren = {
   HallsRoute: HallsRouteWithChildren,
   HowItWorksRoute: HowItWorksRoute,
   HumorAmplifierRoute: HumorAmplifierRoute,
+  KitLabRoute: KitLabRoute,
   LegalRoute: LegalRoute,
   LivedIntelligenceRoute: LivedIntelligenceRoute,
   MarriageRoute: MarriageRoute,
