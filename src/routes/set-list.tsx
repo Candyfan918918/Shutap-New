@@ -3,6 +3,8 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { listMyBits, type SetListItem } from '@/lib/bits.functions'
+import { listMyKits, type KitSummary } from '@/lib/realtors.functions'
+import { TONE_LABEL } from '@/lib/realtors/listing'
 import type { BitTier, BitUsage } from '@/lib/bits/shared'
 import { anonSessionId } from '@/pages/home/joke/jokeClient'
 import { setDurableReturn } from '@/lib/auth-guard'
@@ -36,10 +38,12 @@ function SetListPage() {
   const navigate = useNavigate()
   const [state, setState] = useState<{ tier: BitTier; bits: SetListItem[]; usage: BitUsage } | null>(null)
   const [failed, setFailed] = useState(false)
+  /** realtor kits, in the same list (Nov 6 2026); empty for anyone without one */
+  const [kits, setKits] = useState<KitSummary[]>([])
 
   useEffect(() => {
     list({ data: { anon_session_id: anonSessionId() } })
-      .then(setState)
+      .then((r) => { setState(r); if (r.tier !== 'guest') listMyKits({ data: {} }).then((k) => setKits(k.kits)).catch(() => {}) })
       .catch(() => setFailed(true))
   }, [list])
 
@@ -58,6 +62,14 @@ function SetListPage() {
           </Link>
         </div>
 
+        {kits.length > 0 && (
+          <section className="fd-post" style={{ gap: 8 }} aria-label="Your realtor kits">
+            <div className="fd-between"><b style={{ fontSize: 14 }}>Realtor kits</b><Link to="/realtors/kit" className="fd-link fd-muted">+ paste a listing</Link></div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {kits.map((k) => <Link key={k.id} to="/realtors/kit" search={{ kit: k.id } as never} className="fd-chip" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>{k.address ?? 'listing'}{k.city ? ` · ${k.city}` : ''} · {TONE_LABEL[k.tone].split(' ')[0]}</Link>)}
+            </div>
+          </section>
+        )}
         {failed && <p className="fd-muted">Couldn't load your set list. Refresh to try again.</p>}
         {!state && !failed && <p className="fd-muted">loading…</p>}
 

@@ -377,3 +377,10 @@
   .bt-lined-cta { justify-content: stretch; }
   .bt-lined-cta .bt-go { flex: 1; }
 }
+
+/* the product tabs over the box (Nov 6 2026, newnav): one row, scrolls on a phone */
+.bt-ptabs { display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 2px 2px 8px; margin: 0 -2px; }
+.bt-ptabs::-webkit-scrollbar { display: none; }
+.bt-ptab { flex: none; height: 34px; padding: 0 13px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--card); font: 600 13px/32px var(--sora); color: var(--ink-2); cursor: pointer; text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.bt-ptab.on { background: var(--rose); color: #fff; border-color: var(--rose); }
+.bt-ptab small { font: 700 9.5px var(--sora); letter-spacing: .08em; text-transform: uppercase; opacity: .75; }

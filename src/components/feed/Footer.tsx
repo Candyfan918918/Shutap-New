@@ -3,6 +3,9 @@ import { LaunchBadges } from '@/components/site/LaunchBadges'
 import './feed.css'
 
 const LINKS: Array<[string, string]> = [
+  ['/bits', 'bits'],
+  ['/realtors', 'realtors'],
+  ['/toasts', 'toasts · soon'],
   ['/guides', 'guides'],
   ['/funniest', 'the funniest'],
   ['/business', 'enterprise'],

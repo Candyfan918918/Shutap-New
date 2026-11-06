@@ -20,6 +20,7 @@ import { Route as AiJokeGeneratorRouteImport } from './routes/ai-joke-generator'
 import { Route as BitDailyRouteImport } from './routes/bit-daily'
 import { Route as BitEvalRouteImport } from './routes/bit-eval'
 import { Route as BitLabRouteImport } from './routes/bit-lab'
+import { Route as BitsRouteImport } from './routes/bits'
 import { Route as BusinessRouteImport } from './routes/business'
 import { Route as CareerRouteImport } from './routes/career'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -50,6 +51,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StreamRouteImport } from './routes/stream'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as ToastsRouteImport } from './routes/toasts'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as WelcomeRouteImport } from './routes/welcome'
@@ -159,6 +161,11 @@ const BitEvalRoute = BitEvalRouteImport.update({
 const BitLabRoute = BitLabRouteImport.update({
   id: '/bit-lab',
   path: '/bit-lab',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BitsRoute = BitsRouteImport.update({
+  id: '/bits',
+  path: '/bits',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BusinessRoute = BusinessRouteImport.update({
@@ -309,6 +316,11 @@ const SubscribeRoute = SubscribeRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToastsRoute = ToastsRouteImport.update({
+  id: '/toasts',
+  path: '/toasts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrustRoute = TrustRouteImport.update({
@@ -619,6 +631,7 @@ export interface FileRoutesByFullPath {
   '/bit-daily': typeof BitDailyRoute
   '/bit-eval': typeof BitEvalRoute
   '/bit-lab': typeof BitLabRoute
+  '/bits': typeof BitsRoute
   '/business': typeof BusinessRoute
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
@@ -649,6 +662,7 @@ export interface FileRoutesByFullPath {
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
+  '/toasts': typeof ToastsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -717,6 +731,7 @@ export interface FileRoutesByTo {
   '/bit-daily': typeof BitDailyRoute
   '/bit-eval': typeof BitEvalRoute
   '/bit-lab': typeof BitLabRoute
+  '/bits': typeof BitsRoute
   '/business': typeof BusinessRoute
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
@@ -747,6 +762,7 @@ export interface FileRoutesByTo {
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
+  '/toasts': typeof ToastsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -817,6 +833,7 @@ export interface FileRoutesById {
   '/bit-daily': typeof BitDailyRoute
   '/bit-eval': typeof BitEvalRoute
   '/bit-lab': typeof BitLabRoute
+  '/bits': typeof BitsRoute
   '/business': typeof BusinessRoute
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
@@ -847,6 +864,7 @@ export interface FileRoutesById {
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
+  '/toasts': typeof ToastsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -917,6 +935,7 @@ export interface FileRouteTypes {
     | '/bit-daily'
     | '/bit-eval'
     | '/bit-lab'
+    | '/bits'
     | '/business'
     | '/career'
     | '/contact'
@@ -947,6 +966,7 @@ export interface FileRouteTypes {
     | '/stream'
     | '/subscribe'
     | '/terms'
+    | '/toasts'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1015,6 +1035,7 @@ export interface FileRouteTypes {
     | '/bit-daily'
     | '/bit-eval'
     | '/bit-lab'
+    | '/bits'
     | '/business'
     | '/career'
     | '/contact'
@@ -1045,6 +1066,7 @@ export interface FileRouteTypes {
     | '/stream'
     | '/subscribe'
     | '/terms'
+    | '/toasts'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1114,6 +1136,7 @@ export interface FileRouteTypes {
     | '/bit-daily'
     | '/bit-eval'
     | '/bit-lab'
+    | '/bits'
     | '/business'
     | '/career'
     | '/contact'
@@ -1144,6 +1167,7 @@ export interface FileRouteTypes {
     | '/stream'
     | '/subscribe'
     | '/terms'
+    | '/toasts'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1214,6 +1238,7 @@ export interface RootRouteChildren {
   BitDailyRoute: typeof BitDailyRoute
   BitEvalRoute: typeof BitEvalRoute
   BitLabRoute: typeof BitLabRoute
+  BitsRoute: typeof BitsRoute
   BusinessRoute: typeof BusinessRoute
   CareerRoute: typeof CareerRoute
   ContactRoute: typeof ContactRoute
@@ -1244,6 +1269,7 @@ export interface RootRouteChildren {
   StreamRoute: typeof StreamRoute
   SubscribeRoute: typeof SubscribeRouteWithChildren
   TermsRoute: typeof TermsRoute
+  ToastsRoute: typeof ToastsRoute
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   WelcomeRoute: typeof WelcomeRoute
@@ -1367,6 +1393,13 @@ declare module '@tanstack/react-router' {
       path: '/bit-lab'
       fullPath: '/bit-lab'
       preLoaderRoute: typeof BitLabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bits': {
+      id: '/bits'
+      path: '/bits'
+      fullPath: '/bits'
+      preLoaderRoute: typeof BitsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/business': {
@@ -1577,6 +1610,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/toasts': {
+      id: '/toasts'
+      path: '/toasts'
+      fullPath: '/toasts'
+      preLoaderRoute: typeof ToastsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/trust': {
@@ -2037,6 +2077,7 @@ const rootRouteChildren: RootRouteChildren = {
   BitDailyRoute: BitDailyRoute,
   BitEvalRoute: BitEvalRoute,
   BitLabRoute: BitLabRoute,
+  BitsRoute: BitsRoute,
   BusinessRoute: BusinessRoute,
   CareerRoute: CareerRoute,
   ContactRoute: ContactRoute,
@@ -2067,6 +2108,7 @@ const rootRouteChildren: RootRouteChildren = {
   StreamRoute: StreamRoute,
   SubscribeRoute: SubscribeRouteWithChildren,
   TermsRoute: TermsRoute,
+  ToastsRoute: ToastsRoute,
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   WelcomeRoute: WelcomeRoute,

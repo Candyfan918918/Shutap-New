@@ -15,7 +15,7 @@
  * The server owns the tier, the budget and the text; nothing here can
  * unlock what it did not send. */
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useNavigate, useRouter } from '@tanstack/react-router'
+import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { supabase } from '@/integrations/supabase/client'
 import { claimGuestBits, getBit, listMyBits, writeBit, type WriteBitResult } from '@/lib/bits.functions'
@@ -933,6 +933,14 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               </div>
             )}
 
+            {flags.newnav && (
+              <div className="bt-ptabs" role="tablist" aria-label="What are you saying funnier?">
+                <button type="button" role="tab" aria-selected className="bt-ptab on">✎ what happened</button>
+                <Link to="/realtors/kit" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'realtors' })}>🏠 a listing</Link>
+                <Link to="/toasts" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'toasts' })}>🥂 a toast <small>soon</small></Link>
+                <button type="button" role="tab" className={`bt-ptab${controls.audience === 'office' ? ' on' : ''}`} onClick={() => { setControls((c) => ({ ...c, audience: 'office' })); jokeTrack('product_tab', tier, { tab: 'presentation' }); (document.getElementById('bit-story') ?? document.querySelector('.bt-lline [contenteditable]'))?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }}>▦ a presentation</button>
+              </div>
+            )}
             <div className="bt-box">
               <div className="bt-box-head">
                 <label htmlFor="bit-story" className="bt-box-title">
