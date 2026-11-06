@@ -647,7 +647,17 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   type WriteOpts = { text?: string; controls?: BitControls; writeId?: string; fromSignIn?: boolean; lines?: GivenLines }
 
   /** The lined box, on the homepage and on every guide / funniest page (Nov 6 2026). */
-  const lined = flags.ondemand
+  /** Nov 6 2026: one open box by default. The hook / setup / tags / button
+   *  lines read as a form everyone had to fill in, and nobody typed; they are
+   *  now an option ("build it line by line"), remembered per browser. */
+  const [linedMode, setLinedMode] = useState(false)
+  useEffect(() => { try { setLinedMode(localStorage.getItem('shutap_lined_mode') === '1') } catch { /* noop */ } }, [])
+  function pickLined(on: boolean) {
+    setLinedMode(on)
+    try { localStorage.setItem('shutap_lined_mode', on ? '1' : '0') } catch { /* noop */ }
+    jokeTrack('box_mode_changed', tier, { mode: on ? 'lines' : 'one_box' })
+  }
+  const lined = flags.ondemand && linedMode
   /** which lines the last lined write handed over (for a guest's sign-in return) */
   const linedGiven = useRef<GivenLines | undefined>(undefined)
   function givenFrom(d: Draft, only: Slot[] | null): GivenLines {
@@ -968,7 +978,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               <div className="bt-ptabs" role="tablist" aria-label="What are you saying funnier?">
                 <button type="button" role="tab" aria-selected className="bt-ptab on">✎ what happened</button>
                 <Link to="/realtors" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'realtors' })}>🏠 a realtor listing</Link>
-                <Link to="/toasts" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'toasts' })}>🥂 a toast <small>soon</small></Link>
+                <Link to="/toasts" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'toasts' })}>🥂 a toast</Link>
                 <Link to="/business" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'enterprise' })}>▦ a presentation</Link>
               </div>
             )}
@@ -1062,6 +1072,11 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 </div>
               )}
             </div>
+            {flags.ondemand && (
+              <button type="button" className="bt-mode" onClick={() => pickLined(!lined)}>
+                {lined ? '← back to one box: just type what happened' : 'or build it line by line: hook · setup · tags · button, lock the ones you love'}
+              </button>
+            )}
             {error && (
               <p role="alert" className="bt-note" style={{ textAlign: 'center', color: 'var(--rose-ink)', fontSize: 'var(--fs-small)' }}>
                 {error}
