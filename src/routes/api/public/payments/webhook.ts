@@ -244,6 +244,18 @@ export const Route = createFileRoute('/api/public/payments/webhook')({
                 const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
                 await recordKitPrepaid(supabaseAdmin as any, s.metadata.userId, s.id, env);
               }
+              // a toast bought before it's written: one credit (Nov 6 2026)
+              if (s?.mode === 'payment' && s?.metadata?.kind === 'toast_prepay' && s?.payment_status === 'paid' && s.metadata.userId) {
+                const { recordToastPrepaid } = await import('@/lib/payments.functions');
+                const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+                await recordToastPrepaid(supabaseAdmin as any, s.metadata.userId, s.id, env, s.metadata.parentId ?? null);
+              }
+              // "remove the mark" on the free toast (Nov 6 2026)
+              if (s?.mode === 'payment' && s?.metadata?.kind === 'toast_once' && s?.payment_status === 'paid' && s.metadata.toastId && s.metadata.userId) {
+                const { markToastPaid } = await import('@/lib/payments.functions');
+                const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+                await markToastPaid(supabaseAdmin as any, s.metadata.toastId, s.metadata.userId, s.id, env);
+              }
               break;
             }
             default:
