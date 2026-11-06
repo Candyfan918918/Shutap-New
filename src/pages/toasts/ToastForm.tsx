@@ -506,8 +506,8 @@ export function ToastForm({ occasionIn, prepaidSession }: { occasionIn?: Occasio
             )}
             {sheet === 'off' && (
               <>
-                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>Shutap Toasts opens soon.</h3>
-                <p className="rl-note">The toasts are being rated in-house first. Your form is kept on this device.</p>
+                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>Shutap Toasts opens later today.</h3>
+                <p className="rl-note">Your form is kept on this device. Come back tonight and tap write my toast.</p>
                 <button type="button" className="rl-btn ghost" onClick={() => setSheet(null)}>close</button>
               </>
             )}

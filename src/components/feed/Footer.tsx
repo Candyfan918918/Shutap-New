@@ -5,7 +5,7 @@ import './feed.css'
 const LINKS: Array<[string, string]> = [
   ['/bits', 'bits'],
   ['/realtors', 'realtors'],
-  ['/toasts', 'toasts · soon'],
+  ['/toasts', 'toasts'],
   ['/guides', 'guides'],
   ['/funniest', 'the funniest'],
   ['/business', 'enterprise'],
