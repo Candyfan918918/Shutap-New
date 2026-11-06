@@ -18,6 +18,16 @@ test('kits: free 1 ever, basic 20 a month, pro unlimited', () => {
   assert.equal(can('kit', 'basic', 20).ok, false)
   assert.equal(limitFor('kit', 'pro').cap, null)
 })
+test('toasts: free the first one ever, basic 1 a month, pro unlimited', () => {
+  assert.deepEqual(limitFor('toast', 'free'), { cap: 1, period: 'ever' })
+  assert.deepEqual(limitFor('toast', 'basic'), { cap: 1, period: 'month' })
+  assert.equal(can('toast', 'free', 0).ok, true)
+  assert.equal(can('toast', 'free', 1).ok, false)
+  assert.equal(can('toast', 'basic', 1).ok, false)
+  assert.equal(limitFor('toast', 'pro').cap, null)
+  assert.equal(can('toast', 'pro', 999).ok, true)
+  assert.equal(can('toast', 'guest', 0).ok, false)
+})
 test('using is never counted: downloads and touches unlimited for every signed-in plan', () => {
   for (const t of ['free', 'basic', 'pro'] as const) {
     assert.equal(limitFor('download', t).cap, null)

@@ -21,8 +21,15 @@ import { KIT_CAPS, TOAST_CAPS } from './entitlements'
 /** One realtor kit, bought on its own (Nov 6 2026): a one-time Stripe price
  *  behind the lookup key kit_once. Bought before it's written (past the
  *  plan's kits) or after (to take the mark off a free kit); never counted,
- *  never marked. One toast will be the same price when Toasts opens. */
+ *  never marked. */
 export const KIT_ONCE = { priceId: 'kit_once', amount: 12.99, name: 'Shutap for Realtors · one kit', description: 'One listing kit: the walkthrough, voiceover, hooks, open-house kit, posts and straight copy, in one tone. Yours to copy and download without limits or marks, forever.' } as const
+
+/** One toast, bought on its own (Nov 6 2026): its own one-time Stripe price
+ *  behind the lookup key toast_once (Candy: not kit_once), created on first
+ *  checkout. Bought before it's written (past the plan's toasts, or "change
+ *  a line" after a lock: a new toast) or after (to take the mark off the
+ *  free toast); never counted, never marked. */
+export const TOAST_ONCE = { priceId: 'toast_once', amount: 12.99, name: 'Shutap Toasts · one toast', description: 'One toast: the speech, cue cards, phone prompter, 60-second cut, rehearse and keepsake. Edit until you lock; then yours to download without limits or marks, forever.' } as const
 
 export type PlanKey = 'basic' | 'pro' | 'pro_annual'
 export type PaidPlan = 'basic' | 'pro'

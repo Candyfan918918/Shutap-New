@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
 import { requireRealUser } from './require-real-user';
 import { type StripeEnv, createStripeClient, getStripeErrorMessage, oneTimePriceForLookupKey, priceForLookupKey } from '@/lib/stripe.server';
-import { KIT_ONCE, PLANS, isCheckoutPriceId, planByPriceId, planFromPriceId, productIdForPrice } from '@/lib/pricing';
+import { KIT_ONCE, TOAST_ONCE, PLANS, isCheckoutPriceId, planByPriceId, planFromPriceId, productIdForPrice } from '@/lib/pricing';
 import { bestPlan, rowIsActive } from '@/lib/plan.server';
 
 type CheckoutResult = { clientSecret: string } | { error: string };
@@ -418,3 +418,160 @@ export const confirmKitPrepay = createServerFn({ method: 'POST' })
     }
     return { paid: false };
   });
+
+/* ── Toasts (Nov 6 2026): one toast, $12.99, lookup key toast_once ────────
+ * Two one-time checkouts, the same shapes as the realtor kit:
+ *  · toast_prepay — bought before it's written: past the plan's toasts, or
+ *    "change a line" after a lock (a new toast). The paid session is one
+ *    credit (event toast_prepaid), spent by the next toast written past the
+ *    limit, which is stored paid: clean and never counted.
+ *  · toast_once — bought after: "remove the mark" on the free toast. The
+ *    toast becomes paid and clean everywhere.
+ * Dark until the toasts flag is on; admins can buy while it's dark (to test).
+ * Idempotent: the webhook and the return page can both record a session. */
+
+async function toastsOpenFor(supabase: any, userId: string): Promise<boolean> {
+  const { readFlags } = await import('./flags');
+  if (readFlags().toasts) return true;
+  const { data } = await supabase.rpc('has_role', { _user_id: userId, _role: 'admin' });
+  return !!data;
+}
+
+async function toastSession(
+  context: { userId: string; supabase: any },
+  data: { returnUrl: string; environment: StripeEnv },
+  metadata: Record<string, string>,
+): Promise<CheckoutResult> {
+  const { userId, supabase } = context;
+  const { data: { user } } = await supabase.auth.getUser();
+  const stripe = createStripeClient(data.environment);
+  const price = await oneTimePriceForLookupKey(stripe, TOAST_ONCE.priceId, TOAST_ONCE);
+  const customerId = await resolveOrCreateCustomer(stripe, { email: user?.email ?? undefined, userId });
+  const session = await stripe.checkout.sessions.create({
+    line_items: [{ price: price.id, quantity: 1 }],
+    mode: 'payment',
+    ui_mode: 'embedded_page',
+    locale: 'en',
+    return_url: data.returnUrl,
+    customer: customerId,
+    automatic_tax: { enabled: true },
+    customer_update: { name: 'auto', address: 'auto' },
+    invoice_creation: { enabled: true },
+    metadata: { userId, ...metadata },
+    payment_intent_data: { metadata: { userId, ...metadata } },
+  });
+  return { clientSecret: session.client_secret ?? '' };
+}
+
+/** A toast bought before it's written. `parentId` = "change a line" on a
+ *  locked toast (kept on the session for the admin feed). */
+export const createToastPrepayCheckout = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .inputValidator((data: { returnUrl: string; environment: StripeEnv; parentId?: string }) => {
+    if (data.environment !== 'sandbox' && data.environment !== 'live') throw new Error('Invalid environment');
+    if (!/^https?:\/\//.test(data.returnUrl)) throw new Error('Invalid return');
+    if (data.parentId && !/^[0-9a-f-]{36}$/i.test(data.parentId)) throw new Error('Invalid toast');
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<CheckoutResult> => {
+    try {
+      if (!(await toastsOpenFor(context.supabase, context.userId))) return { error: 'off' };
+      return await toastSession(context as any, data, data.parentId ? { kind: 'toast_prepay', parentId: data.parentId } : { kind: 'toast_prepay' });
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+/** The one place a prepaid toast credit is recorded: once per Stripe session. */
+export async function recordToastPrepaid(admin: any, userId: string, sessionId: string, env: StripeEnv, parentId?: string | null): Promise<void> {
+  const { count } = await admin.from('events').select('id', { count: 'exact', head: true }).eq('user_id', userId).eq('name', 'toast_prepaid').eq('properties->>stripe_session', sessionId);
+  if ((count ?? 0) > 0) return;
+  await admin.from('events').insert({ user_id: userId, session_id: null, name: 'toast_prepaid', product: 'toasts', properties: { product: 'toasts', stripe_session: sessionId, amount: TOAST_ONCE.amount, parent_id: parentId ?? null, env } as never } as never);
+  await admin.from('events').insert({ user_id: userId, session_id: null, name: 'toast_bought', product: 'toasts', properties: { product: 'toasts', toast_id: null, prepaid: true, parent_id: parentId ?? null, amount: TOAST_ONCE.amount, stripe_session: sessionId, env } as never } as never).then(() => {}, () => {});
+}
+
+/** Back from the prepay checkout: is the credit there? Asks Stripe if the
+ *  webhook hasn't landed yet. */
+export const confirmToastPrepay = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
+    if (!/^cs_[A-Za-z0-9_]+$/.test(data.sessionId)) throw new Error('Invalid session');
+    if (data.environment !== 'sandbox' && data.environment !== 'live') throw new Error('Invalid environment');
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<{ paid: boolean }> => {
+    const { userId } = context as { userId: string };
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    try {
+      const stripe = createStripeClient(data.environment);
+      const s = await stripe.checkout.sessions.retrieve(data.sessionId);
+      if (s.payment_status === 'paid' && s.metadata?.kind === 'toast_prepay' && s.metadata?.userId === userId) {
+        await recordToastPrepaid(supabaseAdmin as any, userId, s.id, data.environment, s.metadata?.parentId ?? null);
+        return { paid: true };
+      }
+    } catch (e) {
+      console.error('[toast prepay] status read failed', getStripeErrorMessage(e));
+    }
+    return { paid: false };
+  });
+
+/** "Remove the mark": the free toast, bought after it's written. */
+export const createToastCheckout = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .inputValidator((data: { toastId: string; returnUrl: string; environment: StripeEnv }) => {
+    if (!/^[0-9a-f-]{36}$/i.test(data.toastId)) throw new Error('Invalid toast');
+    if (data.environment !== 'sandbox' && data.environment !== 'live') throw new Error('Invalid environment');
+    if (!/^https?:\/\//.test(data.returnUrl)) throw new Error('Invalid return');
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<CheckoutResult> => {
+    try {
+      if (!(await toastsOpenFor(context.supabase, context.userId))) return { error: 'off' };
+      const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+      const { data: toast } = await (supabaseAdmin as any).from('toasts').select('id, paid, marked').eq('id', data.toastId).eq('user_id', context.userId).maybeSingle();
+      if (!toast) return { error: 'not_found' };
+      if (toast.paid || !toast.marked) return { error: 'already_paid' };
+      return await toastSession(context as any, data, { kind: 'toast_once', toastId: data.toastId });
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+/** After the return: is this toast paid yet? */
+export const toastPaidStatus = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { toastId: string; sessionId?: string; environment: StripeEnv }) => {
+    if (!/^[0-9a-f-]{36}$/i.test(data.toastId)) throw new Error('Invalid toast');
+    if (data.sessionId && !/^cs_[A-Za-z0-9_]+$/.test(data.sessionId)) throw new Error('Invalid session');
+    if (data.environment !== 'sandbox' && data.environment !== 'live') throw new Error('Invalid environment');
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<{ paid: boolean }> => {
+    const { userId } = context as { userId: string };
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const admin = supabaseAdmin as any;
+    const { data: toast } = await admin.from('toasts').select('id, paid').eq('id', data.toastId).eq('user_id', userId).maybeSingle();
+    if (!toast) return { paid: false };
+    if (toast.paid) return { paid: true };
+    if (!data.sessionId) return { paid: false };
+    try {
+      const stripe = createStripeClient(data.environment);
+      const s = await stripe.checkout.sessions.retrieve(data.sessionId);
+      if (s.payment_status === 'paid' && s.metadata?.kind === 'toast_once' && s.metadata?.toastId === data.toastId && s.metadata?.userId === userId) {
+        await markToastPaid(admin, data.toastId, userId, s.id, data.environment);
+        return { paid: true };
+      }
+    } catch (e) {
+      console.error('[toast checkout] status read failed', getStripeErrorMessage(e));
+    }
+    return { paid: false };
+  });
+
+/** The one place a toast becomes paid (the mark comes off): idempotent. */
+export async function markToastPaid(admin: any, toastId: string, userId: string, sessionId: string, env: StripeEnv): Promise<void> {
+  const { data: toast } = await admin.from('toasts').select('id, paid').eq('id', toastId).eq('user_id', userId).maybeSingle();
+  if (!toast || toast.paid) return;
+  const { error } = await admin.from('toasts').update({ paid: true, marked: false, updated_at: new Date().toISOString() }).eq('id', toastId).eq('user_id', userId);
+  if (error) { console.error('[toast checkout] could not mark paid', error.message); return; }
+  await admin.from('events').insert({ user_id: userId, session_id: null, name: 'toast_bought', product: 'toasts', properties: { product: 'toasts', toast_id: toastId, unmark: true, amount: TOAST_ONCE.amount, stripe_session: sessionId, env } as never } as never).then(() => {}, () => {});
+}
