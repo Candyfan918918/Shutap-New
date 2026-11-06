@@ -605,7 +605,7 @@ export type VersionResult =
 export const varyBit = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) =>
     z
-      .object({ bit_id: z.string().uuid(), from_version_id: z.string().uuid().optional(), kind: z.enum(VARY_KINDS), locked: z.array(z.enum(SLOTS)).max(6).optional(), ...Ctx })
+      .object({ bit_id: z.string().uuid(), from_version_id: z.string().uuid().optional(), kind: z.enum(VARY_KINDS), locked: z.array(z.enum(SLOTS)).max(6).optional(), locked_lines: z.record(z.enum(SLOTS), z.string().max(600)).optional(), ...Ctx })
       .parse(d),
   )
   .handler(async ({ data }): Promise<VersionResult> => {
@@ -637,7 +637,12 @@ export const varyBit = createServerFn({ method: 'POST' })
     const from = versions.find((v) => v.id === data.from_version_id) ?? versions[0]
     if (!from) return { ok: false, reason: 'not_found' }
     const controls = { ...DEFAULT_CONTROLS, ...(row.controls ?? {}) } as BitControls
-    const fromDraft = { hook: from.hook, setup: from.setup, tags: from.tags, button: from.button, why: from.why ?? '' }
+    let fromDraft = { hook: from.hook, setup: from.setup, tags: from.tags, button: from.button, why: from.why ?? '' }
+    // Locked lines the user edited on screen win over the stored version.
+    for (const sl of data.locked ?? []) {
+      const mine = data.locked_lines?.[sl]?.trim()
+      if (mine) fromDraft = writeSlot(fromDraft, sl, mine)
+    }
     let draft = await varyBitDraft(row.story_clean, fromDraft, controls, data.kind, data.locked ?? [])
     if (!draft) {
       await refund()
