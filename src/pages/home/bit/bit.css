@@ -62,12 +62,14 @@
 /* the formats (Nov 5 2026): stand-up, sketch, skit as rows in the slot the
    caption used to take, under the video */
 .bt-fmts { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-.bt-fmt { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 10px 12px; min-height: 56px; text-align: left; }
-.bt-fmt > svg { flex-shrink: 0; }
-.bt-fmt .t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+/* .bt-act.bt-fmt: .bt-act (column, centered) comes later in this file and won at equal
+   specificity, stacking the icon over the text (Nov 6 2026). */
+.bt-act.bt-fmt { flex-direction: row; align-items: center; justify-content: flex-start; gap: 12px; padding: 12px 14px; min-height: 60px; text-align: left; }
+.bt-act.bt-fmt > svg { flex-shrink: 0; width: 24px; height: 24px; }
+.bt-fmt .t { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0; flex: 1; }
 .bt-fmt .t b { font-weight: 600; }
 .bt-fmt .t .bt-note { white-space: normal; }
-.bt-fmt .arrow { margin-left: auto; color: var(--faint); }
+.bt-fmt .arrow { margin-left: auto; align-self: center; color: var(--faint); }
 .bt-vc { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
 .bt-vc-video { width: 180px; flex-shrink: 0; }
 .bt-vc-right { flex: 1 1 240px; min-width: 0; display: flex; flex-direction: column; gap: 12px; align-self: stretch; justify-content: center; }
