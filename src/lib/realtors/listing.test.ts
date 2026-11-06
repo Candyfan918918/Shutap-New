@@ -7,10 +7,13 @@ import type { Kit, Listing, ListingControls } from './listing'
 
 const SAMPLE = '4B Alder Court, San Mateo, CA 94401. $749,000. 2 bed 1 bath condo, 870 sq ft, built 1987. Original hardwood, balcony. HOA $410/month. Open house Sunday 1-4.'
 
-test('a price under $50k or an HOA fee is never the listing price', () => {
-  assert.equal(factsFromText('HOA $410/month. Taxes $10,000. Listed at $749,000.').price, '$749,000')
-  assert.equal(factsFromText('Fees $10,000 and 7000 points').price, undefined)
-  assert.equal(factsFromText('lot 7000 sq ft on 40 acres').sqft, 7000)
+test('the price is the one beside the facts, never a fee; a Matrix portal page reads exactly', () => {
+  assert.equal(factsFromText('HOA $410/month. Taxes $10,000. Listed at $749,000. 2 bed 1 bath.').price, '$749,000')
+  const matrix = 'Office Ph: (650) 622-1000 Find a Home Back to Results 1 of 17 230 Selby Ln Atherton, California 94027 MLS#: CC41153069 Total Home $2,588,000 New Listing Active 2 Bedrooms 1 Full Baths 1 Half Baths 1,340 sqft 5,000 Lot SqFt Built in 1957 Detached Upcoming Open Houses 11/07/2026 2:00PM-4:00PM'
+  const f = factsFromText(matrix)
+  assert.equal(f.price, '$2,588,000'); assert.equal(f.beds, 2); assert.equal(f.baths, 1.5); assert.equal(f.sqft, 1340); assert.equal(f.year_built, 1957)
+  assert.equal(f.address, '230 Selby Ln'); assert.equal(f.city, 'Atherton')
+  assert.equal(factsFromText('a cheap lot: $9,500, 0.2 acres, 3 bed').price, '$9,500')
 })
 
 test('facts come out of pasted text', () => {
