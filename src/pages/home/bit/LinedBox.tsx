@@ -58,12 +58,14 @@ type Props = {
   /** the bit as typed, every written line locked (a bit) */
   onKeep: () => void
   onSignIn?: () => void
+  /** a signed-out visitor tapped lock (a line) or lock all: sign in first, then it locks */
+  onGuestLock?: (what: Slot | 'all') => void
   onLimit: () => void
   onCrisis: () => void
   say: (m: string) => void
 }
 
-export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, busy, onFinish, onKeep, onSignIn, onLimit, onCrisis, say }: Props) {
+export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, busy, onFinish, onKeep, onSignIn, onGuestLock, onLimit, onCrisis, say }: Props) {
   const touch = useServerFn(touchLine)
   const [open, setOpen] = useState<Slot | null>(null)
   const [options, setOptions] = useState<TouchOption[] | null>(null)
@@ -119,11 +121,13 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
   }
   function toggleLock(s: Slot) {
     if (!readSlot(lines, s).trim()) return
+    if (tier === 'guest' && onGuestLock && !locked.includes(s)) return onGuestLock(s)
     const on = !locked.includes(s)
     onLocked(on ? [...locked, s] : locked.filter((x) => x !== s))
     jokeTap('line_locked', tier, { slot: s, on, where: 'box' })
   }
   function lockAll() {
+    if (tier === 'guest' && onGuestLock) return onGuestLock('all')
     onLocked(written)
     jokeTap('lines_locked_all', tier, { count: written.length })
   }
@@ -200,7 +204,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
           <button type="button" className="bt-btn ghost" disabled={busy || !written.length} onClick={onFinish} title="Shutap writes the empty lines around yours">
             finish the bit
           </button>
-          <button type="button" className="bt-btn bt-go" disabled={busy || !guide.ready} onClick={onKeep} title="every written line locked: the bit as you typed it">
+          <button type="button" className="bt-btn bt-go" disabled={busy || !(guide.ready || (tier === 'guest' && written.length > 0))} onClick={onKeep} title="every written line locked: the bit as you typed it">
             keep it →
           </button>
         </div>

@@ -60,6 +60,8 @@ import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
 const LINES_KEY = 'shutap_bit_lines'
+/** Nov 5 2026: a guest's tap on lock / lock all, done once they're signed in */
+const PENDING_LOCK_KEY = 'shutap_pending_lock'
 const AUTOSTART_KEY = 'shutap_bit_autostart'
 const CONTROLS_KEY = 'shutap_bit_controls'
 const PENDING_KEY = 'shutap_bit_pending'
@@ -109,6 +111,7 @@ type ShownBit = Bit & { locked: boolean }
  *  they just tapped. The bit comes back with them either way. */
 const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   rewrite: { title: 'Sign in to rewrite it.', sub: 'Free. Hotter, tighter, a new tag, or mix your own. Your bit comes with you.' },
+  lock: { title: 'Sign in to lock your lines.', sub: 'Free. Your lines stay in the box and lock the moment you’re in.' },
   funnier: { title: 'Sign in to make a line funnier.', sub: 'Free: three ways for that line, built from the lines you wrote. Your lines stay in the box.' },
   swap: { title: 'Sign in to swap in a crowd-work angle.', sub: 'Free. Your bit comes with you, with all five angles.' },
   standup: { title: 'Sign in to run it as stand-up.', sub: 'Free. The teleprompter, at talking pace.' },
@@ -133,7 +136,7 @@ const STEPS = ['reading it · names removed', 'finding the angle', 'writing four
 /* ── the note left before sign-in, so the bit comes back after it ── */
 /** What a guest was doing when they were asked to sign in; picked back up
  *  once they're in. */
-type SigninFrom = 'funnier' | 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'watch' | 'save' | 'standup' | 'skit' | 'sketch' | 'post' | 'sheet' | 'one_tap'
+type SigninFrom = 'funnier' | 'lock' | 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'watch' | 'save' | 'standup' | 'skit' | 'sketch' | 'post' | 'sheet' | 'one_tap'
 function writePending(bitId: string, anon: string, from?: SigninFrom) {
   try {
     localStorage.setItem(PENDING_KEY, JSON.stringify({ bit_id: bitId, anon, from, at: Date.now() }))
@@ -650,11 +653,33 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     const tags = [pick('tag0'), pick('tag1')].map((t) => t ?? '')
     return { hook: pick('hook'), setup: pick('setup'), tags: tags.some(Boolean) ? tags : undefined, button: pick('button') }
   }
+  /** lock / lock all while signed out: remember the tap, ask for sign-in,
+   *  and lock once they're in (the lines themselves are kept in LINES_KEY). */
+  function guestLock(what: Slot | 'all') {
+    try { sessionStorage.setItem(PENDING_LOCK_KEY, what) } catch { /* noop */ }
+    jokeTap('lock_needs_signin', tier, { what })
+    openSignin('lock')
+  }
+  useEffect(() => {
+    if (tier === 'guest') return
+    let what: string | null = null
+    try { what = sessionStorage.getItem(PENDING_LOCK_KEY); sessionStorage.removeItem(PENDING_LOCK_KEY) } catch { /* noop */ }
+    if (!what) return
+    const written = writtenSlots(lines)
+    const add = what === 'all' ? written : written.filter((s) => s === what)
+    if (!add.length) return
+    setLinesLocked((prev) => Array.from(new Set([...prev, ...add])))
+    jokeTrack('lock_after_signin', tier, { what })
+    // lines come back from this tab's storage on load; run once the tier lands
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tier])
   /** finish the bit: the locked lines are kept word for word; the rest is Shutap's */
   function finishLined() {
     const given = givenFrom(lines, linesLocked)
     linedGiven.current = given
     jokeTap('lined_finish', tier, { written: writtenSlots(lines).length, locked: linesLocked.length })
+    // Signed out: sign in first; the bit is written the moment they're in.
+    if (tier === 'guest') return showLimit('guest')
     void onWrite({ text: linesText(lines), lines: given })
   }
   /** keep it: every written line is theirs; only the empty ones are written */
@@ -662,6 +687,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     const given = givenFrom(lines, null)
     linedGiven.current = given
     jokeTap('lined_keep', tier, { written: writtenSlots(lines).length })
+    if (tier === 'guest') return showLimit('guest')
     void onWrite({ text: linesText(lines), lines: given })
   }
 
@@ -974,6 +1000,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   onFinish={finishLined}
                   onKeep={keepLined}
                   onSignIn={tier === 'guest' ? () => openSignin('funnier') : undefined}
+                  onGuestLock={guestLock}
                   onLimit={() => openPaywall('rewrite')}
                   onCrisis={() => { setPhase('crisis'); jokeTrack('crisis_route_shown', tier) }}
                   say={say}
