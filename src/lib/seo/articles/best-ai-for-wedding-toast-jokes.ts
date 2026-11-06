@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "best-ai-for-wedding-toast-jokes",
   kind: "guide",
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "best ai for wedding toast jokes",
   title: "Best AI for Wedding Toast Jokes, and Where It Stops | Shutap",
   h1: "The best AI for wedding toast jokes, and where it stops",

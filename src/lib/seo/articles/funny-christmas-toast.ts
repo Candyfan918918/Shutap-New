@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "funny-christmas-toast",
   kind: "guide",
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "funny christmas toast",
   title: "Funny Christmas Toast for Family or the Office Party | Shutap",
   h1: "A funny Christmas toast, for the family table or the office party",

@@ -4,7 +4,7 @@ const guide: Guide = {
   slug: "funny-wedding-ceremony-script",
   kind: "guide",
   preset: { audience: "family", voice: "storyteller", length: "2m", heat: 2 },
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "funny wedding ceremony script",
   title: "Funny Wedding Ceremony Script: How to Write One | Shutap",
   h1: "How to write a funny wedding ceremony script",

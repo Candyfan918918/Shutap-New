@@ -4,7 +4,7 @@ const guide: Guide = {
   slug: "funny-real-estate-captions",
   kind: "guide",
   preset: { audience: "social", voice: "dry", length: "15s", heat: 2 },
-  topic: "jokes-for-occasions",
+  topic: "realtors",
   keyword: "funny real estate captions",
   title: "Funny Real Estate Captions for Listings & Reels | Shutap",
   h1: "Funny real estate captions for listings, open houses and sold posts",

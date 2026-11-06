@@ -17,6 +17,16 @@ const BY_CATEGORY: Partial<Record<GuideTopic, WriterCopy>> = {
     sub: 'Who it\'s for and the one story everyone already knows. Get the lines and the video. Free.',
     placeholder: 'who it\'s for, and the story about them everyone already knows…',
   },
+  'toasts-and-speeches': {
+    heading: 'Write your toast here.',
+    sub: 'Who it\'s for and the story about them everyone already knows. Get the lines, funnier. Free.',
+    placeholder: 'who it\'s for, and the story about them everyone already knows…',
+  },
+  'presentations-and-work': {
+    heading: 'Write your next talk here.',
+    sub: 'The room you\'re speaking to and the thing that happened at work. Get the lines, funnier. Free.',
+    placeholder: 'the meeting, the training, the room you\'re speaking to…',
+  },
   roasts: {
     heading: 'Roast them here.',
     sub: 'Who, and the thing they do that everyone notices. The joke goes at the situation, never at you.',

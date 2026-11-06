@@ -4,7 +4,7 @@ const guide: Guide = {
   slug: "funny-maid-of-honor-speech",
   kind: "guide",
   preset: { audience: "family", voice: "storyteller", length: "2m", heat: 2 },
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "funny maid of honor speech",
   title: "How to Write a Funny Maid of Honor Speech | Shutap",
   h1: "How to write a funny maid of honor speech",

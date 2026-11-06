@@ -4,7 +4,7 @@ const guide: Guide = {
   slug: "best-man-speech-jokes",
   kind: "guide",
   preset: { audience: "family", voice: "storyteller", length: "2m", heat: 2 },
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "best man speech jokes",
   title: "Best Man Speech Jokes: Openers, Lines & Closers | Shutap",
   h1: "Best man speech jokes: openers, lines and closers",

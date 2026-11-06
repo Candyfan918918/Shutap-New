@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "funny-eulogy",
   kind: "guide",
-  topic: "jokes-for-occasions",
+  topic: "toasts-and-speeches",
   keyword: "funny eulogy",
   title: "Funny Eulogy: Gentle Humor That Sounds Like Them | Shutap",
   h1: "How to write a funny eulogy that still feels right",

@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "ai-tool-for-funny-real-estate-listings",
   kind: "guide",
-  topic: "using-shutap",
+  topic: "realtors",
   keyword: "ai tool for funny real estate listings",
   title: "AI Tool for Funny Real Estate Listings: How to Pick | Shutap",
   h1: "Which AI tool for funny real estate listings, and how to check it",

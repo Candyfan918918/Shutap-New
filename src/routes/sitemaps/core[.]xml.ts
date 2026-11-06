@@ -10,6 +10,8 @@ const newest = (dates: (string | undefined)[]) => dates.filter(Boolean).sort().a
 /** Sitewide reposition to "the humor amplifier" (PRs #105–#122), then Oct 30: audience is everyone, no "generator" anywhere: every page's
  *  header, CTA and copy changed that day, so no lastmod is older than this. */
 const REPOSITIONED = "2026-10-30";
+/** Nov 6 2026: site description rewritten ("Shutap Humor Amplifier Lab helps everyone say it funnier"). */
+const REWRITTEN = "2026-11-06";
 const fresh = (d: string | undefined) => newest([d, REPOSITIONED]);
 
 /**
@@ -21,7 +23,7 @@ const fresh = (d: string | undefined) => newest([d, REPOSITIONED]);
 export function getCoreEntries(): SitemapEntry[] {
   return [
   { path: "/", lastmod: todayPacific(), changefreq: "daily", priority: "1.0" },
-  { path: "/guides", lastmod: fresh(newest(GUIDES.map((g) => g.updated ?? g.published))), changefreq: "weekly", priority: "0.9" },
+  { path: "/guides", lastmod: newest([REWRITTEN, fresh(newest(GUIDES.map((g) => g.updated ?? g.published)))]), changefreq: "weekly", priority: "0.9" },
   // Nov 6 2026: the products. /humor-amplifier redirects to /bits.
   { path: "/bits", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.9" },
   { path: "/realtors", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.9" },
@@ -56,18 +58,18 @@ export function getCoreEntries(): SitemapEntry[] {
     changefreq: "monthly",
     priority: "0.7",
   })),
-  { path: "/about", lastmod: REPOSITIONED, changefreq: "monthly", priority: "0.8" },
-  { path: "/how-it-works", lastmod: REPOSITIONED, changefreq: "monthly", priority: "0.8" },
+  { path: "/about", lastmod: REWRITTEN, changefreq: "monthly", priority: "0.8" },
+  { path: "/how-it-works", lastmod: REWRITTEN, changefreq: "monthly", priority: "0.8" },
   { path: "/pricing", lastmod: REPOSITIONED, changefreq: "monthly", priority: "0.8" },
-  { path: "/trust", lastmod: REPOSITIONED, changefreq: "monthly", priority: "0.6" },
-  { path: "/faq", lastmod: REPOSITIONED, changefreq: "monthly", priority: "0.7" },
+  { path: "/trust", lastmod: REWRITTEN, changefreq: "monthly", priority: "0.6" },
+  { path: "/faq", lastmod: REWRITTEN, changefreq: "monthly", priority: "0.7" },
   { path: "/contact", lastmod: REPOSITIONED, changefreq: "yearly", priority: "0.4" },
   { path: "/business", lastmod: REPOSITIONED, changefreq: "monthly", priority: "0.6" },
-  { path: "/terms", lastmod: REPOSITIONED, changefreq: "yearly", priority: "0.4" },
+  { path: "/terms", lastmod: REWRITTEN, changefreq: "yearly", priority: "0.4" },
   { path: "/privacy", lastmod: REPOSITIONED, changefreq: "yearly", priority: "0.4" },
   { path: "/guidelines", lastmod: REPOSITIONED, changefreq: "yearly", priority: "0.4" },
   { path: "/safety", lastmod: REPOSITIONED, changefreq: "yearly", priority: "0.4" },
-  { path: "/ai-disclosure", lastmod: REPOSITIONED, changefreq: "yearly", priority: "0.4" },
+  { path: "/ai-disclosure", lastmod: REWRITTEN, changefreq: "yearly", priority: "0.4" },
   { path: "/disclaimer", lastmod: REPOSITIONED, changefreq: "yearly", priority: "0.4" },
   { path: "/legal", lastmod: REPOSITIONED, changefreq: "yearly", priority: "0.3" },
   ];

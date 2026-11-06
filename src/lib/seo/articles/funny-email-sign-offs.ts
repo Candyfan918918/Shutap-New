@@ -4,7 +4,7 @@ const guide: Guide = {
   slug: "funny-email-sign-offs",
   kind: "guide",
   preset: { audience: "work", voice: "dry", length: "15s" },
-  topic: "jokes-for-occasions",
+  topic: "presentations-and-work",
   keyword: "funny email sign offs",
   title: "Funny Email Sign-Offs for Work, With Examples | Shutap",
   h1: "Funny email sign-offs that fit the email",

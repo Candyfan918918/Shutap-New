@@ -4,7 +4,7 @@ const guide: Guide = {
   slug: "humorous-speech-ideas-for-toastmasters",
   kind: "guide",
   preset: { audience: "live", voice: "storyteller", length: "2m", heat: 3 },
-  topic: "jokes-for-occasions",
+  topic: "presentations-and-work",
   keyword: "humorous speech ideas for toastmasters",
   title: "Humorous Speech Ideas for Toastmasters | Shutap",
   h1: "Humorous speech ideas for Toastmasters",

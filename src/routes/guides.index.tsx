@@ -6,11 +6,11 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 import { GUIDES, GUIDE_TOPICS, guidePath, guidesInTopic, topicPath } from "@/lib/seo/guides";
 
 const PATH = "/guides";
-const TITLE = "Guides & Tools for Writing Funnier Videos and Sets | Shutap";
+const TITLE = "Guides for Saying It Funnier — Bits, Listings, Toasts and Talks | Shutap";
 const DESCRIPTION =
-  "Guides and tools from the Shutap Humor Amplifier Lab: storytime scripts, stand-up bits, POV skits, toasts, captions, stand-up, sketch and skit, plus how to write a hook, tags and a button. Every technique here feeds the humor amplifier.";
+  "Guides from the Shutap Humor Amplifier Lab on how to say it funnier, for any occasion, and the techniques behind them.";
 const CAPSULE =
-  "Shutap is the humor amplifier. These guides cover the craft: how to turn a story into a bit, how long a TikTok bit should be, and how to write tags, plus the tools for scripts, skits, stand-up, sketch and skit.";
+  "These guides cover the craft behind everything Shutap makes: turning a story into a bit, shooting a listing people watch to the end, building a toast the room remembers, and landing a laugh in a deck. Every technique here is in the bank Shutap drafts from, so what you read here is what the tool uses.";
 
 const toItems = (kind: "tool" | "guide" | "business") =>
   GUIDES.filter((g) => g.kind === kind).map((g) => ({
@@ -56,13 +56,13 @@ export const Route = createFileRoute("/guides/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "Shutap guides and tools",
+          name: "Shutap Humor Amplifier Lab guides",
           description: DESCRIPTION,
           url: `${SITE_URL}${PATH}`,
           hasPart: [{
             "@type": "WebPage",
-            name: "The humor amplifier",
-            url: `${SITE_URL}/humor-amplifier`,
+            name: "Shutap Bits",
+            url: `${SITE_URL}/bits`,
           }, ...GUIDES.map((g) => ({
             "@type": "WebPage",
             name: g.h1,
@@ -77,7 +77,7 @@ export const Route = createFileRoute("/guides/")({
     <ContentPage
       tryIt="guides"
       breadcrumbs={[{ name: "Guides", path: PATH }]}
-      h1="Guides and tools for writing funnier"
+      h1="Guides for saying it funnier"
       capsule={CAPSULE}
       sections={[]}
       linkGroups={[

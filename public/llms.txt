@@ -1,20 +1,23 @@
 # Shutap
 
-> Shutap is the humor amplifier. Type what happened and Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, then runs it as stand-up, lays it out as a skit, or formats it as a one-page sketch. Film it for TikTok, Reels or YouTube Shorts, take it to the stage, or bring it to a toast, a talk or a meeting. Shutap amplifies your humor; it never replaces it. Your stories and jokes stay yours. Identifying details are removed from stories before storage, and Shutap never uses your content to train AI. Its writing is guided by the Shutap Humor Amplifier Lab dataset, an in-house joke dataset the Shutap team writes, selects and rates. The Humor Amplifier Lab is Shutap's research arm: the dataset, The funniest series and the work behind Shutap Enterprise.
+> Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format. You bring what you want to say; Shutap drafts it funnier; you decide what stays. Your stories and words stay yours. Identifying details are removed from stories before storage, and Shutap never uses your content to train AI. Its writing is guided by the Shutap Humor Amplifier Lab dataset, an in-house joke dataset the Shutap team writes, selects and rates. The Humor Amplifier Lab is Shutap's research arm: the dataset, The funniest series and the work behind Shutap Enterprise.
 
 The brand line is "SHUTAP. Say it funnier." Writing takes a free account: one bit a day, downloads unlimited with a watermark. Shutap charges for making something new, never for using it. Basic ($19.99/month: 3 bits a day with rewrites, 20 realtor kits a month, 1 toast a month) and Pro ($49.99/month: unlimited bits, kits and toasts, plus the Mirror) add rewrites and remove the watermark. One realtor kit or one toast on its own is $12.99. A "wild" setting runs from 1 (true to your story) to 5 (goes wild). Shutap writes jokes about the situation, never about a real person someone could identify. It is an entertainment tool, not a healthcare, mental-health, crisis or legal service. 18+.
 
 ## Core
 
-- [What Shutap is](https://shutap.com/about): The humor amplifier — storytime, POV, talking-head and skit videos, first drafts for stand-up, toasts and talks. It amplifies your humor; it never replaces it.
-- [How it works](https://shutap.com/how-it-works): Type what happened, names and places are removed, get the bit with its video, then pick stand-up, sketch or skit.
+- [What Shutap is](https://shutap.com/about): Bits for creators, listing kits for realtors, toasts for everyone, Enterprise presentations by request. Shutap drafts; you decide what stays.
+- [Shutap Bits](https://shutap.com/bits): Type what happened and get a bit (hook, setup, tags, button) with a 5-second video; run it as stand-up, a sketch or a skit.
+- [Shutap for Realtors](https://shutap.com/realtors): Paste a listing link; get the walkthrough to shoot, voiceover, hooks, open-house kit, posts and straight copy, fair-housing checked, in your tone. First kit free.
+- [Shutap Toasts](https://shutap.com/toasts): Your stories about the person, in your words, built into a toast with cue cards and a phone prompter: best man, maid of honor, Thanksgiving, holiday party, New Year's and more.
+- [How it works](https://shutap.com/how-it-works): How bits, realtor kits and toasts work, and Enterprise by request.
 - [Pricing](https://shutap.com/pricing): Free account: 1 bit a day, unlimited watermarked downloads, the first realtor kit; Basic ($19.99/mo): 3 bits a day with rewrites, 20 realtor kits a month and 1 toast a month, clean; Pro ($49.99/mo): unlimited bits, kits and toasts, plus the Mirror. Downloads, copies and "funnier" are never counted.
 - [FAQ](https://shutap.com/faq): Is it free, can I use the bits in my own videos and sets, is my name on anything, what can I post.
 - [Trust & privacy](https://shutap.com/trust): Names and places removed from stories before saving, private until you post, never used to train AI, takedown path.
 
 ## Guides and tools
 
-- [The humor amplifier](https://shutap.com/humor-amplifier): Turn what happened into a post: a bit in your voice, a 5-second video.
+- [Shutap Bits (old address)](https://shutap.com/humor-amplifier): Redirects to /bits.
 - [All guides and tools](https://shutap.com/guides): Index of the pages below.
 - [Storytime script writer](https://shutap.com/guides/storytime-script-writer): Turn a story into a script with a hook, setup, tags and a button.
 - [Stand-up bit writer](https://shutap.com/guides/stand-up-bit-writer): A first draft of a bit from a real story.

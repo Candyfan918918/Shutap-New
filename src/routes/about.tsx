@@ -7,73 +7,75 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 const PATH = "/about";
 const TITLE = "About — Shutap Humor Amplifier Lab";
 const DESCRIPTION =
-  "Shutap is the humor amplifier. Type what happened, get a bit in your voice with a hook, setup, tags and button, a 5-second video, then Run it as stand-up, a sketch or a skit.";
+  "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format.";
 const CAPSULE =
-  "Shutap is the humor amplifier. Type what happened. Shutap amplifies it into a bit in your voice — hook, setup, tags and a button — with a 5-second video, then runs it as stand-up, lays it out as a skit, or formats it as a one-page sketch. It amplifies your humor; it never replaces it.";
+  "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format. You bring what you want to say; Shutap drafts it funnier; you decide what stays. Your stories and words stay yours.";
 const SECTIONS = [
   {
     heading: "Our goal: say it funnier",
-    body: "Shutap exists to help people say it funnier, because humor is a form of wisdom and the people who use it well are listened to. Shutap amplifies your humor and never replaces it: stay funny, stay human. Today that starts with a bit and a video from what happened to you. Over time we want to bring it to more of how people speak, present and tell stories, so nobody has to say it flat.",
+    body: "People who use humor well get listened to. Shutap started with bits for creators. Now it also makes listing kits for realtors and toasts for anyone with a speech to give, and Enterprise brings it to company presentations. Shutap drafts from your material; you decide what stays. Stay funny, stay human.",
   },
   {
-    heading: "A bit, not a pun",
-    body: "Most joke tools hand you a one-liner about a keyword. Shutap amplifies the humor already in your story: a hook that stops the scroll, a setup that tells it straight, tags that keep the laughs coming, and a button to end on. It uses your details and your voice, so it sounds like you, not like anyone could have posted it. It amplifies; it never replaces.",
+    heading: "Bits, for creators",
+    body: "Type what happened and get a bit: a hook that stops the scroll, a setup, tags and a button, plus a 5-second video. Tap \"funnier\" on any line you want punched up; the rest stays yours. Run it as stand-up on the teleprompter, a one-page sketch or a skit you film alone. shutap.com/bits",
   },
   {
-    heading: "Built for content creators",
-    body: "Storytime, POV, talking-head and skit videos all run on the same structure. Type the story you were going to tell anyway, get the bit with its 5-second video, and post it, or read it straight off the teleprompter while you film for TikTok, Instagram Reels or YouTube Shorts.",
+    heading: "Kits, for realtors",
+    body: "Paste the listing's web address. Shutap drafts the walkthrough to shoot, the voiceover, the hooks, the open-house kit, the posts and the straight listing copy, in your tone: professional, luxury, funny or young. Fair-housing checked, nothing made up. Shoot mode opens the teleprompter on your phone. shutap.com/realtors",
   },
   {
-    heading: "Built for comedians",
-    body: "Stand-up starts with a premise and lives on tags. Shutap gives you a first draft of the bit — setup, tags, button — to push against your own instincts. Use it to get unstuck, find a new tag, or warm up before a writing session, then rehearse it on the prompter.",
+    heading: "Toasts, for everyone",
+    body: "Best man, maid of honor, parents, Thanksgiving, the holiday party, New Year's, a retirement, a birthday. You give the stories in your words, and Shutap builds them into a toast with pause marks, a running clock, cue cards and a phone prompter. Names stay in your browser. shutap.com/toasts",
   },
   {
-    heading: "Stand-up, sketch and skit",
-    body: "Every bit comes in the formats comics actually perform. Stand-up runs it on a teleprompter, full-screen, at talking pace. The sketch is one page in script format, with characters and action. The skit is a shot list for a short vertical video you film alone, playing every role. Each takes a free account.",
-  },
-  {
-    heading: "What to post today",
-    body: "Never start from a blank page. The homepage shows a daily idea of what to post, with a hook, a short bit and a tag, drawn from what is trending, along with a trend panel that shows which topics are rising or cooling.",
-  },
-  {
-    heading: "Your post, in five seconds",
-    body: "Every bit comes with a 5-second vertical video in the Shutap style, so what happened to you is ready to post without opening an editor. Watching and downloading it takes a free account; free downloads carry a shutap.com watermark, Basic and Pro remove it.",
-  },
-  {
-    heading: "The Shutap Humor Amplifier Lab",
-    body: "The Humor Amplifier Lab is Shutap's research arm. It writes, selects and rates the in-house joke dataset the amplifier learns from (never from users), publishes The funniest series on the techniques of famously funny people, and does the work behind Shutap Enterprise. Its motto is ours: stay funny, stay human.",
-  },
-  {
-    heading: "The funniest: learn from the best",
-    body: "The funniest is a growing series of educational pages. Each asks who is the funniest in a category, using published rankings and sources, then breaks down how that person was funny into techniques you can use, each with an original example line and a way to try it. Read them at shutap.com/funniest.",
+    heading: "Presentations, for enterprise",
+    body: "Shutap Enterprise brings the same approach to company presentations: funnier lines drafted from your own material, and your speakers decide every line. It's by request: tell us what you need at shutap.com/business.",
   },
   {
     heading: "Why Shutap is different",
-    body: "Shutap writes a whole bit from your own story, then lets you steer it: hotter, tighter, storytelling, or mix your own lines. It sits on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild. Around the tool you get a daily idea of what to post and a library of techniques taken from funny people. To our knowledge, no other joke tool pairs all of these, and the aim is simple: you get funnier, and the voice stays yours.",
+    body: "Most AI tools write for you. Shutap starts from what only you have (your story, your listing, your memories of the person) and drafts around it, so the result couldn't belong to anyone else. Every line draws on the Lab's in-house dataset, which the Shutap team writes, selects and rates, never from users.",
   },
   {
-    heading: "Post the best one to a room",
-    body: "Rooms are public feeds by topic: office, work, family, school, live and social. Post a bit under your Shutap name, get likes and comments, follow writers you like, and see what's landing for other creators.",
+    heading: "The Shutap Humor Amplifier Lab",
+    body: "Shutap's research arm. It writes, selects and rates the in-house joke dataset every product drafts from (never from users), builds the technique bank behind bits, realtor kits and toasts, publishes The funniest and the guides, and does the work behind Shutap Enterprise. Its line: stay funny, stay human.",
   },
   {
-    heading: "What is coming next",
-    body: "The humor amplifier is the tool you can use today. Next we are building Shutap Enterprise, which brings original, human-steered humor to presentations and slides, roadshows, product demos, launches and meetings, written from a company's own material. Behind both is the Shutap Humor Amplifier Lab: the research arm that writes, selects and rates an in-house joke dataset pairing everyday situations with jokes, tagged by technique, voice and how wild, and publishes The funniest series. Beyond that we are exploring screenwriting and audio stories. These are plans, not promises of dates, and we will say so when each is ready. To request Enterprise pricing and solutions, or to ask about the dataset, use the form at shutap.com/business.",
+    heading: "The funniest: learn from the best",
+    body: "Who's the funniest president, billionaire, actor or philosopher, according to the people who rank them, and how they did it, broken into techniques for a post, a listing video, a toast or a presentation, each with an original example line. Read them at shutap.com/funniest.",
+  },
+  {
+    heading: "My creations",
+    body: "Every bit, realtor kit and toast you make is saved under your profile in My creations. Once paid for, it's yours to open and download again any time.",
+  },
+  {
+    heading: "What to post today",
+    body: "For creators who post every day: the homepage has a fresh hook, a short bit and a tag each day, drawn from what's trending.",
+  },
+  {
+    heading: "Rooms",
+    body: "Public feeds by topic: office, work, family, school, live and social. Post a bit under your Shutap name, get likes and comments, and follow writers you like.",
   },
   {
     heading: "The one rule",
-    body: "Bits go at the situation, never at a real person someone could identify. Names, places and contact details are removed before anything is saved, and anyone can report a post that breaks the rule.",
+    body: "A bit goes at the situation, never at a real person someone could identify. A toast can tease the person you're toasting, and their name never leaves your browser. Names, places and contact details are removed before anything is saved, and anyone can report a post.",
+  },
+  {
+    heading: "What's coming next",
+    body: "Enterprise presentations come first, by request. After that we're exploring screenwriting and audio stories. These are plans, not dates.",
   },
   {
     heading: "Free to start",
-    body: "A free account (one tap with Google or Apple) gets one bit a day with its video, stand-up, sketch and skit, with unlimited downloads carrying a shutap.com watermark. Basic adds rewrites, crowd-work swaps and mix your own: 3 bits a day, 20 realtor kits a month and 1 toast a month, downloads clean. Pro: unlimited bits, rewrites, kits and toasts, no watermark, and the Mirror. One kit or toast on its own is $12.99. Downloads and copies are never counted.",
+    body: "A free account (one tap with Google or Apple) gets one bit a day, your first realtor kit and your first toast, each marked \"— shutap.com\". Basic is $19.99 a month: 3 bits a day with rewrites, 20 realtor kits and 1 toast a month, no watermark. Pro is $49.99 a month: unlimited bits, kits and toasts, plus the Mirror. One kit or one toast on its own is $12.99. You pay to make something, never to use it.",
   },
   {
     heading: "Who makes Shutap",
-    body: "Shutap is an independent product. Questions, ideas or press: hello@shutap.com. Enterprise pricing: shutap.com/business. Adults 18+. Shutap writes comedy; it is not therapy or advice.",
+    body: "An independent product. Questions, ideas or press: hello@shutap.com. Enterprise: shutap.com/business. Adults 18+. Shutap is entertainment, not therapy or advice.",
   },
 ];
 const OTHERS = [
-  { href: "/", label: "Write jokes" },
+  { href: "/bits", label: "Bits" },
+  { href: "/realtors", label: "Realtors" },
+  { href: "/toasts", label: "Toasts" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/pricing", label: "Pricing" },
   { href: "/guides", label: "Guides" },
@@ -114,7 +116,7 @@ export const Route = createFileRoute("/about")({
   component: () => (
     <ContentPage
       breadcrumbs={[{ name: "About", path: PATH }]}
-      h1="About Shutap, the humor amplifier"
+      h1="About the Shutap Humor Amplifier Lab"
       capsule={CAPSULE}
       sections={SECTIONS}
       whoDoesWhat

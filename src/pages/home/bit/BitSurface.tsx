@@ -958,9 +958,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               <div className="bt-hero">
                 <h1 className="bt-h1">
                   Say it <em>funnier.</em>
-                  <span className="bt-h1-kicker">Your humor, amplified.</span>
+                  <span className="bt-h1-kicker">Whatever you have to say.</span>
                 </h1>
-                <p className="bt-sub">A post, a speech, a toast, a sketch, a presentation. Get the bit and the video. In your voice.</p>
+                <p className="bt-sub">A bit, a listing, a toast, a presentation. Your words, funnier.</p>
               </div>
             )}
 
