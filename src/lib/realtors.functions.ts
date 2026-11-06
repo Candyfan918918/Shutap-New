@@ -24,7 +24,7 @@ async function requireAdmin(context: unknown): Promise<void> {
 }
 
 export type ReadListingResult =
-  | { ok: true; listing: Listing; how: 'jsonld' | 'og' | 'text'; seen?: string }
+  | { ok: true; listing: Listing; how: 'jsonld' | 'og' | 'text' | 'card'; seen?: string }
   | { ok: false; reason: 'bad_url' | 'blocked' | 'fetch_failed' | 'nothing_found' | 'not_a_listing' | 'off'; host?: string; seen?: string }
 
 /** Read a listing from a link or pasted text. Anyone signed in, once the
@@ -55,6 +55,9 @@ const ListingIn = z.object({
   hoa: z.string().max(30).nullable().optional(),
   taxes: z.string().max(30).nullable().optional(),
   lot_sqft: z.number().nullable().optional(),
+  mls: z.string().max(40).nullable().optional(),
+  status: z.string().max(40).nullable().optional(),
+  open_houses: z.array(z.string().max(80)).max(10).optional(),
   description: z.string().max(4000),
   photos: z.array(z.string().max(200)).max(30),
   note: z.string().max(600),

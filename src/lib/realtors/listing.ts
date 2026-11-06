@@ -26,6 +26,10 @@ export type Listing = {
   hoa: string | null
   taxes: string | null
   lot_sqft: number | null
+  /** MLS number, status and open houses, as the listing states them */
+  mls: string | null
+  status: string | null
+  open_houses: string[]
   /** the listing's own description, as published */
   description: string
   /** photo captions or alt text the page gave, in order */
@@ -90,6 +94,9 @@ export function listingFacts(l: Listing): string[] {
   if (l.lot_sqft !== null) f.push(`lot ${l.lot_sqft} sqft`)
   if (l.hoa) f.push(`HOA ${l.hoa}`)
   if (l.taxes) f.push(`taxes ${l.taxes}`)
+  if (l.mls) f.push(`MLS# ${l.mls}`)
+  if (l.status) f.push(`status: ${l.status}`)
+  for (const o of l.open_houses ?? []) f.push(`open house: ${o}`)
   return f
 }
 
