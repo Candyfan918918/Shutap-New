@@ -115,7 +115,7 @@ export function PaywallBody({
         ? 'Free is one download a day: the video, or the picture. Basic gets 20 a month with no watermark; Pro has no limit. More at midnight Pacific.'
         : where === 'rewrite'
           ? `Free gets one bit a day, as written. Hotter, tighter, storytelling, a crowd-work swap or your own mix come with Basic (${BIT_CAPS.basic} bits a day, rewrites included) and Pro (no limit).`
-          : `Free is one bit a day. Basic writes ${BIT_CAPS.basic} a day with rewrites; Pro has no limit. Want to keep going tonight?`
+          : `Free is one bit a day with one watermarked download. Basic writes ${BIT_CAPS.basic} a day with rewrites; Pro has no limit. Want to keep going tonight?`
   return (
     <div className="pw">
       <div className="pw-head">

@@ -36,6 +36,7 @@ import {
 } from '@/lib/bits/shared'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
+import { FREE_LINE } from '@/lib/pricing'
 import { promptOneTap, cancelOneTap, oneTapAvailable } from '@/lib/google-one-tap'
 import { trackEvent } from '@/lib/tracking'
 import { setSurfacePage, anonSessionId, jokeTap, jokeTrack } from '../joke/jokeClient'
@@ -1066,7 +1067,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               </p>
             )}
             <p className="bt-note" style={{ textAlign: 'center' }}>
-              {tier === 'guest' ? 'free with one tap: sign in with Google or Apple · ' : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
+              {tier === 'guest' ? `free: ${FREE_LINE} · sign in with Google or Apple · ` : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
               names removed before anything is saved · nobody at shutap reads it{lined ? ' · "finish the bit" writes only the lines you left empty' : ' · ⌘↵ to write it'}
             </p>
           </>
@@ -1363,7 +1364,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               <>
                 <h3 id="bit-sheet-title">{sheet === 'signin_write' ? 'Sign in to get your bit.' : SIGNIN_COPY[signinFrom].title}</h3>
                 <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  {sheet === 'signin_write' ? 'Free. Your story stays in the box, and the bit is written the moment you’re in.' : SIGNIN_COPY[signinFrom].sub}
+                  {sheet === 'signin_write' ? `Free: ${FREE_LINE}. Your story stays in the box, and the bit is written the moment you’re in.` : SIGNIN_COPY[signinFrom].sub}
                 </p>
                 <GoogleButton onClick={() => void signInForBit('google', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />
                 <AppleButton onClick={() => void signInForBit('apple', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />

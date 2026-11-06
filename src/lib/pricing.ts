@@ -71,8 +71,8 @@ export const PLAN_COMPARE: CompareRow[] = [
     label: 'New bits a day',
     short: 'Bits a day',
     cells: {
-      free: { value: `${BIT_CAPS.free}`, short: `${BIT_CAPS.free}`, on: true },
-      basic: { value: `${BIT_CAPS.basic}`, short: `${BIT_CAPS.basic}`, on: true },
+      free: { value: `${BIT_CAPS.free} a day, as written`, short: `${BIT_CAPS.free}/day`, on: true },
+      basic: { value: `${BIT_CAPS.basic} a day`, short: `${BIT_CAPS.basic}/day`, on: true },
       pro: { value: 'Unlimited', short: 'Unlimited', on: true },
     },
   },
@@ -122,6 +122,10 @@ export const PLAN_COMPARE: CompareRow[] = [
     },
   },
 ]
+
+/** Free in one line (Nov 6 2026, Candy: "free is 1 bit daily with a watermarked download"):
+ *  every surface that sums up Free uses these words. */
+export const FREE_LINE = `${BIT_CAPS.free} bit a day + ${DOWNLOAD_CAPS.free} watermarked download a day`
 
 /** What every plan has, Free included (with a free account). Listed once,
  *  beside the comparison. Rewrites are Basic and Pro since Nov 1 2026. */

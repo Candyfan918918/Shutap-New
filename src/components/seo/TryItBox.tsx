@@ -61,7 +61,7 @@ export function TryItBox({
       <div style={{ display: 'grid', gap: 4, minWidth: 0, flex: '1 1 220px' }}>
         <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#17131a', lineHeight: 1.3 }}>{heading}</h2>
         <p style={{ margin: 0, fontSize: 15, color: '#443c42', lineHeight: 1.45 }}>
-          {realtor ? 'Paste the listing link. Get the walkthrough, voiceover, hooks, open-house kit and posts. First kit free.' : 'Write what happened. Get the bit and the video. Free.'}
+          {realtor ? 'Paste the listing link. Get the walkthrough, voiceover, hooks, open-house kit and posts. First kit free.' : 'Write what happened. Get the bit and the video. Free: 1 bit a day + 1 watermarked download a day.'}
           {!realtor && preset && presetLabel(preset) ? ` Opens set to ${presetLabel(preset)}; change anything before you write.` : ''}
         </p>
       </div>

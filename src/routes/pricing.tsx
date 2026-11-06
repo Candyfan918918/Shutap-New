@@ -5,7 +5,7 @@ import { NO_FLAGS, type Flags } from '@/lib/flags'
 import { ogImageMeta } from '@/lib/seo/meta'
 import { SITE_URL } from '@/lib/site'
 import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
-import { EVERY_PLAN, KIT_ONCE, PLANS, PLAN_COMPARE, usd, type CompareTier } from '@/lib/pricing'
+import { EVERY_PLAN, KIT_ONCE, PLANS, PLAN_COMPARE, usd, type CompareTier, FREE_LINE } from '@/lib/pricing'
 import { Footer } from '@/components/feed/Footer'
 import '@/components/feed/feed.css'
 
@@ -124,7 +124,8 @@ function PlanCard({ plan }: { plan: 'free' | 'basic' | 'pro' }) {
       </div>
       <div>
         <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-.04em' }}>{price}</span>
-        <span className="fd-muted"> {paid ? '/month' : 'forever'}</span>
+        <span className="fd-muted"> {paid ? '/month' : 'with a free account'}</span>
+        {!paid && <div style={{ fontWeight: 700, marginTop: 6 }}>{FREE_LINE}</div>}
       </div>
       <Rows tier={plan} />
       {paid ? (
@@ -198,7 +199,7 @@ function OtherProducts() {
             <thead><tr style={{ textAlign: 'left', color: 'var(--muted)' }}><th style={{ padding: '8px 6px' }}>Product</th><th style={{ padding: '8px 6px' }}>What's metered</th><th style={{ padding: '8px 6px' }}>Free</th><th style={{ padding: '8px 6px' }}>Basic</th><th style={{ padding: '8px 6px' }}>Pro</th></tr></thead>
             <tbody>
               {[
-                ['Bits', 'new bits (a rewrite is one); downloads (video, picture, PDF, a copied line); touches', '1 bit a day · 1 download a day, marked · 3 touches', '3 bits a day · 20 downloads a month · unlimited touches', 'unlimited'],
+                ['Bits', 'new bits (a rewrite is one); downloads (video, picture, PDF, a copied line); touches', '1 bit a day · 1 watermarked download a day · 3 touches', '3 bits a day · 20 downloads a month · unlimited touches', 'unlimited'],
                 ['Realtors', 'kits (a rewrite is one); copies from the download pool (a copied output 1, the kit PDF 6)', '1 kit, outputs marked', '3 kits a day · the same 20 downloads', 'unlimited'],
                 ['One kit', `${usd(KIT_ONCE.amount)} once`, '—', 'never counted, never marked', '—'],
                 ['Toasts', 'speeches · soon', '—', '—', 'included'],
