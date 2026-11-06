@@ -4,7 +4,6 @@
  * through chargeKitDownload first; the number left shows after each. */
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import QRCode from 'qrcode'
 import { chargeKitDownload, keepKitEdit, touchKitLine, type KitDownloadKind, type KitUsage, type KitView as KitData } from '@/lib/realtors.functions'
 import { KIT_ONCE, usd } from '@/lib/pricing'
 import { OUTPUT_LABEL, OUTPUTS, TONE_LABEL, listingFacts, type Kit, type Output } from '@/lib/realtors/listing'
@@ -62,28 +61,17 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
   const [dirty, setDirty] = useState(false)
   const [keeping, setKeeping] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)
-  const [shareOpen, setShareOpen] = useState(false)
   /** "funnier" on one line: which line is open, its options, the pick */
   const [touch, setTouch] = useState<{ key: string; where: string; apply: (k: Kit, t: string) => void; current: string } | null>(null)
   const [options, setOptions] = useState<{ line: string; move: string }[] | null>(null)
   const [picked, setPicked] = useState(-1)
   const [touching, setTouching] = useState(false)
   const offered = useRef<Record<string, string[]>>({})
-  const qrRef = useRef<HTMLCanvasElement | null>(null)
-  /** a phone (touch, narrow): shoot mode opens right here; the QR is for a second phone */
-  const [onPhone, setOnPhone] = useState(false)
-  const [qrOnPhone, setQrOnPhone] = useState(false)
-  useEffect(() => { try { setOnPhone(window.matchMedia('(pointer: coarse) and (max-width: 820px)').matches) } catch { /* noop */ } }, [])
   const free = usage.tier === 'free' && !data.paid
   const marked = free
 
   useEffect(() => { setKit(latest.content); setVersionId(latest.id); setDirty(false) }, [data.id, latest.id, latest.content])
 
-  const shootUrl = useMemo(() => (typeof window === 'undefined' ? '' : `${window.location.origin}/realtors/kit/${data.id}/shoot`), [data.id])
-  useEffect(() => {
-    if (!shareOpen || !qrRef.current || !shootUrl) return
-    QRCode.toCanvas(qrRef.current, shootUrl, { width: 160, margin: 1, color: { dark: '#1a1418', light: '#ffffff' } }).catch(() => {})
-  }, [shareOpen, shootUrl, onPhone, qrOnPhone])
 
   /** the ledger first; false means stop */
   async function charge(output: KitDownloadKind): Promise<{ ok: true; watermarked: boolean } | { ok: false }> {
@@ -284,42 +272,10 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
         <button className="rl-btn" disabled={busy !== null} onClick={() => void copyOutput(tab)}>copy {OUTPUT_LABEL[tab]}<small>this tab · unlimited</small></button>
         {tab === 'voiceover' && <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void voiceoverFile()}>voiceover .txt<small>for text-to-voice</small></button>}
         <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void pdf()}>kit PDF<small>all six, one file</small></button>
-        <button className="rl-btn ghost" onClick={() => { setShareOpen((v) => !v); track('kit_shoot_link', {}) }}>▶ shoot mode<small>teleprompter on your phone</small></button>
+        <Link to="/realtors/kit/$id/shoot" params={{ id: data.id }} className="rl-btn ghost" onClick={() => track('kit_shoot_opened_from_kit', {})}>▶ shoot mode<small>opens the teleprompter</small></Link>
         <button className="rl-btn ghost" onClick={onRewrite}>rewrite<small>new tone or controls · a new kit</small></button>
         {free && <button className="rl-btn ghost" onClick={() => { track('kit_buy_clicked', { tier: usage.tier }); onBuy() }}>remove the mark · {usd(KIT_ONCE.amount)}<small>this kit, clean, forever</small></button>}
       </div>
-      {shareOpen && (
-        <div className="rl-share">
-          {onPhone && !qrOnPhone ? (
-            /* Nov 6 2026: on a phone, this is the phone. Open it here; a QR only if they want another phone. */
-            <div className="rl-share-body">
-              <span className="rl-lbl r">this phone is the teleprompter</span>
-              <p className="rl-note">Open it here, prop the phone by the lens, and record with a second phone or a laptop. Big text, one line at a time, scrolls by itself.</p>
-              <div className="rl-row">
-                <Link to="/realtors/kit/$id/shoot" params={{ id: data.id }} className="rl-btn" onClick={() => track('kit_shoot_open_here', { device: 'phone' })}>▶ open the teleprompter</Link>
-                <button className="rl-mini" onClick={() => setQrOnPhone(true)}>read on another phone</button>
-              </div>
-            </div>
-          ) : (
-            <>
-              <canvas ref={qrRef} width={160} height={160} aria-label="QR code to shoot mode" />
-              <div className="rl-share-body">
-                <span className="rl-lbl r">shoot mode on your phone</span>
-                <ol>
-                  <li>Scan this with the phone you'll read from (or send it the link).</li>
-                  <li>Sign in on that phone with the same account you use here: Google, Apple or email.</li>
-                  <li>The teleprompter opens with this kit, ready to roll.</li>
-                </ol>
-                <p className="rl-note">Record with a second phone or a laptop: shoot mode never opens a camera.</p>
-                <div className="rl-row">
-                  <button className="rl-mini" onClick={async () => { const ok = await toClipboard(shootUrl); say(ok ? 'link copied · open it on the phone' : shootUrl) }}>copy link</button>
-                  <Link to="/realtors/kit/$id/shoot" params={{ id: data.id }} className="rl-mini">open here</Link>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      )}
       <p className="rl-note">copies, the PDF and shoot mode are unlimited · find this kit any time under profile → My creations · "funnier" rewrites that one line only · nobody at shutap reads your listings · saved to your kits</p>
     </section>
   )

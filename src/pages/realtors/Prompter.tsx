@@ -8,6 +8,7 @@ import { Link } from '@tanstack/react-router'
 import { getRealtorKit, type KitView } from '@/lib/realtors.functions'
 import { kitTitle } from '@/lib/realtors/kit-text'
 import { phCapture } from '@/lib/posthog'
+import QRCode from 'qrcode'
 import { supabase } from '@/integrations/supabase/client'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { setDurableReturn } from '@/lib/auth-guard'
@@ -29,6 +30,14 @@ export function Prompter({ kitId }: { kitId: string }) {
   const [mirror, setMirror] = useState(false)
   const [cues, setCues] = useState(true)
   const [err, setErr] = useState('')
+  /** Nov 6 2026: "another phone" — the QR and the steps for a second device */
+  const [second, setSecond] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const qrRef = useRef<HTMLCanvasElement | null>(null)
+  useEffect(() => {
+    if (!second || !qrRef.current) return
+    QRCode.toCanvas(qrRef.current, window.location.origin + window.location.pathname, { width: 200, margin: 1, color: { dark: '#1a1418', light: '#ffffff' } }).catch(() => {})
+  }, [second])
   const timer = useRef<number | undefined>(undefined)
   const segRefs = useRef<(HTMLDivElement | null)[]>([])
 
@@ -102,6 +111,7 @@ export function Prompter({ kitId }: { kitId: string }) {
         <span>{which} · {kitTitle(kit.listing)} · {idx + 1} of {segs.length}</span>
         <div style={{ display: 'flex', gap: 6 }}>
           <button onClick={() => { setWhich((w) => (w === 'walkthrough' ? 'voiceover' : 'walkthrough')); setIdx(0); setRunning(false) }}>{which === 'walkthrough' ? 'voiceover' : 'walkthrough'}</button>
+          <button onClick={() => { setRunning(false); setSecond(true); void phCapture('kit_shoot_second_phone', { product: 'realtors' }) }}>other phone</button>
           <Link to="/realtors/kit" search={{ kit: kit.id } as never}>close</Link>
         </div>
       </div>
@@ -125,6 +135,24 @@ export function Prompter({ kitId }: { kitId: string }) {
         </div>
         <span>{wps.toFixed(1)} words a second · the cue is for you, say only the line · tap a line to jump · record with a second device</span>
       </div>
+      {second && (
+        <div className="pr-second" role="dialog" aria-modal="true" aria-label="Read on another phone" onClick={() => setSecond(false)}>
+          <div className="pr-second-card" onClick={(e) => e.stopPropagation()}>
+            <b>Read on another phone</b>
+            <canvas ref={qrRef} width={200} height={200} aria-label="QR code to this teleprompter" />
+            <ol>
+              <li>Scan this with the phone you'll read from, or send it the link.</li>
+              <li>Sign in on that phone with the same account you use here: Google, Apple or email.</li>
+              <li>The teleprompter opens with this kit, ready to roll.</li>
+            </ol>
+            <p>Record with this phone or a laptop. Shoot mode never opens a camera.</p>
+            <div className="row">
+              <button onClick={async () => { try { await navigator.clipboard.writeText(window.location.origin + window.location.pathname); setCopied(true) } catch { setCopied(false) } }}>{copied ? 'link copied' : 'copy link'}</button>
+              <button className="on" onClick={() => setSecond(false)}>done</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
