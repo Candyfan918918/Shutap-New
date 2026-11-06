@@ -831,10 +831,13 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
       const text = (lined ? linesText(lines) : story).trim()
       if (!text) return
       writePendingWrite({ story: text, controls, write_id: newWriteId(), anon: anonSessionId(), lines: given })
-    } else {
-      if (!bit) return
+    } else if (bit) {
       writePending(bit.id, anonSessionId(), signinFrom)
     }
+    // Nov 5 2026: "funnier" on a line in the box opens this sheet before any
+    // bit exists. The old `if (!bit) return` made all three buttons do
+    // nothing. With no bit there is nothing to carry: the lines are already
+    // kept in this tab (LINES_KEY) and come back in the box after sign-in.
     const back = embed ? window.location.pathname : '/'
     try { sessionStorage.setItem('shutap_returnTo', back) } catch { /* noop */ }
     setDurableReturn(back)
