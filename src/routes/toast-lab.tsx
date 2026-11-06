@@ -9,7 +9,7 @@ import { pageMeta } from '@/lib/seo/page-meta'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { amIAdmin } from '@/lib/admin.functions'
-import { labToastEvals, labTouchToast, labWriteToast, rateLabToast, type ToastLedger } from '@/lib/toasts.functions'
+import { labCutToast, labToastEvals, labTouchToast, labWriteToast, rateLabToast, type ToastLedger } from '@/lib/toasts.functions'
 import { OCCASION, OCCASIONS, TONES, TONE_LABEL, clock, fromPlaceholders, toPlaceholders, toastSeconds, type Names, type Occasion, type Pronoun, type Tone, type ToastForm, type ToastLine } from '@/lib/toasts/shared'
 import '@/components/feed/feed.css'
 
@@ -255,6 +255,26 @@ function Lines({ lines, names, onTouch, touchIndex }: { lines: ToastLine[]; name
   )
 }
 
+/** On demand: the cut is written only when this is tapped (as in the product). */
+function Cut({ form, lines, names }: { form: ToastForm; lines: ToastLine[]; names: Names }) {
+  const [state, setState] = useState<{ busy: boolean; res?: Awaited<ReturnType<typeof labCutToast>>; error?: string }>({ busy: false })
+  async function make() {
+    setState({ busy: true })
+    try { setState({ busy: false, res: await labCutToast({ data: { form, lines } }) }) } catch (e) { setState({ busy: false, error: e instanceof Error ? e.message : 'failed' }) }
+  }
+  return (
+    <div style={{ display: 'grid', gap: 8 }}>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+        <button type="button" className="fd-chip" aria-pressed disabled={state.busy} onClick={() => void make()}>{state.busy ? 'cutting…' : state.res ? 'make it again' : 'make a 60-second version'}</button>
+        {state.res?.ok && <span className="fd-muted" style={{ fontSize: 12.5 }}>{clock(state.res.cut.seconds)} · {state.res.cut.model}{state.res.cut.checks.length ? ` · ${state.res.cut.checks.map((c) => c.rule).join(' · ')}` : ''}</span>}
+        {state.res && !state.res.ok && <span style={{ color: '#b3261e', fontSize: 12.5 }}>no cut passed the checks</span>}
+        {state.error && <span style={{ color: '#b3261e', fontSize: 12.5 }}>{state.error}</span>}
+      </div>
+      {state.res?.ok && <Lines lines={state.res.cut.lines} names={names} />}
+    </div>
+  )
+}
+
 function Result({ run, onTouch, onRate }: { run: Run; onTouch: (i: number) => void; onRate: (r: 'pick' | 'cut' | 'rewrite') => void }) {
   const [tab, setTab] = useState<'speech' | 'cut60' | 'cards' | 'after'>('speech')
   if (!run.result?.ok) return null
@@ -265,7 +285,7 @@ function Result({ run, onTouch, onRate }: { run: Run; onTouch: (i: number) => vo
   return (
     <>
       <p style={{ margin: 0, fontSize: 13 }}>
-        <b>{clock(result.seconds)}</b> of {clock(form.length)} target{form.length > 60 ? <> · 60s cut <b>{clock(result.cut_seconds)}</b></> : null}
+        <b>{clock(result.seconds)}</b> of {clock(form.length)} target
       </p>
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
         {(['speech', 'cut60', 'cards', 'after'] as const).map((t) => <button key={t} type="button" className="fd-chip" aria-pressed={tab === t} onClick={() => setTab(t)}>{t === 'speech' ? 'the speech' : t === 'cut60' ? '60-second cut' : t === 'cards' ? 'cue cards' : 'the text after'}</button>)}
@@ -277,7 +297,7 @@ function Result({ run, onTouch, onRate }: { run: Run; onTouch: (i: number) => vo
           {run.touch.busy ? <span className="fd-muted">three ways…</span> : run.touch.error ? <span style={{ color: '#b3261e' }}>{run.touch.error}</span> : run.touch.options?.map((o, k) => <p key={k} style={serif}>{k + 1}. {fromPlaceholders(o.line, names)} <span className="fd-muted" style={{ fontSize: 12 }}>· {o.move}</span></p>)}
         </div>
       )}
-      {tab === 'cut60' && <Lines lines={toast.cut60} names={names} />}
+      {tab === 'cut60' && <Cut form={form} lines={toast.lines} names={names} />}
       {tab === 'cards' && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 8 }}>
           {toast.cards.map((c, k) => (

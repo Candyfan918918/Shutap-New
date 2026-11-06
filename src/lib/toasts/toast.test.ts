@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { OCCASION, OCCASIONS, clock, fromPlaceholders, lengthWindow, toPlaceholders, toastSeconds, type ToastForm } from './shared'
-import { checkOneLine, checkToast, parseToast } from './toast.server'
+import { checkCut, checkOneLine, checkToast, parseToast } from './toast.server'
 
 const form: ToastForm = {
   occasion: 'best_man',
@@ -56,8 +56,8 @@ test('their words go back in exactly as typed, whatever the writer returned', ()
   const t = parseToast(good, form)!
   assert.equal(t.lines[1]!.text, 'In college {friend} color-coded his fridge.')
   assert.equal(t.lines[4]!.text, "He's the guy who shows up. Every time.")
-  // a 60-second toast is its own 60-second cut
-  assert.equal(t.cut60.length, t.lines.length)
+  // the 60-second cut is on demand: never written with the speech
+  assert.equal(t.cut60.length, 0)
 })
 
 test('a story pasted as a Shutap line is still recognised as theirs', () => {
@@ -95,4 +95,14 @@ test('a toast that runs long is rejected; "raise your glasses" is not a workplac
   const office: ToastForm = { ...form, occasion: 'holiday_party', never_say: [], must_say: [] }
   assert.equal(checkOneLine('So please raise your glasses to the team.', office), null)
   assert.equal(checkOneLine('Even HR laughed.', office), 'workplace check')
+})
+
+test('the on-demand cut keeps the true thing and the must-says, and lands at a minute', () => {
+  const full: ToastForm = { ...form, length: 180 }
+  const t = parseToast(good, full)!
+  assert.deepEqual(checkCut(t.lines, full).filter((c) => c.fatal), [])
+  const dropped = t.lines.filter((l) => l.source !== 'true_thing')
+  assert.ok(checkCut(dropped, full).some((c) => c.fatal && c.rule === 'the cut drops the true thing'))
+  const long = [...t.lines, { section: 'more', text: Array(160).fill('and').join(' '), source: 'shutap' as const }]
+  assert.ok(checkCut(long, full).some((c) => c.fatal && c.rule.startsWith('the cut runs')))
 })
