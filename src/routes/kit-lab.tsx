@@ -30,7 +30,7 @@ export const Route = createFileRoute('/kit-lab')({
 
 const SAMPLE = `4B Alder Court, San Mateo, CA 94401. $749,000. 2 bed 1 bath condo, 870 sq ft, built 1987. Original hardwood floors throughout, kitchen with a window over the sink, private balcony off the living room. HOA $410/month. Four-minute walk to Caltrain. Garage with EV charger. Open house Sunday 1-4.`
 
-type Run = { listing: Listing; controls: ListingControls; busy: boolean; result?: Awaited<ReturnType<typeof labWriteKit>>; error?: string; rated?: string; tab: Output }
+type Run = { listing: Listing; controls: ListingControls; busy: boolean; result?: Awaited<ReturnType<typeof labWriteKit>>; error?: string; rated?: string; saved?: 'saving' | 'saved' | 'failed'; tab: Output }
 
 function KitLab() {
   const [url, setUrl] = useState('')
@@ -87,8 +87,16 @@ function KitLab() {
   async function rate(i: number, rating: 'pick' | 'cut' | 'rewrite') {
     const run = runs[i]
     if (!run?.result || !run.result.ok || !run.result.eval_id) return
-    await rateLabKit({ data: { eval_id: run.result.eval_id, rating } })
-    setRuns((r) => r.map((x, j) => (j === i ? { ...x, rated: rating } : x)))
+    const evalId = run.result.eval_id
+    // the tap shows at once; the save is confirmed (or not) after
+    setRuns((r) => r.map((x, j) => (j === i ? { ...x, rated: rating, saved: 'saving' } : x)))
+    try {
+      const res = await rateLabKit({ data: { eval_id: evalId, rating } })
+      setRuns((r) => r.map((x, j) => (j === i ? { ...x, saved: res.ok ? 'saved' : 'failed' } : x)))
+      if (res.ok) labKitEvals({ data: {} }).then(setLedger).catch(() => {})
+    } catch {
+      setRuns((r) => r.map((x, j) => (j === i ? { ...x, saved: 'failed' } : x)))
+    }
   }
 
   const toggle = (k: 'roast_house' | 'roast_neighborhood' | 'mention_price') => (
@@ -165,10 +173,19 @@ function KitLab() {
                     </p>
                   ))}
                 </details>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  {(['pick', 'cut', 'rewrite'] as const).map((r) => <button key={r} className="fd-chip" aria-pressed={run.rated === r} onClick={() => void rate(i, r)}>{r}</button>)}
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 12.5, fontWeight: 700 }}>rate this {TONE_LABEL[run.controls.tone]} kit on its own:</span>
+                  {(['pick', 'cut', 'rewrite'] as const).map((r) => (
+                    <button key={r} type="button" className="fd-chip" aria-pressed={run.rated === r} disabled={run.saved === 'saving'} onClick={() => void rate(i, r)} style={run.rated === r ? { background: '#c1216b', color: '#fff', borderColor: '#c1216b' } : undefined}>
+                      {run.rated === r ? '✓ ' : ''}{r}
+                    </button>
+                  ))}
+                  {run.saved === 'saving' && <span className="fd-muted" style={{ fontSize: 12.5 }}>saving…</span>}
+                  {run.saved === 'saved' && <span style={{ fontSize: 12.5, color: '#2e8b57', fontWeight: 700 }}>saved</span>}
+                  {run.saved === 'failed' && <span style={{ fontSize: 12.5, color: '#b00020', fontWeight: 700 }}>not saved · tap again</span>}
                   {!run.result.eval_id && <span className="fd-muted" style={{ fontSize: 12.5 }}>not stored (run the realtors migration to rate)</span>}
                 </div>
+                <p className="fd-muted" style={{ margin: '6px 0 0', fontSize: 12 }}>pick = a realtor could post it as-is · rewrite = right idea, you'd change lines · cut = wrong tone, wrong facts or unusable. Judge it against its own tone, not the other kits.</p>
               </>
             )}
           </section>
