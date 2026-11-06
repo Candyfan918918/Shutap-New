@@ -60,11 +60,17 @@ export const STRIPE_DESCRIPTIONS: Record<PaidPlan, string> = {
   pro: 'Shutap Pro: unlimited bits, rewrites, realtor kits and toasts. Downloads and copies unlimited with no watermark, plus the Mirror.',
 }
 
-/** What each plan gives, in the same words on every surface. */
-export const PLAN_LINES: Record<PaidPlan, string[]> = {
-  basic: [`${BIT_CAPS.basic} new bits a day (a rewrite counts as one)`, 'Rewrites, crowd-work swaps and mix your own', `${KIT_CAPS.basic} realtor kits a month`, `${TOAST_CAPS.basic} toast a month`, 'Unlimited downloads and copies, no watermark', 'Unlimited "funnier", line by line'],
-  pro: ['Unlimited bits and rewrites', 'Unlimited realtor kits and toasts', 'Unlimited downloads and copies, no watermark', 'The Mirror'],
+/** What each plan gives, in the same words on every surface (Nov 6 2026,
+ *  Candy: one plan for everything, no per-product lists). */
+export const PLAN_SUMMARY: Record<'free' | PaidPlan, string[]> = {
+  free: [`${BIT_CAPS.free} bit a day`, 'Your first realtor kit', 'Your first toast', 'Marked “— shutap.com”'],
+  basic: [`${BIT_CAPS.basic} bits a day, with rewrites`, `${KIT_CAPS.basic} realtor kits a month`, `${TOAST_CAPS.basic} toast a month`, 'No watermark'],
+  pro: ['Unlimited bits, kits and toasts', 'No watermark', 'The Mirror'],
 }
+export const PLAN_LINES: Record<PaidPlan, string[]> = { basic: PLAN_SUMMARY.basic, pro: PLAN_SUMMARY.pro }
+
+/** Just one, no subscription: a realtor kit or a toast. */
+export const ONE_TIME_LINE = '$12.99 for one realtor kit or one toast. No subscription.'
 
 /** The plans side by side: the same rows on every surface that compares
  *  them (pricing page, paywall, upgrade sheet, account page), so Free never
@@ -74,57 +80,39 @@ export type CompareCell = { value: string; short: string; on: boolean }
 export type CompareRow = { label: string; short: string; cells: Record<CompareTier, CompareCell> }
 export const PLAN_COMPARE: CompareRow[] = [
   {
-    label: 'New bits a day',
-    short: 'Bits a day',
+    label: 'Bits',
+    short: 'Bits',
     cells: {
-      free: { value: `${BIT_CAPS.free} a day, as written`, short: `${BIT_CAPS.free}/day`, on: true },
-      basic: { value: `${BIT_CAPS.basic} a day`, short: `${BIT_CAPS.basic}/day`, on: true },
-      pro: { value: 'Unlimited', short: 'Unlimited', on: true },
-    },
-  },
-  {
-    label: 'Rewrites (hotter, tighter, storytelling), crowd-work swaps, mix your own',
-    short: 'Rewrites',
-    cells: {
-      free: { value: 'Not included', short: '—', on: false },
-      basic: { value: 'Included (a rewrite counts as a bit)', short: '✓', on: true },
-      pro: { value: 'Included', short: '✓', on: true },
-    },
-  },
-  {
-    label: 'Downloads and copies (the video, the picture, a PDF, a copied line, the prompter)',
-    short: 'Downloads',
-    cells: {
-      free: { value: 'Unlimited, with the shutap.com mark', short: '∞ · mark', on: true },
-      basic: { value: 'Unlimited, no watermark', short: '∞ · clean', on: true },
-      pro: { value: 'Unlimited, no watermark', short: '∞ · clean', on: true },
-    },
-  },
-  {
-    label: 'AI on demand: "funnier" on any one line, lock a line, keep your edits',
-    short: 'Line by line',
-    cells: {
-      free: { value: 'Unlimited', short: '∞', on: true },
-      basic: { value: 'Unlimited', short: '∞', on: true },
+      free: { value: `${BIT_CAPS.free} a day`, short: `${BIT_CAPS.free}/day`, on: true },
+      basic: { value: `${BIT_CAPS.basic} a day, with rewrites`, short: `${BIT_CAPS.basic}/day`, on: true },
       pro: { value: 'Unlimited', short: '∞', on: true },
     },
   },
   {
-    label: 'Realtor kits (paste a listing, get the shoot kit)',
-    short: 'Realtor kits',
+    label: 'Realtor kits',
+    short: 'Kits',
     cells: {
-      free: { value: 'First kit free (marked); then $12.99 a kit', short: '1 · mark', on: true },
-      basic: { value: `${KIT_CAPS.basic} a month; then $12.99 a kit`, short: `${KIT_CAPS.basic}/mo`, on: true },
+      free: { value: 'Your first', short: '1st', on: true },
+      basic: { value: `${KIT_CAPS.basic} a month`, short: `${KIT_CAPS.basic}/mo`, on: true },
       pro: { value: 'Unlimited', short: '∞', on: true },
     },
   },
   {
-    label: 'Toasts (best man, maid of honor, holidays…) · opening soon',
+    label: 'Toasts',
     short: 'Toasts',
     cells: {
-      free: { value: 'First toast free (marked); then $12.99 a toast', short: '1 · mark', on: true },
-      basic: { value: `${TOAST_CAPS.basic} a month; then $12.99 a toast`, short: `${TOAST_CAPS.basic}/mo`, on: true },
+      free: { value: 'Your first', short: '1st', on: true },
+      basic: { value: `${TOAST_CAPS.basic} a month`, short: `${TOAST_CAPS.basic}/mo`, on: true },
       pro: { value: 'Unlimited', short: '∞', on: true },
+    },
+  },
+  {
+    label: 'Watermark',
+    short: 'Mark',
+    cells: {
+      free: { value: '“— shutap.com”', short: 'mark', on: false },
+      basic: { value: 'None', short: 'none', on: true },
+      pro: { value: 'None', short: 'none', on: true },
     },
   },
   {
