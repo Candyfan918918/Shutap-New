@@ -12,7 +12,9 @@ test('the price is the one beside the facts, never a fee; a Matrix portal page r
   const matrix = 'Office Ph: (650) 622-1000 Find a Home Back to Results 1 of 17 230 Selby Ln Atherton, California 94027 MLS#: CC41153069 Total Home $2,588,000 New Listing Active 2 Bedrooms 1 Full Baths 1 Half Baths 1,340 sqft 5,000 Lot SqFt Built in 1957 Detached Upcoming Open Houses 11/07/2026 2:00PM-4:00PM'
   const f = factsFromText(matrix)
   assert.equal(f.price, '$2,588,000'); assert.equal(f.beds, 2); assert.equal(f.baths, 1.5); assert.equal(f.sqft, 1340); assert.equal(f.year_built, 1957)
-  assert.equal(f.address, '230 Selby Ln'); assert.equal(f.city, 'Atherton')
+  assert.equal(f.address, '230 Selby Ln'); assert.equal(f.city, 'Atherton'); assert.equal(f.lot_sqft, 5000)
+  const g = factsFromText('HOA $410/month. Taxes $10,000. Listed at $749,000. 2 bed 1 bath.')
+  assert.equal(g.hoa, '$410/month'); assert.equal(g.taxes, '$10,000/year')
   assert.equal(factsFromText('a cheap lot: $9,500, 0.2 acres, 3 bed').price, '$9,500')
 })
 
@@ -32,7 +34,7 @@ test('fair housing words are caught, plain and coded', () => {
   assert.equal(fairHousingHit('The balcony fits one chair and one decision.'), null)
 })
 
-const listing: Listing = { source: 'pasted', url: null, address: '4B Alder Court', city: 'San Mateo', price: '$749,000', beds: 2, baths: 1, sqft: 870, year_built: 1987, description: SAMPLE, photos: [], note: 'balcony fits one chair' }
+const listing: Listing = { source: 'pasted', url: null, address: '4B Alder Court', city: 'San Mateo', price: '$749,000', beds: 2, baths: 1, sqft: 870, year_built: 1987, hoa: '$410/month', taxes: null, lot_sqft: null, description: SAMPLE, photos: [], note: 'balcony fits one chair' }
 const kit: Kit = {
   walkthrough: { shots: [{ where: 'front door', action: 'Open it on the last word.', line: 'Two bedrooms, one bath, a balcony that fits one chair.', seconds: '0–3' }], cut15: '1', cut60: 'adds the bath' },
   voiceover: [{ label: 'front door', text: 'Two bedrooms, one bath.' }],

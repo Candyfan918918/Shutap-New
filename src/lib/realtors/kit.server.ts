@@ -60,8 +60,8 @@ export function kitLines(kit: Kit): { where: string; line: string }[] {
 function allowedNumbers(l: Listing, c: ListingControls): Set<string> {
   const s = new Set<string>()
   const add = (t: string | null | undefined) => { for (const m of String(t ?? '').match(/\d[\d,]*/g) ?? []) s.add(m.replace(/,/g, '')) }
-  add(l.price); add(l.address); add(l.description); add(l.note); l.photos.forEach(add); c.must_say.forEach(add)
-  for (const n of [l.beds, l.baths, l.sqft, l.year_built]) if (n !== null) s.add(String(n))
+  add(l.price); add(l.address); add(l.description); add(l.note); add(l.hoa); add(l.taxes); l.photos.forEach(add); c.must_say.forEach(add)
+  for (const n of [l.beds, l.baths, l.sqft, l.year_built, l.lot_sqft]) if (n !== null && n !== undefined) s.add(String(n))
   return s
 }
 

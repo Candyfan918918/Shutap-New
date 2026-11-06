@@ -69,14 +69,18 @@ export function factsFromText(text: string): Partial<Listing> {
   if (dec) out.baths = num(dec[1])
   else if (full) out.baths = (num(full[1]) ?? 0) + (half ? (num(half[1]) ?? 0) * 0.5 : 0) || null
   // living area, not the lot: skip a figure labelled lot
-  const sqRe = /(?<![\d,])([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{3,5})\s*(?:sq\.?\s?ft|sqft|square feet)/gi
+  const sqRe = /(?<![\d,])([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{3,5})\s*(lot\s*)?(?:sq\.?\s?ft|sqft|square feet)/gi
   let sm: RegExpExecArray | null
   while ((sm = sqRe.exec(t))) {
     const before = t.slice(Math.max(0, sm.index - 12), sm.index).toLowerCase()
     const after = t.slice(sm.index, sm.index + sm[0].length + 6).toLowerCase()
-    if (/\blot\b/.test(before) || /lot\s*sq/.test(after)) continue
-    out.sqft = num(sm[1]); break
+    if (sm[2] || /\blot\b/.test(before) || /lot\s*sq/.test(after)) { if (out.lot_sqft === undefined) out.lot_sqft = num(sm[1]); continue }
+    if (out.sqft === undefined) out.sqft = num(sm[1])
   }
+  const hoa = /\bhoa(?:\s*(?:dues|fee|fees))?\s*:?\s*\$\s?([0-9]{1,3}(?:,[0-9]{3})*)(?:\s*(?:\/|per|a)\s*(mo|month|yr|year))?/i.exec(t)
+  if (hoa) out.hoa = '$' + hoa[1] + (hoa[2] ? (/^y/i.test(hoa[2]) ? '/year' : '/month') : '/month')
+  const tax = /\b(?:taxes|tax)\s*:?\s*\$\s?([0-9]{1,3}(?:,[0-9]{3})*)(?:\s*(?:\/|per|a)\s*(mo|month|yr|year))?/i.exec(t)
+  if (tax) out.taxes = '$' + tax[1] + (tax[2] ? (/^m/i.test(tax[2]) ? '/month' : '/year') : '/year')
   const built = /(?:built(?: in)?|year built)[:\s]+((?:18|19|20)[0-9]{2})\b/i.exec(t)
   if (built) out.year_built = num(built[1])
   // the price: every $ figure that is not per month/year/sqft; pick the one
@@ -160,7 +164,7 @@ async function tryFetch(url: string, h: string): Promise<ReadResult> {
   } catch {
     return { ok: false, reason: 'fetch_failed', host: h }
   }
-  const base: Listing = { source: h, url, address: null, city: null, price: null, beds: null, baths: null, sqft: null, year_built: null, description: '', photos: [], note: '' }
+  const base: Listing = { source: h, url, address: null, city: null, price: null, beds: null, baths: null, sqft: null, year_built: null, hoa: null, taxes: null, lot_sqft: null, description: '', photos: [], note: '' }
   const ld = fromJsonLd(jsonLd(html))
   const ogTitle = meta(html, 'og:title')
   const ogDesc = meta(html, 'og:description') ?? meta(html, 'description')
@@ -186,7 +190,7 @@ export function readListingText(text: string, source = 'pasted'): ReadResult {
   const clean = text.replace(/\s+/g, ' ').trim()
   if (clean.length < 40) return { ok: false, reason: 'nothing_found' }
   const facts = factsFromText(clean)
-  const listing: Listing = { source, url: null, address: null, city: null, price: null, beds: null, baths: null, sqft: null, year_built: null, description: clean.slice(0, 3000), photos: [], note: '', ...facts }
+  const listing: Listing = { source, url: null, address: null, city: null, price: null, beds: null, baths: null, sqft: null, year_built: null, hoa: null, taxes: null, lot_sqft: null, description: clean.slice(0, 3000), photos: [], note: '', ...facts }
   if (![listing.price, listing.beds, listing.address, listing.sqft].some(Boolean)) return { ok: false, reason: 'not_a_listing' }
   return { ok: true, listing, how: 'text' }
 }

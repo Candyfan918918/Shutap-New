@@ -22,6 +22,10 @@ export type Listing = {
   baths: number | null
   sqft: number | null
   year_built: number | null
+  /** monthly HOA dues, annual taxes, lot size, as the listing states them */
+  hoa: string | null
+  taxes: string | null
+  lot_sqft: number | null
   /** the listing's own description, as published */
   description: string
   /** photo captions or alt text the page gave, in order */
@@ -83,6 +87,9 @@ export function listingFacts(l: Listing): string[] {
   if (l.baths !== null) f.push(`${l.baths} bath`)
   if (l.sqft !== null) f.push(`${l.sqft} sqft`)
   if (l.year_built !== null) f.push(`built ${l.year_built}`)
+  if (l.lot_sqft !== null) f.push(`lot ${l.lot_sqft} sqft`)
+  if (l.hoa) f.push(`HOA ${l.hoa}`)
+  if (l.taxes) f.push(`taxes ${l.taxes}`)
   return f
 }
 
