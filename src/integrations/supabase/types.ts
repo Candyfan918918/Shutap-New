@@ -442,6 +442,7 @@ export type Database = {
           day: string
           id: string
           kind: string
+          product: string
           tier: string
           user_id: string
           version_id: string
@@ -453,6 +454,7 @@ export type Database = {
           day: string
           id?: string
           kind: string
+          product?: string
           tier: string
           user_id: string
           version_id: string
@@ -464,6 +466,7 @@ export type Database = {
           day?: string
           id?: string
           kind?: string
+          product?: string
           tier?: string
           user_id?: string
           version_id?: string
@@ -620,9 +623,9 @@ export type Database = {
           hook: string
           id: string
           kind: string
-          scene: Json | null
-          screenplay: Json | null
           setup: string
+          sketch: Json | null
+          skit: Json | null
           tags: string[]
           why: string | null
         }
@@ -636,9 +639,9 @@ export type Database = {
           hook: string
           id?: string
           kind: string
-          scene?: Json | null
-          screenplay?: Json | null
           setup: string
+          sketch?: Json | null
+          skit?: Json | null
           tags?: string[]
           why?: string | null
         }
@@ -652,9 +655,9 @@ export type Database = {
           hook?: string
           id?: string
           kind?: string
-          scene?: Json | null
-          screenplay?: Json | null
           setup?: string
+          sketch?: Json | null
+          skit?: Json | null
           tags?: string[]
           why?: string | null
         }
@@ -670,15 +673,16 @@ export type Database = {
       }
       bits: {
         Row: {
-          alt_tags: string[]
           anon_key: string | null
           candidates: Json
           controls: Json
           created_at: string
+          crowd_work: string[]
           id: string
           judge_model: string | null
           judge_why: string | null
           premises: Json | null
+          product: string
           prompt_version: string | null
           story_clean: string
           timings: Json
@@ -687,15 +691,16 @@ export type Database = {
           writer_model: string | null
         }
         Insert: {
-          alt_tags?: string[]
           anon_key?: string | null
           candidates?: Json
           controls?: Json
           created_at?: string
+          crowd_work?: string[]
           id?: string
           judge_model?: string | null
           judge_why?: string | null
           premises?: Json | null
+          product?: string
           prompt_version?: string | null
           story_clean: string
           timings?: Json
@@ -704,15 +709,16 @@ export type Database = {
           writer_model?: string | null
         }
         Update: {
-          alt_tags?: string[]
           anon_key?: string | null
           candidates?: Json
           controls?: Json
           created_at?: string
+          crowd_work?: string[]
           id?: string
           judge_model?: string | null
           judge_why?: string | null
           premises?: Json | null
+          product?: string
           prompt_version?: string | null
           story_clean?: string
           timings?: Json
@@ -1058,6 +1064,7 @@ export type Database = {
         Row: {
           id: string
           name: string
+          product: string
           properties: Json
           session_id: string | null
           ts: string
@@ -1066,6 +1073,7 @@ export type Database = {
         Insert: {
           id?: string
           name: string
+          product?: string
           properties?: Json
           session_id?: string | null
           ts?: string
@@ -1074,6 +1082,7 @@ export type Database = {
         Update: {
           id?: string
           name?: string
+          product?: string
           properties?: Json
           session_id?: string | null
           ts?: string
@@ -1487,6 +1496,250 @@ export type Database = {
           register_notes?: string
           updated_at?: string
           weight?: number
+        }
+        Relationships: []
+      }
+      kit_downloads: {
+        Row: {
+          created_at: string
+          day: string
+          id: string
+          kit_id: string
+          output: string
+          tier: string
+          units: number
+          user_id: string
+          version_id: string
+          watermarked: boolean
+        }
+        Insert: {
+          created_at?: string
+          day: string
+          id?: string
+          kit_id: string
+          output: string
+          tier: string
+          units?: number
+          user_id: string
+          version_id: string
+          watermarked?: boolean
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          id?: string
+          kit_id?: string
+          output?: string
+          tier?: string
+          units?: number
+          user_id?: string
+          version_id?: string
+          watermarked?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kit_downloads_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "kits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_downloads_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "kit_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kit_evals: {
+        Row: {
+          controls: Json
+          created_at: string
+          id: string
+          listing: Json
+          notes: string | null
+          prompt_version: string
+          rating: string | null
+          result: Json
+        }
+        Insert: {
+          controls: Json
+          created_at?: string
+          id?: string
+          listing: Json
+          notes?: string | null
+          prompt_version: string
+          rating?: string | null
+          result: Json
+        }
+        Update: {
+          controls?: Json
+          created_at?: string
+          id?: string
+          listing?: Json
+          notes?: string | null
+          prompt_version?: string
+          rating?: string | null
+          result?: Json
+        }
+        Relationships: []
+      }
+      kit_versions: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          kind: string
+          kit_id: string
+          skipped: Json
+        }
+        Insert: {
+          content: Json
+          created_at?: string
+          id?: string
+          kind: string
+          kit_id: string
+          skipped?: Json
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          kind?: string
+          kit_id?: string
+          skipped?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kit_versions_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "kits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kits: {
+        Row: {
+          controls: Json
+          created_at: string
+          day: string | null
+          id: string
+          listing_id: string
+          paid: boolean
+          prompt_version: string
+          tone: string
+          user_id: string
+        }
+        Insert: {
+          controls?: Json
+          created_at?: string
+          day?: string | null
+          id?: string
+          listing_id: string
+          paid?: boolean
+          prompt_version: string
+          tone: string
+          user_id: string
+        }
+        Update: {
+          controls?: Json
+          created_at?: string
+          day?: string | null
+          id?: string
+          listing_id?: string
+          paid?: boolean
+          prompt_version?: string
+          tone?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kits_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings: {
+        Row: {
+          address: string | null
+          baths: number | null
+          beds: number | null
+          city: string | null
+          controls: Json
+          created_at: string
+          description: string
+          hoa: string | null
+          id: string
+          lot_sqft: number | null
+          mls: string | null
+          note: string
+          open_houses: Json
+          photos: Json
+          price: string | null
+          source: string
+          sqft: number | null
+          status: string | null
+          taxes: string | null
+          updated_at: string
+          url: string | null
+          user_id: string
+          year_built: number | null
+        }
+        Insert: {
+          address?: string | null
+          baths?: number | null
+          beds?: number | null
+          city?: string | null
+          controls?: Json
+          created_at?: string
+          description?: string
+          hoa?: string | null
+          id?: string
+          lot_sqft?: number | null
+          mls?: string | null
+          note?: string
+          open_houses?: Json
+          photos?: Json
+          price?: string | null
+          source: string
+          sqft?: number | null
+          status?: string | null
+          taxes?: string | null
+          updated_at?: string
+          url?: string | null
+          user_id: string
+          year_built?: number | null
+        }
+        Update: {
+          address?: string | null
+          baths?: number | null
+          beds?: number | null
+          city?: string | null
+          controls?: Json
+          created_at?: string
+          description?: string
+          hoa?: string | null
+          id?: string
+          lot_sqft?: number | null
+          mls?: string | null
+          note?: string
+          open_houses?: Json
+          photos?: Json
+          price?: string | null
+          source?: string
+          sqft?: number | null
+          status?: string | null
+          taxes?: string | null
+          updated_at?: string
+          url?: string | null
+          user_id?: string
+          year_built?: number | null
         }
         Relationships: []
       }

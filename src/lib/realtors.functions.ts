@@ -132,7 +132,7 @@ export { OUTPUTS, type Kit }
    every edit the agent keeps is a version of its own; a rewrite (new tone or
    controls on the same listing) is a new kit and counts like one. Copies and
    PDFs go through chargeKitDownload: one pool with the bit downloads. */
-import { resolveTier, today, downloadsUsed, kitTier } from './bits.functions'
+import { resolveTier, today, downloadsUsed, kitTier } from './bits/tier.server'
 import { limitFor } from './entitlements'
 import type { BitTier } from './bits/shared'
 
