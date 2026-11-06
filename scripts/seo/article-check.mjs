@@ -130,7 +130,7 @@ const funniestSlugs = new Set(existsSync(FUN_DIR) ? readdirSync(FUN_DIR).filter(
 if (existingGuideSlugs.has(slug)) fail(`slug "${slug}" already exists`);
 for (const r of g.related ?? []) if (!existingGuideSlugs.has(r)) fail(`related slug "${r}" is not a live guide (links must point at existing pages)`);
 if ((g.related ?? []).length < 2) fail("need ≥2 related guides for internal linking");
-const staticPaths = new Set(["/", "/guides", "/funniest", "/pricing", "/about", "/faq", "/how-it-works", "/business", "/humor-amplifier", "/trust"]);
+const staticPaths = new Set(["/", "/guides", "/funniest", "/pricing", "/about", "/faq", "/how-it-works", "/business", "/humor-amplifier", "/trust", "/realtors"]);
 const href = g.cta?.href ?? "";
 const okHref = staticPaths.has(href) || (href.startsWith("/guides/") && existingGuideSlugs.has(href.slice(8))) || (href.startsWith("/funniest/") && funniestSlugs.has(href.slice(10)));
 if (!okHref) fail(`cta href "${href}" is not a known live page`);
