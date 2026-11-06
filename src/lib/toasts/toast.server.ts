@@ -8,7 +8,7 @@ import { callAgent, tryParseJson } from '@/lib/agents/gateway'
 import { fill } from '@/lib/jokes/prompts.server'
 import { backupWriterModel, bitJudgeModel, bitWriterModel, BIT_BUDGET } from '@/lib/bits/pipeline.server'
 import { judgeStandard, standardBlock, standardLines } from '@/lib/bits/taste-bank'
-import { TOAST_JUDGE_PROMPT, TOAST_PROMPT, TOAST_RULES, TOAST_TONES, TOAST_TOUCH_PROMPT, TOUCH_KIND_SPEECH, TOUCH_KIND_STORY } from './prompts.server'
+import { TOAST_CUT_PROMPT, TOAST_JUDGE_PROMPT, TOAST_PROMPT, TOAST_RULES, TOAST_TONES, TOAST_TOUCH_PROMPT, TOUCH_KIND_SPEECH, TOUCH_KIND_STORY } from './prompts.server'
 import { OCCASION, PLACEHOLDERS, lengthWindow, toastSeconds, WPM, type CueCard, type LineSource, type Toast, type ToastForm, type ToastLine } from './shared'
 
 export type ToastCheck = { rule: string; where: string; line: string; fatal: boolean }
@@ -134,17 +134,20 @@ function restoreTheirWords(lines: ToastLine[], form: ToastForm): ToastLine[] {
   })
 }
 
+/** Glasses up on the last line if the occasion ends with glasses and the writer forgot. */
+function glassesUp(lines: ToastLine[], form: ToastForm): ToastLine[] {
+  if (!OCCASION[form.occasion].glasses || !lines.length || lines.some((l) => l.glass)) return lines
+  return [...lines.slice(0, -1), { ...lines[lines.length - 1]!, glass: true }]
+}
+
 export function parseToast(raw: unknown, form: ToastForm): Toast | null {
   const r = (raw ?? {}) as any
   let lines = (Array.isArray(r.lines) ? r.lines : []).map(lineIn).filter(Boolean) as ToastLine[]
   if (lines.length < 3) return null
   lines = restoreTheirWords(lines, form)
-  let cut60 = (Array.isArray(r.cut60) ? r.cut60 : []).map(lineIn).filter(Boolean) as ToastLine[]
-  cut60 = cut60.length ? restoreTheirWords(cut60, form) : form.length <= 60 ? lines : []
-  // glasses up on the last line if the occasion ends with glasses and the writer forgot
-  if (OCCASION[form.occasion].glasses) {
-    for (const list of [lines, cut60]) if (list.length && !list.some((l) => l.glass)) list[list.length - 1] = { ...list[list.length - 1]!, glass: true }
-  }
+  // the 60-second cut is on demand (writeCut60), never written with the speech
+  const cut60: ToastLine[] = []
+  lines = glassesUp(lines, form)
   const cards: CueCard[] = (Array.isArray(r.cards) ? r.cards : [])
     .map((c: any) => ({ title: tidy(c?.title), keys: (Array.isArray(c?.keys) ? c.keys : []).map(tidy).filter(Boolean).slice(0, 4), land: unquote(tidy(c?.land)) }))
     .filter((c: CueCard) => c.title && c.land)
@@ -238,17 +241,6 @@ export function checkToast(t: Toast, form: ToastForm): ToastCheck[] {
   const secs = toastSeconds(t.lines)
   if (secs > hi) fails.push({ rule: `runs long: ${secs}s, target ${form.length}s`, where: 'speech', line: '', fatal: true })
   else if (secs < lo) fails.push({ rule: `runs short: ${secs}s, target ${form.length}s`, where: 'speech', line: '', fatal: false })
-  if (form.length > 60) {
-    if (!t.cut60.length) fails.push({ rule: '60-second cut missing', where: '60s cut', line: '', fatal: true })
-    else {
-      const cs = toastSeconds(t.cut60)
-      // the must-keeps alone (their lines, the true thing) may already run past a minute: then only flag it
-      const floor = toastSeconds(t.cut60.filter(theirs))
-      if (cs > 64) fails.push({ rule: `60-second cut runs ${cs}s`, where: '60s cut', line: '', fatal: floor <= 56 })
-      form.stories.forEach((s, i) => { if (s.trim() && !t.cut60.some((l) => l.source === 'story' && l.ref === i + 1)) fails.push({ rule: `60s cut drops story ${i + 1}`, where: '60s cut', line: s, fatal: false }) })
-      if (form.true_thing.trim() && !t.cut60.some((l) => l.source === 'true_thing')) fails.push({ rule: '60s cut drops the true thing', where: '60s cut', line: '', fatal: true })
-    }
-  }
   if (!t.text_after) fails.push({ rule: 'no text after', where: 'the text after', line: '', fatal: false })
   if (t.cards.length < 2) fails.push({ rule: 'too few cue cards', where: 'cards', line: '', fatal: false })
   for (const f of t.flags) fails.push({ rule: `writer's flag: ${f.why}`, where: 'flag', line: f.line, fatal: false })
@@ -279,7 +271,6 @@ function promptFor(form: ToastForm): string {
     RULES: rulesFor(form),
     GLASS_NOTE: spec.glasses ? (form.occasion === 'new_years' ? '; the last line lands at midnight' : '') : '; this occasion has no glasses: glass is always false',
     ENDING: spec.glasses ? 'The last line is the toast itself: "please raise your glasses… to {friend}" (and {partner} for a wedding), glass true.' : 'The last line is the close: a callback to the opening, said plainly.',
-    CUT60: form.length <= 60 ? '[] (the speech is already a minute or less)' : 'the same speech cut to 60 seconds or less (about 110 words): keep every story line word for word, the true thing, every MUST SAY and the toast; cut Shutap\'s lines first. Same shape as lines.',
     TEXT_TO: spec.partner ? ' and {partner}' : '',
   })
 }
@@ -387,4 +378,57 @@ export async function touchToastLine(form: ToastForm, target: TouchTarget, avoid
     console.warn('[toast-touch] too few options passed', { got: opts.length })
   }
   return null
+}
+
+/* ───────────────────────── the 60-second cut, on demand ───────────────────────── */
+
+/** The cut's checks: Shutap's lines pass the line rules; the true thing and
+ *  every must-say stay; it lands at a minute (unless the speaker's own words
+ *  alone already run past one: then that is only noted). */
+export function checkCut(cut: ToastLine[], form: ToastForm): ToastCheck[] {
+  const fails: ToastCheck[] = []
+  const nums = allowedNumbers(form)
+  const theirs = (l: ToastLine) => l.source === 'story' || l.source === 'true_thing'
+  cut.forEach((l, i) => { if (!theirs(l)) for (const rule of lineFails(l.text, form, nums)) fails.push({ rule, where: `60s cut · line ${i + 1}`, line: l.text, fatal: true }) })
+  if (form.true_thing.trim() && !cut.some((l) => l.source === 'true_thing')) fails.push({ rule: 'the cut drops the true thing', where: '60s cut', line: '', fatal: true })
+  const text = cut.map((l) => l.text).join(' ').toLowerCase()
+  for (const w of form.must_say.map((x) => x.trim()).filter(Boolean)) if (!text.includes(w.toLowerCase())) fails.push({ rule: `must say missing: "${w}"`, where: '60s cut', line: '', fatal: true })
+  form.stories.forEach((s, i) => { if (s.trim() && !cut.some((l) => l.source === 'story' && l.ref === i + 1)) fails.push({ rule: `the cut drops story ${i + 1}`, where: '60s cut', line: s, fatal: false }) })
+  const secs = toastSeconds(cut)
+  const floor = toastSeconds(cut.filter(theirs))
+  if (secs > 64) fails.push({ rule: `the cut runs ${secs}s`, where: '60s cut', line: '', fatal: floor <= 56 })
+  return fails
+}
+
+export type CutResult = { lines: ToastLine[]; seconds: number; checks: ToastCheck[]; model: string }
+
+/** "Make a 60-second version": written only when the speaker taps it. A
+ *  speech that is already a minute or less is its own cut. */
+export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<CutResult | null> {
+  if (toastSeconds(speech) <= 60) return { lines: speech, seconds: toastSeconds(speech), checks: [], model: 'none' }
+  const prompt = fill(TOAST_CUT_PROMPT, {
+    OCCASION: OCCASION[form.occasion].label,
+    TONE: TOAST_TONES[form.tone] ?? TOAST_TONES.warm_funny!,
+    MUST_SAY: form.must_say.length ? form.must_say.map((w) => `"${w}"`).join(', ') : '(none)',
+    NEVER_SAY: form.never_say.length ? form.never_say.map((w) => `"${w}"`).join(', ') : '(none)',
+    RULES: rulesFor(form),
+    SPEECH: speech.map((l) => `${l.source === 'story' || l.source === 'true_thing' ? '[theirs] ' : ''}${JSON.stringify(l)}`).join('\n'),
+  })
+  let best: CutResult | null = null
+  let feedback = ''
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const model = attempt === 0 ? bitWriterModel() : backupWriterModel()
+    const r = await writeOnce(model, prompt + feedback, BIT_BUDGET.write())
+    if (!r) continue
+    const raw = (r.raw ?? {}) as any
+    let lines = (Array.isArray(raw.lines) ? raw.lines : []).map(lineIn).filter(Boolean) as ToastLine[]
+    if (lines.length < 2) continue
+    lines = glassesUp(restoreTheirWords(lines, form), form)
+    const checks = checkCut(lines, form)
+    const cut = { lines, seconds: toastSeconds(lines), checks, model }
+    if (!checks.some((c) => c.fatal)) return cut
+    best = best ?? cut
+    feedback = `\n\nYOUR LAST CUT BROKE THESE RULES. Fix every one:\n${checks.filter((c) => c.fatal).map((c) => `- ${c.rule}`).join('\n')}\nAt most 110 words.`
+  }
+  return best && !best.checks.some((c) => c.fatal) ? best : null
 }

@@ -6,7 +6,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { OCCASIONS, TONES, type Toast, type ToastForm, type ToastLine } from './toasts/shared'
-import type { ToastResult, ToastTouchOption } from './toasts/toast.server'
+import type { CutResult, ToastResult, ToastTouchOption } from './toasts/toast.server'
 
 async function requireAdmin(context: unknown): Promise<void> {
   const c = context as { supabase: any; userId: string }
@@ -85,6 +85,17 @@ export const labTouchToast = createServerFn({ method: 'POST' })
     const form = data.form as ToastForm
     const options = await touchToastLine(form, data.kind === 'story' ? { kind: 'story', index: data.index } : { kind: 'speech', index: data.index, lines: (data.lines ?? []) as ToastLine[] }, data.avoid ?? [])
     return options ? { ok: true, options } : { ok: false }
+  })
+
+/** Admin only: "make a 60-second version" of a lab toast (on demand). */
+export const labCutToast = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ form: ToastFormIn, lines: z.array(LineIn).min(1).max(80) }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true; cut: CutResult } | { ok: false }> => {
+    await requireAdmin(context)
+    const { writeCut60 } = await import('./toasts/toast.server')
+    const cut = await writeCut60(data.form as ToastForm, data.lines as ToastLine[])
+    return cut ? { ok: true, cut } : { ok: false }
   })
 
 /** Admin only: rate a lab toast. */

@@ -4,7 +4,9 @@
 // story, a fact or a person. Same bones as the realtor kit: two writers, a
 // judge from another model family, checks before anyone sees it.
 // TOAST_PROMPT_VERSION is stamped on every toast; bump on any edit.
-export const TOAST_PROMPT_VERSION = 'toast-0.1'
+export const TOAST_PROMPT_VERSION = 'toast-0.2'
+// 0.2 (Nov 6 2026, Candy): the 60-second cut is on demand, written only when
+// the speaker taps "make a 60-second version" (TOAST_CUT_PROMPT), not with every speech.
 
 export const TOAST_TONES: Record<string, string> = {
   warm_funny:
@@ -49,14 +51,12 @@ NEVER SAY: {{NEVER_SAY}}
 
 WRITE:
 1. lines: the whole speech, one object per spoken line, in order. Each: section (one of the sections above, e.g. "opener", "story 1", "story 1 · tag", "the turn", "the true thing", "to {partner}", "the toast"), text, source ("shutap" | "story" | "true_thing" | "must_say" | "bridge"), ref (the story number, for a story), pause (true for a beat after the line), laugh (true where the room should laugh: the speaker waits), glass (true only on the line where glasses go up{{GLASS_NOTE}}), note (a short delivery note or ""). The opener names the speaker and why they're up there. Each story is followed by at most two short tags. {{ENDING}}
-2. cut60: {{CUT60}}
-3. cards: cue cards, one per section group (the opener, one per story with its tags, the close), at most 6. Each: title (2–4 words), keys (2–4 fragments of under 7 words each that remind the speaker what comes next, from the lines), land (the line the card ends on, word for word; for the last card, the toast line in full).
-4. text_after: the text message the speaker sends {friend}{{TEXT_TO}} tonight after the toast: one or two sentences, warm, in the speaker's voice, nothing new invented.
-5. flags: any line that only part of the room will get (an inside joke), or anything you were unsure about: [{"line": "...", "why": "..."}]. Empty if none.
+2. cards: cue cards, one per section group (the opener, one per story with its tags, the close), at most 6. Each: title (2–4 words), keys (2–4 fragments of under 7 words each that remind the speaker what comes next, from the lines), land (the line the card ends on, word for word; for the last card, the toast line in full).
+3. text_after: the text message the speaker sends {friend}{{TEXT_TO}} tonight after the toast: one or two sentences, warm, in the speaker's voice, nothing new invented.
+4. flags: any line that only part of the room will get (an inside joke), or anything you were unsure about: [{"line": "...", "why": "..."}]. Empty if none.
 
 Return only JSON:
 {"lines":[{"section":"...","text":"...","source":"shutap","ref":0,"pause":false,"laugh":false,"glass":false,"note":""}],
- "cut60":[...same shape...],
  "cards":[{"title":"...","keys":["..."],"land":"..."}],
  "text_after":"...",
  "flags":[{"line":"...","why":"..."}]}`
@@ -104,3 +104,21 @@ Return only JSON:
 
 export const TOUCH_KIND_SPEECH = 'This is one of Shutap\'s lines in the speech (not the speaker\'s story). Write it three better ways; never add a new fact.'
 export const TOUCH_KIND_STORY = 'This is the SPEAKER\'S OWN story line, in their words. Offer three ways to tell the SAME story funnier: the same facts and the same events, nothing added, in their voice (first person where they wrote first person). Their version stays first on the page; yours are suggestions they may take.'
+
+/** On demand (Nov 6 2026): the same speech cut to a minute, written only
+ *  when the speaker taps "make a 60-second version". */
+export const TOAST_CUT_PROMPT = `You cut a toast down to 60 seconds or less said aloud (about 110 words), for when the speaker is told on the day to keep it short. The speaker's own words stay; you take out, you never add.
+
+THE OCCASION: {{OCCASION}}
+TONE: {{TONE}}
+MUST SAY: {{MUST_SAY}}
+NEVER SAY: {{NEVER_SAY}}
+{{RULES}}
+
+THE FULL SPEECH (one line per row; [theirs] marks the speaker's own words):
+{{SPEECH}}
+
+KEEP, word for word: every [theirs] line you can (a story the speaker wrote is the last thing to go), the true thing, every MUST SAY, and the toast line at the end. Cut Shutap's lines first: tags, transitions, the second joke on a story. You may shorten one of Shutap's lines; you may not write a new one except a single short bridge where a cut leaves a gap. Keep the same marks (pause, laugh, glass, note).
+
+Return only JSON, the same shape as the speech:
+{"lines":[{"section":"...","text":"...","source":"shutap","ref":0,"pause":false,"laugh":false,"glass":false,"note":""}]}`
