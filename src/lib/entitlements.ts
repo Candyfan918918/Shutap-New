@@ -7,9 +7,9 @@
 //   bit        a new story, or hotter/tighter/storytelling   0     1    3     ∞ (server fair-use)
 //   download   the video, picture, PDF or a copied line      0     1/day 20/month ∞
 //   touch      "funnier" on one line (AI on demand)          0     3    ∞     ∞
-//   kit        a realtor kit (6 downloads)                   0     1    —     ∞
-// The usage pool and the monthly realtor counts land with the pricing slice;
-// the shape here is what they'll fill in.
+//   kit        a realtor kit written (a rewrite is one too)  0     1ever 3/day ∞
+// Downloads are one pool: a copied kit line is 1, the kit PDF is 6, beside
+// the video, picture and PDF of a bit.
 import { BIT_CAPS, DOWNLOAD_CAPS, DOWNLOAD_PERIOD } from './bits/plans'
 import type { BitTier } from './bits/shared'
 
@@ -28,7 +28,7 @@ export function limitFor(kind: EntitlementKind, tier: BitTier): Limit {
     case 'touch':
       return { cap: tier === 'guest' ? 0 : tier === 'free' ? 3 : null, period: 'day' }
     case 'kit':
-      return { cap: tier === 'pro' ? null : tier === 'guest' ? 0 : 1, period: tier === 'free' ? 'ever' : 'month' }
+      return tier === 'pro' ? { cap: null, period: 'day' } : tier === 'guest' ? { cap: 0, period: 'day' } : tier === 'free' ? { cap: 1, period: 'ever' } : { cap: 3, period: 'day' }
   }
 }
 

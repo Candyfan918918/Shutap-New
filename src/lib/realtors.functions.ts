@@ -125,3 +125,253 @@ export const labKitEvals = createServerFn({ method: 'POST' })
   })
 
 export { OUTPUTS, type Kit }
+
+/* ───────────────────────── the product (Nov 6 2026) ─────────────────────────
+   Signed-in users, behind the realtors flag. A kit is written for a listing
+   (stored with the agent's note and controls), kept as its original version;
+   every edit the agent keeps is a version of its own; a rewrite (new tone or
+   controls on the same listing) is a new kit and counts like one. Copies and
+   PDFs go through chargeKitDownload: one pool with the bit downloads. */
+import { resolveTier, today, downloadsUsed, kitTier } from './bits.functions'
+import { limitFor } from './entitlements'
+import type { BitTier } from './bits/shared'
+
+type KitVersionRow = { id: string; kit_id: string; kind: 'original' | 'edited' | 'rewrite'; content: Kit; skipped: { where: string; what: string }[]; created_at: string }
+export type KitView = {
+  id: string
+  listing_id: string
+  listing: Listing
+  tone: ListingControls['tone']
+  controls: ListingControls
+  paid: boolean
+  created_at: string
+  versions: KitVersionRow[]
+}
+export type KitUsage = { tier: BitTier; kits: { used: number; cap: number | null; period: 'day' | 'ever' }; downloads: { used: number; cap: number | null; period: 'day' | 'month' } }
+
+export type WriteKitResult =
+  | { ok: true; kit: KitView; usage: KitUsage }
+  | { ok: false; reason: 'off' | 'sign_in' | 'failed' | 'not_found' }
+  | { ok: false; reason: 'limited'; usage: KitUsage }
+
+async function adminDb(): Promise<any> {
+  const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+  return supabaseAdmin
+}
+
+function listingFromRow(r: any): Listing {
+  return {
+    source: r.source, url: r.url ?? null, address: r.address ?? null, city: r.city ?? null, price: r.price ?? null,
+    beds: r.beds === null || r.beds === undefined ? null : Number(r.beds), baths: r.baths === null || r.baths === undefined ? null : Number(r.baths),
+    sqft: r.sqft ?? null, year_built: r.year_built ?? null, hoa: r.hoa ?? null, taxes: r.taxes ?? null, lot_sqft: r.lot_sqft ?? null,
+    mls: r.mls ?? null, status: r.status ?? null, open_houses: Array.isArray(r.open_houses) ? r.open_houses : [],
+    description: r.description ?? '', photos: Array.isArray(r.photos) ? r.photos : [], note: r.note ?? '',
+  }
+}
+
+async function kitsUsed(admin: any, userId: string, tier: BitTier): Promise<number> {
+  const { period } = limitFor('kit', tier)
+  let q = admin.from('kits').select('id', { count: 'exact', head: true }).eq('user_id', userId).eq('paid', false)
+  if (period === 'day') q = q.eq('day', today().day)
+  const { count } = await q
+  return count ?? 0
+}
+
+async function usageFor(admin: any, userId: string, tier: BitTier): Promise<KitUsage> {
+  const k = limitFor('kit', tier)
+  const d = limitFor('download', tier)
+  const [ku, du] = await Promise.all([kitsUsed(admin, userId, tier).catch(() => 0), downloadsUsed(admin, userId, tier).catch(() => 0)])
+  return { tier, kits: { used: ku, cap: k.cap, period: k.period === 'month' ? 'day' : k.period }, downloads: { used: du, cap: d.cap, period: d.period === 'ever' ? 'day' : d.period } }
+}
+
+async function loadKit(admin: any, kitId: string, userId: string): Promise<KitView | null> {
+  const { data: k } = await admin.from('kits').select('id, listing_id, user_id, tone, controls, paid, created_at').eq('id', kitId).eq('user_id', userId).maybeSingle()
+  if (!k) return null
+  const [{ data: l }, { data: vs }] = await Promise.all([
+    admin.from('listings').select('*').eq('id', k.listing_id).maybeSingle(),
+    admin.from('kit_versions').select('id, kit_id, kind, content, skipped, created_at').eq('kit_id', kitId).order('created_at', { ascending: true }),
+  ])
+  if (!l) return null
+  const controls = { ...DEFAULT_LISTING_CONTROLS, ...(k.controls ?? {}), tone: k.tone } as ListingControls
+  return { id: k.id, listing_id: k.listing_id, listing: listingFromRow(l), tone: k.tone, controls, paid: !!k.paid, created_at: k.created_at, versions: (vs ?? []) as KitVersionRow[] }
+}
+
+const KitIdIn = z.object({ kit_id: z.string().uuid() })
+
+/** Write a kit: from a listing just read (listing) or an existing one
+ *  (listing_id, a rewrite). Counts one kit. The note is scrubbed like a story. */
+export const writeRealtorKit = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ listing: ListingIn.optional(), listing_id: z.string().uuid().optional(), controls: ControlsIn }).refine((x) => x.listing || x.listing_id, { message: 'a listing' }).parse(d))
+  .handler(async ({ data, context }): Promise<WriteKitResult> => {
+    const { userId } = context as { userId: string }
+    if (!readFlags().realtors) {
+      try { await requireAdmin(context) } catch { return { ok: false, reason: 'off' } }
+    }
+    const admin = await adminDb()
+    const tier = await kitTier(admin, userId)
+    const usage = await usageFor(admin, userId, tier)
+    if (usage.kits.cap !== null && usage.kits.used >= usage.kits.cap) return { ok: false, reason: 'limited', usage }
+    const controls: ListingControls = { ...DEFAULT_LISTING_CONTROLS, ...data.controls }
+    // the listing row: reused on a rewrite, stored on a first write
+    let listingId = data.listing_id ?? null
+    let listing: Listing
+    if (listingId) {
+      const { data: l } = await admin.from('listings').select('*').eq('id', listingId).eq('user_id', userId).maybeSingle()
+      if (!l) return { ok: false, reason: 'not_found' }
+      listing = listingFromRow(l)
+      if (data.listing?.note !== undefined) listing.note = data.listing.note
+    } else {
+      listing = { ...(data.listing as Listing), open_houses: data.listing!.open_houses ?? [], hoa: data.listing!.hoa ?? null, taxes: data.listing!.taxes ?? null, lot_sqft: data.listing!.lot_sqft ?? null, mls: data.listing!.mls ?? null, status: data.listing!.status ?? null }
+    }
+    // the agent's note is their text: names out before a model or the table sees it
+    const { hasContactDetails, runScrub } = await import('./agents/scrubber.functions')
+    if (listing.note && hasContactDetails(listing.note)) listing.note = (await runScrub(listing.note)).clean_text
+    if (!listingId) {
+      const { data: row, error } = await admin.from('listings').insert({
+        user_id: userId, source: listing.source, url: listing.url, address: listing.address, city: listing.city, price: listing.price, beds: listing.beds, baths: listing.baths,
+        sqft: listing.sqft, year_built: listing.year_built, hoa: listing.hoa, taxes: listing.taxes, lot_sqft: listing.lot_sqft, mls: listing.mls, status: listing.status, open_houses: listing.open_houses,
+        description: listing.description, photos: listing.photos, note: listing.note, controls,
+      }).select('id').single()
+      if (error || !row) return { ok: false, reason: 'failed' }
+      listingId = row.id as string
+    } else {
+      await admin.from('listings').update({ note: listing.note, controls, updated_at: new Date().toISOString() }).eq('id', listingId)
+    }
+    const { writeKit } = await import('./realtors/kit.server')
+    const { KIT_PROMPT_VERSION } = await import('./realtors/prompts.server')
+    const result = await writeKit(listing, controls)
+    if (!result) return { ok: false, reason: 'failed' }
+    const { data: kitRow, error: kErr } = await admin.from('kits').insert({ listing_id: listingId, user_id: userId, tone: controls.tone, prompt_version: KIT_PROMPT_VERSION, controls, day: today().day }).select('id').single()
+    if (kErr || !kitRow) return { ok: false, reason: 'failed' }
+    await admin.from('kit_versions').insert({ kit_id: kitRow.id, kind: 'original', content: result.kit, skipped: result.skipped })
+    await admin.from('events').insert({ user_id: userId, session_id: null, name: 'kit_written', properties: { product: 'realtors', tone: controls.tone, rewrite: !!data.listing_id, ms: result.ms, tier } as never } as never).then(() => {}, () => {})
+    const kit = await loadKit(admin, kitRow.id, userId)
+    if (!kit) return { ok: false, reason: 'failed' }
+    return { ok: true, kit, usage: await usageFor(admin, userId, tier) }
+  })
+
+/** Keep the kit as edited on the page as a version. No model, no charge. */
+export const keepKitEdit = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => KitIdIn.extend({ content: z.any() }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true; version: KitVersionRow } | { ok: false; reason: 'not_found' | 'failed' | 'too_many' }> => {
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const kit = await loadKit(admin, data.kit_id, userId)
+    if (!kit) return { ok: false, reason: 'not_found' }
+    if (kit.versions.length >= 40) return { ok: false, reason: 'too_many' }
+    const content = sanitizeKit(data.content, kit.versions[kit.versions.length - 1]!.content)
+    const { hasContactDetails, runScrub } = await import('./agents/scrubber.functions')
+    for (const { where, line } of (await import('./realtors/kit.server')).kitLines(content)) {
+      if (hasContactDetails(line)) {
+        const clean = (await runScrub(line)).clean_text
+        replaceLine(content, where, line, clean)
+      }
+    }
+    const { data: row, error } = await admin.from('kit_versions').insert({ kit_id: kit.id, kind: 'edited', content, skipped: [] }).select('id, kit_id, kind, content, skipped, created_at').single()
+    if (error || !row) return { ok: false, reason: 'failed' }
+    return { ok: true, version: row as KitVersionRow }
+  })
+
+/** A kit's content as typed on the page: same shape as the last version,
+ *  strings trimmed and capped, nothing else let through. */
+function sanitizeKit(input: unknown, base: Kit): Kit {
+  const t = (v: unknown, max = 600) => (typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().slice(0, max) : '')
+  const i = (input ?? {}) as any
+  const shots = Array.isArray(i?.walkthrough?.shots) ? i.walkthrough.shots : base.walkthrough.shots
+  return {
+    walkthrough: {
+      shots: shots.slice(0, 14).map((s: any, n: number) => ({ where: t(s?.where, 80) || base.walkthrough.shots[n]?.where || '', action: t(s?.action, 240), line: t(s?.line), seconds: t(s?.seconds, 12), ...(s?.fact ? { fact: t(s.fact, 60) } : {}) })),
+      cut15: t(i?.walkthrough?.cut15, 300) || base.walkthrough.cut15,
+      cut60: t(i?.walkthrough?.cut60, 300) || base.walkthrough.cut60,
+    },
+    voiceover: (Array.isArray(i?.voiceover) ? i.voiceover : base.voiceover).slice(0, 14).map((x: any) => ({ label: t(x?.label, 60), text: t(x?.text) })).filter((x: any) => x.text),
+    hooks: (Array.isArray(i?.hooks) ? i.hooks : base.hooks).slice(0, 6).map((x: any) => ({ line: t(x?.line, 200), move: t(x?.move, 60) })).filter((x: any) => x.line),
+    open_house: (Array.isArray(i?.open_house) ? i.open_house : base.open_house).slice(0, 8).map((x: any) => ({ label: t(x?.label, 60), text: t(x?.text, 900) })).filter((x: any) => x.text),
+    posts: (Array.isArray(i?.posts) ? i.posts : base.posts).slice(0, 10).map((x: any) => ({ label: t(x?.label, 60), text: t(x?.text, 1200) })).filter((x: any) => x.text),
+    straight: t(i?.straight, 2500) || base.straight,
+  }
+}
+function replaceLine(k: Kit, where: string, from: string, to: string) {
+  const swap = (s: string) => (s === from ? to : s)
+  k.walkthrough.shots.forEach((s) => { s.line = swap(s.line); s.action = swap(s.action) })
+  k.walkthrough.cut15 = swap(k.walkthrough.cut15); k.walkthrough.cut60 = swap(k.walkthrough.cut60)
+  k.voiceover.forEach((x) => { x.text = swap(x.text) }); k.hooks.forEach((x) => { x.line = swap(x.line) })
+  k.open_house.forEach((x) => { x.text = swap(x.text) }); k.posts.forEach((x) => { x.text = swap(x.text) })
+  k.straight = swap(k.straight)
+  void where
+}
+
+export const getRealtorKit = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => KitIdIn.parse(d))
+  .handler(async ({ data, context }): Promise<{ kit: KitView | null; usage: KitUsage | null }> => {
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const kit = await loadKit(admin, data.kit_id, userId)
+    const tier = await kitTier(admin, userId)
+    return { kit, usage: await usageFor(admin, userId, tier) }
+  })
+
+export type KitSummary = { id: string; address: string | null; city: string | null; price: string | null; tone: ListingControls['tone']; created_at: string }
+export const listMyKits = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({}).parse(d ?? {}))
+  .handler(async ({ context }): Promise<{ kits: KitSummary[]; usage: KitUsage }> => {
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: rows } = await admin.from('kits').select('id, tone, created_at, listings(address, city, price)').eq('user_id', userId).order('created_at', { ascending: false }).limit(60)
+    const kits: KitSummary[] = (rows ?? []).map((r: any) => ({ id: r.id, address: r.listings?.address ?? null, city: r.listings?.city ?? null, price: r.listings?.price ?? null, tone: r.tone, created_at: r.created_at }))
+    const tier = await kitTier(admin, userId)
+    return { kits, usage: await usageFor(admin, userId, tier) }
+  })
+
+export const KIT_DOWNLOADS = [...OUTPUTS, 'pdf', 'txt'] as const
+export type KitDownloadKind = (typeof KIT_DOWNLOADS)[number]
+/** what each download costs from the pool: a copied output 1, the PDF all six, the voiceover .txt 1 */
+export const KIT_UNITS: Record<KitDownloadKind, number> = { walkthrough: 1, voiceover: 1, hooks: 1, open_house: 1, posts: 1, straight: 1, pdf: 6, txt: 1 }
+
+export type KitDownloadCharge =
+  | { ok: true; used: number; cap: number | null; watermarked: boolean; tier: BitTier; repeat: boolean }
+  | { ok: false; reason: 'sign_in' | 'not_found' | 'failed' }
+  | { ok: false; reason: 'limited'; used: number; cap: number; tier: BitTier }
+
+/** One copy, PDF or text file against the download pool. Free: never
+ *  counted, always marked (every output carries "— shutap.com"). A bought
+ *  kit and Pro: never counted, never marked. Basic: counted by units, the
+ *  same output of the same version the same day free (a second copy). */
+export const chargeKitDownload = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => KitIdIn.extend({ version_id: z.string().uuid(), output: z.enum(KIT_DOWNLOADS) }).parse(d))
+  .handler(async ({ data, context }): Promise<KitDownloadCharge> => {
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const kit = await loadKit(admin, data.kit_id, userId)
+    if (!kit) return { ok: false, reason: 'not_found' }
+    if (!kit.versions.some((v) => v.id === data.version_id)) return { ok: false, reason: 'not_found' }
+    const tier = await kitTier(admin, userId)
+    const cap = limitFor('download', tier).cap
+    const { day } = today()
+    const free = tier === 'free' && !kit.paid
+    const uncounted = kit.paid || tier === 'pro'
+    const units = KIT_UNITS[data.output]
+    let used = 0
+    try { used = await downloadsUsed(admin, userId, tier) } catch { /* ledger down: let it through */ }
+    const { count: same } = await admin.from('kit_downloads').select('id', { count: 'exact', head: true }).eq('user_id', userId).eq('version_id', data.version_id).eq('output', data.output).eq('day', day)
+    if ((same ?? 0) > 0) return { ok: true, used, cap, watermarked: free, tier, repeat: true }
+    if (!free && !uncounted && cap !== null && used + units > cap) return { ok: false, reason: 'limited', used, cap, tier }
+    const { error } = await admin.from('kit_downloads').insert({ user_id: userId, kit_id: kit.id, version_id: data.version_id, output: data.output, units: free || uncounted ? 0 : units, tier, watermarked: free, day })
+    if (error && String(error.code) !== '23505') console.error('[kit download] ledger', error.message)
+    await admin.from('events').insert({ user_id: userId, session_id: null, name: 'download', properties: { product: 'realtors', kind: data.output, units, tier, watermarked: free, kit_id: kit.id, version_id: data.version_id } as never } as never).then(() => {}, () => {})
+    return { ok: true, used: free || uncounted ? used : used + units, cap, watermarked: free, tier, repeat: false }
+  })
+
+export const kitUsage = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({}).parse(d ?? {}))
+  .handler(async ({ context }): Promise<KitUsage> => {
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    return usageFor(admin, userId, await kitTier(admin, userId))
+  })
