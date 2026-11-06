@@ -358,3 +358,22 @@
   .bt-eslot { grid-template-columns: 1fr; }
   .bt-ectl { flex-direction: row; }
 }
+
+/* the lined box (slice 4b, Nov 5 2026): the write box as a bit, line by line */
+.bt-lined { display: flex; flex-direction: column; gap: 4px; padding: 6px 18px 0; }
+.bt-lline { padding: 8px 0; border-bottom: 1px solid var(--line); }
+.bt-lline .bt-lbl small { font: 500 11px var(--sora); letter-spacing: 0; text-transform: none; color: var(--muted); }
+.bt-etext.empty { min-height: 1.6em; }
+.bt-etext.empty:empty::before { content: attr(data-placeholder); color: #a8949d; font-style: italic; font-weight: 400; pointer-events: none; }
+.bt-mini.ghost { color: var(--muted); border-style: dashed; }
+.bt-lined-foot { display: flex; flex-direction: column; gap: 10px; padding: 12px 0 14px; }
+.bt-guide { margin: 0; font-size: var(--fs-small); color: var(--ink-2); line-height: 1.45; }
+.bt-guide.ready { color: var(--wine); font-weight: 600; }
+.bt-lined-cta { display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+@media (max-width: 600px) {
+  .bt-lined { padding: 4px 12px 0; }
+  .bt-lline { grid-template-columns: 1fr; }
+  .bt-lline .bt-ectl { flex-direction: row; }
+  .bt-lined-cta { justify-content: stretch; }
+  .bt-lined-cta .bt-go { flex: 1; }
+}

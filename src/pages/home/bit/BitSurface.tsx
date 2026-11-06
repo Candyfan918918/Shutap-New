@@ -38,7 +38,7 @@ import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { promptOneTap, cancelOneTap, oneTapAvailable } from '@/lib/google-one-tap'
 import { trackEvent } from '@/lib/tracking'
-import { setSurfacePage, anonSessionId, jokeTrack } from '../joke/jokeClient'
+import { setSurfacePage, anonSessionId, jokeTap, jokeTrack } from '../joke/jokeClient'
 import { ActionIcon, ACTION_COLORS } from './icons'
 import { Versions } from './Versions'
 import { Progress } from './Progress'
@@ -50,14 +50,16 @@ import { PostSheet } from './PostSheet'
 import { PaywallBody, UpgradeBody, type PaywallWhere } from './PlanSheets'
 import { VideoCard } from './VideoCard'
 import { EditableBit, draftOf, type Draft } from './EditableBit'
+import { EMPTY_LINES, LinedBox, linesText, writtenSlots } from './LinedBox'
 import { getFlags } from '@/lib/flags.functions'
 import { NO_FLAGS, type Flags } from '@/lib/flags'
-import type { Slot } from '@/lib/bits/shared'
+import { readSlot, type Slot } from '@/lib/bits/shared'
 import { downloadUsage, type DownloadUsage } from '@/lib/bits.functions'
 import { FuelMeter, storyFuel, useTypingPrompt } from './storyBox'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
+const LINES_KEY = 'shutap_bit_lines'
 const AUTOSTART_KEY = 'shutap_bit_autostart'
 const CONTROLS_KEY = 'shutap_bit_controls'
 const PENDING_KEY = 'shutap_bit_pending'
@@ -76,7 +78,7 @@ const PENDING_WRITE_TTL = 30 * 60 * 1000
    the same bit) instead of starting a second one. */
 const INFLIGHT_KEY = 'shutap_write_inflight'
 const INFLIGHT_TTL = 2 * 60 * 1000
-type Inflight = { id: string; key: string; story: string; controls: BitControls; at: number }
+type Inflight = { id: string; key: string; story: string; controls: BitControls; at: number; lines?: GivenLines }
 function readInflight(): Inflight | null {
   try {
     const raw = localStorage.getItem(INFLIGHT_KEY)
@@ -86,7 +88,7 @@ function readInflight(): Inflight | null {
       localStorage.removeItem(INFLIGHT_KEY)
       return null
     }
-    return { id: f.id, key: f.key, story: f.story, controls: { ...DEFAULT_CONTROLS, ...(f.controls ?? {}) }, at: f.at }
+    return { id: f.id, key: f.key, story: f.story, controls: { ...DEFAULT_CONTROLS, ...(f.controls ?? {}) }, at: f.at, lines: f.lines && typeof f.lines === 'object' ? f.lines : undefined }
   } catch {
     return null
   }
@@ -107,6 +109,7 @@ type ShownBit = Bit & { locked: boolean }
  *  they just tapped. The bit comes back with them either way. */
 const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   rewrite: { title: 'Sign in to rewrite it.', sub: 'Free. Hotter, tighter, a new tag, or mix your own. Your bit comes with you.' },
+  funnier: { title: 'Sign in to make a line funnier.', sub: 'Free: three ways for that line, built from the lines you wrote. Your lines stay in the box.' },
   swap: { title: 'Sign in to swap in a crowd-work angle.', sub: 'Free. Your bit comes with you, with all five angles.' },
   standup: { title: 'Sign in to run it as stand-up.', sub: 'Free. The teleprompter, at talking pace.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
@@ -130,7 +133,7 @@ const STEPS = ['reading it · names removed', 'finding the angle', 'writing four
 /* ── the note left before sign-in, so the bit comes back after it ── */
 /** What a guest was doing when they were asked to sign in; picked back up
  *  once they're in. */
-type SigninFrom = 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'watch' | 'save' | 'standup' | 'skit' | 'sketch' | 'post' | 'sheet' | 'one_tap'
+type SigninFrom = 'funnier' | 'rewrite' | 'swap' | 'mix' | 'download' | 'video' | 'watch' | 'save' | 'standup' | 'skit' | 'sketch' | 'post' | 'sheet' | 'one_tap'
 function writePending(bitId: string, anon: string, from?: SigninFrom) {
   try {
     localStorage.setItem(PENDING_KEY, JSON.stringify({ bit_id: bitId, anon, from, at: Date.now() }))
@@ -154,7 +157,9 @@ function clearPending() {
   try { localStorage.removeItem(PENDING_KEY) } catch { /* noop */ }
 }
 
-type PendingWrite = { story: string; controls: BitControls; write_id: string; anon: string }
+/** the lined box's lines, when the write came from it (null slots = the writer's) */
+type GivenLines = { hook?: string; setup?: string; tags?: string[]; button?: string }
+type PendingWrite = { story: string; controls: BitControls; write_id: string; anon: string; lines?: GivenLines }
 function writePendingWrite(p: PendingWrite) {
   try {
     localStorage.setItem(PENDING_WRITE_KEY, JSON.stringify({ ...p, at: Date.now() }))
@@ -176,7 +181,7 @@ function readPendingWrite(): PendingWrite | null {
       localStorage.removeItem(PENDING_WRITE_KEY)
       return null
     }
-    return { story: p.story, controls: { ...DEFAULT_CONTROLS, ...(p.controls ?? {}) }, write_id: p.write_id, anon: p.anon }
+    return { story: p.story, controls: { ...DEFAULT_CONTROLS, ...(p.controls ?? {}) }, write_id: p.write_id, anon: p.anon, lines: p.lines && typeof p.lines === 'object' ? p.lines : undefined }
   } catch {
     return null
   }
@@ -269,6 +274,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     typeof document === 'undefined' ? '' : ((document.getElementById('bit-story') as HTMLTextAreaElement | null)?.value ?? ''),
   )
   const [controls, setControls] = useState<BitControls>(DEFAULT_CONTROLS)
+  /** the lined box (slice 4b): the lines typed so far and which are locked */
+  const [lines, setLines] = useState<Draft>(EMPTY_LINES)
+  const [linesLocked, setLinesLocked] = useState<Slot[]>([])
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [phase, setPhase] = useState<Phase>('write')
   const [tier, setTier] = useState<BitTier>('guest')
@@ -418,6 +426,17 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     try { sessionStorage.setItem(DRAFT_KEY, story) } catch { /* noop */ }
   }, [story])
   useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(LINES_KEY)
+      if (!raw) return
+      const p = JSON.parse(raw) as { lines?: Draft; locked?: Slot[] }
+      if (p.lines && typeof p.lines.hook === 'string' && Array.isArray(p.lines.tags)) { setLines({ ...EMPTY_LINES, ...p.lines, tags: [p.lines.tags[0] ?? '', p.lines.tags[1] ?? ''] }); setLinesLocked(Array.isArray(p.locked) ? p.locked : []) }
+    } catch { /* noop */ }
+  }, [])
+  useEffect(() => {
+    try { sessionStorage.setItem(LINES_KEY, JSON.stringify({ lines, locked: linesLocked })) } catch { /* noop */ }
+  }, [lines, linesLocked])
+  useEffect(() => {
     try { localStorage.setItem(CONTROLS_KEY, JSON.stringify(controls)) } catch { /* noop */ }
   }, [controls])
 
@@ -450,7 +469,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         typed.current = true
         setStory(f.story)
         setControls(f.controls)
-        await onWriteRef.current({ text: f.story, controls: f.controls, writeId: f.id, fromSignIn: true })
+        await onWriteRef.current({ text: f.story, controls: f.controls, writeId: f.id, fromSignIn: true, lines: f.lines })
       }
       return
     }
@@ -487,7 +506,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         setStory(pending.story)
         setControls(pending.controls)
         jokeTrack('bit_after_signin', t, {})
-        await onWriteRef.current({ text: pending.story, controls: pending.controls, writeId: pending.write_id, fromSignIn: true })
+        await onWriteRef.current({ text: pending.story, controls: pending.controls, writeId: pending.write_id, fromSignIn: true, lines: pending.lines })
         return
       }
       if (!note) return
@@ -620,7 +639,31 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     say("You're on Pro. Write as many as you want.")
   }
 
-  type WriteOpts = { text?: string; controls?: BitControls; writeId?: string; fromSignIn?: boolean }
+  type WriteOpts = { text?: string; controls?: BitControls; writeId?: string; fromSignIn?: boolean; lines?: GivenLines }
+
+  /** The lined box is on the homepage only (never an embed), behind the flag. */
+  const lined = flags.ondemand && !embed
+  /** which lines the last lined write handed over (for a guest's sign-in return) */
+  const linedGiven = useRef<GivenLines | undefined>(undefined)
+  function givenFrom(d: Draft, only: Slot[] | null): GivenLines {
+    const pick = (s: Slot) => (only === null || only.includes(s)) && readSlot(d, s).trim() ? readSlot(d, s).trim() : undefined
+    const tags = [pick('tag0'), pick('tag1')].map((t) => t ?? '')
+    return { hook: pick('hook'), setup: pick('setup'), tags: tags.some(Boolean) ? tags : undefined, button: pick('button') }
+  }
+  /** finish the bit: the locked lines are kept word for word; the rest is Shutap's */
+  function finishLined() {
+    const given = givenFrom(lines, linesLocked)
+    linedGiven.current = given
+    jokeTap('lined_finish', tier, { written: writtenSlots(lines).length, locked: linesLocked.length })
+    void onWrite({ text: linesText(lines), lines: given })
+  }
+  /** keep it: every written line is theirs; only the empty ones are written */
+  function keepLined() {
+    const given = givenFrom(lines, null)
+    linedGiven.current = given
+    jokeTap('lined_keep', tier, { written: writtenSlots(lines).length })
+    void onWrite({ text: linesText(lines), lines: given })
+  }
 
   /** One write at a time: a double tap (or the sign-in return racing a tap)
    *  must not start two bits. */
@@ -644,7 +687,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     const ctl = opts?.controls ?? controls
     if (!text || phaseRef.current === 'writing') return
     setError(null)
-    const key = JSON.stringify([text, ctl])
+    const given = opts?.lines
+    const key = JSON.stringify([text, ctl, given ?? null])
     // The same story already being written (in this tab or another): join
     // it rather than spending a second bit on it.
     const inflight = readInflight()
@@ -659,13 +703,13 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     // retry of a write that landed returns the same bit and costs nothing.
     const writeId = opts?.writeId ?? joining?.id ?? (unsureWrite.current?.key === key ? unsureWrite.current.id : newWriteId())
     if (joining) jokeTrack('bit_write_joined', tier, { age_ms: Date.now() - joining.at, via: 'press' })
-    setInflight({ id: writeId, key, story: text, controls: ctl, at: joining?.at ?? Date.now() })
+    setInflight({ id: writeId, key, story: text, controls: ctl, at: joining?.at ?? Date.now(), lines: given })
     inflightId.current = writeId
     unsureWrite.current = null
     setPhase('writing')
     setNotice(null)
     requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
-    jokeTrack('bit_submitted', tier, { audience: ctl.audience, voice: ctl.voice, length: ctl.length, heat: ctl.heat, after_signin: !!opts?.fromSignIn, fuel: storyFuel(text).pct, details: storyFuel(text).details })
+    jokeTrack('bit_submitted', tier, { audience: ctl.audience, voice: ctl.voice, length: ctl.length, heat: ctl.heat, after_signin: !!opts?.fromSignIn, fuel: storyFuel(text).pct, details: storyFuel(text).details, lined: !!given, given: given ? Object.values(given).flat().filter(Boolean).length : 0 })
     // One silent retry before the visitor ever sees an error: a slow model or
     // a dropped request costs a few seconds, not the bit.
     // A time limit on every try (Oct 22 2026): phones sat on "writing…" for
@@ -684,7 +728,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
       let timer: number | undefined
       try {
         res = await Promise.race([
-          write({ data: { story: text, controls: move ? { ...ctl, move: move.id } : ctl, write_id: writeId, ...ctx() } }),
+          write({ data: { story: text, lines: given, controls: move ? { ...ctl, move: move.id } : ctl, write_id: writeId, ...ctx() } }),
           new Promise<never>((_, reject) => {
             timer = window.setTimeout(() => reject(new Error('timeout')), WRITE_TIME_LIMIT_MS)
           }),
@@ -753,6 +797,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     setNotice(res.notice || swaps.length ? { text: res.notice, swaps } : null)
     setPhase('bit')
     setStory('')
+    if (given) { setLines(EMPTY_LINES); setLinesLocked([]) }
     jokeTrack('bit_written', res.tier, { ms: res.ms, seconds: res.bit.versions[0]?.est_seconds ?? null })
   }
 
@@ -782,9 +827,10 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   async function signInForBit(method: 'google' | 'apple' | 'email', from: string) {
     if (from === 'bit_2') {
       // The guest's second bit: keep the story, write it right after sign-in.
-      const text = story.trim()
+      const given = lined ? linedGiven.current : undefined
+      const text = (lined ? linesText(lines) : story).trim()
       if (!text) return
-      writePendingWrite({ story: text, controls, write_id: newWriteId(), anon: anonSessionId() })
+      writePendingWrite({ story: text, controls, write_id: newWriteId(), anon: anonSessionId(), lines: given })
     } else {
       if (!bit) return
       writePending(bit.id, anonSessionId(), signinFrom)
@@ -891,7 +937,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               <div className="bt-box-head">
                 <label htmlFor="bit-story" className="bt-box-title">
                   <span className="bt-rec" aria-hidden="true" />
-                  what do you want to say funnier?
+                  {lined ? 'what happened, as a bit · line by line, your words' : 'what do you want to say funnier?'}
                 </label>
                 <span className="bt-box-aside">names get removed</span>
               </div>
@@ -905,20 +951,40 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   </button>
                 </div>
               )}
-              <textarea
-                suppressHydrationWarning
-                id="bit-story"
-                ref={paperRef}
-                className="bt-paper"
-                placeholder={embed?.placeholder ?? prompt}
-                value={story}
-                maxLength={4000}
-                onChange={(e) => { typed.current = true; setStory(e.target.value) }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void onWrite()
-                }}
-              />
-              <FuelMeter fuel={fuel} />
+              {lined ? (
+                <LinedBox
+                  tier={tier}
+                  controls={move ? { ...controls, move: move.id } : controls}
+                  lines={lines}
+                  onLines={(d) => { typed.current = true; setLines(d) }}
+                  locked={linesLocked}
+                  onLocked={setLinesLocked}
+                  busy={phaseRef.current === 'writing'}
+                  onFinish={finishLined}
+                  onKeep={keepLined}
+                  onSignIn={tier === 'guest' ? () => openSignin('funnier') : undefined}
+                  onLimit={() => openPaywall('rewrite')}
+                  onCrisis={() => { setPhase('crisis'); jokeTrack('crisis_route_shown', tier) }}
+                  say={say}
+                />
+              ) : (
+                <>
+                  <textarea
+                    suppressHydrationWarning
+                    id="bit-story"
+                    ref={paperRef}
+                    className="bt-paper"
+                    placeholder={embed?.placeholder ?? prompt}
+                    value={story}
+                    maxLength={4000}
+                    onChange={(e) => { typed.current = true; setStory(e.target.value) }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void onWrite()
+                    }}
+                  />
+                  <FuelMeter fuel={fuel} />
+                </>
+              )}
               <div className="bt-box-foot">
                 <button
                   type="button"
@@ -931,12 +997,14 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   <span>{controls.audience} · {controls.voice} · {controls.length} · wild {controls.heat}</span>
                   <span className="bt-chev" aria-hidden="true">{settingsOpen ? '▴' : '▾'}</span>
                 </button>
-                <div className="bt-box-go">
-                  {fuel.words > 0 && <span className="bt-count">{fuel.words} {fuel.words === 1 ? 'word' : 'words'}</span>}
-                  <button className="bt-btn bt-go" disabled={!story.trim()} onClick={() => void onWrite()}>
-                    make it funnier →
-                  </button>
-                </div>
+                {!lined && (
+                  <div className="bt-box-go">
+                    {fuel.words > 0 && <span className="bt-count">{fuel.words} {fuel.words === 1 ? 'word' : 'words'}</span>}
+                    <button className="bt-btn bt-go" disabled={!story.trim()} onClick={() => void onWrite()}>
+                      make it funnier →
+                    </button>
+                  </div>
+                )}
               </div>
               {settingsOpen && (
                 <div className="bt-ctl" id="bit-settings">
@@ -961,7 +1029,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             )}
             <p className="bt-note" style={{ textAlign: 'center' }}>
               {tier === 'guest' ? 'free with one tap: sign in with Google or Apple · ' : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
-              names removed before anything is saved · nobody at shutap reads it · ⌘↵ to write it
+              names removed before anything is saved · nobody at shutap reads it{lined ? ' · "finish the bit" writes only the lines you left empty' : ' · ⌘↵ to write it'}
             </p>
           </>
         )}

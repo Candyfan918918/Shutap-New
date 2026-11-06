@@ -266,12 +266,32 @@ export type LabDetail = {
   judge_model: string
 }
 
+type GivenLines = Partial<Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>>
+function cleanLines(l: GivenLines): GivenLines | undefined {
+  const t = (v?: string) => (v ?? '').replace(/\s+/g, ' ').trim()
+  const out: GivenLines = { hook: t(l.hook) || undefined, setup: t(l.setup) || undefined, tags: (l.tags ?? []).map(t), button: t(l.button) || undefined }
+  if (!out.tags?.some(Boolean)) delete out.tags
+  return out.hook || out.setup || out.tags || out.button ? out : undefined
+}
+/** If the Scrubber changed the story, the lines need the same treatment. */
+async function scrubGivenAsync(g: GivenLines): Promise<GivenLines> {
+  const one = async (v?: string) => (v && hasContactDetails(v) ? (await runScrub(v)).clean_text : v)
+  return { hook: await one(g.hook), setup: await one(g.setup), tags: g.tags ? await Promise.all(g.tags.map((t) => one(t).then((x) => x ?? ''))) : undefined, button: await one(g.button) }
+}
+function scrubGiven(g: GivenLines, raw: string, clean: string): GivenLines | Promise<GivenLines> {
+  return raw === clean ? g : scrubGivenAsync(g)
+}
+function linesAsStory(g: GivenLines): string {
+  return [g.hook, g.setup, ...(g.tags ?? []), g.button].filter(Boolean).join(' ')
+}
+
 async function writeCore(
   story: string,
   controlsIn: Partial<BitControls> | undefined,
   anonSessionId: string | null,
   lab: boolean,
   writeId?: string,
+  given?: GivenLines,
 ): Promise<WriteBitResult & { lab?: LabDetail }> {
   const started = Date.now()
   const supabaseAdmin = await adminDb()
@@ -357,7 +377,10 @@ async function writeCore(
     // THIS PERSON: their own kept lines and rewrite habits (a quick read,
     // cached five minutes; '' for a first bit)
     const person = await personSignal(supabaseAdmin, id.userId).catch(() => '')
-    const writing = writeBitFromStory(clean, controls, undefined, sink, { person }).catch((e) => {
+    // The person's lines are scrubbed with the story (same text), so the
+    // given block carries clean lines too.
+    const givenClean = given ? await scrubGiven(given, story, clean) : undefined
+    const writing = writeBitFromStory(clean, controls, undefined, sink, { person, given: givenClean }).catch((e) => {
       sink.failure = { rejected: [], error: e instanceof Error ? e.message : 'threw' }
       return null
     })
@@ -525,22 +548,29 @@ export const writeBit = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) =>
     z
       .object({
-        story: z.string().min(1).max(4000),
+        story: z.string().max(4000).optional(),
+        /** the lined box (Nov 5 2026): the lines the person wrote; the writer fills the rest */
+        lines: z.object({ hook: z.string().max(300).optional(), setup: z.string().max(600).optional(), tags: z.array(z.string().max(600)).max(3).optional(), button: z.string().max(600).optional() }).optional(),
         controls: ControlsSchema,
         /** one id per press of "write", reused on the silent retry */
         write_id: z.string().uuid().optional(),
         ...Ctx,
       })
+      .refine((d) => (d.story && d.story.trim()) || (d.lines && Object.values(d.lines).some((v) => (Array.isArray(v) ? v.some(Boolean) : !!v))), { message: 'a story or a line' })
       .parse(d),
   )
   .handler(async ({ data }): Promise<WriteBitResult> => {
     try {
+      const given = data.lines ? cleanLines(data.lines) : undefined
+      // With lines and no story, the lines are the story the writer reads.
+      const story = data.story?.trim() || (given ? linesAsStory(given) : '')
       const { lab: _lab, ...result } = await writeCore(
-        data.story,
+        story,
         data.controls as Partial<BitControls> | undefined,
         data.anon_session_id ?? null,
         false,
         data.write_id,
+        given,
       )
       if (result.status === 'no_session') {
         const { alertBitFailure } = await import('./bits/alert.server')
@@ -872,7 +902,7 @@ export const getSketch = createServerFn({ method: 'POST' })
 
 export type TouchResult =
   | { ok: true; options: TouchOption[]; used: number; cap: number | null }
-  | { ok: false; reason: 'sign_in' | 'not_found' | 'rate_limited' | 'failed' }
+  | { ok: false; reason: 'sign_in' | 'not_found' | 'rate_limited' | 'failed' | 'crisis' }
   | { ok: false; reason: 'limited'; used: number; cap: number; tier: BitTier }
 
 const DraftIn = z.object({
@@ -887,14 +917,23 @@ const DraftIn = z.object({
  *  unlimited, counted in bit_usage under touch:<user>. Nothing is stored. */
 export const touchLine = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) =>
-    z.object({ bit_id: z.string().uuid(), draft: DraftIn, slot: z.enum(SLOTS), avoid: z.array(z.string().max(600)).max(12).optional(), ...Ctx }).parse(d),
+    z.object({
+      /** the bit on the result page; absent in the lined box, where no bit exists yet */
+      bit_id: z.string().uuid().optional(),
+      draft: DraftIn,
+      slot: z.enum(SLOTS),
+      avoid: z.array(z.string().max(600)).max(12).optional(),
+      /** the box's settings, when there is no bit to read them from */
+      controls: ControlsSchema,
+      ...Ctx,
+    }).parse(d),
   )
   .handler(async ({ data }): Promise<TouchResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
     if (!id.userId) return { ok: false, reason: 'sign_in' }
-    const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
-    if (!row) return { ok: false, reason: 'not_found' }
+    const row = data.bit_id ? await loadOwnedBit(supabaseAdmin, data.bit_id, id) : null
+    if (data.bit_id && !row) return { ok: false, reason: 'not_found' }
     const tier = await resolveTier(supabaseAdmin, id)
     const { day } = today()
     if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
@@ -908,14 +947,26 @@ export const touchLine = createServerFn({ method: 'POST' })
       return { ok: false, reason: 'failed' }
     }
     if (used === -1) return { ok: false, reason: 'limited', used: limit.cap ?? 0, cap: limit.cap ?? 0, tier }
-    const controls = { ...DEFAULT_CONTROLS, ...(row.controls ?? {}) } as BitControls
+    const controls = { ...DEFAULT_CONTROLS, ...(row ? row.controls ?? {} : data.controls ?? {}) } as BitControls
     // Typed lines are the person's own text: names come out before a model sees them.
     const clean = { ...data.draft, why: '' }
     for (const sl of SLOTS) {
       const v = readSlot(clean, sl)
       if (v && hasContactDetails(v)) Object.assign(clean, writeSlot(clean, sl, (await runScrub(v)).clean_text))
     }
-    const options = await touchLineDraft(row.story_clean, clean, data.slot, controls, data.avoid ?? [])
+    // In the lined box the lines are the story; the Guard reads them like one.
+    let story = row?.story_clean ?? ''
+    if (!row) {
+      story = linesAsStory(clean)
+      if (story.length < 3) return { ok: false, reason: 'failed' }
+      const crisis = await runClassifyCrisis(story)
+      if (crisis.crisis) {
+        await refundBit(supabaseAdmin, subject, day, chargeId)
+        await supabaseAdmin.from('crisis_events').insert({ alias_id: id.userId, category: crisis.category, severity: crisis.severity, resources_shown: true } as never)
+        return { ok: false, reason: 'crisis' }
+      }
+    }
+    const options = await touchLineDraft(story, clean, data.slot, controls, data.avoid ?? [])
     if (!options) {
       await refundBit(supabaseAdmin, subject, day, chargeId)
       return { ok: false, reason: 'failed' }

@@ -1312,7 +1312,7 @@ VOICE: {{VOICE}}
 {{HEAT}}
 LENGTH: about {{SECONDS}} seconds spoken, which is about {{WORDS}} words for the
 whole bit at talking pace. Never more than {{MAX_WORDS}} words.
-{{JOB}}
+{{JOB}}{{GIVEN}}
 A BIT HAS FOUR PARTS:
 
 HOOK — the first two seconds, also the on-screen text. At most 8 words.
