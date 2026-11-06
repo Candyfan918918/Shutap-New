@@ -24,9 +24,12 @@ export function TryItBox({
   preset,
   anchor = false,
   realtor = false,
+  toast = false,
 }: {
   /** the box above is the realtor listing box */
   realtor?: boolean
+  /** the box above is the Shutap Toasts box */
+  toast?: boolean
   page: string
   heading?: string
   /** open the writer with these controls set; the story box stays empty */
@@ -61,8 +64,8 @@ export function TryItBox({
       <div style={{ display: 'grid', gap: 4, minWidth: 0, flex: '1 1 220px' }}>
         <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#17131a', lineHeight: 1.3 }}>{heading}</h2>
         <p style={{ margin: 0, fontSize: 15, color: '#443c42', lineHeight: 1.45 }}>
-          {realtor ? 'Paste the listing link. Get the walkthrough, voiceover, hooks, open-house kit and posts. First kit free; copies always unlimited.' : 'Write what happened. Get the bit and the video. Free: 1 bit a day, downloads unlimited with the shutap.com mark.'}
-          {!realtor && preset && presetLabel(preset) ? ` Opens set to ${presetLabel(preset)}; change anything before you write.` : ''}
+          {toast ? 'Type the stories about them, in your words. Get the toast with pause marks, cue cards and a phone prompter. First toast free.' : realtor ? 'Paste the listing link. Get the walkthrough, voiceover, hooks, open-house kit and posts. First kit free; copies always unlimited.' : 'Write what happened. Get the bit and the video. Free: 1 bit a day, downloads unlimited with the shutap.com mark.'}
+          {!realtor && !toast && preset && presetLabel(preset) ? ` Opens set to ${presetLabel(preset)}; change anything before you write.` : ''}
         </p>
       </div>
       {anchor ? (
@@ -86,7 +89,7 @@ export function TryItBox({
             whiteSpace: 'nowrap',
           }}
         >
-          Say it funnier ↑
+          {toast ? 'Write my toast ↑' : 'Say it funnier ↑'}
         </a>
       ) : (
       <Link
