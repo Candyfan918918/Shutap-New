@@ -167,7 +167,7 @@
 .bt-slot { display: flex; flex-direction: column; gap: 3px; padding-block: 10px; border-bottom: 1px solid var(--line); }
 .bt-slot:last-of-type { border-bottom: 0; }
 .bt-v { font-family: var(--news); font-size:var(--fs-read); line-height: 1.4; color: var(--ink); margin: 0; }
-.bt-v.hook { font-family: var(--sora); font-weight: 800; font-size:var(--fs-h2); letter-spacing:0; line-height: 1.15; color: var(--wine); }
+.bt-v.hook { font-weight: 500; color: var(--wine); } /* Nov 6 2026: same size as every line (Candy: the hook font was too big) */
 .bt-slot.locked .bt-v { filter: blur(5px); user-select: none; color: rgba(142, 28, 76, 0.28); letter-spacing:0; }
 .bt-why { font-family: var(--news); font-style: italic; color: var(--muted); background: var(--tint); border-radius: 12px; padding: 10px 12px; font-size:var(--fs-body); margin: 8px 0 0; }
 .bt-acts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
@@ -269,7 +269,7 @@
 .bt-h2,.bt-sheet h3 {font-size:var(--fs-h2);line-height:1.1;font-weight:800;}
 .bt-lbl,.bt-stage .bt-lbl,.bt-sheet .bt-lbl,.bt-steplabels span,.bt-beat .shot {font-size:var(--fs-label);font-weight:700;letter-spacing:.14em;line-height:1.5;}
 .bt-v,.bt-why,.bt-opt,.bt-pick .t,.bt-beat .line,.bt-post-prev p {font-family:var(--news);font-size:var(--fs-read);font-weight:400;line-height:1.6;}
-.bt-v.hook {font-family:var(--sora);font-size:var(--fs-h2);font-weight:800;line-height:1.1;}
+.bt-v.hook {font-weight:500;}
 .bt-chip,.bt-btn.sm,.bt-sheet .bt-chip,.bt-stage-btn {height:var(--home-control-height);font:500 var(--fs-small)/1.5 'Sora',sans-serif;}
 .bt-chip[aria-pressed=true],.bt-opt[aria-pressed=true] {font-weight:700;}
 .bt-btn {height:var(--home-control-height);font:700 var(--fs-body)/1.5 var(--sora);}
