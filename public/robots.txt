@@ -49,6 +49,7 @@ Disallow: /bit-lab
 Disallow: /bit-daily
 Disallow: /bit-eval
 Disallow: /kit-lab
+Disallow: /toast-lab
 Disallow: /realtors/kit
 Disallow: /lovable/
 Disallow: /.lovable/
