@@ -80,7 +80,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-best-man-speech", "funny-wedding-toast", "funny-maid-of-honor-speech"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Write your best man speech from your stories", href: "/toasts/best-man" },
   techniques: [
     {
       name: "Early by an hour",

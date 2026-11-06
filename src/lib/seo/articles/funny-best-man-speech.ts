@@ -84,7 +84,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-wedding-toast", "best-ai-for-wedding-toast-jokes", "roast-lines"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Write your best man speech from your stories", href: "/toasts/best-man" },
   techniques: [
     {
       name: "The recount that never ends",

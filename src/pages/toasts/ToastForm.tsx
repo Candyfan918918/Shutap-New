@@ -123,7 +123,7 @@ const LockIcon = ({ open, color }: { open?: boolean; color: string }) => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.4" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d={open ? 'M8 11V7a4 4 0 0 1 7.5-2' : 'M8 11V7a4 4 0 0 1 8 0v4'} /></svg>
 )
 
-export function ToastForm({ occasionIn, prepaidSession }: { occasionIn?: Occasion; prepaidSession?: string }) {
+export function ToastForm({ occasionIn, prepaidSession, kicker, h1, lead }: { occasionIn?: Occasion; prepaidSession?: string; kicker?: string; h1?: [string, string]; lead?: string }) {
   const { userId, ready } = useCurrentAlias()
   const navigate = useNavigate()
   const [d, setD] = useState<Draft>(() => freshDraft(occasionIn ?? 'best_man'))
@@ -265,9 +265,9 @@ export function ToastForm({ occasionIn, prepaidSession }: { occasionIn?: Occasio
     <div className="rl">
       <div className="ts-wrap">
         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
-          <p className="rl-kicker">shutap toasts · {spec.label}</p>
-          <h1 className="rl-h1">Your toast, <em>funnier.</em></h1>
-          <p className="rl-lead">Your stories, in your words. Shutap builds the toast around them, and only touches a line when you tap it.</p>
+          <p className="rl-kicker">{kicker ?? `shutap toasts · ${spec.label}`}</p>
+          <h1 className="rl-h1">{h1 ? <>{h1[0]}<em>{h1[1]}</em></> : <>Your toast, <em>funnier.</em></>}</h1>
+          <p className="rl-lead">{lead ?? 'Your stories, in your words. Shutap builds the toast around them, and only touches a line when you tap it.'}</p>
         </div>
 
         <div className="ts-cols">
