@@ -25,3 +25,4 @@
 - Links preload on intent (router defaultPreload) and the homepage loader has a staleTime, so Write opens without waiting on fresh server reads each click.
 - Guide routes split only their page component; boundary options stay eager and missing-resource errors target the matching guide route so 404 handling does not depend on a separate boundary chunk.
 - Email actions and footer lines have independent innermost table rows so the renderer's missing-variable pruning cannot hide neighboring prose or the company address; auth JSX ports retain the scaffold's prop contracts and secure callback wiring.
+- Every route with `ssr: false` must be private and listed as a `Disallow:` in public/robots.txt (or be server-rendered); otherwise the "AI crawler readability (SSR check)" workflow fails and emails on every push. Run `node scripts/seo/ssr-check.mjs` before pushing a new route.
