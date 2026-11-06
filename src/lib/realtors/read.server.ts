@@ -11,8 +11,8 @@ const UA = 'Mozilla/5.0 (compatible; ShutapKit/1.0; +https://shutap.com/realtors
 const BLOCKED_HOSTS = ['zillow.com', 'redfin.com', 'realtor.com', 'trulia.com', 'homes.com']
 
 export type ReadResult =
-  | { ok: true; listing: Listing; how: 'jsonld' | 'og' | 'text' }
-  | { ok: false; reason: 'bad_url' | 'blocked' | 'fetch_failed' | 'nothing_found' | 'not_a_listing'; host?: string }
+  | { ok: true; listing: Listing; how: 'jsonld' | 'og' | 'text'; seen?: string }
+  | { ok: false; reason: 'bad_url' | 'blocked' | 'fetch_failed' | 'nothing_found' | 'not_a_listing'; host?: string; seen?: string }
 
 function host(u: string): string | null {
   try { return new URL(u).hostname.replace(/^www\./, '') } catch { return null }
@@ -53,30 +53,61 @@ function meta(html: string, name: string): string | null {
   return m ? stripTags(m[1]!) : null
 }
 
-/** Facts from free text: an MLS sheet, a page copied, an OG description. */
+/** Facts from free text: an MLS sheet, a page copied, a portal page's text.
+ *  Exact, not guessed: the price is the dollar figure that sits closest to
+ *  the beds / baths / sqft block (that is where every portal prints the list
+ *  price; fees and taxes sit elsewhere), never a per-month or per-year figure. */
 export function factsFromText(text: string): Partial<Listing> {
   const t = text.replace(/\s+/g, ' ')
   const out: Partial<Listing> = {}
-  // a home price: at least $50,000, not per month / per sqft; the first one
-  // that looks like a listing price wins (HOA and taxes come later and smaller)
-  const priceRe = /\$\s?([0-9]{2,3}(?:,[0-9]{3})+|[0-9]{5,9})(?!\s*(?:\/|per)\s*(?:mo|month|sqft|sq|yr|year))/gi
+  const beds = /([0-9]+(?:\.[0-9])?)\s*(?:bd|bds|bed|beds|bedrooms?|br)\b/i.exec(t)
+  if (beds) out.beds = num(beds[1])
+  // "2 bath" · "2.5 baths" · "1 Full Baths 1 Half Baths" (Matrix) · "2 full, 1 half"
+  const full = /([0-9]+)\s*(?:full\s*)?(?:ba|bath|baths|bathrooms?)\b/i.exec(t)
+  const half = /([0-9]+)\s*half\s*(?:ba|bath|baths|bathrooms?)\b/i.exec(t)
+  const dec = /([0-9]+\.[0-9])\s*(?:ba|bath|baths|bathrooms?)\b/i.exec(t)
+  if (dec) out.baths = num(dec[1])
+  else if (full) out.baths = (num(full[1]) ?? 0) + (half ? (num(half[1]) ?? 0) * 0.5 : 0) || null
+  // living area, not the lot: skip a figure labelled lot
+  const sqRe = /(?<![\d,])([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{3,5})\s*(?:sq\.?\s?ft|sqft|square feet)/gi
+  let sm: RegExpExecArray | null
+  while ((sm = sqRe.exec(t))) {
+    const before = t.slice(Math.max(0, sm.index - 12), sm.index).toLowerCase()
+    const after = t.slice(sm.index, sm.index + sm[0].length + 6).toLowerCase()
+    if (/\blot\b/.test(before) || /lot\s*sq/.test(after)) continue
+    out.sqft = num(sm[1]); break
+  }
+  const built = /(?:built(?: in)?|year built)[:\s]+((?:18|19|20)[0-9]{2})\b/i.exec(t)
+  if (built) out.year_built = num(built[1])
+  // the price: every $ figure that is not per month/year/sqft; pick the one
+  // nearest the facts block (beds or sqft), else the largest
+  const anchor = beds?.index ?? (out.sqft ? t.search(/sq\.?\s?ft|sqft|square feet/i) : -1)
+  const priceRe = /\$\s?([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{4,9})(?!\s*(?:\/|per|a)\s*(?:mo|month|sqft|sq|yr|year|night|day))/gi
+  const prices: { n: number; i: number }[] = []
   let pm: RegExpExecArray | null
   while ((pm = priceRe.exec(t))) {
     const n = Number(pm[1]!.replace(/,/g, ''))
-    if (n >= 50_000 && n <= 200_000_000) { out.price = '$' + n.toLocaleString('en-US'); break }
+    const ctx = t.slice(Math.max(0, pm.index - 24), pm.index).toLowerCase()
+    if (/\b(hoa|tax|taxes|fee|fees|dues|deposit|insurance|save|off)\b/.test(ctx)) continue
+    prices.push({ n, i: pm.index })
   }
-  const beds = /([0-9]+(?:\.[0-9])?)\s*(?:bd|bds|bed|beds|bedrooms?|br)\b/i.exec(t)
-  if (beds) out.beds = num(beds[1])
-  const baths = /([0-9]+(?:\.[0-9])?)\s*(?:ba|bath|baths|bathrooms?)\b/i.exec(t)
-  if (baths) out.baths = num(baths[1])
-  const sqft = /([0-9]{3,5}(?:,[0-9]{3})?)\s*(?:sq\.?\s?ft|sqft|square feet)/i.exec(t)
-  if (sqft) { const n = num(sqft[1]); if (n && n >= 250 && n <= 30_000) out.sqft = n }
-  const built = /(?:built|year built)[:\s]+((?:18|19|20)[0-9]{2})\b/i.exec(t)
-  if (built) out.year_built = num(built[1])
-  const addr = /\b([0-9]{1,6}[A-Za-z]?\s+[A-Z][A-Za-z0-9.' ]{2,40}\s(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Ct|Court|Ln|Lane|Way|Blvd|Boulevard|Pl|Place|Ter|Terrace|Cir|Circle)\b\.?(?:\s?(?:#|Unit|Apt)\s?[A-Za-z0-9-]+)?)/.exec(t)
+  if (prices.length) {
+    const best = anchor >= 0 ? prices.reduce((b, p) => (Math.abs(p.i - anchor) < Math.abs(b.i - anchor) ? p : b)) : prices.reduce((b, p) => (p.n > b.n ? p : b))
+    out.price = '$' + best.n.toLocaleString('en-US')
+  }
+  const addr = /\b([0-9]{1,6}[A-Za-z]?\s+[A-Z][A-Za-z0-9.' ]{2,40}\s(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Ct|Court|Ln|Lane|Way|Blvd|Boulevard|Pl|Place|Ter|Terrace|Cir|Circle|Hwy|Highway|Pkwy|Parkway|Trl|Trail|Loop|Walk)\b\.?(?:\s?(?:#|Unit|Apt)\s?[A-Za-z0-9-]+)?)/.exec(t)
   if (addr) out.address = addr[1]!.trim()
-  const city = /,\s*([A-Z][A-Za-z.' ]{2,30}),\s*[A-Z]{2}\b/.exec(t)
-  if (city) out.city = city[1]!.trim()
+  // "San Mateo, CA 94401" · "Atherton, California 94027"
+  // the city is the word(s) right before ", <State> <zip>"; when the street
+  // address runs straight into it (a portal header), it starts after the
+  // street suffix
+  const city = /([A-Z][A-Za-z.' ]{2,30}?),\s*(?:[A-Z]{2}|[A-Z][a-z]+(?: [A-Z][a-z]+)?)\s+[0-9]{5}\b/.exec(t)
+  if (city) {
+    let c = city[1]!.trim()
+    const cut = /\b(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Ct|Court|Ln|Lane|Way|Blvd|Boulevard|Pl|Place|Ter|Terrace|Cir|Circle|Hwy|Pkwy|Trl|Loop|Walk)\.?\s+(.+)$/.exec(c)
+    if (cut) c = cut[1]!.trim()
+    if (c && !/\d/.test(c)) out.city = c
+  }
   return out
 }
 
@@ -137,15 +168,17 @@ async function tryFetch(url: string, h: string): Promise<ReadResult> {
   // gives numbers that are not the listing's. Read facts from the page text
   // only when there is real text; otherwise from the OG tags alone.
   const bodyText = stripTags(html)
-  const thin = bodyText.split(/\s+/).length < 120
+  const words = bodyText.split(/\s+/).length
+  const thin = words < 120
+  const seen = `${words} words of page text · title: ${ogTitle ?? meta(html, 'title') ?? '(none)'} · ${bodyText.slice(0, 240)}`
   const textFacts = factsFromText([ogTitle ?? '', ogDesc ?? '', thin ? '' : bodyText.slice(0, 20000)].join(' '))
   const merged: Listing = { ...base, ...textFacts, ...(ld ? Object.fromEntries(Object.entries(ld).filter(([, v]) => v !== null && v !== '' && !(Array.isArray(v) && !v.length))) : {}) } as Listing
   if (!merged.description) merged.description = ogDesc ?? ''
   if (!merged.address && ogTitle && /\d/.test(ogTitle)) merged.address = ogTitle.split('|')[0]!.trim().slice(0, 120)
   const found = [merged.address, merged.price, merged.beds, merged.description].filter(Boolean).length
   // a thin page with no description and no structured data is a guess, not a read
-  if (found < 2 || (thin && !ld && !merged.description)) return { ok: false, reason: 'nothing_found', host: h }
-  return { ok: true, listing: merged, how: ld ? 'jsonld' : 'og' }
+  if (found < 2 || (thin && !ld && !merged.description)) return { ok: false, reason: 'nothing_found', host: h, seen }
+  return { ok: true, listing: merged, how: ld ? 'jsonld' : 'og', seen }
 }
 
 /** Read a listing from pasted text. */

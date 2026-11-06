@@ -38,6 +38,7 @@ function KitLab() {
   const [note, setNote] = useState('')
   const [listing, setListing] = useState<Listing | null>(null)
   const [how, setHow] = useState<string>('')
+  const [seen, setSeen] = useState<string>('')
   const [reading, setReading] = useState(false)
   const [controls, setControls] = useState<ListingControls>({ ...DEFAULT_LISTING_CONTROLS, must_say: [], never_say: [] })
   const [must, setMust] = useState('')
@@ -48,9 +49,10 @@ function KitLab() {
   useEffect(() => { labKitEvals({ data: {} }).then(setLedger).catch(() => {}) }, [runs.length])
 
   async function read() {
-    setReading(true); setListing(null); setHow('')
+    setReading(true); setListing(null); setHow(''); setSeen('')
     try {
       const r = await readListing({ data: url.trim() ? { url: url.trim() } : { text } })
+      setSeen(r.seen ?? '')
       if (!r.ok) {
         setHow(r.reason === 'blocked' ? `${r.host} refuses automated reads · paste the listing text instead` : r.reason === 'fetch_failed' ? `could not fetch ${r.host ?? 'that page'} · paste the text` : r.reason === 'nothing_found' ? 'no listing facts found on that page · paste the text' : r.reason === 'not_a_listing' ? 'that text has no price, beds or address' : r.reason)
         return
@@ -119,6 +121,7 @@ function KitLab() {
             <button className="fd-chip" aria-pressed disabled={reading || (!url.trim() && text.trim().length < 40)} onClick={() => void read()}>{reading ? 'reading…' : 'read the listing'}</button>
             <span className="fd-muted" style={{ fontSize: 13 }}>{how}</span>
           </div>
+          {seen && <p className="fd-muted" style={{ margin: 0, fontSize: 12, wordBreak: 'break-word' }}>what the server saw: {seen}</p>}
         </section>
 
         {listing && (

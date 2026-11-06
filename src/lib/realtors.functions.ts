@@ -24,8 +24,8 @@ async function requireAdmin(context: unknown): Promise<void> {
 }
 
 export type ReadListingResult =
-  | { ok: true; listing: Listing; how: 'jsonld' | 'og' | 'text' }
-  | { ok: false; reason: 'bad_url' | 'blocked' | 'fetch_failed' | 'nothing_found' | 'not_a_listing' | 'off'; host?: string }
+  | { ok: true; listing: Listing; how: 'jsonld' | 'og' | 'text'; seen?: string }
+  | { ok: false; reason: 'bad_url' | 'blocked' | 'fetch_failed' | 'nothing_found' | 'not_a_listing' | 'off'; host?: string; seen?: string }
 
 /** Read a listing from a link or pasted text. Anyone signed in, once the
  *  flag is on; admins always (for the lab). */
