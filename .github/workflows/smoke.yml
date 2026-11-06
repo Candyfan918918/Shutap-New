@@ -16,13 +16,24 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
+      # The full browser test signs in with the service role key, which Lovable
+      # Cloud does not give out. Without it, the job runs the live health
+      # check instead: one real bit through the writer, judge, scrubber and guard.
       HAS_SECRETS: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY != '' && secrets.SUPABASE_URL != '' && secrets.SMOKE_EMAIL != '' }}
     steps:
-      # Until the four repo secrets are added the job skips instead of failing
-      # (Nov 5 2026: it failed and emailed on every push since it was added).
-      - name: Secrets present?
+      - name: Wait for the publish (health check)
+        if: env.HAS_SECRETS != 'true' && github.event_name == 'push'
+        run: sleep 300
+      - name: Live health check (write one bit)
         if: env.HAS_SECRETS != 'true'
-        run: echo "::notice::Smoke skipped - add SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_PUBLISHABLE_KEY and SMOKE_EMAIL under Settings > Secrets and variables > Actions."
+        run: |
+          for i in 1 2 3; do
+            code=$(curl -sS -o body.json -w '%{http_code}' --max-time 90 'https://shutap.com/api/public/bit-health?fresh=1' || echo 000)
+            echo "attempt $i: HTTP $code"; head -c 400 body.json 2>/dev/null; echo
+            [ "$code" = "200" ] && grep -q '"ok":true' body.json && exit 0
+            sleep 30
+          done
+          echo "::error::The live health check could not write a bit"; exit 1
       - uses: actions/checkout@v4
         if: env.HAS_SECRETS == 'true'
       - uses: actions/setup-node@v4
