@@ -21,7 +21,10 @@ export function getCoreEntries(): SitemapEntry[] {
   return [
   { path: "/", lastmod: todayPacific(), changefreq: "daily", priority: "1.0" },
   { path: "/guides", lastmod: fresh(newest(GUIDES.map((g) => g.updated ?? g.published))), changefreq: "weekly", priority: "0.9" },
-  { path: "/humor-amplifier", lastmod: REPOSITIONED, changefreq: "monthly", priority: "0.9" },
+  // Nov 6 2026: the products. /humor-amplifier redirects to /bits.
+  { path: "/bits", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.9" },
+  { path: "/realtors", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.9" },
+  { path: "/toasts", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.6" },
   ...GUIDE_TOPICS.filter((t) => guidesInTopic(t.id).length > 0).map((t): SitemapEntry => ({
     path: topicPath(t.id),
     lastmod: fresh(newest(guidesInTopic(t.id).map((g) => g.updated ?? g.published))),
