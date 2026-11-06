@@ -15,7 +15,7 @@ const TITLE = 'Shutap for Realtors — your listing, funnier. The walkthrough, v
 const DESC = 'Paste the listing link. Shutap writes the walkthrough to shoot, the voiceover for text-to-voice, the hooks, the open-house kit, the posts and the straight copy, in your tone: professional, funny, luxury or young. Fair-housing checked, nothing made up. First kit free.'
 
 export const Route = createFileRoute('/realtors/')({
-  // Nov 6 2026: /realtors is the tool (the old /realtors/kit redirects here).
+  // Nov 6 2026: /realtors is the tool; /realtors/kit is gone.
   validateSearch: (s: Record<string, unknown>) => z.object({ kit: z.string().uuid().optional(), session_id: z.string().max(200).optional(), prepaid: z.string().max(200).optional(), url: z.string().max(2000).optional(), text: z.string().max(2).optional() }).parse(s),
   head: () => ({ meta: pageMeta(TITLE, DESC, '/realtors') }),
   component: Landing,
