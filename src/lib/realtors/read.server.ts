@@ -53,6 +53,37 @@ function meta(html: string, name: string): string | null {
   return m ? stripTags(m[1]!) : null
 }
 
+/** Property tax, as the listing's own record states it (Nov 6 2026).
+ *  Portals print a mortgage calculator ("Property taxes $170 · Home insurance
+ *  …") before the facts; its number is an estimate per month, not the
+ *  listing's tax. So a labelled annual amount wins ("Annual tax amount",
+ *  "Tax annual amount", "Taxes (annual)"); a bare "tax $N" counts only when it
+ *  is not inside a payment breakdown. */
+export function taxFromText(t: string): string | undefined {
+  const fmt = (n: string, per?: string) => '$' + n + (per && /^m/i.test(per) ? '/month' : '/year')
+  const labelled = /\b(?:annual tax amount|tax annual amount|annual (?:property )?taxes|taxes \(annual\)|property tax(?:es)? \(annual\))\s*:?\s*\|?\s*\$\s?([0-9]{1,3}(?:,[0-9]{3})*)/i.exec(t)
+  if (labelled) return fmt(labelled[1]!)
+  const re = /\b(?:taxes|tax)\s*:?\s*\$\s?([0-9]{1,3}(?:,[0-9]{3})*)(?:\s*(?:\/|per|a)\s*(mo|month|yr|year))?/gi
+  let m: RegExpExecArray | null
+  while ((m = re.exec(t))) {
+    const around = t.slice(Math.max(0, m.index - 160), m.index + m[0].length + 160).toLowerCase()
+    if (/principal|interest|home insurance|mortgage insurance|monthly payment|est(?:imated)?\.? payment|payment calculator|down payment|assessed/.test(around)) continue
+    return fmt(m[1]!, m[2])
+  }
+  return undefined
+}
+
+/** A tax figure that can't be this home's (a $170 "annual" tax on a $2.4M
+ *  house) is left out rather than shown: nothing added, nothing wrong. */
+export function taxPlausible(taxes: string, price: string | null | undefined): boolean {
+  const n = Number(taxes.replace(/[^0-9]/g, ''))
+  const p = price ? Number(price.replace(/[^0-9]/g, '')) : 0
+  if (!n) return false
+  if (!p) return true
+  const yearly = /month/.test(taxes) ? n * 12 : n
+  return yearly >= p * 0.0005 && yearly <= p * 0.05
+}
+
 /** Facts from free text: an MLS sheet, a page copied, a portal page's text.
  *  Exact, not guessed: the price is the dollar figure that sits closest to
  *  the beds / baths / sqft block (that is where every portal prints the list
@@ -79,8 +110,8 @@ export function factsFromText(text: string): Partial<Listing> {
   }
   const hoa = /\bhoa(?:\s*(?:dues|fee|fees))?\s*:?\s*\$\s?([0-9]{1,3}(?:,[0-9]{3})*)(?:\s*(?:\/|per|a)\s*(mo|month|yr|year))?/i.exec(t)
   if (hoa) out.hoa = '$' + hoa[1] + (hoa[2] ? (/^y/i.test(hoa[2]) ? '/year' : '/month') : '/month')
-  const tax = /\b(?:taxes|tax)\s*:?\s*\$\s?([0-9]{1,3}(?:,[0-9]{3})*)(?:\s*(?:\/|per|a)\s*(mo|month|yr|year))?/i.exec(t)
-  if (tax) out.taxes = '$' + tax[1] + (tax[2] ? (/^m/i.test(tax[2]) ? '/month' : '/year') : '/year')
+  const taxes = taxFromText(t)
+  if (taxes) out.taxes = taxes
   const built = /(?:built(?: in)?|year built)[:\s]+((?:18|19|20)[0-9]{2})\b/i.exec(t)
   if (built) out.year_built = num(built[1])
   // the price: every $ figure that is not per month/year/sqft; pick the one
@@ -99,6 +130,7 @@ export function factsFromText(text: string): Partial<Listing> {
     const best = anchor >= 0 ? prices.reduce((b, p) => (Math.abs(p.i - anchor) < Math.abs(b.i - anchor) ? p : b)) : prices.reduce((b, p) => (p.n > b.n ? p : b))
     out.price = '$' + best.n.toLocaleString('en-US')
   }
+  if (out.taxes && !taxPlausible(out.taxes, out.price)) delete out.taxes
   const addr = /\b([0-9]{1,6}[A-Za-z]?\s+[A-Z][A-Za-z0-9.' ]{2,40}\s(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Ct|Court|Ln|Lane|Way|Blvd|Boulevard|Pl|Place|Ter|Terrace|Cir|Circle|Hwy|Highway|Pkwy|Parkway|Trl|Trail|Loop|Walk)\b\.?(?:\s?(?:#|Unit|Apt)\s?[A-Za-z0-9-]+)?)/.exec(t)
   if (addr) out.address = addr[1]!.trim()
   // "San Mateo, CA 94401" · "Atherton, California 94027"
