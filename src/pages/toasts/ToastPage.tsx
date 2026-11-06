@@ -17,7 +17,9 @@ import { copyMyToast, cutMyToast, getMyToast, keepToastEdit, lockMyToast, myToas
 import { OCCASION, TONE_LABEL, clock, fromPlaceholders, toPlaceholders, toastSeconds, type Names, type ToastLine } from '@/lib/toasts/shared'
 import { readNames, saveNames } from '@/lib/toasts/names-store'
 import { lineTimes, speechText, toastTitle, withMark } from '@/lib/toasts/toast-text'
-import { downloadBlob, pdfName, speechPdf } from '@/lib/toasts/toast-pdf'
+import { cueCardsPdf, downloadBlob, keepsakePdf, pdfName, speechPdf } from '@/lib/toasts/toast-pdf'
+import { prompterLink, readRuns, type RehearseRun } from '@/lib/toasts/on-the-day'
+import QRCode from 'qrcode'
 import type { ToastUsage } from '@/lib/toasts/usage.server'
 import { TOAST_ONCE, usd } from '@/lib/pricing'
 import { trackEvent } from '@/lib/tracking'
@@ -335,7 +337,19 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
   const [sheet, setSheet] = useState<null | 'change' | 'change_pay' | 'unmark'>(null)
   const [checkoutError, setCheckoutError] = useState('')
   const [copying, setCopying] = useState(false)
+  const [runs, setRuns] = useState<RehearseRun[]>([])
+  const qrRef = useRef<HTMLCanvasElement | null>(null)
   const shown = (s: string) => fromPlaceholders(s, names)
+  const phoneLink = typeof window === 'undefined' ? '' : prompterLink(window.location.origin, row.id, names)
+  useEffect(() => { setRuns(readRuns(row.id)) }, [row.id])
+  useEffect(() => {
+    if (!qrRef.current || !phoneLink) return
+    QRCode.toCanvas(qrRef.current, phoneLink, { width: 150, margin: 1, color: { dark: '#1a1418', light: '#ffffff' } }).catch(() => {})
+  }, [phoneLink])
+  const openPrompter = (opts: { short?: boolean; rehearse?: boolean } = {}) => {
+    track(opts.rehearse ? 'toast_rehearse_opened' : 'toast_prompter_opened_here', { short: !!opts.short })
+    window.location.assign(prompterLink(window.location.origin, row.id, names, opts))
+  }
 
   async function copy(text: string, what: string) {
     try { await navigator.clipboard.writeText(text); say('copied') } catch { say('copy failed · select the text instead') }
@@ -381,7 +395,6 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
       {body}
     </article>
   )
-  const soon = (what: string) => <p className="rl-note" style={{ fontSize: 13 }}>{what} open here later today, on this toast, free.</p>
 
   return (
     <div className="rl">
@@ -414,14 +427,41 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
               <p className="rl-note">With pause marks and the clock in the margin. Large type, so it reads from a podium.</p>
             </>
           ))}
-          {card('2', 'cue cards', 'PDF · 4 cards a page', soon('Printable cue cards (one story a card, punchline in bold)'))}
-          {card('3', 'the prompter', 'on your phone', soon('The phone prompter (one line at a time, works offline)'), true)}
+          {card('2', 'cue cards', 'PDF · 4 cards a page', (
+            <>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 8, padding: 8, border: '1px dashed rgba(90,30,50,.3)', borderRadius: 10 }}>
+                {t.cards.slice(0, 4).map((c, i) => (
+                  <div key={i} style={{ border: '1px solid var(--line)', borderRadius: 6, padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    <span style={{ font: '800 10px var(--sora)', color: 'var(--rose)' }}>{i + 1} · {shown(c.title)}</span>
+                    <span style={{ font: '600 10.5px/1.35 var(--sora)', color: 'var(--ink-2)' }}>{c.keys.map(shown).join(' · ')}</span>
+                    <span style={{ font: '700 11px/1.3 var(--news)', color: 'var(--ink)' }}>{shown(c.land)}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="rl-row"><button type="button" className="rl-btn" disabled={!t.cards.length} onClick={() => { downloadBlob(cueCardsPdf({ occasion: row.occasion, cards: t.cards, names, marked }), pdfName(row.occasion, names, 'cue-cards')); track('toast_downloaded', { what: 'cue_cards', marked }) }}>download cue cards</button></div>
+              <p className="rl-note">Print, cut on the dashed lines, hold in one hand. One story a card, the line to land in bold, the last line written out in full.</p>
+            </>
+          ))}
+          {card('3', 'the prompter', 'on your phone', (
+            <>
+              <div className="rl-row" style={{ alignItems: 'center', gap: 14, flexWrap: 'nowrap' }}>
+                <canvas ref={qrRef} width={150} height={150} aria-label="QR code that opens the prompter on your phone" style={{ flex: '0 0 150px', borderRadius: 12, border: '1px solid var(--line)' }} />
+                <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.5, color: 'var(--ink-2)' }}>Scan with your phone and sign in once with this account. The names ride in the link itself (after the #), so they never reach Shutap.</p>
+              </div>
+              <div className="rl-row">
+                <button type="button" className="rl-btn" onClick={() => openPrompter()}>open prompter here</button>
+                <button type="button" className="rl-btn ghost" onClick={() => void copy(phoneLink, 'prompter_link')}>copy phone link</button>
+              </div>
+              <p className="rl-note">Works offline once it's open: a reception hall's Wi-Fi is not a plan.{row.occasion === 'new_years' ? ' “Sync to midnight” tells you when to start.' : row.occasion === 'toastmasters' ? ' Timing lights: green 5:00, yellow 6:00, red 7:00.' : ''}</p>
+            </>
+          ), true)}
           {card('4', 'the 60-second version', cut ? clock(cut.seconds) : 'on demand', cut ? (
             <>
               <p style={{ margin: 0, font: '400 16px/1.5 var(--news)', color: 'var(--ink)' }}>{cut.lines.map((l) => shown(l.text)).join(' ')}</p>
               <div className="rl-row">
                 <button type="button" className="rl-btn ghost" onClick={() => void copy(withMark(speechText(cut.lines, names), marked), 'cut60')}>copy</button>
                 <button type="button" className="rl-btn ghost" onClick={() => pdf(cut.lines, 'the 60-second version', 'cut60')}>PDF</button>
+                <button type="button" className="rl-btn ghost" onClick={() => openPrompter({ short: true })}>prompter: short</button>
                 <button type="button" className="rl-mini" disabled={cutting} onClick={() => void makeCut(true)}>{cutting ? 'cutting…' : 'make it again'}</button>
               </div>
               <p className="rl-note">Your stories, the true thing and your must-says stay; Shutap's lines go first.</p>
@@ -432,10 +472,24 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
               <button type="button" className="rl-btn" disabled={cutting} onClick={() => void makeCut()}>{cutting ? 'cutting to a minute… 20s' : 'make a 60-second version'}</button>
             </>
           ))}
-          {card('5', 'rehearse', 'timer · nothing recorded', soon('A timed run-through against your target'))}
+          {card('5', 'rehearse', 'timer · nothing recorded', (
+            <>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, background: 'var(--surface)', borderRadius: 14, padding: '14px 16px' }}>
+                <span style={{ font: '800 30px var(--sora)', letterSpacing: '-0.02em', color: 'var(--wine)' }}>{runs[0] ? clock(runs[0].seconds) : '0:00'} <span style={{ font: '600 14px var(--sora)', color: 'var(--muted)' }}>/ {clock(row.length)}</span></span>
+                <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.5, color: 'var(--ink-2)' }}>{runs[0] ? `Last run ${runs[0].seconds > runs[0].target + 5 ? `${runs[0].seconds - runs[0].target}s over` : 'on time'}${runs[0].long ? ` · “${runs[0].long}” ran long` : ''} · ${runs.length} run${runs.length === 1 ? '' : 's'} on this device.` : 'Read it out loud and tap through the lines. Each run shows your time against the target and the section that ran long. Runs stay on this device.'}</p>
+              </div>
+              <div className="rl-row"><button type="button" className="rl-btn" onClick={() => openPrompter({ rehearse: true })}>start a run</button></div>
+              <p className="rl-note">Running long after locking? The 60-second version is here. The words can't change, the speed can.</p>
+            </>
+          ))}
           {card('6', spec.keepsake ? 'keepsake + the text after' : 'the text after', '', (
             <>
-              {spec.keepsake && <p className="rl-note" style={{ fontSize: 13 }}>The one-page keepsake to give them opens here later today.</p>}
+              {spec.keepsake && (
+                <div className="rl-row" style={{ gap: 12, flexWrap: 'nowrap' }}>
+                  <div aria-hidden="true" style={{ width: 62, height: 80, flex: '0 0 62px', border: '1px solid var(--line-2)', borderRadius: 4, background: '#fffdf9', padding: 7, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 4 }}><span style={{ font: 'italic 400 8px var(--news)', color: 'var(--wine)' }}>{toastTitle(row.occasion, names)}</span>{[0, 1, 2, 3].map((k) => <span key={k} style={{ height: 2, background: '#eee' }} />)}</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}><span style={{ font: '600 13.5px var(--sora)' }}>A one-page copy to give them</span><button type="button" className="rl-btn sm" onClick={() => { downloadBlob(keepsakePdf({ occasion: row.occasion, lines: t.lines, names, marked }), pdfName(row.occasion, names, 'keepsake')); track('toast_downloaded', { what: 'keepsake', marked }) }}>download keepsake</button></div>
+                </div>
+              )}
               <span className="rl-lbl">the text to send tonight</span>
               <p style={{ margin: 0, font: '400 16px/1.45 var(--news)', color: 'var(--ink)' }}>{shown(t.text_after)}</p>
               <div className="rl-row"><button type="button" className="rl-btn ghost sm" onClick={() => void copy(withMark(shown(t.text_after), marked), 'text_after')}>copy</button></div>

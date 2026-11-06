@@ -13,7 +13,8 @@ import { getMyToast, listMyToasts, type ToastSummary } from '@/lib/toasts.functi
 import { OCCASION, TONE_LABEL as TOAST_TONE, clock } from '@/lib/toasts/shared'
 import { readNames } from '@/lib/toasts/names-store'
 import { toastTitle } from '@/lib/toasts/toast-text'
-import { downloadBlob, pdfName, speechPdf } from '@/lib/toasts/toast-pdf'
+import { cueCardsPdf, downloadBlob, keepsakePdf, pdfName, speechPdf } from '@/lib/toasts/toast-pdf'
+import { prompterLink } from '@/lib/toasts/on-the-day'
 import { TONE_LABEL } from '@/lib/realtors/listing'
 import type { BitTier } from '@/lib/bits/shared'
 import { anonSessionId } from '@/pages/home/joke/jokeClient'
@@ -87,14 +88,20 @@ function Creations() {
 
   const count: Record<Kind, number> = { all: bits.length + kits.length + toasts.length, bits: bits.length, kits: kits.length, toasts: toasts.length, presentations: 0 }
 
-  /** The speech PDF straight from the list: names from this device. */
-  async function toastPdf(t: ToastSummary) {
+  /** A toast's downloads straight from the list: names from this device
+   *  (a device without them opens the toast, which asks once). */
+  async function toastGet(t: ToastSummary, what: 'speech' | 'cue_cards' | 'keepsake' | 'prompter') {
     const names = readNames(t.id)
     if (!names) { void navigate({ to: '/toasts/edit/$id', params: { id: t.id } }); return }
+    void trackEvent(what === 'prompter' ? 'toast_prompter_opened_here' : 'toast_downloaded', { product: 'toasts', what, where: 'creations' })
+    if (what === 'prompter') { window.location.assign(prompterLink(window.location.origin, t.id, names)); return }
     const r = await getMyToast({ data: { id: t.id } }).catch(() => null)
     if (!r?.ok || !r.toast.toast) return
-    downloadBlob(speechPdf({ occasion: t.occasion, tone: t.tone, length: t.length, lines: r.toast.toast.lines, names, marked: r.toast.marked }), pdfName(t.occasion, names, 'speech'))
-    void trackEvent('toast_downloaded', { product: 'toasts', what: 'speech', where: 'creations' })
+    const x = r.toast.toast
+    const blob = what === 'speech' ? speechPdf({ occasion: t.occasion, tone: t.tone, length: t.length, lines: x.lines, names, marked: r.toast.marked })
+      : what === 'cue_cards' ? cueCardsPdf({ occasion: t.occasion, cards: x.cards, names, marked: r.toast.marked })
+      : keepsakePdf({ occasion: t.occasion, lines: x.lines, names, marked: r.toast.marked })
+    downloadBlob(blob, pdfName(t.occasion, names, what.replace('_', '-')))
   }
   const pick = (k: Kind) => void navigate({ to: '/creations', search: k === 'all' ? {} : { show: k }, replace: true })
 
@@ -150,7 +157,7 @@ function Creations() {
         {tier && tier !== 'guest' && kind === 'toasts' && toasts.length > 0 && (
           <div className="fd-post" style={{ gap: 4, background: '#f3f8f4', borderColor: '#b9d3bf' }}>
             <b style={{ fontSize: 14.5 }}>Your toasts live here.</b>
-            <span className="fd-muted" style={{ fontSize: 13.5 }}>Locked toasts download as often as you like, forever: the speech, the 60-second version, the text after.</span>
+            <span className="fd-muted" style={{ fontSize: 13.5 }}>Locked toasts download as often as you like, forever: the speech, cue cards, keepsake, prompter.</span>
           </div>
         )}
 
@@ -201,7 +208,14 @@ function Creations() {
                   </span>
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                     <Link to="/toasts/edit/$id" params={{ id: it.toast.id }} className="fd-btn sm">{it.toast.locked ? 'open' : 'keep editing'}</Link>
-                    {it.toast.locked && <button type="button" className="fd-btn sm ghost" onClick={() => void toastPdf(it.toast)}>speech PDF</button>}
+                    {it.toast.locked && (
+                      <>
+                        <button type="button" className="fd-btn sm ghost" onClick={() => void toastGet(it.toast, 'speech')}>speech PDF</button>
+                        <button type="button" className="fd-btn sm ghost" onClick={() => void toastGet(it.toast, 'cue_cards')}>cue cards</button>
+                        {OCCASION[it.toast.occasion].keepsake && <button type="button" className="fd-btn sm ghost" onClick={() => void toastGet(it.toast, 'keepsake')}>keepsake</button>}
+                        <button type="button" className="fd-btn sm ghost" onClick={() => void toastGet(it.toast, 'prompter')}>prompter</button>
+                      </>
+                    )}
                   </div>
                 </div>
               ) : (

@@ -99,6 +99,7 @@ import { Route as GuidesTopicTopicRouteImport } from './routes/guides.topic.$top
 import { Route as RealtorsKitIndexRouteImport } from './routes/realtors.kit.index'
 import { Route as StoryPillarSlugRouteImport } from './routes/story.$pillar.$slug'
 import { Route as ToastsEditIdRouteImport } from './routes/toasts.edit.$id'
+import { Route as ToastsPrompterIdRouteImport } from './routes/toasts.prompter.$id'
 import { Route as ApiPublicHooksBillingReceiptsRouteImport } from './routes/api/public/hooks/billing-receipts'
 import { Route as ApiPublicHooksDailyIdeaEmailsRouteImport } from './routes/api/public/hooks/daily-idea-emails'
 import { Route as ApiPublicHooksDispatchCheckinsRouteImport } from './routes/api/public/hooks/dispatch-checkins'
@@ -570,6 +571,11 @@ const ToastsEditIdRoute = ToastsEditIdRouteImport.update({
   path: '/toasts/edit/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToastsPrompterIdRoute = ToastsPrompterIdRouteImport.update({
+  id: '/toasts/prompter/$id',
+  path: '/toasts/prompter/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksBillingReceiptsRoute =
   ApiPublicHooksBillingReceiptsRouteImport.update({
     id: '/api/public/hooks/billing-receipts',
@@ -727,6 +733,7 @@ export interface FileRoutesByFullPath {
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
   '/toasts/edit/$id': typeof ToastsEditIdRoute
+  '/toasts/prompter/$id': typeof ToastsPrompterIdRoute
   '/realtors/kit/': typeof RealtorsKitIndexRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
@@ -830,6 +837,7 @@ export interface FileRoutesByTo {
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
   '/toasts/edit/$id': typeof ToastsEditIdRoute
+  '/toasts/prompter/$id': typeof ToastsPrompterIdRoute
   '/realtors/kit': typeof RealtorsKitIndexRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
@@ -935,6 +943,7 @@ export interface FileRoutesById {
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
   '/toasts/edit/$id': typeof ToastsEditIdRoute
+  '/toasts/prompter/$id': typeof ToastsPrompterIdRoute
   '/realtors/kit/': typeof RealtorsKitIndexRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
@@ -1040,6 +1049,7 @@ export interface FileRouteTypes {
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
     | '/toasts/edit/$id'
+    | '/toasts/prompter/$id'
     | '/realtors/kit/'
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
@@ -1143,6 +1153,7 @@ export interface FileRouteTypes {
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
     | '/toasts/edit/$id'
+    | '/toasts/prompter/$id'
     | '/realtors/kit'
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
@@ -1247,6 +1258,7 @@ export interface FileRouteTypes {
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
     | '/toasts/edit/$id'
+    | '/toasts/prompter/$id'
     | '/realtors/kit/'
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
@@ -1341,6 +1353,7 @@ export interface RootRouteChildren {
   GuidesTopicTopicRoute: typeof GuidesTopicTopicRoute
   StoryPillarSlugRoute: typeof StoryPillarSlugRoute
   ToastsEditIdRoute: typeof ToastsEditIdRoute
+  ToastsPrompterIdRoute: typeof ToastsPrompterIdRoute
   RealtorsKitIndexRoute: typeof RealtorsKitIndexRoute
   ApiPublicHooksBillingReceiptsRoute: typeof ApiPublicHooksBillingReceiptsRoute
   ApiPublicHooksDailyIdeaEmailsRoute: typeof ApiPublicHooksDailyIdeaEmailsRoute
@@ -1987,6 +2000,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToastsEditIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/toasts/prompter/$id': {
+      id: '/toasts/prompter/$id'
+      path: '/toasts/prompter/$id'
+      fullPath: '/toasts/prompter/$id'
+      preLoaderRoute: typeof ToastsPrompterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/billing-receipts': {
       id: '/api/public/hooks/billing-receipts'
       path: '/api/public/hooks/billing-receipts'
@@ -2205,6 +2225,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuidesTopicTopicRoute: GuidesTopicTopicRoute,
   StoryPillarSlugRoute: StoryPillarSlugRoute,
   ToastsEditIdRoute: ToastsEditIdRoute,
+  ToastsPrompterIdRoute: ToastsPrompterIdRoute,
   RealtorsKitIndexRoute: RealtorsKitIndexRoute,
   ApiPublicHooksBillingReceiptsRoute: ApiPublicHooksBillingReceiptsRoute,
   ApiPublicHooksDailyIdeaEmailsRoute: ApiPublicHooksDailyIdeaEmailsRoute,

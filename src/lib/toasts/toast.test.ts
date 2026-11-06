@@ -68,8 +68,10 @@ test('a story pasted as a Shutap line is still recognised as theirs', () => {
 })
 
 test('a clean toast passes every fatal check', () => {
-  const t = parseToast(good, form)!
-  assert.deepEqual(checkToast(t, form).filter((c) => c.fatal), [])
+  // the sample speech runs about 20 seconds: judge it against a 30-second toast
+  const f: ToastForm = { ...form, length: 30 }
+  const t = parseToast(good, f)!
+  assert.deepEqual(checkToast(t, f).filter((c) => c.fatal), [])
 })
 
 test('invented numbers, never-say families, unknown names and missing must-says are rejected', () => {
@@ -105,4 +107,15 @@ test('the on-demand cut keeps the true thing and the must-says, and lands at a m
   assert.ok(checkCut(dropped, full).some((c) => c.fatal && c.rule === 'the cut drops the true thing'))
   const long = [...t.lines, { section: 'more', text: Array(160).fill('and').join(' '), source: 'shutap' as const }]
   assert.ok(checkCut(long, full).some((c) => c.fatal && c.rule.startsWith('the cut runs')))
+})
+
+test('a speech well under its target is rewritten; a little under is only noted', () => {
+  const two: ToastForm = { ...form, length: 120 }
+  const t = parseToast(good, two)!
+  // the sample speech is ~20s: far under two minutes
+  assert.ok(checkToast(t, two).some((c) => c.fatal && c.rule.startsWith('runs short')))
+  const lines = [...good.lines.slice(0, 5), { section: 'more', text: Array(150).fill('word').join(' '), source: 'shutap' }, good.lines[5]!]
+  const near = parseToast({ ...good, lines }, two)!
+  const short = checkToast(near, two).find((c) => c.rule.startsWith('runs short'))
+  assert.ok(!short || !short.fatal)
 })
