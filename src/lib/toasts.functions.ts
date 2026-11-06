@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { OCCASIONS, TONES, type Toast, type ToastForm, type ToastLine } from './toasts/shared'
 import type { CutResult, ToastResult, ToastTouchOption } from './toasts/toast.server'
+import type { ToastUsage } from './toasts/usage.server'
 
 async function requireAdmin(context: unknown): Promise<void> {
   const c = context as { supabase: any; userId: string }
@@ -132,3 +133,128 @@ export const labToastEvals = createServerFn({ method: 'POST' })
   })
 
 export type { Toast, ToastForm }
+
+/* ───────────────────────── the product (slice 2, Nov 6 2026) ─────────────────────────
+   Signed-in users, behind the toasts flag (admins while it's dark). The form
+   is written into a toast here: the Guard first (a crisis never sees a
+   paywall), then the plan's allowance (a credit bought ahead pays for one
+   past the limit), the Scrubber, the writer. What's stored: the scrubbed
+   form and the speech, never a name. A write that fails never counts. */
+async function toastsOpen(context: unknown): Promise<boolean> {
+  const { readFlags } = await import('./flags')
+  if (readFlags().toasts) return true
+  try { await requireAdmin(context); return true } catch { return false }
+}
+
+function isAnon(context: unknown): boolean {
+  return !!(context as { claims?: { is_anonymous?: boolean } }).claims?.is_anonymous
+}
+
+export type ToastRow = {
+  id: string
+  occasion: ToastForm['occasion']
+  tone: ToastForm['tone']
+  length: number
+  form: ToastForm
+  paid: boolean
+  marked: boolean
+  locked_at: string | null
+  parent_id: string | null
+  created_at: string
+  version_id: string | null
+  toast: Toast | null
+}
+
+export type WriteMyToastResult =
+  | { ok: true; id: string; usage: ToastUsage }
+  | { ok: false; reason: 'off' | 'sign_in' | 'crisis' | 'failed' }
+  | { ok: false; reason: 'limited'; usage: ToastUsage }
+
+/** Write my toast. Counts one toast (unless bought ahead: then it's paid). */
+export const writeMyToast = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ form: ToastFormIn }).parse(d))
+  .handler(async ({ data, context }): Promise<WriteMyToastResult> => {
+    if (isAnon(context)) return { ok: false, reason: 'sign_in' }
+    if (!(await toastsOpen(context))) return { ok: false, reason: 'off' }
+    const { userId } = context as { userId: string }
+    const form = data.form as ToastForm
+    if (!form.stories.some((s) => s.trim())) return { ok: false, reason: 'failed' }
+    const { guardForm, scrubForm, writeToast } = await import('./toasts/toast.server')
+    // the Guard overrides everything: no paywall, no speech
+    const guard = await guardForm(form)
+    if (guard.crisis) {
+      const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+      await (supabaseAdmin as any).from('events').insert({ user_id: userId, session_id: null, name: 'toast_guard_blocked', product: 'toasts', properties: { product: 'toasts', category: guard.category } }).then(() => {}, () => {})
+      return { ok: false, reason: 'crisis' }
+    }
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const admin = supabaseAdmin as any
+    const { kitTier, today } = await import('./bits/tier.server')
+    const { toastAllowance, toastMarked, toastUsage } = await import('./toasts/usage.server')
+    const tier = await kitTier(admin, userId)
+    const allow = await toastAllowance(admin, userId, tier)
+    if (!allow.ok) return { ok: false, reason: 'limited', usage: allow.usage }
+    const clean = await scrubForm(form)
+    const result = await writeToast(clean)
+    if (!result) return { ok: false, reason: 'failed' }
+    const { TOAST_PROMPT_VERSION } = await import('./toasts/prompts.server')
+    const paid = !!allow.credit
+    const { data: row, error } = await admin.from('toasts').insert({
+      user_id: userId, occasion: clean.occasion, tone: clean.tone, length: String(clean.length), form: clean,
+      prompt_version: TOAST_PROMPT_VERSION, tier, paid, marked: toastMarked(tier, paid), day: today().day,
+    }).select('id').single()
+    if (error || !row) { console.error('[toasts] insert failed', error?.message); return { ok: false, reason: 'failed' } }
+    const winner = result.candidates[result.winner]
+    await admin.from('toast_versions').insert({ toast_id: row.id, kind: 'original', content: result.toast, checks: winner?.checks ?? [] })
+    if (allow.credit) await admin.from('events').insert({ user_id: userId, session_id: null, name: 'toast_prepay_used', product: 'toasts', properties: { product: 'toasts', toast_id: row.id, stripe_session: allow.credit } }).then(() => {}, () => {})
+    await admin.from('events').insert({ user_id: userId, session_id: null, name: 'toast_written', product: 'toasts', properties: { product: 'toasts', toast_id: row.id, occasion: clean.occasion, tone: clean.tone, length: clean.length, seconds: result.seconds, ms: result.ms, tier, paid, stories: clean.stories.filter((s) => s.trim()).length } }).then(() => {}, () => {})
+    return { ok: true, id: row.id as string, usage: await toastUsage(admin, userId, tier) }
+  })
+
+/** My toast usage, for the labels on the form ("your first toast is free"). */
+export const myToastUsage = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({}).parse(d ?? {}))
+  .handler(async ({ context }): Promise<{ open: boolean; usage: ToastUsage | null }> => {
+    const open = await toastsOpen(context)
+    if (isAnon(context)) return { open, usage: null }
+    const { userId } = context as { userId: string }
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const { kitTier } = await import('./bits/tier.server')
+    const { toastUsage } = await import('./toasts/usage.server')
+    const tier = await kitTier(supabaseAdmin as any, userId)
+    return { open, usage: await toastUsage(supabaseAdmin as any, userId, tier) }
+  })
+
+/** One of my toasts, with its latest version. */
+export const getMyToast = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true; toast: ToastRow } | { ok: false; reason: 'not_found' | 'off' }> => {
+    if (!(await toastsOpen(context))) return { ok: false, reason: 'off' }
+    const { userId } = context as { userId: string }
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const admin = supabaseAdmin as any
+    const { data: t } = await admin.from('toasts').select('id, occasion, tone, length, form, paid, marked, locked_at, locked_version_id, parent_id, created_at').eq('id', data.id).eq('user_id', userId).maybeSingle()
+    if (!t) return { ok: false, reason: 'not_found' }
+    const q = admin.from('toast_versions').select('id, content').eq('toast_id', t.id)
+    const { data: v } = t.locked_version_id ? await q.eq('id', t.locked_version_id).maybeSingle() : await q.order('created_at', { ascending: false }).limit(1).maybeSingle()
+    return { ok: true, toast: { id: t.id, occasion: t.occasion, tone: t.tone, length: Number(t.length), form: t.form, paid: !!t.paid, marked: !!t.marked, locked_at: t.locked_at, parent_id: t.parent_id, created_at: t.created_at, version_id: v?.id ?? null, toast: (v?.content as Toast) ?? null } }
+  })
+
+/** "funnier" on a story line in the form: three ways to tell the same story.
+ *  Never paid, never counted; signed in only. Nothing is stored. */
+export const touchMyStory = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ form: ToastFormIn, index: z.number().int().min(0).max(2), avoid: z.array(z.string().max(400)).max(9).optional() }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true; options: ToastTouchOption[] } | { ok: false; reason: 'off' | 'sign_in' | 'failed' }> => {
+    if (isAnon(context)) return { ok: false, reason: 'sign_in' }
+    if (!(await toastsOpen(context))) return { ok: false, reason: 'off' }
+    const { touchToastLine } = await import('./toasts/toast.server')
+    const options = await touchToastLine(data.form as ToastForm, { kind: 'story', index: data.index }, data.avoid ?? [])
+    const { userId } = context as { userId: string }
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    await (supabaseAdmin as any).from('events').insert({ user_id: userId, session_id: null, name: 'toast_story_funnier', product: 'toasts', properties: { product: 'toasts', occasion: data.form.occasion, story: data.index + 1, options: options?.length ?? 0 } }).then(() => {}, () => {})
+    return options ? { ok: true, options } : { ok: false, reason: 'failed' }
+  })

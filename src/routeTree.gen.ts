@@ -53,7 +53,6 @@ import { Route as StreamRouteImport } from './routes/stream'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ToastLabRouteImport } from './routes/toast-lab'
-import { Route as ToastsRouteImport } from './routes/toasts'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as WelcomeRouteImport } from './routes/welcome'
@@ -78,6 +77,7 @@ import { Route as SitemapsPostsDotxmlRouteImport } from './routes/sitemaps/posts
 import { Route as SitemapsProfilesDotxmlRouteImport } from './routes/sitemaps/profiles[.]xml'
 import { Route as SitemapsStoriesDotxmlRouteImport } from './routes/sitemaps/stories[.]xml'
 import { Route as SubscribeReturnRouteImport } from './routes/subscribe.return'
+import { Route as ToastsIndexRouteImport } from './routes/toasts.index'
 import { Route as UPseudonymRouteImport } from './routes/u.$pseudonym'
 import { Route as VentTopicRouteImport } from './routes/vent.$topic'
 import { Route as WhatHappensSlugRouteImport } from './routes/what-happens.$slug'
@@ -98,6 +98,7 @@ import { Route as ApiPublicJokeCardRouteImport } from './routes/api/public/joke-
 import { Route as GuidesTopicTopicRouteImport } from './routes/guides.topic.$topic'
 import { Route as RealtorsKitIndexRouteImport } from './routes/realtors.kit.index'
 import { Route as StoryPillarSlugRouteImport } from './routes/story.$pillar.$slug'
+import { Route as ToastsEditIdRouteImport } from './routes/toasts.edit.$id'
 import { Route as ApiPublicHooksBillingReceiptsRouteImport } from './routes/api/public/hooks/billing-receipts'
 import { Route as ApiPublicHooksDailyIdeaEmailsRouteImport } from './routes/api/public/hooks/daily-idea-emails'
 import { Route as ApiPublicHooksDispatchCheckinsRouteImport } from './routes/api/public/hooks/dispatch-checkins'
@@ -330,11 +331,6 @@ const ToastLabRoute = ToastLabRouteImport.update({
   path: '/toast-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ToastsRoute = ToastsRouteImport.update({
-  id: '/toasts',
-  path: '/toasts',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TrustRoute = TrustRouteImport.update({
   id: '/trust',
   path: '/trust',
@@ -457,6 +453,11 @@ const SubscribeReturnRoute = SubscribeReturnRouteImport.update({
   path: '/return',
   getParentRoute: () => SubscribeRoute,
 } as any)
+const ToastsIndexRoute = ToastsIndexRouteImport.update({
+  id: '/toasts/',
+  path: '/toasts/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UPseudonymRoute = UPseudonymRouteImport.update({
   id: '/u/$pseudonym',
   path: '/u/$pseudonym',
@@ -562,6 +563,11 @@ const RealtorsKitIndexRoute = RealtorsKitIndexRouteImport.update({
 const StoryPillarSlugRoute = StoryPillarSlugRouteImport.update({
   id: '/story/$pillar/$slug',
   path: '/story/$pillar/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToastsEditIdRoute = ToastsEditIdRouteImport.update({
+  id: '/toasts/edit/$id',
+  path: '/toasts/edit/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicHooksBillingReceiptsRoute =
@@ -676,7 +682,6 @@ export interface FileRoutesByFullPath {
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
-  '/toasts': typeof ToastsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -704,6 +709,7 @@ export interface FileRoutesByFullPath {
   '/guides/': typeof GuidesIndexRoute
   '/realtors/': typeof RealtorsIndexRoute
   '/rooms/': typeof RoomsIndexRoute
+  '/toasts/': typeof ToastsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -720,6 +726,7 @@ export interface FileRoutesByFullPath {
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
+  '/toasts/edit/$id': typeof ToastsEditIdRoute
   '/realtors/kit/': typeof RealtorsKitIndexRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
@@ -778,7 +785,6 @@ export interface FileRoutesByTo {
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
-  '/toasts': typeof ToastsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -806,6 +812,7 @@ export interface FileRoutesByTo {
   '/guides': typeof GuidesIndexRoute
   '/realtors': typeof RealtorsIndexRoute
   '/rooms': typeof RoomsIndexRoute
+  '/toasts': typeof ToastsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -822,6 +829,7 @@ export interface FileRoutesByTo {
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
+  '/toasts/edit/$id': typeof ToastsEditIdRoute
   '/realtors/kit': typeof RealtorsKitIndexRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
@@ -882,7 +890,6 @@ export interface FileRoutesById {
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
-  '/toasts': typeof ToastsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -910,6 +917,7 @@ export interface FileRoutesById {
   '/guides/': typeof GuidesIndexRoute
   '/realtors/': typeof RealtorsIndexRoute
   '/rooms/': typeof RoomsIndexRoute
+  '/toasts/': typeof ToastsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -926,6 +934,7 @@ export interface FileRoutesById {
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
+  '/toasts/edit/$id': typeof ToastsEditIdRoute
   '/realtors/kit/': typeof RealtorsKitIndexRoute
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
@@ -986,7 +995,6 @@ export interface FileRouteTypes {
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
-    | '/toasts'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1014,6 +1022,7 @@ export interface FileRouteTypes {
     | '/guides/'
     | '/realtors/'
     | '/rooms/'
+    | '/toasts/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/analytics'
@@ -1030,6 +1039,7 @@ export interface FileRouteTypes {
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
+    | '/toasts/edit/$id'
     | '/realtors/kit/'
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
@@ -1088,7 +1098,6 @@ export interface FileRouteTypes {
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
-    | '/toasts'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1116,6 +1125,7 @@ export interface FileRouteTypes {
     | '/guides'
     | '/realtors'
     | '/rooms'
+    | '/toasts'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/analytics'
@@ -1132,6 +1142,7 @@ export interface FileRouteTypes {
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
+    | '/toasts/edit/$id'
     | '/realtors/kit'
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
@@ -1191,7 +1202,6 @@ export interface FileRouteTypes {
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
-    | '/toasts'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1219,6 +1229,7 @@ export interface FileRouteTypes {
     | '/guides/'
     | '/realtors/'
     | '/rooms/'
+    | '/toasts/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/analytics'
@@ -1235,6 +1246,7 @@ export interface FileRouteTypes {
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
     | '/story/$pillar/$slug'
+    | '/toasts/edit/$id'
     | '/realtors/kit/'
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
@@ -1295,7 +1307,6 @@ export interface RootRouteChildren {
   SubscribeRoute: typeof SubscribeRouteWithChildren
   TermsRoute: typeof TermsRoute
   ToastLabRoute: typeof ToastLabRoute
-  ToastsRoute: typeof ToastsRoute
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   WelcomeRoute: typeof WelcomeRoute
@@ -1321,6 +1332,7 @@ export interface RootRouteChildren {
   GuidesIndexRoute: typeof GuidesIndexRoute
   RealtorsIndexRoute: typeof RealtorsIndexRoute
   RoomsIndexRoute: typeof RoomsIndexRoute
+  ToastsIndexRoute: typeof ToastsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiFeedbackEventsRoute: typeof ApiFeedbackEventsRoute
@@ -1328,6 +1340,7 @@ export interface RootRouteChildren {
   ApiPublicJokeCardRoute: typeof ApiPublicJokeCardRoute
   GuidesTopicTopicRoute: typeof GuidesTopicTopicRoute
   StoryPillarSlugRoute: typeof StoryPillarSlugRoute
+  ToastsEditIdRoute: typeof ToastsEditIdRoute
   RealtorsKitIndexRoute: typeof RealtorsKitIndexRoute
   ApiPublicHooksBillingReceiptsRoute: typeof ApiPublicHooksBillingReceiptsRoute
   ApiPublicHooksDailyIdeaEmailsRoute: typeof ApiPublicHooksDailyIdeaEmailsRoute
@@ -1652,13 +1665,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToastLabRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/toasts': {
-      id: '/toasts'
-      path: '/toasts'
-      fullPath: '/toasts'
-      preLoaderRoute: typeof ToastsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/trust': {
       id: '/trust'
       path: '/trust'
@@ -1827,6 +1833,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubscribeReturnRouteImport
       parentRoute: typeof SubscribeRoute
     }
+    '/toasts/': {
+      id: '/toasts/'
+      path: '/toasts'
+      fullPath: '/toasts/'
+      preLoaderRoute: typeof ToastsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/u/$pseudonym': {
       id: '/u/$pseudonym'
       path: '/u/$pseudonym'
@@ -1965,6 +1978,13 @@ declare module '@tanstack/react-router' {
       path: '/story/$pillar/$slug'
       fullPath: '/story/$pillar/$slug'
       preLoaderRoute: typeof StoryPillarSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/toasts/edit/$id': {
+      id: '/toasts/edit/$id'
+      path: '/toasts/edit/$id'
+      fullPath: '/toasts/edit/$id'
+      preLoaderRoute: typeof ToastsEditIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/billing-receipts': {
@@ -2150,7 +2170,6 @@ const rootRouteChildren: RootRouteChildren = {
   SubscribeRoute: SubscribeRouteWithChildren,
   TermsRoute: TermsRoute,
   ToastLabRoute: ToastLabRoute,
-  ToastsRoute: ToastsRoute,
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   WelcomeRoute: WelcomeRoute,
@@ -2177,6 +2196,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuidesIndexRoute: GuidesIndexRoute,
   RealtorsIndexRoute: RealtorsIndexRoute,
   RoomsIndexRoute: RoomsIndexRoute,
+  ToastsIndexRoute: ToastsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiFeedbackEventsRoute: ApiFeedbackEventsRoute,
@@ -2184,6 +2204,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicJokeCardRoute: ApiPublicJokeCardRoute,
   GuidesTopicTopicRoute: GuidesTopicTopicRoute,
   StoryPillarSlugRoute: StoryPillarSlugRoute,
+  ToastsEditIdRoute: ToastsEditIdRoute,
   RealtorsKitIndexRoute: RealtorsKitIndexRoute,
   ApiPublicHooksBillingReceiptsRoute: ApiPublicHooksBillingReceiptsRoute,
   ApiPublicHooksDailyIdeaEmailsRoute: ApiPublicHooksDailyIdeaEmailsRoute,
