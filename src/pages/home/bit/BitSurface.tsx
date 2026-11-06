@@ -641,8 +641,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
 
   type WriteOpts = { text?: string; controls?: BitControls; writeId?: string; fromSignIn?: boolean; lines?: GivenLines }
 
-  /** The lined box is on the homepage only (never an embed), behind the flag. */
-  const lined = flags.ondemand && !embed
+  /** The lined box, on the homepage and on every guide / funniest page (Nov 6 2026). */
+  const lined = flags.ondemand
   /** which lines the last lined write handed over (for a guest's sign-in return) */
   const linedGiven = useRef<GivenLines | undefined>(undefined)
   function givenFrom(d: Draft, only: Slot[] | null): GivenLines {

@@ -23,7 +23,10 @@ export function TryItBox({
   position = 'bottom',
   preset,
   anchor = false,
+  realtor = false,
 }: {
+  /** the box above is the realtor listing box */
+  realtor?: boolean
   page: string
   heading?: string
   /** open the writer with these controls set; the story box stays empty */
@@ -58,8 +61,8 @@ export function TryItBox({
       <div style={{ display: 'grid', gap: 4, minWidth: 0, flex: '1 1 220px' }}>
         <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#17131a', lineHeight: 1.3 }}>{heading}</h2>
         <p style={{ margin: 0, fontSize: 15, color: '#443c42', lineHeight: 1.45 }}>
-          Write what happened. Get the bit and the video. Free.
-          {preset && presetLabel(preset) ? ` Opens set to ${presetLabel(preset)}; change anything before you write.` : ''}
+          {realtor ? 'Paste the listing link. Get the walkthrough, voiceover, hooks, open-house kit and posts. First kit free.' : 'Write what happened. Get the bit and the video. Free.'}
+          {!realtor && preset && presetLabel(preset) ? ` Opens set to ${presetLabel(preset)}; change anything before you write.` : ''}
         </p>
       </div>
       {anchor ? (
@@ -69,7 +72,7 @@ export function TryItBox({
             e.preventDefault()
             track()
             document.getElementById('bit-write')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-            window.setTimeout(() => (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.focus(), 500)
+            window.setTimeout(() => (document.querySelector('#bit-write input.rl-input, #bit-story, .bt-lline [contenteditable]') as HTMLElement | null)?.focus(), 500)
           }}
           style={{
             flex: '0 0 auto',

@@ -4,6 +4,8 @@ import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
 import { TryItBox } from '@/components/seo/TryItBox'
 import { BitSurface } from '@/pages/home/bit/BitSurface'
+import { RealtorEmbed } from '@/components/seo/RealtorEmbed'
+import { isRealtorContent } from '@/lib/realtors/is-realtor'
 import { FUNNIEST_WRITER } from '@/lib/seo/writer-copy'
 import { WriterBar } from '@/components/seo/WriterBar'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
@@ -63,6 +65,7 @@ export function FunniestPage({
   others: { href: string; label: string }[]
 }) {
   const updated = entry.updated ?? entry.published
+  const realtor = isRealtorContent(entry.slug, (entry as any).category, (entry as any).title, (entry as any).h1)
   const basis = entry.sources.filter((s) => s.kind === 'ranking' || s.kind === 'profile').slice(0, 3)
   return (
     <main
@@ -133,7 +136,7 @@ export function FunniestPage({
         <p style={{ fontSize: 17, margin: '0 0 32px' }}>{entry.capsule}</p>
 
         <div style={{ margin: '0 0 44px' }}>
-          <BitSurface embed={{ page: `funniest/${entry.slug}`, ...FUNNIEST_WRITER }} />
+          {realtor ? <RealtorEmbed page={`funniest/${entry.slug}`} /> : <BitSurface embed={{ page: `funniest/${entry.slug}`, ...FUNNIEST_WRITER }} />}
         </div>
 
         <section style={{ marginBottom: 40 }}>
@@ -231,8 +234,8 @@ export function FunniestPage({
           </section>
         )}
 
-        <TryItBox page={`funniest/${entry.slug}`} heading="Try these techniques on your own story" anchor />
-        <WriterBar page={`funniest/${entry.slug}`} label={FUNNIEST_WRITER.heading} />
+        <TryItBox page={`funniest/${entry.slug}`} heading={realtor ? 'Try these techniques on your listing' : 'Try these techniques on your own story'} anchor realtor={realtor} />
+        <WriterBar page={`funniest/${entry.slug}`} label={realtor ? 'Paste the listing. Get the kit.' : FUNNIEST_WRITER.heading} realtor={realtor} />
 
         <section style={{ marginBottom: 32 }}>
           <h2 style={{ ...h2Style, fontSize: 18 }}>Sources</h2>
