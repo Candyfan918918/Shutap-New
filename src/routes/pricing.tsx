@@ -14,12 +14,12 @@ const BASIC = PLANS.basic.amount
 const PRO = PLANS.pro.amount
 
 const TITLE = `Pricing — Shutap, the Humor Amplifier, plans from ${usd(BASIC)}/mo`
-const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video from your story, with stand-up, sketch and skit formats. Free with an account: one bit and one watermarked download a day. Basic is ${usd(BASIC)}/month: 3 new bits a day with rewrites, AI on demand on every line, and 20 clean downloads a month. Pro is ${usd(PRO)}/month: unlimited bits, rewrites and downloads, no watermark, and the Mirror. Cancel anytime.`
+const DESCRIPTION = `Shutap is a free humor amplifier: a bit, a 5-second video from your story, with stand-up, sketch and skit formats. You pay to make something new, never to use it: downloads, copies and "funnier" are unlimited on every plan. Free with an account: one bit a day, downloads watermarked. Basic is ${usd(BASIC)}/month: 3 new bits a day with rewrites and 20 realtor kits a month, no watermark. Pro is ${usd(PRO)}/month: unlimited bits, rewrites and kits, and the Mirror. One kit on its own is ${usd(KIT_ONCE.amount)}. Cancel anytime.`
 
 const QA = [
-  { q: 'Is Shutap really free?', a: 'Yes, with a free account. Sign in first (one tap with Google or Apple), then you get one new bit a day, as written, with its 5-second video, and stand-up, sketch and skit. You also get one download a day: the video (with a shutap.com watermark) or the picture. Rewrites (hotter, tighter, storytelling), crowd-work swaps and mix your own come with Basic and Pro.' },
-  { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 3 new bits a day (a rewrite counts as one), crowd-work swaps and mix your own, and 20 downloads a month with no watermark, and AI on demand on every line. Pro is ${usd(PRO)} a month: unlimited bits and rewrites, unlimited downloads with no watermark, and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
-  { q: 'What counts toward the daily limit?', a: 'New bits, rewrites and downloads. A rewrite (hotter, tighter, storytelling) is a new bit: written again, video rendered again. The video is one download; the picture or script PDF another; a rewrite\'s downloads count again. Crowd-work swaps and mix your own don\'t count against the day. Limits reset at midnight Pacific.' },
+  { q: 'Is Shutap really free?', a: 'Yes, with a free account. Sign in first (one tap with Google or Apple), then you get one new bit a day, as written, with its 5-second video, and stand-up, sketch and skit. Download and copy as often as you like (with a shutap.com watermark), and "funnier" on any line. Rewrites (hotter, tighter, storytelling), crowd-work swaps and mix your own come with Basic and Pro.' },
+  { q: 'What do Basic and Pro cost?', a: `Basic is ${usd(BASIC)} a month: 3 new bits a day (a rewrite counts as one), crowd-work swaps and mix your own, and 20 realtor kits a month, with unlimited clean downloads. Pro is ${usd(PRO)} a month: unlimited bits, rewrites and kits, no watermark, and the Mirror. Prices are in US dollars; tax may be added at checkout.` },
+  { q: 'What counts toward the limit?', a: 'Only making something new: a new bit, a rewrite (hotter, tighter, storytelling, written again with a new video), a new realtor kit (a rewrite in a new tone is a new kit). Using what you made never counts: downloads, copies, the PDF, the prompter, "funnier" and lock are unlimited, and everything stays in My creations to download again any time. Bits reset at midnight Pacific; kits on the 1st of the month.' },
   { q: 'Can I move from Basic to Pro?', a: 'Yes, any time. You pay the difference for the rest of the month, and Pro starts right away.' },
   { q: 'Is there a free trial?', a: 'No trial. The free plan is the trial: write your bits before you decide.' },
   { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your account; you keep your plan until the end of the period you paid for. Payments are handled by Stripe.' },
@@ -173,15 +173,15 @@ function OtherProducts() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 14 }}>
           <Tile name="First kit" price="free" lines={['one listing, all six outputs, every tone to try', 'each output ends with "— shutap.com"', 'sign in with Google or Apple']} cta="paste a listing" href="/realtors/kit" />
-          <Tile name="One kit" price={usd(KIT_ONCE.amount)} per="once" lines={['one listing, no subscription', 'copy and download without limits or marks', 'rewrite it for 30 days']} cta="buy from the kit page" href="/realtors/kit" />
-          <Tile name="Basic" price={usd(PLANS.basic.amount)} per="/month" lines={['3 kits a day (a rewrite is one)', '20 downloads a month: a copied output is 1, the kit PDF is 6', 'funnier on any line, unlimited', 'everything in Bits Basic']} cta={`get Basic · ${usd(PLANS.basic.amount)}`} href="/subscribe?plan=basic&from=pricing_realtors" best />
-          <Tile name="Pro" price={usd(PLANS.pro.amount)} per="/month" lines={['unlimited kits, rewrites and downloads', 'nothing marked', 'everything in Bits Pro']} cta={`get Pro · ${usd(PLANS.pro.amount)}`} href="/subscribe?plan=pro&from=pricing_realtors" />
+          <Tile name="One kit" price={usd(KIT_ONCE.amount)} per="once" lines={['one listing, no subscription', 'paid before it\'s written, or to take the mark off your free kit', 'copy, download and shoot without limits or marks, forever']} cta="buy from the kit page" href="/realtors/kit" />
+          <Tile name="Basic" price={usd(PLANS.basic.amount)} per="/month" lines={['20 kits a month (a rewrite is one)', 'copies, the PDF and shoot mode: unlimited, nothing marked', 'funnier on any line, unlimited', 'everything in Bits Basic']} cta={`get Basic · ${usd(PLANS.basic.amount)}`} href="/subscribe?plan=basic&from=pricing_realtors" best />
+          <Tile name="Pro" price={usd(PLANS.pro.amount)} per="/month" lines={['unlimited kits and rewrites', 'copies and downloads unlimited, nothing marked', 'everything in Bits Pro']} cta={`get Pro · ${usd(PLANS.pro.amount)}`} href="/subscribe?plan=pro&from=pricing_realtors" />
         </div>
       </section>
       <section id="toasts" style={{ display: 'flex', flexDirection: 'column', gap: 12, scrollMarginTop: 90 }}>
         <div>
           <h2 className="fd-h1" style={{ fontSize: 24, marginBottom: 4 }}>Shutap Toasts <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--rose-ink)', background: 'var(--surface)', borderRadius: 999, padding: '3px 8px', verticalAlign: 'middle' }}>soon</span></h2>
-          <p className="fd-muted" style={{ margin: 0, fontSize: 15 }}>Best man, maid of honor, parents, retirement, birthday: your stories about them, said funnier, with a teleprompter and a clock. Pricing lands when it opens; Pro members will write toasts at no extra charge.</p>
+          <p className="fd-muted" style={{ margin: 0, fontSize: 15 }}>Best man, maid of honor, parents, retirement, birthday: your stories about them, said funnier, with a teleprompter and a clock. Same rule as everything here: your first toast is free (marked); after that you pay to write a toast, one time, and then edit it until you lock it. Once locked, the speech, cue cards, keepsake and prompter are yours to download, unlimited, forever, from My creations. Pro members write toasts at no extra charge.</p>
         </div>
         <div><Link to="/toasts" className="fd-btn ghost">join the list</Link></div>
       </section>
@@ -199,16 +199,17 @@ function OtherProducts() {
             <thead><tr style={{ textAlign: 'left', color: 'var(--muted)' }}><th style={{ padding: '8px 6px' }}>Product</th><th style={{ padding: '8px 6px' }}>What's metered</th><th style={{ padding: '8px 6px' }}>Free</th><th style={{ padding: '8px 6px' }}>Basic</th><th style={{ padding: '8px 6px' }}>Pro</th></tr></thead>
             <tbody>
               {[
-                ['Bits', 'new bits (a rewrite is one); downloads (video, picture, PDF, a copied line); touches', '1 bit a day · 1 watermarked download a day · 3 touches', '3 bits a day · 20 downloads a month · unlimited touches', 'unlimited'],
-                ['Realtors', 'kits (a rewrite is one); copies from the download pool (a copied output 1, the kit PDF 6)', '1 kit, outputs marked', '3 kits a day · the same 20 downloads', 'unlimited'],
-                ['One kit', `${usd(KIT_ONCE.amount)} once`, '—', 'never counted, never marked', '—'],
-                ['Toasts', 'speeches · soon', '—', '—', 'included'],
+                ['Bits', 'new bits (a rewrite is one)', '1 bit a day', '3 bits a day', 'unlimited'],
+                ['Realtors', 'new kits (a rewrite in a new tone is one)', '1 kit, outputs marked', '20 kits a month', 'unlimited'],
+                ['One kit', `${usd(KIT_ONCE.amount)} once, before or after it\'s written`, 'any time', 'past the 20', '—'],
+                ['Downloads, copies, prompter, funnier', 'never metered', 'unlimited · marked', 'unlimited · clean', 'unlimited · clean'],
+                ['Toasts', 'new toasts · soon', 'first toast, marked', 'to be announced', 'included'],
                 ['Enterprise', 'seats and decks', '—', '—', 'quoted'],
               ].map((r) => <tr key={r[0]} style={{ borderTop: '1px solid var(--line)' }}>{r.map((c, i) => <td key={i} style={{ padding: '8px 6px', verticalAlign: 'top', fontWeight: i === 0 ? 700 : 400 }}>{c}</td>)}</tr>)}
             </tbody>
           </table>
         </div>
-        <p className="fd-faint" style={{ margin: 0 }}>Limits reset at midnight Pacific; monthly downloads on the 1st. The same download again the same day is free.</p>
+        <p className="fd-faint" style={{ margin: 0 }}>You pay to make something new, never to use it. Bits reset at midnight Pacific; realtor kits on the 1st of the month. Everything you made stays in My creations, to download again any time.</p>
       </section>
     </>
   )
@@ -227,7 +228,7 @@ function PricingPage() {
             {flags.newnav ? <>One account. Every product.</> : <>Free to use. {usd(BASIC)} to download clean.</>}
           </h1>
           <p className="fd-muted" style={{ fontSize: 16, maxWidth: 560, margin: 0 }}>
-            {flags.newnav ? 'Pick what you need to be funny for. One plan covers Bits and Realtors; Toasts is next. Prices in US dollars, limits reset at midnight Pacific, cancel anytime.' : 'Every bit comes with a 5-second video. Free downloads one a day with a watermark. Basic removes it. Pro downloads as much as you want and adds the Mirror.'}
+            {flags.newnav ? 'Pick what you need to be funny for. One plan covers Bits and Realtors; Toasts is next. Prices in US dollars, limits reset at midnight Pacific, cancel anytime.' : 'Every bit comes with a 5-second video. Download it as often as you like: Free with a watermark, Basic and Pro clean. Pro adds unlimited bits and the Mirror.'}
           </p>
           {flags.newnav && <ProductTabs active={tab} onPick={setTab} />}
         </div>

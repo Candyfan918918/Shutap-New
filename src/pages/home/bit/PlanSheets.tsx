@@ -17,14 +17,14 @@ import { useServerFn } from '@tanstack/react-start'
 import { changePlanToPro } from '@/lib/payments.functions'
 import { getStripeEnvironment } from '@/lib/stripe'
 import { EVERY_PLAN, PLANS, PLAN_COMPARE, usd, type CompareTier, type PaidPlan } from '@/lib/pricing'
-import { BIT_CAPS, DOWNLOAD_CAPS } from '@/lib/bits/plans'
+import { BIT_CAPS } from '@/lib/bits/plans'
 
 /** Where the plans opened from. 'bit_3' = a free account out of bits today
  *  (the key predates the Nov 1 2026 limits; it's the second bit now);
  *  'rewrite' = a free account asking for a rewrite, swap or mix;
  *  'download' = remove the watermark;
- *  'download_count' = a free account out of downloads today;
- *  'download_limit' = a Basic account out of downloads today (Pro only). */
+ *  'download_count' / 'download_limit' = kept for old links: downloads are
+ *  never counted since Nov 6 2026 (pay to create, never to use). */
 export type PaywallWhere = 'bit_3' | 'rewrite' | 'daily_limit' | 'download' | 'download_count' | 'download_limit'
 
 /** What every plan keeps, Free included (the same list as the pricing
@@ -34,7 +34,7 @@ const EVERY_ICON: Record<(typeof EVERY_PLAN)[number], FeatureIcon> = {
   'A 5-second video of it': 'post',
   'Stand-up on the teleprompter': 'standup',
   'Sketch and skit': 'sketch',
-  'My creations: every bit and kit in one place': 'list',
+  'My creations: every bit and kit in one place, download again any time': 'list',
 }
 
 /** The comparison table: one column per plan, the same rows everywhere.
@@ -104,18 +104,18 @@ export function PaywallBody({
     where === 'download'
       ? 'Download it clean.'
       : where === 'download_count'
-        ? "That's today's free download."
+        ? 'Download it clean.'
         : where === 'rewrite'
           ? 'Rewrites are on Basic and Pro.'
           : "That's today's free bit."
   const sub =
     where === 'download'
-      ? 'Free downloads carry the shutap.com watermark. Basic gets 20 clean downloads a month; Pro has no limit.'
+      ? 'Free downloads are unlimited and carry the shutap.com watermark. Basic and Pro download clean, as often as they like.'
       : where === 'download_count'
-        ? 'Free is one download a day: the video, or the picture. Basic gets 20 a month with no watermark; Pro has no limit. More at midnight Pacific.'
+        ? 'Free downloads are unlimited and carry the shutap.com watermark. Basic and Pro download clean, as often as they like.'
         : where === 'rewrite'
           ? `Free gets one bit a day, as written. Hotter, tighter, storytelling, a crowd-work swap or your own mix come with Basic (${BIT_CAPS.basic} bits a day, rewrites included) and Pro (no limit).`
-          : `Free is one bit a day with one watermarked download. Basic writes ${BIT_CAPS.basic} a day with rewrites; Pro has no limit. Want to keep going tonight?`
+          : `Free is one bit a day, downloads unlimited with the shutap.com mark. Basic writes ${BIT_CAPS.basic} a day with rewrites, clean; Pro has no limit. Want to keep going tonight?`
   return (
     <div className="pw">
       <div className="pw-head">
@@ -200,9 +200,9 @@ export function UpgradeBody({
 
   return (
     <>
-      <h3 id="bit-sheet-title">{why === 'downloads' ? `That's ${DOWNLOAD_CAPS.basic} downloads for this month.` : `That's ${BIT_CAPS.basic} for today.`}</h3>
+      <h3 id="bit-sheet-title">{`That's ${BIT_CAPS.basic} for today.`}</h3>
       <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-        {why === 'downloads' ? 'Pro downloads as many as you want.' : 'Pro writes as many as you want.'}
+        Pro writes as many as you want.
       </p>
       <Compare tiers={['basic', 'pro']} you="basic" />
       <button className="bt-btn block" disabled={busy} onClick={() => void go()}>

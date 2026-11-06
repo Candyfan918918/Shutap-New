@@ -119,7 +119,7 @@ const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   standup: { title: 'Sign in to run it as stand-up.', sub: 'Free. The teleprompter, at talking pace.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
   watch: { title: 'Sign in to watch the video.', sub: 'Free. The 5-second video comes with you.' },
-  download: { title: 'Sign in to download it.', sub: 'Free: one download a day (the video, or the picture), with a shutap.com watermark.' },
+  download: { title: 'Sign in to download it.', sub: 'Free: download it as often as you like, with a shutap.com watermark.' },
   save: { title: 'Sign in to keep it.', sub: 'Free. It goes in My creations with every version you make.' },
   skit: { title: 'Sign in for the skit.', sub: 'Free. A shot list you film alone, every role yours.' },
   sketch: { title: 'Sign in for the sketch.', sub: 'Free. One page in script format.' },

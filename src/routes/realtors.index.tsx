@@ -70,7 +70,7 @@ function Landing() {
           <p className="rl-kicker" style={{ textAlign: 'left' }}>pricing</p>
           <div className="rl-grid" style={{ marginTop: 8 }}>
             <div className="rl-tile"><h3>First kit · free</h3><p>One listing, all six outputs, every tone to try. Each output ends with "— shutap.com". Sign in with Google or Apple.</p></div>
-            <div className="rl-tile"><h3>Basic · {usd(PLANS.basic.amount)}/month</h3><p>3 kits a day, 20 clean downloads a month: a copied output is one, the kit PDF is six. Plus everything in Shutap for creators.</p></div>
+            <div className="rl-tile"><h3>Basic · {usd(PLANS.basic.amount)}/month</h3><p>20 kits a month. Every copy, the PDF and shoot mode: unlimited, nothing marked. Plus everything in Shutap for creators.</p></div>
             <div className="rl-tile"><h3>Pro · {usd(PLANS.pro.amount)}/month</h3><p>Unlimited kits, rewrites and downloads, nothing marked.</p></div>
             <div className="rl-tile"><h3>One kit · {usd(KIT_ONCE.amount)}</h3><p>One listing, no subscription. Copy and download it without limits or marks, and rewrite it for 30 days.</p></div>
           </div>

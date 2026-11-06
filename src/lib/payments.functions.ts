@@ -343,3 +343,78 @@ export async function markKitPaid(admin: any, kitId: string, userId: string, ses
   if (error) { console.error('[kit checkout] could not mark paid', error.message); return; }
   await admin.from('events').insert({ user_id: userId, session_id: null, name: 'kit_bought', properties: { product: 'realtors', kit_id: kitId, amount: KIT_ONCE.amount, stripe_session: sessionId, env } as never } as never).then(() => {}, () => {});
 }
+
+/* ── A realtor kit bought before it's written (Nov 6 2026) ──────────────
+ * Pay to create: a Free account past its free kit (or Basic past its 20 a
+ * month) buys the next kit for $12.99 before Shutap writes it. The paid
+ * checkout is one credit (event kit_prepaid, keyed by the Stripe session),
+ * spent by writeRealtorKit on the next kit past the limit, which is stored
+ * paid: clean and never counted. The webhook records it; the return page
+ * asks Stripe directly in case the webhook is late. Idempotent both ways. */
+
+export const createKitPrepayCheckout = createServerFn({ method: 'POST' })
+  .middleware([requireRealUser])
+  .inputValidator((data: { returnUrl: string; environment: StripeEnv }) => {
+    if (data.environment !== 'sandbox' && data.environment !== 'live') throw new Error('Invalid environment');
+    if (!/^https?:\/\//.test(data.returnUrl)) throw new Error('Invalid return');
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<CheckoutResult> => {
+    try {
+      const { userId, supabase } = context;
+      const { data: { user } } = await supabase.auth.getUser();
+      const stripe = createStripeClient(data.environment);
+      const price = await oneTimePriceForLookupKey(stripe, KIT_ONCE.priceId, KIT_ONCE);
+      const customerId = await resolveOrCreateCustomer(stripe, { email: user?.email ?? undefined, userId });
+      const session = await stripe.checkout.sessions.create({
+        line_items: [{ price: price.id, quantity: 1 }],
+        mode: 'payment',
+        ui_mode: 'embedded_page',
+        locale: 'en',
+        return_url: data.returnUrl,
+        customer: customerId,
+        automatic_tax: { enabled: true },
+        customer_update: { name: 'auto', address: 'auto' },
+        invoice_creation: { enabled: true },
+        metadata: { userId, kind: 'kit_prepay' },
+        payment_intent_data: { metadata: { userId, kind: 'kit_prepay' } },
+      });
+      return { clientSecret: session.client_secret ?? '' };
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+/** The one place a prepaid kit credit is recorded: once per Stripe session. */
+export async function recordKitPrepaid(admin: any, userId: string, sessionId: string, env: StripeEnv): Promise<void> {
+  const { count } = await admin.from('events').select('id', { count: 'exact', head: true }).eq('user_id', userId).eq('name', 'kit_prepaid').eq('properties->>stripe_session', sessionId);
+  if ((count ?? 0) > 0) return;
+  await admin.from('events').insert({ user_id: userId, session_id: null, name: 'kit_prepaid', properties: { product: 'realtors', stripe_session: sessionId, amount: KIT_ONCE.amount, env } as never } as never);
+  await admin.from('events').insert({ user_id: userId, session_id: null, name: 'kit_bought', properties: { product: 'realtors', kit_id: null, prepaid: true, amount: KIT_ONCE.amount, stripe_session: sessionId, env } as never } as never).then(() => {}, () => {});
+}
+
+/** Back from the prepay checkout: is the credit there? Asks Stripe if the
+ *  webhook hasn't landed yet. */
+export const confirmKitPrepay = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
+    if (!/^cs_[A-Za-z0-9_]+$/.test(data.sessionId)) throw new Error('Invalid session');
+    if (data.environment !== 'sandbox' && data.environment !== 'live') throw new Error('Invalid environment');
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<{ paid: boolean }> => {
+    const { userId } = context as { userId: string };
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const admin = supabaseAdmin as any;
+    try {
+      const stripe = createStripeClient(data.environment);
+      const s = await stripe.checkout.sessions.retrieve(data.sessionId);
+      if (s.payment_status === 'paid' && s.metadata?.kind === 'kit_prepay' && s.metadata?.userId === userId) {
+        await recordKitPrepaid(admin, userId, s.id, data.environment);
+        return { paid: true };
+      }
+    } catch (e) {
+      console.error('[kit prepay] status read failed', getStripeErrorMessage(e));
+    }
+    return { paid: false };
+  });

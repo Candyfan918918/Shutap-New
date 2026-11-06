@@ -23,7 +23,7 @@ import { activePlan } from './plan.server'
 import { downloadsUsed, kitTier, resolveTier } from './bits/tier.server'
 import { heatFor, touchLineDraft, varyBitDraft, writeBitFromStory, type BitFailure, type TouchOption } from './bits/pipeline.server'
 import { forgetPerson, personSignal } from './bits/person.server'
-import { NO_CAP, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
+import { NO_CAP, TOUCH_FAIR_USE, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
 import { DOWNLOAD_KINDS } from './bits/plans'
 import { limitFor } from './entitlements'
 import {
@@ -937,11 +937,11 @@ export const touchLine = createServerFn({ method: 'POST' })
     const chargeId = crypto.randomUUID()
     let used: number
     try {
-      used = await chargeBit(supabaseAdmin, subject, day, limit.cap ?? NO_CAP, chargeId)
+      used = await chargeBit(supabaseAdmin, subject, day, limit.cap ?? TOUCH_FAIR_USE, chargeId)
     } catch {
       return { ok: false, reason: 'failed' }
     }
-    if (used === -1) return { ok: false, reason: 'limited', used: limit.cap ?? 0, cap: limit.cap ?? 0, tier }
+    if (used === -1) return limit.cap === null ? { ok: false, reason: 'rate_limited' } : { ok: false, reason: 'limited', used: limit.cap, cap: limit.cap, tier }
     const controls = { ...DEFAULT_CONTROLS, ...(row ? row.controls ?? {} : data.controls ?? {}) } as BitControls
     // Typed lines are the person's own text: names come out before a model sees them.
     const clean = { ...data.draft, why: '' }
@@ -1002,8 +1002,8 @@ export type MyUsage = {
   bits: { used: number; cap: number | null; resets_at: string }
   downloads: { used: number; cap: number | null; period: 'day' | 'month' }
   touches: { used: number; cap: number | null }
-  /** realtor kits written: Free 1 ever, Basic 3 a day, Pro unlimited */
-  kits: { used: number; cap: number | null; period: 'day' | 'ever' }
+  /** realtor kits written: Free 1 ever, Basic 20 a month, Pro unlimited (a bought kit never counts) */
+  kits: { used: number; cap: number | null; period: 'month' | 'ever'; credits: number }
 }
 export const myUsage = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) => z.object({ ...Ctx }).parse(d ?? {}))
@@ -1016,15 +1016,24 @@ export const myUsage = createServerFn({ method: 'POST' })
     const k = limitFor('kit', tier)
     const kitsQ = async () => {
       let q = supabaseAdmin.from('kits').select('id', { count: 'exact', head: true }).eq('user_id', id.userId).eq('paid', false)
-      if (k.period === 'day') q = q.eq('day', day)
+      if (k.period === 'month') q = q.gte('day', `${day.slice(0, 7)}-01`)
       const { count } = await q
       return count ?? 0
     }
-    const [bitsUsed, dl, touchesUsed, kitsUsed] = await Promise.all([
+    const creditsQ = async () => {
+      const [{ data: paid }, { data: used }] = await Promise.all([
+        supabaseAdmin.from('events').select('properties').eq('user_id', id.userId).eq('name', 'kit_prepaid').limit(200),
+        supabaseAdmin.from('events').select('properties').eq('user_id', id.userId).eq('name', 'kit_prepay_used').limit(200),
+      ])
+      const spent = new Set((used ?? []).map((r: any) => r.properties?.stripe_session).filter(Boolean))
+      return new Set((paid ?? []).map((r: any) => r.properties?.stripe_session).filter((x: any) => x && !spent.has(x))).size
+    }
+    const [bitsUsed, dl, touchesUsed, kitsUsed, kitCreditsN] = await Promise.all([
       readUsed(supabaseAdmin, id.subjectKey, day).catch(() => 0),
       downloadsUsed(supabaseAdmin, id.userId, tier).catch(() => 0),
       readUsed(supabaseAdmin, `touch:${id.userId}`, day).catch(() => 0),
       kitsQ().catch(() => 0),
+      creditsQ().catch(() => 0),
     ])
     const d = limitFor('download', tier)
     return {
@@ -1032,7 +1041,7 @@ export const myUsage = createServerFn({ method: 'POST' })
       bits: { used: bitsUsed, cap: limitFor('bit', tier).cap, resets_at: resetsAt },
       downloads: { used: dl, cap: d.cap, period: d.period === 'ever' ? 'day' : d.period },
       touches: { used: touchesUsed, cap: limitFor('touch', tier).cap },
-      kits: { used: kitsUsed, cap: k.cap, period: k.period === 'ever' ? 'ever' : 'day' },
+      kits: { used: kitsUsed, cap: k.cap, period: k.period === 'ever' ? 'ever' : 'month', credits: kitCreditsN },
     }
   })
 

@@ -83,6 +83,10 @@ export async function refundBitUnlessStored(admin: any, subjectKey: string, day:
 /** A stored bit always counts, even past the cap (it's already written). */
 export const NO_CAP = 2147483647
 
+/** "funnier" is unlimited on every plan (Nov 6 2026); this hidden daily
+ *  ceiling only stops a runaway script. Hitting it reads as a rate limit. */
+export const TOUCH_FAIR_USE = 300
+
 /** After sign-in: this browser's guest bits today count toward the account.
  *  Safe to repeat. Returns the account's count for today. */
 export async function mergeGuestUsage(admin: any, userId: string, anonId: string, day: string): Promise<number> {

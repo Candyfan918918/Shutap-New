@@ -238,6 +238,12 @@ export const Route = createFileRoute('/api/public/payments/webhook')({
                 const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
                 await markKitPaid(supabaseAdmin as any, s.metadata.kitId, s.metadata.userId, s.id, env);
               }
+              // a kit bought before it's written: one credit (Nov 6 2026)
+              if (s?.mode === 'payment' && s?.metadata?.kind === 'kit_prepay' && s?.payment_status === 'paid' && s.metadata.userId) {
+                const { recordKitPrepaid } = await import('@/lib/payments.functions');
+                const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+                await recordKitPrepaid(supabaseAdmin as any, s.metadata.userId, s.id, env);
+              }
               break;
             }
             default:
