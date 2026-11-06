@@ -321,7 +321,7 @@ export async function runBitPass(
   story: string,
   premises: Premise[],
   controls: BitControls,
-  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal; dealt?: Dealt[]; prompt?: string; angleFinder?: string; house?: string; standard?: string; person?: string } = {},
+  opts: { model?: string; timeoutMs?: number; signal?: AbortSignal; dealt?: Dealt[]; prompt?: string; angleFinder?: string; house?: string; standard?: string; person?: string; given?: BitVariant['given'] } = {},
 ): Promise<BitPass> {
   const model = opts.model ?? bitWriterModel()
   const prompt = fill(opts.prompt ?? BIT_PROMPT, {
@@ -332,6 +332,7 @@ export async function runBitPass(
     STANDARD: opts.standard ?? standardBlock(standardLines(6)),
     PERSON: opts.person ?? '',
     JOB: jobBlock(controls),
+    GIVEN: opts.given ? givenBlock(opts.given) : '',
     ...controlVars(controls),
   })
   const res = await callAgent({
@@ -528,6 +529,34 @@ export type WrittenBit = {
 /** Premises are passed in when they were started early (beside the Guard). */
 /** A pipeline variant, for the eval bench: which prompt, models and
  *  stages. Production passes nothing and gets the current pipeline. */
+/** The lines the person wrote (the lined box): shown to the writer as fixed.
+ *  Every candidate must carry them word for word; enforced after too. */
+export function givenBlock(g: Partial<Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>>): string {
+  const rows: string[] = []
+  if (g.hook) rows.push(`HOOK: ${g.hook}`)
+  if (g.setup) rows.push(`SETUP: ${g.setup}`)
+  ;(g.tags ?? []).forEach((t, i) => { if (t) rows.push(`TAG ${i + 1}: ${t}`) })
+  if (g.button) rows.push(`BUTTON: ${g.button}`)
+  if (!rows.length) return ''
+  return `
+THE PERSON ALREADY WROTE THESE LINES. Keep each one WORD FOR WORD in its
+place in every bit you write; write only the parts they left empty, built
+around theirs (their hook sets the voice; their button is the ending):
+${rows.join('\n')}
+`
+}
+
+/** Put the person's lines back over a draft, word for word. */
+export function applyGiven<T extends Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>>(d: T, g: Partial<Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>>): T {
+  let out = { ...d, tags: [...d.tags] }
+  if (g.hook) out.hook = g.hook
+  if (g.setup) out.setup = g.setup
+  ;(g.tags ?? []).forEach((t, i) => { if (t) { while (out.tags.length <= i) out.tags.push(''); out.tags[i] = t } })
+  out.tags = out.tags.filter(Boolean).slice(0, 3)
+  if (g.button) out.button = g.button
+  return out
+}
+
 export type BitVariant = {
   prompt?: string
   angleFinder?: string
@@ -541,6 +570,9 @@ export type BitVariant = {
   noTechniques?: boolean
   /** THIS PERSON block from their own past bits ('' for a guest or a first bit) */
   person?: string
+  /** AI on demand (Nov 5 2026): lines the person wrote themselves; the
+   *  writer fills the rest around them and never changes these */
+  given?: Partial<Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>>
   /** leave THE STANDARD out (the bit-1.5 behaviour, for the eval's before side) */
   noStandard?: boolean
 }
@@ -595,7 +627,7 @@ export async function writeBitFromStory(
     hedgeMs: BIT_BUDGET.hedge(),
     deadlineMs: BIT_BUDGET.write() + 5_000,
     preferPrimary: variant.preferPrimary ?? preferPrimaryOn(),
-    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal, dealt, prompt: variant.prompt, angleFinder: variant.angleFinder, house: house.examples, standard, person: variant.person ?? '' }),
+    run: (leg, signal) => runBitPass(story, premises, controls, { model: leg.model, timeoutMs: leg.timeoutMs, signal, dealt, prompt: variant.prompt, angleFinder: variant.angleFinder, house: house.examples, standard, person: variant.person ?? '', given: variant.given }),
     usable: (p) => {
       const s = sortBits(p.bits as BitDraft[])
       return s.ok.length + s.craftOnly.length > 0
@@ -628,7 +660,8 @@ export async function writeBitFromStory(
   // The judge may reject everything; then the rules' survivors stand in
   // writer order rather than returning nothing.
   const order = verdict.order.length ? verdict.order : passing.map((_, i) => i)
-  const ranked = order.map((i) => passing[i]!).filter(Boolean)
+  // The person's own lines come back word for word whatever the writer did.
+  const ranked = order.map((i) => passing[i]!).filter(Boolean).map((b) => (variant.given ? applyGiven(b, variant.given) : b))
 
   return {
     ranked,
@@ -727,7 +760,11 @@ export async function touchLineDraft(
   avoid: string[] = [],
 ): Promise<TouchOption[] | null> {
   const current = readSlot(bit, slot)
-  const mark = (s: Slot, text: string) => (s === slot ? `>>> ${text}` : text)
+  // The lined box: some lines are not written yet. The writer sees them as
+  // empty and the option is checked on its own (the whole-bit rules need a
+  // whole bit).
+  const partial = !bit.hook || !bit.setup || !bit.button || bit.tags.some((t) => !t)
+  const mark = (s: Slot, text: string) => (s === slot ? `>>> ${text || '(empty: write it)'}` : text || '(not written yet)')
   const asText = [
     `HOOK: ${mark('hook', bit.hook)}`,
     `SETUP: ${mark('setup', bit.setup)}`,
@@ -750,7 +787,7 @@ export async function touchLineDraft(
             SITUATION: story.slice(0, 2000),
             BIT: asText,
             SLOT: slotLabel(slot).toUpperCase(),
-            LINE: current,
+            LINE: current || '(empty: write this line fresh, from the lines that are written)',
             AUDIENCE: cv.AUDIENCE,
             VOICE: cv.VOICE,
             AVOID: avoid.length ? `ALREADY OFFERED (write different ones):\n${avoid.map((a) => `- ${a}`).join('\n')}\n` : '',
@@ -767,7 +804,16 @@ export async function touchLineDraft(
       .map((o) => ({ line: tidy((o as any)?.line).replace(/^["']|["']$/g, ''), move: tidy((o as any)?.move).slice(0, 60) }))
       .filter((o) => o.line && o.line.toLowerCase() !== current.toLowerCase() && !avoid.some((a) => a.toLowerCase() === o.line.toLowerCase()))
     // every option must pass the same rules as the bit it goes into
-    const ok = opts.filter((o) => !bitFailure(writeSlot({ ...bit, why: '' }, slot, o.line), story, { ...controls, length: '2m' }))
+    const lineOk = (line: string) => {
+      if (toneFailure(line)) return false
+      const f = hardRuleFailure(line, story, 'the_roast', { ignoreLength: true })
+      if (f && f !== 'too short') return false
+      if (slot === 'hook' && line.split(/\s+/).length > 10) return false
+      return true
+    }
+    const ok = partial
+      ? opts.filter((o) => lineOk(o.line))
+      : opts.filter((o) => !bitFailure(writeSlot({ ...bit, why: '' }, slot, o.line), story, { ...controls, length: '2m' }))
     if (ok.length >= 2) return ok.slice(0, 3)
     console.warn('[bit-touch] too few options passed', { slot, got: opts.length, ok: ok.length })
   }
