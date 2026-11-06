@@ -20,6 +20,20 @@ export function useMyUsage(enabled: boolean): MyUsage | null {
   return u
 }
 
+/** The account menu (Nov 6 2026): one short line per thing, what's left,
+ *  so it fits a narrow menu instead of one long line running out of it. */
+export function usageRows(u: MyUsage): string[] {
+  const left = (used: number, cap: number) => Math.max(0, cap - used)
+  const per = (p: string) => (p === 'month' ? 'this month' : p === 'day' ? 'today' : '')
+  const row = (cap: number | null, used: number, one: string, many: string, period: string) =>
+    cap === null ? `unlimited ${many}` : `${left(used, cap)} of ${cap} ${cap === 1 ? one : many} left${per(period) ? ' ' + per(period) : ''}`
+  return [
+    row(u.bits.cap, u.bits.used, 'bit', 'bits', 'day'),
+    row(u.downloads.cap, u.downloads.used, 'download', 'downloads', u.downloads.period),
+    row(u.kits.cap, u.kits.used, 'realtor kit', 'realtor kits', u.kits.period),
+  ]
+}
+
 export function usageLine(u: MyUsage): string {
   const bits = u.bits.cap === null ? 'bits ∞' : `${u.bits.used}/${u.bits.cap} bits today`
   const per = u.downloads.period === 'month' ? 'this month' : 'today'

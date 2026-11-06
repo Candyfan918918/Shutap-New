@@ -9,7 +9,7 @@ import { Link, useRouterState, useNavigate } from '@tanstack/react-router'
 import { rememberReturnTo, signOut as doSignOut } from '@/lib/auth'
 import { useCurrentAlias, useIsAdmin } from '@/hooks/use-current-alias'
 import { UserAvatar } from '@/components/UserAvatar'
-import { useMyUsage, usageLine } from '@/components/UsageBar'
+import { useMyUsage, usageRows } from '@/components/UsageBar'
 import { myAlias } from '@/lib/feed.functions'
 import { getFlags } from '@/lib/flags.functions'
 import { NO_FLAGS, type Flags } from '@/lib/flags'
@@ -331,7 +331,8 @@ export function GlobalHeader() {
                       position: 'absolute',
                       top: 'calc(100% + 9px)',
                       right: 0,
-                      width: 220,
+                      width: 244,
+                      maxWidth: "calc(100vw - 24px)",
                       background: menuBg,
                       border: menuBorder,
                       borderRadius: 16,
@@ -341,7 +342,11 @@ export function GlobalHeader() {
                     }}
                   >
                     <div data-ph-private style={{ ...menuItem, cursor: 'default', color: inkMuted, fontSize: isHome ? 'var(--fs-small)' : 12.5 }}>{alias.name || 'signed in'}</div>
-                    {usage && <Link to="/profile" style={{ ...menuItem, fontSize: 12, color: inkMuted }} onClick={() => setMenuOpen(false)}>{usageLine(usage)}</Link>}
+                    {usage && (
+                      <Link to="/profile" aria-label="what's left on your plan" style={{ ...menuItem, fontSize: 12, lineHeight: 1.45, color: inkMuted, whiteSpace: 'normal', overflowWrap: 'anywhere', display: 'flex', flexDirection: 'column', gap: 1 }} onClick={() => setMenuOpen(false)}>
+                        {usageRows(usage).map((r) => <span key={r}>{r}</span>)}
+                      </Link>
+                    )}
                     <Link to="/profile" style={menuItem} onClick={() => setMenuOpen(false)}>profile</Link>
                     <Link to="/creations" style={menuItem} onClick={() => setMenuOpen(false)}>my creations</Link>
                     {admin && (
