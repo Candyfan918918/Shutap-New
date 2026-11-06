@@ -67,6 +67,7 @@ export function UsageMini({ u, dark = false }: { u: MyUsage; dark?: boolean }) {
         })}
         {u.kits.credits > 0 && <div style={{ fontSize: 12, color: muted, paddingLeft: 15 }}>+ {u.kits.credits} bought kit{u.kits.credits === 1 ? '' : 's'} ready to write</div>}
         <div style={{ fontSize: 12, lineHeight: 1.4, color: muted, paddingTop: 2, whiteSpace: 'normal' }}>downloads, copies, funnier: <b style={{ color: ink, fontWeight: 600 }}>unlimited</b>{u.tier === 'free' ? ' · marked' : ''}</div>
+        <div style={{ fontSize: 12, lineHeight: 1.4, color: muted, whiteSpace: 'normal' }}>toasts: <b style={{ color: ink, fontWeight: 600 }}>unlimited downloads on yours</b></div>
       </div>
     </div>
   )

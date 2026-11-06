@@ -163,6 +163,7 @@ export type ToastRow = {
   created_at: string
   version_id: string | null
   toast: Toast | null
+  cut60: { lines: ToastLine[]; seconds: number } | null
 }
 
 export type WriteMyToastResult =
@@ -235,13 +236,18 @@ export const getMyToast = createServerFn({ method: 'POST' })
     if (!(await toastsOpen(context))) return { ok: false, reason: 'off' }
     const { userId } = context as { userId: string }
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
-    const admin = supabaseAdmin as any
-    const { data: t } = await admin.from('toasts').select('id, occasion, tone, length, form, paid, marked, locked_at, locked_version_id, parent_id, created_at').eq('id', data.id).eq('user_id', userId).maybeSingle()
-    if (!t) return { ok: false, reason: 'not_found' }
-    const q = admin.from('toast_versions').select('id, content').eq('toast_id', t.id)
-    const { data: v } = t.locked_version_id ? await q.eq('id', t.locked_version_id).maybeSingle() : await q.order('created_at', { ascending: false }).limit(1).maybeSingle()
-    return { ok: true, toast: { id: t.id, occasion: t.occasion, tone: t.tone, length: Number(t.length), form: t.form, paid: !!t.paid, marked: !!t.marked, locked_at: t.locked_at, parent_id: t.parent_id, created_at: t.created_at, version_id: v?.id ?? null, toast: (v?.content as Toast) ?? null } }
+    const toast = await loadToastRow(supabaseAdmin as any, data.id, userId)
+    return toast ? { ok: true, toast } : { ok: false, reason: 'not_found' }
   })
+
+/** One toast with the version that counts: the locked one, else the latest. */
+async function loadToastRow(admin: any, id: string, userId: string): Promise<ToastRow | null> {
+  const { data: t } = await admin.from('toasts').select('id, occasion, tone, length, form, paid, marked, locked_at, locked_version_id, parent_id, created_at, cut60').eq('id', id).eq('user_id', userId).maybeSingle()
+  if (!t) return null
+  const q = admin.from('toast_versions').select('id, content').eq('toast_id', t.id)
+  const { data: v } = t.locked_version_id ? await q.eq('id', t.locked_version_id).maybeSingle() : await q.order('created_at', { ascending: false }).limit(1).maybeSingle()
+  return { id: t.id, occasion: t.occasion, tone: t.tone, length: Number(t.length), form: t.form, paid: !!t.paid, marked: !!t.marked, locked_at: t.locked_at, parent_id: t.parent_id, created_at: t.created_at, version_id: v?.id ?? null, toast: (v?.content as Toast) ?? null, cut60: (t.cut60 as ToastRow['cut60']) ?? null }
+}
 
 /** "funnier" on a story line in the form: three ways to tell the same story.
  *  Never paid, never counted; signed in only. Nothing is stored. */
@@ -257,4 +263,185 @@ export const touchMyStory = createServerFn({ method: 'POST' })
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
     await (supabaseAdmin as any).from('events').insert({ user_id: userId, session_id: null, name: 'toast_story_funnier', product: 'toasts', properties: { product: 'toasts', occasion: data.form.occasion, story: data.index + 1, options: options?.length ?? 0 } }).then(() => {}, () => {})
     return options ? { ok: true, options } : { ok: false, reason: 'failed' }
+  })
+
+/* ───────────────────────── edit → lock → keep (slice 3, Nov 6 2026) ─────────────────────────
+   Editing is free and unlimited until the lock. A saved edit is a new
+   version (names already swapped out in the browser; a line the person
+   typed with another name in it goes through the Scrubber). Lock freezes
+   one version for good. After that: "change a line" is a new toast copied
+   from this one ($12.99, free on Pro), and the 60-second version is made on
+   demand and kept. Downloads and copies are never counted. */
+
+async function adminDb(): Promise<any> {
+  const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+  return supabaseAdmin
+}
+
+async function event(admin: any, userId: string, name: string, properties: Record<string, unknown>): Promise<void> {
+  await admin.from('events').insert({ user_id: userId, session_id: null, name, product: 'toasts', properties: { product: 'toasts', ...properties } }).then(() => {}, () => {})
+}
+
+async function latestVersion(admin: any, toastId: string): Promise<{ id: string; content: Toast } | null> {
+  const { data } = await admin.from('toast_versions').select('id, content').eq('toast_id', toastId).order('created_at', { ascending: false }).limit(1).maybeSingle()
+  return data ? { id: data.id, content: data.content as Toast } : null
+}
+
+/** A name typed mid-sentence (a capital after a lowercase word) or a
+ *  contact detail sends the line through the Scrubber; anything else is
+ *  stored as typed, so role words aren't over-redacted. */
+async function cleanEdited(lines: ToastLine[], before: ToastLine[]): Promise<ToastLine[]> {
+  const { scrubOne } = await import('./toasts/toast.server')
+  const { hasContactDetails } = await import('./agents/scrubber.functions')
+  const nameLike = /[a-z,;:] (?!I\b)[A-Z][a-z]{1,}/
+  return Promise.all(lines.map(async (l, i) => {
+    const prev = before[i]
+    const text = l.text.trim()
+    if (prev && prev.text === text) return { ...l, text }
+    if (hasContactDetails(text) || nameLike.test(text.replace(/\{(friend|partner|me)\}/g, 'x'))) return { ...l, text: await scrubOne(text) }
+    return { ...l, text }
+  }))
+}
+
+const IdIn = z.object({ id: z.string().uuid() })
+const EditIn = z.object({ id: z.string().uuid(), lines: z.array(LineIn).min(1).max(80) })
+
+/** Keep the speech as edited on the page: a new version. No model, no charge. */
+export const keepToastEdit = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => EditIn.parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true; version_id: string; lines: ToastLine[] } | { ok: false; reason: 'off' | 'not_found' | 'locked' | 'failed' }> => {
+    if (!(await toastsOpen(context))) return { ok: false, reason: 'off' }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: t } = await admin.from('toasts').select('id, locked_at').eq('id', data.id).eq('user_id', userId).maybeSingle()
+    if (!t) return { ok: false, reason: 'not_found' }
+    if (t.locked_at) return { ok: false, reason: 'locked' }
+    const prev = await latestVersion(admin, t.id)
+    if (!prev) return { ok: false, reason: 'not_found' }
+    const lines = await cleanEdited(data.lines as ToastLine[], prev.content.lines)
+    const content: Toast = { ...prev.content, lines }
+    const { data: v, error } = await admin.from('toast_versions').insert({ toast_id: t.id, kind: 'edited', content }).select('id').single()
+    if (error || !v) return { ok: false, reason: 'failed' }
+    await admin.from('toasts').update({ updated_at: new Date().toISOString() }).eq('id', t.id)
+    return { ok: true, version_id: v.id as string, lines }
+  })
+
+/** "funnier" on one line of my speech: three options, nothing changes until picked. */
+export const touchMyLine = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid(), index: z.number().int().min(0).max(80), lines: z.array(LineIn).min(1).max(80), avoid: z.array(z.string().max(400)).max(9).optional() }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true; options: ToastTouchOption[] } | { ok: false; reason: 'off' | 'not_found' | 'locked' | 'failed' }> => {
+    if (!(await toastsOpen(context))) return { ok: false, reason: 'off' }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: t } = await admin.from('toasts').select('id, form, locked_at, occasion').eq('id', data.id).eq('user_id', userId).maybeSingle()
+    if (!t) return { ok: false, reason: 'not_found' }
+    if (t.locked_at) return { ok: false, reason: 'locked' }
+    const { touchToastLine } = await import('./toasts/toast.server')
+    const options = await touchToastLine(t.form as ToastForm, { kind: 'speech', index: data.index, lines: data.lines as ToastLine[] }, data.avoid ?? [])
+    await event(admin, userId, 'toast_line_funnier', { toast_id: t.id, occasion: t.occasion, line: data.index + 1, options: options?.length ?? 0 })
+    return options ? { ok: true, options } : { ok: false, reason: 'failed' }
+  })
+
+/** Lock: the words are final. Saves the page's lines first if they changed. */
+export const lockMyToast = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => EditIn.parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true; toast: ToastRow } | { ok: false; reason: 'off' | 'not_found' | 'failed' }> => {
+    if (!(await toastsOpen(context))) return { ok: false, reason: 'off' }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: t } = await admin.from('toasts').select('id, locked_at, occasion').eq('id', data.id).eq('user_id', userId).maybeSingle()
+    if (!t) return { ok: false, reason: 'not_found' }
+    if (!t.locked_at) {
+      const prev = await latestVersion(admin, t.id)
+      if (!prev) return { ok: false, reason: 'not_found' }
+      let versionId = prev.id
+      const changed = JSON.stringify(prev.content.lines) !== JSON.stringify(data.lines)
+      if (changed) {
+        const lines = await cleanEdited(data.lines as ToastLine[], prev.content.lines)
+        const { data: v } = await admin.from('toast_versions').insert({ toast_id: t.id, kind: 'edited', content: { ...prev.content, lines } }).select('id').single()
+        if (!v) return { ok: false, reason: 'failed' }
+        versionId = v.id
+      }
+      const { error } = await admin.from('toasts').update({ locked_at: new Date().toISOString(), locked_version_id: versionId, updated_at: new Date().toISOString() }).eq('id', t.id).eq('user_id', userId)
+      if (error) return { ok: false, reason: 'failed' }
+      await event(admin, userId, 'toast_locked', { toast_id: t.id, occasion: t.occasion, edited: changed })
+    }
+    const toast = await loadToastRow(admin, data.id, userId)
+    return toast ? { ok: true, toast } : { ok: false, reason: 'failed' }
+  })
+
+/** "make a 60-second version": written once from the locked speech, kept. */
+export const cutMyToast = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid(), again: z.boolean().optional() }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true; cut: { lines: ToastLine[]; seconds: number } } | { ok: false; reason: 'off' | 'not_found' | 'not_locked' | 'failed' }> => {
+    if (!(await toastsOpen(context))) return { ok: false, reason: 'off' }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: t } = await admin.from('toasts').select('id, form, locked_version_id, cut60, occasion').eq('id', data.id).eq('user_id', userId).maybeSingle()
+    if (!t) return { ok: false, reason: 'not_found' }
+    if (!t.locked_version_id) return { ok: false, reason: 'not_locked' }
+    if (t.cut60 && !data.again) return { ok: true, cut: t.cut60 }
+    const { data: v } = await admin.from('toast_versions').select('content').eq('id', t.locked_version_id).maybeSingle()
+    if (!v) return { ok: false, reason: 'not_found' }
+    const { writeCut60 } = await import('./toasts/toast.server')
+    const cut = await writeCut60(t.form as ToastForm, (v.content as Toast).lines)
+    if (!cut) return { ok: false, reason: 'failed' }
+    const kept = { lines: cut.lines, seconds: cut.seconds }
+    await admin.from('toasts').update({ cut60: kept }).eq('id', t.id)
+    await event(admin, userId, 'toast_cut_made', { toast_id: t.id, occasion: t.occasion, seconds: cut.seconds, again: !!data.again })
+    return { ok: true, cut: kept }
+  })
+
+export type CopyResult = { ok: true; id: string } | { ok: false; reason: 'off' | 'not_found' | 'not_locked' | 'pay' | 'failed' }
+
+/** "change a line" after a lock: a new, unlocked toast copied from this
+ *  one; this one stays as it is. Free on Pro; otherwise it spends a toast
+ *  bought for it ($12.99, toast_prepay) and the copy is clean. */
+export const copyMyToast = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => IdIn.parse(d))
+  .handler(async ({ data, context }): Promise<CopyResult> => {
+    if (!(await toastsOpen(context))) return { ok: false, reason: 'off' }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: t } = await admin.from('toasts').select('id, occasion, tone, length, form, prompt_version, locked_version_id').eq('id', data.id).eq('user_id', userId).maybeSingle()
+    if (!t) return { ok: false, reason: 'not_found' }
+    if (!t.locked_version_id) return { ok: false, reason: 'not_locked' }
+    const { kitTier, today } = await import('./bits/tier.server')
+    const { toastCredits } = await import('./toasts/usage.server')
+    const tier = await kitTier(admin, userId)
+    let credit: string | null = null
+    if (tier !== 'pro') {
+      credit = (await toastCredits(admin, userId).catch(() => [] as string[]))[0] ?? null
+      if (!credit) return { ok: false, reason: 'pay' }
+    }
+    const { data: v } = await admin.from('toast_versions').select('content').eq('id', t.locked_version_id).maybeSingle()
+    if (!v) return { ok: false, reason: 'not_found' }
+    const { data: row, error } = await admin.from('toasts').insert({
+      user_id: userId, occasion: t.occasion, tone: t.tone, length: t.length, form: t.form, prompt_version: t.prompt_version,
+      tier, paid: !!credit, marked: false, parent_id: t.id, day: today().day,
+    }).select('id').single()
+    if (error || !row) return { ok: false, reason: 'failed' }
+    await admin.from('toast_versions').insert({ toast_id: row.id, kind: 'original', content: v.content })
+    if (credit) await event(admin, userId, 'toast_prepay_used', { toast_id: row.id, parent_id: t.id, stripe_session: credit })
+    await event(admin, userId, 'toast_copied', { toast_id: row.id, parent_id: t.id, occasion: t.occasion, tier })
+    return { ok: true, id: row.id as string }
+  })
+
+export type ToastSummary = { id: string; occasion: ToastForm['occasion']; tone: ToastForm['tone']; length: number; locked: boolean; paid: boolean; marked: boolean; parent_id: string | null; created_at: string }
+
+/** My toasts, newest first, for My creations. */
+export const listMyToasts = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({}).parse(d ?? {}))
+  .handler(async ({ context }): Promise<{ toasts: ToastSummary[] }> => {
+    if (isAnon(context)) return { toasts: [] }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data } = await admin.from('toasts').select('id, occasion, tone, length, locked_at, paid, marked, parent_id, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(100)
+    return { toasts: (data ?? []).map((t: any) => ({ id: t.id, occasion: t.occasion, tone: t.tone, length: Number(t.length), locked: !!t.locked_at, paid: !!t.paid, marked: !!t.marked, parent_id: t.parent_id, created_at: t.created_at })) }
   })

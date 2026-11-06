@@ -1,6 +1,6 @@
 // My creations (Nov 6 2026): everything a person makes on Shutap, in one
-// place under their profile. Bits, realtor kits, and — when they open —
-// toasts and presentations. Replaces the old set list (/set-list redirects
+// place under their profile. Bits, realtor kits, toasts (Nov 6 2026) and —
+// when they open — presentations. Replaces the old set list (/set-list redirects
 // here). Private: noindex, disallowed in robots.txt, text hidden in replays.
 import { pageMeta } from '@/lib/seo/page-meta'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
@@ -9,6 +9,11 @@ import { useServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { listMyBits, type SetListItem } from '@/lib/bits.functions'
 import { listMyKits, type KitSummary } from '@/lib/realtors.functions'
+import { getMyToast, listMyToasts, type ToastSummary } from '@/lib/toasts.functions'
+import { OCCASION, TONE_LABEL as TOAST_TONE, clock } from '@/lib/toasts/shared'
+import { readNames } from '@/lib/toasts/names-store'
+import { toastTitle } from '@/lib/toasts/toast-text'
+import { downloadBlob, pdfName, speechPdf } from '@/lib/toasts/toast-pdf'
 import { TONE_LABEL } from '@/lib/realtors/listing'
 import type { BitTier } from '@/lib/bits/shared'
 import { anonSessionId } from '@/pages/home/joke/jokeClient'
@@ -44,6 +49,7 @@ function when(iso: string): string {
 type Item =
   | { kind: 'bits'; at: string; bit: SetListItem }
   | { kind: 'kits'; at: string; kit: KitSummary }
+  | { kind: 'toasts'; at: string; toast: ToastSummary }
 
 function Creations() {
   const list = useServerFn(listMyBits)
@@ -53,6 +59,7 @@ function Creations() {
   const [tier, setTier] = useState<BitTier | null>(null)
   const [bits, setBits] = useState<SetListItem[]>([])
   const [kits, setKits] = useState<KitSummary[]>([])
+  const [toasts, setToasts] = useState<ToastSummary[]>([])
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
@@ -60,7 +67,10 @@ function Creations() {
       .then((r) => {
         setTier(r.tier)
         setBits(r.bits)
-        if (r.tier !== 'guest') listMyKits({ data: {} }).then((k) => setKits(k.kits)).catch(() => {})
+        if (r.tier !== 'guest') {
+          listMyKits({ data: {} }).then((k) => setKits(k.kits)).catch(() => {})
+          listMyToasts({ data: {} }).then((t) => setToasts(t.toasts)).catch(() => {})
+        }
       })
       .catch(() => setFailed(true))
     void trackEvent('creations_viewed', {})
@@ -70,11 +80,22 @@ function Creations() {
     const all: Item[] = [
       ...bits.map((b) => ({ kind: 'bits' as const, at: b.created_at, bit: b })),
       ...kits.map((k) => ({ kind: 'kits' as const, at: k.created_at, kit: k })),
+      ...toasts.map((t) => ({ kind: 'toasts' as const, at: t.created_at, toast: t })),
     ]
     return all.filter((i) => kind === 'all' || i.kind === kind).sort((a, b) => (a.at < b.at ? 1 : -1))
-  }, [bits, kits, kind])
+  }, [bits, kits, toasts, kind])
 
-  const count: Record<Kind, number> = { all: bits.length + kits.length, bits: bits.length, kits: kits.length, toasts: 0, presentations: 0 }
+  const count: Record<Kind, number> = { all: bits.length + kits.length + toasts.length, bits: bits.length, kits: kits.length, toasts: toasts.length, presentations: 0 }
+
+  /** The speech PDF straight from the list: names from this device. */
+  async function toastPdf(t: ToastSummary) {
+    const names = readNames(t.id)
+    if (!names) { void navigate({ to: '/toasts/edit/$id', params: { id: t.id } }); return }
+    const r = await getMyToast({ data: { id: t.id } }).catch(() => null)
+    if (!r?.ok || !r.toast.toast) return
+    downloadBlob(speechPdf({ occasion: t.occasion, tone: t.tone, length: t.length, lines: r.toast.toast.lines, names, marked: r.toast.marked }), pdfName(t.occasion, names, 'speech'))
+    void trackEvent('toast_downloaded', { product: 'toasts', what: 'speech', where: 'creations' })
+  }
   const pick = (k: Kind) => void navigate({ to: '/creations', search: k === 'all' ? {} : { show: k }, replace: true })
 
   return (
@@ -86,13 +107,14 @@ function Creations() {
           <div style={{ display: 'flex', gap: 6 }}>
             <Link to="/" className="fd-btn sm">+ bit</Link>
             <Link to="/realtors/kit" className="fd-btn sm ghost">+ kit</Link>
+            <Link to="/toasts" className="fd-btn sm ghost">+ toast</Link>
           </div>
         </div>
 
         <div role="tablist" aria-label="What to show" style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {KINDS.map((k) => (
             <button key={k} role="tab" aria-selected={kind === k} className="fd-chip" aria-pressed={kind === k} onClick={() => pick(k)}>
-              {KIND_LABEL[k]}{k === 'toasts' || k === 'presentations' ? ' · soon' : count[k] ? ` · ${count[k]}` : ''}
+              {KIND_LABEL[k]}{k === 'presentations' ? ' · soon' : count[k] ? ` · ${count[k]}` : ''}
             </button>
           ))}
         </div>
@@ -117,26 +139,30 @@ function Creations() {
           </div>
         )}
 
-        {tier && tier !== 'guest' && (kind === 'toasts' || kind === 'presentations') && (
+        {tier && tier !== 'guest' && kind === 'presentations' && (
           <div className="fd-empty">
-            <b>{kind === 'toasts' ? 'Toasts are coming.' : 'Presentations are coming.'}</b>
-            <span className="fd-muted">
-              {kind === 'toasts'
-                ? 'Best man, maid of honor, retirement, birthday: your stories, said funnier, with a teleprompter. They will land here.'
-                : 'Slides with the funny already in them, for teams. They will land here.'}
-            </span>
-            {kind === 'toasts' ? <Link to="/toasts" className="fd-btn">hear the day it opens</Link> : <a href="/pricing#enterprise" className="fd-btn ghost">for teams</a>}
+            <b>Presentations are coming.</b>
+            <span className="fd-muted">Slides with the funny already in them, for teams. They will land here.</span>
+            <a href="/pricing#enterprise" className="fd-btn ghost">for teams</a>
           </div>
         )}
 
-        {tier && tier !== 'guest' && kind !== 'toasts' && kind !== 'presentations' && (
+        {tier && tier !== 'guest' && kind === 'toasts' && toasts.length > 0 && (
+          <div className="fd-post" style={{ gap: 4, background: '#f3f8f4', borderColor: '#b9d3bf' }}>
+            <b style={{ fontSize: 14.5 }}>Your toasts live here.</b>
+            <span className="fd-muted" style={{ fontSize: 13.5 }}>Locked toasts download as often as you like, forever: the speech, the 60-second version, the text after.</span>
+          </div>
+        )}
+
+        {tier && tier !== 'guest' && kind !== 'presentations' && (
           items.length === 0 ? (
             <div className="fd-empty">
               <b>Nothing here yet.</b>
               <span className="fd-muted">Everything you make lands here, newest first, with every version.</span>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
-                {kind !== 'kits' && <Link to="/" className="fd-btn">write a bit</Link>}
-                {kind !== 'bits' && <Link to="/realtors/kit" className="fd-btn ghost">paste a listing</Link>}
+                {(kind === 'all' || kind === 'bits') && <Link to="/" className="fd-btn">write a bit</Link>}
+                {(kind === 'all' || kind === 'kits') && <Link to="/realtors/kit" className="fd-btn ghost">paste a listing</Link>}
+                {(kind === 'all' || kind === 'toasts') && <Link to="/toasts" className={kind === 'toasts' ? 'fd-btn' : 'fd-btn ghost'}>write a toast</Link>}
               </div>
             </div>
           ) : (
@@ -162,6 +188,22 @@ function Creations() {
                     {when(it.at)} · {it.bit.audience} · {it.bit.versions} {it.bit.versions === 1 ? 'version' : 'versions'}
                   </span>
                 </a>
+              ) : it.kind === 'toasts' ? (
+                <div key={`t${it.toast.id}`} className="fd-post" style={{ gap: 8 }}>
+                  <div className="fd-between" style={{ alignItems: 'flex-start' }}>
+                    <Link to="/toasts/edit/$id" params={{ id: it.toast.id }} className="fd-hook" style={{ fontSize: 19, textDecoration: 'none', color: 'inherit' }} onClick={() => void trackEvent('creation_opened', { kind: 'toast' })}>
+                      {(() => { const n = readNames(it.toast.id); return n ? toastTitle(it.toast.occasion, n) : `A ${OCCASION[it.toast.occasion].label} toast` })()}
+                    </Link>
+                    <span className="fd-pill" style={{ flex: 'none' }}>toast</span>
+                  </div>
+                  <span className="fd-faint">
+                    {when(it.at)} · {OCCASION[it.toast.occasion].label} · {TOAST_TONE[it.toast.tone]} · {clock(it.toast.length)} · {it.toast.locked ? <b>locked · unlimited downloads</b> : <b>editing · downloads open when you lock</b>}{it.toast.marked ? ' · free (marked)' : ''}
+                  </span>
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    <Link to="/toasts/edit/$id" params={{ id: it.toast.id }} className="fd-btn sm">{it.toast.locked ? 'open' : 'keep editing'}</Link>
+                    {it.toast.locked && <button type="button" className="fd-btn sm ghost" onClick={() => void toastPdf(it.toast)}>speech PDF</button>}
+                  </div>
+                </div>
               ) : (
                 <Link
                   key={`k${it.kit.id}`}

@@ -38,7 +38,7 @@ export async function guardForm(form: ToastForm): Promise<GuardVerdict> {
 
 const PROTECT: [string, string][] = [['{friend}', '[friend]'], ['{partner}', '[partner]'], ['{me}', '[me]']]
 
-async function scrubOne(text: string): Promise<string> {
+export async function scrubOne(text: string): Promise<string> {
   const t = text.trim()
   if (!t) return ''
   const { runScrub } = await import('@/lib/agents/scrubber.functions')
