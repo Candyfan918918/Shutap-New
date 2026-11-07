@@ -11,8 +11,8 @@ import '@/pages/realtors/realtors.css'
 
 // Shutap for Realtors, the landing (Nov 6 2026). Public and indexed; the
 // kit page behind it is dark until the realtors flag is on.
-const TITLE = 'Shutap for Realtors — your listing, funnier. The walkthrough, voiceover, hooks, open-house kit and posts from one link'
-const DESC = 'Paste the listing link. Shutap writes the walkthrough to shoot, the voiceover for text-to-voice, the hooks, the open-house kit, the posts and the straight copy, in your tone: professional, funny, luxury or young. Fair-housing checked, nothing made up. First kit free.'
+const TITLE = 'Shutap for Realtors — every listing, introduced in your style. Your listing, funnier.'
+const DESC = 'Every listing, introduced in your style. Paste the listing link, pick a tone (professional, funny, luxury or young) and get the walkthrough to shoot, the voiceover, hooks, open-house kit, posts and straight copy. Fair-housing checked, nothing made up. First kit free.'
 
 export const Route = createFileRoute('/realtors/')({
   // Nov 6 2026: /realtors is the tool; /realtors/kit is gone.

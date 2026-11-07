@@ -142,10 +142,10 @@ function BusinessPage() {
     <SeoPage>
       <p style={{ fontSize: 12, letterSpacing: '.14em', textTransform: 'uppercase', color: '#6f666c', margin: '0 0 10px' }}>Shutap Enterprise</p>
       <h1 style={{ fontFamily: "'Sora', system-ui, sans-serif", fontSize: 'clamp(30px,6vw,46px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, margin: '0 0 18px', color: '#8e1c4c' }}>
-        Humor is wisdom. Bring it to the way your company speaks.
+        Your presentation, funnier. Talks people listen to and remember.
       </h1>
       <p style={{ fontSize: 17, lineHeight: 1.6, margin: '0 0 12px' }}>
-        The people who are listened to are often the ones who can find the true and funny thing to say. Shutap Enterprise helps teams bring original, human-steered humor to presentations, roadshows, product demos, launches and meetings.
+        People listen to the speaker who makes them laugh. Bring humor to your decks, pitches and meetings, and walk up with more confidence. Shutap Enterprise is being built to draft from your own material, for presentations, roadshows, product demos, launches and meetings, with your speakers steering every line.
       </p>
       <p style={{ fontSize: 14, lineHeight: 1.6, color: '#6f666c', margin: '0 0 8px' }}>
         Shutap Enterprise is in development. Tell us what you need and we will scope a solution and send pricing.

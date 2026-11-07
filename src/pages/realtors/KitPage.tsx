@@ -230,7 +230,7 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, child
         <div>
           <p className="rl-kicker">shutap for realtors</p>
           <h1 className="rl-h1">Your listing, <em>funnier.</em></h1>
-          {!kit && !listing && <p className="rl-lead">One link in. The walkthrough, voiceover, hooks, open-house kit, posts and straight copy out, in your tone.</p>}
+          {!kit && !listing && <p className="rl-lead">Introduce every listing your way, in one of four tones: professional, funny, luxury or young. Promoting a property gets easy, and fun enough that people want to watch.</p>}
         </div>
 
         {kit ? (

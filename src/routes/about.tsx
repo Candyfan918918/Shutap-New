@@ -16,20 +16,20 @@ const SECTIONS = [
     body: "People who use humor well get listened to. Shutap started with bits for creators. Now it also makes listing kits for realtors and toasts for anyone with a speech to give, and Enterprise brings it to company presentations. Shutap drafts from your material; you decide what stays. Stay funny, stay human.",
   },
   {
-    heading: "Bits, for creators",
-    body: "Type what happened and get a bit: a hook that stops the scroll, a setup, tags and a button, plus a 5-second video. Tap \"funnier\" on any line you want punched up; the rest stays yours. Run it as stand-up on the teleprompter, a one-page sketch or a skit you film alone. shutap.com/bits",
+    heading: "Bits: your bit, funnier",
+    body: "Your voice, your call. Funnier only where you ask. A clearer way to build your bit, in your own voice. Shutap only touches a line when you tap “funnier”, and you decide what stays. Type it line by line, tap “funnier” where you want it, then post it or perform it: every bit comes with a 5-second video, stand-up on the prompter, a sketch page and a skit. For creators and comedians. shutap.com/bits",
   },
   {
-    heading: "Kits, for realtors",
-    body: "Paste the listing's web address. Shutap drafts the walkthrough to shoot, the voiceover, the hooks, the open-house kit, the posts and the straight listing copy, in your tone: professional, luxury, funny or young. Fair-housing checked, nothing made up. Shoot mode opens the teleprompter on your phone. shutap.com/realtors",
+    heading: "Realtors: your listing, funnier",
+    body: "Every listing, introduced in your style. Introduce every listing your way, in one of four tones: professional, funny, luxury or young. Promoting a property gets easy, and fun enough that people want to watch. Paste the listing link, pick your tone, and get the walkthrough to shoot, the voiceover, the hooks, the open-house kit, the posts and the straight MLS copy. Fair-housing checked, nothing made up. Shoot it with the prompter on your phone. shutap.com/realtors",
   },
   {
-    heading: "Toasts, for everyone",
-    body: "Best man, maid of honor, parents, Thanksgiving, the holiday party, New Year's, a retirement, a birthday. You give the stories in your words, and Shutap builds them into a toast with pause marks, a running clock, cue cards and a phone prompter. Names stay in your browser. shutap.com/toasts",
+    heading: "Toasts: your toast, funnier",
+    body: "Ready for life’s big moments. Be ready for the moments that matter. Your stories become the toast, then you rehearse it, carry cue cards, read from the prompter and keep a keepsake. Best man, maid of honor, Thanksgiving, the holiday party, New Year’s and more: pick the occasion, type your stories in your words, then edit, lock and give it. Names stay in your browser. shutap.com/toasts",
   },
   {
-    heading: "Presentations, for enterprise",
-    body: "Shutap Enterprise brings the same approach to company presentations: funnier lines drafted from your own material, and your speakers decide every line. It's by request: tell us what you need at shutap.com/business.",
+    heading: "Enterprise: your presentation, funnier",
+    body: "Talks people listen to and remember. People listen to the speaker who makes them laugh. Bring humor to your decks, pitches and meetings, and walk up with more confidence. Tell us the talk, we scope it and send pricing, and your speakers steer every line. Shutap Enterprise is in development, by request at shutap.com/business.",
   },
   {
     heading: "Why Shutap is different",
