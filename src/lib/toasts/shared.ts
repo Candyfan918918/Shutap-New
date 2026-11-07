@@ -63,20 +63,20 @@ export const OCCASION: Record<Occasion, OccasionSpec> = {
     who: "your child's first name", relation: 'you are their',
   },
   thanksgiving: {
-    id: 'thanksgiving', label: 'Thanksgiving', structure: ['greeting', 'one shared story', 'gratitude', 'glasses'],
-    lengths: [60, 120], defaultLength: 60, stories: 1, partner: false, neverSay: [],
+    id: 'thanksgiving', label: 'Thanksgiving', structure: ['greeting', 'the stories the whole table knows', 'gratitude', 'glasses'],
+    lengths: [60, 120], defaultLength: 120, stories: 3, partner: false, neverSay: [],
     check: 'Half the table: flag any inside joke only part of the table would get, and keep the shared story one everyone at the table can follow.',
     glasses: true, keepsake: false, who: 'who the toast is to (the family, the host, a name)', relation: 'who they are to you',
   },
   holiday_party: {
-    id: 'holiday_party', label: 'holiday party', structure: ["the year's wins (shout-outs)", 'one light laugh', 'thanks', 'glasses'],
-    lengths: [60, 90], defaultLength: 60, stories: 1, partner: false, neverSay: ['drinking', 'bonuses', 'layoffs'],
+    id: 'holiday_party', label: 'holiday party', structure: ["the year's wins (shout-outs)", 'a laugh or two the team shared', 'thanks', 'glasses'],
+    lengths: [60, 90, 120], defaultLength: 90, stories: 3, partner: false, neverSay: ['drinking', 'bonuses', 'layoffs'],
     check: 'Workplace: no one person singled out or embarrassed, shout-outs go to teams or wins, no drinking, bonus, layoff, HR or salary jokes.',
     glasses: true, keepsake: false, who: 'the team or company', relation: 'you are their',
   },
   new_years: {
-    id: 'new_years', label: "New Year's", structure: ['the year in one line', 'the turn', 'glasses at midnight'],
-    lengths: [30, 60], defaultLength: 60, stories: 1, partner: false, neverSay: [], check: null, glasses: true, keepsake: false,
+    id: 'new_years', label: "New Year's", structure: ['the year in a few lines', 'the turn', 'glasses at midnight'],
+    lengths: [60, 120], defaultLength: 60, stories: 3, partner: false, neverSay: [], check: null, glasses: true, keepsake: false,
     who: 'who is in the room (friends, the family, a name)', relation: 'who they are to you',
   },
   retirement: {
@@ -218,9 +218,23 @@ export const STORY_PROMPTS: Record<Occasion, StoryPrompt[]> = {
     { sub: 'them grown up', example: '“She called home every Sunday in college, mostly to ask how to do laundry.”' },
     { sub: 'the day you knew about their partner (optional)', example: '“The first time he brought her home, he cleaned the car. He has never cleaned the car.”' },
   ],
-  thanksgiving: [{ sub: 'one story the whole table knows', example: '“Last year the turkey caught fire and we ate pizza on the good plates.”' }],
-  holiday_party: [{ sub: 'the year’s big win', example: '“We shipped the new app in March and the servers stayed up.”' }],
-  new_years: [{ sub: 'the year in one line', example: '“This year half of us moved and one of us learned to make sourdough.”' }],
+  // Nov 7 2026 (Candy): never only one story. Story 1 required, 2 and 3
+  // optional but recommended, like the wedding toasts.
+  thanksgiving: [
+    { sub: 'one story the whole table knows', example: '“Last year the turkey caught fire and we ate pizza on the good plates.”' },
+    { sub: 'something this family always does', example: '“Every year Grandpa carves, and every year he asks who brought the good knife.”' },
+    { sub: 'what you’re thankful for this year', example: '“This is the first year we all fit at one table.”' },
+  ],
+  holiday_party: [
+    { sub: 'the year’s big win', example: '“We shipped the new app in March and the servers stayed up.”' },
+    { sub: 'a moment the whole team laughed', example: '“The day the coffee machine broke and we held stand-up in the parking lot.”' },
+    { sub: 'what you want to thank them for', example: '“You covered for each other every time someone was out.”' },
+  ],
+  new_years: [
+    { sub: 'the year in one line', example: '“This year half of us moved and one of us learned to make sourdough.”' },
+    { sub: 'one thing that went sideways', example: '“We booked the cabin for the wrong weekend and slept in the car.”' },
+    { sub: 'what you want next year', example: '“Next year, one trip together. On the right weekend.”' },
+  ],
   retirement: [
     { sub: 'what they’re known for at work', example: '“She answered every email within four minutes for fifteen years.”' },
     { sub: 'a small thing everyone noticed', example: '“He kept a drawer of snacks for anyone having a bad day.”' },

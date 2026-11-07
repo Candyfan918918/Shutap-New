@@ -93,7 +93,7 @@ function nextStep(d: Draft): { bar: string; why: string | null } {
     return { bar: `Lock story ${open + 1} when it reads right. Locked lines stay word for word.${after >= 0 ? ` Then story ${after + 1}, or leave it empty.` : ''}`, why: `lock story ${open + 1} to continue` }
   }
   const empty = d.stories.findIndex((s) => !s.text.trim())
-  if (!d.true_thing.trim()) return { bar: `${empty >= 0 ? `Story ${empty + 1} is optional: empty gets a bridge from your other stories, never a made-up one. ` : ''}Now the one true thing: the sentence the toast ends on.`, why: 'add the one true thing to continue' }
+  if (!d.true_thing.trim()) return { bar: `${empty >= 0 ? `Story ${empty + 1} is recommended, not required: left empty it gets a bridge from your other stories, never a made-up one. ` : ''}Now the one true thing: the sentence the toast ends on.`, why: 'add the one true thing to continue' }
   return { bar: 'All set. Tap write my toast.', why: null }
 }
 
@@ -329,7 +329,7 @@ export function ToastForm({ occasionIn, prepaidSession, kicker, h1, lead }: { oc
                     <div key={`${d.occasion}-${i}`} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                       <div className="ts-line-head">
                         <b>Story {i + 1} <span>· {shown(p.sub)}</span></b>
-                        <i>{s.locked ? 'locked · kept word for word' : s.text.trim() ? 'not locked yet' : i > 0 ? 'empty · optional' : 'empty'}</i>
+                        <i>{s.locked ? 'locked · kept word for word' : s.text.trim() ? 'not locked yet' : i > 0 ? 'empty · recommended' : 'empty'}</i>
                       </div>
                       <div className={`ts-box ${state}`} style={state === 'empty' ? { gridTemplateColumns: 'minmax(0, 1fr) auto' } : undefined}>
                         <textarea
@@ -343,7 +343,7 @@ export function ToastForm({ occasionIn, prepaidSession, kicker, h1, lead }: { oc
                           onBlur={() => setFocus((f) => (f === i ? null : f))}
                           onChange={(e) => setStory(i, { text: e.target.value.replace(/\n/g, ' ') })}
                         />
-                        {state === 'empty' ? <span className="ts-optional">{i === 0 ? 'required' : 'optional'}</span> : (
+                        {state === 'empty' ? <span className="ts-optional">{i === 0 ? 'required' : 'recommended'}</span> : (
                           <>
                             <button type="button" className="ts-pill funnier" disabled={!s.text.trim() || touch?.busy} onClick={() => void funnier(i)}>{touch?.index === i && touch.busy ? 'three ways…' : 'funnier'}</button>
                             {s.locked
