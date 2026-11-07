@@ -267,7 +267,7 @@ export function ToastForm({ occasionIn, prepaidSession, kicker, h1, lead }: { oc
         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
           <p className="rl-kicker">{kicker ?? `shutap toasts · ${spec.label}`}</p>
           <h1 className="rl-h1">{h1 ? <>{h1[0]}<em>{h1[1]}</em></> : <>Your toast, <em>funnier.</em></>}</h1>
-          <p className="rl-lead">{lead ?? 'Your stories, in your words. Shutap builds the toast around them, and only touches a line when you tap it.'}</p>
+          <p className="rl-lead">{lead ?? 'Be ready for the moments that matter. Your stories become the toast, then you rehearse it, carry cue cards, read from the prompter and keep a keepsake.'}</p>
         </div>
 
         <div className="ts-cols">
