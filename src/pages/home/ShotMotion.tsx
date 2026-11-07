@@ -12,9 +12,9 @@ const pct = (b: Box): CSSProperties => ({ left: `${b.left}%`, top: `${b.top}%`, 
 /** `then`: another line follows, so this line's caret leaves when it's done */
 type Typing = { kind: 'type'; box: Box; chars: number; from: number; to: number; then?: boolean }
 type Writing = { kind: 'write'; box: Box; until: number; label?: string }
-export type ShotEffect = Typing | Writing
+type ShotEffect = Typing | Writing
 
-export type ShotMotionSpec = { seconds: number; effects: ShotEffect[] }
+type ShotMotionSpec = { seconds: number; effects: ShotEffect[] }
 
 /** Bits: the hook is typed, then tag 1 is written by "funnier". */
 const BITS: ShotMotionSpec = {
@@ -44,7 +44,7 @@ const REALTORS: ShotMotionSpec = {
   ],
 }
 
-export const SHOT_MOTION: Record<'bits' | 'realtors' | 'toasts', ShotMotionSpec> = { bits: BITS, toasts: TOASTS, realtors: REALTORS }
+const SHOT_MOTION: Record<'bits' | 'realtors' | 'toasts', ShotMotionSpec> = { bits: BITS, toasts: TOASTS, realtors: REALTORS }
 
 /** Keyframes for one effect, as a CSS string (percent of the loop). */
 function keyframes(name: string, e: ShotEffect): string {
