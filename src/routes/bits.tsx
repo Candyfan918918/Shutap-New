@@ -6,8 +6,8 @@ import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
 // Shutap Bits (Nov 6 2026): the product page for the box, for creators and
 // comedians. The box itself stays on the homepage; this page embeds it.
 const PATH = '/bits'
-const TITLE = 'Shutap Bits — what happened, as a bit in your voice, with the video | for creators and comedians'
-const DESCRIPTION = 'Shutap Bits: type what happened and get a bit in your voice (hook, setup, tags, button), the 5-second video, stand-up on the teleprompter, sketch and skit. AI on demand: "funnier" on any one line, lock the rest. Free to start.'
+const TITLE = 'Shutap Bits — your voice, your call. Funnier only where you ask | for creators and comedians'
+const DESCRIPTION = 'Your voice, your call. Build your bit line by line, in your own voice: Shutap only touches a line when you tap "funnier", and you decide what stays. With the 5-second video, stand-up on the prompter, a sketch page and a skit. Free to start.'
 
 export const Route = createFileRoute('/bits')({
   head: () => ({
@@ -33,11 +33,11 @@ function BitsPage() {
     <ContentPage
       tryIt="humor-amplifier"
       breadcrumbs={[{ name: 'Shutap Bits', path: PATH }]}
-      h1="Shutap Bits: what happened, as a bit in your voice"
-      capsule="For creators and comedians. Type what happened; get a complete bit (hook, setup, tags, button), the 5-second video with a cast that matches your story, stand-up on the teleprompter, a sketch page and a skit. Your lines stay yours: tap funnier on one line and Shutap offers three ways for that line only."
-      cta={{ label: 'Type what happened. Say it funnier.', href: '/bits' }}
+      h1="Your bit, funnier."
+      capsule="Your voice, your call. Funnier only where you ask. A clearer way to build your bit, in your own voice. Shutap only touches a line when you tap “funnier”, and you decide what stays. For creators and comedians."
+      cta={{ label: 'Write a bit', href: '/bits' }}
       sections={[
-        { heading: 'Line by line, your words first', body: 'The box is already a bit: hook, setup, two tags, button. Write any line yourself, lock the ones you like, and "finish the bit" writes only what you left empty, around yours. Nothing on the page changes until you tap.' },
+        { heading: 'Type it, tap funnier, post it', body: '1. Type your bit, line by line. 2. Tap “funnier” on any line you want punched up. 3. Post it, or perform it. The box is already a bit: hook, setup, two tags, button. Write any line yourself, lock the ones you like, and "finish the bit" writes only what you left empty, around yours. Nothing on the page changes until you tap.' },
         { heading: 'What a complete bit is', body: 'The hook opens with a reason to listen, in the first two seconds. The setup gives just enough of the story to follow the turn. Tags add laughs after the turn without restarting the story. The button is the last line, the one you can stop on.' },
         { heading: 'The video, the stage, the page', body: 'Every bit comes with a 5-second cartoon whose cast and room match the story. Run it as stand-up on the teleprompter, lay it out as a skit you can film alone, or as a one-page sketch in screenplay format.' },
         { heading: 'Hotter, tighter, swapped, mixed', body: 'Rewrites go hotter or tighter, swap the crowd-work line, or let you mix your own from every candidate. My creations keeps every version. Free writes one bit a day; Basic three with rewrites; Pro without limits.' },
@@ -45,7 +45,8 @@ function BitsPage() {
       ]}
       others={[
         { href: '/realtors', label: 'Shutap for Realtors' },
-        { href: '/toasts', label: 'Shutap Toasts · soon' },
+        { href: '/toasts', label: 'Shutap Toasts' },
+        { href: '/business', label: 'Shutap Enterprise' },
         { href: '/how-it-works', label: 'How Shutap works' },
         { href: '/pricing', label: 'Pricing' },
       ]}

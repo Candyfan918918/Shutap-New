@@ -14,8 +14,8 @@ import '@/pages/realtors/realtors.css'
 // the toasts flag: until it's on, "write my toast" says it opens later today
 // and admins can write. ?occasion= presets the form (the landing pages);
 // ?prepaid= is the $12.99 return.
-const TITLE = 'Shutap Toasts — your best man, maid of honor or holiday toast, funnier'
-const DESC = 'Your stories about them, in your words, built into a toast: pause marks, a running clock, cue cards and a phone prompter. Best man, maid of honor, parents, Thanksgiving, holiday party, New Year’s, retirement, birthday, Toastmasters.'
+const TITLE = 'Shutap Toasts — ready for life’s big moments. Your toast, funnier.'
+const DESC = 'Be ready for the moments that matter. Your stories, in your words, become the toast: rehearse it, carry cue cards, read from the prompter and keep a keepsake. Best man, maid of honor, Thanksgiving, holiday party, New Year’s and more.'
 
 export const Route = createFileRoute('/toasts/')({
   validateSearch: (s: Record<string, unknown>) => z.object({ occasion: z.enum(OCCASIONS).optional().catch(undefined), prepaid: z.string().max(200).optional().catch(undefined) }).parse(s),
