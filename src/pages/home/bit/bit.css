@@ -454,3 +454,8 @@
   .bt-topt { justify-self: end; }
   .bt-tbox.empty:has(.bt-topt) { grid-template-columns: minmax(0, 1fr) auto; }
 }
+
+/* /bits (the writer under a product head, Nov 6 2026): tighter, like /toasts */
+.bt.bt-bare .bt-lined { gap: 8px; padding-top: 10px; }
+.bt.bt-bare .bt-lined-foot { padding: 8px 0 12px; }
+.bt.bt-bare .bt-col { gap: 12px; }
