@@ -46,7 +46,7 @@ export function PrompterDemo() {
   return (
     <section ref={box} className="rl-demo-pr" aria-label="Shoot mode, the teleprompter, with the sample kit">
       <div className="rl-demo-pr-top">
-        <span>shoot mode · {SAMPLE_LISTING.address} · {idx + 1} of {shots.length}</span>
+        <span>shoot mode · {SAMPLE_LISTING.beds}-bed in {SAMPLE_LISTING.city} · {idx + 1} of {shots.length}</span>
         <button type="button" onClick={() => { setRunning((r) => !r); void trackEvent('sample_prompter_toggle', { product: 'realtors' }) }}>{running ? 'pause' : 'play'}</button>
       </div>
       <div className="rl-demo-pr-scroll" ref={scroll} onClick={() => setRunning((r) => !r)}>

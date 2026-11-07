@@ -104,7 +104,7 @@ const PRODUCTS: ProductLine[] = [
     gets: [['camera', 'Walkthrough'], ['wave', 'Voiceover'], ['bolt', 'Hooks'], ['sign', 'Open house'], ['post', 'Posts'], ['doc', 'MLS copy']],
     price: 'First kit free, marked · one kit $12.99 · Basic: 20 a month · Pro: unlimited',
     cta: 'Paste a listing', href: '/realtors',
-    shot: { src: '/home/realtors.jpg', url: 'shutap.com/realtors', w: 1200, h: 708, alt: 'A Shutap for Realtors kit for 1384 Madera Ave, Menlo Park, open on the walkthrough' },
+    shot: { src: '/home/realtors.jpg', url: 'shutap.com/realtors', w: 1200, h: 708, alt: 'A Shutap for Realtors kit open on the walkthrough' },
   },
   {
     key: 'toasts', icon: 'toasts', name: 'Toasts', full: 'Shutap Toasts', aud: 'for weddings and holidays', tab: 'weddings & holidays',

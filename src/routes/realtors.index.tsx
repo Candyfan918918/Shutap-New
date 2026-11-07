@@ -43,7 +43,7 @@ function Landing() {
       <KitPage kitId={kit} sessionId={session_id} prepaidSession={prepaid} urlIn={url} textIn={text === '1'}>
         <div className="rl-demos">
           <div>
-            <p className="rl-kicker" style={{ textAlign: 'left' }}>the demo · a real listing, all six outputs</p>
+            <p className="rl-kicker" style={{ textAlign: 'left' }}>the demo · a real kit, all six outputs</p>
             <div style={{ marginTop: 8 }}><SampleKit /></div>
           </div>
           <div>

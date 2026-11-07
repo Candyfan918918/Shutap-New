@@ -14,9 +14,9 @@ export function SampleKit() {
       <div className="rl-row" style={{ justifyContent: 'space-between' }}>
         <div>
           <span className="rl-lbl r">a real kit · {TONE_LABEL[SAMPLE_CONTROLS.tone]}</span>
-          <h2 style={{ margin: '2px 0 0', font: '800 22px var(--sora)', color: 'var(--wine)', letterSpacing: '-0.03em' }}>{SAMPLE_LISTING.address} · {SAMPLE_LISTING.city}</h2>
+          <h2 style={{ margin: '2px 0 0', font: '800 22px var(--sora)', color: 'var(--wine)', letterSpacing: '-0.03em' }}>A {SAMPLE_LISTING.beds}-bed in {SAMPLE_LISTING.city}</h2>
         </div>
-        <span className="rl-note">written by Shutap from the listing page · rated by the Lab · nothing added</span>
+        <span className="rl-note">written by Shutap from the listing page · rated by the Lab · nothing added · address and price hidden here</span>
       </div>
       <div className="rl-facts">{listingFacts(SAMPLE_LISTING).map((f) => <span key={f} className="rl-fact">{f}</span>)}</div>
       <div className="rl-tabs" role="tablist">
