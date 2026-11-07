@@ -23,8 +23,8 @@ const FIRST_DAY = '2026-11-02' // first day the cron sends to everyone
 const MAX_PER_RUN = 60 // the next hourly run picks up the rest
 const RESEND_GAP_MS = 600 // stay under Resend's default 2 requests/second
 const SKIP_EMAIL = /(@test\.local|@example\.com|@shutap\.com|@a2b2\.ai)$/i
-// The one link in the body. Plain homepage, no #anchor, so Gmail's link wrapping can't drop anything.
-const CTA = 'https://shutap.com/?utm_source=hello_shutap&utm_medium=email&utm_campaign=daily_idea'
+// The one link in the body. The writer (/bits since the Nov 6 homepage), no #anchor, so Gmail's link wrapping can't drop anything.
+const CTA = 'https://shutap.com/bits?utm_source=hello_shutap&utm_medium=email&utm_campaign=daily_idea'
 const WHY_MAX_WORDS = 25
 
 const esc = (s: string) =>
