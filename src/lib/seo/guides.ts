@@ -252,7 +252,7 @@ export interface GuideTechnique {
   tryIt: string;
 }
 
-const CTA = { label: "Type what happened. Say it funnier.", href: "/" };
+const CTA = { label: "Type what happened. Say it funnier.", href: "/bits" };
 const BIZ_CTA = { label: "Request pricing and solutions", href: "/business" };
 const PUBLISHED = "2026-10-17";
 

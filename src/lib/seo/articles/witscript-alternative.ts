@@ -81,7 +81,7 @@ const guide: Guide = {
     { label: "Claude pricing, fetched Oct 2026", url: "https://claude.com/pricing" },
   ],
   related: ["punchlines-ai-alternatives", "ai-roast-tools-compared", "ai-comedy-writing-tools"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-10-26",
 };
 

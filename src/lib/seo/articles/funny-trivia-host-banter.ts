@@ -126,7 +126,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-tell-a-funny-story", "sense-of-humor", "humorous-speech-ideas-for-toastmasters"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-11-02",
 };
 

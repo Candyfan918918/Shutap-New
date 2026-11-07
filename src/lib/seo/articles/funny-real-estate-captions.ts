@@ -84,7 +84,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-captions", "how-to-get-more-views-on-tiktok", "funny-email-sign-offs"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   techniques: [
     {
       name: "The feature with its own zip code",

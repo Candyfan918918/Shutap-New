@@ -541,7 +541,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     const id = new URLSearchParams(window.location.search).get('bit')
     if (!id || !/^[0-9a-f-]{36}$/i.test(id) || readPending() || readPendingWrite()) return
     // The link opens the bit once; a refresh afterwards lands on a clean box.
-    window.history.replaceState(window.history.state, '', '/')
+    window.history.replaceState(window.history.state, '', window.location.pathname)
     setOpening(true)
     try {
       const r = await fetchBit({ data: { bit_id: id, ...ctx() } })
@@ -558,7 +558,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   useEffect(() => {
     // The linked bit opens at once, beside the account check, not after it.
     void refresh().then(() => restore())
-    if (!embed) void openFromLink()
+    // Nov 6 2026: the homepage no longer holds the box, so /bits (an embed)
+    // opens ?bit= links too (My creations links there).
+    void openFromLink()
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user.is_anonymous !== true) {
         // Signed in without leaving the page (a popup, as in the preview):
@@ -884,7 +886,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   }
 
   function writeAnother() {
-    if (!embed && window.location.search.includes('bit=')) window.history.replaceState(null, '', '/')
+    if (window.location.search.includes('bit=')) window.history.replaceState(null, '', window.location.pathname)
     setBit(null)
     setNotice(null)
     setPhase('write')

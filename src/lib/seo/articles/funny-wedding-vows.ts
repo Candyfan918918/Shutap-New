@@ -84,7 +84,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-wedding-toast", "best-ai-for-wedding-toast-jokes", "self-deprecating-humor"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   techniques: [
     {
       name: "The promise one notch too specific",

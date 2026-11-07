@@ -50,7 +50,7 @@ Disallow: /bit-daily
 Disallow: /bit-eval
 Disallow: /kit-lab
 Disallow: /toast-lab
-Disallow: /realtors/*/shoot
+Disallow: /realtors/shoot
 Disallow: /toasts/edit
 Disallow: /toasts/prompter
 Disallow: /lovable/

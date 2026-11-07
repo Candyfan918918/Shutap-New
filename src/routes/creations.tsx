@@ -177,14 +177,14 @@ function Creations() {
               it.kind === 'bits' ? (
                 <a
                   key={`b${it.bit.id}`}
-                  href={`/?bit=${it.bit.id}`}
+                  href={`/bits?bit=${it.bit.id}`}
                   className="fd-post"
                   style={{ textDecoration: 'none', color: 'inherit', gap: 6 }}
                   onClick={(e) => {
                     if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
                     e.preventDefault()
                     void trackEvent('creation_opened', { kind: 'bit' })
-                    void navigate({ href: `/?bit=${it.bit.id}` })
+                    void navigate({ href: `/bits?bit=${it.bit.id}` })
                   }}
                 >
                   <div className="fd-between" style={{ alignItems: 'flex-start' }}>

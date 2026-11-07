@@ -26,7 +26,7 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
     const router = getRouterRef()
     const goPath = (to: string) => { if (router) router.navigate({ to }); else window.location.replace(to) }
     // Spill and Scan are retired: their old intents land on the write box.
-    const goHash = (_hash: 'spill' | 'scan') => { if (router) router.navigate({ to: '/' }); else window.location.replace('/') }
+    const goHash = (_hash: 'spill' | 'scan') => { if (router) router.navigate({ to: '/bits' }); else window.location.replace('/bits') }
     const goRoom = (roomId: string) => {
       if (router) router.navigate({ to: '/rooms/$id', params: { id: roomId } })
       else window.location.replace('/rooms/' + encodeURIComponent(roomId))

@@ -92,7 +92,7 @@ const guide: Guide = {
     },
   ],
   related: ["shutap-vs-chatgpt-for-jokes", "ai-joke-tools-compared", "shutap-vs-chatgpt-for-stand-up"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-11-02",
 };
 

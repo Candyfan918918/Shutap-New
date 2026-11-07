@@ -80,7 +80,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-shutap-is-built", "turn-a-bad-experience-into-comedy", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-10-29",
 };
 

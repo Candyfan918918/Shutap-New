@@ -87,7 +87,7 @@ const guide: Guide = {
     },
   ],
   related: ["deadpan-humor", "types-of-humor", "self-deprecating-humor"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   preset: { voice: "deadpan", heat: 4 },
   techniques: [
     {

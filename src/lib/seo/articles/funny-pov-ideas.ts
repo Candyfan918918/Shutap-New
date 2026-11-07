@@ -108,7 +108,7 @@ const guide: Guide = {
     },
   ],
   related: ["pov-skit-writer", "storytime-script-writer", "how-to-write-a-skit"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-11-05",
 };
 

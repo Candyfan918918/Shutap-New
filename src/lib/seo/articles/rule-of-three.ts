@@ -87,7 +87,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-write-comedy-tags", "deadpan-humor", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   techniques: [
     {
       name: "The relaxed fourth",

@@ -84,7 +84,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-wedding-toast", "how-to-tell-a-funny-story", "best-ai-for-wedding-toast-jokes"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   techniques: [
     {
       name: "The joke inside the announcement",

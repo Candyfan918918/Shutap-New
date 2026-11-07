@@ -88,7 +88,7 @@ const guide: Guide = {
     },
   ],
   related: ["deadpan-humor", "types-of-humor", "sense-of-humor"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   techniques: [
     {
       name: "The understatement",

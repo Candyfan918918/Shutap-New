@@ -126,7 +126,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-trivia-host-banter", "funny-icebreakers-for-training-sessions", "sense-of-humor"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-11-06",
 };
 

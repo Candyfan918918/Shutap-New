@@ -91,7 +91,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "self-deprecating-humor", "how-to-write-comedy-tags"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-10-21",
 };
 
