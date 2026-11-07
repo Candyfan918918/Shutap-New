@@ -181,7 +181,18 @@ export function ContentPage({
         {cta && (
           <p style={{ margin: "8px 0 36px" }}>
             <Link
-              to={cta.href}
+              to={cta.href.startsWith("#") ? "." : cta.href}
+              hash={cta.href.startsWith("#") ? cta.href.slice(1) : undefined}
+              onClick={(e) => {
+                // An in-page CTA (the writer on this page): scroll to it and
+                // put the cursor in the first line.
+                if (!cta.href.startsWith("#")) return;
+                e.preventDefault();
+                const el = document.getElementById(cta.href.slice(1));
+                el?.scrollIntoView({ behavior: "smooth", block: "start" });
+                const box = el?.closest(".bt-col")?.querySelector<HTMLElement>('[contenteditable="true"], textarea');
+                window.setTimeout(() => box?.focus({ preventScroll: true }), 450);
+              }}
               style={{
                 display: "inline-block",
                 background: "#8e1c4c",

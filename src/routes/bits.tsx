@@ -35,7 +35,7 @@ function BitsPage() {
       breadcrumbs={[{ name: 'Shutap Bits', path: PATH }]}
       h1="Your bit, funnier."
       capsule="Your voice, your call. Funnier only where you ask. A clearer way to build your bit, in your own voice. Shutap only touches a line when you tap “funnier”, and you decide what stays. For creators and comedians."
-      cta={{ label: 'Write a bit', href: '/bits' }}
+      cta={{ label: 'Write a bit', href: '#bit-write' }}
       sections={[
         { heading: 'Type it, tap funnier, post it', body: '1. Type your bit, line by line. 2. Tap “funnier” on any line you want punched up. 3. Post it, or perform it. The box is already a bit: hook, setup, two tags, button. Write any line yourself, lock the ones you like, and "finish the bit" writes only what you left empty, around yours. Nothing on the page changes until you tap.' },
         { heading: 'What a complete bit is', body: 'The hook opens with a reason to listen, in the first two seconds. The setup gives just enough of the story to follow the turn. Tags add laughs after the turn without restarting the story. The button is the last line, the one you can stop on.' },
