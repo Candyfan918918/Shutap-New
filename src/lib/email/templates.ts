@@ -340,7 +340,7 @@ ${v.bit_plain ?? ''}
 ${v.tag_plain ? `\nTag: ${v.tag_plain}\n` : ''}
 Now make it yours. Swap in what happened to you, and Shutap builds your version with the video.
 
-Make it yours: ${v.cta_url ?? 'https://shutap.com/?utm_source=hello_shutap&utm_medium=email&utm_campaign=daily_idea'}
+Make it yours: ${v.cta_url ?? 'https://shutap.com/bits?utm_source=hello_shutap&utm_medium=email&utm_campaign=daily_idea'}
 
 Say it funnier,
 Candy Fan
