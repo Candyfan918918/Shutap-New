@@ -75,7 +75,7 @@ export function ContentPage({
       }}
     >
       <article
-        style={{ maxWidth: 720, margin: "0 auto", lineHeight: 1.65 }}
+        style={{ maxWidth: 720, margin: "0 auto", lineHeight: hero ? 1.55 : 1.65 }}
       >
         {hero ? (
           <div className="rl" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, textAlign: "center", margin: "0 0 22px" }}>
@@ -125,7 +125,7 @@ export function ContentPage({
 
         {tryIt && realtor && <RealtorEmbed page={tryIt} />}
         {tryIt && !realtor && (
-          <div style={{ margin: "0 0 44px" }}>
+          <div style={{ margin: hero ? "0 0 32px" : "0 0 44px" }}>
             <BitSurface embed={{ page: tryIt, preset, bare: !!hero, ...(writer ?? { heading: "Try it on what you want to say.", sub: "A post, a speech, a toast, a sketch, a presentation. Get the bit and the video. Right here, free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
           </div>
         )}
@@ -135,20 +135,20 @@ export function ContentPage({
         {whoDoesWhat && <WhoDoesWhat />}
 
         {sections.map((s) => (
-          <section key={s.heading} style={{ marginBottom: 36 }}>
+          <section key={s.heading} style={{ marginBottom: hero ? 22 : 36 }}>
             <h2
               style={{
                 fontFamily: "'Sora', system-ui, sans-serif",
                 fontSize: "clamp(20px, 2.6vw, 24px)",
                 fontWeight: 600,
                 letterSpacing: "-0.02em",
-                margin: "0 0 12px",
+                margin: hero ? "0 0 6px" : "0 0 12px",
                 color: "#0b080f",
               }}
             >
               {s.heading}
             </h2>
-            <p style={{ fontSize: 17, margin: 0, color: "#0b080f" }}>
+            <p style={{ fontSize: hero ? 16 : 17, margin: 0, color: "#0b080f" }}>
               {s.body}
             </p>
           </section>
@@ -195,7 +195,7 @@ export function ContentPage({
         ))}
 
         {cta && (
-          <p style={{ margin: "8px 0 36px" }}>
+          <p style={{ margin: hero ? "4px 0 24px" : "8px 0 36px" }}>
             <Link
               to={cta.href.startsWith("#") ? "." : cta.href}
               hash={cta.href.startsWith("#") ? cta.href.slice(1) : undefined}
@@ -234,7 +234,7 @@ export function ContentPage({
               padding: "20px 0",
               borderTop: "1px solid rgba(11,8,15,.10)",
               borderBottom: "1px solid rgba(11,8,15,.10)",
-              margin: "40px 0",
+              margin: hero ? "24px 0" : "40px 0",
               fontSize: 15,
             }}
           >
@@ -256,10 +256,10 @@ export function ContentPage({
           </nav>
         )}
 
-        {tryIt && <TryItBox page={tryIt} preset={preset} anchor heading={realtor ? "Paste your listing above" : (writer?.heading ?? "Write yours above")} realtor={realtor} />}
+        {tryIt && !hero && <TryItBox page={tryIt} preset={preset} anchor heading={realtor ? "Paste your listing above" : (writer?.heading ?? "Write yours above")} realtor={realtor} />}
         {tryIt && <WriterBar page={tryIt} label={realtor ? "Paste the listing. Get the kit." : (writer?.heading ?? "Try it on what you want to say.")} realtor={realtor} />}
 
-        <p style={{ marginTop: 40, fontSize: 15 }}>
+        <p style={{ marginTop: hero ? 24 : 40, fontSize: 15 }}>
           <Link
             to="/"
             style={{
