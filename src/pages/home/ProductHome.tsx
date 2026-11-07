@@ -13,6 +13,7 @@ import { Link } from '@tanstack/react-router'
 import { useCurrentAlias } from '@/hooks/use-current-alias'
 import { trackEvent } from '@/lib/tracking'
 import { Footer } from '@/components/feed/Footer'
+import { ShotMotion } from './ShotMotion'
 import '@/components/feed/feed.css'
 import './product-home.css'
 
@@ -92,7 +93,7 @@ const PRODUCTS: ProductLine[] = [
     gets: [['lines', 'The bit'], ['video', '5-second video'], ['mic', 'Stand-up prompter'], ['page', 'Sketch page'], ['scene', 'Skit']],
     price: 'Free: 1 bit a day, video watermarked · Basic $19.99/mo: 3 a day · Pro $49.99/mo: unlimited',
     cta: 'Write a bit', href: '/bits',
-    shot: { src: '/home/bits.jpg', url: 'shutap.com/bits', w: 1100, h: 769, alt: 'The Shutap Bits writer: a hook, setup and tags typed line by line, each with funnier and lock' },
+    shot: { src: '/home/bits.jpg', url: 'shutap.com/bits', w: 1200, h: 908, alt: 'The Shutap Bits writer: a hook, setup and tags typed line by line, each with funnier and lock' },
   },
   {
     key: 'realtors', icon: 'realtors', name: 'Realtors', full: 'Shutap for Realtors', aud: 'for agents and brokerages', tab: 'listing videos',
@@ -103,7 +104,7 @@ const PRODUCTS: ProductLine[] = [
     gets: [['camera', 'Walkthrough'], ['wave', 'Voiceover'], ['bolt', 'Hooks'], ['sign', 'Open house'], ['post', 'Posts'], ['doc', 'MLS copy']],
     price: 'First kit free, marked · one kit $12.99 · Basic: 20 a month · Pro: unlimited',
     cta: 'Paste a listing', href: '/realtors',
-    shot: { src: '/home/realtors.jpg', url: 'shutap.com/realtors', w: 1100, h: 649, alt: 'A Shutap for Realtors kit for 1384 Madera Ave, Menlo Park, open on the walkthrough' },
+    shot: { src: '/home/realtors.jpg', url: 'shutap.com/realtors', w: 1200, h: 708, alt: 'A Shutap for Realtors kit for 1384 Madera Ave, Menlo Park, open on the walkthrough' },
   },
   {
     key: 'toasts', icon: 'toasts', name: 'Toasts', full: 'Shutap Toasts', aud: 'for weddings and holidays', tab: 'weddings & holidays',
@@ -114,7 +115,7 @@ const PRODUCTS: ProductLine[] = [
     gets: [['doc', 'Speech'], ['cards', 'Cue cards'], ['phone', 'Prompter'], ['clock', '60-sec cut'], ['timer', 'Rehearse'], ['gift', 'Keepsake']],
     price: 'First toast free, marked · one toast $12.99 · Basic: 1 a month · Pro: unlimited',
     cta: 'Write a toast', href: '/toasts',
-    shot: { src: '/home/toasts.jpg', url: 'shutap.com/toasts', w: 1100, h: 977, alt: 'The Shutap Toasts form: the occasion, who it is for, and the first story' },
+    shot: { src: '/home/toasts.jpg', url: 'shutap.com/toasts', w: 1200, h: 1065, alt: 'The Shutap Toasts form: the occasion, who it is for, and the first story' },
     occasions: [
       { label: 'best man', href: '/toasts/best-man' },
       { label: 'maid of honor', href: '/toasts/maid-of-honor' },
@@ -256,7 +257,11 @@ export function ProductHome() {
                     <figure className="shot">
                       <div className="win">
                         <div className="bar" aria-hidden="true"><i /><i /><i /><span><Icon name="lock" size={10} color="#8f7f86" />{p.shot.url}</span></div>
-                        <div className="crop"><img src={p.shot.src} width={p.shot.w} height={p.shot.h} alt={p.shot.alt} loading="lazy" decoding="async" /></div>
+                        <div className="crop">
+                          <ShotMotion product={p.key as 'bits' | 'realtors' | 'toasts'}>
+                            <img src={p.shot.src} width={p.shot.w} height={p.shot.h} alt={p.shot.alt} loading="lazy" decoding="async" />
+                          </ShotMotion>
+                        </div>
                       </div>
                       <figcaption>Live today on {p.shot.url}</figcaption>
                     </figure>
