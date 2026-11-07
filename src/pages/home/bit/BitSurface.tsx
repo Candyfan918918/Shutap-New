@@ -966,14 +966,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               </div>
             )}
 
-            {flags.newnav && (
-              <div className="bt-ptabs" role="tablist" aria-label="What are you saying funnier?">
-                <button type="button" role="tab" aria-selected className="bt-ptab on">✎ what happened</button>
-                <Link to="/realtors" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'realtors' })}>🏠 a realtor listing</Link>
-                <Link to="/toasts" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'toasts' })}>🥂 a toast</Link>
-                <Link to="/business" role="tab" className="bt-ptab" onClick={() => jokeTrack('product_tab', tier, { tab: 'enterprise' })}>▦ a presentation</Link>
-              </div>
-            )}
+            {/* Nov 6 2026: the product pills are gone; the homepage lists the products. */}
             <div className="bt-box">
               <div className="bt-box-head">
                 <label htmlFor="bit-story" className="bt-box-title">
