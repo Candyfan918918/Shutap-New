@@ -2611,6 +2611,146 @@ export type Database = {
         }
         Relationships: []
       }
+      toast_evals: {
+        Row: {
+          created_at: string
+          form: Json
+          id: string
+          notes: string | null
+          prompt_version: string
+          rating: string | null
+          result: Json
+        }
+        Insert: {
+          created_at?: string
+          form: Json
+          id?: string
+          notes?: string | null
+          prompt_version: string
+          rating?: string | null
+          result: Json
+        }
+        Update: {
+          created_at?: string
+          form?: Json
+          id?: string
+          notes?: string | null
+          prompt_version?: string
+          rating?: string | null
+          result?: Json
+        }
+        Relationships: []
+      }
+      toast_versions: {
+        Row: {
+          checks: Json
+          content: Json
+          created_at: string
+          id: string
+          kind: string
+          toast_id: string
+        }
+        Insert: {
+          checks?: Json
+          content: Json
+          created_at?: string
+          id?: string
+          kind: string
+          toast_id: string
+        }
+        Update: {
+          checks?: Json
+          content?: Json
+          created_at?: string
+          id?: string
+          kind?: string
+          toast_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "toast_versions_toast_id_fkey"
+            columns: ["toast_id"]
+            isOneToOne: false
+            referencedRelation: "toasts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      toasts: {
+        Row: {
+          created_at: string
+          cut60: Json | null
+          day: string
+          form: Json
+          id: string
+          length: string
+          locked_at: string | null
+          locked_version_id: string | null
+          marked: boolean
+          occasion: string
+          paid: boolean
+          parent_id: string | null
+          prompt_version: string
+          tier: string
+          tone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          cut60?: Json | null
+          day: string
+          form?: Json
+          id?: string
+          length: string
+          locked_at?: string | null
+          locked_version_id?: string | null
+          marked?: boolean
+          occasion: string
+          paid?: boolean
+          parent_id?: string | null
+          prompt_version: string
+          tier: string
+          tone: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          cut60?: Json | null
+          day?: string
+          form?: Json
+          id?: string
+          length?: string
+          locked_at?: string | null
+          locked_version_id?: string | null
+          marked?: boolean
+          occasion?: string
+          paid?: boolean
+          parent_id?: string | null
+          prompt_version?: string
+          tier?: string
+          tone?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "toasts_locked_version_fk"
+            columns: ["locked_version_id"]
+            isOneToOne: false
+            referencedRelation: "toast_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "toasts_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "toasts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_patterns: {
         Row: {
           alias_id: string
