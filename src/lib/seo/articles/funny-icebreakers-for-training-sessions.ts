@@ -122,7 +122,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-trivia-host-banter", "how-to-tell-a-funny-story", "funny-presentations-and-slides"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-11-04",
 };
 

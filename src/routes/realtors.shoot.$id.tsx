@@ -3,7 +3,7 @@ import { pageMeta } from '@/lib/seo/page-meta'
 import { Prompter } from '@/pages/realtors/Prompter'
 import '@/pages/realtors/realtors.css'
 
-export const Route = createFileRoute('/realtors/$id/shoot')({
+export const Route = createFileRoute('/realtors/shoot/$id')({
   ssr: false,
   head: () => ({ meta: [...pageMeta('Shoot mode — Shutap for Realtors', 'The walkthrough as a teleprompter on your phone.', '/realtors'), { name: 'robots', content: 'noindex' }] }),
   component: () => {

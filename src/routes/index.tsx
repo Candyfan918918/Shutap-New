@@ -1,8 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ogImageMeta } from "@/lib/seo/meta";
-import { HomePage } from '@/pages/home/HomePage'
+import { ProductHome } from '@/pages/home/ProductHome'
 import { SITE_URL } from '@/lib/site'
-import { listDailyIdea } from '@/lib/daily-idea.functions'
 
 const HOME_TITLE = "Shutap Humor Amplifier Lab"
 const HOME_DESCRIPTION =
@@ -16,12 +15,8 @@ export const Route = createFileRoute('/')({
   headers: () => ({
     'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400',
   }),
-  // Coming back to Write reuses the last reading for 5 minutes.
-  staleTime: 5 * 60_000,
-  // Nothing here blocks the write box: "what to post today" is handed down
-  // as a promise and fills in when it lands; on the server it still streams
-  // into the HTML, so search engines see the section.
-  loader: () => ({ dailyIdea: listDailyIdea().catch(() => null) }),
+  // Nov 6 2026: the homepage presents the four product lines; the write box
+  // lives on /bits (old box links are forwarded there by ProductHome).
   head: () => ({
     meta: [
       { title: HOME_TITLE },
@@ -43,6 +38,5 @@ export const Route = createFileRoute('/')({
 })
 
 function HomeRouteComponent() {
-  const { dailyIdea } = Route.useLoaderData()
-  return <HomePage dailyIdea={dailyIdea} />
+  return <ProductHome />
 }

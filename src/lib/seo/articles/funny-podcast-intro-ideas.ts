@@ -126,7 +126,7 @@ const guide: Guide = {
     },
   ],
   related: ["comedic-voice", "callback-humor", "how-to-tell-a-funny-story"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-11-03",
 };
 

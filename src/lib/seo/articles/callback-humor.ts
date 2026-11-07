@@ -115,7 +115,7 @@ const guide: Guide = {
     },
   ],
   related: ["rule-of-three", "how-to-write-comedy-tags", "how-to-tell-a-funny-story"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-10-31",
 };
 

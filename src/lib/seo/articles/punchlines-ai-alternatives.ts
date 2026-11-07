@@ -79,7 +79,7 @@ const guide: Guide = {
     { label: "Google Gemini subscriptions", url: "https://gemini.google/subscriptions/" },
   ],
   related: ["shutap-vs-punchlines-ai", "ai-joke-tools-compared", "shutap-vs-witscript"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-10-20",
 };
 

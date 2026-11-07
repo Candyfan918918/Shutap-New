@@ -141,7 +141,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "dark-humor", "how-to-write-a-skit"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   preset: { voice: "storyteller", heat: 3 },
   published: "2026-11-05",
 };

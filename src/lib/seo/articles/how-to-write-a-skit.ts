@@ -92,7 +92,7 @@ const guide: Guide = {
     },
   ],
   related: ["pov-skit-writer", "comedy-screenplay-format", "rule-of-three"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-10-29",
 };
 

@@ -130,7 +130,7 @@ const guide: Guide = {
     },
   ],
   related: ["what-is-a-joke", "funny-email-sign-offs", "callback-humor"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-11-03",
 };
 

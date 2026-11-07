@@ -108,7 +108,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-write-a-skit", "pov-skit-writer", "deadpan-humor"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-10-30",
 };
 

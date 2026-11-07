@@ -102,7 +102,7 @@ const guide: Guide = {
     { label: "JD Creviston, \"Want to know the biggest mistake clean comedians make?\" (May 1, 2025)", url: "https://jdcrevistoncomedy.substack.com/p/the-1-mistake-new-clean-comics-make" },
   ],
   related: ["stand-up-comedy", "open-mic-night", "funny-for-business"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-10-31",
 };
 

@@ -97,7 +97,7 @@ import { Route as ApiFeedbackEventsRouteImport } from './routes/api/feedback/eve
 import { Route as ApiPublicBitHealthRouteImport } from './routes/api/public/bit-health'
 import { Route as ApiPublicJokeCardRouteImport } from './routes/api/public/joke-card'
 import { Route as GuidesTopicTopicRouteImport } from './routes/guides.topic.$topic'
-import { Route as RealtorsIdShootRouteImport } from './routes/realtors.$id.shoot'
+import { Route as RealtorsShootIdRouteImport } from './routes/realtors.shoot.$id'
 import { Route as StoryPillarSlugRouteImport } from './routes/story.$pillar.$slug'
 import { Route as ToastsEditIdRouteImport } from './routes/toasts.edit.$id'
 import { Route as ToastsPrompterIdRouteImport } from './routes/toasts.prompter.$id'
@@ -561,9 +561,9 @@ const GuidesTopicTopicRoute = GuidesTopicTopicRouteImport.update({
   path: '/guides/topic/$topic',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RealtorsIdShootRoute = RealtorsIdShootRouteImport.update({
-  id: '/realtors/$id/shoot',
-  path: '/realtors/$id/shoot',
+const RealtorsShootIdRoute = RealtorsShootIdRouteImport.update({
+  id: '/realtors/shoot/$id',
+  path: '/realtors/shoot/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StoryPillarSlugRoute = StoryPillarSlugRouteImport.update({
@@ -732,7 +732,7 @@ export interface FileRoutesByFullPath {
   '/api/public/bit-health': typeof ApiPublicBitHealthRoute
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
-  '/realtors/$id/shoot': typeof RealtorsIdShootRoute
+  '/realtors/shoot/$id': typeof RealtorsShootIdRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
   '/toasts/edit/$id': typeof ToastsEditIdRoute
   '/toasts/prompter/$id': typeof ToastsPrompterIdRoute
@@ -836,7 +836,7 @@ export interface FileRoutesByTo {
   '/api/public/bit-health': typeof ApiPublicBitHealthRoute
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
-  '/realtors/$id/shoot': typeof RealtorsIdShootRoute
+  '/realtors/shoot/$id': typeof RealtorsShootIdRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
   '/toasts/edit/$id': typeof ToastsEditIdRoute
   '/toasts/prompter/$id': typeof ToastsPrompterIdRoute
@@ -942,7 +942,7 @@ export interface FileRoutesById {
   '/api/public/bit-health': typeof ApiPublicBitHealthRoute
   '/api/public/joke-card': typeof ApiPublicJokeCardRoute
   '/guides/topic/$topic': typeof GuidesTopicTopicRoute
-  '/realtors/$id/shoot': typeof RealtorsIdShootRoute
+  '/realtors/shoot/$id': typeof RealtorsShootIdRoute
   '/story/$pillar/$slug': typeof StoryPillarSlugRoute
   '/toasts/edit/$id': typeof ToastsEditIdRoute
   '/toasts/prompter/$id': typeof ToastsPrompterIdRoute
@@ -1048,7 +1048,7 @@ export interface FileRouteTypes {
     | '/api/public/bit-health'
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
-    | '/realtors/$id/shoot'
+    | '/realtors/shoot/$id'
     | '/story/$pillar/$slug'
     | '/toasts/edit/$id'
     | '/toasts/prompter/$id'
@@ -1152,7 +1152,7 @@ export interface FileRouteTypes {
     | '/api/public/bit-health'
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
-    | '/realtors/$id/shoot'
+    | '/realtors/shoot/$id'
     | '/story/$pillar/$slug'
     | '/toasts/edit/$id'
     | '/toasts/prompter/$id'
@@ -1257,7 +1257,7 @@ export interface FileRouteTypes {
     | '/api/public/bit-health'
     | '/api/public/joke-card'
     | '/guides/topic/$topic'
-    | '/realtors/$id/shoot'
+    | '/realtors/shoot/$id'
     | '/story/$pillar/$slug'
     | '/toasts/edit/$id'
     | '/toasts/prompter/$id'
@@ -1352,7 +1352,7 @@ export interface RootRouteChildren {
   ApiPublicBitHealthRoute: typeof ApiPublicBitHealthRoute
   ApiPublicJokeCardRoute: typeof ApiPublicJokeCardRoute
   GuidesTopicTopicRoute: typeof GuidesTopicTopicRoute
-  RealtorsIdShootRoute: typeof RealtorsIdShootRoute
+  RealtorsShootIdRoute: typeof RealtorsShootIdRoute
   StoryPillarSlugRoute: typeof StoryPillarSlugRoute
   ToastsEditIdRoute: typeof ToastsEditIdRoute
   ToastsPrompterIdRoute: typeof ToastsPrompterIdRoute
@@ -1986,11 +1986,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuidesTopicTopicRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/realtors/$id/shoot': {
-      id: '/realtors/$id/shoot'
-      path: '/realtors/$id/shoot'
-      fullPath: '/realtors/$id/shoot'
-      preLoaderRoute: typeof RealtorsIdShootRouteImport
+    '/realtors/shoot/$id': {
+      id: '/realtors/shoot/$id'
+      path: '/realtors/shoot/$id'
+      fullPath: '/realtors/shoot/$id'
+      preLoaderRoute: typeof RealtorsShootIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/story/$pillar/$slug': {
@@ -2224,7 +2224,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicBitHealthRoute: ApiPublicBitHealthRoute,
   ApiPublicJokeCardRoute: ApiPublicJokeCardRoute,
   GuidesTopicTopicRoute: GuidesTopicTopicRoute,
-  RealtorsIdShootRoute: RealtorsIdShootRoute,
+  RealtorsShootIdRoute: RealtorsShootIdRoute,
   StoryPillarSlugRoute: StoryPillarSlugRoute,
   ToastsEditIdRoute: ToastsEditIdRoute,
   ToastsPrompterIdRoute: ToastsPrompterIdRoute,

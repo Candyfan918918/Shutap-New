@@ -103,7 +103,7 @@ const guide: Guide = {
     },
   ],
   related: ["sense-of-humor", "types-of-humor", "how-to-tell-a-funny-story"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
   published: "2026-11-01",
 };
 
