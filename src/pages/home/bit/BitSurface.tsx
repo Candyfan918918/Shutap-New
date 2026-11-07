@@ -240,6 +240,8 @@ export type BitEmbed = {
   sub?: string
   placeholder?: string
   preset?: Partial<BitControls>
+  /** the page above already says what this is (/bits): no heading here */
+  bare?: boolean
 }
 
 export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
@@ -942,7 +944,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const left = usage && usage.cap !== null ? Math.max(0, usage.cap - usage.used) : null
 
   return (
-    <section className="bt" aria-label="Write a bit">
+    <section className={embed?.bare ? "bt bt-bare" : "bt"} aria-label="Write a bit">
       <div className="bt-col" ref={topRef} style={{ scrollMarginTop: 84 }}>
         {phase === 'write' && opening && (
           <div className="bt-hero" aria-live="polite">
@@ -951,7 +953,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         )}
         {phase === 'write' && !opening && (
           <>
-            {embed ? (
+            {embed?.bare ? (
+              <span id="bit-write" aria-hidden="true" />
+            ) : embed ? (
               <div className="bt-hero bt-hero-embed" id="bit-write">
                 <h2 className="bt-h1">{embed.heading}</h2>
                 <p className="bt-sub">{embed.sub ?? 'Type what happened. Get the bit and the video. Right here, free.'}</p>

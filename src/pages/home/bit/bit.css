@@ -20,6 +20,7 @@
   padding: clamp(28px, 6vh, 64px) 16px clamp(32px, 6vh, 64px);
 }
 .bt * { box-sizing: border-box; }
+.bt.bt-bare { padding: 0; }
 .bt-col { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 .bt-hero { text-align: center; display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
 /* the writer on a guide or funniest page: a section heading, not the site's */
