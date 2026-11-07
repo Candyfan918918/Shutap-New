@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { LaunchBadges } from "@/components/site/LaunchBadges";
 import { Link } from "@tanstack/react-router";
+import '@/pages/realtors/realtors.css'
 import { Words } from '@/components/motion'
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
 import { TryItBox } from '@/components/seo/TryItBox'
@@ -33,6 +34,7 @@ export function ContentPage({
   sample,
   writer,
   whoDoesWhat,
+  hero,
 }: {
   breadcrumbs?: Crumb[];
   h1: string;
@@ -54,6 +56,10 @@ export function ContentPage({
   writer?: WriterCopy;
   /** the "you type · Shutap does · Shutap never" block, above the sections */
   whoDoesWhat?: boolean;
+  /** a product page head, laid out like /toasts and /realtors: a centered
+   *  kicker, h1 (second part in italic) and lead, then the writer with no
+   *  heading of its own. Replaces the breadcrumb, h1 and capsule box. */
+  hero?: { kicker: string; h1: [string, string]; lead: string };
 }) {
   // a page about listings, open houses, agents or loan officers gets the
   // realtor box; its CTAs point at the kit too
@@ -65,52 +71,62 @@ export function ContentPage({
         background: "transparent",
         color: "#0b080f",
         fontFamily: "'Sora', system-ui, sans-serif",
-        padding: "clamp(48px, 8vw, 96px) clamp(20px, 5vw, 40px)",
+        padding: hero ? "24px clamp(16px, 5vw, 40px) clamp(48px, 8vw, 96px)" : "clamp(48px, 8vw, 96px) clamp(20px, 5vw, 40px)",
       }}
     >
       <article
         style={{ maxWidth: 720, margin: "0 auto", lineHeight: 1.65 }}
       >
-        {breadcrumbs ? <Breadcrumbs trail={breadcrumbs} /> : null}
+        {hero ? (
+          <div className="rl" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, textAlign: "center", margin: "0 0 22px" }}>
+            <p className="rl-kicker" style={{ margin: 0 }}>{hero.kicker}</p>
+            <h1 className="rl-h1">{hero.h1[0]}<em>{hero.h1[1]}</em></h1>
+            <p className="rl-lead">{hero.lead}</p>
+          </div>
+        ) : (
+          <>
+          {breadcrumbs ? <Breadcrumbs trail={breadcrumbs} /> : null}
 
-        <Words
-          as="h1"
-          key={h1}
-          style={{
-            fontFamily: "'Sora', system-ui, sans-serif",
-            fontSize: "clamp(32px, 6vw, 52px)",
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
-            lineHeight: 1.1,
-            margin: "0 0 28px",
-            color: "#8e1c4c",
-          }}
-        >
-          {h1}
-        </Words>
+          <Words
+            as="h1"
+            key={h1}
+            style={{
+              fontFamily: "'Sora', system-ui, sans-serif",
+              fontSize: "clamp(32px, 6vw, 52px)",
+              fontWeight: 800,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.1,
+              margin: "0 0 28px",
+              color: "#8e1c4c",
+            }}
+          >
+            {h1}
+          </Words>
 
-        <p
-          {...(nosnippetCapsule ? { "data-nosnippet": true } : {})}
-          style={{
-            fontFamily: "'Newsreader', Georgia, serif",
-            fontSize: "clamp(19px, 2.4vw, 23px)",
-            lineHeight: 1.55,
-            color: "#0b080f",
-            background: "#ffffff",
-            border: "1px solid rgba(11,8,15,.10)",
-            borderRadius: 18,
-            padding: "24px 26px",
-            margin: tryIt ? "0 0 20px" : "0 0 48px",
-            boxShadow: "0 12px 30px -24px rgba(20,16,22,.3)",
-          }}
-        >
-          {capsule}
-        </p>
+          <p
+            {...(nosnippetCapsule ? { "data-nosnippet": true } : {})}
+            style={{
+              fontFamily: "'Newsreader', Georgia, serif",
+              fontSize: "clamp(19px, 2.4vw, 23px)",
+              lineHeight: 1.55,
+              color: "#0b080f",
+              background: "#ffffff",
+              border: "1px solid rgba(11,8,15,.10)",
+              borderRadius: 18,
+              padding: "24px 26px",
+              margin: tryIt ? "0 0 20px" : "0 0 48px",
+              boxShadow: "0 12px 30px -24px rgba(20,16,22,.3)",
+            }}
+          >
+            {capsule}
+          </p>
+          </>
+        )}
 
         {tryIt && realtor && <RealtorEmbed page={tryIt} />}
         {tryIt && !realtor && (
           <div style={{ margin: "0 0 44px" }}>
-            <BitSurface embed={{ page: tryIt, preset, ...(writer ?? { heading: "Try it on what you want to say.", sub: "A post, a speech, a toast, a sketch, a presentation. Get the bit and the video. Right here, free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
+            <BitSurface embed={{ page: tryIt, preset, bare: !!hero, ...(writer ?? { heading: "Try it on what you want to say.", sub: "A post, a speech, a toast, a sketch, a presentation. Get the bit and the video. Right here, free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
           </div>
         )}
 
