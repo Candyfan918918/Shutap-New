@@ -137,6 +137,33 @@ const toastSlugs = new Set(existsSync("src/lib/toasts/landings.ts") ? [...readFi
 const href = g.cta?.href ?? "";
 const okHref = staticPaths.has(href) || (href.startsWith("/toasts/") && toastSlugs.has(href.slice(8))) || (href.startsWith("/guides/") && existingGuideSlugs.has(href.slice(8))) || (href.startsWith("/funniest/") && funniestSlugs.has(href.slice(10)));
 if (!okHref) fail(`cta href "${href}" is not a known live page`);
+
+// Toast and speech articles send the reader to the Toasts page for that exact
+// occasion (Candy, Nov 8 2026: "/toasts have 10 occasions, articles should point
+// to relevant occasion page"). Same order as src/lib/seo/product-for.ts. A page
+// about toasts or weddings in general may use the /toasts hub or any occasion page.
+const occKey = `${slug.replace(/-/g, " ")} ${g.keyword ?? ""}`.toLowerCase();
+const occText = `${occKey} ${g.h1 ?? ""}`.toLowerCase();
+if (g.topic === "toasts-and-speeches" || /\b(toasts?|speech(es)?)\b/.test(occText)) {
+  const OCC = [
+    [/best[ -]man|groomsm/, "best-man"],
+    [/maid[ -]of[ -]honou?r|bridesmaid/, "maid-of-honor"],
+    [/thanksgiving/, "thanksgiving"],
+    [/holiday[ -]party|office|end[ -]of[ -]year/, "office-holiday-party"],
+    [/christmas|xmas/, "christmas"],
+    [/chinese|lunar/, "any-occasion"],
+    [/new[ -]years?/, "new-years"],
+    [/mother[ -]of[ -]the[ -]bride|\bmom\b/, "mother-of-the-bride"],
+    [/father[ -]of[ -]the[ -]bride|\bdad\b|parents?\b/, "father-of-the-bride"],
+    [/retire/, "retirement"],
+    [/birthday/, "birthday"],
+    [/toastmasters?|baby[ -]shower|graduation|anniversar|engagement|rehearsal|farewell|going[ -]away/, "any-occasion"],
+  ];
+  // slug and keyword decide first; the h1 only when they name no occasion
+  const pick = (t) => OCC.find(([re, s]) => re.test(t) && toastSlugs.has(s));
+  const hit = pick(occKey) ?? pick(occText);
+  if (hit && href !== `/toasts/${hit[1]}`) fail(`toast/speech article about "${hit[1]}" must send its cta to /toasts/${hit[1]} (got "${href}")`);
+}
 if (/https?:\/\/(?!\S*\bshutap\.com)/.test(allText)) fail("body text contains a raw external URL (put it in sources)");
 
 // ---------- no duplicate topics (cannibalization) ----------
