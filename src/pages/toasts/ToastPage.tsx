@@ -438,8 +438,8 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
                   </div>
                 ))}
               </div>
-              <div className="rl-row"><button type="button" className="rl-btn" disabled={!t.cards.length} onClick={() => { downloadBlob(cueCardsPdf({ occasion: row.occasion, cards: t.cards, names, marked }), pdfName(row.occasion, names, 'cue-cards')); track('toast_downloaded', { what: 'cue_cards', marked }) }}>download cue cards</button></div>
-              <p className="rl-note">Print, cut on the dashed lines, hold in one hand. One story a card, the line to land in bold, the last line written out in full.</p>
+              <div className="rl-row"><button type="button" className="rl-btn" disabled={!t.cards.length} onClick={() => { downloadBlob(cueCardsPdf({ occasion: row.occasion, cards: t.cards, names, marked, trueThing: t.lines.find((l) => l.source === 'true_thing')?.text }), pdfName(row.occasion, names, 'cue-cards')); track('toast_downloaded', { what: 'cue_cards', marked }) }}>download cue cards</button></div>
+              <p className="rl-note">Print, cut on the dashed lines, hold in one hand. One beat a card: the cue words to glance at, the line to land in bold. Four to a Letter page, cut on the dashed lines.</p>
             </>
           ))}
           {card('3', 'the prompter', 'on your phone', (
@@ -499,7 +499,7 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
 
         <p className="rl-note" style={{ textAlign: 'center', fontSize: 13 }}>
           {marked
-            ? <>Your free toast: every page and copy ends “— shutap.com” · <button type="button" className="rl-mini" onClick={() => { setCheckoutError(''); setSheet('unmark'); track('toast_unmark_opened', {}) }}>remove the mark, {usd(TOAST_ONCE.amount)}</button></>
+            ? <>Your free toast: a shutap.com watermark across every PDF page, and “— shutap.com” at the end of every copy · <button type="button" className="rl-mini" onClick={() => { setCheckoutError(''); setSheet('unmark'); track('toast_unmark_opened', {}) }}>remove the mark, {usd(TOAST_ONCE.amount)}</button></>
             : 'Every page and copy of this toast is clean.'}
         </p>
       </div>
@@ -538,7 +538,7 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
               <>
                 <p className="rl-lbl r" style={{ margin: 0 }}>optional · your free toast</p>
                 <h3 style={{ margin: 0, font: '800 24px/1.15 var(--sora)', color: 'var(--wine)' }}>Remove the mark · {usd(TOAST_ONCE.amount)}</h3>
-                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: 'var(--ink-2)' }}>Your free toast ends every PDF and copy with “— shutap.com”. Remove it once and this toast is clean everywhere, forever. No subscription. Tax may be added.</p>
+                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: 'var(--ink-2)' }}>Your free toast has a shutap.com watermark across every PDF page and “— shutap.com” at the end of every copy. Remove it once and this toast is clean everywhere, forever. No subscription. Tax may be added.</p>
                 {checkoutError ? <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{checkoutError}</p> : (
                   <div style={{ minHeight: 420 }}>
                     <EmbeddedCheckoutProvider key={`unmark-${row.id}`} stripe={getStripe()} options={{ fetchClientSecret: unmarkSecret }}>

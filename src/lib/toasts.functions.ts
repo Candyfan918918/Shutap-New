@@ -253,15 +253,16 @@ async function loadToastRow(admin: any, id: string, userId: string): Promise<Toa
  *  Never paid, never counted; signed in only. Nothing is stored. */
 export const touchMyStory = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ form: ToastFormIn, index: z.number().int().min(0).max(2), avoid: z.array(z.string().max(400)).max(9).optional() }).parse(d))
+  .inputValidator((d: unknown) => z.object({ form: ToastFormIn, index: z.number().int().min(-1).max(2), avoid: z.array(z.string().max(400)).max(9).optional() }).parse(d))
   .handler(async ({ data, context }): Promise<{ ok: true; options: ToastTouchOption[] } | { ok: false; reason: 'off' | 'sign_in' | 'failed' }> => {
     if (isAnon(context)) return { ok: false, reason: 'sign_in' }
     if (!(await toastsOpen(context))) return { ok: false, reason: 'off' }
     const { touchToastLine } = await import('./toasts/toast.server')
-    const options = await touchToastLine(data.form as ToastForm, { kind: 'story', index: data.index }, data.avoid ?? [])
+    // index -1 is the one true thing (Nov 8 2026: funnier and lock on every line the person types)
+    const options = await touchToastLine(data.form as ToastForm, data.index < 0 ? { kind: 'true_thing' } : { kind: 'story', index: data.index }, data.avoid ?? [])
     const { userId } = context as { userId: string }
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
-    await (supabaseAdmin as any).from('events').insert({ user_id: userId, session_id: null, name: 'toast_story_funnier', product: 'toasts', properties: { product: 'toasts', occasion: data.form.occasion, story: data.index + 1, options: options?.length ?? 0 } }).then(() => {}, () => {})
+    await (supabaseAdmin as any).from('events').insert({ user_id: userId, session_id: null, name: 'toast_story_funnier', product: 'toasts', properties: { product: 'toasts', occasion: data.form.occasion, story: data.index < 0 ? 'true_thing' : data.index + 1, options: options?.length ?? 0 } }).then(() => {}, () => {})
     return options ? { ok: true, options } : { ok: false, reason: 'failed' }
   })
 

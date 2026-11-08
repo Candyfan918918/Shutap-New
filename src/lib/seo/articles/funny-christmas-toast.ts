@@ -66,7 +66,7 @@ const guide: Guide = {
     { label: "Brad Phillips, Throughline Group (Dec 5, 2013), \"How to Give a Christmas or Holiday Party Toast\"", url: "https://www.throughlinegroup.com/2013/12/05/how-to-give-a-christmas-or-holiday-party-toast/" },
   ],
   related: ["funny-wedding-toast", "funny-email-sign-offs", "funny-captions"],
-  cta: { label: "Write your holiday toast", href: "/toasts" },
+  cta: { label: "Write your Christmas toast", href: "/toasts/christmas" },
   published: "2026-10-27",
 };
 

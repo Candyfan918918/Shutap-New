@@ -106,6 +106,7 @@ Return only JSON:
 
 export const TOUCH_KIND_SPEECH = 'This is one of Shutap\'s lines in the speech (not the speaker\'s story). Write it three better ways; never add a new fact.'
 export const TOUCH_KIND_STORY = 'This is the SPEAKER\'S OWN story line, in their words. Offer three ways to tell the SAME story funnier: the same facts and the same events, nothing added, in their voice (first person where they wrote first person). Their version stays first on the page; yours are suggestions they may take.'
+export const TOUCH_KIND_TRUE = 'This is the SPEAKER\'S OWN closing line: the one true thing the toast ends on, said plainly. It is NOT a joke and must not become one. Offer three ways to say the SAME thing a little clearer, warmer or more vivid: the same meaning, nothing added, in their voice. Their version stays first on the page; yours are suggestions they may take.'
 
 /** On demand (Nov 6 2026): the same speech cut to a minute, written only
  *  when the speaker taps "make a 60-second version". */

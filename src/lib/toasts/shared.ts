@@ -3,7 +3,7 @@
 // holidays are occasions inside it. Each occasion is its own speech type
 // (structure, lengths, defaults, checks) as Candy specified in the handoff.
 
-export const OCCASIONS = ['best_man', 'maid_of_honor', 'parent', 'thanksgiving', 'holiday_party', 'new_years', 'retirement', 'birthday', 'toastmasters', 'other'] as const
+export const OCCASIONS = ['best_man', 'maid_of_honor', 'parent', 'thanksgiving', 'christmas', 'holiday_party', 'new_years', 'retirement', 'birthday', 'toastmasters', 'other'] as const
 export type Occasion = (typeof OCCASIONS)[number]
 
 export const TONES = ['warm_funny', 'roast_lite', 'dry', 'heartfelt'] as const
@@ -66,6 +66,14 @@ export const OCCASION: Record<Occasion, OccasionSpec> = {
     id: 'thanksgiving', label: 'Thanksgiving', structure: ['greeting', 'the stories the whole table knows', 'gratitude', 'glasses'],
     lengths: [60, 120], defaultLength: 120, stories: 3, partner: false, neverSay: [],
     check: 'Half the table: flag any inside joke only part of the table would get, and keep the shared story one everyone at the table can follow.',
+    glasses: true, keepsake: false, who: 'who the toast is to (the family, the host, a name)', relation: 'who they are to you',
+  },
+  // Nov 8 2026 (Candy): Christmas is its own family occasion (the office
+  // party stays holiday_party, with its workplace check).
+  christmas: {
+    id: 'christmas', label: 'Christmas', structure: ['greeting', 'the stories the family tells every year', 'gratitude', 'glasses'],
+    lengths: [60, 120], defaultLength: 120, stories: 3, partner: false, neverSay: [],
+    check: 'Half the table: flag any inside joke only part of the table would get, and keep the shared story one everyone at the table can follow. Nothing a grandparent or a ten-year-old at the table would wince at.',
     glasses: true, keepsake: false, who: 'who the toast is to (the family, the host, a name)', relation: 'who they are to you',
   },
   holiday_party: {
@@ -224,6 +232,11 @@ export const STORY_PROMPTS: Record<Occasion, StoryPrompt[]> = {
     { sub: 'one story the whole table knows', example: '“Last year the turkey caught fire and we ate pizza on the good plates.”' },
     { sub: 'something this family always does', example: '“Every year Grandpa carves, and every year he asks who brought the good knife.”' },
     { sub: 'what you’re thankful for this year', example: '“This is the first year we all fit at one table.”' },
+  ],
+  christmas: [
+    { sub: 'the story your family tells every year', example: '“The year Dad assembled the bike on Christmas Eve and had three screws left over.”' },
+    { sub: 'something this family always does', example: '“Every year Mom hides one present so well we find it in March.”' },
+    { sub: 'what you’re thankful for this year', example: '“This is the first Christmas the cousins all made it home.”' },
   ],
   holiday_party: [
     { sub: 'the year’s big win', example: '“We shipped the new app in March and the servers stayed up.”' },

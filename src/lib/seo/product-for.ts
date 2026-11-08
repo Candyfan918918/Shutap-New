@@ -22,17 +22,20 @@ function toastTarget(text: string): PageProduct {
     occasionLabel,
     ...(occasion ? { search: { occasion } } : {}),
   })
+  // Nov 8 2026: every occasion has its own page with a real toast for exactly
+  // that occasion; the hub is only for pages about toasts in general.
   if (/best[ -]man|groomsm/.test(t)) return to('/toasts/best-man', 'best man speech')
   if (/maid[ -]of[ -]honou?r|bridesmaid/.test(t)) return to('/toasts/maid-of-honor', 'maid of honor speech')
   if (/thanksgiving/.test(t)) return to('/toasts/thanksgiving', 'Thanksgiving toast')
   if (/holiday[ -]party|office|end[ -]of[ -]year/.test(t)) return to('/toasts/office-holiday-party', 'holiday party toast')
-  if (/chinese|lunar/.test(t)) return to('/toasts', 'Chinese New Year toast')
-  if (/christmas/.test(t)) return to('/toasts', 'Christmas toast')
+  if (/christmas|xmas/.test(t)) return to('/toasts/christmas', 'Christmas toast')
+  if (/chinese|lunar/.test(t)) return to('/toasts/any-occasion', 'Lunar New Year toast')
   if (/new[ -]years?/.test(t)) return to('/toasts/new-years', "New Year's toast")
-  if (/father|mother|parent|dad|mom/.test(t)) return to('/toasts', 'toast to the couple', 'parent')
-  if (/retirement/.test(t)) return to('/toasts', 'retirement speech', 'retirement')
-  if (/birthday/.test(t)) return to('/toasts', 'birthday toast', 'birthday')
-  if (/toastmasters?/.test(t)) return to('/toasts', 'Toastmasters speech', 'toastmasters')
+  if (/mother|mom\b/.test(t)) return to('/toasts/mother-of-the-bride', 'mother of the bride speech')
+  if (/father|dad\b|parent/.test(t)) return to('/toasts/father-of-the-bride', 'father of the bride speech')
+  if (/retirement/.test(t)) return to('/toasts/retirement', 'retirement speech')
+  if (/birthday/.test(t)) return to('/toasts/birthday', 'birthday toast')
+  if (/toastmasters?/.test(t)) return to('/toasts/any-occasion', 'Toastmasters speech')
   if (/wedding|bride|groom|officiant/.test(t)) return to('/toasts', 'wedding toast')
   return to('/toasts', 'toast')
 }
