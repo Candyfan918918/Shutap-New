@@ -121,6 +121,12 @@ export interface FunniestEntry {
   sources: FunniestSource[];
   /** 3–6 questions people ask about this category, answered in 12–80 words. */
   faq: FunniestFaq[];
+  /**
+   * Optional: the Shutap product this page puts in front of its reader.
+   * Left out, it is picked from the slug and category (listings and agents →
+   * realtors; toasts and speeches → toasts; everything else → bits).
+   */
+  product?: "bits" | "realtors" | "toasts";
   /** Slugs of related entries. */
   related: string[];
   /** ISO dates. */
