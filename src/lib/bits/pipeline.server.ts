@@ -752,6 +752,22 @@ export type TouchOption = { line: string; move: string }
 
 /** Three versions of ONE line, the rest of the bit held still. `avoid` are
  *  lines already offered this session, so "three more" brings new ones. */
+/** Which funnier options can be offered (Nov 8 2026). Each option is checked
+ *  on its own line: the rest of the bit is the person's, word for word, and
+ *  is never judged by the whole-bit rules (with all five lines required,
+ *  checking the whole bit rejected every option on most bits). A hook or a
+ *  setup may restate the situation, so only the tone rules apply to them;
+ *  a tag or a button must also add something new and pass the line rules. */
+export function touchOptionsOk(opts: TouchOption[], slot: Slot, story: string): TouchOption[] {
+  return opts.filter((o) => {
+    if (toneFailure(o.line)) return false
+    if (slot === 'hook' && o.line.split(/\s+/).length > 12) return false
+    if (slot === 'hook' || slot === 'setup') return true
+    const f = hardRuleFailure(o.line, story, 'the_roast', { ignoreLength: true })
+    return !f || f === 'too short'
+  })
+}
+
 export async function touchLineDraft(
   story: string,
   bit: Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>,
@@ -760,10 +776,8 @@ export async function touchLineDraft(
   avoid: string[] = [],
 ): Promise<TouchOption[] | null> {
   const current = readSlot(bit, slot)
-  // The lined box: some lines are not written yet. The writer sees them as
-  // empty and the option is checked on its own (the whole-bit rules need a
-  // whole bit).
-  const partial = !bit.hook || !bit.setup || !bit.button || bit.tags.some((t) => !t)
+  // The lined box: some lines may not be written yet; the writer sees them
+  // as empty.
   const mark = (s: Slot, text: string) => (s === slot ? `>>> ${text || '(empty: write it)'}` : text || '(not written yet)')
   const asText = [
     `HOOK: ${mark('hook', bit.hook)}`,
@@ -803,17 +817,7 @@ export async function touchLineDraft(
     const opts = (Array.isArray(raw?.options) ? raw!.options : [])
       .map((o) => ({ line: tidy((o as any)?.line).replace(/^["']|["']$/g, ''), move: tidy((o as any)?.move).slice(0, 60) }))
       .filter((o) => o.line && o.line.toLowerCase() !== current.toLowerCase() && !avoid.some((a) => a.toLowerCase() === o.line.toLowerCase()))
-    // every option must pass the same rules as the bit it goes into
-    const lineOk = (line: string) => {
-      if (toneFailure(line)) return false
-      const f = hardRuleFailure(line, story, 'the_roast', { ignoreLength: true })
-      if (f && f !== 'too short') return false
-      if (slot === 'hook' && line.split(/\s+/).length > 10) return false
-      return true
-    }
-    const ok = partial
-      ? opts.filter((o) => lineOk(o.line))
-      : opts.filter((o) => !bitFailure(writeSlot({ ...bit, why: '' }, slot, o.line), story, { ...controls, length: '2m' }))
+    const ok = touchOptionsOk(opts, slot, story)
     if (ok.length >= 2) return ok.slice(0, 3)
     console.warn('[bit-touch] too few options passed', { slot, got: opts.length, ok: ok.length })
   }
