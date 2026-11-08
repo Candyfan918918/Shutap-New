@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "funny-just-listed-post-ideas",
   kind: "guide",
-  topic: "jokes-for-occasions",
+  topic: "realtors",
   keyword: "funny just listed post ideas",
   title: "Funny Just Listed Post Ideas for the First Week | Shutap",
   h1: "Funny just listed post ideas for a new listing's first week",
