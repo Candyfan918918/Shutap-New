@@ -256,7 +256,7 @@ export function ToastForm({ occasionIn, prepaidSession, kicker, h1, lead }: { oc
     : usage.credits > 0 ? `${usage.credits} toast bought, ready` : `next toast ${usd(TOAST_ONCE.amount)}`
   const priceLine = usage?.tier === 'pro' ? 'Unlimited toasts on Pro, no mark.'
     : usage?.tier === 'basic' ? `Basic includes 1 toast a month, no mark. Another is ${usd(TOAST_ONCE.amount)}.`
-    : 'Your first toast is free (every page ends “— shutap.com”). Basic includes 1 a month. Unlimited with Pro.'
+    : 'Your first toast is free, with a shutap.com watermark across every PDF page. Basic includes 1 a month. Unlimited with Pro.'
 
   const names = d.names
   const shown = (t: string) => fromPlaceholders(t, names)
@@ -447,7 +447,7 @@ export function ToastForm({ occasionIn, prepaidSession, kicker, h1, lead }: { oc
             {sheet === 'signin' && (
               <>
                 <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>Sign in to write your toast.</h3>
-                <p className="rl-note">Your first toast is free, with “— shutap.com” at the end of each page. Your form is kept on this device for after.</p>
+                <p className="rl-note">Your first toast is free, with a shutap.com watermark across every PDF page. Your form is kept on this device for after.</p>
                 <Link to="/welcome" className="rl-btn">sign in with Google or Apple</Link>
                 <button type="button" className="rl-btn ghost" onClick={() => setSheet(null)}>not now</button>
               </>
@@ -459,7 +459,7 @@ export function ToastForm({ occasionIn, prepaidSession, kicker, h1, lead }: { oc
                 <p className="rl-note" style={{ fontSize: 14 }}>Your form is saved. Pay once and Shutap writes the toast now.</p>
                 <button type="button" className="ts-plan" aria-pressed={choice === 'once'} onClick={() => setChoice('once')}>
                   <span className="top"><b>This toast</b><em>{usd(TOAST_ONCE.amount)} <small>one time</small></em></span>
-                  <p>Edit as much as you like until you lock. Then every download, copy, the prompter and rehearse: unlimited, forever. No “— shutap.com” mark. Always in your profile → My creations → toasts.</p>
+                  <p>Edit as much as you like until you lock. Then every download, copy, the prompter and rehearse: unlimited, forever. No shutap.com watermark. Always in your profile → My creations → toasts.</p>
                 </button>
                 {usage.tier === 'free' && (
                   <button type="button" className="ts-plan" aria-pressed={choice === 'basic'} onClick={() => setChoice('basic')}>

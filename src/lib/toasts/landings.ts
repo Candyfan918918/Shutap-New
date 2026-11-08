@@ -36,7 +36,7 @@ export const LANDINGS: Landing[] = [
       },
       {
         h2: 'The half-the-table check',
-        body: ['Inside jokes kill a family toast: half the table laughs, the other half asks what happened. Shutap flags any line only part of the room will get, so you can swap it before Thursday.'],
+        body: ['Inside jokes kill a family toast: half the table laughs, the other half asks what happened. Every Thanksgiving toast is written and judged against one rule: the story has to be one the whole table can follow.'],
       },
       {
         h2: 'What you take to the table',
@@ -47,7 +47,7 @@ export const LANDINGS: Landing[] = [
       { q: 'How long should a Thanksgiving toast be?', a: 'About a minute, two at most. Shutap writes to the length you pick (60 seconds or 2 minutes) and shows a running clock, counted at a relaxed 140 words a minute with the pauses.' },
       { q: 'Does Shutap make up stories about my family?', a: 'No. Your story goes in word for word. Shutap writes only the lines around it: the opener, a tag after the story, the thanks, the toast. It never invents a story, a fact or a person.' },
       { q: 'Do the names leave my phone?', a: 'No. Names stay on your device. Shutap only ever sees placeholders and your browser puts the names back on screen, in the prompter and in the PDFs.' },
-      { q: 'What does it cost?', a: 'Your first toast is free (each page ends “— shutap.com”). After that a toast is $12.99 one time, Basic includes one a month, and Pro is unlimited. Downloads are never limited.' },
+      { q: 'What does it cost?', a: 'Your first toast is free, with a shutap.com watermark across every PDF page. After that a toast is $12.99 one time, Basic includes one a month, and Pro is unlimited. Downloads are never limited.' },
     ],
     guide: { href: '/guides/funny-thanksgiving-toast', label: 'How to give a funny Thanksgiving toast' },
   },
@@ -78,7 +78,7 @@ export const LANDINGS: Landing[] = [
       { q: 'How long should a holiday party toast be?', a: 'Sixty to ninety seconds. People are standing, holding drinks and talking. Shutap writes to the length you pick and shows the clock as you edit.' },
       { q: 'Can I roast my coworkers?', a: 'Lightly, and only about what you typed. The workplace check rejects any line that singles out one person or touches drinking, bonuses, layoffs, HR or pay.' },
       { q: 'Does Shutap invent accomplishments?', a: 'No. It builds the toast from the win you give it and never adds a number, a project or a person you didn’t type.' },
-      { q: 'What does it cost?', a: 'Your first toast is free (each page ends “— shutap.com”). After that $12.99 a toast, one included each month on Basic, unlimited on Pro.' },
+      { q: 'What does it cost?', a: 'Your first toast is free, with a shutap.com watermark across every PDF page. After that $12.99 a toast, one included each month on Basic, unlimited on Pro.' },
     ],
   },
   {
@@ -103,7 +103,7 @@ export const LANDINGS: Landing[] = [
     faqs: [
       { q: 'How long should a New Year’s toast be?', a: 'Thirty to sixty seconds. Shutap writes to the length you pick, and the prompter works out your start time from it.' },
       { q: 'Does the prompter need Wi-Fi at the party?', a: 'Only to open it. Once it’s open on your phone it runs without a connection.' },
-      { q: 'What does it cost?', a: 'Your first toast is free (each page ends “— shutap.com”). After that $12.99 a toast, one a month on Basic, unlimited on Pro. Downloads are never limited.' },
+      { q: 'What does it cost?', a: 'Your first toast is free, with a shutap.com watermark across every PDF page. After that $12.99 a toast, one a month on Basic, unlimited on Pro. Downloads are never limited.' },
     ],
   },
   {
@@ -138,7 +138,7 @@ export const LANDINGS: Landing[] = [
       { q: 'Will it sound like me?', a: 'Your stories go in word for word, and you can edit any line or tap funnier on it until you lock. Nothing changes unless you pick it.' },
       { q: 'Can I roast the groom?', a: 'Yes: pick roast-lite and Shutap roasts him, the stories, you and the room, using only what you typed. The wedding checks still apply.' },
       { q: 'Do the names leave my device?', a: 'No. Shutap only sees placeholders; your browser puts the names back on screen, in the prompter and in the PDFs.' },
-      { q: 'What does it cost?', a: 'Your first toast is free (each page ends “— shutap.com”). After that $12.99 one time, one a month on Basic, unlimited on Pro. Downloads are never limited.' },
+      { q: 'What does it cost?', a: 'Your first toast is free, with a shutap.com watermark across every PDF page. After that $12.99 one time, one a month on Basic, unlimited on Pro. Downloads are never limited.' },
     ],
     guide: { href: '/guides/funny-best-man-speech', label: 'How to write a funny best man speech' },
   },
@@ -169,7 +169,7 @@ export const LANDINGS: Landing[] = [
       { q: 'How long should a maid of honor speech be?', a: 'Two to three minutes; five at most. Shutap writes to the length you pick and shows the clock as you edit.' },
       { q: 'Does Shutap write the speech for me?', a: 'It builds the speech around your stories. Your lines stay word for word, you edit anything you like, and nothing changes unless you tap it and pick.' },
       { q: 'Can I make it heartfelt instead of funny?', a: 'Yes. Pick heartfelt: one light laugh from your stories, then mostly the true thing you wrote.' },
-      { q: 'What does it cost?', a: 'Your first toast is free (each page ends “— shutap.com”). After that $12.99 one time, one a month on Basic, unlimited on Pro.' },
+      { q: 'What does it cost?', a: 'Your first toast is free, with a shutap.com watermark across every PDF page. After that $12.99 one time, one a month on Basic, unlimited on Pro.' },
     ],
     guide: { href: '/guides/funny-maid-of-honor-speech', label: 'How to write a funny maid of honor speech' },
   },

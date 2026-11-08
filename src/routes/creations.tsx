@@ -99,7 +99,7 @@ function Creations() {
     if (!r?.ok || !r.toast.toast) return
     const x = r.toast.toast
     const blob = what === 'speech' ? speechPdf({ occasion: t.occasion, tone: t.tone, length: t.length, lines: x.lines, names, marked: r.toast.marked })
-      : what === 'cue_cards' ? cueCardsPdf({ occasion: t.occasion, cards: x.cards, names, marked: r.toast.marked })
+      : what === 'cue_cards' ? cueCardsPdf({ occasion: t.occasion, cards: x.cards, names, marked: r.toast.marked, trueThing: x.lines.find((l) => l.source === 'true_thing')?.text })
       : keepsakePdf({ occasion: t.occasion, lines: x.lines, names, marked: r.toast.marked })
     downloadBlob(blob, pdfName(t.occasion, names, what.replace('_', '-')))
   }
