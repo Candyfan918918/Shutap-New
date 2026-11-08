@@ -52,7 +52,7 @@ const guide: Guide = {
     },
     {
       heading: "Write a fresh line every week",
-      body: "Recycled banter is fine for rules. Everything else goes stale fast with regulars, so keep a running note on your phone of what actually happened on the night: the answer nobody could spell, the team that changed its name mid-game, the jukebox that kept playing the same song. Those are next week's openers, and they work because the room was there. If you want a hand punching one up, type what happened into Shutap, the humor amplifier, set the audience to live and the voice to dry, and ask for a tighter version. It hands back options built from your night. You pick the line, cut it to ten seconds and say it your way, because the room came to hear you.",
+      body: "Recycled banter is fine for rules. Everything else goes stale fast with regulars, so keep a running note on your phone of what actually happened on the night: the answer nobody could spell, the team that changed its name mid-game, the jukebox that kept playing the same song. Those are next week's openers, and they work because the room was there. If you want a hand punching one up, write the line into Shutap, the humor amplifier, set the audience to live and the voice to dry, and tap funnier on it. It hands back three other ways to say it, built from your words. You pick the line, cut it to ten seconds and say it your way, because the room came to hear you.",
     },
   ],
   techniques: [
@@ -126,7 +126,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-tell-a-funny-story", "sense-of-humor", "humorous-speech-ideas-for-toastmasters"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-11-02",
 };
 

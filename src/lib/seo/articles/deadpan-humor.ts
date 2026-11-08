@@ -88,7 +88,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "self-deprecating-humor", "how-to-write-comedy-tags"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   techniques: [
     {
       name: "The polite reading of an insult",

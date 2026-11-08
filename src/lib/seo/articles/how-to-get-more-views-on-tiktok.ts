@@ -88,7 +88,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-long-should-a-tiktok-bit-be", "funny-captions", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-10-26",
 };
 

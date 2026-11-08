@@ -1,12 +1,14 @@
-/* The lined box (slice 4b, Nov 5 2026): the write box is already a bit.
- * Five lines (hook, setup, two tags, button), each typed in the person's
- * own words or left empty. "funnier" on a line offers three versions built
- * from the lines they wrote (a touch, not a bit); "lock" keeps a line word
- * for word through the write. Two ways out:
- *   finish the bit — Shutap writes only the empty lines, around theirs
- *   keep it →      — every written line locked: the bit is theirs as typed
- * Nothing is stored until one of those is pressed. Behind the ondemand flag;
- * the plain textarea renders otherwise. */
+/* The lined box (Nov 8 2026 redesign, approved by Candy): the person writes
+ * the bit. Five lines (hook, setup, two tags, button), all required, all in
+ * their own words. Shutap never fills a line: AI runs only when "funnier" is
+ * tapped on one line, and offers three other ways to say it with theirs
+ * first; nothing changes until they pick. "lock" keeps a line from being
+ * changed (and from funnier) until it's unlocked. Both stay gray until the
+ * line has text. "Make my bit →" is never disabled: with lines missing it
+ * says which; with all five it hands them over word for word, and the
+ * result lays them out as the video, stand-up, sketch and skit.
+ * (Supersedes Nov 5's "finish the bit", which wrote the empty lines.)
+ * Nothing is stored until "Make my bit" is pressed. */
 import { useRef, useState, type KeyboardEvent } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { touchLine } from '@/lib/bits.functions'
@@ -18,17 +20,18 @@ import type { Draft } from './EditableBit'
 export const EMPTY_LINES: Draft = { hook: '', setup: '', tags: ['', ''], button: '' }
 export const LINE_SLOTS: Slot[] = ['hook', 'setup', 'tag0', 'tag1', 'button']
 
-const PLACEHOLDER: Record<string, string> = {
-  hook: "what happened, in one line — the thing you'd say first",
-  setup: 'the one fact the hook left out',
-  tag0: 'a picture that lands on a thing you can point at… or leave it empty',
-  tag1: 'another tag, or skip it',
-  button: 'a verdict or a reversal, never a moral',
+const LINE: Record<string, { title: string; sub: string; help: string }> = {
+  hook: { title: 'Hook', sub: 'the first 2 seconds', help: 'What happened, the way you’d say it first. A reason to listen.' },
+  setup: { title: 'Setup', sub: 'the one fact the hook left out', help: 'Just enough of the story to follow the turn.' },
+  tag0: { title: 'Tag 1', sub: 'a laugh after the turn', help: 'A picture that lands on a thing you can point at.' },
+  tag1: { title: 'Tag 2', sub: 'another laugh, same idea', help: 'Don’t restart the story; push the same idea further.' },
+  button: { title: 'Button', sub: 'the last line', help: 'A verdict or a reversal, never a moral. The line you stop on.' },
 }
+const EMPTY_TAP = 'Type something first to make it funnier or lock it.'
+
 const LockIcon = ({ open, color }: { open?: boolean; color: string }) => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.4" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d={open ? 'M8 11V7a4 4 0 0 1 7.5-2' : 'M8 11V7a4 4 0 0 1 8 0v4'} /></svg>
 )
-const SUB: Record<string, string> = { hook: 'first 2 seconds', tag1: 'optional', button: 'the last line' }
 
 /** The lines as one story (what the writing card shows, what the key is). */
 export function linesText(d: Draft): string {
@@ -37,15 +40,22 @@ export function linesText(d: Draft): string {
 export function writtenSlots(d: Draft): Slot[] {
   return LINE_SLOTS.filter((s) => readSlot(d, s).trim())
 }
+export function missingSlots(d: Draft): Slot[] {
+  return LINE_SLOTS.filter((s) => !readSlot(d, s).trim())
+}
+/** "the tag 1, tag 2 and button" */
+export function listLines(slots: Slot[]): string {
+  const n = slots.map((s) => LINE[s]!.title.toLowerCase())
+  return n.length < 2 ? n.join('') : `${n.slice(0, -1).join(', ')} and ${n[n.length - 1]}`
+}
 
 /** What the box asks for next, from its state alone. */
 export function guideLine(d: Draft, locked: Slot[]): { text: string; ready: boolean } {
-  const written = writtenSlots(d)
-  if (!written.length) return { text: 'type what happened in any line, in your words · "finish the bit" writes the lines you leave empty', ready: false }
-  const unlocked = written.filter((s) => !locked.includes(s))
-  if (unlocked.length) return { text: `lock the lines you want kept word for word (${unlocked.map(slotLabel).join(', ')} not locked yet) · "funnier" offers three ways for any line`, ready: false }
-  if (!d.hook.trim() || !d.button.trim()) return { text: 'a bit needs a hook and a button · write them, tap funnier, or "finish the bit" and Shutap fills them', ready: false }
-  return { text: 'every line locked · keep it as written, or "finish the bit" fills the empty lines', ready: true }
+  const missing = missingSlots(d)
+  if (missing.length === 5) return { text: 'Write all five lines in your own words. Stuck on one? Write a rough version and tap funnier.', ready: false }
+  if (missing.length) return { text: `Still to write: ${listLines(missing)}. Shutap never fills a line for you.`, ready: false }
+  const open = LINE_SLOTS.filter((s) => !locked.includes(s))
+  return { text: `All five lines are yours${open.length ? '' : ', all locked'}. Next: the 5-second video, stand-up, sketch and skit, laid out from them.`, ready: true }
 }
 
 type Props = {
@@ -56,10 +66,10 @@ type Props = {
   locked: Slot[]
   onLocked: (l: Slot[]) => void
   busy: boolean
-  /** Shutap fills the empty lines (a bit) */
-  onFinish: () => void
-  /** the bit as typed, every written line locked (a bit) */
-  onKeep: () => void
+  /** all five lines written: make the bit from them, word for word */
+  onMake: () => void
+  /** which box this is, for events: 'top' or 'mid' */
+  box?: string
   onSignIn?: () => void
   /** a signed-out visitor tapped lock (a line) or lock all: sign in first, then it locks */
   onGuestLock?: (what: Slot | 'all') => void
@@ -68,18 +78,26 @@ type Props = {
   say: (m: string) => void
 }
 
-export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, busy, onFinish, onKeep, onSignIn, onGuestLock, onLimit, onCrisis, say }: Props) {
+export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, busy, onMake, box = 'top', onSignIn, onGuestLock, onLimit, onCrisis, say }: Props) {
   const touch = useServerFn(touchLine)
   const [open, setOpen] = useState<Slot | null>(null)
   const [options, setOptions] = useState<TouchOption[] | null>(null)
   const [picked, setPicked] = useState(-1)
   const [touching, setTouching] = useState(false)
   const [touches, setTouches] = useState<{ used: number; cap: number | null } | null>(null)
+  const [note, setNote] = useState<string | null>(null)
+  const noteTimer = useRef<number | undefined>(undefined)
   const offered = useRef<Record<string, string[]>>({})
+  const typedOnce = useRef<Record<string, boolean>>({})
   const [focusSlot, setFocusSlot] = useState<Slot | null>(null)
   const guide = guideLine(lines, locked)
   const written = writtenSlots(lines)
 
+  function flash(m: string) {
+    setNote(m)
+    window.clearTimeout(noteTimer.current)
+    noteTimer.current = window.setTimeout(() => setNote(null), 4200)
+  }
   function setLine(s: Slot, line: string) {
     onLines(writeSlot(lines, s, line))
     // an emptied line can't stay locked
@@ -87,17 +105,20 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
   }
   function onType(s: Slot, el: HTMLElement) {
     const line = (el.innerText ?? '').replace(/\n+/g, ' ').trim()
-    if (line !== readSlot(lines, s)) setLine(s, line)
+    if (line === readSlot(lines, s)) return
+    setLine(s, line)
+    // which line got text, never the words
+    if (line && !typedOnce.current[s]) { typedOnce.current[s] = true; jokeTap('line_typed', tier, { slot: s, box }) }
   }
   function keyDown(e: KeyboardEvent<HTMLParagraphElement>) {
     if (e.key === 'Enter') { e.preventDefault(); (e.target as HTMLElement).blur() }
   }
 
   async function funnier(s: Slot) {
-    if (tier === 'guest') return onSignIn?.()
-    if (locked.includes(s)) return say('that line is locked · unlock it first')
-    if (!written.length) return say('write one line first · funnier builds from your lines')
-    jokeTap('line_touched', tier, { slot: s, where: 'box', written: written.length })
+    if (!readSlot(lines, s).trim()) { jokeTap('line_tap_empty', tier, { slot: s, what: 'funnier', box }); return flash(EMPTY_TAP) }
+    if (locked.includes(s)) return flash('That line is locked. Unlock it to try funnier.')
+    if (tier === 'guest') { jokeTap('funnier_needs_signin', tier, { slot: s, box }); return onSignIn?.() }
+    jokeTap('line_touched', tier, { slot: s, where: 'box', box, written: written.length })
     setOpen(s); setOptions(null); setPicked(-1); setTouching(true)
     try {
       const r = await touch({ data: { draft: lines, slot: s, avoid: offered.current[s] ?? [], controls, anon_session_id: anonSessionId() } })
@@ -119,21 +140,23 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
     if (!open) return
     if (picked >= 0 && options) {
       setLine(open, options[picked]!.line)
-      jokeTap('touch_picked', tier, { slot: open, pick: picked + 1, move: options[picked]!.move, where: 'box' })
-    } else jokeTap('touch_picked', tier, { slot: open, pick: 'mine', where: 'box' })
+      jokeTap('touch_picked', tier, { slot: open, pick: picked + 1, move: options[picked]!.move, where: 'box', box })
+    } else jokeTap('touch_picked', tier, { slot: open, pick: 'mine', where: 'box', box })
     setOpen(null)
   }
   function toggleLock(s: Slot) {
-    if (!readSlot(lines, s).trim()) return
+    if (!readSlot(lines, s).trim()) { jokeTap('line_tap_empty', tier, { slot: s, what: 'lock', box }); return flash(EMPTY_TAP) }
     if (tier === 'guest' && onGuestLock && !locked.includes(s)) return onGuestLock(s)
     const on = !locked.includes(s)
     onLocked(on ? [...locked, s] : locked.filter((x) => x !== s))
-    jokeTap('line_locked', tier, { slot: s, on, where: 'box' })
+    jokeTap('line_locked', tier, { slot: s, on, where: 'box', box })
   }
-  function lockAll() {
-    if (tier === 'guest' && onGuestLock) return onGuestLock('all')
-    onLocked(written)
-    jokeTap('lines_locked_all', tier, { count: written.length })
+  function make() {
+    const missing = missingSlots(lines)
+    jokeTap('box_submit', tier, { box, written: 5 - missing.length, locked: locked.length, ready: !missing.length })
+    if (missing.length) return flash(`Write the ${listLines(missing)} to continue. Stuck? Write a rough version and tap funnier.`)
+    setNote(null)
+    onMake()
   }
 
   return (
@@ -142,23 +165,19 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
         const value = readSlot(lines, s)
         const isLocked = locked.includes(s)
         const has = !!value.trim()
-        const isHook = s === 'hook'
+        const meta = LINE[s]!
         const label = slotLabel(s)
-        // Nov 6 2026: each line drawn like the toast stories: a title with its
-        // status, a dashed box to type in (solid while typing, green once
-        // locked), funnier and lock inside the box, the hint underneath.
         const state = isLocked ? 'locked' : has || focusSlot === s ? 'typing' : 'empty'
-        const title = label.charAt(0).toUpperCase() + label.slice(1)
-        const status = isLocked ? 'locked · kept word for word' : has ? 'not locked yet' : isHook ? 'empty' : 'empty · optional'
+        const status = isLocked ? 'locked · word for word' : has ? 'written · not locked' : 'required'
         return (
           <div key={s} className={`bt-tline${open === s ? ' open' : ''}`}>
             <div className="bt-tline-head">
-              <b>{title}{SUB[s] && s !== 'tag1' ? <span> · {SUB[s]}</span> : null}</b>
-              <i>{status}</i>
+              <b>{meta.title}<span> · {meta.sub}</span></b>
+              <i className={isLocked ? 'ok' : has ? undefined : 'req'}>{status}</i>
             </div>
             <div className={`bt-tbox ${state}`}>
               <p
-                className={`bt-v${isHook ? ' hook' : ''} bt-etext${has ? '' : ' empty'}`}
+                className={`bt-v bt-etext${has ? '' : ' empty'}`}
                 contentEditable={!isLocked && !busy}
                 suppressContentEditableWarning
                 spellCheck={false}
@@ -166,32 +185,28 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
                 onFocus={() => setFocusSlot(s)}
                 onBlur={(e) => { setFocusSlot((f) => (f === s ? null : f)); onType(s, e.currentTarget) }}
                 onKeyDown={keyDown}
-                aria-label={`${label}, type it`}
+                aria-label={`${meta.title}, required, type it`}
                 style={s === 'button' ? { fontWeight: 400 } : undefined}
               >
                 {value}
               </p>
-              {state === 'empty' && !written.length ? (
-                <span className="bt-topt">{isHook ? 'start here' : 'optional'}</span>
-              ) : (
-                <span className="bt-tpills">
-                  <button type="button" className={`bt-tpill funnier${open === s ? ' on' : ''}`} disabled={busy || (touching && open === s)} onClick={() => void funnier(s)}>
-                    {touching && open === s ? 'three ways…' : 'funnier'}
-                  </button>
-                  {isLocked ? (
-                    <button type="button" className="bt-tpill locked" aria-pressed="true" disabled={busy} onClick={() => toggleLock(s)}><LockIcon color="#fff" />locked</button>
-                  ) : (
-                    <button type="button" className="bt-tpill lock" aria-pressed="false" disabled={busy || !has} onClick={() => toggleLock(s)}><LockIcon open color="#2f6a45" />lock</button>
-                  )}
-                </span>
-              )}
+              <span className="bt-tpills">
+                <button type="button" className={`bt-tpill funnier${open === s ? ' on' : ''}${has && !isLocked ? '' : ' off'}`} aria-disabled={!has || isLocked} disabled={busy || (touching && open === s)} onClick={() => void funnier(s)}>
+                  {touching && open === s ? 'three ways…' : 'funnier'}
+                </button>
+                {isLocked ? (
+                  <button type="button" className="bt-tpill locked" aria-pressed="true" disabled={busy} onClick={() => toggleLock(s)}><LockIcon color="#fff" />locked</button>
+                ) : (
+                  <button type="button" className={`bt-tpill lock${has ? '' : ' off'}`} aria-pressed="false" aria-disabled={!has} disabled={busy} onClick={() => toggleLock(s)}><LockIcon open color={has ? '#2f6a45' : '#8f878b'} />lock</button>
+                )}
+              </span>
             </div>
             {open === s && options && (
               <div className="bt-pop" role="dialog" aria-label={`${label}, three ways`}>
-                <span className="bt-lbl r">funnier · {label} · three ways, from the lines you wrote</span>
+                <span className="bt-lbl r">funnier · {label} · nothing changes until you pick</span>
                 <button type="button" className={`bt-opt keep${picked === -1 ? ' on' : ''}`} onClick={() => setPicked(-1)}>
                   <b>✓</b>
-                  <span>{has ? value : <i style={{ color: 'var(--muted)' }}>leave it empty</i>}<small>keep yours</small></span>
+                  <span>{value}<small>keep yours</small></span>
                 </button>
                 {options.map((o, i) => (
                   <button type="button" key={i} className={`bt-opt${picked === i ? ' on' : ''}`} onClick={() => setPicked(i)}>
@@ -207,21 +222,16 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
                 </div>
               </div>
             )}
-            <span className="bt-thelp">{PLACEHOLDER[s]}</span>
+            <span className="bt-thelp">{meta.help}</span>
           </div>
         )
       })}
+      {note && <p className="bt-lined-note" role="alert">{note}</p>}
       <div className="bt-lined-foot">
         <p className={`bt-guide${guide.ready ? ' ready' : ''}`} role="status">{guide.text}</p>
         <div className="bt-lined-cta">
-          {written.length > 0 && locked.length < written.length && (
-            <button type="button" className="bt-mini" disabled={busy} onClick={lockAll}>lock all {written.length}</button>
-          )}
-          <button type="button" className="bt-btn ghost" disabled={busy || !written.length} onClick={onFinish} title="Shutap writes the empty lines around yours">
-            finish the bit
-          </button>
-          <button type="button" className="bt-btn bt-go" disabled={busy || !(guide.ready || (tier === 'guest' && written.length > 0))} onClick={onKeep} title="every written line locked: the bit as you typed it">
-            keep it →
+          <button type="button" className="bt-btn bt-go" disabled={busy} onClick={make}>
+            Make my bit →
           </button>
         </div>
       </div>

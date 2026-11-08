@@ -99,11 +99,11 @@ function AiDisclosurePage() {
       <WhoDoesWhat />
       <h3>What you bring stays yours</h3>
       <p>
-        You don&rsquo;t hand Shutap your jokes. You give it the situation, the listing or your
-        memories of the person, and it drafts from that, using the Lab&rsquo;s in-house dataset of
-        jokes written and rated by people at the Lab and the techniques on its /funniest and
-        /guides pages. If you do type your own lines, they stay yours: unread by staff, out of the
-        dataset, out of training.
+        On Bits the lines are yours: you write them, and they stay unread by staff, out of the
+        dataset and out of training. For realtor kits and toasts you give Shutap the listing or
+        your memories of the person, and it drafts from that, using the Lab&rsquo;s in-house
+        dataset of jokes written and rated by people at the Lab and the techniques on its
+        /funniest and /guides pages. Whatever you type stays yours.
       </p>
       <p>
         Shutap uses AI models from Google (Gemini) and OpenAI, through the Lovable AI Gateway. No
@@ -111,12 +111,15 @@ function AiDisclosurePage() {
         product.
       </p>
       <p>
-        <b>Bits.</b> It removes identifying details and runs the crisis check. Then it writes
-        several drafts, each built on one technique from the Shutap Humor Amplifier Lab bank (the
-        operation, never anyone&rsquo;s material), and a second model from a different
-        company&rsquo;s family ranks them. It also writes rewrites, any line you tap
-        &ldquo;funnier&rdquo;, and the Mirror. The 5-second video is not AI-generated: a fixed
-        template draws it from the finished bit on your own device.
+        <b>Bits.</b> You write the bit: all five lines are yours, and the bit you make is
+        those lines, word for word. AI writes on a bit only when you ask: tap &ldquo;funnier&rdquo;
+        on a line and a model offers three other ways to say it, built from your lines and one
+        technique from the Shutap Humor Amplifier Lab bank (the operation, never anyone&rsquo;s
+        material); nothing changes until you pick. Before anything is saved or sent to a model,
+        identifying details are removed and the crisis check runs. Rewrites on Basic and Pro
+        (hotter, tighter, storytelling) and the Mirror are AI-written when you ask for them. The
+        sketch and the skit are laid out by a model from your lines, in script and shot form, and
+        it is told to add no new jokes; the 5-second video is not AI-generated: a fixed template draws it from your finished bit on your own device.
       </p>
       <p>
         <b>Realtor kits.</b> Shutap reads the listing page you link, or the text you paste, and

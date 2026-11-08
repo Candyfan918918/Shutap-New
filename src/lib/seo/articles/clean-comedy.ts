@@ -44,7 +44,7 @@ const guide: Guide = {
     },
     {
       heading: "Test it on the room you'll actually play",
-      body: "Before you call a set clean, read every line as if your boss, your aunt and a twelve-year-old are sitting in the front row together. Innuendo is the gray zone: Wikipedia notes clean comics often use double meanings, but a church or school booker may count those as blue, so ask for the client's list before the gig instead of guessing. Drinking jokes, dating jokes and mild political lines vary the same way. Shutap, the humor amplifier, has an office and a family audience setting and a low \"how wild\" setting, so you can type what happened and get a clean draft to push against. You still pick the lines, cut the rest and rewrite it in your voice.",
+      body: "Before you call a set clean, read every line as if your boss, your aunt and a twelve-year-old are sitting in the front row together. Innuendo is the gray zone: Wikipedia notes clean comics often use double meanings, but a church or school booker may count those as blue, so ask for the client's list before the gig instead of guessing. Drinking jokes, dating jokes and mild political lines vary the same way. Shutap, the humor amplifier, has an office and a family audience setting and a low \"how wild\" setting, so you can write your bit line by line and tap funnier on a line for cleaner options to push against. You still pick the lines, cut the rest and keep it in your voice.",
     },
   ],
   techniques: [
@@ -102,7 +102,7 @@ const guide: Guide = {
     { label: "JD Creviston, \"Want to know the biggest mistake clean comedians make?\" (May 1, 2025)", url: "https://jdcrevistoncomedy.substack.com/p/the-1-mistake-new-clean-comics-make" },
   ],
   related: ["stand-up-comedy", "open-mic-night", "funny-for-business"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-10-31",
 };
 

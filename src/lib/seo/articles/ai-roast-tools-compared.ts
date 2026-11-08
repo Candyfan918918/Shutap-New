@@ -80,7 +80,7 @@ const guide: Guide = {
     { label: "Claude pricing", url: "https://claude.com/pricing" },
   ],
   related: ["roast-lines", "ai-joke-tools-compared", "shutap-vs-chatgpt-for-jokes"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-10-20",
 };
 

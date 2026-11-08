@@ -32,7 +32,7 @@ const guide: Guide = {
     },
     {
       heading: "How Shutap's roast voice works",
-      body: "Shutap Humor Amplifier Lab helps you say it funnier. You type what happened, pick the roast voice, and set the heat from 1 to 5, where 1 is a raised eyebrow and 5 is the version you'd only post with the group chat's blessing. It writes a draft bit with a hook, setup, tags and a button at 15, 30 or 60 seconds or 2 minutes. Lines that would fit anyone's story get dropped, and so do jokes aimed at you. Then you steer: hotter, tighter, storytelling, swap in a crowd-work angle. It's a draft to push against, so keep the burns that sound like you and cut the rest.",
+      body: "Shutap Humor Amplifier Lab helps you say it funnier. You write the roast as a bit, a hook, setup, two tags and a button, in your own words, and pick the roast voice. On the line that isn't burning yet, tap funnier: Shutap offers three other ways to say it, built from your lines, with yours first. Lines that would fit anyone's story get dropped, and so do jokes aimed at you. Keep the burns that sound like you and cut the rest.",
     },
     {
       heading: "Roasting a friend for a birthday or a roast night",
@@ -75,7 +75,7 @@ const guide: Guide = {
     { label: "Benzinga (Oct 2023), \"This ChatGPT jailbreak lets you get AI's help to roast people\"", url: "https://www.benzinga.com/news/23/10/35244404/this-chatgpt-jailbreak-lets-you-get-ais-help-to-roast-people" },
   ],
   related: ["ai-roast-tools-compared", "roast-lines", "roast-battle"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-10-26",
 };
 

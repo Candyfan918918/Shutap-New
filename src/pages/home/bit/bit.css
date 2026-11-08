@@ -459,3 +459,15 @@
 .bt.bt-bare .bt-lined { gap: 8px; padding-top: 10px; }
 .bt.bt-bare .bt-lined-foot { padding: 8px 0 12px; }
 .bt.bt-bare .bt-col { gap: 12px; }
+
+/* Nov 8 2026: the five-line box, every line the person's own */
+.bt-lined-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.bt-lined-top b { font: 800 15px var(--sora); color: var(--ink); }
+.bt-lined-top span { font: 700 12.5px var(--sora); color: var(--rose-ink); }
+.bt-lined-top span.done { color: #2f6a45; }
+.bt-tline-head i.req { color: var(--rose-ink); }
+.bt-tline-head i.ok { color: #2f6a45; }
+.bt-tpill.off, .bt-tpill.off:hover { border: 1px solid rgba(26, 20, 24, .12); background: #f3f1f2; color: #8f878b; cursor: pointer; }
+.bt-lined-note { margin: 0; display: flex; gap: 8px; align-items: center; background: #fff4f7; border: 1px solid rgba(184, 69, 107, .35); border-radius: 12px; padding: 9px 12px; font: 600 13px/1.45 var(--sora); color: var(--wine); }
+.bt-lined-foot .bt-guide { font-size: 13px; }
+.bt-lined-cta .bt-go { min-height: 52px; padding: 0 26px; font-size: 16px; }

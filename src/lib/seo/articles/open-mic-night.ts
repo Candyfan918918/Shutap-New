@@ -92,7 +92,7 @@ const guide: Guide = {
     },
   ],
   related: ["stand-up-bit-writer", "turn-a-bad-experience-into-comedy", "how-to-write-comedy-tags"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-10-24",
 };
 

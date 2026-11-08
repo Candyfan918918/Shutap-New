@@ -9,30 +9,30 @@ const guide: Guide = {
   title: "ChatGPT Alternative for Comedy Writing, Compared | Shutap",
   h1: "Shutap vs ChatGPT and other chatbots for comedy writing",
   description:
-    "Why Shutap is a faster ChatGPT alternative for comedy writing: type what happened and get a bit, a caption and five hashtags, in stand-up, sketch or skit form.",
+    "Why Shutap is a different ChatGPT alternative for comedy writing: you write your own bit line by line, tap funnier where you're stuck, and get it back as a 5-second video, stand-up, a sketch or a skit.",
   capsule:
-    "Shutap is a ChatGPT alternative for comedy writing built for one job: you describe what happened in a sentence, and it drafts a finished bit (hook, setup, tags and button) built on a named comedy technique, plus a caption, five hashtags and a short video. With ChatGPT you write the prompt, the structure and the follow-ups yourself. With Shutap, the situation is the prompt.",
-  blurb: "ChatGPT gives you a blank box. Shutap gives you a finished bit from one sentence about what happened.",
+    "Shutap is a ChatGPT alternative for comedy writing built for writers who want to keep their own voice: you write the bit as five lines (hook, setup, two tags, button), and when a line isn't landing you tap funnier for three other ways to say it, built on a named comedy technique, yours first. The finished bit comes back as a 5-second video, stand-up, a sketch and a skit. With ChatGPT you prompt for jokes; with Shutap you write, and it helps only where you ask.",
+  blurb: "ChatGPT gives you a blank box. Shutap gives you the shape of a bit, and help on the line you're stuck on.",
   sections: [
     {
       heading: "The short answer",
-      body: "ChatGPT is a general assistant. It can write a joke, a cover letter or a recipe, and it's very good at all three if you know how to ask. Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, only does comedy. That focus changes what you have to bring. With a chatbot you bring a prompt: the format, the tone, the length, what a tag is, and a request for a caption at the end. With Shutap you bring the situation, described plainly, and pick a few settings. The comedy structure, the technique and the post kit are already built in.",
+      body: "ChatGPT is a general assistant. It can write a joke, a cover letter or a recipe, and it's very good at all three if you know how to ask. Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, only does comedy, and on Shutap Bits it doesn't write the bit for you. You write it, line by line, in the shape comics use: a hook, a setup, two tags and a button. When a line isn't landing, you tap funnier and get three other ways to say it, yours first.",
     },
     {
       heading: "One morning, two workflows",
-      body: "Take a real situation: \"My son tried on three pairs of shoes before he could get out the door on a busy school morning.\" In ChatGPT, that sentence alone usually gets you a handful of loose jokes. To get something you could film, you'd ask for a 30-second script, then a stronger opening line, then tags, then a punchier ending, then a caption, then hashtags, then a version for the stage. In Shutap you type the same sentence, pick an audience, a voice, a length and how wild it should get, and the bit comes back whole, with the caption, five hashtags and a 5-second video attached.",
+      body: "Take a real situation: your son tried on three pairs of shoes before he could get out the door on a school morning. In ChatGPT you'd prompt for jokes and pick from what comes back. In Shutap you write the hook yourself (\"He tried on three pairs of shoes.\"), then the setup, two tags and the button. Stuck on the button? Write the plain version and tap funnier: three other ways to say it come back, built from your other lines. When all five lines are yours, the bit comes back as a 5-second video, stand-up, a sketch and a skit.",
     },
     {
-      heading: "You bring the situation, not the jokes",
-      body: "Most people don't freeze because they lack a story. They freeze because turning the story into a joke feels like work. Shutap starts where you are: say what happened in descriptive words, the way you'd text a friend. The more specific the detail (three pairs, the school bell, the shoe he picked was the first one), the better the draft. You don't have to arrive with punchlines or learn prompt tricks. What comes back is a draft in your story's details. You pick the lines that sound like you, cut the rest, and ask for a hotter, tighter or more escalated version if it isn't there yet.",
+      heading: "You write the jokes, with a shape to fill",
+      body: "Most people don't freeze because they lack a story. They freeze at the blank page. Shutap gives the page a shape: five lines, each with a one-line hint about what it's for. The more specific the detail (three pairs, the school bell, the shoe he picked was the first one), the funnier the line. You don't need prompt tricks, and nothing is written for you unless you tap funnier on a line and pick an option.",
     },
     {
       heading: "Built on named comedy techniques",
-      body: "Every Shutap draft is built on one specific technique from the Lab's technique bank: moves like the rule of three, a callback, fake precision or escalation, each one broken down on the Lab's public guides and Funniest pages. Several drafts are written, each on a different technique, and a second model from a different AI company ranks them, so the writer never grades its own work. A general chatbot can use these techniques too, but only when you name them and ask. Here's the kind of line that structure aims for. Weak: \"Kids take forever to get ready.\" Stronger: \"He tried on three pairs of shoes. He left in the first pair. I've seen shorter cabinet meetings.\"",
+      body: "When you tap funnier, each of the three options is built on one specific technique from the Lab's technique bank: moves like the rule of three, a callback, fake precision or escalation, each one broken down on the Lab's public guides and Funniest pages. A general chatbot can use these techniques too, but only when you name them and ask. Here's the kind of line that structure aims for. Weak: \"Kids take forever to get ready.\" Stronger: \"He tried on three pairs of shoes. He left in the first pair. I've seen shorter cabinet meetings.\"",
     },
     {
       heading: "Ready-to-use formats",
-      body: "A chatbot returns a block of text, and the formatting is your job. Shutap returns the same bit in the form you're going to use. Stand-up runs on a full-screen teleprompter so you can rehearse with your eyes up. Sketch lays it out as a screenplay page. Skit splits it into a scene, beat by beat, for filming. Every bit also comes with a post kit: a 5-second vertical video whose cartoon cast and setting match your story, a caption under 100 characters and five hashtags. My creations keeps every bit you've made, so last Tuesday's shoe saga is still there when you need an opener.",
+      body: "A chatbot returns a block of text, and the formatting is your job. Shutap returns your bit in the form you're going to use. Stand-up runs on a full-screen teleprompter so you can rehearse with your eyes up. Sketch lays it out as a screenplay page. Skit splits it into shots, beat by beat, for filming alone. Every bit also comes with a 5-second vertical video whose cartoon cast and setting follow your lines. My creations keeps every bit you've made, so last Tuesday's shoe saga is still there when you need an opener.",
     },
     {
       heading: "Where the jokes come from",
@@ -40,7 +40,7 @@ const guide: Guide = {
     },
     {
       heading: "When ChatGPT is the better pick",
-      body: "Be honest about the trade. ChatGPT is the better tool when the job isn't a bit: editing a long speech you already wrote, brainstorming fifty show titles, researching a topic for a set, rewriting an email or talking through an idea with no story in it yet. It's also more flexible, since you can steer every word with your prompt. Shutap wins when you have a real moment and want it turned into something you can say, post or perform today, without building the structure yourself every time. Plenty of people use both: a chatbot for the thinking, Shutap for the bit.",
+      body: "Be honest about the trade. ChatGPT is the better tool when the job isn't a bit: editing a long speech you already wrote, brainstorming fifty show titles, researching a topic for a set, rewriting an email or talking through an idea with no story in it yet. It's also more flexible, since you can steer every word with your prompt. Shutap is for when you want to write the bit yourself, keep every line yours, and get help only where you're stuck. Plenty of people use both: a chatbot for the thinking, Shutap for the bit.",
     },
     {
       heading: "Taking the bit to a longer AI video",
@@ -52,13 +52,13 @@ const guide: Guide = {
     },
     {
       heading: "What it costs",
-      body: "You sign in with Google, Apple or email before the first bit. A free account gets one bit a day as written, in stand-up, sketch or skit form, with unlimited downloads (watermarked). Basic is $19.99 a month for three bits a day with no watermark. Pro is $49.99 a month for unlimited bits and rewrites. ChatGPT also has a free plan. The honest test is your own morning: type one thing that happened and see which tool gets you to something you'd post first.",
+      body: "You sign in with Google, Apple or email before the first bit. A free account gets one bit a day as written, in stand-up, sketch or skit form, with unlimited downloads (watermarked). Basic is $19.99 a month for three bits a day with no watermark. Pro is $49.99 a month for unlimited bits and rewrites. ChatGPT also has a free plan. The honest test is your own morning: write one thing that happened as a bit and see which tool gets you to something you'd post first.",
     },
   ],
   faq: [
     {
       q: "Is there a ChatGPT alternative made for comedy writing?",
-      a: "Yes. Shutap is built only for comedy. You describe what happened, and it drafts a whole bit with a hook, setup, tags and a button, built on a named technique, plus a caption, five hashtags and a 5-second video.",
+      a: "Yes. Shutap is built only for comedy. You write your bit as a hook, setup, two tags and a button, tap funnier on any line for three other ways to say it, and get it back as a 5-second video, stand-up, a sketch and a skit.",
     },
     {
       q: "Can ChatGPT write funny jokes?",
@@ -66,7 +66,7 @@ const guide: Guide = {
     },
     {
       q: "Do I need to write my own jokes to use Shutap?",
-      a: "No. You describe the situation in plain, specific words, and Shutap drafts the bit. You still decide what stays: pick the lines that sound like you, cut the rest, and ask for hotter, tighter or escalated versions.",
+      a: "Yes, and that is the point: you write the bit yourself as five lines, in plain, specific words. Tap funnier on any line you are stuck on for three other ways to say it, and keep yours or pick one. You decide what stays.",
     },
     {
       q: "Does Shutap use comedians' jokes?",
@@ -92,7 +92,7 @@ const guide: Guide = {
     },
   ],
   related: ["shutap-vs-chatgpt-for-jokes", "ai-joke-tools-compared", "shutap-vs-chatgpt-for-stand-up"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-11-02",
 };
 

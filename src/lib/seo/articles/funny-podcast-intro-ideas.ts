@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Write and test one new line a week",
-      body: "Write the intro last, after you've recorded the episode, because the best cold open and teaser are buried somewhere in the raw file. Jot down three moments while you listen back. Pick the one that's funny with no context and cut it to under ten seconds. Then read the full intro out loud with a stopwatch running. Castmagic suggests getting a few listeners to react and revising from there. If a line needs a second sentence to explain it, cut it. Shutap, the humor amplifier, can help with the punch-up pass: type what happened in the episode, set the length to 15 seconds and ask for a tighter version. You choose the line, rewrite it in your words, and say it your way.",
+      body: "Write the intro last, after you've recorded the episode, because the best cold open and teaser are buried somewhere in the raw file. Jot down three moments while you listen back. Pick the one that's funny with no context and cut it to under ten seconds. Then read the full intro out loud with a stopwatch running. Castmagic suggests getting a few listeners to react and revising from there. If a line needs a second sentence to explain it, cut it. Shutap, the humor amplifier, can help with the punch-up pass: write the intro line in your own words and tap funnier on it for three other ways to say it. You choose the line, rewrite it in your words, and say it your way.",
     },
   ],
   techniques: [
@@ -126,7 +126,7 @@ const guide: Guide = {
     },
   ],
   related: ["comedic-voice", "callback-humor", "how-to-tell-a-funny-story"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-11-03",
 };
 

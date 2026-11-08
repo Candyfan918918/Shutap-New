@@ -4,8 +4,8 @@ import { SITE_URL } from '@/lib/site'
 import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
 
 const PATH = '/humor-amplifier'
-const TITLE = 'Shutap Bits — turn what happened into a bit | Shutap Humor Amplifier Lab'
-const DESCRIPTION = 'Shutap Bits, for creators: type what happened and get a bit in your words (hook, setup, tags and button) with a 5-second video. Run it as stand-up, a sketch or a skit.'
+const TITLE = 'Shutap Bits — write your bit, funnier only where you ask | Shutap Humor Amplifier Lab'
+const DESCRIPTION = 'Shutap Bits, for creators and comedians: write your bit line by line (hook, setup, two tags, button) in your own words, tap funnier on any line you’re stuck on, and get a 5-second video, stand-up, a sketch and a skit.'
 
 export const Route = createFileRoute('/humor-amplifier')({
   // newnav (Nov 6 2026): the product page is /bits; this URL keeps working
@@ -37,29 +37,29 @@ function HumorAmplifierPage() {
     <ContentPage
       tryIt="humor-amplifier"
       breadcrumbs={[{ name: 'The humor amplifier', path: PATH }]}
-      h1="The humor amplifier: turn what happened into a post"
-      capsule="Shutap amplifies your own story into a complete bit — hook, setup, tags and button — in your voice, with a 5-second video, ready to post. Start with what happened to you, not a request for a random joke. It amplifies your humor; it never replaces it."
-      cta={{ label: 'Type what happened. Say it funnier.', href: '/' }}
+      h1="The humor amplifier: your bit, funnier where you ask"
+      capsule="Shutap amplifies your humor without replacing it. On Shutap Bits you write the bit yourself, line by line: a hook, a setup, two tags and a button. When a line isn't landing, tap funnier for three other ways to say it, yours first. The finished bit comes back as a 5-second video to post, and stand-up, a sketch and a skit to perform."
+      cta={{ label: 'Write your bit. Funnier only where you ask.', href: '/bits' }}
       sections={[
         {
-          heading: 'Your story, not a random one-liner',
-          body: 'A topic such as “work” gives any joke tool very little to work with. The meeting your manager called to discuss having fewer meetings gives it a scene, a contradiction and somewhere to go. Shutap starts with that situation and builds connected beats around it, rather than handing you unrelated punchlines about a broad category.',
+          heading: 'Your material, not a random one-liner',
+          body: 'A topic such as “work” gives any joke tool very little to work with. The meeting your manager called to discuss having fewer meetings gives you a scene, a contradiction and somewhere to go. You write that situation as your bit, and Shutap helps only on the lines you ask about.',
         },
         {
           heading: 'What makes it a complete bit?',
-          body: 'The hook opens with a reason to listen. The setup gives the audience enough of the story to follow the turn. Tags add laughs after that turn without starting the story again. The button is the final line: the ending you can stop on. Those four parts give you a sequence to perform, not just a sentence to paste into a caption.',
+          body: 'The hook opens with a reason to listen. The setup gives the audience enough of the story to follow the turn. Tags add laughs after that turn without starting the story again. The button is the final line: the ending you can stop on. The box asks for each of these as its own line, so you write a sequence to perform, not just a sentence to paste into a caption.',
         },
         {
-          heading: 'How to amplify your own story',
-          body: 'Write what happened in the story box. Include who did what, the exact words you remember and the small detail that made it ridiculous; leave real names out. Choose your audience, voice, length and how wild, then let Shutap write the bit. Read the draft out loud and decide what fits your delivery. You can make it hotter, tighter, change the tags or mix your own version. Each version gets its own 5-second video.',
+          heading: 'How to amplify your own bit',
+          body: 'Write each of the five lines in your words. Include who did what, the exact words you remember and the small detail that made it ridiculous; leave real names out. If a line is flat, tap funnier on it: you get three other ways to say it, built from your other lines, and nothing changes until you pick. Lock the lines that are done, then make the bit.',
         },
         {
           heading: 'For anyone who needs to say it funnier',
-          body: 'Creators can turn a storytime premise into a post for TikTok, Instagram Reels or YouTube Shorts. Comedians can use a familiar experience as the starting point for a stand-up bit to rehearse and refine. Anyone with a toast, a speech, a presentation or a meeting coming up can find the funny version of what happened. Choose a social, live, office, work, family or school audience to suit the room. Deadpan, storyteller and dry voices offer different ways to tell the same situation without borrowing another performer’s lines.',
+          body: 'Creators can shape a storytime premise into a post for TikTok, Instagram Reels or YouTube Shorts. Comedians can work a familiar experience into a stand-up bit to rehearse and refine. Choose a social, live, office, work, family or school audience and a deadpan, storyteller or dry voice for the options funnier offers.',
         },
         {
-          heading: 'From draft to post',
-          body: 'Download the video and post it, or run the bit as stand-up on the teleprompter, lay it out as a skit you film alone, or format it as a one-page sketch. The format changes how you use the material; the story remains the starting point. Edit anything you would not naturally say, and rehearse the pauses before recording or performing.',
+          heading: 'From your lines to a post',
+          body: 'Download the 5-second video and post it, or run your bit as stand-up on the teleprompter, lay it out as a skit you film alone, or format it as a one-page sketch. The format changes how you use the material; the lines stay yours. Rehearse the pauses before recording or performing.',
         },
       ]}
       others={[

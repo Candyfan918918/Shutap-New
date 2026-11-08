@@ -21,7 +21,8 @@ import { runClassifyCrisis } from './agents/guard.functions'
 import { requestAnonId, resolveJokeIdentity, type JokeIdentity } from './jokes/session.server'
 import { activePlan } from './plan.server'
 import { downloadsUsed, kitTier, resolveTier } from './bits/tier.server'
-import { heatFor, touchLineDraft, varyBitDraft, writeBitFromStory, type BitFailure, type TouchOption } from './bits/pipeline.server'
+import { BIT_PROMPT_VERSION, heatFor, touchLineDraft, varyBitDraft, writeBitFromStory, type BitFailure, type TouchOption } from './bits/pipeline.server'
+import { allLinesGiven, keptAsWritten } from './bits/kept'
 import { forgetPerson, personSignal } from './bits/person.server'
 import { NO_CAP, TOUCH_FAIR_USE, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
 import { DOWNLOAD_KINDS } from './bits/plans'
@@ -375,7 +376,7 @@ async function writeCore(
     // The person's lines are scrubbed with the story (same text), so the
     // given block carries clean lines too.
     const givenClean = given ? await scrubGiven(given, story, clean) : undefined
-    const writing = writeBitFromStory(clean, controls, undefined, sink, { person, given: givenClean }).catch((e) => {
+    const writing = (allLinesGiven(givenClean) ? Promise.resolve(keptAsWritten(givenClean, BIT_PROMPT_VERSION)) : writeBitFromStory(clean, controls, undefined, sink, { person, given: givenClean })).catch((e) => {
       sink.failure = { rejected: [], error: e instanceof Error ? e.message : 'threw' }
       return null
     })

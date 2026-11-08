@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Turn your own week into POVs",
-      body: "The best POV ideas are already in your camera roll and your texts. Go back through the last seven days and write down every moment where you thought \"of course.\" The meeting that ran long, the delivery left at the wrong door, the group chat that went quiet after your joke. For each one, ask who else was in that moment, including objects, and write the caption from their side. One small week usually gives five premises. Film the one you can explain in a single caption line. If you'd like a second draft to push against, type what happened into Shutap, the humor amplifier: you get a short bit, a caption under 100 characters and five hashtags, and you pick, cut and rewrite until it sounds like you.",
+      body: "The best POV ideas are already in your camera roll and your texts. Go back through the last seven days and write down every moment where you thought \"of course.\" The meeting that ran long, the delivery left at the wrong door, the group chat that went quiet after your joke. For each one, ask who else was in that moment, including objects, and write the caption from their side. One small week usually gives five premises. Film the one you can explain in a single caption line. If you'd like a second draft to push against, write it as a bit in Shutap, the humor amplifier, line by line, and tap funnier on any line you're stuck on: you get three other ways to say it, yours first, and a 5-second video of the finished bit.",
     },
   ],
   techniques: [
@@ -108,7 +108,7 @@ const guide: Guide = {
     },
   ],
   related: ["pov-skit-writer", "storytime-script-writer", "how-to-write-a-skit"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-11-05",
 };
 

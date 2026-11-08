@@ -17,7 +17,7 @@ const SECTIONS = [
   },
   {
     heading: "Bits: your bit, funnier",
-    body: "Your voice, your call. Funnier only where you ask. A clearer way to build your bit, in your own voice. Shutap only touches a line when you tap “funnier”, and you decide what stays. Type it line by line, tap “funnier” where you want it, then post it or perform it: every bit comes with a 5-second video, stand-up on the prompter, a sketch page and a skit. For creators and comedians. shutap.com/bits",
+    body: "Write your bit line by line. Funnier only where you ask. For creators and comedians: you write all five lines (hook, setup, two tags, button) in your own words, and Shutap keeps them word for word. Stuck on a line? Tap “funnier” for three other ways to say it, yours first; AI runs only then. The finished bit becomes a 5-second video to post, and stand-up on the prompter, a sketch page and a skit to perform. shutap.com/bits",
   },
   {
     heading: "Realtors: your listing, funnier",

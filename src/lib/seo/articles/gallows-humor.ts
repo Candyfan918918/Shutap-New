@@ -95,7 +95,7 @@ const guide: Guide = {
     },
   ],
   related: ["dark-humor", "deadpan-humor", "turn-a-bad-experience-into-comedy"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   preset: { voice: "deadpan", heat: 3 },
   techniques: [
     {

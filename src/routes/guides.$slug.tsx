@@ -159,7 +159,7 @@ function GuideExtras({ faq, sources, techniques }: { faq?: { q: string; a: strin
         <section style={{ marginBottom: 36 }}>
           <h2 style={H2}>The techniques, as Shutap uses them</h2>
           <p style={{ fontSize: 15, margin: "0 0 14px", color: "#443c42" }}>
-            Each move on this page is in the humor amplifier's technique bank: when you type what happened, one of these may be the shape your bit is built on.
+            Each move on this page is in the humor amplifier's technique bank: when you tap funnier on a line, one of these may be the shape of the options you get.
           </p>
           {techniques.map((t) => (
             <div key={t.name} style={{ marginBottom: 18 }}>

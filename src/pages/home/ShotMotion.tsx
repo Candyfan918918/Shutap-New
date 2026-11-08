@@ -16,12 +16,14 @@ type ShotEffect = Typing | Writing
 
 type ShotMotionSpec = { seconds: number; effects: ShotEffect[] }
 
-/** Bits: the hook is typed, then tag 1 is written by "funnier". */
+/** Bits (Nov 8 2026, the new /bits first screen): the writer types the hook
+ *  (two lines in the capture), then the setup, into the five-line box. */
 const BITS: ShotMotionSpec = {
   seconds: 10,
   effects: [
-    { kind: 'type', box: { left: 5.14, top: 19.1, width: 53.8, height: 4.8 }, chars: 48, from: 4, to: 30 },
-    { kind: 'write', box: { left: 5.14, top: 60.6, width: 56.6, height: 4.8 }, until: 52, label: '✦ funnier: writing three ways' },
+    { kind: 'type', box: { left: 5.24, top: 50.4, width: 24.64, height: 3.6 }, chars: 36, from: 4, to: 24, then: true },
+    { kind: 'type', box: { left: 5.24, top: 53.77, width: 8.52, height: 3.6 }, chars: 12, from: 25, to: 32 },
+    { kind: 'type', box: { left: 5.24, top: 68.64, width: 27.16, height: 3.6 }, chars: 42, from: 36, to: 58 },
   ],
 }
 

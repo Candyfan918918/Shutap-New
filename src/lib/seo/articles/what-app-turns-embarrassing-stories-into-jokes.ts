@@ -28,7 +28,7 @@ const guide: Guide = {
     },
     {
       heading: "How it works in Shutap",
-      body: "Type what happened. Choose an audience (social, live, office, work, family or school), a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes, and how wild, from 1 for true to your story to 5 for goes wild. Shutap reads the story for what's odd about it first, then writes the bit. From there you steer it: hotter, tighter, storytelling, or swap in a crowd-work angle you like better. When it's close, run it as stand-up to film to camera, open the skit to shoot it alone, or lay it out as a screenplay page.",
+      body: "You write it, in the shape of a bit: a hook (the first two seconds), a setup (the one fact the hook left out), two tags and a button, each in your own words. Stuck on a line? Tap funnier on it and Shutap offers three other ways to say it, built from your other lines, with yours first; nothing changes until you pick. When all five lines are yours, the bit comes back as a 5-second video to post, stand-up on the teleprompter to film to camera, a skit to shoot alone, or a screenplay page.",
     },
     {
       heading: "Embarrassing doesn't mean the joke is on you",
@@ -80,7 +80,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-shutap-is-built", "turn-a-bad-experience-into-comedy", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-10-29",
 };
 

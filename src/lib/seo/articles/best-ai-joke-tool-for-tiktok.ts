@@ -83,7 +83,7 @@ const guide: Guide = {
     { label: "ClickUp, AI prompts for funny TikTok captions, fetched Oct 2026", url: "https://clickup.com/p/ai-prompts/writing-funny-tiktok-captions" },
   ],
   related: ["ai-comedy-writing-tools", "how-to-get-more-views-on-tiktok", "funny-captions"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-10-26",
 };
 

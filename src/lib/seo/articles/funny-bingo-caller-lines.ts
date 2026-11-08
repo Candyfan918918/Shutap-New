@@ -52,7 +52,7 @@ const guide: Guide = {
     },
     {
       heading: "Write next week's lines tonight",
-      body: "The best bingo lines come from the night itself: the table that wore matching hats, the prize nobody wanted, the number that came up three games in a row. Keep a note on your phone and write them down before you pack up. They become next week's openers, and they work because the regulars were there. If you want help sharpening one, type what happened into Shutap, the humor amplifier, set the audience to live and the voice to dry, and ask for a tighter version. It hands back options built from your story. You pick the one that sounds like you, cut it to five seconds, and say it your way, because the room came to hear its caller.",
+      body: "The best bingo lines come from the night itself: the table that wore matching hats, the prize nobody wanted, the number that came up three games in a row. Keep a note on your phone and write them down before you pack up. They become next week's openers, and they work because the regulars were there. If you want help sharpening one, write it into Shutap, the humor amplifier, set the audience to live and the voice to dry, and tap funnier on the line. It hands back three other ways to say it, built from your words. You pick the one that sounds like you, cut it to five seconds, and say it your way, because the room came to hear its caller.",
     },
   ],
   techniques: [
@@ -126,7 +126,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-trivia-host-banter", "funny-icebreakers-for-training-sessions", "sense-of-humor"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-11-06",
 };
 

@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Write a fresh opener from today's room",
-      body: "Stock icebreakers work. A line about this room, this week, works better. Before the session, jot one true detail: the projector that needs a specific cable, the course title that's eleven words long, the fact that the session got rescheduled three times. Turn that into your opener. \"This session has been rescheduled three times, so if you're here, you're the survivors.\" If you want options to push against, type what happened into Shutap, the humor amplifier, set the audience to work, the voice to dry and the wild setting low, then ask for a tighter version. It amplifies your own detail into a few lines. You pick one, cut it to a sentence and say it your way.",
+      body: "Stock icebreakers work. A line about this room, this week, works better. Before the session, jot one true detail: the projector that needs a specific cable, the course title that's eleven words long, the fact that the session got rescheduled three times. Turn that into your opener. \"This session has been rescheduled three times, so if you're here, you're the survivors.\" If you want options to push against, write your opener into Shutap, the humor amplifier, set the audience to work and the voice to dry, then tap funnier on it. It offers three other ways to say your own detail. You pick one, cut it to a sentence and say it your way.",
     },
   ],
   techniques: [
@@ -122,7 +122,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-trivia-host-banter", "how-to-tell-a-funny-story", "funny-presentations-and-slides"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-11-04",
 };
 

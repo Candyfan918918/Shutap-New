@@ -8,10 +8,10 @@ const guide: Guide = {
   title: "Shutap vs ChatGPT for Stand-Up Bits: Which to Use | Shutap",
   h1: "Shutap vs ChatGPT for stand-up bits",
   description:
-    "ChatGPT is a flexible brainstorming partner. Shutap drafts a stand-up bit from your own story. What each does well, where each goes flat, and when to use which.",
+    "ChatGPT is a flexible brainstorming partner. Shutap helps you write your own stand-up bit, line by line, with funnier on the line you're stuck on. What each does well and when to use which.",
   capsule:
-    "For stand-up bits, ChatGPT is the better open-ended brainstorming partner and Shutap is the better starting draft: ChatGPT will riff on any premise you give it, while Shutap starts from a story from your own life and returns a whole bit with a hook, setup, tags and a button, timed for the stage. Either way, the jokes you perform are the ones you rewrite.",
-  blurb: "A general chatbot versus a tool that starts from your story. What each is good for on the way to an open mic.",
+    "For stand-up bits, ChatGPT is the better open-ended brainstorming partner and Shutap is the better place to write the bit yourself: ChatGPT will riff on any premise you give it, while Shutap gives you the shape of a bit (hook, setup, two tags, button) to write in your own words and offers other ways to say a line only when you tap funnier.",
+  blurb: "A general chatbot versus a tool where you write the bit and get help only where you ask.",
   preset: { audience: "live", voice: "deadpan", length: "2m", heat: 3 },
   sections: [
     {
@@ -36,7 +36,7 @@ const guide: Guide = {
     },
     {
       heading: "What Shutap does differently",
-      body: "Shutap builds those steps in so you don't have to prompt for them. It reads your story for observations first, writes the bit from those, drops lines that would fit anyone's story, blocks advice and jokes aimed at you, and has a second model rank the drafts so the writer isn't grading itself. You set the audience (live, for a club), a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and a heat from 1 to 5. Then you steer it: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own version from the lines you liked. It's a draft to push against. You still cut, rewrite and decide what goes on stage.",
+      body: "Shutap gives you the shape instead of a prompt: five lines to write in your own words, a hook, a setup, two tags and a button. When a line isn't landing, tap funnier and it offers three other ways to say it, built from your other lines, with lines that would fit anyone's story and jokes aimed at you dropped. You set the audience (live, for a club) and a voice (deadpan, storyteller, roast or dry). Yours always stays the first choice, and you decide what goes on stage. Then rehearse it on the teleprompter.",
     },
     {
       heading: "Rehearsing the bit, not just reading it",
@@ -77,7 +77,7 @@ const guide: Guide = {
     { label: "OpenAI, ChatGPT plans and pricing, fetched Oct 2026", url: "https://openai.com/chatgpt/pricing/" },
   ],
   related: ["shutap-vs-chatgpt-for-jokes", "stand-up-comedy", "open-mic-night"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-10-26",
 };
 
