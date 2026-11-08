@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { PACIFIC_TZ, pacificDay, pacificMidnight, shiftDay } from './pacific-day'
 import { PAYWALL_EVENTS, aggregatePaywall, type PaywallEventRow, type PaywallReport } from './paywall-report'
+import { PRODUCT_LINE_EVENTS, aggregateProductLines, type KitDownloadRow, type KitRow, type PlEventRow, type RealtorsDay, type ToastRow, type ToastsDay } from './product-lines-report'
 
 const TZ = PACIFIC_TZ
 const DAY = 24 * 3600 * 1000
@@ -44,6 +45,10 @@ export interface TopMaker {
   email: string | null
   bits_day: number
   bits_total: number
+  kits_day: number
+  kits_total: number
+  toasts_day: number
+  toasts_total: number
 }
 
 export interface DailyReport {
@@ -62,6 +67,8 @@ export interface DailyReport {
   hidden: { admins: number; no_email: number }
   /** sign-in prompt → paywall → plan → checkout → paid, unique people */
   paywall: PaywallReport
+  realtors: RealtorsDay
+  toasts: ToastsDay
 }
 
 export const adminDailyReport = createServerFn({ method: 'POST' })
@@ -85,7 +92,7 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
     type Bit = { id: string; user_id: string | null; created_at: string }
     type Visit = { user_id: string | null; session_id: string | null; started_at: string }
 
-    const [profiles, roles, noEmail, bits, rewritesDay, visitsDay, paywallRows] = await Promise.all([
+    const [profiles, roles, noEmail, bits, rewritesDay, visitsDay, paywallRows, kits, toasts, kitDownloads, plEvents] = await Promise.all([
       fetchAll<Profile>((f, t) => db.from('profiles')
         .select('user_id, email, full_name, first_name, last_name, signup_at')
         .eq('is_anonymous', false).not('email', 'is', null).neq('email', '').order('user_id').range(f, t)),
@@ -98,6 +105,12 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
         .gte('started_at', iso(start)).lt('started_at', iso(end)).order('started_at').range(f, t)),
       fetchAll<PaywallEventRow>((f, t) => db.from('events').select('name, user_id, session_id, properties')
         .in('name', [...PAYWALL_EVENTS]).gte('ts', iso(start)).lt('ts', iso(end)).order('ts').range(f, t)),
+      fetchAll<KitRow>((f, t) => db.from('kits').select('user_id, created_at, paid').lt('created_at', iso(end)).order('created_at').range(f, t)),
+      fetchAll<ToastRow>((f, t) => db.from('toasts').select('user_id, created_at, paid, locked_at, occasion').lt('created_at', iso(end)).order('created_at').range(f, t)),
+      fetchAll<KitDownloadRow>((f, t) => db.from('kit_downloads').select('user_id, created_at')
+        .gte('created_at', iso(start)).lt('created_at', iso(end)).order('created_at').range(f, t)),
+      fetchAll<PlEventRow>((f, t) => db.from('events').select('name, user_id, session_id, properties')
+        .in('name', [...PRODUCT_LINE_EVENTS]).gte('ts', iso(start)).lt('ts', iso(end)).order('ts').range(f, t)),
     ])
 
     const admins = new Set(roles.map((r) => r.user_id))
@@ -145,6 +158,8 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
       if (t >= start) activeDay.add(uid)
     }
     for (const b of bits) touch(b.user_id, b.created_at)
+    for (const k of kits) touch(k.user_id, k.created_at)
+    for (const t of toasts) touch(t.user_id, t.created_at)
     for (const e of evRows) touch(e.user_id, e.ts)
     for (const v of visitRows) touch(v.user_id, v.started_at)
     for (const r of rewritesDay) {
@@ -172,18 +187,40 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
         if (today) guestDay++
       }
     }
-    const topMakers: TopMaker[] = [...perUser.entries()]
-      .map(([uid, c]) => {
+    // Kits and toasts per person, so "most made" covers every product line.
+    const tally = (rows: Array<{ user_id: string; created_at: string }>) => {
+      const m = new Map<string, { day: number; total: number }>()
+      for (const r of rows) {
+        if (!isPerson(r.user_id)) continue
+        const cur = m.get(r.user_id) ?? { day: 0, total: 0 }
+        cur.total++
+        if (inDay(r.created_at)) cur.day++
+        m.set(r.user_id, cur)
+      }
+      return m
+    }
+    const kitsPer = tally(kits)
+    const toastsPer = tally(toasts)
+    const makerIds = new Set([...perUser.keys(), ...kitsPer.keys(), ...toastsPer.keys()])
+    const topMakers: TopMaker[] = [...makerIds]
+      .map((uid) => {
         const p = personById.get(uid)!
+        const b = perUser.get(uid), k = kitsPer.get(uid), t = toastsPer.get(uid)
         return {
           user_id: uid,
           name: p.full_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || null,
           email: p.email,
-          bits_day: c.day,
-          bits_total: c.total,
+          bits_day: b?.day ?? 0,
+          bits_total: b?.total ?? 0,
+          kits_day: k?.day ?? 0,
+          kits_total: k?.total ?? 0,
+          toasts_day: t?.day ?? 0,
+          toasts_total: t?.total ?? 0,
         }
       })
-      .sort((a, b) => b.bits_day - a.bits_day || b.bits_total - a.bits_total)
+      .sort((a, b) =>
+        (b.bits_day + b.kits_day + b.toasts_day) - (a.bits_day + a.kits_day + a.toasts_day) ||
+        (b.bits_total + b.kits_total + b.toasts_total) - (a.bits_total + a.kits_total + a.toasts_total))
       .slice(0, 10)
 
     const unique = dayKeys.size
@@ -213,5 +250,13 @@ export const adminDailyReport = createServerFn({ method: 'POST' })
       // hidden guest id of their own, so they must not be filtered as if
       // they were accounts.
       paywall: aggregatePaywall(paywallRows, (uid) => !admins.has(uid) && !noEmailIds.has(uid)),
+      ...aggregateProductLines({
+        events: plEvents,
+        kits,
+        kitDownloads,
+        toasts,
+        inDay,
+        include: (uid) => !admins.has(uid) && !noEmailIds.has(uid),
+      }),
     }
   })

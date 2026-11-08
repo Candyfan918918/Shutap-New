@@ -45,6 +45,8 @@ export interface ProductUserRow {
   bits: number
   rewrites: number
   last_bit_at: string | null
+  kits: number
+  toasts: number
   active_days_30d: number
   runs_today: number
   runs_total: number
@@ -160,7 +162,7 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
     type Fail = { user_id: string | null; created_at: string }
     type Sub = { user_id: string; status: string; environment: string; cancel_at_period_end: boolean | null }
 
-    const [profiles, bits, versions, subs, roles, failures7, posted, fails] = await Promise.all([
+    const [profiles, bits, versions, subs, roles, failures7, posted, fails, kitRows, toastRows] = await Promise.all([
       fetchAll<Profile>((f, t) => db.from('profiles')
         .select('user_id, email, full_name, first_name, last_name, provider, signup_at, last_login_at, login_count')
         .eq('is_anonymous', false).not('email', 'is', null).neq('email', '').order('user_id').range(f, t)),
@@ -171,6 +173,8 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
       db.from('bit_failures').select('id', { count: 'exact', head: true }).gte('created_at', iso(t7)),
       db.from('rooms').select('id', { count: 'exact', head: true }).not('bit_version_id', 'is', null).eq('hidden', false),
       fetchAll<Fail>((f, t) => db.from('bit_failures').select('user_id, created_at').eq('lab', false).order('created_at').range(f, t)),
+      fetchAll<{ user_id: string; created_at: string }>((f, t) => db.from('kits').select('user_id, created_at').order('created_at').range(f, t)),
+      fetchAll<{ user_id: string; created_at: string }>((f, t) => db.from('toasts').select('user_id, created_at').order('created_at').range(f, t)),
     ])
 
     // Events and visits, all time, for signed-in accounts only (anonymous traffic is far larger and irrelevant here).
@@ -224,6 +228,8 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
     }
     for (const b of bitsCounted) touch(b.user_id, b.created_at)
     for (const v of rewritesCounted) touch(bitOwner.get(v.bit_id), v.created_at)
+    for (const k of kitRows) touch(k.user_id, k.created_at)
+    for (const t of toastRows) touch(t.user_id, t.created_at)
     for (const e of events) touch(e.user_id, e.ts)
     for (const v of visits) touch(v.user_id, v.started_at)
 
@@ -255,6 +261,9 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
     }
     for (const b of bitsCounted) { mark(anyDays, b.user_id, b.created_at); mark(madeDays, b.user_id, b.created_at) }
     for (const v of rewritesCounted) { const o = bitOwner.get(v.bit_id); mark(anyDays, o, v.created_at); mark(madeDays, o, v.created_at) }
+    // Making a realtor kit or a toast counts as making something too.
+    for (const k of kitRows) { mark(anyDays, k.user_id, k.created_at); mark(madeDays, k.user_id, k.created_at) }
+    for (const t of toastRows) { mark(anyDays, t.user_id, t.created_at); mark(madeDays, t.user_id, t.created_at) }
     for (const e of events) mark(anyDays, e.user_id, e.ts)
     for (const v of visits) mark(anyDays, v.user_id, v.started_at)
 
@@ -378,6 +387,14 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
     const bits7 = bitsCounted.filter((b) => inWin(b.created_at, t7)).length
     const failures = failures7.count ?? 0
 
+    const countBy = (rows: Array<{ user_id: string }>) => {
+      const m = new Map<string, number>()
+      for (const r of rows) m.set(r.user_id, (m.get(r.user_id) ?? 0) + 1)
+      return m
+    }
+    const kitsPerUser = countBy(kitRows)
+    const toastsPerUser = countBy(toastRows)
+
     const userRows: ProductUserRow[] = profiles
       .filter((p) => data.include_admins || !adminIds.has(p.user_id))
       .map((p) => ({
@@ -391,6 +408,8 @@ export const adminProductMetrics = createServerFn({ method: 'POST' })
         bits: bitsPerUser.get(p.user_id)?.n ?? 0,
         rewrites: rewritesPerUser.get(p.user_id) ?? 0,
         last_bit_at: bitsPerUser.get(p.user_id)?.last ?? null,
+        kits: kitsPerUser.get(p.user_id) ?? 0,
+        toasts: toastsPerUser.get(p.user_id) ?? 0,
         active_days_30d: activeDays.get(p.user_id)?.size ?? 0,
         runs_today: runsPerUser.get(p.user_id)?.today ?? 0,
         runs_total: runsPerUser.get(p.user_id)?.total ?? 0,

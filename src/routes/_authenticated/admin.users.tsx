@@ -33,7 +33,7 @@ interface Row {
   last_country: string | null
   last_city: string | null
   alias: { display_name: string; emoji: string } | null
-  stats: { bits: number; rewrites: number; plan: 'paying' | 'trialing' | 'free' }
+  stats: { bits: number; rewrites: number; kits: number; toasts: number; plan: 'paying' | 'trialing' | 'free' }
 }
 
 function fmt(d: string | null | undefined): string {
@@ -133,6 +133,8 @@ function AdminUsersPage() {
                 <Th col="city" label="city" />
                 <Th col="bits" label="bits" />
                 <Th col="rewrites" label="rewrites" />
+                <Th col="kits" label="realtor kits" />
+                <Th col="toasts" label="toasts" />
                 <Th col="plan" label="plan" />
               </tr>
             </thead>
@@ -154,6 +156,8 @@ function AdminUsersPage() {
                   <td style={td}>{r.last_city || '—'}</td>
                   <td style={td}>{r.stats.bits}</td>
                   <td style={td}>{r.stats.rewrites}</td>
+                  <td style={td}>{r.stats.kits}</td>
+                  <td style={td}>{r.stats.toasts}</td>
                   <td style={td}>{r.stats.plan}</td>
                 </tr>
               ))}
