@@ -130,7 +130,7 @@ const funniestSlugs = new Set(existsSync(FUN_DIR) ? readdirSync(FUN_DIR).filter(
 if (existingGuideSlugs.has(slug)) fail(`slug "${slug}" already exists`);
 for (const r of g.related ?? []) if (!existingGuideSlugs.has(r)) fail(`related slug "${r}" is not a live guide (links must point at existing pages)`);
 if ((g.related ?? []).length < 2) fail("need ≥2 related guides for internal linking");
-const staticPaths = new Set(["/", "/guides", "/funniest", "/pricing", "/about", "/faq", "/how-it-works", "/business", "/humor-amplifier", "/trust", "/realtors"]);
+const staticPaths = new Set(["/", "/guides", "/funniest", "/pricing", "/about", "/faq", "/how-it-works", "/business", "/humor-amplifier", "/trust", "/realtors", "/bits"]);
 // Shutap Toasts (live Nov 2026): /toasts and its occasion pages (src/lib/toasts/landings.ts).
 staticPaths.add("/toasts");
 const toastSlugs = new Set(existsSync("src/lib/toasts/landings.ts") ? [...readFileSync("src/lib/toasts/landings.ts", "utf8").matchAll(/^\s{4}slug: '([a-z0-9-]+)'/gm)].map((m) => m[1]) : []);
