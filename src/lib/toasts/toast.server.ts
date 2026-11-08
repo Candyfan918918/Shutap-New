@@ -342,6 +342,19 @@ export type ToastTouchOption = { line: string; move: string }
 export type TouchTarget = { kind: 'speech'; index: number; lines: ToastLine[] } | { kind: 'story'; index: number } | { kind: 'true_thing' }
 
 /** One line's checks: never-say, the occasion's check, names, invented numbers. */
+/** Numbers a funnier option may use: the form's, plus the line being made
+ *  funnier and the lines around it (an edited line can carry its own). */
+export function touchNumbers(form: ToastForm, nearby: string): Set<string> {
+  const s = allowedNumbers(form)
+  for (const m of nearby.match(/\d[\d,.]*/g) ?? []) s.add(m.replace(/[,.]$/, '').replace(/,/g, ''))
+  return s
+}
+
+/** A funnier option for a toast line: the line rules, with the nearby numbers allowed. */
+export function touchOptionFails(text: string, form: ToastForm, nearby: string): string | null {
+  return lineFails(text, form, touchNumbers(form, nearby))[0] ?? null
+}
+
 export function checkOneLine(text: string, form: ToastForm): string | null {
   return lineFails(text, form, allowedNumbers(form))[0] ?? null
 }
@@ -369,6 +382,8 @@ export async function touchToastLine(form: ToastForm, target: TouchTarget, avoid
     LINE: current,
     AVOID: avoid.length ? `ALREADY OFFERED (write different ones):\n${avoid.map((a) => `- ${a}`).join('\n')}\n` : '',
   })
+  // a number already in the line or the lines around it is the speaker's, not invented
+  const nums = touchNumbers(form, `${current}\n${context}`)
   for (let attempt = 0; attempt < 2; attempt++) {
     const model = attempt === 0 ? bitWriterModel() : backupWriterModel()
     const res = await callAgent({ model, temperature: 1.0, maxTokens: 900, timeoutMs: BIT_BUDGET.vary(), messages: [{ role: 'user', content: prompt }], reasoningEffort: /^openai\/gpt-5/.test(model) ? 'minimal' : undefined })
@@ -377,7 +392,7 @@ export async function touchToastLine(form: ToastForm, target: TouchTarget, avoid
     const opts = (Array.isArray(raw?.options) ? raw!.options : [])
       .map((o: any) => ({ line: unquote(tidy(o?.line)), move: tidy(o?.move).slice(0, 60) }))
       .filter((o) => o.line && norm(o.line) !== norm(current) && !avoid.some((a) => norm(a) === norm(o.line)))
-      .filter((o) => !checkOneLine(o.line, form))
+      .filter((o) => !lineFails(o.line, form, nums).length)
     if (opts.length >= 2) return opts.slice(0, 3)
     console.warn('[toast-touch] too few options passed', { got: opts.length })
   }

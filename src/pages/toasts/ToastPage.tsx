@@ -197,8 +197,9 @@ function Editor({ row, names, say, onNames, onLocked }: { row: ToastRow; names: 
     track('toast_line_funnier_opened', { line: i + 1, section: lines[i]?.section })
     try {
       const r = await touchMyLine({ data: { id: row.id, index: i, lines: stored(lines), avoid } })
+      if (!r.ok) track('toast_line_funnier_failed', { line: i + 1, reason: r.reason })
       setTouch(r.ok ? { index: i, busy: false, options: r.options } : { index: i, busy: false, error: 'no new ways this time · tap funnier again' })
-    } catch { setTouch({ index: i, busy: false, error: 'could not reach Shutap · try again' }) }
+    } catch { track('toast_line_funnier_failed', { line: i + 1, reason: 'network' }); setTouch({ index: i, busy: false, error: 'could not reach Shutap · try again' }) }
   }
 
   async function lock() {

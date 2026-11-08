@@ -697,16 +697,17 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
    *  word for word; Shutap writes no line. The result lays them out as the
    *  video, stand-up, sketch and skit. A guest signs in first; the lines stay
    *  in the box and the bit is made the moment they're in. */
-  function makeLined() {
+  function makeLined(typedNow?: Draft) {
+    const draft = typedNow ?? lines
     if (embed?.mirror) {
       window.dispatchEvent(new CustomEvent(MAKE_EVENT))
       return
     }
-    const given = givenFrom(lines, null)
+    const given = givenFrom(draft, null)
     linedGiven.current = given
-    jokeTap('lined_make', tier, { written: writtenSlots(lines).length, locked: linesLocked.length })
+    jokeTap('lined_make', tier, { written: writtenSlots(draft).length, locked: linesLocked.length })
     if (tier === 'guest') return showLimit('guest')
-    void onWrite({ text: linesText(lines), lines: given })
+    void onWrite({ text: linesText(draft), lines: given })
   }
   const onPhase = embed?.onPhase
   useEffect(() => { onPhase?.(phase === 'write' ? 'write' : 'result') }, [phase, onPhase])

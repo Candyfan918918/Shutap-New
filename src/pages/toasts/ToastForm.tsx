@@ -313,10 +313,12 @@ export function ToastForm({ occasionIn, preset, prepaidSession, otherChoice, onS
       if (!r.ok) {
         if (r.reason === 'sign_in') { setTouch(null); return gate() }
         if (r.reason === 'off') { setTouch(null); return setSheet('off') }
+        track('toast_story_funnier_failed', { occasion: d.occasion, story: i < 0 ? 'true_thing' : i + 1, reason: r.reason })
         return setTouch({ index: i, busy: false, error: 'no new ways this time · tap three more' })
       }
       setTouch({ index: i, busy: false, options: r.options })
     } catch {
+      track('toast_story_funnier_failed', { occasion: d.occasion, story: i < 0 ? 'true_thing' : i + 1, reason: 'network' })
       setTouch({ index: i, busy: false, error: 'could not reach Shutap · try again' })
     }
   }
