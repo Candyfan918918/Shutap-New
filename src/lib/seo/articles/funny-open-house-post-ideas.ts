@@ -3,7 +3,7 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "funny-open-house-post-ideas",
   kind: "guide",
-  topic: "writing-jokes",
+  topic: "realtors",
   keyword: "funny open house post ideas",
   title: "Funny Open House Post Ideas, Invite to Thank-You | Shutap",
   h1: "Funny open house post ideas: how to make an open house funny, post by post",

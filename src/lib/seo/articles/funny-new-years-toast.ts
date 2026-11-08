@@ -101,7 +101,7 @@ const guide: Guide = {
     { label: "Kate Miller-Wilson, LoveToKnow (updated Nov 25, 2024), \"31 New Year's Toasts That Inspire\"", url: "https://www.lovetoknow.com/quotes-quips/holiday/new-years-toasts" },
   ],
   related: ["funny-christmas-toast", "funny-thanksgiving-toast", "funny-wedding-toast"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/" },
+  cta: { label: "Write your New Year's toast", href: "/toasts/new-years" },
   published: "2026-11-07",
 };
 

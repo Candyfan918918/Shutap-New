@@ -131,8 +131,11 @@ if (existingGuideSlugs.has(slug)) fail(`slug "${slug}" already exists`);
 for (const r of g.related ?? []) if (!existingGuideSlugs.has(r)) fail(`related slug "${r}" is not a live guide (links must point at existing pages)`);
 if ((g.related ?? []).length < 2) fail("need ≥2 related guides for internal linking");
 const staticPaths = new Set(["/", "/guides", "/funniest", "/pricing", "/about", "/faq", "/how-it-works", "/business", "/humor-amplifier", "/trust", "/realtors"]);
+// Shutap Toasts (live Nov 2026): /toasts and its occasion pages (src/lib/toasts/landings.ts).
+staticPaths.add("/toasts");
+const toastSlugs = new Set(existsSync("src/lib/toasts/landings.ts") ? [...readFileSync("src/lib/toasts/landings.ts", "utf8").matchAll(/^\s{4}slug: '([a-z0-9-]+)'/gm)].map((m) => m[1]) : []);
 const href = g.cta?.href ?? "";
-const okHref = staticPaths.has(href) || (href.startsWith("/guides/") && existingGuideSlugs.has(href.slice(8))) || (href.startsWith("/funniest/") && funniestSlugs.has(href.slice(10)));
+const okHref = staticPaths.has(href) || (href.startsWith("/toasts/") && toastSlugs.has(href.slice(8))) || (href.startsWith("/guides/") && existingGuideSlugs.has(href.slice(8))) || (href.startsWith("/funniest/") && funniestSlugs.has(href.slice(10)));
 if (!okHref) fail(`cta href "${href}" is not a known live page`);
 if (/https?:\/\/(?!\S*\bshutap\.com)/.test(allText)) fail("body text contains a raw external URL (put it in sources)");
 
