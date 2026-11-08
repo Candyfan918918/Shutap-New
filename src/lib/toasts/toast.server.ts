@@ -8,7 +8,7 @@ import { callAgent, tryParseJson } from '@/lib/agents/gateway'
 import { fill } from '@/lib/jokes/prompts.server'
 import { backupWriterModel, bitJudgeModel, bitWriterModel, BIT_BUDGET } from '@/lib/bits/pipeline.server'
 import { judgeStandard, standardBlock, standardLines } from '@/lib/bits/taste-bank'
-import { TOAST_CUT_PROMPT, TOAST_JUDGE_PROMPT, TOAST_PROMPT, TOAST_RULES, TOAST_TONES, TOAST_TOUCH_PROMPT, TOUCH_KIND_SPEECH, TOUCH_KIND_STORY } from './prompts.server'
+import { TOAST_CUT_PROMPT, TOAST_JUDGE_PROMPT, TOAST_PROMPT, TOAST_RULES, TOAST_TONES, TOAST_TOUCH_PROMPT, TOUCH_KIND_SPEECH, TOUCH_KIND_STORY, TOUCH_KIND_TRUE } from './prompts.server'
 import { OCCASION, PLACEHOLDERS, lengthWindow, toastSeconds, WPM, type CueCard, type LineSource, type Toast, type ToastForm, type ToastLine } from './shared'
 
 export type ToastCheck = { rule: string; where: string; line: string; fatal: boolean }
@@ -339,7 +339,7 @@ export async function writeToast(form: ToastForm): Promise<ToastResult | null> {
 /* ───────────────────────── "funnier" on one line ───────────────────────── */
 
 export type ToastTouchOption = { line: string; move: string }
-export type TouchTarget = { kind: 'speech'; index: number; lines: ToastLine[] } | { kind: 'story'; index: number }
+export type TouchTarget = { kind: 'speech'; index: number; lines: ToastLine[] } | { kind: 'story'; index: number } | { kind: 'true_thing' }
 
 /** One line's checks: never-say, the occasion's check, names, invented numbers. */
 export function checkOneLine(text: string, form: ToastForm): string | null {
@@ -348,10 +348,12 @@ export function checkOneLine(text: string, form: ToastForm): string | null {
 
 export async function touchToastLine(form: ToastForm, target: TouchTarget, avoid: string[] = []): Promise<ToastTouchOption[] | null> {
   const spec = OCCASION[form.occasion]
-  const current = target.kind === 'story' ? (form.stories[target.index] ?? '').trim() : (target.lines[target.index]?.text ?? '').trim()
+  const current = target.kind === 'story' ? (form.stories[target.index] ?? '').trim() : target.kind === 'true_thing' ? (form.true_thing ?? '').trim() : (target.lines[target.index]?.text ?? '').trim()
   if (!current) return null
   const context = target.kind === 'story'
     ? form.stories.map((s, i) => (i === target.index ? '' : s.trim() ? `story ${i + 1}: ${s}` : '')).filter(Boolean).join('\n') || '(no other stories)'
+    : target.kind === 'true_thing'
+    ? form.stories.map((s, i) => (s.trim() ? `story ${i + 1}: ${s}` : '')).filter(Boolean).join('\n') || '(no stories)'
     : target.lines.slice(Math.max(0, target.index - 3), target.index + 3).map((l, i) => `${i + Math.max(0, target.index - 3) === target.index ? '→ ' : ''}${l.text}`).join('\n')
   const prompt = fill(TOAST_TOUCH_PROMPT, {
     OCCASION: spec.label,
@@ -362,7 +364,7 @@ export async function touchToastLine(form: ToastForm, target: TouchTarget, avoid
     NEVER_SAY: form.never_say.length ? form.never_say.join(' · ') : '(none)',
     CHECK: checkLine(form),
     RULES: rulesFor(form),
-    KIND: target.kind === 'story' ? TOUCH_KIND_STORY : TOUCH_KIND_SPEECH,
+    KIND: target.kind === 'story' ? TOUCH_KIND_STORY : target.kind === 'true_thing' ? TOUCH_KIND_TRUE : TOUCH_KIND_SPEECH,
     CONTEXT: context.slice(0, 1500),
     LINE: current,
     AVOID: avoid.length ? `ALREADY OFFERED (write different ones):\n${avoid.map((a) => `- ${a}`).join('\n')}\n` : '',

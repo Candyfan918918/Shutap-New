@@ -84,7 +84,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-tell-a-funny-story", "rule-of-three", "funny-graduation-speech"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your Toastmasters speech from your stories", href: "/toasts/any-occasion" },
   techniques: [
     {
       name: "Two people, forty minutes",
