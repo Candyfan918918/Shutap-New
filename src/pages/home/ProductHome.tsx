@@ -193,7 +193,6 @@ export function ProductHome() {
             <b>New</b>Shutap Toasts, for weddings and the holidays <Icon name="arrow" size={14} color="#b8456b" />
           </Link>
           <h1 className="ph-h1">Say it <em>funnier.</em></h1>
-          <p className="ph-lede">The humor amplifier for creators, agents, speakers and teams. Your words, only sharper.</p>
           <a href={startHref} className="ph-btn primary" onClick={() => tap('home_cta', { cta: signedIn ? 'pick_product' : 'get_started', where: 'hero' })}>
             {startLabel}
           </a>
