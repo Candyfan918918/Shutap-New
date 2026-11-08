@@ -22,7 +22,7 @@ import { KIT_CAPS, TOAST_CAPS } from './entitlements'
  *  behind the lookup key kit_once. Bought before it's written (past the
  *  plan's kits) or after (to take the mark off a free kit); never counted,
  *  never marked. */
-export const KIT_ONCE = { priceId: 'kit_once', amount: 12.99, name: 'Shutap for Realtors · one kit', description: 'One listing kit: the walkthrough, voiceover, hooks, open-house kit, posts and straight copy, in one tone. Yours to copy and download without limits or marks, forever.' } as const
+export const KIT_ONCE = { priceId: 'kit_once', amount: 12.99, name: 'Shutap for Realtors · one kit', description: 'One listing kit: the walkthrough, voiceover, hooks, open-house kit, posts and MLS copy, in one tone. Yours to copy and download without limits or marks, forever.' } as const
 
 /** One toast, bought on its own (Nov 6 2026): its own one-time Stripe price
  *  behind the lookup key toast_once (Candy: not kit_once), created on first

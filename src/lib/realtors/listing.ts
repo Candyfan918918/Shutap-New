@@ -64,7 +64,7 @@ export const OUTPUT_LABEL: Record<Output, string> = {
   hooks: 'hooks',
   open_house: 'open-house kit',
   posts: 'posts',
-  straight: 'straight copy',
+  straight: 'MLS copy',
 }
 
 export type Shot = { where: string; action: string; line: string; seconds: string; fact?: string }
