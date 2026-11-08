@@ -21,7 +21,7 @@ const SECTIONS = [
   },
   {
     heading: "Realtors: your listing, funnier",
-    body: "Every listing, introduced in your style. Introduce every listing your way, in one of four tones: professional, funny, luxury or young. Promoting a property gets easy, and fun enough that people want to watch. Paste the listing link, pick your tone, and get the walkthrough to shoot, the voiceover, the hooks, the open-house kit, the posts and the straight MLS copy. Fair-housing checked, nothing made up. Shoot it with the prompter on your phone. shutap.com/realtors",
+    body: "Paste a listing. Get a video script and every post to go with it. To film: the walkthrough, the voiceover and the hooks. To post: the open-house kit, social posts and the MLS copy. Pick one of four tones (professional, funny, luxury or young) and the kit is written in about 30 seconds. Fair-housing checked, nothing made up. Shoot it with the teleprompter on your phone. shutap.com/realtors",
   },
   {
     heading: "Toasts: your toast, funnier",

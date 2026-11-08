@@ -238,7 +238,7 @@ export function FunniestPage({
         )}
 
         <TryItBox page={`funniest/${entry.slug}`} heading={toasts ? `Try these techniques in your ${toasts.occasionLabel}` : realtor ? 'Try these techniques on your listing' : 'Try these techniques on your own story'} anchor realtor={realtor} toast={!!toasts} />
-        <WriterBar page={`funniest/${entry.slug}`} label={toasts ? 'Your stories. Your toast, funnier.' : realtor ? 'Paste the listing. Get the kit.' : FUNNIEST_WRITER.heading} realtor={realtor} toast={!!toasts} />
+        <WriterBar page={`funniest/${entry.slug}`} label={toasts ? 'Your stories. Your toast, funnier.' : realtor ? 'Paste a listing. Get the video script and posts.' : FUNNIEST_WRITER.heading} realtor={realtor} toast={!!toasts} />
 
         <section style={{ marginBottom: 32 }}>
           <h2 style={{ ...h2Style, fontSize: 18 }}>Sources</h2>

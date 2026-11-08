@@ -257,7 +257,7 @@ export function ContentPage({
         )}
 
         {tryIt && !hero && <TryItBox page={tryIt} preset={preset} anchor heading={realtor ? "Paste your listing above" : (writer?.heading ?? "Write yours above")} realtor={realtor} />}
-        {tryIt && <WriterBar page={tryIt} label={realtor ? "Paste the listing. Get the kit." : (writer?.heading ?? "Try it on what you want to say.")} realtor={realtor} />}
+        {tryIt && <WriterBar page={tryIt} label={realtor ? "Paste a listing. Get the video script and posts." : (writer?.heading ?? "Try it on what you want to say.")} realtor={realtor} />}
 
         <p style={{ marginTop: hero ? 24 : 40, fontSize: 15 }}>
           <Link

@@ -34,13 +34,12 @@ const TOASTS: ShotMotionSpec = {
   ],
 }
 
-/** Realtors: the walkthrough is written shot by shot. */
+/** Realtors (Nov 8 2026, the new /realtors first screen): the listing link
+ *  is typed into the paste box beside the real sample kit. */
 const REALTORS: ShotMotionSpec = {
-  seconds: 8,
+  seconds: 7,
   effects: [
-    { kind: 'write', box: { left: 2.24, top: 49.66, width: 95.05, height: 19.86 }, until: 26, label: '✦ writing the walkthrough from the listing' },
-    { kind: 'write', box: { left: 2.24, top: 69.52, width: 95.05, height: 19.86 }, until: 36 },
-    { kind: 'write', box: { left: 2.24, top: 89.38, width: 95.05, height: 10.62 }, until: 46 },
+    { kind: 'type', box: { left: 7.83, top: 70.9, width: 20.8, height: 5.04 }, chars: 25, from: 8, to: 45 },
   ],
 }
 

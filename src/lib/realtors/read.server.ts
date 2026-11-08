@@ -1,8 +1,9 @@
 // Reading a listing (Nov 5 2026). Server only. Three routes behind one box:
 //   1. a brokerage or IDX page: schema.org JSON-LD and Open Graph tags carry
 //      address, price, beds, baths, sqft, the description and photo captions
-//   2. Zillow / Redfin / Realtor.com: these refuse automated fetches most of
-//      the time; the fetch is tried once and the fallback is "paste the text"
+//   2. Zillow / Redfin / Realtor.com: read the same way (Nov 8 2026: Zillow
+//      links read fine in practice, see the listings table); if one of these
+//      ever refuses the fetch, the fallback is "paste the text"
 //   3. pasted text (an MLS sheet, the page copied): facts are pulled by regex
 // Nothing is invented: a field we can't read stays null.
 import type { Listing } from './listing'
