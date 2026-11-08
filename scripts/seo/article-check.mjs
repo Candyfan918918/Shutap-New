@@ -130,13 +130,35 @@ const funniestSlugs = new Set(existsSync(FUN_DIR) ? readdirSync(FUN_DIR).filter(
 if (existingGuideSlugs.has(slug)) fail(`slug "${slug}" already exists`);
 for (const r of g.related ?? []) if (!existingGuideSlugs.has(r)) fail(`related slug "${r}" is not a live guide (links must point at existing pages)`);
 if ((g.related ?? []).length < 2) fail("need ≥2 related guides for internal linking");
-const staticPaths = new Set(["/", "/guides", "/funniest", "/pricing", "/about", "/faq", "/how-it-works", "/business", "/humor-amplifier", "/trust", "/realtors"]);
+const staticPaths = new Set(["/", "/guides", "/funniest", "/pricing", "/about", "/faq", "/how-it-works", "/business", "/humor-amplifier", "/trust", "/realtors", "/bits"]);
 // Shutap Toasts (live Nov 2026): /toasts and its occasion pages (src/lib/toasts/landings.ts).
 staticPaths.add("/toasts");
 const toastSlugs = new Set(existsSync("src/lib/toasts/landings.ts") ? [...readFileSync("src/lib/toasts/landings.ts", "utf8").matchAll(/^\s{4}slug: '([a-z0-9-]+)'/gm)].map((m) => m[1]) : []);
 const href = g.cta?.href ?? "";
 const okHref = staticPaths.has(href) || (href.startsWith("/toasts/") && toastSlugs.has(href.slice(8))) || (href.startsWith("/guides/") && existingGuideSlugs.has(href.slice(8))) || (href.startsWith("/funniest/") && funniestSlugs.has(href.slice(10)));
 if (!okHref) fail(`cta href "${href}" is not a known live page`);
+// Toasts has a page per occasion (Nov 8 2026): a guide about one occasion points
+// at that page, and any other toast or speech guide points into /toasts.
+const occText = `${slug.replace(/-/g, " ")} ${g.keyword ?? ""}`.toLowerCase();
+const OCCASION_PAGE = [
+  [/best[ -]man|groomsm/, "best-man"],
+  [/maid[ -]of[ -]honou?r|bridesmaid/, "maid-of-honor"],
+  [/thanksgiving/, "thanksgiving"],
+  [/holiday[ -]party|office[ -]party|end[ -]of[ -]year/, "office-holiday-party"],
+  [/christmas|xmas/, "christmas"],
+  [/chinese|lunar/, null],
+  [/new[ -]years?/, "new-years"],
+  [/mother[ -]of[ -]the[ -](bride|groom)/, "mother-of-the-bride"],
+  [/father[ -]of[ -]the[ -](bride|groom)/, "father-of-the-bride"],
+  [/retirement/, "retirement"],
+  [/birthday/, "birthday"],
+];
+const occ = OCCASION_PAGE.find(([re]) => re.test(occText));
+if (occ && occ[1] && toastSlugs.has(occ[1]) && href !== `/toasts/${occ[1]}`) {
+  fail(`cta href must be the occasion page /toasts/${occ[1]} (got "${href}")`);
+} else if (g.topic === "toasts-and-speeches" && /\b(toasts?|speech(es)?)\b/.test(occText) && !href.startsWith("/toasts")) {
+  fail(`a toast or speech guide's cta must point into /toasts (an occasion page, /toasts/any-occasion, or /toasts for weddings in general); got "${href}"`);
+}
 if (/https?:\/\/(?!\S*\bshutap\.com)/.test(allText)) fail("body text contains a raw external URL (put it in sources)");
 
 // ---------- no duplicate topics (cannibalization) ----------

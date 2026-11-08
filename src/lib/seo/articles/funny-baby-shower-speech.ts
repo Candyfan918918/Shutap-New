@@ -65,7 +65,7 @@ const guide: Guide = {
     { label: "Kate Miller-Wilson, LoveToKnow (updated Feb 8, 2024), \"Baby shower speech\"", url: "https://www.lovetoknow.com/celebrations/parties/baby-shower-speech" },
   ],
   related: ["funny-wedding-toast", "best-ai-for-wedding-toast-jokes", "funny-captions"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your baby shower toast from your stories", href: "/toasts/any-occasion" },
   published: "2026-10-27",
 };
 
