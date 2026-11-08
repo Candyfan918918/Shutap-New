@@ -1,4 +1,5 @@
-import { describe, expect, test } from 'bun:test'
+import { describe, test } from 'node:test'
+import assert from 'node:assert/strict'
 import { LANDINGS, OCCASION_PAGES, landingFor } from './landings'
 import { OCCASION, OCCASIONS } from './shared'
 import { productFor } from '../seo/product-for'
@@ -7,38 +8,38 @@ const BANNED = /\b(generator|safe space|community|therapy|support|positive|silve
 
 describe('toast occasion pages (Nov 8 2026)', () => {
   test('ten occasion pages plus any occasion, unique slugs, real occasions', () => {
-    expect(OCCASION_PAGES.length).toBe(10)
-    expect(new Set(LANDINGS.map((l) => l.slug)).size).toBe(LANDINGS.length)
-    for (const l of LANDINGS) expect(OCCASIONS).toContain(l.occasion)
+    assert.equal(OCCASION_PAGES.length, 10)
+    assert.equal(new Set(LANDINGS.map((l) => l.slug)).size, LANDINGS.length)
+    for (const l of LANDINGS) assert.ok((OCCASIONS as readonly string[]).includes(l.occasion))
   })
   test('no banned words, no old prices, no "names are removed"', () => {
     for (const l of LANDINGS) {
       const text = JSON.stringify(l)
-      expect(text).not.toMatch(BANNED)
-      expect(text).not.toMatch(/\$1\.99|\$7\.99|names are removed/i)
+      assert.doesNotMatch(text, BANNED)
+      assert.doesNotMatch(text, /\$1\.99|\$7\.99|names are removed/i)
     }
   })
   test('length answers match what the form offers', () => {
-    expect(OCCASION.christmas.lengths).toEqual([60, 120])
-    expect(LANDINGS.find((l) => l.slug === 'christmas')!.hub.lengths).toBe('1 or 2 min')
-    expect(LANDINGS.find((l) => l.slug === 'office-holiday-party')!.hub.lengths).toBe('60s, 90s or 2 min')
+    assert.deepEqual(OCCASION.christmas.lengths, [60, 120])
+    assert.equal(LANDINGS.find((l) => l.slug === 'christmas')!.hub.lengths, '1 or 2 min')
+    assert.equal(LANDINGS.find((l) => l.slug === 'office-holiday-party')!.hub.lengths, '60s, 90s or 2 min')
   })
   test('every occasion has a page to land on', () => {
-    for (const o of OCCASIONS) expect(landingFor(o).slug).toBeTruthy()
-    expect(landingFor('parent', 'mom').slug).toBe('mother-of-the-bride')
-    expect(landingFor('parent', 'dad').slug).toBe('father-of-the-bride')
-    expect(landingFor('toastmasters').slug).toBe('any-occasion')
+    for (const o of OCCASIONS) assert.ok(landingFor(o).slug)
+    assert.equal(landingFor('parent', 'mom').slug, 'mother-of-the-bride')
+    assert.equal(landingFor('parent', 'dad').slug, 'father-of-the-bride')
+    assert.equal(landingFor('toastmasters').slug, 'any-occasion')
   })
   test('SEO pages point to the exact occasion page', () => {
     const to = (slug: string, category = '') => { const p = productFor({ slug, category, product: 'toasts' }); return p.kind === 'toasts' ? p.href : p.kind }
-    expect(to('best-man-speech')).toBe('/toasts/best-man')
-    expect(to('funny-christmas-toast')).toBe('/toasts/christmas')
-    expect(to('father-of-the-bride-speech')).toBe('/toasts/father-of-the-bride')
-    expect(to('mother-of-the-bride-speech')).toBe('/toasts/mother-of-the-bride')
-    expect(to('retirement-speech')).toBe('/toasts/retirement')
-    expect(to('birthday-toast')).toBe('/toasts/birthday')
-    expect(to('office-holiday-party-toast')).toBe('/toasts/office-holiday-party')
-    expect(to('thanksgiving-toast')).toBe('/toasts/thanksgiving')
-    expect(to('new-years-toast')).toBe('/toasts/new-years')
+    assert.equal(to('best-man-speech'), '/toasts/best-man')
+    assert.equal(to('funny-christmas-toast'), '/toasts/christmas')
+    assert.equal(to('father-of-the-bride-speech'), '/toasts/father-of-the-bride')
+    assert.equal(to('mother-of-the-bride-speech'), '/toasts/mother-of-the-bride')
+    assert.equal(to('retirement-speech'), '/toasts/retirement')
+    assert.equal(to('birthday-toast'), '/toasts/birthday')
+    assert.equal(to('office-holiday-party-toast'), '/toasts/office-holiday-party')
+    assert.equal(to('thanksgiving-toast'), '/toasts/thanksgiving')
+    assert.equal(to('new-years-toast'), '/toasts/new-years')
   })
 })

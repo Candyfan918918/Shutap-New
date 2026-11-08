@@ -248,32 +248,42 @@ export function ToastForm({ occasionIn, preset, prepaidSession, otherChoice, onS
     return () => window.removeEventListener(TOAST_STORY_EVENT, on)
   }, [])
 
-  // back from sign-in or from buying a toast: write it now, on this page
-  const autoWrite = useRef(false)
+  // back from sign-in or from buying a toast: write it now, on this page.
+  // Nov 8 2026: this was a ref, so the $12.99 confirm (which resolves after
+  // the page has settled) set it without a re-render and the toast was never
+  // written. It is state now, so the write runs the moment it is set.
+  const [pendingWrite, setPendingWrite] = useState(false)
   useEffect(() => {
     if (!ready || !userId) return
     let flagged = false
     try { flagged = sessionStorage.getItem(AUTOWRITE_KEY) === '1' || localStorage.getItem(AUTOWRITE_KEY) === '1'; sessionStorage.removeItem(AUTOWRITE_KEY); localStorage.removeItem(AUTOWRITE_KEY) } catch { /* noop */ }
-    if (flagged) { autoWrite.current = true; track('toast_autowrite_after_signin', {}) }
+    if (flagged) { setPendingWrite(true); track('toast_autowrite_after_signin', {}) }
     if (!prepaidSession) return
     confirmToastPrepay({ data: { sessionId: prepaidSession, environment: getStripeEnvironment() } })
       .then((r) => {
         if (!r.paid) return say('payment not confirmed yet · if you were charged, your toast is saved for your next write')
         track('toast_prepaid_seen', {})
-        autoWrite.current = true
+        setPendingWrite(true)
       })
-      .catch(() => {})
+      .catch(() => say('could not confirm the payment · if you were charged, your toast is saved for your next write'))
       .finally(() => { void navigate({ to: here() as never, search: {} as never, replace: true }) })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, userId, prepaidSession])
   const complete = loaded && !missing(d, 1) && !missing(d, 2) && !missing(d, 3)
   useEffect(() => {
-    if (!autoWrite.current || !loaded || writing || !complete || !userId) return
-    autoWrite.current = false
+    if (!pendingWrite || !loaded || writing || !userId) return
+    setPendingWrite(false)
+    if (!complete) {
+      // paid or signed in, but the form isn't finished: the toast waits for them
+      const s = [1, 2, 3].find((n) => missing(d, n)) ?? 1
+      setStep(s)
+      say('Your toast is ready to write. Finish this step and tap write.')
+      return
+    }
     setStep(4)
     void write()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaded, complete, userId, usage])
+  }, [pendingWrite, loaded, complete, userId, writing])
 
   useEffect(() => { onStep?.(step) }, [step, onStep])
 
