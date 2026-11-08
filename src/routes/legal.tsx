@@ -14,7 +14,7 @@ const ITEMS: Item[] = [
   {
     href: "/how-it-works",
     label: "How it works",
-    sub: "type what happened, get the bit: stand-up, sketch, skit. what\u2019s free and what Basic and Pro add.",
+    sub: "write your bit, funnier only where you ask: stand-up, sketch, skit. what\u2019s free and what Basic and Pro add.",
   },
   {
     href: "/faq",
@@ -54,7 +54,7 @@ const ITEMS: Item[] = [
   {
     href: "/ai-disclosure",
     label: "AI disclosure",
-    sub: "what writes your jokes, our in-house joke dataset, and what we never do with your content.",
+    sub: "where Shutap uses AI, our in-house joke dataset, and what we never do with your content.",
   },
   {
     href: "/disclaimer",

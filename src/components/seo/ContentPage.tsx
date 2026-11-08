@@ -126,7 +126,7 @@ export function ContentPage({
         {tryIt && realtor && <RealtorEmbed page={tryIt} />}
         {tryIt && !realtor && (
           <div style={{ margin: hero ? "0 0 32px" : "0 0 44px" }}>
-            <BitSurface embed={{ page: tryIt, preset, bare: !!hero, ...(writer ?? { heading: "Try it on what you want to say.", sub: "A post, a speech, a toast, a sketch, a presentation. Get the bit and the video. Right here, free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
+            <BitSurface embed={{ page: tryIt, preset, bare: !!hero, ...(writer ?? { heading: "Try it on what you want to say.", sub: "Write it line by line, in your words. Tap funnier on any line you’re stuck on. Get the video, stand-up, sketch and skit. Free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
           </div>
         )}
 
@@ -288,7 +288,7 @@ function SampleBit({ sample }: { sample: GuideSample }) {
     <section aria-label="A sample bit" style={{ margin: '0 0 44px', padding: '22px 24px', borderRadius: 18, background: '#ffffff', border: '1px solid rgba(11,8,15,.10)' }}>
       <h2 style={{ margin: '0 0 6px', fontSize: 20, fontWeight: 700, color: '#17131a' }}>A sample bit</h2>
       <p style={{ margin: '0 0 18px', fontSize: 15, color: '#443c42' }}>
-        Written by Shutap on {sample.made} from this story: “{sample.story}”
+        Made on Shutap on {sample.made} from this story: “{sample.story}”
       </p>
       <p style={label}>hook</p>
       <p style={line}>{sample.hook}</p>

@@ -100,7 +100,7 @@ function TopicRoute() {
           items: list.map((g) => ({ href: guidePath(g.slug), label: g.h1, blurb: g.blurb })),
         },
       ]}
-      cta={{ label: "Type what happened. Say it funnier.", href: "/" }}
+      cta={{ label: "Write your bit. Funnier only where you ask.", href: "/" }}
       others={[
         ...otherTopics.map((x) => ({ href: topicPath(x.id), label: x.label })),
         { href: "/guides", label: "All guides" },

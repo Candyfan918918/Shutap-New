@@ -7,7 +7,7 @@ import { SITE_URL } from '@/lib/site'
 const URL = `${SITE_URL}/ai-disclosure`
 const TITLE = "AI Disclosure — How Shutap Uses AI | Shutap Humor Amplifier Lab"
 const DESCRIPTION =
-  "Shutap drafts with AI (Google Gemini and OpenAI models, through the Lovable AI Gateway), working from your material and its own in-house jokes and techniques. Nobody at Shutap reads what you make, and none of it is used to train AI. AI can be wrong; you decide what to use."
+  "Shutap uses AI (Google Gemini and OpenAI models, through the Lovable AI Gateway): on Bits only when you tap funnier on a line; for realtor kits and toasts, to draft from your material. Nobody at Shutap reads what you make, and none of it is used to train AI. AI can be wrong; you decide what to use."
 
 export const Route = createFileRoute('/ai-disclosure')({
   head: () => ({
@@ -89,8 +89,9 @@ function AiDisclosurePage() {
             color: '#e4dfe2',
           }}
         >
-          you bring the material: what happened, your listing, your stories about the person.
-          shutap drafts with ai from that and from its own in-house jokes and techniques. nobody at
+          you bring the material: your bit, your listing, your stories about the person. on a bit,
+          ai only suggests when you tap funnier; realtor kits and toasts are drafted with ai from
+          what you give, and you edit them. nobody at
           shutap reads what you make, and none of it is ever used to train anything. ai can get
           things wrong, miss the joke or say something offensive. it&rsquo;s not therapy or advice.
           you decide what to use.
@@ -99,11 +100,11 @@ function AiDisclosurePage() {
       <WhoDoesWhat />
       <h3>What you bring stays yours</h3>
       <p>
-        You don&rsquo;t hand Shutap your jokes. You give it the situation, the listing or your
-        memories of the person, and it drafts from that, using the Lab&rsquo;s in-house dataset of
-        jokes written and rated by people at the Lab and the techniques on its /funniest and
-        /guides pages. If you do type your own lines, they stay yours: unread by staff, out of the
-        dataset, out of training.
+        On Bits the lines are yours: you write them, and they stay unread by staff, out of the
+        dataset and out of training. For realtor kits and toasts you give Shutap the listing or
+        your memories of the person, and it drafts from that, using the Lab&rsquo;s in-house
+        dataset of jokes written and rated by people at the Lab and the techniques on its
+        /funniest and /guides pages. Whatever you type stays yours.
       </p>
       <p>
         Shutap uses AI models from Google (Gemini) and OpenAI, through the Lovable AI Gateway. No
@@ -111,12 +112,15 @@ function AiDisclosurePage() {
         product.
       </p>
       <p>
-        <b>Bits.</b> It removes identifying details and runs the crisis check. Then it writes
-        several drafts, each built on one technique from the Shutap Humor Amplifier Lab bank (the
-        operation, never anyone&rsquo;s material), and a second model from a different
-        company&rsquo;s family ranks them. It also writes rewrites, any line you tap
-        &ldquo;funnier&rdquo;, and the Mirror. The 5-second video is not AI-generated: a fixed
-        template draws it from the finished bit on your own device.
+        <b>Bits.</b> You write the bit: all five lines are yours, and the bit you make is
+        those lines, word for word. AI writes on a bit only when you ask: tap &ldquo;funnier&rdquo;
+        on a line and a model offers three other ways to say it, built from your lines and one
+        technique from the Shutap Humor Amplifier Lab bank (the operation, never anyone&rsquo;s
+        material); nothing changes until you pick. Before anything is saved or sent to a model,
+        identifying details are removed and the crisis check runs. Rewrites on Basic and Pro
+        (hotter, tighter, storytelling) and the Mirror are AI-written when you ask for them. The
+        sketch and the skit are laid out by a model from your lines, in script and shot form, and
+        it is told to add no new jokes; the 5-second video is not AI-generated: a fixed template draws it from your finished bit on your own device.
       </p>
       <p>
         <b>Realtor kits.</b> Shutap reads the listing page you link, or the text you paste, and
@@ -137,7 +141,7 @@ function AiDisclosurePage() {
       </p>
       <p>
         Removing identifying details uses automated checks and an AI model, and it can miss things.
-        Nothing Shutap drafts searches the internet for other people&rsquo;s jokes, and no
+        Nothing Shutap&rsquo;s AI suggests searches the internet for other people&rsquo;s jokes, and no
         comedian&rsquo;s lines are in Shutap&rsquo;s instructions. The AI models were trained by
         Google and OpenAI, not by Shutap, on data those companies chose; we can&rsquo;t change what
         they trained on, and we don&rsquo;t pretend otherwise. What we control is what goes in from
@@ -156,7 +160,7 @@ function AiDisclosurePage() {
       <p>
         The Shutap Humor Amplifier Lab dataset is in-house: the Shutap team writes, selects and rates its own
         jokes, pairing everyday situations with jokes tagged by technique, voice and how wild. It is
-        what guides how Shutap writes, and it is the only joke material Shutap uses to train or
+        what guides Shutap&rsquo;s suggestions, and it is the only joke material Shutap uses to train or
         tune AI models. How your text is handled is set out in the{' '}
         <a href="/privacy">Privacy Policy</a>.
       </p>

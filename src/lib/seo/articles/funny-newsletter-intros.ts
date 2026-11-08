@@ -52,7 +52,7 @@ const guide: Guide = {
     },
     {
       heading: "Draft three openers, then test them",
-      body: "Write the intro last, after the rest of the issue is done, because the best opener usually comes from something that happened while you were putting it together. Draft three versions: one confession, one status report, one question. Read each out loud and cut any line that needs a second sentence to make sense. beehiiv's guide suggests writing several openers and A/B testing them, and most email platforms let you test two subject lines or preview texts. Shutap, the humor amplifier, can help with the punch-up: type what happened this week, set the audience to office or social, the voice to dry and the length to 15 seconds, then ask for a tighter version. You pick the line, rewrite it in your words, and send it as yours.",
+      body: "Write the intro last, after the rest of the issue is done, because the best opener usually comes from something that happened while you were putting it together. Draft three versions: one confession, one status report, one question. Read each out loud and cut any line that needs a second sentence to make sense. beehiiv's guide suggests writing several openers and A/B testing them, and most email platforms let you test two subject lines or preview texts. Shutap, the humor amplifier, can help with the punch-up: write your opener as the hook, set the audience to office or social and the voice to dry, then tap funnier on it for three other ways to say it. You pick the line, rewrite it in your words, and send it as yours.",
     },
   ],
   techniques: [
@@ -130,7 +130,7 @@ const guide: Guide = {
     },
   ],
   related: ["what-is-a-joke", "funny-email-sign-offs", "callback-humor"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-11-03",
 };
 

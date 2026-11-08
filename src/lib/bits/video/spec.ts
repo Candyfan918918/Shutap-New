@@ -108,19 +108,26 @@ const ROLE_WORDS: [Role, Gender, boolean, RegExp][] = [
   ['stranger', 'n', false, /\b(barista|cashier|driver|customer|stranger|courier|delivery|teacher|doctor|dentist|nurse|cop|officer|server|bartender|trainer)\b/i],
 ]
 
-/** Where each pattern first appears; the setting named first wins. Kitchen,
- *  office and the rest are ordered most-specific first for the tie. */
+/** Words in SCENE_WORDS that name a person, not a place: they pick a
+ *  setting only when the story names no place at all (Nov 8 2026: "my
+ *  roommate… the fridge" is the kitchen, not the living room). */
+const PERSON_SCENE = /^(teacher|doctor|dentist|nurse|pediatrician|vet|therapist|waiter|waitress|server|bartender|barista|trainer|boss|manager|coworker|co-worker|hr|client|roommate|landlord|cashier)$/i
+
+/** Where each pattern first appears; the place named first wins, and a word
+ *  for a person only decides when no place is named. Kitchen, office and the
+ *  rest are ordered most-specific first for the tie. */
 export function sceneFor(story: string): SceneKind {
-  let best: SceneKind = 'generic'
-  let at = Infinity
+  let place: { at: number; k: SceneKind } | null = null
+  let person: { at: number; k: SceneKind } | null = null
   for (const [k, re] of SCENE_WORDS) {
-    const m = re.exec(story)
-    if (m && m.index < at) {
-      at = m.index
-      best = k
+    const g = new RegExp(re.source, 'gi')
+    for (const m of story.matchAll(g)) {
+      const at = m.index ?? 0
+      if (PERSON_SCENE.test(m[0])) { if (!person || at < person.at) person = { at, k } }
+      else if (!place || at < place.at) place = { at, k }
     }
   }
-  return best
+  return (place ?? person)?.k ?? 'generic'
 }
 
 /** The people in the story, in the order it names them, two at most. The
@@ -144,6 +151,17 @@ export function castFor(story: string): Character[] {
     }
     out.push({ ...h.c })
     if (out.length === 2) break
+  }
+  // Nov 8 2026: "he" / "she" when no word says who. One gender of pronoun in
+  // the story refines a lone neutral person ("my roommate… her yogurt"), or
+  // draws the person the story never names ("he turned up two hours late").
+  const he = /\b(he|him|his)\b/i.test(story)
+  const she = /\b(she|her|hers)\b/i.test(story)
+  if (he !== she) {
+    const g: Gender = he ? 'm' : 'f'
+    const neutral = out.filter((c) => c.gender === 'n' && !c.kid)
+    if (out.length === 1 && neutral.length === 1) neutral[0]!.gender = g
+    else if (!out.length) out.push({ role: 'stranger', gender: g, kid: false })
   }
   return out
 }

@@ -95,7 +95,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-write-comedy-tags", "rule-of-three", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   techniques: [
     {
       name: "End on the receipt",

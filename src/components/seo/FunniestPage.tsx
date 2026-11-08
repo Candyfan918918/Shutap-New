@@ -183,7 +183,7 @@ export function FunniestPage({
                 <p style={{ fontSize: 16, margin: 0 }}>{t.whatTheyDid}</p>
                 <span style={label}>Why it works</span>
                 <p style={{ fontSize: 16, margin: 0 }}>{t.whyItWorks}</p>
-                <span style={label}>Example (original, written by Shutap)</span>
+                <span style={label}>Example (an original line)</span>
                 <p
                   style={{
                     fontFamily: "'Newsreader', Georgia, serif",
@@ -205,11 +205,11 @@ export function FunniestPage({
                     window.dispatchEvent(new CustomEvent('shutap:move', { detail: { id, name: t.name } }))
                     void import('@/lib/tracking').then((m) => m.trackEvent('move_clicked', { page: `funniest/${entry.slug}`, technique: id })).catch(() => {})
                     document.getElementById('bit-write')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                    window.setTimeout(() => (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.focus(), 500)
+                    window.setTimeout(() => (document.querySelector('#bit-write ~ .bt-box .bt-etext, .bt-box .bt-etext') as HTMLElement | null)?.focus(), 500)
                   }}
                   style={{ alignSelf: 'flex-start', marginTop: 4, color: BRAND, fontWeight: 600, fontSize: 15, textDecoration: 'none' }}
                 >
-                  Use this move on your story ↑
+                  Use this move on your bit ↑
                 </a>
               </li>
             ))}
@@ -237,7 +237,7 @@ export function FunniestPage({
           </section>
         )}
 
-        <TryItBox page={`funniest/${entry.slug}`} heading={toasts ? `Try these techniques in your ${toasts.occasionLabel}` : realtor ? 'Try these techniques on your listing' : 'Try these techniques on your own story'} anchor realtor={realtor} toast={!!toasts} />
+        <TryItBox page={`funniest/${entry.slug}`} heading={toasts ? `Try these techniques in your ${toasts.occasionLabel}` : realtor ? 'Try these techniques on your listing' : 'Try these techniques on your own bit'} anchor realtor={realtor} toast={!!toasts} />
         <WriterBar page={`funniest/${entry.slug}`} label={toasts ? 'Your stories. Your toast, funnier.' : realtor ? 'Paste a listing. Get the video script and posts.' : FUNNIEST_WRITER.heading} realtor={realtor} toast={!!toasts} />
 
         <section style={{ marginBottom: 32 }}>

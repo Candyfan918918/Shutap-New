@@ -8,10 +8,10 @@ const guide: Guide = {
   title: "Shutap vs Claude for TikTok Comedy Scripts | Shutap",
   h1: "Shutap vs Claude for TikTok comedy scripts",
   description:
-    "Claude is a strong writing partner you set up yourself. Shutap drafts a timed TikTok bit from your story. What each does well and how to get funny out of both.",
+    "Claude is a strong writing partner you set up yourself. Shutap helps you write a timed TikTok bit line by line, with funnier where you're stuck. What each does well and how to get funny out of both.",
   capsule:
-    "For TikTok comedy scripts, Claude is the better tool to build your own system in and Shutap is the faster route from a story to a filmable bit. Claude will follow any rules you give it and explain humor well, but you write the setup. Shutap starts from what happened to you and returns a hook, setup, tags and a button at 15, 30 or 60 seconds, ready for the teleprompter.",
-  blurb: "A general assistant you configure versus a tool that starts from your story and hands you something to film.",
+    "For TikTok comedy scripts, Claude is the better tool to build your own system in, and Shutap is the faster route from your own lines to a filmable bit. Claude will follow any rules you give it and explain humor well. Shutap gives you the shape of a bit to write in your words, helps only on the line you tap, and hands back a 5-second video and a teleprompter.",
+  blurb: "A general assistant you configure versus a tool where you write the bit and get something to film.",
   preset: { audience: "social", voice: "deadpan", length: "30s", heat: 3 },
   sections: [
     {
@@ -36,7 +36,7 @@ const guide: Guide = {
     },
     {
       heading: "What Shutap does instead",
-      body: "Shutap runs that routine for you, starting from your story. It reads the story for observations, writes the bit from them, drops lines that would work on anyone's story, blocks advice and jokes aimed at you, and has a second model rank the drafts. You set the audience to social, a voice (deadpan, storyteller, roast or dry), a length of 15, 30 or 60 seconds or 2 minutes, and a heat from 1 to 5. Then you steer: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from the lines you liked. It's still a draft. You rewrite it until it sounds like you talking.",
+      body: "Shutap gives you that routine as a shape to fill: you write five lines in your own words, a hook for the first two seconds, a setup, two tags and a button. When a line isn't landing, tap funnier for three other ways to say it, built from your other lines, with lines that would work on anyone's story and jokes aimed at you dropped. You set the audience to social and a voice (deadpan, storyteller, roast or dry). The finished bit comes back as a 5-second video and stand-up on the teleprompter. It sounds like you because you wrote it.",
     },
     {
       heading: "From script to camera",
@@ -76,7 +76,7 @@ const guide: Guide = {
     { label: "Blockchain Council (Apr 20, 2026), \"Claude AI for TikTok script writing\"", url: "https://www.blockchain-council.org/claude-ai/claude-ai-for-tiktok-script-writing/" },
   ],
   related: ["shutap-vs-claude-for-jokes", "best-ai-joke-tool-for-tiktok", "how-long-should-a-tiktok-bit-be"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-10-26",
 };
 

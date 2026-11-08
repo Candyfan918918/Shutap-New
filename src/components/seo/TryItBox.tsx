@@ -19,7 +19,7 @@ export function presetLabel(preset: Partial<BitControls>): string {
 
 export function TryItBox({
   page,
-  heading = 'Turn your own story into a bit',
+  heading = 'Write your bit, line by line',
   position = 'bottom',
   preset,
   anchor = false,
@@ -64,7 +64,7 @@ export function TryItBox({
       <div style={{ display: 'grid', gap: 4, minWidth: 0, flex: '1 1 220px' }}>
         <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#17131a', lineHeight: 1.3 }}>{heading}</h2>
         <p style={{ margin: 0, fontSize: 15, color: '#443c42', lineHeight: 1.45 }}>
-          {toast ? 'Type the stories about them, in your words. Get the toast with pause marks, cue cards and a phone prompter. First toast free.' : realtor ? 'Paste a listing. Get a video script and every post to go with it. First kit free; copies always unlimited.' : 'Write what happened. Get the bit and the video. Free: 1 bit a day, downloads unlimited with the shutap.com mark.'}
+          {toast ? 'Type the stories about them, in your words. Get the toast with pause marks, cue cards and a phone prompter. First toast free.' : realtor ? 'Paste a listing. Get a video script and every post to go with it. First kit free; copies always unlimited.' : 'Five lines in your words; tap funnier where you’re stuck. Get the video, stand-up, sketch and skit. Free: 1 bit a day, downloads unlimited with the shutap.com mark.'}
           {!realtor && !toast && preset && presetLabel(preset) ? ` Opens set to ${presetLabel(preset)}; change anything before you write.` : ''}
         </p>
       </div>

@@ -70,7 +70,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-turn-a-story-into-a-bit", "how-to-write-comedy-tags", "types-of-humor"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   techniques: [
     {
       name: "Give the wave an owner",

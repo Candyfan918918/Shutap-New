@@ -114,7 +114,7 @@ type ShownBit = Bit & { locked: boolean }
 const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   rewrite: { title: 'Sign in to rewrite it.', sub: 'Free. Hotter, tighter, a new tag, or mix your own. Your bit comes with you.' },
   lock: { title: 'Sign in to lock your lines.', sub: 'Free. Your lines stay in the box and lock the moment you’re in.' },
-  funnier: { title: 'Sign in to make a line funnier.', sub: 'Free: three ways for that line, built from the lines you wrote. Your lines stay in the box.' },
+  funnier: { title: 'Sign in free to use funnier.', sub: 'Three other ways to say that line, built from the lines you wrote, yours first. Unlimited once you’re in; your lines stay in the box.' },
   swap: { title: 'Sign in to swap in a crowd-work angle.', sub: 'Free. Your bit comes with you, with all five angles.' },
   standup: { title: 'Sign in to run it as stand-up.', sub: 'Free. The teleprompter, at talking pace.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
@@ -242,7 +242,18 @@ export type BitEmbed = {
   preset?: Partial<BitControls>
   /** the page above already says what this is (/bits): no heading here */
   bare?: boolean
+  /** Nov 8 2026 (/bits): a second copy of the five-line box lower on the
+   *  page. It shares the lines with the main box (shutap:bit-lines) and
+   *  "Make my bit" hands over to the main box (shutap:bit-make), so there is
+   *  one flow: one sign-in, one write, one result. It never writes itself. */
+  mirror?: boolean
+  /** the page lays itself out around the box: write vs the result */
+  onPhase?: (phase: 'write' | 'result') => void
 }
+
+/** the five lines, shared by the boxes on one page */
+const LINES_EVENT = 'shutap:bit-lines'
+const MAKE_EVENT = 'shutap:bit-make'
 
 export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const navigate = useNavigate()
@@ -559,6 +570,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
 
   useEffect(() => {
     // The linked bit opens at once, beside the account check, not after it.
+    // The mirror box only shares lines; the main box writes and restores.
+    if (embed?.mirror) { void refresh(); return }
     void refresh().then(() => restore())
     // Nov 6 2026: the homepage no longer holds the box, so /bits (an embed)
     // opens ?bit= links too (My creations links there).
@@ -575,6 +588,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
       }
     })
     return () => sub.subscription.unsubscribe()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh, restore, openFromLink])
 
   useEffect(() => {
@@ -679,23 +693,50 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     // lines come back from this tab's storage on load; run once the tier lands
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tier])
-  /** finish the bit: the locked lines are kept word for word; the rest is Shutap's */
-  function finishLined() {
-    const given = givenFrom(lines, linesLocked)
-    linedGiven.current = given
-    jokeTap('lined_finish', tier, { written: writtenSlots(lines).length, locked: linesLocked.length })
-    // Signed out: sign in first; the bit is written the moment they're in.
-    if (tier === 'guest') return showLimit('guest')
-    void onWrite({ text: linesText(lines), lines: given })
-  }
-  /** keep it: every written line is theirs; only the empty ones are written */
-  function keepLined() {
+  /** Make my bit (Nov 8 2026): all five lines are the person's, handed over
+   *  word for word; Shutap writes no line. The result lays them out as the
+   *  video, stand-up, sketch and skit. A guest signs in first; the lines stay
+   *  in the box and the bit is made the moment they're in. */
+  function makeLined() {
+    if (embed?.mirror) {
+      window.dispatchEvent(new CustomEvent(MAKE_EVENT))
+      return
+    }
     const given = givenFrom(lines, null)
     linedGiven.current = given
-    jokeTap('lined_keep', tier, { written: writtenSlots(lines).length })
+    jokeTap('lined_make', tier, { written: writtenSlots(lines).length, locked: linesLocked.length })
     if (tier === 'guest') return showLimit('guest')
     void onWrite({ text: linesText(lines), lines: given })
   }
+  const onPhase = embed?.onPhase
+  useEffect(() => { onPhase?.(phase === 'write' ? 'write' : 'result') }, [phase, onPhase])
+  const makeRef = useRef(makeLined)
+  makeRef.current = makeLined
+  /* one draft for the boxes on a page: each box tells the others its lines */
+  const boxId = useRef(Math.random().toString(36).slice(2))
+  function shareLines(next: Draft, locked: Slot[]) {
+    window.dispatchEvent(new CustomEvent(LINES_EVENT, { detail: { from: boxId.current, lines: next, locked } }))
+  }
+  function setBoxLines(d: Draft) { typed.current = true; setLines(d); shareLines(d, linesLocked) }
+  function setBoxLocked(l: Slot[]) { setLinesLocked(l); shareLines(lines, l) }
+  useEffect(() => {
+    const onLinesEv = (e: Event) => {
+      const d = (e as CustomEvent<{ from: string; lines: Draft; locked: Slot[] }>).detail
+      if (!d || d.from === boxId.current) return
+      setLines(d.lines)
+      setLinesLocked(d.locked)
+    }
+    const onMake = () => {
+      if (embed?.mirror) return
+      topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      // the other box's last line lands on blur, a beat before this
+      window.setTimeout(() => makeRef.current(), 60)
+    }
+    window.addEventListener(LINES_EVENT, onLinesEv)
+    window.addEventListener(MAKE_EVENT, onMake)
+    return () => { window.removeEventListener(LINES_EVENT, onLinesEv); window.removeEventListener(MAKE_EVENT, onMake) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   /** One write at a time: a double tap (or the sign-in return racing a tap)
    *  must not start two bits. */
@@ -958,7 +999,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             ) : embed ? (
               <div className="bt-hero bt-hero-embed" id="bit-write">
                 <h2 className="bt-h1">{embed.heading}</h2>
-                <p className="bt-sub">{embed.sub ?? 'Type what happened. Get the bit and the video. Right here, free.'}</p>
+                <p className="bt-sub">{embed.sub ?? 'Write it line by line, in your words. Tap funnier where you’re stuck. Free.'}</p>
               </div>
             ) : (
               <div className="bt-hero">
@@ -975,9 +1016,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               <div className="bt-box-head">
                 <label htmlFor="bit-story" className="bt-box-title">
                   <span className="bt-rec" aria-hidden="true" />
-                  {lined ? 'what happened, as a bit · line by line, your words' : 'what do you want to say funnier?'}
+                  {lined ? 'your bit · five lines, all yours' : 'what do you want to say funnier?'}
                 </label>
-                <span className="bt-box-aside">names get removed</span>
+                <span className="bt-box-aside">{lined ? `${writtenSlots(lines).length} of 5 written · names get removed` : 'names get removed'}</span>
               </div>
               {move && (
                 <div className="bt-move" role="status">
@@ -994,12 +1035,12 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   tier={tier}
                   controls={move ? { ...controls, move: move.id } : controls}
                   lines={lines}
-                  onLines={(d) => { typed.current = true; setLines(d) }}
+                  onLines={setBoxLines}
                   locked={linesLocked}
-                  onLocked={setLinesLocked}
+                  onLocked={setBoxLocked}
                   busy={phaseRef.current === 'writing'}
-                  onFinish={finishLined}
-                  onKeep={keepLined}
+                  onMake={makeLined}
+                  box={embed?.mirror ? 'mid' : embed ? 'top' : 'home'}
                   onSignIn={tier === 'guest' ? () => openSignin('funnier') : undefined}
                   onGuestLock={guestLock}
                   onLimit={() => openPaywall('rewrite')}
@@ -1068,7 +1109,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             )}
             <p className="bt-note" style={{ textAlign: 'center' }}>
               {tier === 'guest' ? `free: ${FREE_LINE} · sign in with Google or Apple · ` : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
-              names removed before anything is saved · nobody at shutap reads it{lined ? ' · "finish the bit" writes only the lines you left empty' : ' · ⌘↵ to write it'}
+              names removed before anything is saved · nobody at shutap reads it{lined ? ' · AI writes only when you tap funnier' : ' · ⌘↵ to write it'}
             </p>
           </>
         )}
@@ -1326,9 +1367,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
           <div className={`bt-sheet${sheet === 'paywall' ? ' wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="bit-sheet-title">
             {(sheet === 'signin' || sheet === 'signin_write') && (
               <>
-                <h3 id="bit-sheet-title">{sheet === 'signin_write' ? 'Sign in to get your bit.' : SIGNIN_COPY[signinFrom].title}</h3>
+                <h3 id="bit-sheet-title">{sheet === 'signin_write' ? (lined ? 'Sign in free to make your bit.' : 'Sign in to get your bit.') : SIGNIN_COPY[signinFrom].title}</h3>
                 <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  {sheet === 'signin_write' ? `Free: ${FREE_LINE}. Your story stays in the box, and the bit is written the moment you’re in.` : SIGNIN_COPY[signinFrom].sub}
+                  {sheet === 'signin_write' ? (lined ? `Free: ${FREE_LINE}. Your five lines stay in the box, and your bit is made from them the moment you’re in.` : `Free: ${FREE_LINE}. Your story stays in the box, and the bit is written the moment you’re in.`) : SIGNIN_COPY[signinFrom].sub}
                 </p>
                 <GoogleButton onClick={() => void signInForBit('google', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />
                 <AppleButton onClick={() => void signInForBit('apple', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />

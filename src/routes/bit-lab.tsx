@@ -7,6 +7,11 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import { useState } from 'react'
 import { amIAdmin } from '@/lib/admin.functions'
 import { labWriteBit, varyBit } from '@/lib/bits.functions'
+import { saveBitDemo, type DemoFunnier } from '@/lib/bits/demo.functions'
+import { EMPTY_LINES, LinedBox, missingSlots } from '@/pages/home/bit/LinedBox'
+import type { Draft } from '@/pages/home/bit/EditableBit'
+import type { Slot } from '@/lib/bits/shared'
+import '@/pages/home/bit/bit.css'
 import { AUDIENCES, LENGTHS, VOICES, type BitControls, type BitDraft, type BitVersion, type VaryKind } from '@/lib/bits/shared'
 import '@/components/feed/feed.css'
 
@@ -108,6 +113,8 @@ function BitLab() {
             </button>
           )}
         </div>
+
+        <DemoMaker controls={controls} />
 
         {runs
           .map((r, i) => ({ r, i }))
@@ -215,5 +222,41 @@ function RunCard({ story, busy, result, error }: { story: string; busy: boolean;
         </>
       )}
     </article>
+  )
+}
+
+/** The /bits demo (Nov 8 2026): type five lines in-house, the way a visitor
+ *  would, use funnier where it helps, then make it the demo. /bits shows the
+ *  newest one, with the lines that used funnier marked. */
+function DemoMaker({ controls }: { controls: BitControls }) {
+  const [lines, setLines] = useState<Draft>(EMPTY_LINES)
+  const [locked, setLocked] = useState<Slot[]>([])
+  const [funnier, setFunnier] = useState<DemoFunnier[]>([])
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  async function make() {
+    if (missingSlots(lines).length) return
+    setBusy(true); setMsg('')
+    try {
+      // keep only the funnier picks still on the line as it stands
+      const now = (s: Slot) => (s === 'tag0' ? lines.tags[0] : s === 'tag1' ? lines.tags[1] : (lines as unknown as Record<string, string>)[s])
+      const kept = funnier.filter((f) => now(f.slot)?.trim() === f.picked.trim())
+      const r = await saveBitDemo({ data: { lines: { hook: lines.hook, setup: lines.setup, tags: [lines.tags[0] ?? '', lines.tags[1] ?? ''], button: lines.button }, funnier: kept, controls } })
+      setMsg(r.ok ? 'Saved. shutap.com/bits shows it now (sketch and skit written).' : `Not saved: ${r.error}`)
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : 'failed')
+    } finally { setBusy(false) }
+  }
+  return (
+    <section className="fd-card" style={{ display: 'grid', gap: 10 }}>
+      <h2 style={{ margin: 0, fontSize: 18 }}>The /bits demo</h2>
+      <p className="fd-muted" style={{ margin: 0 }}>Type the five lines in-house, the way a visitor would. Tap funnier on a line where it helps and pick one; those lines show as “funnier · picked” on /bits, the rest as their words. Then make it the demo.</p>
+      <div className="bt bt-bare"><div className="bt-box">
+        <LinedBox tier="pro" controls={controls} lines={lines} onLines={setLines} locked={locked} onLocked={setLocked} busy={busy} onMake={() => void make()} box="lab"
+          onLimit={() => setMsg('funnier limit reached')} onCrisis={() => setMsg('the crisis check stopped this line')} say={setMsg}
+          onPicked={(slot, typed, picked, move) => setFunnier((f) => [...f.filter((x) => x.slot !== slot), { slot: slot as DemoFunnier['slot'], typed: f.find((x) => x.slot === slot)?.typed ?? typed, picked, move }])} />
+      </div></div>
+      {msg && <p style={{ margin: 0, fontWeight: 700 }}>{msg}</p>}
+    </section>
   )
 }

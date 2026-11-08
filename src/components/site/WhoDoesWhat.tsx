@@ -5,16 +5,16 @@ const COLS: { title: string; lines: string[] }[] = [
   {
     title: 'You type',
     lines: [
-      'What happened, a listing link, your stories about the person.',
-      'An idea, a story, a listing. Not your jokes: you don’t need any.',
-      'If you do type your own lines, they stay yours too.',
+      'Your bit, line by line: all five lines are yours.',
+      'A listing link, or your stories about the person for a toast.',
+      'Whatever you write stays yours, word for word.',
     ],
   },
   {
     title: 'Shutap does',
     lines: [
       'Removes names and places before anything is saved.',
-      'Drafts the bit, the kit or the toast from its own in-house jokes and techniques, written and rated by people at the Lab.',
+      'On a bit, writes only when you tap “funnier” on a line, from its in-house techniques. Drafts realtor kits and toasts from what you give it.',
       'Lays it out as a video, stand-up, a sketch, a skit, a shoot kit or a toast.',
     ],
   },

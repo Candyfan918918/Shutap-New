@@ -59,7 +59,8 @@ export function jokeTrack(name: string, tier: JokeTier | BitTier, props: Record<
  *  admin events table, the moment it happens and whatever happens next, so a
  *  guest who taps download and leaves still shows up. */
 export function jokeTap(name: string, tier: JokeTier | BitTier, props: Record<string, unknown> = {}): void {
-  void phCapture(name, { product: 'bits', ...props, tier, surface: surfacePage })
+  // trackEvent sends to PostHog as well as admin (Nov 8 2026: a second
+  // capture here logged every tap twice).
   void trackEvent(name, { product: 'bits', ...props, tier, surface: surfacePage })
 }
 

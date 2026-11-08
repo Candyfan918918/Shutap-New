@@ -104,7 +104,7 @@ const guide: Guide = {
     },
   ],
   related: ["sense-of-humor", "how-to-turn-a-story-into-a-bit", "turn-a-bad-experience-into-comedy"],
-  cta: { label: "Type what happened. Say it funnier.", href: "/bits" },
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   published: "2026-10-30",
 };
 
