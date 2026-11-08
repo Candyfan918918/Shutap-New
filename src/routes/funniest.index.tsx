@@ -49,7 +49,6 @@ export const Route = createFileRoute("/funniest/")({
   }),
   component: () => (
     <ContentPage
-      tryIt="funniest"
       breadcrumbs={[{ name: "The funniest", path: FUNNIEST_HUB }]}
       h1="The funniest people in the world, and what to take from them — from the Shutap Humor Amplifier Lab"
       capsule={CAPSULE}
