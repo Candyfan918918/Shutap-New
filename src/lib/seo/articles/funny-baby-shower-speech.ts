@@ -12,7 +12,6 @@ const guide: Guide = {
   capsule:
     "A funny baby shower speech runs about two minutes, teases one real habit of the parents-to-be, like the spreadsheet they built to pick a stroller, and ends with a warm line to the baby. Skip jokes about bodies, cravings gone wrong or sleepless nights everyone's already heard. The laugh comes from a detail only you know.",
   blurb: "Who speaks, how long, what to tease, and a worked example from a real-feeling story.",
-  preset: { audience: "family", voice: "storyteller", length: "60s", heat: 2 },
   sections: [
     {
       heading: "Who gives the speech, and when",
@@ -40,7 +39,7 @@ const guide: Guide = {
     },
     {
       heading: "Getting from the story to the lines",
-      body: "Write the story the way you'd text it to a friend, then find the one detail that's weirdly specific, like the flour or the column name. That detail is your opening line. If you're stuck, Shutap can draft it: set the audience to family, pick the storyteller voice, choose 60 seconds and keep the heat at 2. It hands back a draft of the bit with a hook, setup, a tag or two and a closing line. Use it as a draft to push against. Keep what sounds like you, rewrite the rest, and write the line to the baby yourself.",
+      body: "Write the story the way you'd text it to a friend, then find the one detail that's weirdly specific, like the flour or the column name. That detail is your opening line. If you'd like a draft around it, Shutap Toasts, from Shutap the humor amplifier, keeps the stories you type word for word and builds the toast around them: the greeting, the stories, the thanks and glasses up. It flags lines only part of the room will get and gives you a PDF with pauses marked, cue cards and a phone prompter. Names stay on your device, and the first toast is free. Keep what sounds like you, rewrite the rest, and write the line to the baby yourself.",
     },
   ],
   faq: [
@@ -67,6 +66,7 @@ const guide: Guide = {
   related: ["funny-wedding-toast", "best-ai-for-wedding-toast-jokes", "funny-captions"],
   cta: { label: "Write your baby shower toast from your stories", href: "/toasts/any-occasion" },
   published: "2026-10-27",
+  updated: "2026-11-08",
 };
 
 export default guide;

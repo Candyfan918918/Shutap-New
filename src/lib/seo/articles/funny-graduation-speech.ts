@@ -12,7 +12,6 @@ const guide: Guide = {
   capsule:
     "A funny graduation speech gets its laughs from things only your class shared, like the vending machine that ate dollars for four years or the teacher's famous phrase, not from jokes about graduation in general. Keep a student speech to five to ten minutes, use two or three of those shared details, and tie the last one to what comes next.",
   blurb: "Shared details, the right length, who's safe to tease, and a worked example.",
-  preset: { audience: "school", voice: "storyteller", length: "2m", heat: 2 },
   sections: [
     {
       heading: "Why graduation jokes usually fall flat",
@@ -40,7 +39,7 @@ const guide: Guide = {
     },
     {
       heading: "Drafting one bit at a time",
-      body: "Treat each funny section as a small bit with a hook, a setup, a tag or two and a closing line, then stitch the bits together with the sincere parts in between. If you're stuck on one, Shutap can draft it from your story: set the audience to school, pick the storyteller voice, choose 60 seconds or 2 minutes and keep the heat at 2. You'll get a draft to push against, not a finished speech. Keep the details that are true to your class, cut anything that sounds like it came from another school, and write the ending yourself.",
+      body: "Treat each funny section as a small bit with a hook, a setup, a tag or two and a closing line, then stitch the bits together with the sincere parts in between. If you'd like a draft to push against, Shutap Toasts, from Shutap the humor amplifier, keeps the stories you type word for word and builds the speech around them, with pauses marked in a PDF, cue cards and a phone prompter. It flags lines only part of the room will get, which matters with parents listening. Names stay on your device and the first one is free. Keep the details that are true to your class, cut anything that sounds like it came from another school, and write the ending yourself.",
     },
   ],
   faq: [
@@ -68,6 +67,7 @@ const guide: Guide = {
   related: ["funny-wedding-toast", "self-deprecating-humor", "rule-of-three"],
   cta: { label: "Write your graduation speech from your stories", href: "/toasts/any-occasion" },
   published: "2026-10-27",
+  updated: "2026-11-08",
 };
 
 export default guide;
