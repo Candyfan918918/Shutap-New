@@ -99,7 +99,7 @@ export const adminListUsers = createServerFn({ method: 'POST' })
     if (error) throw new Error(error.message)
     const profiles = (rows ?? []) as Array<Record<string, unknown> & { user_id: string }>
     const ids = profiles.map((p) => p.user_id)
-    const [aliasRes, bitRes, subRes] = await Promise.all([
+    const [aliasRes, bitRes, subRes, kitRes, toastRes] = await Promise.all([
       ids.length
         ? supabaseAdmin.from('aliases').select('user_id, display_name, emoji').in('user_id', ids)
         : Promise.resolve({ data: [] as Array<{ user_id: string; display_name: string; emoji: string }> }),
@@ -109,13 +109,21 @@ export const adminListUsers = createServerFn({ method: 'POST' })
       ids.length
         ? supabaseAdmin.from('subscriptions').select('user_id, status').eq('environment', 'live').in('user_id', ids)
         : Promise.resolve({ data: [] as unknown[] }),
+      ids.length
+        ? supabaseAdmin.from('kits').select('user_id').in('user_id', ids).limit(5000)
+        : Promise.resolve({ data: [] as unknown[] }),
+      ids.length
+        ? supabaseAdmin.from('toasts').select('user_id').in('user_id', ids).limit(5000)
+        : Promise.resolve({ data: [] as unknown[] }),
     ])
     const aliasMap: Record<string, { display_name: string; emoji: string }> = {}
     for (const r of (aliasRes.data ?? []) as Array<{ user_id: string; display_name: string; emoji: string }>) {
       aliasMap[r.user_id] = { display_name: r.display_name, emoji: r.emoji }
     }
-    const statsMap: Record<string, { bits: number; rewrites: number; plan: 'paying' | 'trialing' | 'free' }> = {}
-    const stat = (id: string) => (statsMap[id] ??= { bits: 0, rewrites: 0, plan: 'free' })
+    const statsMap: Record<string, { bits: number; rewrites: number; kits: number; toasts: number; plan: 'paying' | 'trialing' | 'free' }> = {}
+    const stat = (id: string) => (statsMap[id] ??= { bits: 0, rewrites: 0, kits: 0, toasts: 0, plan: 'free' })
+    for (const k of (kitRes.data ?? []) as Array<{ user_id: string }>) stat(k.user_id).kits++
+    for (const t of (toastRes.data ?? []) as Array<{ user_id: string }>) stat(t.user_id).toasts++
     for (const b of (bitRes.data ?? []) as Array<{ user_id: string; bit_versions: Array<{ kind: string }> | null }>) {
       const st = stat(b.user_id)
       st.bits++
@@ -130,7 +138,7 @@ export const adminListUsers = createServerFn({ method: 'POST' })
       ...p,
       deleted_at: null as string | null,
       alias: aliasMap[p.user_id] ?? null,
-      stats: statsMap[p.user_id] ?? { bits: 0, rewrites: 0, plan: 'free' as const },
+      stats: statsMap[p.user_id] ?? { bits: 0, rewrites: 0, kits: 0, toasts: 0, plan: 'free' as const },
     }))
     // Accounts people deleted stay on the list (no email or name: the privacy
     // page promises those are removed). Hidden while searching by email/name.
@@ -145,7 +153,7 @@ export const adminListUsers = createServerFn({ method: 'POST' })
       provider: d.provider, is_anonymous: false, signup_at: d.signup_at, first_visit_at: d.signup_at,
       last_visit_at: d.deleted_at, last_login_at: null, login_count: d.login_count ?? 0, visit_count: d.visit_count ?? 0,
       last_country: d.last_country, last_city: d.last_city, deleted_at: d.deleted_at, alias: null,
-      stats: { bits: 0, rewrites: 0, plan: 'free' as const },
+      stats: { bits: 0, rewrites: 0, kits: 0, toasts: 0, plan: 'free' as const },
     }))
     const merged = [...live, ...deleted] as Array<Record<string, unknown>>
     const val = (r: Record<string, unknown>) => r[sort] as string | number | null | undefined

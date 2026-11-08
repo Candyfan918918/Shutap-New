@@ -99,9 +99,9 @@ export function DailyReportSection() {
           </div>
 
           <div style={{ background: '#fff', border: '.5px solid rgba(11,8,15,.08)', borderRadius: 14, padding: 16 }}>
-            <h3 style={{ fontFamily: "'Sora',sans-serif", fontSize: 13, fontWeight: 700, color: INK, margin: '0 0 10px' }}>most bits generated</h3>
+            <h3 style={{ fontFamily: "'Sora',sans-serif", fontSize: 13, fontWeight: 700, color: INK, margin: '0 0 10px' }}>most made <span style={{ fontWeight: 500, color: DIM, fontSize: 12 }}>{r.is_today ? 'today' : 'that day'} · all time</span></h3>
             {r.top_makers.length === 0 && r.guests.bits_total === 0 ? (
-              <div style={{ color: DIM, fontStyle: 'italic', fontSize: 13 }}>no bits yet</div>
+              <div style={{ color: DIM, fontStyle: 'italic', fontSize: 13 }}>nothing made yet</div>
             ) : (
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
@@ -109,8 +109,9 @@ export function DailyReportSection() {
                     <tr style={{ textAlign: 'left', color: MID }}>
                       <th style={th}>#</th>
                       <th style={th}>who</th>
-                      <th style={{ ...th, textAlign: 'right' }}>{r.is_today ? 'today' : 'that day'}</th>
-                      <th style={{ ...th, textAlign: 'right' }}>all time</th>
+                      <th style={{ ...th, textAlign: 'right' }}>bits</th>
+                      <th style={{ ...th, textAlign: 'right' }}>realtor kits</th>
+                      <th style={{ ...th, textAlign: 'right' }}>toasts</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -121,15 +122,17 @@ export function DailyReportSection() {
                           <div style={{ fontWeight: 600 }}>{m.name || m.email || '—'}</div>
                           {m.name && <div style={{ color: DIM, fontSize: 12 }}>{m.email}</div>}
                         </td>
-                        <td style={{ ...num, fontWeight: m.bits_day > 0 ? 800 : 400 }}>{m.bits_day}</td>
-                        <td style={num}>{m.bits_total}</td>
+                        <DayAll day={m.bits_day} all={m.bits_total} />
+                        <DayAll day={m.kits_day} all={m.kits_total} />
+                        <DayAll day={m.toasts_day} all={m.toasts_total} />
                       </tr>
                     ))}
                     <tr style={{ ...tr, background: '#fbf8fa' }}>
                       <td style={{ ...td, color: DIM }} />
                       <td style={{ ...td, color: MID }}>guests (not signed in, all together)</td>
-                      <td style={num}>{r.guests.bits_day}</td>
-                      <td style={num}>{r.guests.bits_total}</td>
+                      <DayAll day={r.guests.bits_day} all={r.guests.bits_total} />
+                      <td style={{ ...num, color: DIM }}>—</td>
+                      <td style={{ ...num, color: DIM }}>—</td>
                     </tr>
                   </tbody>
                 </table>
@@ -137,7 +140,30 @@ export function DailyReportSection() {
             )}
           </div>
 
-          <h3 style={{ fontFamily: "'Sora',sans-serif", fontSize: 13, fontWeight: 700, color: INK, margin: '18px 0 10px' }}>paywall</h3>
+          <h3 style={sectionH3}>realtor kits</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12 }}>
+            <Stat label="visited /realtors" value={r.realtors.visited} sub="people" />
+            <Stat label="pasted a listing" value={r.realtors.pasted} sub={`${r.realtors.read_ok} read · ${r.realtors.read_failed} failed`} />
+            <Stat label="kits made" value={r.realtors.kits} sub={`by ${r.realtors.makers} ${r.realtors.makers === 1 ? 'person' : 'people'} · ${r.realtors.total_kits} all time (${r.realtors.total_makers} ${r.realtors.total_makers === 1 ? 'person' : 'people'})`} />
+            <Stat label="bought one kit" value={r.realtors.paid} sub="$12.99 one-time" />
+            <Stat label="kit downloads & copies" value={r.realtors.downloads} />
+          </div>
+
+          <h3 style={sectionH3}>toasts</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12 }}>
+            <Stat label="visited /toasts" value={r.toasts.visited} sub="people" />
+            <Stat label="opened the form" value={r.toasts.form_opened} sub="people" />
+            <Stat
+              label="toasts written"
+              value={r.toasts.written}
+              sub={`by ${r.toasts.writers} ${r.toasts.writers === 1 ? 'person' : 'people'} · ${r.toasts.total} all time (${r.toasts.total_writers} ${r.toasts.total_writers === 1 ? 'person' : 'people'})${r.toasts.occasions.length ? ' · ' + r.toasts.occasions.map(([o, n]) => `${o.replace(/_/g, ' ')} ${n}`).join(', ') : ''}`}
+            />
+            <Stat label="locked (finished)" value={r.toasts.locked} />
+            <Stat label="bought one toast" value={r.toasts.paid} sub="$12.99 one-time" />
+            <Stat label="toast downloads" value={r.toasts.downloads} sub="speech, cue cards, keepsake" />
+          </div>
+
+          <h3 style={sectionH3}>paywall</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12 }}>
             <Stat
               label="sign-in prompt"
@@ -164,6 +190,7 @@ export function DailyReportSection() {
           </div>
 
           <p style={{ fontSize: 11, color: DIM, marginTop: 10, lineHeight: 1.6 }}>
+            Realtor kit and toast visits, pasted listings and form opens are unique people that day; kits, toasts and downloads are counts. Everyone who makes a kit or toast is signed in.{' '}
             Paywall numbers are unique people that day (an account, or a guest's browser session). The sign-in prompt counts guests asked to sign in for a second bit or to rewrite, save or keep a bit; "other" is stand-up, sketch, skit or post. "Opened checkout" counts checkouts reached from the paywall. "Paid" is a new plan (live payments only), not a renewal; its rate is the share of people who opened checkout and paid that day.{' '}
             Days are {r.timezone} calendar days. Visits are human sessions (bots removed); people = distinct visitors. Sign-in rate = signed-in users active that day ÷ distinct visitors.
             Returning users = signed-in users active that day who joined on an earlier day. Totals are as of the end of the day.
@@ -176,6 +203,16 @@ export function DailyReportSection() {
   )
 }
 
+function DayAll({ day, all }: { day: number; all: number }) {
+  return (
+    <td style={{ ...num, whiteSpace: 'nowrap' }}>
+      <span style={{ fontWeight: day > 0 ? 800 : 400 }}>{day}</span>
+      <span style={{ color: DIM }}> · {all}</span>
+    </td>
+  )
+}
+
+const sectionH3: React.CSSProperties = { fontFamily: "'Sora',sans-serif", fontSize: 13, fontWeight: 700, color: INK, margin: '18px 0 10px' }
 const th: React.CSSProperties = { padding: '8px 12px', fontWeight: 600, fontSize: 11, letterSpacing: '.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }
 const td: React.CSSProperties = { padding: '9px 12px', color: '#100c14', verticalAlign: 'top' }
 const num: React.CSSProperties = { ...td, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }

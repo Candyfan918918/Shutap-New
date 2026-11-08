@@ -70,7 +70,7 @@ function Retention({ any, made }: { any: RetentionBlock; made: RetentionBlock })
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap', margin: '18px 0 10px' }}>
         <h3 style={{ ...groupH, margin: 0 }}>retention · signed-in users, by sign-up day</h3>
         <div style={{ marginLeft: 'auto', display: 'inline-flex', background: '#fff', border: '.5px solid rgba(11,8,15,.12)', borderRadius: 999, padding: 3 }}>
-          {([['any', 'came back'], ['made', 'made a bit']] as const).map(([k, label]) => (
+          {([['any', 'came back'], ['made', 'made something']] as const).map(([k, label]) => (
             <button
               key={k}
               onClick={() => setBasis(k)}
@@ -137,7 +137,7 @@ export function BigNumbers({ total, dau, mau }: { total: number; dau: number; ma
   )
 }
 
-type SortKey = 'runs_today' | 'runs_total' | 'last_sign_in' | 'first_sign_in' | 'sign_ins' | 'bits' | 'rewrites' | 'last_bit_at' | 'active_days_30d' | 'plan'
+type SortKey = 'runs_today' | 'runs_total' | 'last_sign_in' | 'first_sign_in' | 'sign_ins' | 'bits' | 'rewrites' | 'kits' | 'toasts' | 'last_bit_at' | 'active_days_30d' | 'plan'
 
 function UserTable({ rows }: { rows: ProductUserRow[] }) {
   const [q, setQ] = useState('')
@@ -194,6 +194,8 @@ function UserTable({ rows }: { rows: ProductUserRow[] }) {
                 <Th k="runs_today" label="runs · today" />
                 <Th k="runs_total" label="runs · total" />
                 <Th k="bits" label="bits" />
+                <Th k="kits" label="realtor kits" />
+                <Th k="toasts" label="toasts" />
                 <Th k="rewrites" label="rewrites" />
                 <Th k="last_bit_at" label="last bit" />
                 <Th k="active_days_30d" label="active days · 30d" />
@@ -214,6 +216,8 @@ function UserTable({ rows }: { rows: ProductUserRow[] }) {
                   <td style={{ ...num, fontWeight: r.runs_today > 0 ? 700 : 400 }}>{r.runs_today}</td>
                   <td style={num}>{r.runs_total}</td>
                   <td style={num}>{r.bits}</td>
+                  <td style={num}>{r.kits}</td>
+                  <td style={num}>{r.toasts}</td>
                   <td style={num}>{r.rewrites}</td>
                   <td style={td}>{fmtDate(r.last_bit_at)}</td>
                   <td style={num}>{r.active_days_30d}</td>
@@ -323,7 +327,7 @@ export function AdminProductSection() {
           </details>
 
           <p style={{ fontSize: 11, color: DIM, marginTop: 10, lineHeight: 1.6 }}>
-            Retention: dN = share of users who signed up on day 0 and were back on exactly day N (only users who signed up at least N days ago count); "that day or later" counts anyone back on day N or after. Weekly cohorts use Monday-start weeks; w0 is the sign-up week. "Came back" = any activity; "made a bit" = wrote or rewrote a bit.
+            Retention: dN = share of users who signed up on day 0 and were back on exactly day N (only users who signed up at least N days ago count); "that day or later" counts anyone back on day N or after. Weekly cohorts use Monday-start weeks; w0 is the sign-up week. "Came back" = any activity; "made something" = wrote or rewrote a bit, made a realtor kit or wrote a toast.
             A run = one press of write or rewrite: a new bit, a rewrite, or an attempt that failed. Today = today in {m.timezone}.
             Active = a signed-in user who wrote a bit, rewrote one, fired an event or opened a visit. Days are {m.timezone} calendar days; dau / wau / mau are the last 24h / 7d / 30d.
             Paying = live Stripe subscription that is active or past due; sandbox subscriptions ({m.users.sandbox_subs}) are not counted.
