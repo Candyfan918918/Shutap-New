@@ -293,9 +293,9 @@ function Editor({ row, names, say, onNames, onLocked }: { row: ToastRow; names: 
             </div>
             <div className="ts-how">
               <p style={{ font: '700 15px/1.4 var(--sora)', color: 'var(--wine)' }}>Edit anything until it sounds like you.</p>
-              <p style={{ fontSize: 13.5 }}>Tap any dashed line and type over it, or tap funnier. Your own lines stay word for word; tap the lock on one to change it. When you lock, the words are final and the downloads open. A change after that is a new toast, {usd(TOAST_ONCE.amount)}.</p>
+              <p style={{ fontSize: 13.5 }}>Tap any dashed line and type over it, or tap funnier. Your own lines stay word for word; tap the lock on one to change it. When you lock, this is your final version: no more edits, and the downloads open. A change after that is a new toast, {usd(TOAST_ONCE.amount)}.</p>
               <button type="button" className="rl-btn" style={{ height: 52, fontSize: 16 }} onClick={() => { setSheet(true); track('toast_lock_sheet_opened', {}) }}>lock it &amp; get my toast</button>
-              <p className="rl-note" style={{ textAlign: 'center' }}>nothing more to pay</p>
+              <p className="rl-note" style={{ textAlign: 'center' }}>nothing more to pay · locking is final, no more edits</p>
             </div>
           </aside>
         </div>
@@ -305,8 +305,8 @@ function Editor({ row, names, say, onNames, onLocked }: { row: ToastRow; names: 
         <div className="rl-sheet-scrim" onClick={() => setSheet(false)}>
           <div className="rl-sheet ts-sheet" role="dialog" aria-modal aria-label="Lock this toast" onClick={(e) => e.stopPropagation()}>
             <LockIcon color="#b8456b" size={30} />
-            <h3 style={{ margin: 0, font: '800 24px/1.15 var(--sora)', color: 'var(--wine)' }}>Lock this toast?</h3>
-            <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: 'var(--ink-2)' }}>Once it's locked, the words are final. The speech PDF, cue cards, prompter, the 60-second version, rehearse and {spec.keepsake ? 'keepsake' : 'the text after'} all open.</p>
+            <h3 style={{ margin: 0, font: '800 24px/1.15 var(--sora)', color: 'var(--wine)' }}>This is your final draft. Lock it?</h3>
+            <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: 'var(--ink-2)' }}>Read it through once more. Once it's locked, this is the final version: <b>no more edits</b>. The speech PDF, cue cards, prompter, the 60-second version, rehearse and {spec.keepsake ? 'keepsake' : 'the text after'} all open.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, background: 'var(--surface)', borderRadius: 14, padding: '14px 16px', fontSize: 14, lineHeight: 1.5 }}>
               <p style={{ margin: 0 }}><b>Still yours to change after locking:</b> the names (they live on this device) and the prompter's speed and text size.</p>
               <p style={{ margin: 0 }}><b>Not after locking:</b> any word of the speech. A changed line is a new toast, {usd(TOAST_ONCE.amount)}, starting from this one.</p>
@@ -317,7 +317,7 @@ function Editor({ row, names, say, onNames, onLocked }: { row: ToastRow; names: 
             </div>
             <div className="rl-row" style={{ justifyContent: 'flex-end' }}>
               <button type="button" className="rl-btn ghost" onClick={() => setSheet(false)}>keep editing</button>
-              <button type="button" className="rl-btn" disabled={locking} onClick={() => void lock()}>{locking ? 'locking…' : 'lock it'}</button>
+              <button type="button" className="rl-btn" disabled={locking} onClick={() => void lock()}>{locking ? 'locking…' : 'it\'s final · lock it'}</button>
             </div>
           </div>
         </div>
@@ -524,7 +524,7 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
             {sheet === 'change_pay' && (
               <>
                 <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>A new toast from this one · {usd(TOAST_ONCE.amount)}</h3>
-                <p className="rl-note">Pay once and the copy opens, ready to edit, clean. No subscription. Tax may be added.</p>
+                <p className="rl-note">Pay once and the copy opens, ready to edit, clean. Edit it as much as you like; once you lock the copy, it's final, no more edits. No subscription. Tax may be added.</p>
                 {checkoutError ? <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{checkoutError}</p> : (
                   <div style={{ minHeight: 420 }}>
                     <EmbeddedCheckoutProvider key={`change-${row.id}`} stripe={getStripe()} options={{ fetchClientSecret: prepaySecret }}>
@@ -539,7 +539,7 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
               <>
                 <p className="rl-lbl r" style={{ margin: 0 }}>optional · your free toast</p>
                 <h3 style={{ margin: 0, font: '800 24px/1.15 var(--sora)', color: 'var(--wine)' }}>Remove the mark · {usd(TOAST_ONCE.amount)}</h3>
-                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: 'var(--ink-2)' }}>Your free toast has a shutap.com watermark across every PDF page and “— shutap.com” at the end of every copy. Remove it once and this toast is clean everywhere, forever. No subscription. Tax may be added.</p>
+                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: 'var(--ink-2)' }}>Your free toast has a shutap.com watermark across every PDF page and “— shutap.com” at the end of every copy. Remove it once and this toast is clean everywhere, forever. The words stay exactly as you locked them: removing the mark doesn't reopen edits. No subscription. Tax may be added.</p>
                 {checkoutError ? <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{checkoutError}</p> : (
                   <div style={{ minHeight: 420 }}>
                     <EmbeddedCheckoutProvider key={`unmark-${row.id}`} stripe={getStripe()} options={{ fetchClientSecret: unmarkSecret }}>

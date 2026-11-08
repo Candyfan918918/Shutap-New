@@ -89,7 +89,7 @@ export function OccasionPage({ l, demo, prepaid }: { l: Landing; demo: ToastDemo
         <div className="rl-steps3">
           <div><p className="n">1</p><h3>Type your stories</h3><p>Lock each one. A locked story goes in word for word.</p></div>
           <div><p className="n">2</p><h3>Shutap writes around them</h3><p>Edit any word or tap funnier on a line. Nothing changes until you pick.</p></div>
-          <div><p className="n">3</p><h3>Lock it, rehearse, give it</h3><p>Cue cards, the prompter and the 60-second version open once it’s locked.</p></div>
+          <div><p className="n">3</p><h3>Lock it, rehearse, give it</h3><p>Locking makes it final, no more edits. Cue cards, the prompter and the 60-second version open once it’s locked.</p></div>
         </div>
 
         <section className="tp-sec">
@@ -132,7 +132,7 @@ export function OccasionPage({ l, demo, prepaid }: { l: Landing; demo: ToastDemo
                 {buys.map((x) => <p key={x} className="it"><Check />{x}</p>)}
               </div>
             </div>
-            <div className="tp-receipt-ft"><p className="lbl">Not in the {usd(TOAST_ONCE.amount)}</p><p>Changing a line after you lock: that’s a new toast, {usd(TOAST_ONCE.amount)} again (free on Pro). A toast for another occasion is another toast.</p></div>
+            <div className="tp-receipt-ft"><p className="lbl">Not in the {usd(TOAST_ONCE.amount)}</p><p>Edits after you lock. Locking makes it the final version; changing a line after that is a new toast, {usd(TOAST_ONCE.amount)} again (free on Pro). A toast for another occasion is another toast.</p></div>
           </div>
           <h3 className="tp-h3">Or on a plan</h3>
           <div className="rl-price4">
