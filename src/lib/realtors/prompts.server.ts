@@ -2,7 +2,9 @@
 // outputs out, in one tone. Written on the same bones as the bit prompts:
 // THE STANDARD (lines rated funny), the house rules, and a judge from another
 // model family. KIT_PROMPT_VERSION is stamped on every kit; bump on any edit.
-export const KIT_PROMPT_VERSION = 'kit-0.1'
+// kit-0.2 (Nov 8 2026): the voiceover is its own narration for B-roll, not
+// the walkthrough lines again, and no line or joke is reused across outputs.
+export const KIT_PROMPT_VERSION = 'kit-0.2'
 
 export const KIT_TONES: Record<string, string> = {
   professional:
@@ -45,11 +47,13 @@ NEVER SAY: {{NEVER_SAY}}
 WRITE SIX THINGS, in this shape:
 
 1. walkthrough: 7 to 9 shots for a 30-second one-take walkthrough. Each shot: where (the room and the camera move, e.g. "front door · to camera", "kitchen · pan left to the window"), action (one sentence: where to stand, what to do, when to say the line), line (what the agent says: one sentence, under 16 words, the turn as the last word), seconds (e.g. "0–3"), fact (the listing fact the line is built on, or "" ). Shot 1 is the hook (on screen, first two seconds); the last shot is the button, said as the door closes. One laugh per room at most. Then cut15: which shot numbers make the 15-second cut; cut60: what the 60-second cut adds (one sentence).
-2. voiceover: the same walkthrough as clean narration for text-to-voice or the agent's own voice over B-roll: one line per shot, label = the room, text = the line as spoken (no directions, no quotes).
+2. voiceover: a separate script, written to be heard over silent B-roll of the same rooms (text-to-voice or the agent's own voice recorded later), not said to camera. 5 to 7 segments in walkthrough order, label = the room, text = one or two sentences as spoken (no directions, no quotes). It must NOT repeat any walkthrough line or reuse a walkthrough joke: same rooms, new words, a narrator's angle (what the buyer will do here, the listing-speak vs the reality), and its own button at the end.
 3. hooks: three first-two-second openers (line, move: which comedy move it uses, e.g. "specific picture", "escalation", "reversal", "buyer's inner voice", "price anchor", "listing-speak vs reality"). Each under 12 words. If MENTION THE PRICE is off, no hook uses the price.
 4. open_house: five pieces, label and text: "invite post" (2–3 sentences), "story · 3 frames" (three short on-screen lines, numbered), "sign line" (under 8 words, for the A-frame), "day-before reminder" (one sentence), "thank-you text" (one or two sentences, to a visitor, warm, no sales push). If no open-house time is given, write them without a time and say so in "skipped".
 5. posts: six, label and text: "just listed · instagram" (2–3 sentences), "just listed · tiktok" (fragments, under 25 words), "just listed · facebook" (3–4 sentences, the fullest), "price improvement" (1–2 sentences; use "now" with no number unless the price is under MUST SAY), "pending" (one line), "sold" (1–2 sentences, congratulate the new owners without naming them).
 6. straight: the MLS-ready description, 60–110 words, no humor at all, every fact given and nothing else.
+
+NO REPEATS: each output is written fresh. No sentence, joke, punchline or turn of phrase appears in two outputs (a running gag may come back, in new words). Hooks are not walkthrough lines; the sign line, story frames and posts each say something the walkthrough did not.
 
 Also: skipped: an array of {where, what} for any MUST SAY word you left out of an output and why (empty if none).
 

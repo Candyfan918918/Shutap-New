@@ -33,6 +33,14 @@ function readDraft(): Draft | null {
   try { const raw = sessionStorage.getItem(DRAFT_KEY); return raw ? (JSON.parse(raw) as Draft) : null } catch { return null }
 }
 
+/* Nov 8 2026: small line icons for the paste box and the trust row */
+const svgProps = { 'aria-hidden': true, fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', viewBox: '0 0 24 24' } as const
+function IconLock({ big }: { big?: boolean }) { const n = big ? 18 : 14; return <svg {...svgProps} width={n} height={n} className="rl-ic"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg> }
+function IconClip() { return <svg {...svgProps} width={16} height={16} className="rl-ic"><rect x="8" y="3" width="8" height="4" rx="1" /><path d="M16 5h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2" /></svg> }
+function IconLink() { return <svg {...svgProps} width={16} height={16} className="rl-ic"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" /><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" /></svg> }
+function IconShield() { return <svg {...svgProps} width={18} height={18} className="rl-ic"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z" /><path d="M9 12l2 2 4-4" /></svg> }
+function IconDoc() { return <svg {...svgProps} width={18} height={18} className="rl-ic"><path d="M4 4h16v16H4z" /><path d="M8 9h8M8 13h8M8 17h5" /></svg> }
+
 /** Chips you can add with Enter and remove with ×. */
 function Chips({ label, hint, value, onChange }: { label: string; hint: string; value: string[]; onChange: (v: string[]) => void }) {
   const [text, setText] = useState('')
@@ -53,7 +61,7 @@ function Chips({ label, hint, value, onChange }: { label: string; hint: string; 
   )
 }
 
-export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, children }: { kitId?: string; sessionId?: string; prepaidSession?: string; urlIn?: string; textIn?: boolean; /** the demos and the page's own sections, shown under the box while nothing is open */ children?: React.ReactNode }) {
+export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, aside, children }: { kitId?: string; sessionId?: string; prepaidSession?: string; urlIn?: string; textIn?: boolean; /** Nov 8 2026: the sample kit, beside the box in the first screen while nothing is open */ aside?: React.ReactNode; /** the page's own sections, shown under the first screen while nothing is open */ children?: React.ReactNode }) {
   const { userId, ready } = useCurrentAlias()
   const navigate = useNavigate()
   const [url, setUrl] = useState('')
@@ -159,13 +167,16 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, child
     return r.clientSecret
   }
 
-  async function read() {
-    const u = url.trim()
-    const t = text.trim()
-    if (!u && t.length < 40) return
-    if (!userId) return gate()
+  /** box: which paste box on /realtors started it (Nov 8 2026: top or mid) */
+  async function read(box: 'top' | 'mid' = 'top') {
+    const u = pasteText ? '' : url.trim()
+    const t = pasteText ? text.trim() : ''
+    track('paste_box_submit', { box, how: pasteText ? 'text' : 'url', signed_in: !!userId })
+    if (!pasteText && !/^https?:\/\//i.test(u)) return setReadNote(u ? "that doesn't look like a web address · it starts with https://" : 'paste your listing link first · it starts with https://')
+    if (pasteText && t.length < 40) return setReadNote('paste the whole listing text: address, beds, baths, the description')
+    if (!userId) return gate(box)
     setReading(true); setListing(null); setReadNote('')
-    track('listing_read_started', { how: u ? 'url' : 'text' })
+    track('listing_read_started', { how: u ? 'url' : 'text', box })
     try {
       const r = await readListing({ data: u ? { url: u } : { text: t } })
       if (!r.ok) {
@@ -184,12 +195,32 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, child
     }
   }
 
-  function gate() {
+  function gate(box?: 'top' | 'mid') {
     setDurableReturn('/realtors')
     try { sessionStorage.setItem('shutap_returnTo', '/realtors') } catch { /* noop */ }
     setSheet('signin')
-    track('signin_prompt_seen', { where: 'realtors_kit' })
+    track('signin_prompt_seen', { where: 'realtors_kit', box: box ?? null })
   }
+
+  // Nov 8 2026: the mid-page box hands its link to this box and reads it here,
+  // so both boxes run one flow (same sign-in, same draft kept across it)
+  const pendingRead = useRef<string | null>(null)
+  useEffect(() => {
+    const on = (e: Event) => {
+      const u = String((e as CustomEvent<string>).detail ?? '').trim()
+      if (!u) return
+      setPasteText(false); setUrl(u); pendingRead.current = u
+      topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    window.addEventListener('rl-paste', on)
+    return () => window.removeEventListener('rl-paste', on)
+  }, [])
+  useEffect(() => {
+    if (pendingRead.current === null || pendingRead.current !== url || pasteText) return
+    pendingRead.current = null
+    void read('mid')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url, pasteText])
 
   async function write(existing?: KitData) {
     if (!userId) return gate()
@@ -224,13 +255,130 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, child
     <button type="button" className="rl-chip soft" aria-pressed={controls[k]} onClick={() => setControls((c) => ({ ...c, [k]: !c[k] }))}>{label}: {controls[k] ? 'on' : 'off'}</button>
   )
 
+  const landing = !kit && !listing && !!aside
+  const usageLine = usage
+    ? (usage.kits.cap === null ? 'unlimited kits' : `${kitsLeft} of ${usage.kits.cap} kit${usage.kits.cap === 1 ? '' : 's'} left${usage.kits.period === 'month' ? ' this month' : ''}${usage.credits > 0 ? ` · +${usage.credits} bought` : ''}`)
+    : 'First kit free · no card'
+  const switchMode = (toText: boolean) => { setPasteText(toText); setReadNote(''); track('paste_text_toggle', { open: toText }) }
+
+  // Nov 8 2026: the paste box before a listing is read. A link in two
+  // numbered steps, or (expanded) the listing text.
+  const pasteBox = (
+    <div className="rl-box rl-box2" data-ph-private>
+      {!pasteText ? (
+        <div className="rl-box-body rl-steps">
+          <div className="rl-step">
+            <span className="rl-num" aria-hidden>1</span>
+            <div className="rl-step-b">
+              <p className="rl-step-t">Copy your listing’s web address</p>
+              <div className="rl-urlbar rl-only-wide" aria-hidden>
+                <IconLock /><span className="u">https://www.zillow.com/homedetails/…</span><span className="k">⌘C</span>
+              </div>
+              <p className="rl-note rl-only-wide">Zillow · Redfin · Realtor.com · MLS · brokerage site</p>
+              <p className="rl-note rl-only-narrow">In the Zillow or Redfin app: Share › Copy link</p>
+            </div>
+          </div>
+          <div className="rl-step">
+            <span className="rl-num" aria-hidden>2</span>
+            <div className="rl-step-b">
+              <label htmlFor="rl-url" className="rl-step-t">Paste it</label>
+              <div className="rl-paste-row">
+                <input id="rl-url" className="rl-input rl-input-lg" placeholder="https://…" value={url} onChange={(e) => { setUrl(e.target.value); if (readNote) setReadNote('') }} onKeyDown={(e) => { if (e.key === 'Enter') void read('top') }} inputMode="url" autoComplete="off" />
+                <button type="button" className="rl-btn rl-btn-lg" disabled={reading} onClick={() => void read('top')}>{reading ? 'reading…' : 'Get my free kit →'}</button>
+              </div>
+              {readNote && <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{readNote}</p>}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="rl-box-body">
+          <div className="rl-row" style={{ gap: 8 }}><IconClip /><label htmlFor="rl-text" className="rl-step-t">Paste the listing text</label></div>
+          <p className="rl-note">On the listing page: select all (⌘A), copy (⌘C), paste here.</p>
+          <textarea id="rl-text" className="rl-textarea" style={{ minHeight: 150, borderColor: 'var(--rose)' }} placeholder="Address, price, beds, baths, sq ft, the description, open-house times…" value={text} onChange={(e) => { setText(e.target.value); if (readNote) setReadNote('') }} />
+          <div className="rl-row" style={{ justifyContent: 'space-between' }}>
+            <span className="rl-note">Shutap uses only what you paste.</span>
+            <button type="button" className="rl-btn rl-btn-lg" disabled={reading} onClick={() => void read('top')}>{reading ? 'reading…' : 'Get my free kit →'}</button>
+          </div>
+          {readNote && <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{readNote}</p>}
+        </div>
+      )}
+      <div className="rl-box-foot rl-box2-foot">
+        <span>{usageLine}</span>
+        {pasteText
+          ? <button type="button" className="rl-linkbtn" onClick={() => switchMode(false)}><IconLink /><span>Paste a link instead</span></button>
+          : <button type="button" className="rl-linkbtn" onClick={() => switchMode(true)}><IconClip /><span>No link? Paste the text</span></button>}
+      </div>
+    </div>
+  )
+
+  // the listing read back: the facts, the one thing, the tone, then write
+  const listingBox = listing && (
+    <div className="rl-box" data-ph-private>
+      <div className="rl-box-head">
+        <span>● the listing</span>
+        <span style={{ fontWeight: 500, color: 'var(--muted)' }}>{usage ? usageLine : 'first kit free'}</span>
+      </div>
+      <div className="rl-box-body">
+        <div className="rl-row" style={{ justifyContent: 'space-between' }}>
+          <span className="rl-lbl r">read from {listing.source} · nothing added</span>
+          <button className="rl-mini" onClick={() => setListing(null)}>read another</button>
+        </div>
+        <div className="rl-facts">{listingFacts(listing).map((f) => <span key={f} className="rl-fact">{f}</span>)}</div>
+        <div>
+          <span className="rl-lbl">the one thing about it</span>
+          <textarea className="rl-textarea" style={{ minHeight: 56 }} placeholder="the thing a buyer notices first: the balcony that fits one chair, the train, the 1957 kitchen…" value={note} onChange={(e) => setNote(e.target.value.slice(0, 600))} />
+        </div>
+        <div>
+          <span className="rl-lbl">tone · one per kit</span>
+          <div className="rl-tone" style={{ marginTop: 6 }}>{TONES.map(toneBtn)}</div>
+        </div>
+        <button type="button" className="rl-mini" aria-expanded={moreOpen} onClick={() => setMoreOpen((v) => !v)} style={{ alignSelf: 'flex-start' }}>{moreOpen ? 'fewer options ▴' : 'more options: roast, must say, never say ▾'}</button>
+        {moreOpen && (
+          <>
+            <div className="rl-row">{toggle('roast_house', 'roast the house')}{toggle('roast_neighborhood', 'roast the neighborhood')}{toggle('mention_price', 'mention the price in the jokes')}</div>
+            <Chips label="must say" hint="type and press Enter: the brokerage, the open house, a feature…" value={controls.must_say} onChange={(v) => setControls((c) => ({ ...c, must_say: v }))} />
+            <Chips label="never say" hint="words that must not appear" value={controls.never_say} onChange={(v) => setControls((c) => ({ ...c, never_say: v }))} />
+          </>
+        )}
+      </div>
+      <div className="rl-box-foot">
+        <span>fair-housing check on every line · nothing added beyond the listing</span>
+        <button className="rl-btn" disabled={writing} onClick={() => void write()}>{writing ? 'writing the kit… 20–40s' : 'write the kit →'}</button>
+      </div>
+    </div>
+  )
+
+  const mineLine = !kit && !listing && mine.length > 0 && (
+    <p className="rl-note" style={{ textAlign: landing ? 'left' : 'center' }}>
+      {mine.length} {mine.length === 1 ? 'kit' : 'kits'} of yours · <Link to="/creations" search={{ show: 'kits' } as never} className="rl-note" style={{ textDecoration: 'underline' }}>open them in My creations →</Link>
+    </p>
+  )
+
   return (
     <div className="rl">
+      {landing ? (
+        <div className="rl-hero2" ref={topRef}>
+          <div className="rl-hero2-head">
+            <p className="rl-kicker">Shutap for Realtors</p>
+            <h1 className="rl-h1 rl-h1-2">Paste a listing.<br />Get a video script <em>and every post to go with it.</em></h1>
+            <p className="rl-lead2">To film: walkthrough, voiceover, hooks. To post: open-house kit, social posts, MLS copy. In your tone, in about 30 seconds.</p>
+          </div>
+          <div className="rl-hero2-aside">{aside}</div>
+          <div className="rl-hero2-box">
+            {pasteBox}
+            <ul className="rl-trust">
+              <li><IconShield /><span>Fair-housing checked</span></li>
+              <li><IconDoc /><span>Nothing made up</span></li>
+              <li><IconLock big /><span>Private, never trains AI</span></li>
+            </ul>
+            {mineLine}
+          </div>
+        </div>
+      ) : (
       <div className="rl-col" ref={topRef}>
         <div>
           <p className="rl-kicker">shutap for realtors</p>
           <h1 className="rl-h1">Your listing, <em>funnier.</em></h1>
-          {!kit && !listing && <p className="rl-lead">Introduce every listing your way, in one of four tones: professional, funny, luxury or young. Promoting a property gets easy, and fun enough that people want to watch.</p>}
         </div>
 
         {kit ? (
@@ -241,78 +389,16 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, child
               {usage && <span className="rl-note">{usage.kits.cap === null ? 'kits: unlimited' : `kits: ${usage.kits.used} of ${usage.kits.cap}${usage.kits.period === 'month' ? ' this month' : ' free'}`}{usage.credits > 0 ? ` · ${usage.credits} bought, ready` : ''} · copies and downloads: unlimited</span>}
             </div>
           </>
-        ) : (
-          <div className="rl-box" data-ph-private>
-            <div className="rl-box-head">
-              <span>● {listing ? 'the listing' : pasteText ? 'paste the listing text' : 'paste the listing link'}</span>
-              <span style={{ fontWeight: 500, color: 'var(--muted)' }}>{usage ? (usage.kits.cap === null ? 'unlimited kits' : `${kitsLeft} of ${usage.kits.cap} kit${usage.kits.cap === 1 ? '' : 's'} left${usage.kits.period === 'month' ? ' this month' : ''}${usage.credits > 0 ? ` · +${usage.credits} bought` : ''}`) : 'first kit free'}</span>
-            </div>
-            <div className="rl-box-body">
-              {!listing ? (
-                <>
-                  {!pasteText ? (
-                    <>
-                      <p className="rl-note" style={{ fontSize: 14, color: 'var(--ink-2)' }}>Open the listing in your browser, copy the web address from the address bar (it starts with <b>https://</b>) and paste it here. MLS portal links, your brokerage page, Zillow, Redfin, Realtor.com all work.</p>
-                      <div className="rl-row">
-                        <input className="rl-input" style={{ flex: '1 1 320px' }} placeholder="https://…" value={url} onChange={(e) => setUrl(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') void read() }} inputMode="url" autoComplete="off" />
-                        <button className="rl-btn" disabled={reading || !/^https?:\/\//i.test(url.trim())} onClick={() => void read()}>{reading ? 'reading…' : 'read the listing →'}</button>
-                      </div>
-                      {url.trim() && !/^https?:\/\//i.test(url.trim()) && <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>that doesn't look like a web address · it should start with https://</p>}
-                    </>
-                  ) : (
-                    <>
-                      <textarea className="rl-textarea" placeholder="paste the listing text: address, price, beds, baths, sqft, the description, the open house…" value={text} onChange={(e) => setText(e.target.value)} />
-                      <div className="rl-row"><button className="rl-btn" disabled={reading || text.trim().length < 40} onClick={() => void read()}>{reading ? 'reading…' : 'read the listing'}</button><button className="rl-mini" onClick={() => setPasteText(false)}>paste a link instead</button></div>
-                    </>
-                  )}
-                  {readNote && <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{readNote}</p>}
-                  {!pasteText && <p className="rl-note">No link? <button type="button" className="rl-mini" onClick={() => setPasteText(true)}>paste the listing text instead</button></p>}
-                </>
-              ) : (
-                <>
-                  <div className="rl-row" style={{ justifyContent: 'space-between' }}>
-                    <span className="rl-lbl r">read from {listing.source} · nothing added</span>
-                    <button className="rl-mini" onClick={() => setListing(null)}>read another</button>
-                  </div>
-                  <div className="rl-facts">{listingFacts(listing).map((f) => <span key={f} className="rl-fact">{f}</span>)}</div>
-                  <div>
-                    <span className="rl-lbl">the one thing about it</span>
-                    <textarea className="rl-textarea" style={{ minHeight: 56 }} placeholder="the thing a buyer notices first: the balcony that fits one chair, the train, the 1957 kitchen…" value={note} onChange={(e) => setNote(e.target.value.slice(0, 600))} />
-                  </div>
-                  <div>
-                    <span className="rl-lbl">tone · one per kit</span>
-                    <div className="rl-tone" style={{ marginTop: 6 }}>{TONES.map(toneBtn)}</div>
-                  </div>
-                  <button type="button" className="rl-mini" aria-expanded={moreOpen} onClick={() => setMoreOpen((v) => !v)} style={{ alignSelf: 'flex-start' }}>{moreOpen ? 'fewer options ▴' : 'more options: roast, must say, never say ▾'}</button>
-                  {moreOpen && (
-                    <>
-                      <div className="rl-row">{toggle('roast_house', 'roast the house')}{toggle('roast_neighborhood', 'roast the neighborhood')}{toggle('mention_price', 'mention the price in the jokes')}</div>
-                      <Chips label="must say" hint="type and press Enter: the brokerage, the open house, a feature…" value={controls.must_say} onChange={(v) => setControls((c) => ({ ...c, must_say: v }))} />
-                      <Chips label="never say" hint="words that must not appear" value={controls.never_say} onChange={(v) => setControls((c) => ({ ...c, never_say: v }))} />
-                    </>
-                  )}
-                </>
-              )}
-            </div>
-            <div className="rl-box-foot">
-              <span>{listing ? 'fair-housing check on every line · nothing added beyond the listing' : 'nobody at shutap reads your listings · nothing is made up'}</span>
-              {listing && <button className="rl-btn" disabled={writing} onClick={() => void write()}>{writing ? 'writing the kit… 20–40s' : 'write the kit →'}</button>}
-            </div>
-          </div>
-        )}
+        ) : listing ? listingBox : pasteBox}
 
-        {/* Nov 6 2026: kits live in My creations, under the profile */}
-        {!kit && !listing && mine.length > 0 && (
-          <p className="rl-note" style={{ textAlign: 'center' }}>
-            {mine.length} {mine.length === 1 ? 'kit' : 'kits'} of yours · <Link to="/creations" search={{ show: 'kits' } as never} className="rl-note" style={{ textDecoration: 'underline' }}>open them in My creations →</Link>
-          </p>
-        )}
+        {mineLine}
 
-        {!listing && <p className="rl-note" style={{ textAlign: 'center' }}>
+        {!listing && !kit && <p className="rl-note" style={{ textAlign: 'center' }}>
           first kit free with an account · one kit {usd(KIT_ONCE.amount)} · Basic {usd(PLANS.basic.amount)}/mo: 20 kits a month · Pro {usd(PLANS.pro.amount)}/mo: unlimited · copies and downloads always unlimited · <Link to="/pricing" className="rl-note">pricing</Link>
         </p>}
-        {!kit && !listing && children}
       </div>
+      )}
+      {landing && children}
 
       {toast && <div className="rl-toast" role="status">{toast}</div>}
 
