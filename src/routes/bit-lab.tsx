@@ -234,7 +234,7 @@ function DemoMaker({ controls }: { controls: BitControls }) {
   const [funnier, setFunnier] = useState<DemoFunnier[]>([])
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
-  async function make() {
+  async function make(lines: Draft) {
     if (missingSlots(lines).length) return
     setBusy(true); setMsg('')
     try {
@@ -252,7 +252,7 @@ function DemoMaker({ controls }: { controls: BitControls }) {
       <h2 style={{ margin: 0, fontSize: 18 }}>The /bits demo</h2>
       <p className="fd-muted" style={{ margin: 0 }}>Type the five lines in-house, the way a visitor would. Tap funnier on a line where it helps and pick one; those lines show as “funnier · picked” on /bits, the rest as their words. Then make it the demo.</p>
       <div className="bt bt-bare"><div className="bt-box">
-        <LinedBox tier="pro" controls={controls} lines={lines} onLines={setLines} locked={locked} onLocked={setLocked} busy={busy} onMake={() => void make()} box="lab"
+        <LinedBox tier="pro" controls={controls} lines={lines} onLines={setLines} locked={locked} onLocked={setLocked} busy={busy} onMake={(l) => void make(l)} box="lab"
           onLimit={() => setMsg('funnier limit reached')} onCrisis={() => setMsg('the crisis check stopped this line')} say={setMsg}
           onPicked={(slot, typed, picked, move) => setFunnier((f) => [...f.filter((x) => x.slot !== slot), { slot: slot as DemoFunnier['slot'], typed: f.find((x) => x.slot === slot)?.typed ?? typed, picked, move }])} />
       </div></div>

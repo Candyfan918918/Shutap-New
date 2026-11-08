@@ -153,10 +153,15 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
       if (!r.ok) {
         setTouch(null)
         if (r.reason === 'limited') return onTouchLimit()
+        track('kit_line_funnier_failed', { where, reason: r.reason })
         return say(r.reason === 'rate_limited' ? 'one at a time · try again in a moment' : 'that one did not come back · try again')
       }
       setOptions(r.options)
       offered.current[key] = [...(offered.current[key] ?? []), ...r.options.map((o) => o.line)].slice(-12)
+    } catch {
+      setTouch(null)
+      track('kit_line_funnier_failed', { where, reason: 'network' })
+      say('could not reach Shutap · try again')
     } finally {
       setTouching(false)
     }

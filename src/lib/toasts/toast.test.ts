@@ -119,3 +119,10 @@ test('a speech well under its target is rewritten; a little under is only noted'
   const short = checkToast(near, two).find((c) => c.rule.startsWith('runs short'))
   assert.ok(!short || !short.fatal)
 })
+
+test('funnier on an edited speech line may keep the number the speaker typed', async () => {
+  const { touchOptionFails } = await import('./toast.server')
+  const line = 'He has been late to 12 of my birthdays'
+  assert.equal(touchOptionFails('Late to 12 birthdays and early to every buffet', form, line), null)
+  assert.match(touchOptionFails('Late to 13 birthdays and early to every buffet', form, line) ?? '', /invented number/)
+})

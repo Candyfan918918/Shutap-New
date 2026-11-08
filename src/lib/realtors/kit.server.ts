@@ -175,12 +175,14 @@ export async function writeKit(l: Listing, c: ListingControls): Promise<KitResul
 export type KitTouchOption = { line: string; move: string }
 
 /** The one-line checks: fair housing, never-say, numbers not the listing's. */
-export function checkLine(line: string, l: Listing, c: ListingControls): string | null {
+export function checkLine(line: string, l: Listing, c: ListingControls, nearby = ''): string | null {
   const fh = fairHousingHit(line)
   if (fh) return `fair housing: "${fh}"`
   const lower = line.toLowerCase()
   for (const w of c.never_say.map((x) => x.toLowerCase()).filter(Boolean)) if (lower.includes(w)) return `never say: "${w}"`
   const nums = allowedNumbers(l, c)
+  // a number already in the line being made funnier (or around it) is the agent's
+  for (const m of nearby.match(/\d[\d,]*/g) ?? []) nums.add(m.replace(/,/g, ''))
   for (const m of line.match(/\d[\d,]*/g) ?? []) {
     const n = m.replace(/,/g, '')
     if (n.length <= 1 || nums.has(n)) continue
@@ -214,7 +216,7 @@ export async function touchKitLine(l: Listing, c: ListingControls, where: string
     const opts = (Array.isArray(raw?.options) ? raw!.options : [])
       .map((o: any) => ({ line: tidy(o?.line).replace(/^["'“]|["'”]$/g, ''), move: tidy(o?.move).slice(0, 60) }))
       .filter((o) => o.line && o.line.toLowerCase() !== current.toLowerCase() && !avoid.some((a) => a.toLowerCase() === o.line.toLowerCase()))
-      .filter((o) => !checkLine(o.line, l, c))
+      .filter((o) => !checkLine(o.line, l, c, `${current}\n${context}`))
     if (opts.length >= 2) return opts.slice(0, 3)
     console.warn('[kit-touch] too few options passed', { got: opts.length })
   }

@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { fairHousingHit, listingFacts } from './listing'
 import { factsFromText, readListingText } from './read.server'
-import { checkKit, kitLines } from './kit.server'
+import { checkKit, checkLine, kitLines } from './kit.server'
 import type { Kit, Listing, ListingControls } from './listing'
 
 const SAMPLE = '4B Alder Court, San Mateo, CA 94401. $749,000. 2 bed 1 bath condo, 870 sq ft, built 1987. Original hardwood, balcony. HOA $410/month. Open house Sunday 1-4.'
@@ -75,4 +75,11 @@ test('a results page is split into cards and the #N card is read exactly', () =>
   assert.match(f.description ?? '', /^Here is your chance/)
   const g = factsFromCard(cards[1]!)
   assert.equal(g.price, '$2,688,000'); assert.equal(g.beds, 4); assert.equal(g.sqft, 1700); assert.equal(g.city, 'Menlo Park')
+})
+
+test('funnier on a line the agent typed may keep the agent\'s own number', () => {
+  const typed = 'Seen by 140 people at the open house'
+  assert.equal(checkLine('140 people came, 139 of them for the cookies', listing, controls, typed)?.startsWith('number not on the listing: 139') ?? false, true)
+  assert.equal(checkLine('140 people came for the cookies', listing, controls, typed), null)
+  assert.match(checkLine('140 people came for the cookies', listing, controls) ?? '', /number not on the listing/)
 })

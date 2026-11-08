@@ -44,6 +44,8 @@ export function EditableBit({ bitId, version, tier, say, draft, onDraft, locked,
   const [keeping, setKeeping] = useState(false)
   const [touches, setTouches] = useState<{ used: number; cap: number | null } | null>(null)
   const offered = useRef<Record<string, string[]>>({})
+  /** each line's paragraph: funnier reads what is typed right now */
+  const els = useRef<Partial<Record<Slot, HTMLElement | null>>>({})
   /** one level of undo per line */
   const undo = useRef<Partial<Record<Slot, string>>>({})
   const dirty = SLOTS.some((s) => readSlot(draft, s) !== readSlot(version, s) && (s.startsWith('tag') ? Number(s.slice(3)) < version.tags.length : true))
@@ -67,8 +69,26 @@ export function EditableBit({ bitId, version, tier, say, draft, onDraft, locked,
     setLine(s, line, true)
   }
 
+  /** the bit as typed on the page this instant (state can lag a blur) */
+  function live(): Draft {
+    let next = draft
+    for (const sl of slots) {
+      const el = els.current[sl]
+      if (!el) continue
+      const t = (el.innerText ?? '').replace(/\n+/g, ' ').trim()
+      if (t !== readSlot(next, sl)) {
+        if (!undo.current[sl]) undo.current[sl] = readSlot(next, sl)
+        next = writeSlot(next, sl, t)
+        if (!yours.includes(sl)) onYours([...yours, sl])
+      }
+    }
+    if (next !== draft) onDraft(next)
+    return next
+  }
+
   async function funnier(s: Slot) {
     if (tier === 'guest') return onSignIn?.()
+    const draft = live()
     if (locked.includes(s)) return say('that line is locked · unlock it first')
     jokeTap('line_touched', tier, { slot: s })
     setOpen(s); setOptions(null); setPicked(-1); setBusy(true)
@@ -78,11 +98,16 @@ export function EditableBit({ bitId, version, tier, say, draft, onDraft, locked,
         setOpen(null)
         if (r.reason === 'limited') { jokeTrack('touch_blocked', tier, { slot: s }); return onLimit() }
         if (r.reason === 'sign_in') return onSignIn?.()
+        jokeTrack('touch_failed', tier, { slot: s, where: 'result', reason: r.reason })
         return say(r.reason === 'rate_limited' ? 'one at a time · try again in a moment' : 'that one did not come back · try again')
       }
       setOptions(r.options)
       setTouches({ used: r.used, cap: r.cap })
       offered.current[s] = [...(offered.current[s] ?? []), ...r.options.map((o) => o.line)].slice(-12)
+    } catch {
+      setOpen(null)
+      jokeTrack('touch_failed', tier, { slot: s, where: 'result', reason: 'network' })
+      say('could not reach Shutap · try again')
     } finally {
       setBusy(false)
     }
@@ -147,6 +172,7 @@ export function EditableBit({ bitId, version, tier, say, draft, onDraft, locked,
                   {isYours && !isLocked && <span className="bt-mark yours">yours</span>}
                 </span>
                 <p
+                  ref={(el) => { els.current[s] = el }}
                   className={`bt-v${isHook ? ' hook' : ''} bt-etext`}
                   contentEditable={!isLocked}
                   suppressContentEditableWarning

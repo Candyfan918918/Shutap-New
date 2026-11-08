@@ -67,7 +67,8 @@ type Props = {
   onLocked: (l: Slot[]) => void
   busy: boolean
   /** all five lines written: make the bit from them, word for word */
-  onMake: () => void
+  /** the five lines as typed this instant */
+  onMake: (lines: Draft) => void
   /** which box this is, for events: 'top' or 'mid' */
   box?: string
   onSignIn?: () => void
@@ -92,6 +93,9 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
   const offered = useRef<Record<string, string[]>>({})
   const typedOnce = useRef<Record<string, boolean>>({})
   const [focusSlot, setFocusSlot] = useState<Slot | null>(null)
+  /** each line's editable paragraph: a tap on funnier reads what is typed
+   *  right now, even if the line has not blurred into state yet */
+  const els = useRef<Partial<Record<Slot, HTMLElement | null>>>({})
   const guide = guideLine(lines, locked)
   const written = writtenSlots(lines)
 
@@ -116,7 +120,21 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
     if (e.key === 'Enter') { e.preventDefault(); (e.target as HTMLElement).blur() }
   }
 
+  /** the lines as typed on the page this instant (state can lag a blur) */
+  function live(): typeof lines {
+    let next = lines
+    for (const sl of LINE_SLOTS) {
+      const el = els.current[sl]
+      if (!el) continue
+      const t = (el.innerText ?? '').replace(/\n+/g, ' ').trim()
+      if (t !== readSlot(next, sl)) next = writeSlot(next, sl, t)
+    }
+    if (next !== lines) onLines(next)
+    return next
+  }
+
   async function funnier(s: Slot) {
+    const lines = live()
     if (!readSlot(lines, s).trim()) { jokeTap('line_tap_empty', tier, { slot: s, what: 'funnier', box }); return flash(EMPTY_TAP) }
     if (locked.includes(s)) return flash('That line is locked. Unlock it to try funnier.')
     if (tier === 'guest') { jokeTap('funnier_needs_signin', tier, { slot: s, box }); return onSignIn?.() }
@@ -129,11 +147,16 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
         if (r.reason === 'limited') { jokeTrack('touch_blocked', tier, { slot: s, where: 'box' }); return onLimit() }
         if (r.reason === 'sign_in') return onSignIn?.()
         if (r.reason === 'crisis') return onCrisis()
+        jokeTrack('touch_failed', tier, { slot: s, where: 'box', box, reason: r.reason })
         return say(r.reason === 'rate_limited' ? 'one at a time · try again in a moment' : 'that one did not come back · try again')
       }
       setOptions(r.options)
       setTouches({ used: r.used, cap: r.cap })
       offered.current[s] = [...(offered.current[s] ?? []), ...r.options.map((o) => o.line)].slice(-12)
+    } catch {
+      setOpen(null)
+      jokeTrack('touch_failed', tier, { slot: s, where: 'box', box, reason: 'network' })
+      say('could not reach Shutap · try again')
     } finally {
       setTouching(false)
     }
@@ -148,6 +171,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
     setOpen(null)
   }
   function toggleLock(s: Slot) {
+    const lines = live()
     if (!readSlot(lines, s).trim()) { jokeTap('line_tap_empty', tier, { slot: s, what: 'lock', box }); return flash(EMPTY_TAP) }
     if (tier === 'guest' && onGuestLock && !locked.includes(s)) return onGuestLock(s)
     const on = !locked.includes(s)
@@ -155,11 +179,12 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
     jokeTap('line_locked', tier, { slot: s, on, where: 'box', box })
   }
   function make() {
-    const missing = missingSlots(lines)
+    const now = live()
+    const missing = missingSlots(now)
     jokeTap('box_submit', tier, { box, written: 5 - missing.length, locked: locked.length, ready: !missing.length })
     if (missing.length) return flash(`Write the ${listLines(missing)} to continue. Stuck? Write a rough version and tap funnier.`)
     setNote(null)
-    onMake()
+    onMake(now)
   }
 
   return (
@@ -180,6 +205,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
             </div>
             <div className={`bt-tbox ${state}`}>
               <p
+                ref={(el) => { els.current[s] = el }}
                 className={`bt-v bt-etext${has ? '' : ' empty'}`}
                 contentEditable={!isLocked && !busy}
                 suppressContentEditableWarning
