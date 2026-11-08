@@ -545,13 +545,13 @@ export function ToastForm({ occasionIn, preset, prepaidSession, otherChoice, onS
               <>
                 <p className="rl-lbl r" style={{ margin: 0 }}>your {usage.tier === 'free' ? 'second' : 'next'} toast · {spec.label}</p>
                 <h3 style={{ margin: 0, font: '800 22px/1.15 var(--sora)', color: 'var(--wine)' }}>{usage.tier === 'free' ? `Your first toast was free. This one is ${usd(TOAST_ONCE.amount)}.` : `That's your toast this month. This one is ${usd(TOAST_ONCE.amount)}.`}</h3>
-                <p className="rl-note" style={{ fontSize: 14 }}>Your form is saved. Pay once and Shutap writes the toast now.</p>
+                <p className="rl-note" style={{ fontSize: 14 }}>Your form is saved. Pay once and Shutap writes the toast now. You edit it until you lock; once locked, it's final, no more edits.</p>
                 <button type="button" className="ts-plan" aria-pressed={choice === 'once'} onClick={() => setChoice('once')}>
                   <span className="top"><b>This toast</b><em>{usd(TOAST_ONCE.amount)} <small>one time, no subscription</small></em></span>
                   <span className="tf-buys">
                     {['The speech, written around your stories', 'Speech PDF with pause and laugh marks', 'Cue cards, 4 to a page', 'The phone prompter', 'The 60-second version', 'Rehearse timer', spec.keepsake ? 'Keepsake + the text to send after' : 'The text to send after', 'No watermark, downloads with no limit'].map((x) => <span key={x}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2f6a45" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12l5 5 9-10" /></svg>{x}</span>)}
                   </span>
-                  <p>Edit and tap funnier as much as you like until you lock. A change after the lock is a new toast. Always in profile › My creations.</p>
+                  <p>After it's written, edit and tap funnier as much as you like. When you lock, that's the final version: no more edits. A change after the lock is a new toast. Always in profile › My creations.</p>
                 </button>
                 {usage.tier === 'free' && (
                   <button type="button" className="ts-plan" aria-pressed={choice === 'basic'} onClick={() => setChoice('basic')}>
@@ -573,7 +573,7 @@ export function ToastForm({ occasionIn, preset, prepaidSession, otherChoice, onS
             {sheet === 'prebuy' && (
               <>
                 <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>This toast · {usd(TOAST_ONCE.amount)}</h3>
-                <p className="rl-note">Pay once and Shutap writes it right after: clean, no watermark. Every download, copy and the prompter are unlimited, forever, under profile › My creations › toasts. No subscription. Tax may be added.</p>
+                <p className="rl-note">Pay once and Shutap writes it right after: clean, no watermark. Edit it until it sounds like you; once you lock it, it's the final version, no more edits. Every download, copy and the prompter are unlimited, forever, under profile › My creations › toasts. No subscription. Tax may be added.</p>
                 {checkoutError ? <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{checkoutError}</p> : (
                   <div style={{ minHeight: 420 }}>
                     <EmbeddedCheckoutProvider key="toast-prepay" stripe={getStripe()} options={{ fetchClientSecret: fetchPrepaySecret }}>
