@@ -7,7 +7,7 @@ import { SITE_URL } from '@/lib/site'
 const URL = `${SITE_URL}/ai-disclosure`
 const TITLE = "AI Disclosure — How Shutap Uses AI | Shutap Humor Amplifier Lab"
 const DESCRIPTION =
-  "Shutap drafts with AI (Google Gemini and OpenAI models, through the Lovable AI Gateway), working from your material and its own in-house jokes and techniques. Nobody at Shutap reads what you make, and none of it is used to train AI. AI can be wrong; you decide what to use."
+  "Shutap uses AI (Google Gemini and OpenAI models, through the Lovable AI Gateway): on Bits only when you tap funnier on a line; for realtor kits and toasts, to draft from your material. Nobody at Shutap reads what you make, and none of it is used to train AI. AI can be wrong; you decide what to use."
 
 export const Route = createFileRoute('/ai-disclosure')({
   head: () => ({
@@ -89,8 +89,9 @@ function AiDisclosurePage() {
             color: '#e4dfe2',
           }}
         >
-          you bring the material: what happened, your listing, your stories about the person.
-          shutap drafts with ai from that and from its own in-house jokes and techniques. nobody at
+          you bring the material: your bit, your listing, your stories about the person. on a bit,
+          ai only suggests when you tap funnier; realtor kits and toasts are drafted with ai from
+          what you give, and you edit them. nobody at
           shutap reads what you make, and none of it is ever used to train anything. ai can get
           things wrong, miss the joke or say something offensive. it&rsquo;s not therapy or advice.
           you decide what to use.
@@ -140,7 +141,7 @@ function AiDisclosurePage() {
       </p>
       <p>
         Removing identifying details uses automated checks and an AI model, and it can miss things.
-        Nothing Shutap drafts searches the internet for other people&rsquo;s jokes, and no
+        Nothing Shutap&rsquo;s AI suggests searches the internet for other people&rsquo;s jokes, and no
         comedian&rsquo;s lines are in Shutap&rsquo;s instructions. The AI models were trained by
         Google and OpenAI, not by Shutap, on data those companies chose; we can&rsquo;t change what
         they trained on, and we don&rsquo;t pretend otherwise. What we control is what goes in from
@@ -159,7 +160,7 @@ function AiDisclosurePage() {
       <p>
         The Shutap Humor Amplifier Lab dataset is in-house: the Shutap team writes, selects and rates its own
         jokes, pairing everyday situations with jokes tagged by technique, voice and how wild. It is
-        what guides how Shutap writes, and it is the only joke material Shutap uses to train or
+        what guides Shutap&rsquo;s suggestions, and it is the only joke material Shutap uses to train or
         tune AI models. How your text is handled is set out in the{' '}
         <a href="/privacy">Privacy Policy</a>.
       </p>

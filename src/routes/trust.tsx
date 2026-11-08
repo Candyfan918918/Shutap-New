@@ -16,7 +16,7 @@ const SECTIONS = [
   { heading: "Private until you post", body: "Bits you write stay private, in My creations. Only what you post to a room is public. The Mirror is private to you. Shutap staff don't read the text of your stories or bits, except to fix a problem you report or when the law requires it." },
   { heading: "Jokes about situations, not people", body: "Shutap's jokes go at the situation, never at a real person someone could identify. That keeps your content shareable and keeps rooms from turning into callouts." },
   { heading: "Reporting and takedowns", body: "Anyone can report a post or comment. When a post gets three reports, it's hidden until reviewed. If a post is about you, email hello@shutap.com or use the report page and we'll take a look." },
-  { heading: "Crisis check", body: "If something you write reads as a crisis, Shutap writes no jokes, posts nothing, and shows where to get help. Shutap is not a crisis service." },
+  { heading: "Crisis check", body: "If something you write reads as a crisis, Shutap makes nothing, posts nothing, and shows where to get help. Shutap is not a crisis service." },
   { heading: "Your data, your call", body: "Delete any post, comment or your whole account in the app at any time. To get a copy of your data or delete a single bit, email hello@shutap.com. We don't sell personal data." },
   { heading: "AI, disclosed", body: "Jokes are written and ranked by AI models. AI can be wrong or offensive, so you decide what to post." },
 ];

@@ -54,7 +54,7 @@ const ITEMS: Item[] = [
   {
     href: "/ai-disclosure",
     label: "AI disclosure",
-    sub: "what writes your jokes, our in-house joke dataset, and what we never do with your content.",
+    sub: "where Shutap uses AI, our in-house joke dataset, and what we never do with your content.",
   },
   {
     href: "/disclaimer",

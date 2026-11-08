@@ -58,7 +58,7 @@ function PrivacyPage() {
           <b>What you write:</b> your original story is checked for contact details and sent to an
           AI model that removes identifying details. If that model doesn&rsquo;t respond, only
           emails, phone numbers and links are removed before saving. We save the cleaned story,
-          with the bits Shutap writes from it and any rewrites you make. The short video is drawn from the bit on your own device; we don&rsquo;t
+          with your bits and any rewrites you ask for. The short video is drawn from the bit on your own device; we don&rsquo;t
           keep a copy of the file.
         </li>
         <li>
@@ -100,11 +100,11 @@ function PrivacyPage() {
           would see them. Replays are kept for 30 days.
         </li>
         <li>
-          <b>Joke battle:</b> the jokes in the homepage joke battle are written by Shutap, never taken
+          <b>Joke battle:</b> the jokes in the homepage joke battle are in-house, never taken
           from anyone&rsquo;s story. When you play, we record which line you picked (or that you
           picked none of them, or skipped), how long you took, and a random ID kept in your browser.
-          If you&rsquo;re signed in, your picks are linked to your account. We use picks to improve how
-          Shutap writes jokes and to show you your own rank, streak and humor type. Other players never
+          If you&rsquo;re signed in, your picks are linked to your account. We use picks to improve
+          Shutap&rsquo;s suggestions and to show you your own rank, streak and humor type. Other players never
           see your picks.
         </li>
         <li>

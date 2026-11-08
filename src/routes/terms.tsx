@@ -43,8 +43,9 @@ function TermsPage() {
         any format. You bring the material: what happened (Shutap Bits, with a short video and the
         stand-up, sketch and skit formats), a real-estate listing (Shutap for Realtors) or your
         stories about a person (Shutap Toasts). Shutap removes identifying details where it stores
-        text and drafts from your material, in your voice. You can download, share or post what it
-        drafts. Shutap amplifies your humor; it never replaces
+        text. On Bits you write the bit and AI suggests only where you tap &ldquo;funnier&rdquo;;
+        realtor kits and toasts are drafted from your material. You can download, share or post
+        what you make. Shutap amplifies your humor; it never replaces
         it. Shutap is for entertainment only.
       </p>
       <p>
@@ -69,7 +70,7 @@ function TermsPage() {
         If you or someone else may be in danger, contact emergency services. In the US, call or
         text <b>988</b> or call <b>911</b>. In the UK and Ireland, call Samaritans on{' '}
         <b>116 123</b>. Elsewhere, go to findahelpline.com. If something you type reads as a
-        crisis, Shutap writes no jokes and shows these resources instead.
+        crisis, Shutap makes nothing and shows these resources instead.
       </p>
 
       <h3>4. Age</h3>
@@ -108,7 +109,7 @@ function TermsPage() {
         no and keep using Shutap.
       </p>
       <p>
-        The jokes Shutap writes for you are yours to save, share and post, including in your
+        Your bits, realtor kits and toasts are yours to save, share and post, including in your
         own content. AI output may be similar to output for other people, and we don&rsquo;t
         promise any joke is unique or free of third-party rights.
       </p>

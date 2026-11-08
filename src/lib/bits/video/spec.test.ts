@@ -66,3 +66,19 @@ test('the cast follows the story: who, in order, drawn as the words say', () => 
   // 'called' is a verb, not a phone
   assert.equal(sceneFor('she called me at the restaurant'), 'restaurant')
 })
+
+test('a named place beats a word for a person; pronouns draw who the story never names', () => {
+  assert.equal(sceneFor('My roommate labels her food in the fridge, then eats mine'), 'kitchen')
+  assert.equal(sceneFor('my boss yelled at me at the gym'), 'gym')
+  assert.equal(sceneFor('my roommate keeps the remote'), 'living')
+  assert.equal(sceneFor('the barista spelled my name wrong'), 'restaurant')
+  assert.deepEqual(castFor('My roommate labels her food in the fridge'), [{ role: 'roommate', gender: 'f', kid: false }])
+  assert.deepEqual(castFor('He turned up two hours late and explained why'), [{ role: 'stranger', gender: 'm', kid: false }])
+  // both pronouns: nobody is guessed
+  assert.equal(castFor('he said she said').length, 0)
+  // the demo story keeps its cast and its street
+  assert.deepEqual(castFor('My daughter introduced the homeless lady. She wanted references.'), [
+    { role: 'kid', gender: 'f', kid: true },
+    { role: 'stranger', gender: 'f', kid: false },
+  ])
+})

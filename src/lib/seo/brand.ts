@@ -7,7 +7,7 @@ export const BRAND = {
   tagline: "SHUTAP. Say it funnier.",
   // The entity sentence (locked) — goes in every machine-read surface.
   entitySentence:
-    "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format. You bring what you want to say; Shutap drafts it funnier; you decide what stays. Your stories and words stay yours.",
+    "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format. You bring what you want to say; Shutap helps make it funnier; you decide what stays. Your stories and words stay yours.",
   // Short variant for title tags.
   entitySentenceShort:
     "Shutap Humor Amplifier Lab — say it funnier",

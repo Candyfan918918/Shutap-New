@@ -63,7 +63,7 @@ function DisclaimerPage() {
           lineHeight: 1.55,
         }}
       >
-        shutap writes jokes. not therapy, not advice, not a diagnosis. paying removes the
+        shutap is for comedy. not therapy, not advice, not a diagnosis. paying removes the
         watermark and adds the mirror. it doesn&rsquo;t buy a cure. if it&rsquo;s heavy,{' '}
         <a href="/safety">here&rsquo;s real help →</a>
       </div>

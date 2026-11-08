@@ -18,6 +18,7 @@ import { BIT_CAPS } from '@/lib/bits/plans'
 import { KIT_CAPS, TOAST_CAPS } from '@/lib/entitlements'
 import { PLANS, usd } from '@/lib/pricing'
 import { Footer } from '@/components/feed/Footer'
+import type { BitDemo } from '@/lib/bits/demo.functions'
 import { trackEvent } from '@/lib/tracking'
 import '@/components/feed/feed.css'
 import './bits.css'
@@ -134,7 +135,106 @@ function Preview({ lines }: { lines: Draft }) {
   )
 }
 
-export function BitsLanding() {
+const SLOT_OF = { hook: 'hook', setup: 'setup', tag0: 'tag0', tag1: 'tag1', button: 'button' } as const
+function demoLine(d: BitDemo, s: keyof typeof SLOT_OF): string {
+  return s === 'tag0' ? d.lines.tags[0] : s === 'tag1' ? d.lines.tags[1] : d.lines[s]
+}
+
+/** The video, drawn by the real video code from the demo's lines: the last
+ *  frame still, and the whole 5 seconds on "play". The free look (with the
+ *  mark), as a free account gets it. */
+function DemoVideo({ d }: { d: BitDemo }) {
+  const ref = useRef<HTMLCanvasElement>(null)
+  const raf = useRef(0)
+  const [playing, setPlaying] = useState(false)
+  const spec = useRef<ReturnType<typeof buildSpec> | null>(null)
+  useEffect(() => {
+    const l = d.lines
+    spec.current = buildSpec({ id: d.id, hook: l.hook, tags: [...l.tags], button: l.button }, [l.hook, l.setup, ...l.tags, l.button].join(' '))
+    const draw = (t: number) => {
+      const c = ref.current; const ctx = c?.getContext('2d'); if (!c || !ctx || !spec.current) return
+      ctx.setTransform(c.width / VIDEO_W, 0, 0, c.width / VIDEO_W, 0, 0); drawFrame(ctx, t, spec.current, { watermark: true })
+    }
+    draw(4.6)
+    void document.fonts?.ready.then(() => { if (!playing) draw(4.6) })
+    if (!playing) return
+    const t0 = performance.now()
+    const tick = () => { const t = (performance.now() - t0) / 1000; draw(Math.min(t, 4.99)); if (t < 5) raf.current = requestAnimationFrame(tick); else setPlaying(false) }
+    raf.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf.current)
+  }, [d, playing])
+  return (
+    <button type="button" className="bl-phone play" onClick={() => { setPlaying(true); tap('demo_tile_open', { tile: 'video' }) }} aria-label="Play the 5-second video for this bit">
+      <canvas ref={ref} width={360} height={Math.round((360 * VIDEO_H) / VIDEO_W)} />
+      {!playing && <span className="bl-play" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M7 4l13 8-13 8z" /></svg></span>}
+    </button>
+  )
+}
+
+function Demo({ d }: { d: BitDemo }) {
+  const [open, setOpen] = useState<null | 'standup' | 'sketch' | 'skit'>(null)
+  const [i, setI] = useState(0)
+  const rows = LINE_INFO.map((l) => ({ ...l, v: demoLine(d, l.s), f: d.funnier.find((f) => f.slot === l.s) }))
+  useEffect(() => {
+    if (open !== 'standup') return
+    setI(0)
+    const id = window.setInterval(() => setI((x) => (x < 4 ? x + 1 : x)), 2600)
+    return () => window.clearInterval(id)
+  }, [open])
+  const go = (t: 'standup' | 'sketch' | 'skit') => { setOpen(t); tap('demo_tile_open', { tile: t }) }
+  return (
+    <aside className="bl-side" aria-label="A real bit">
+      <div className="bl-side-h"><p className="bl-kick">A real bit</p><p className="bl-meta">typed in-house, the way you would</p></div>
+      <div className="bl-yours">
+        <p className="bl-lbl">What they wrote</p>
+        {rows.map((r) => (
+          <div key={r.s} className="bl-row on">
+            <span className="k">{r.k}</span>
+            <span className="v wrap">{r.v}{r.f && <small>they typed: “{r.f.typed}”</small>}</span>
+            {r.f ? <span className="mine fun">funnier · picked</span> : <span className="mine">their words</span>}
+          </div>
+        ))}
+      </div>
+      <p className="bl-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v16M6 14l6 6 6-6" /></svg>What Shutap made from those lines · no new jokes added</p>
+      <div className="bl-stage">
+        <div className="bl-tiles">
+          <div className="bl-tile video"><b>5-second video</b><DemoVideo d={d} /><span className="d">Tap to play. Free shows the shutap.com mark.</span></div>
+          <button type="button" className="bl-tile" onClick={() => go('standup')}>
+            <b>Stand-up</b>
+            <span className="bl-prompt"><i>0:00</i><span className="on">{d.lines.hook}</span></span>
+            <span className="d">Teleprompter · tap to run it</span>
+          </button>
+          <button type="button" className="bl-tile" onClick={() => go('sketch')} disabled={!d.sketch}>
+            <b>Sketch</b>
+            <span className="bl-page">{(d.sketch ?? []).slice(0, 5).map((e, k) => <span key={k} className={e.type === 'scene_heading' ? 'sh' : e.type === 'character' ? 'ch' : e.type === 'dialogue' ? 'dl on' : 'ac'}>{e.text}</span>)}</span>
+            <span className="d">One screenplay page · tap to read</span>
+          </button>
+          <button type="button" className="bl-tile wide" onClick={() => go('skit')} disabled={!d.skit}>
+            <b>Skit</b>
+            <span className="d">{d.skit?.length ? `${d.skit.length} shots to film alone: ${d.skit[0]!.shot}…` : 'A shot list to film alone'}</span>
+          </button>
+        </div>
+        {open && (
+          <div className={`bl-pop${open === 'standup' ? ' dark' : ''}`} role="dialog" aria-label={open}>
+            <div className="bl-pop-h"><b>{open === 'standup' ? 'Stand-up' : open === 'sketch' ? 'Sketch' : 'Skit'}</b><button type="button" onClick={() => setOpen(null)} aria-label="Close">×</button></div>
+            {open === 'standup' && (
+              <div className="bl-run">
+                <p className="dim">{i > 0 ? rows[i - 1]!.v : ''}</p>
+                <p className="lit">{rows[i]!.v}</p>
+                <p className="dim">{i < 4 ? rows[i + 1]!.v : ''}</p>
+              </div>
+            )}
+            {open === 'sketch' && <div className="bl-script">{(d.sketch ?? []).map((e, k) => <p key={k} className={e.type}>{e.text}</p>)}</div>}
+            {open === 'skit' && <ol className="bl-shots">{(d.skit ?? []).map((b, k) => <li key={k}><b>{b.shot}</b><span>{b.speaker}: {b.line}</span>{b.on_screen && <i>on screen: {b.on_screen}</i>}</li>)}</ol>}
+            <p className="bl-pop-f">Real Shutap output from these five lines, not edited. <a href="#bits-top">Write yours ↑</a></p>
+          </div>
+        )}
+      </div>
+    </aside>
+  )
+}
+
+export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
   const lines = useBoxLines()
   const [phase, setPhase] = useState<'write' | 'result'>('write')
   const onPhase = useCallback((p: 'write' | 'result') => setPhase(p), [])
@@ -168,7 +268,7 @@ export function BitsLanding() {
             <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e1c4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z" /><path d="M9 12l2 2 4-4" /></svg>Your bits never train AI</li>
           </ul>
         )}
-        {phase === 'write' && <Preview lines={lines} />}
+        {phase === 'write' && (demo ? <Demo d={demo} /> : <Preview lines={lines} />)}
       </section>
 
       <div className="bl-lower">

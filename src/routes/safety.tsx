@@ -83,7 +83,7 @@ function SafetyPage() {
       </div>
       <p>
         Shutap runs a crisis check on what people type, post and comment. If something reads as a
-        crisis, Shutap writes no jokes, posts nothing, and shows these lines instead. Anything
+        crisis, Shutap makes nothing, posts nothing, and shows these lines instead. Anything
         flagged stays private and is never posted.
       </p>
     </DocLayout>

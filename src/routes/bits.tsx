@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { SITE_URL } from '@/lib/site'
 import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
 import { BitsLanding, BITS_FAQ } from '@/pages/bits/BitsLanding'
+import { getBitDemo } from '@/lib/bits/demo.functions'
 
 // Shutap Bits (Nov 8 2026 redesign, approved by Candy): the person writes
 // all five lines; Shutap helps only where they tap "funnier", and lays the
@@ -34,5 +35,13 @@ export const Route = createFileRoute('/bits')({
     links: [{ rel: 'canonical', href: `${SITE_URL}${PATH}` }],
     scripts: [breadcrumbScript([{ name: 'Shutap Bits', path: PATH }]), { type: 'application/ld+json', children: JSON.stringify(faqSchema) }],
   }),
-  component: BitsLanding,
+  // the demo: the newest bit Candy picked in /bit-lab (null until there is one)
+  loader: () => getBitDemo(),
+  staleTime: 5 * 60 * 1000,
+  component: BitsRoute,
 })
+
+function BitsRoute() {
+  const demo = Route.useLoaderData()
+  return <BitsLanding demo={demo} />
+}

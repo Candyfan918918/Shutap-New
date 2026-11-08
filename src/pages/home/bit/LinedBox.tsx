@@ -76,9 +76,11 @@ type Props = {
   onLimit: () => void
   onCrisis: () => void
   say: (m: string) => void
+  /** /bit-lab demo maker: a funnier option was used on a line */
+  onPicked?: (slot: Slot, typed: string, picked: string, move: string) => void
 }
 
-export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, busy, onMake, box = 'top', onSignIn, onGuestLock, onLimit, onCrisis, say }: Props) {
+export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, busy, onMake, box = 'top', onSignIn, onGuestLock, onLimit, onCrisis, say, onPicked }: Props) {
   const touch = useServerFn(touchLine)
   const [open, setOpen] = useState<Slot | null>(null)
   const [options, setOptions] = useState<TouchOption[] | null>(null)
@@ -139,6 +141,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
   function useOption() {
     if (!open) return
     if (picked >= 0 && options) {
+      onPicked?.(open, readSlot(lines, open), options[picked]!.line, options[picked]!.move)
       setLine(open, options[picked]!.line)
       jokeTap('touch_picked', tier, { slot: open, pick: picked + 1, move: options[picked]!.move, where: 'box', box })
     } else jokeTap('touch_picked', tier, { slot: open, pick: 'mine', where: 'box', box })
