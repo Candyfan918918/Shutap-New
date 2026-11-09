@@ -7,7 +7,7 @@
  * PDF opens from the same code a buyer's download uses. The lines the current
  * form step fills light up. Every open is tracked (admin + PostHog). */
 import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { OCCASION, TONE_LABEL, clock, fromPlaceholders, lengthLabel, type Names, type ToastLine } from '@/lib/toasts/shared'
+import { OCCASION, TONE_LABEL, occasionName, clock, fromPlaceholders, lengthLabel, type Names, type ToastLine } from '@/lib/toasts/shared'
 import type { ToastDemo } from '@/lib/toasts/demo.functions'
 import { trackEvent } from '@/lib/tracking'
 import { phCapture } from '@/lib/posthog'
@@ -43,9 +43,9 @@ async function openPdf(kind: 'speech' | 'cards' | 'keepsake', demo: ToastDemo, n
   const m = await import('@/lib/toasts/toast-pdf')
   const t = demo.toast
   const blob = kind === 'speech'
-    ? m.speechPdf({ occasion: demo.form.occasion, tone: demo.form.tone, length: demo.form.length, lines: t.lines, names, marked: false })
+    ? m.speechPdf({ name: occasionName(demo.form.occasion, demo.form), occasion: demo.form.occasion, tone: demo.form.tone, length: demo.form.length, lines: t.lines, names, marked: false })
     : kind === 'cards'
-      ? m.cueCardsPdf({ occasion: demo.form.occasion, cards: t.cards, names, marked: false, trueThing: t.lines.find((l) => l.source === 'true_thing')?.text })
+      ? m.cueCardsPdf({ name: occasionName(demo.form.occasion, demo.form), occasion: demo.form.occasion, cards: t.cards, names, marked: false, trueThing: t.lines.find((l) => l.source === 'true_thing')?.text })
       : m.keepsakePdf({ occasion: demo.form.occasion, lines: t.lines, names, marked: false })
   const url = URL.createObjectURL(blob)
   const w = window.open(url, '_blank', 'noopener')
@@ -100,7 +100,7 @@ export function DemoTiles({ demo, roles, step, page, onTry }: { demo: ToastDemo 
   const tryYours = () => { track('seo_cta_clicked', { page, kind: 'sample_tile', output: open }); close(); onTry() }
 
   const spec = demo ? OCCASION[demo.form.occasion] : null
-  const what = spec ? spec.label : ''
+  const what = demo ? occasionName(demo.form.occasion, demo.form) : ''
   const trueText = lines.find((l) => l.source === 'true_thing')?.text ?? ''
   const cards = demo?.toast.cards ?? []
   const cut = demo?.toast.cut60 ?? []
@@ -132,8 +132,8 @@ export function DemoTiles({ demo, roles, step, page, onTry }: { demo: ToastDemo 
     )
   }
 
-  const rowsSpeech = lines.map((l) => ({ k: l.section, v: shown(l.text), mine: mine(l), m: marksOf(l), note: l.note ? shown(l.note) : '', lit: lit(l, step) }))
-  const rowsCut = cut.map((l) => ({ k: l.section, v: shown(l.text), mine: mine(l), m: marksOf(l), note: '', lit: false }))
+  const rowsSpeech = lines.map((l) => ({ k: shown(l.section), v: shown(l.text), mine: mine(l), m: marksOf(l), note: l.note ? shown(l.note) : '', lit: lit(l, step) }))
+  const rowsCut = cut.map((l) => ({ k: shown(l.section), v: shown(l.text), mine: mine(l), m: marksOf(l), note: '', lit: false }))
   const pop: Partial<Record<Id, { n: number; title: string; use: string; rows?: typeof rowsSpeech; pdf?: 'speech' | 'cards' | 'keepsake' }>> = {
     speech: { n: 1, title: 'The speech', use: `${clock(demo.seconds)} of a ${lengthLabel(demo.form.occasion, demo.form.length)} target · the PDF marks every pause and laugh`, rows: rowsSpeech, pdf: 'speech' },
     cards: { n: 2, title: 'Cue cards', use: 'Print, cut, hold. Four to a Letter page.', pdf: 'cards' },
@@ -157,7 +157,7 @@ export function DemoTiles({ demo, roles, step, page, onTry }: { demo: ToastDemo 
     <section className="st dt" aria-label={`A real ${what} toast`}>
       <div className="st-head">
         <p className="rl-kicker" style={{ textAlign: 'left', margin: 0 }}>A real toast</p>
-        <p className="rl-note">{spec.label} · {TONE_LABEL[demo.form.tone]} · {lengthLabel(demo.form.occasion, demo.form.length)} · <span className="rl-only-wide">hover to open</span><span className="rl-only-narrow">tap one</span></p>
+        <p className="rl-note">{what} · {TONE_LABEL[demo.form.tone]} · {lengthLabel(demo.form.occasion, demo.form.length)} · <span className="rl-only-wide">hover to open</span><span className="rl-only-narrow">tap one</span></p>
       </div>
       {step > 1 && STEP_LINE[step] && <p className="dt-step" role="status"><span aria-hidden />{STEP_LINE[step]}</p>}
       <div className="dt-typed">

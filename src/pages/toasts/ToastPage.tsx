@@ -14,7 +14,7 @@ import { useCurrentAlias } from '@/hooks/use-current-alias'
 import { getStripe, getStripeEnvironment } from '@/lib/stripe'
 import { confirmToastPrepay, createToastCheckout, createToastPrepayCheckout, toastPaidStatus } from '@/lib/payments.functions'
 import { copyMyToast, cutMyToast, getMyToast, keepToastEdit, lockMyToast, myToastUsage, touchMyLine, type ToastRow } from '@/lib/toasts.functions'
-import { OCCASION, TONE_LABEL, clock, fromPlaceholders, toPlaceholders, toastSeconds, type Names, type ToastLine } from '@/lib/toasts/shared'
+import { OCCASION, TONE_LABEL, occasionName, clock, fromPlaceholders, toPlaceholders, toastSeconds, type Names, type ToastLine } from '@/lib/toasts/shared'
 import { readNames, saveNames } from '@/lib/toasts/names-store'
 import { lineTimes, speechText, toastTitle, withMark } from '@/lib/toasts/toast-text'
 import { cueCardsPdf, downloadBlob, keepsakePdf, pdfName, speechPdf } from '@/lib/toasts/toast-pdf'
@@ -141,7 +141,7 @@ function Header({ row, names, right }: { row: ToastRow; names: Names; right: Rea
   return (
     <div className="rl-row" style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <p className="rl-lbl r" style={{ margin: 0 }}>{spec.label} · {TONE_LABEL[row.tone]} · target {clock(row.length)}</p>
+        <p className="rl-lbl r" style={{ margin: 0 }}>{occasionName(row.occasion, row.form)} · {TONE_LABEL[row.tone]} · target {clock(row.length)}</p>
         <h1 style={{ margin: 0, font: '800 clamp(28px, 4vw, 38px)/1.1 var(--sora)', letterSpacing: '-0.03em', color: 'var(--wine)' }}>
           {row.locked_at ? 'Your toast ' : ''}{toastTitle(row.occasion, names).replace(/^For /, row.locked_at ? 'for ' : 'For ')}
         </h1>
@@ -313,7 +313,7 @@ function Editor({ row, names, say, onNames, onLocked }: { row: ToastRow; names: 
             </div>
             <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, background: '#f3f8f4', border: '1px solid #b9d3bf', borderRadius: 14, padding: '12px 16px' }}><b>Yours to keep.</b> Find it any time under your <b>profile → My creations → toasts</b>, with unlimited downloads.</p>
             <div className="rl-row" style={{ justifyContent: 'space-between', font: '600 13.5px var(--sora)', color: 'var(--ink-2)' }}>
-              <span>{spec.label} · {clock(row.length)} target</span><span style={{ color: over > 0 ? 'var(--rose-ink)' : '#2f6a45' }}>{clock(secs)} · {over > 0 ? `${over} seconds over` : `${-over} seconds to spare`}</span>
+              <span>{occasionName(row.occasion, row.form)} · {clock(row.length)} target</span><span style={{ color: over > 0 ? 'var(--rose-ink)' : '#2f6a45' }}>{clock(secs)} · {over > 0 ? `${over} seconds over` : `${-over} seconds to spare`}</span>
             </div>
             <div className="rl-row" style={{ justifyContent: 'flex-end' }}>
               <button type="button" className="rl-btn ghost" onClick={() => setSheet(false)}>keep editing</button>
@@ -357,7 +357,7 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
     track('toast_copied_text', { what, marked })
   }
   function pdf(lines: ToastLine[], label: string, what: string) {
-    downloadBlob(speechPdf({ occasion: row.occasion, tone: row.tone, length: what === 'cut60' ? 60 : row.length, lines, names, marked, label }), pdfName(row.occasion, names, what))
+    downloadBlob(speechPdf({ name: occasionName(row.occasion, row.form), occasion: row.occasion, tone: row.tone, length: what === 'cut60' ? 60 : row.length, lines, names, marked, label }), pdfName(row.occasion, names, what))
     track('toast_downloaded', { what, marked })
   }
   async function makeCut(again = false) {
@@ -404,7 +404,7 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <span style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 8, height: 32, padding: '0 14px', borderRadius: 999, background: 'var(--ink)', color: '#fff', font: '700 13px var(--sora)' }}><LockIcon color="#fff" />locked · the words are final</span>
             <h1 style={{ margin: 0, font: '800 clamp(28px, 4vw, 38px)/1.1 var(--sora)', letterSpacing: '-0.03em', color: 'var(--wine)' }}>Your toast {toastTitle(row.occasion, names).replace(/^For /, 'for ')}</h1>
-            <p style={{ margin: 0, fontSize: 15, color: 'var(--ink-2)' }}>{spec.label} · {TONE_LABEL[row.tone]} · {clock(toastSeconds(t.lines))} of {clock(row.length)}</p>
+            <p style={{ margin: 0, fontSize: 15, color: 'var(--ink-2)' }}>{occasionName(row.occasion, row.form)} · {TONE_LABEL[row.tone]} · {clock(toastSeconds(t.lines))} of {clock(row.length)}</p>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
             <button type="button" className="rl-btn ghost" disabled={copying} onClick={() => void changeALine()}>{copying ? 'copying…' : `change a line → new toast${pro ? ', free on Pro' : `, ${usd(TOAST_ONCE.amount)}`}`}</button>
@@ -439,7 +439,7 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
                   </div>
                 ))}
               </div>
-              <div className="rl-row"><button type="button" className="rl-btn" disabled={!t.cards.length} onClick={() => { downloadBlob(cueCardsPdf({ occasion: row.occasion, cards: t.cards, names, marked, trueThing: t.lines.find((l) => l.source === 'true_thing')?.text }), pdfName(row.occasion, names, 'cue-cards')); track('toast_downloaded', { what: 'cue_cards', marked }) }}>download cue cards</button></div>
+              <div className="rl-row"><button type="button" className="rl-btn" disabled={!t.cards.length} onClick={() => { downloadBlob(cueCardsPdf({ name: occasionName(row.occasion, row.form), occasion: row.occasion, cards: t.cards, names, marked, trueThing: t.lines.find((l) => l.source === 'true_thing')?.text }), pdfName(row.occasion, names, 'cue-cards')); track('toast_downloaded', { what: 'cue_cards', marked }) }}>download cue cards</button></div>
               <p className="rl-note">Print, cut on the dashed lines, hold in one hand. One beat a card: the cue words to glance at, the line to land in bold. Four to a Letter page, cut on the dashed lines.</p>
             </>
           ))}

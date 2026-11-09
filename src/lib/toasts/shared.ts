@@ -276,3 +276,15 @@ export function lengthLabel(o: Occasion, seconds: number): string {
   if (r) return `${Math.round(r[0] / 60)}–${Math.round(r[1] / 60)} min`
   return seconds < 60 ? `${seconds}s` : seconds % 60 === 0 ? `${seconds / 60} min` : `${seconds}s`
 }
+
+/** Nov 9 2026: "parent of the couple" read wrong on the mother-of-the-bride
+ *  page and on a mom's own PDFs. Name a parent's toast from who they are and
+ *  whose wedding it is; every other occasion keeps its label. */
+export function occasionName(occasion: Occasion, form?: { relation?: string; pronouns?: { friend?: Pronoun } } | null): string {
+  if (occasion !== 'parent') return OCCASION[occasion].label
+  const r = (form?.relation ?? '').toLowerCase()
+  const who = /\b(mom|mother|mum|mama)\b/.test(r) ? 'mother' : /\b(dad|father|papa)\b/.test(r) ? 'father' : 'parent'
+  const p = form?.pronouns?.friend
+  const side = p === 'she' ? 'bride' : p === 'he' ? 'groom' : 'couple'
+  return `${who} of the ${side}`
+}
