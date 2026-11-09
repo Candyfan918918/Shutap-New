@@ -435,6 +435,36 @@ export type Database = {
         }
         Relationships: []
       }
+      bit_demos: {
+        Row: {
+          controls: Json | null
+          created_at: string
+          funnier: Json
+          id: string
+          lines: Json
+          sketch: Json | null
+          skit: Json | null
+        }
+        Insert: {
+          controls?: Json | null
+          created_at?: string
+          funnier?: Json
+          id?: string
+          lines: Json
+          sketch?: Json | null
+          skit?: Json | null
+        }
+        Update: {
+          controls?: Json | null
+          created_at?: string
+          funnier?: Json
+          id?: string
+          lines?: Json
+          sketch?: Json | null
+          skit?: Json | null
+        }
+        Relationships: []
+      }
       bit_downloads: {
         Row: {
           bit_id: string
