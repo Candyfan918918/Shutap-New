@@ -463,12 +463,19 @@ export type CutResult = { lines: ToastLine[]; seconds: number; checks: ToastChec
 export function trimToMinute(lines: ToastLine[], form: ToastForm): ToastLine[] {
   const must = form.must_say.map((w) => w.trim().toLowerCase()).filter(Boolean)
   const out = [...lines]
-  const fixed = (l: ToastLine, i: number) => l.source === 'story' || l.source === 'true_thing' || l.glass || i === 0 || must.some((w) => l.text.toLowerCase().includes(w))
+  // a must-say is kept once, in its fullest line (not a bare stub); a repeat goes
+  const keeper = new Map<string, ToastLine>()
+  for (const w of must) { const l = lines.filter((x) => x.text.toLowerCase().includes(w)).sort((x, y) => y.text.length - x.text.length)[0]; if (l) keeper.set(w, l) }
+  const fixed = (l: ToastLine, i: number) => l.source === 'story' || l.source === 'true_thing' || l.glass || i === 0 || [...keeper.values()].includes(l)
+  const repeat = (l: ToastLine) => !fixed(l, -1) && must.some((w) => l.text.toLowerCase().includes(w))
+  const rank = (l: ToastLine) => (repeat(l) ? 0 : /tag/i.test(l.section) ? 1 : 2)
+  // a must-say said twice reads as a slip in a minute-long toast: drop the repeat
+  for (let i = out.length - 1; i >= 0; i--) if (repeat(out[i]!)) out.splice(i, 1)
   while (toastSeconds(out) > 60) {
     const next = out
       .map((l, i) => ({ l, i }))
       .filter(({ l, i }) => !fixed(l, i))
-      .sort((a, b) => (/tag/i.test(a.l.section) ? 0 : 1) - (/tag/i.test(b.l.section) ? 0 : 1) || b.i - a.i)[0]
+      .sort((a, b) => rank(a.l) - rank(b.l) || b.i - a.i)[0]
     if (!next) break
     out.splice(next.i, 1)
   }
@@ -477,7 +484,7 @@ export function trimToMinute(lines: ToastLine[], form: ToastForm): ToastLine[] {
 
 /** "Make a 60-second version": written only when the speaker taps it. A
  *  speech that is already a minute or less is its own cut. */
-export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<CutResult | null> {
+export async function writeCut60(form: ToastForm, speech: ToastLine[], opts: { keepBest?: boolean } = {}): Promise<CutResult | null> {
   if (toastSeconds(speech) <= 60) return { lines: speech, seconds: toastSeconds(speech), checks: [], model: 'none' }
   const prompt = fill(TOAST_CUT_PROMPT, {
     OCCASION: OCCASION[form.occasion].label,
@@ -492,10 +499,10 @@ export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<
   for (let attempt = 0; attempt < 2; attempt++) {
     const model = attempt === 0 ? bitWriterModel() : backupWriterModel()
     const r = await writeOnce(model, prompt + feedback, BIT_BUDGET.write())
-    if (!r) continue
+    if (!r) { if (opts.keepBest) best = best ?? { lines: [], seconds: 0, checks: [{ rule: `${model}: no answer`, where: '60s cut', line: '', fatal: true }], model }; continue }
     const raw = (r.raw ?? {}) as any
     let lines = (Array.isArray(raw.lines) ? raw.lines : []).map(lineIn).filter(Boolean) as ToastLine[]
-    if (lines.length < 2) continue
+    if (lines.length < 2) { if (opts.keepBest) best = best ?? { lines, seconds: 0, checks: [{ rule: `${model}: unreadable answer`, where: '60s cut', line: '', fatal: true }], model }; continue }
     lines = trimToMinute(glassesUp(restoreTheirWords(lines, form), form), form)
     const checks = checkCut(lines, form)
     const cut = { lines, seconds: toastSeconds(lines), checks, model }
@@ -503,5 +510,6 @@ export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<
     best = best ?? cut
     feedback = `\n\nYOUR LAST CUT BROKE THESE RULES. Fix every one:\n${checks.filter((c) => c.fatal).map((c) => `- ${c.rule}`).join('\n')}\nAt most 110 words.`
   }
+  if (opts.keepBest) return best
   return best && !best.checks.some((c) => c.fatal) ? best : null
 }

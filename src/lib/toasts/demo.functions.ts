@@ -11,7 +11,7 @@ import { OCCASIONS, type Occasion, type Toast, type ToastForm } from './shared'
 
 export type ToastDemo = {
   id: string
-  form: Pick<ToastForm, 'occasion' | 'stories' | 'true_thing' | 'tone' | 'length' | 'relation'>
+  form: Pick<ToastForm, 'occasion' | 'stories' | 'true_thing' | 'tone' | 'length' | 'relation' | 'pronouns'>
   toast: Toast
   /** seconds, as the lab measured them */
   seconds: number
@@ -39,7 +39,7 @@ export const getToastDemo = createServerFn({ method: 'GET' })
       const f = row.form as ToastForm
       return {
         id: row.id as string,
-        form: { occasion: f.occasion as Occasion, stories: (f.stories ?? []).filter((s: string) => s?.trim()), true_thing: f.true_thing ?? '', tone: f.tone, length: Number(f.length), relation: f.relation ?? '' },
+        form: { occasion: f.occasion as Occasion, stories: (f.stories ?? []).filter((s: string) => s?.trim()), true_thing: f.true_thing ?? '', tone: f.tone, length: Number(f.length), relation: f.relation ?? '', pronouns: f.pronouns ?? { friend: 'they' } },
         toast: row.result.toast as Toast,
         seconds: Number(row.result.seconds ?? 0),
         cut_seconds: row.result.toast?.cut60?.length ? Number(row.result.cut_seconds ?? 0) : null,

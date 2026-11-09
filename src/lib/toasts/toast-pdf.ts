@@ -116,14 +116,14 @@ function renderPages(pages: string[][], title: string, marked: boolean, docName:
   return new Blob([pdf], { type: 'application/pdf' })
 }
 
-export type SpeechPdfIn = { occasion: Occasion; tone: Tone; length: number; lines: ToastLine[]; names: Partial<Names>; marked: boolean; label?: string }
+export type SpeechPdfIn = { occasion: Occasion; tone: Tone; length: number; lines: ToastLine[]; names: Partial<Names>; marked: boolean; label?: string; /** occasionName(): "mother of the bride" */ name?: string }
 
 /** The speech, ready to read from: clock in the margin, marks, big type. */
 export function speechPdf(t: SpeechPdfIn): Blob {
   const d = new Doc()
   const title = toastTitle(t.occasion, t.names)
   const secs = toastSeconds(t.lines)
-  d.text(`shutap toasts · ${OCCASION[t.occasion].label}`, 10, { bold: true, color: '0.76 0.13 0.42 rg', gapAfter: 10 })
+  d.text(`shutap toasts · ${t.name ?? OCCASION[t.occasion].label}`, 10, { bold: true, color: '0.76 0.13 0.42 rg', gapAfter: 10 })
   d.text(title, 26, { bold: true, color: '0.56 0.11 0.30 rg', gapAfter: 4 })
   d.text(`${t.label ?? 'the speech'} · ${TONE_LABEL[t.tone]} · ${clock(secs)} at a relaxed 140 words a minute (target ${clock(t.length)})`, 10, { color: '0.40 0.37 0.39 rg', gapAfter: 4 })
   d.text('|| pause  ·  (wait) let them laugh  ·  ^ glasses up: raise your glass', 9.5, { color: '0.56 0.54 0.55 rg', gapAfter: 8 })
@@ -169,7 +169,7 @@ export function pdfName(occasion: Occasion, names: Partial<Names>, what: string)
 
 /* ───────────────────────── cue cards: 4 a page, cut on the dashes ───────────────────────── */
 
-export type CueCardsIn = { occasion: Occasion; cards: { title: string; keys: string[]; land: string }[]; names: Partial<Names>; marked: boolean; /** the one true thing, so its card says "say it word for word" */ trueThing?: string }
+export type CueCardsIn = { occasion: Occasion; cards: { title: string; keys: string[]; land: string }[]; names: Partial<Names>; marked: boolean; name?: string; /** the one true thing, so its card says "say it word for word" */ trueThing?: string }
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9{}]+/g, ' ').trim()
 
@@ -180,7 +180,7 @@ const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9{}]+/g, ' ').trim()
  *  watermark runs over the cards and under the words. */
 export function cueCardsPdf(t: CueCardsIn): Blob {
   const title = toastTitle(t.occasion, t.names)
-  const what = `${OCCASION[t.occasion].label} toast`
+  const what = `${t.name ?? OCCASION[t.occasion].label} toast`
   const pages: string[][] = []
   const cw = W / 2
   const ch = H / 2

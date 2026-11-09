@@ -45,7 +45,7 @@ export function OccasionPage({ l, demo, prepaid }: { l: Landing; demo: ToastDemo
       const k = ln.section.split(' · ')[0]!.trim()
       if (seen.has(k)) continue
       seen.add(k)
-      shape.push({ k, v: fromPlaceholders(ln.text, names), mine: ln.source === 'story' || ln.source === 'true_thing' })
+      shape.push({ k: fromPlaceholders(k, names), v: fromPlaceholders(ln.text, names), mine: ln.source === 'story' || ln.source === 'true_thing' })
     }
   }
 

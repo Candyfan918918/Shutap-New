@@ -15,7 +15,7 @@ import { supabase } from '@/integrations/supabase/client'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { getMyToast, type ToastRow } from '@/lib/toasts.functions'
-import { OCCASION, clock, fromPlaceholders, lineSeconds, toastSeconds, type Names, type ToastLine } from '@/lib/toasts/shared'
+import { OCCASION, clock, occasionName, fromPlaceholders, lineSeconds, toastSeconds, type Names, type ToastLine } from '@/lib/toasts/shared'
 import { readNames, saveNames } from '@/lib/toasts/names-store'
 import { lineTimes } from '@/lib/toasts/toast-text'
 import { namesFromHash, saveRun, type RehearseRun } from '@/lib/toasts/on-the-day'
@@ -215,7 +215,7 @@ function Run({ row, lines, names, rehearse, short }: { row: ToastRow; lines: Toa
     <div className="pr" style={{ ['--tp-scale' as string]: size }}>
       <div className="pr-top">
         <a href={back}>done</a>
-        <span>{rehearse ? 'rehearse' : short ? '60-second version' : spec.label} · {fromPlaceholders(lines[idx]!.section, names)}</span>
+        <span>{rehearse ? 'rehearse' : short ? '60-second version' : occasionName(row.occasion, row.form)} · {fromPlaceholders(lines[idx]!.section, names)}</span>
         <b style={{ color: '#fff', fontSize: 17 }}>{clock(elapsed)} <span style={{ color: '#9a8890', fontWeight: 500 }}>/ {clock(target)}</span></b>
       </div>
       <div style={{ padding: '0 16px' }}><div style={{ height: 6, borderRadius: 999, background: '#2a2024', overflow: 'hidden' }}><div style={{ width: `${Math.min(100, (elapsed / Math.max(1, target)) * 100)}%`, height: '100%', background: elapsed > target ? '#ff6b6b' : '#e7548a' }} /></div></div>
