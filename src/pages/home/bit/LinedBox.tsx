@@ -259,8 +259,8 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
       <div className="bt-lined-foot">
         <p className={`bt-guide${guide.ready ? ' ready' : ''}`} role="status">{guide.text}</p>
         <div className="bt-lined-cta">
-          <button type="button" className="bt-btn bt-go" disabled={busy} onClick={make}>
-            Make my bit →
+          <button type="button" className="bt-btn bt-go" disabled={busy} aria-busy={busy} onClick={make}>
+            {busy ? 'Making it…' : 'Make my bit →'}
           </button>
         </div>
       </div>
