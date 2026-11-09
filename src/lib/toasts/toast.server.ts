@@ -45,9 +45,43 @@ export async function scrubOne(text: string): Promise<string> {
   let protectedText = t
   for (const [ph, token] of PROTECT) protectedText = protectedText.split(ph).join(token)
   const r = await runScrub(protectedText)
-  let out = (r.clean_text || '').trim() || protectedText
+  let out = keepPlaceholders(protectedText, (r.clean_text || '').trim() || protectedText)
   for (const [ph, token] of PROTECT) out = out.split(token).join(ph)
   return out
+}
+
+const PRONOUN = /^(he|she|they|him|her|them|his|hers|their|theirs)$/i
+const LABEL = /^\[[^\]]+\]$/
+const bare = (s: string) => s.replace(/[’']s$/i, '').replace(/^[“"(]+|[.,!?;:”")]+$/g, '').replace(/[’']s$/i, '')
+
+/** Nov 9 2026: the Scrubber sometimes rewrote the names the browser had
+ *  already swapped ("[friend]" became "[a friend]") or turned a plain "she"
+ *  into "[a friend]", so the speaker's own story reached the speech as
+ *  "When [a friend] was seven…". A pronoun or one of our placeholders is never
+ *  a name to hide: where the Scrubber replaced only that, put the speaker's
+ *  word back. Every other change it made stands. */
+export function keepPlaceholders(input: string, output: string): string {
+  const a = input.split(/\s+/).filter(Boolean)
+  const b = output.split(/\s+/).filter(Boolean)
+  const n = a.length, m = b.length
+  const L: number[][] = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0))
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) L[i]![j] = a[i] === b[j] ? L[i + 1]![j + 1]! + 1 : Math.max(L[i + 1]![j]!, L[i]![j + 1]!)
+  const out: string[] = []
+  let i = 0, j = 0
+  const ours = (w: string) => PROTECT.some(([, t]) => bare(w) === t) || PRONOUN.test(bare(w))
+  while (i < n || j < m) {
+    if (i < n && j < m && a[i] === b[j]) { out.push(b[j]!); i++; j++; continue }
+    // collect one changed stretch on each side
+    const si = i, sj = j
+    while ((i < n || j < m) && !(i < n && j < m && a[i] === b[j])) {
+      if (j < m && (i >= n || L[i]![j + 1]! >= L[i + 1]![j]!)) j++
+      else i++
+    }
+    const was = a.slice(si, i), now = b.slice(sj, j)
+    const label = bare(now.join(' '))
+    out.push(...(was.length === 1 && ours(was[0]!) && LABEL.test(label) ? was : now))
+  }
+  return out.join(' ')
 }
 
 /** The Scrubber on every free-text field before a model or a table sees it.
@@ -421,6 +455,26 @@ export function checkCut(cut: ToastLine[], form: ToastForm): ToastCheck[] {
 
 export type CutResult = { lines: ToastLine[]; seconds: number; checks: ToastCheck[]; model: string }
 
+/** Nov 9 2026: writers keep too many laugh beats (2.5s each), so a 110-word
+ *  cut of a 3-minute wedding speech still ran 65-70s and failed, and the
+ *  speaker got nothing. Take out Shutap's lines until it fits: tags first,
+ *  latest first. Never the speaker's words, the true thing, a must-say line,
+ *  the opener or the glasses line. Only removes; never adds. */
+export function trimToMinute(lines: ToastLine[], form: ToastForm): ToastLine[] {
+  const must = form.must_say.map((w) => w.trim().toLowerCase()).filter(Boolean)
+  const out = [...lines]
+  const fixed = (l: ToastLine, i: number) => l.source === 'story' || l.source === 'true_thing' || l.glass || i === 0 || must.some((w) => l.text.toLowerCase().includes(w))
+  while (toastSeconds(out) > 60) {
+    const next = out
+      .map((l, i) => ({ l, i }))
+      .filter(({ l, i }) => !fixed(l, i))
+      .sort((a, b) => (/tag/i.test(a.l.section) ? 0 : 1) - (/tag/i.test(b.l.section) ? 0 : 1) || b.i - a.i)[0]
+    if (!next) break
+    out.splice(next.i, 1)
+  }
+  return out
+}
+
 /** "Make a 60-second version": written only when the speaker taps it. A
  *  speech that is already a minute or less is its own cut. */
 export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<CutResult | null> {
@@ -442,7 +496,7 @@ export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<
     const raw = (r.raw ?? {}) as any
     let lines = (Array.isArray(raw.lines) ? raw.lines : []).map(lineIn).filter(Boolean) as ToastLine[]
     if (lines.length < 2) continue
-    lines = glassesUp(restoreTheirWords(lines, form), form)
+    lines = trimToMinute(glassesUp(restoreTheirWords(lines, form), form), form)
     const checks = checkCut(lines, form)
     const cut = { lines, seconds: toastSeconds(lines), checks, model }
     if (!checks.some((c) => c.fatal)) return cut
