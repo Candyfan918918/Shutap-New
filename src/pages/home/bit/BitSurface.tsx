@@ -440,7 +440,14 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
       } catch { /* noop */ }
     }
   }, [])
+  /* Nov 9 2026: the first save runs in the same commit as the restore,
+     before the restored text is in state, and wrote the EMPTY starting
+     draft over the saved one. A second box on the page (/bits) then read
+     that empty draft, and typing in it wiped the lines. The first run of
+     an empty draft only replaces a saved one once the person has typed
+     (typed.current); the restored value saves on the next render. */
   useEffect(() => {
+    if (!typed.current && !story) return
     try { sessionStorage.setItem(DRAFT_KEY, story) } catch { /* noop */ }
   }, [story])
   useEffect(() => {
@@ -452,6 +459,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     } catch { /* noop */ }
   }, [])
   useEffect(() => {
+    if (!typed.current && !writtenSlots(lines).length && !linesLocked.length) return
     try { sessionStorage.setItem(LINES_KEY, JSON.stringify({ lines, locked: linesLocked })) } catch { /* noop */ }
   }, [lines, linesLocked])
   useEffect(() => {
