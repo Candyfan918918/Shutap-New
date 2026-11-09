@@ -235,17 +235,19 @@ function DemoMaker({ controls }: { controls: BitControls }) {
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
   const msgRef = useRef<HTMLParagraphElement>(null)
+  const [saved, setSaved] = useState(false)
   // the message sits under the box, where Lovable's chat bar can cover it
   useEffect(() => { if (msg) msgRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }, [msg])
   async function make(lines: Draft) {
     if (missingSlots(lines).length) return
-    setBusy(true); setMsg('Saving the demo and writing its sketch and skit · about 20 seconds…')
+    setBusy(true); setSaved(false); setMsg('Saving the demo and writing its sketch and skit · about 20 seconds…')
     try {
       // keep only the funnier picks still on the line as it stands
       const now = (s: Slot) => (s === 'tag0' ? lines.tags[0] : s === 'tag1' ? lines.tags[1] : (lines as unknown as Record<string, string>)[s])
       const kept = funnier.filter((f) => now(f.slot)?.trim() === f.picked.trim())
       const r = await saveBitDemo({ data: { lines: { hook: lines.hook, setup: lines.setup, tags: [lines.tags[0] ?? '', lines.tags[1] ?? ''], button: lines.button }, funnier: kept, controls } })
-      setMsg(r.ok ? 'Saved. shutap.com/bits shows it now (sketch and skit written).' : `Not saved: ${r.error}`)
+      setSaved(r.ok)
+      setMsg(r.ok ? 'Saved. It is the demo on /bits now, with its video, stand-up, sketch and skit. Typed again and saved, the newest one shows.' : `Not saved: ${r.error}`)
     } catch (e) {
       setMsg(e instanceof Error ? e.message : 'failed')
     } finally { setBusy(false) }
@@ -259,7 +261,7 @@ function DemoMaker({ controls }: { controls: BitControls }) {
           onLimit={() => setMsg('funnier limit reached')} onCrisis={() => setMsg('the crisis check stopped this line')} say={setMsg}
           onPicked={(slot, typed, picked, move) => setFunnier((f) => [...f.filter((x) => x.slot !== slot), { slot: slot as DemoFunnier['slot'], typed: f.find((x) => x.slot === slot)?.typed ?? typed, picked, move }])} />
       </div></div>
-      {msg && <p ref={msgRef} role="status" style={{ margin: 0, fontWeight: 700 }}>{msg}</p>}
+      {msg && <p ref={msgRef} role="status" style={{ margin: 0, fontWeight: 700 }}>{msg}{saved && <> <a href="/bits" target="_blank" rel="noopener">See it on /bits →</a></>}</p>}
     </section>
   )
 }
