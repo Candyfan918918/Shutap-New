@@ -463,12 +463,19 @@ export type CutResult = { lines: ToastLine[]; seconds: number; checks: ToastChec
 export function trimToMinute(lines: ToastLine[], form: ToastForm): ToastLine[] {
   const must = form.must_say.map((w) => w.trim().toLowerCase()).filter(Boolean)
   const out = [...lines]
-  const fixed = (l: ToastLine, i: number) => l.source === 'story' || l.source === 'true_thing' || l.glass || i === 0 || must.some((w) => l.text.toLowerCase().includes(w))
+  // a must-say is kept once, in its fullest line (not a bare stub); a repeat goes
+  const keeper = new Map<string, ToastLine>()
+  for (const w of must) { const l = lines.filter((x) => x.text.toLowerCase().includes(w)).sort((x, y) => y.text.length - x.text.length)[0]; if (l) keeper.set(w, l) }
+  const fixed = (l: ToastLine, i: number) => l.source === 'story' || l.source === 'true_thing' || l.glass || i === 0 || [...keeper.values()].includes(l)
+  const repeat = (l: ToastLine) => !fixed(l, -1) && must.some((w) => l.text.toLowerCase().includes(w))
+  const rank = (l: ToastLine) => (repeat(l) ? 0 : /tag/i.test(l.section) ? 1 : 2)
+  // a must-say said twice reads as a slip in a minute-long toast: drop the repeat
+  for (let i = out.length - 1; i >= 0; i--) if (repeat(out[i]!)) out.splice(i, 1)
   while (toastSeconds(out) > 60) {
     const next = out
       .map((l, i) => ({ l, i }))
       .filter(({ l, i }) => !fixed(l, i))
-      .sort((a, b) => (/tag/i.test(a.l.section) ? 0 : 1) - (/tag/i.test(b.l.section) ? 0 : 1) || b.i - a.i)[0]
+      .sort((a, b) => rank(a.l) - rank(b.l) || b.i - a.i)[0]
     if (!next) break
     out.splice(next.i, 1)
   }
