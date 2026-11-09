@@ -9,7 +9,7 @@ import { pageMeta } from '@/lib/seo/page-meta'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { amIAdmin } from '@/lib/admin.functions'
-import { labCutToast, labToastEvals, labTouchToast, labWriteToast, rateLabToast, type ToastLedger } from '@/lib/toasts.functions'
+import { labCutEval, labCutToast, labToastEvals, labTouchToast, labWriteToast, rateLabToast, type ToastLedger } from '@/lib/toasts.functions'
 import { OCCASION, OCCASIONS, TONES, TONE_LABEL, clock, fromPlaceholders, toPlaceholders, toastSeconds, type Names, type Occasion, type Pronoun, type Tone, type ToastForm, type ToastLine } from '@/lib/toasts/shared'
 import '@/components/feed/feed.css'
 
@@ -151,6 +151,7 @@ function ToastLab() {
             {OCCASIONS.map((o) => { const b = ledger.by_occasion[o]; return <span key={o} style={{ marginRight: 12, color: b?.pick ? '#2e8b57' : '#8f898d' }}>{OCCASION[o].label}: {b ? `${b.pick} pick / ${b.pick + b.cut + b.rewrite} rated` : '—'}</span> })}
           </p>
         )}
+        {ledger && ledger.uncut.length > 0 && <UncutPicks list={ledger.uncut} onDone={() => labToastEvals({ data: {} }).then(setLedger).catch(() => {})} />}
 
         <section className="fd-post" style={{ gap: 12 }}>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -252,6 +253,31 @@ function Lines({ lines, names, onTouch, touchIndex }: { lines: ToastLine[]; name
           </div>
         )
       })}
+    </div>
+  )
+}
+
+/** Picks with no 60-second version: the page demo shows one only once it is made and kept. */
+function UncutPicks({ list, onDone }: { list: ToastLedger['uncut']; onDone: () => void }) {
+  const [state, setState] = useState<Record<string, string>>({})
+  async function make(id: string) {
+    setState((s) => ({ ...s, [id]: 'cutting…' }))
+    try {
+      const r = await labCutEval({ data: { eval_id: id } })
+      setState((s) => ({ ...s, [id]: r.ok ? `kept · ${clock(r.seconds)}` : `failed: ${r.checks.map((c) => c.rule + (c.line ? ` (“${c.line.slice(0, 50)}”)` : '')).join(' · ')}` }))
+      if (r.ok) onDone()
+    } catch (e) { setState((s) => ({ ...s, [id]: e instanceof Error ? e.message : 'failed' })) }
+  }
+  return (
+    <div className="fd-post" style={{ gap: 6, fontSize: 13 }}>
+      <b>Picks with no 60-second version (the page demo needs one)</b>
+      {list.map((p) => (
+        <div key={p.id} style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <span>{OCCASION[p.occasion as Occasion]?.label ?? p.occasion}{p.relation ? ` · ${p.relation}` : ''}</span>
+          <button type="button" className="fd-chip" data-cut-eval={p.id} disabled={state[p.id] === 'cutting…'} onClick={() => void make(p.id)}>make it</button>
+          {state[p.id] && <span data-cut-state={p.id} style={{ color: state[p.id]!.startsWith('kept') ? '#2e8b57' : state[p.id] === 'cutting…' ? '#8f898d' : '#b3261e' }}>{state[p.id]}</span>}
+        </div>
+      ))}
     </div>
   )
 }
