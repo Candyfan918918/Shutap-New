@@ -4,7 +4,7 @@ import { pageMeta } from '@/lib/seo/page-meta'
 // ranked, what the rules threw out and why, and how long each stage took.
 // Lab runs are not charged to the daily five.
 import { createFileRoute, notFound } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { amIAdmin } from '@/lib/admin.functions'
 import { labWriteBit, varyBit } from '@/lib/bits.functions'
 import { saveBitDemo, type DemoFunnier } from '@/lib/bits/demo.functions'
@@ -234,9 +234,12 @@ function DemoMaker({ controls }: { controls: BitControls }) {
   const [funnier, setFunnier] = useState<DemoFunnier[]>([])
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
+  const msgRef = useRef<HTMLParagraphElement>(null)
+  // the message sits under the box, where Lovable's chat bar can cover it
+  useEffect(() => { if (msg) msgRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }, [msg])
   async function make(lines: Draft) {
     if (missingSlots(lines).length) return
-    setBusy(true); setMsg('')
+    setBusy(true); setMsg('Saving the demo and writing its sketch and skit · about 20 seconds…')
     try {
       // keep only the funnier picks still on the line as it stands
       const now = (s: Slot) => (s === 'tag0' ? lines.tags[0] : s === 'tag1' ? lines.tags[1] : (lines as unknown as Record<string, string>)[s])
@@ -256,7 +259,7 @@ function DemoMaker({ controls }: { controls: BitControls }) {
           onLimit={() => setMsg('funnier limit reached')} onCrisis={() => setMsg('the crisis check stopped this line')} say={setMsg}
           onPicked={(slot, typed, picked, move) => setFunnier((f) => [...f.filter((x) => x.slot !== slot), { slot: slot as DemoFunnier['slot'], typed: f.find((x) => x.slot === slot)?.typed ?? typed, picked, move }])} />
       </div></div>
-      {msg && <p style={{ margin: 0, fontWeight: 700 }}>{msg}</p>}
+      {msg && <p ref={msgRef} role="status" style={{ margin: 0, fontWeight: 700 }}>{msg}</p>}
     </section>
   )
 }
