@@ -421,6 +421,26 @@ export function checkCut(cut: ToastLine[], form: ToastForm): ToastCheck[] {
 
 export type CutResult = { lines: ToastLine[]; seconds: number; checks: ToastCheck[]; model: string }
 
+/** Nov 9 2026: writers keep too many laugh beats (2.5s each), so a 110-word
+ *  cut of a 3-minute wedding speech still ran 65-70s and failed, and the
+ *  speaker got nothing. Take out Shutap's lines until it fits: tags first,
+ *  latest first. Never the speaker's words, the true thing, a must-say line,
+ *  the opener or the glasses line. Only removes; never adds. */
+export function trimToMinute(lines: ToastLine[], form: ToastForm): ToastLine[] {
+  const must = form.must_say.map((w) => w.trim().toLowerCase()).filter(Boolean)
+  const out = [...lines]
+  const fixed = (l: ToastLine, i: number) => l.source === 'story' || l.source === 'true_thing' || l.glass || i === 0 || must.some((w) => l.text.toLowerCase().includes(w))
+  while (toastSeconds(out) > 60) {
+    const next = out
+      .map((l, i) => ({ l, i }))
+      .filter(({ l, i }) => !fixed(l, i))
+      .sort((a, b) => (/tag/i.test(a.l.section) ? 0 : 1) - (/tag/i.test(b.l.section) ? 0 : 1) || b.i - a.i)[0]
+    if (!next) break
+    out.splice(next.i, 1)
+  }
+  return out
+}
+
 /** "Make a 60-second version": written only when the speaker taps it. A
  *  speech that is already a minute or less is its own cut. */
 export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<CutResult | null> {
@@ -442,7 +462,7 @@ export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<
     const raw = (r.raw ?? {}) as any
     let lines = (Array.isArray(raw.lines) ? raw.lines : []).map(lineIn).filter(Boolean) as ToastLine[]
     if (lines.length < 2) continue
-    lines = glassesUp(restoreTheirWords(lines, form), form)
+    lines = trimToMinute(glassesUp(restoreTheirWords(lines, form), form), form)
     const checks = checkCut(lines, form)
     const cut = { lines, seconds: toastSeconds(lines), checks, model }
     if (!checks.some((c) => c.fatal)) return cut
