@@ -1064,6 +1064,10 @@ export const GUIDE_SLUG_REDIRECTS: Record<string, string> = {
   "ai-joke-generators-compared": "ai-joke-tools-compared",
   "best-ai-joke-generator-for-tiktok": "best-ai-joke-tool-for-tiktok",
   "ai-roast-generator": "ai-roast-tools-compared",
+  // Nov 9 2026: addresses people arrive at (outside links, ads) that never
+  // were guides. A value starting with "/" is a page elsewhere on the site.
+  "office-holiday-party-speech": "/toasts/office-holiday-party",
+  "how-shutap-writes-a-bit": "/how-it-works",
 };
 
 export function getGuide(slug: string): Guide | undefined {

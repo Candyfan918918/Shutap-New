@@ -13,6 +13,7 @@ export const Route = createFileRoute("/guides/$slug")({
   codeSplitGroupings: [["component"]],
   beforeLoad: ({ params }) => {
     const moved = GUIDE_SLUG_REDIRECTS[params.slug];
+    if (moved?.startsWith("/")) throw redirect({ href: moved, statusCode: 301 });
     if (moved) throw redirect({ to: "/guides/$slug", params: { slug: moved }, statusCode: 301 });
   },
   loader: ({ params }) => {

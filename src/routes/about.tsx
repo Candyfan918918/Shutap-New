@@ -5,15 +5,17 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/about";
-const TITLE = "About — Shutap Humor Amplifier Lab";
+const TITLE = "About Shutap, the humor amplifier: say it funnier";
+// Nov 9 2026: 307 impressions, 10 clicks at position ~3. The snippet now says
+// what Shutap is and names the three products.
 const DESCRIPTION =
-  "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format.";
+  "Shutap is a humor amplifier on demand: say it funnier for any occasion. Bits for creators and comedians, Kits for realtors, Toasts for special occasions.";
 const CAPSULE =
-  "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format. You bring what you want to say; Shutap helps make it funnier; you decide what stays. Your stories and words stay yours.";
+  "Shutap is a humor amplifier on demand. It helps people say it funnier on the occasions that matter, with three products: Bits for creators and comedians, Kits for realtors, and Toasts for special occasions. You bring what you want to say; Shutap makes it funnier; you decide what stays. Your stories and words stay yours.";
 const SECTIONS = [
   {
-    heading: "Our goal: say it funnier",
-    body: "People who use humor well get listened to. Shutap started with bits for creators. Now it also makes listing kits for realtors and toasts for anyone with a speech to give, and Enterprise brings it to company presentations. Shutap works from your material; you decide what stays. Stay funny, stay human.",
+    heading: "What Shutap is: a humor amplifier, on demand",
+    body: "People who use humor well get listened to. Shutap amplifies the humor you already have, when you need it: a post, a listing, a toast. Bits are for creators and comedians, Kits are for realtors, and Toasts are for weddings, holidays, birthdays and every other occasion with a glass raised. Enterprise brings it to company presentations. Shutap works from your material; you decide what stays. Stay funny, stay human.",
   },
   {
     heading: "Bits: your bit, funnier",
@@ -108,6 +110,13 @@ export const Route = createFileRoute("/about")({
           name: "About Shutap",
           description: DESCRIPTION,
           url: `${SITE_URL}${PATH}`,
+          mainEntity: {
+            "@type": "Organization",
+            name: "Shutap",
+            url: SITE_URL,
+            slogan: "Say it funnier.",
+            description: "A humor amplifier on demand. Products: Shutap Bits (for creators and comedians), Shutap for Realtors (listing kits), Shutap Toasts (special occasions).",
+          },
         }),
       },
       breadcrumbScript([{ name: "About", path: PATH }]),
@@ -116,7 +125,7 @@ export const Route = createFileRoute("/about")({
   component: () => (
     <ContentPage
       breadcrumbs={[{ name: "About", path: PATH }]}
-      h1="About the Shutap Humor Amplifier Lab"
+      h1="About Shutap, the humor amplifier"
       capsule={CAPSULE}
       sections={SECTIONS}
       whoDoesWhat
