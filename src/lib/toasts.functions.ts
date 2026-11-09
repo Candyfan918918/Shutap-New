@@ -92,11 +92,13 @@ export const labTouchToast = createServerFn({ method: 'POST' })
 export const labCutToast = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ form: ToastFormIn, lines: z.array(LineIn).min(1).max(80) }).parse(d))
-  .handler(async ({ data, context }): Promise<{ ok: true; cut: CutResult } | { ok: false }> => {
+  .handler(async ({ data, context }): Promise<{ ok: true; cut: CutResult } | { ok: false; checks?: CutResult['checks'] }> => {
     await requireAdmin(context)
     const { writeCut60 } = await import('./toasts/toast.server')
-    const cut = await writeCut60(data.form as ToastForm, data.lines as ToastLine[])
-    return cut ? { ok: true, cut } : { ok: false }
+    // the lab sees why a cut failed (the product only ever gets a passing cut)
+    const cut = await writeCut60(data.form as ToastForm, data.lines as ToastLine[], { keepBest: true })
+    if (!cut) return { ok: false }
+    return cut.checks.some((c) => c.fatal) ? { ok: false, checks: cut.checks } : { ok: true, cut }
   })
 
 /** Admin only: rate a lab toast. */

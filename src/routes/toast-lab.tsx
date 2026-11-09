@@ -268,7 +268,7 @@ function Cut({ form, lines, names }: { form: ToastForm; lines: ToastLine[]; name
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
         <button type="button" className="fd-chip" aria-pressed disabled={state.busy} onClick={() => void make()}>{state.busy ? 'cutting…' : state.res ? 'make it again' : 'make a 60-second version'}</button>
         {state.res?.ok && <span className="fd-muted" style={{ fontSize: 12.5 }}>{clock(state.res.cut.seconds)} · {state.res.cut.model}{state.res.cut.checks.length ? ` · ${state.res.cut.checks.map((c) => c.rule).join(' · ')}` : ''}</span>}
-        {state.res && !state.res.ok && <span style={{ color: '#b3261e', fontSize: 12.5 }}>no cut passed the checks</span>}
+        {state.res && !state.res.ok && <span style={{ color: '#b3261e', fontSize: 12.5 }}>no cut passed the checks{state.res.checks?.length ? `: ${state.res.checks.filter((c) => c.fatal).map((c) => c.rule + (c.line ? ` (“${c.line.slice(0, 60)}”)` : '')).join(' · ')}` : ''}</span>}
         {state.error && <span style={{ color: '#b3261e', fontSize: 12.5 }}>{state.error}</span>}
       </div>
       {state.res?.ok && <Lines lines={state.res.cut.lines} names={names} />}

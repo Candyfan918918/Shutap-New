@@ -484,7 +484,7 @@ export function trimToMinute(lines: ToastLine[], form: ToastForm): ToastLine[] {
 
 /** "Make a 60-second version": written only when the speaker taps it. A
  *  speech that is already a minute or less is its own cut. */
-export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<CutResult | null> {
+export async function writeCut60(form: ToastForm, speech: ToastLine[], opts: { keepBest?: boolean } = {}): Promise<CutResult | null> {
   if (toastSeconds(speech) <= 60) return { lines: speech, seconds: toastSeconds(speech), checks: [], model: 'none' }
   const prompt = fill(TOAST_CUT_PROMPT, {
     OCCASION: OCCASION[form.occasion].label,
@@ -499,10 +499,10 @@ export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<
   for (let attempt = 0; attempt < 2; attempt++) {
     const model = attempt === 0 ? bitWriterModel() : backupWriterModel()
     const r = await writeOnce(model, prompt + feedback, BIT_BUDGET.write())
-    if (!r) continue
+    if (!r) { if (opts.keepBest) best = best ?? { lines: [], seconds: 0, checks: [{ rule: `${model}: no answer`, where: '60s cut', line: '', fatal: true }], model }; continue }
     const raw = (r.raw ?? {}) as any
     let lines = (Array.isArray(raw.lines) ? raw.lines : []).map(lineIn).filter(Boolean) as ToastLine[]
-    if (lines.length < 2) continue
+    if (lines.length < 2) { if (opts.keepBest) best = best ?? { lines, seconds: 0, checks: [{ rule: `${model}: unreadable answer`, where: '60s cut', line: '', fatal: true }], model }; continue }
     lines = trimToMinute(glassesUp(restoreTheirWords(lines, form), form), form)
     const checks = checkCut(lines, form)
     const cut = { lines, seconds: toastSeconds(lines), checks, model }
@@ -510,5 +510,6 @@ export async function writeCut60(form: ToastForm, speech: ToastLine[]): Promise<
     best = best ?? cut
     feedback = `\n\nYOUR LAST CUT BROKE THESE RULES. Fix every one:\n${checks.filter((c) => c.fatal).map((c) => `- ${c.rule}`).join('\n')}\nAt most 110 words.`
   }
+  if (opts.keepBest) return best
   return best && !best.checks.some((c) => c.fatal) ? best : null
 }
