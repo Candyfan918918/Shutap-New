@@ -91,7 +91,6 @@ export function GlobalHeader() {
   // a fresh account's name is minted a moment after sign-in, and the header
   // must never say "sign in" to someone who already is.
   const alias = aliasRow ?? (userId ? { name: '', emoji: '', avatar: null } : null)
-  const usage = useMyUsage(!!userId)
   const admin = useIsAdmin()
   const [flags, setFlags] = useState<Flags>(NO_FLAGS)
   useEffect(() => { getFlags().then(setFlags).catch(() => {}) }, [])
@@ -106,6 +105,7 @@ export function GlobalHeader() {
   }, [productsOpen])
   useEffect(() => { setProductsOpen(false) }, [pathname])
   const [menuOpen, setMenuOpen] = useState(false)
+  const usage = useMyUsage(!!userId, menuOpen)
   const areaRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const isWelcome = pathname === '/welcome'

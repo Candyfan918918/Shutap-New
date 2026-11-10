@@ -8,7 +8,10 @@ import { useServerFn } from '@tanstack/react-start'
 import { myUsage, type MyUsage } from '@/lib/bits.functions'
 import { PLANS, usd } from '@/lib/pricing'
 
-export function useMyUsage(enabled: boolean): MyUsage | null {
+/** `refreshKey`: a value that changes when the numbers should be read again
+ *  (Nov 9 2026: the account menu passes its open state, so a bit written in
+ *  this visit, or a new day, shows the moment the menu opens). */
+export function useMyUsage(enabled: boolean, refreshKey?: unknown): MyUsage | null {
   const fn = useServerFn(myUsage)
   const [u, setU] = useState<MyUsage | null>(null)
   useEffect(() => {
@@ -16,7 +19,7 @@ export function useMyUsage(enabled: boolean): MyUsage | null {
     let live = true
     fn({ data: {} }).then((r) => live && setU(r)).catch(() => {})
     return () => { live = false }
-  }, [enabled, fn])
+  }, [enabled, fn, refreshKey])
   return u
 }
 
@@ -61,7 +64,7 @@ export function UsageMini({ u, dark = false }: { u: MyUsage; dark?: boolean }) {
             <div key={p.key} style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12, color: muted, minWidth: 0 }}>
               <span aria-hidden style={{ width: 8, height: 8, borderRadius: 999, background: USAGE_COLORS[p.key], flex: 'none' }} />
               <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.label}{left === null || !p.when ? '' : <span style={{ opacity: 0.8 }}> · {p.when.replace('this ', '')}</span>}</span>
-              <b style={{ flex: 'none', color: left === 0 ? '#b3261e' : ink, fontWeight: 600 }}>{left === null ? '\u221e' : `${left} of ${p.cap}`}</b>
+              <b style={{ flex: 'none', color: left === 0 ? '#b3261e' : ink, fontWeight: 600 }}>{left === null ? '\u221e' : `${left} of ${p.cap} left`}</b>
             </div>
           )
         })}
