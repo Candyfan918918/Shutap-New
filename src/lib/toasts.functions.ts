@@ -101,6 +101,29 @@ export const labCutToast = createServerFn({ method: 'POST' })
     return cut.checks.some((c) => c.fatal) ? { ok: false, checks: cut.checks } : { ok: true, cut }
   })
 
+/** Admin only (Nov 9 2026): make and keep the 60-second version of a picked
+ *  lab toast, so the /toasts page demo shows it like a paid toast does. The
+ *  same writer and checks as "make a 60-second version" in the product. */
+export const labCutEval = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ eval_id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true; seconds: number } | { ok: false; checks: { rule: string; line: string }[] }> => {
+    await requireAdmin(context)
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const db = supabaseAdmin as any
+    const { data: row } = await db.from('toast_evals').select('form, result').eq('id', data.eval_id).maybeSingle()
+    const lines = row?.result?.toast?.lines as ToastLine[] | undefined
+    if (!row || !lines?.length) return { ok: false, checks: [{ rule: 'no such lab toast', line: '' }] }
+    const { writeCut60 } = await import('./toasts/toast.server')
+    const cut = await writeCut60(row.form as ToastForm, lines, { keepBest: true })
+    if (!cut) return { ok: false, checks: [{ rule: 'no answer', line: '' }] }
+    const fatal = cut.checks.filter((c) => c.fatal)
+    if (fatal.length) return { ok: false, checks: fatal.map((c) => ({ rule: c.rule, line: c.line })) }
+    const result = { ...row.result, toast: { ...row.result.toast, cut60: cut.lines }, cut_seconds: cut.seconds }
+    const { error } = await db.from('toast_evals').update({ result }).eq('id', data.eval_id)
+    return error ? { ok: false, checks: [{ rule: 'not saved', line: '' }] } : { ok: true, seconds: cut.seconds }
+  })
+
 /** Admin only: rate a lab toast. */
 export const rateLabToast = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
@@ -112,7 +135,7 @@ export const rateLabToast = createServerFn({ method: 'POST' })
     return { ok: !error }
   })
 
-export type ToastLedger = { total: number; pick: number; cut: number; rewrite: number; unrated: number; by_occasion: Record<string, { pick: number; cut: number; rewrite: number; unrated: number }> }
+export type ToastLedger = { total: number; pick: number; cut: number; rewrite: number; unrated: number; by_occasion: Record<string, { pick: number; cut: number; rewrite: number; unrated: number }>; /** picks (the /toasts page demos) with no 60-second version yet */ uncut: { id: string; occasion: string; relation: string }[] }
 
 /** Admin only: the lab's ledger, by occasion (every occasion needs a pick before launch). */
 export const labToastEvals = createServerFn({ method: 'POST' })
@@ -121,10 +144,11 @@ export const labToastEvals = createServerFn({ method: 'POST' })
   .handler(async ({ context }): Promise<ToastLedger> => {
     await requireAdmin(context)
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
-    const { data } = await (supabaseAdmin as any).from('toast_evals').select('rating, form')
-    const rows: { rating: string | null; form: { occasion?: string } }[] = data ?? []
-    const out: ToastLedger = { total: rows.length, pick: 0, cut: 0, rewrite: 0, unrated: 0, by_occasion: {} }
+    const { data } = await (supabaseAdmin as any).from('toast_evals').select('id, rating, form, cut:result->toast->cut60').order('created_at', { ascending: false })
+    const rows: { id: string; rating: string | null; form: { occasion?: string; relation?: string }; cut: unknown[] | null }[] = data ?? []
+    const out: ToastLedger = { total: rows.length, pick: 0, cut: 0, rewrite: 0, unrated: 0, by_occasion: {}, uncut: [] }
     for (const r of rows) {
+      if (r.rating === 'pick' && !(Array.isArray(r.cut) && r.cut.length)) out.uncut.push({ id: r.id, occasion: r.form?.occasion ?? '?', relation: r.form?.relation ?? '' })
       const o = r.form?.occasion ?? '?'
       const b = (out.by_occasion[o] ??= { pick: 0, cut: 0, rewrite: 0, unrated: 0 })
       const k = r.rating === 'pick' || r.rating === 'cut' || r.rating === 'rewrite' ? r.rating : 'unrated'
