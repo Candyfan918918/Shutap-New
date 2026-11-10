@@ -299,3 +299,23 @@
 .tp a { color: var(--wine); }
 .tp-others .rl-chip, .tp-hub a { text-decoration: none; }
 @media (max-width: 900px) { .dt-peek .dt-chip:not(.mine) { display: none; } }
+
+/* ============ Nov 10 2026 (Candy): the form runs the full page width, the demo
+   sits under it. Every typed line is one row on the same two columns (what to
+   type on the left, the box on the right), so the boxes line up. The demo is
+   the same demo: what they typed on the left, the same tiles on the right. ============ */
+@media (min-width: 901px) {
+  .tp-hero .rl-hero2-head > .rl-lead2 { grid-row: 1 / span 3; }
+  .tp-hero .tf-line { display: grid; grid-template-columns: 300px minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 16px; row-gap: 4px; align-items: start; }
+  .tp-hero .tf-line > .tf-line-head { grid-column: 1; grid-row: 1; flex-direction: column; align-items: flex-start; gap: 2px; padding-top: 6px; }
+  .tp-hero .tf-line > .tf-box { grid-column: 2; grid-row: 1 / span 2; }
+  .tp-hero .tf-line > .tf-help { grid-column: 1; grid-row: 2; }
+  .tp-hero .tf-line > .rl-pop { grid-column: 1 / -1; grid-row: 3; }
+  .tp-hero .dt { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); column-gap: 16px; row-gap: 10px; align-items: start; }
+  .tp-hero .dt > * { grid-column: 1 / -1; }
+  .tp-hero .dt > .dt-left { grid-column: 1; }
+  .tp-hero .dt > .st-wrap { grid-column: 2; }
+  .tp-hero .dt-left > .dt-arrow { justify-content: flex-end; flex-direction: row-reverse; }
+  .tp-hero .dt-left > .dt-arrow svg { transform: rotate(-90deg); }
+}
+.dt-left { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
