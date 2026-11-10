@@ -160,6 +160,7 @@ export function DemoTiles({ demo, roles, step, page, onTry }: { demo: ToastDemo 
         <p className="rl-note">{what} · {TONE_LABEL[demo.form.tone]} · {lengthLabel(demo.form.occasion, demo.form.length)} · <span className="rl-only-wide">hover to open</span><span className="rl-only-narrow">tap one</span></p>
       </div>
       {step > 1 && STEP_LINE[step] && <p className="dt-step" role="status"><span aria-hidden />{STEP_LINE[step]}</p>}
+      <div className="dt-left">
       <div className="dt-typed">
         <p className="dt-lbl">What they typed</p>
         <div className="dt-typed-g">
@@ -169,6 +170,7 @@ export function DemoTiles({ demo, roles, step, page, onTry }: { demo: ToastDemo 
         </div>
       </div>
       <p className="dt-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 4v16M6 14l6 6 6-6" /></svg>What Shutap built around it · {clock(demo.seconds)}</p>
+      </div>
       <div className="st-wrap">
         <div className="st-grid dt-grid">
           {tile('speech', 1, 'The speech', `${lines.length} lines · ${clock(demo.seconds)} of ${lengthLabel(demo.form.occasion, demo.form.length)}`, (

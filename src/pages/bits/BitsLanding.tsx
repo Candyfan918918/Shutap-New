@@ -96,6 +96,7 @@ function Preview({ lines }: { lines: Draft }) {
   return (
     <aside className="bl-side" aria-label="What your five lines become">
       <div className="bl-side-h"><p className="bl-kick">What your five lines become</p><p className="bl-meta">yours, word for word</p></div>
+      <div className="bl-typed">
       <div className="bl-yours">
         <p className="bl-lbl">Your bit</p>
         {LINE_INFO.map((l) => {
@@ -110,6 +111,7 @@ function Preview({ lines }: { lines: Draft }) {
         })}
       </div>
       <p className="bl-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v16M6 14l6 6 6-6" /></svg>Laid out from your lines, no new jokes added</p>
+      </div>
       <div className="bl-tiles">
         <div className="bl-tile video">
           <b>5-second video</b>
@@ -185,6 +187,7 @@ function Demo({ d }: { d: BitDemo }) {
   return (
     <aside className="bl-side" aria-label="A real bit">
       <div className="bl-side-h"><p className="bl-kick">A real bit</p><p className="bl-meta">typed in-house, the way you would</p></div>
+      <div className="bl-typed">
       <div className="bl-yours">
         <p className="bl-lbl">What they wrote</p>
         {rows.map((r) => (
@@ -196,6 +199,7 @@ function Demo({ d }: { d: BitDemo }) {
         ))}
       </div>
       <p className="bl-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v16M6 14l6 6 6-6" /></svg>What Shutap made from those lines · no new jokes added</p>
+      </div>
       <div className="bl-stage">
         <div className="bl-tiles">
           <div className="bl-tile video"><b>5-second video</b><DemoVideo d={d} /><span className="d">Tap to play. Free shows the shutap.com mark.</span></div>

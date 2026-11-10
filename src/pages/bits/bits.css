@@ -149,3 +149,26 @@ button.bl-tile:hover:not(:disabled) { border-color: var(--rose); }
 .bl-pop-f { margin: 0; padding: 8px 14px; background: var(--surface); font: 500 12px var(--sora); color: var(--muted); display: flex; justify-content: space-between; gap: 10px; }
 .bl-pop.dark .bl-pop-f { background: #1f171b; color: #9a8890; }
 .bl-pop-f a { color: var(--wine); font-weight: 700; text-decoration: none; }
+
+/* ============ Nov 10 2026 (Candy): the box runs the full page width and the
+   demo sits under it, on desktop and on a phone. Each of the five lines is
+   one row: what the line is on the left, the box to type in on the right. ============ */
+.bl-hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "box" "trust" "side"; }
+.bl-side { position: static; }
+.bl-typed { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.bl .bt-col:has(> .bt-box) { max-width: none; }
+.bl-mid { max-width: none; }
+@media (min-width: 901px) {
+  .bl-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); column-gap: 40px; row-gap: 10px; align-items: end; }
+  .bl-head > * { grid-column: 1; }
+  .bl-head > .bl-lead { grid-column: 2; grid-row: 1 / span 2; max-width: none; }
+  .bl .bt-tline { display: grid; grid-template-columns: 300px minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 16px; row-gap: 2px; align-items: start; }
+  .bl .bt-tline > .bt-tline-head { grid-column: 1; grid-row: 1; padding-top: 8px; }
+  .bl .bt-tline > .bt-tbox { grid-column: 2; grid-row: 1 / span 2; }
+  .bl .bt-tline > .bt-thelp { grid-column: 1; grid-row: 2; }
+  .bl .bt-tline > .bt-pop { grid-column: 1 / -1; grid-row: 3; }
+  .bl-side { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); column-gap: 16px; row-gap: 10px; align-items: start; }
+  .bl-side > .bl-side-h { grid-column: 1 / -1; }
+  .bl-typed > .bl-arrow { justify-content: flex-end; flex-direction: row-reverse; }
+  .bl-typed > .bl-arrow svg { transform: rotate(-90deg); }
+}

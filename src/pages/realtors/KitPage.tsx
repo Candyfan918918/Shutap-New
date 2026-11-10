@@ -172,6 +172,8 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, aside
     const u = pasteText ? '' : url.trim()
     const t = pasteText ? text.trim() : ''
     track('paste_box_submit', { box, how: pasteText ? 'text' : 'url', signed_in: !!userId })
+    // the sample address (today's or the old "https://www.zillow.com/homedetails/…") is not a listing
+    if (!pasteText && (/…|\.\.\.$|homedetails\/your-listing/i.test(u) || /^https?:\/\/(www\.)?zillow\.com\/homedetails\/?$/i.test(u))) { track('paste_sample_link', { box }); return setReadNote('That’s our sample, not a listing. Paste your own listing’s web address.') }
     if (!pasteText && !/^https?:\/\//i.test(u)) return setReadNote(u ? "that doesn't look like a web address · it starts with https://" : 'paste your listing link first · it starts with https://')
     if (pasteText && t.length < 40) return setReadNote('paste the whole listing text: address, beds, baths, the description')
     if (!userId) return gate(box)
@@ -270,20 +272,23 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, aside
           <div className="rl-step">
             <span className="rl-num" aria-hidden>1</span>
             <div className="rl-step-b">
-              <p className="rl-step-t">Copy your listing’s web address</p>
-              <div className="rl-urlbar rl-only-wide" aria-hidden>
-                <IconLock /><span className="u">https://www.zillow.com/homedetails/…</span><span className="k">⌘C</span>
+              <p className="rl-step-t">Copy your own listing’s web address</p>
+              {/* Nov 10 2026: a sample of what an address looks like. People were
+                  copying it into the box, so it is not a real address, its text is
+                  drawn by CSS (nothing to select), and it says it is only a sample. */}
+              <div className="rl-sample" aria-hidden>
+                <span className="tag">SAMPLE ONLY</span><span className="u" data-sample="zillow.com / homedetails / your-listing…" /><span className="why">What an address looks like. Not a real link, it can’t be copied.</span>
               </div>
-              <p className="rl-note rl-only-wide">Zillow · Redfin · Realtor.com · MLS · brokerage site</p>
+              <p className="rl-note rl-only-wide">From Zillow · Redfin · Realtor.com · MLS · your brokerage site</p>
               <p className="rl-note rl-only-narrow">In the Zillow or Redfin app: Share › Copy link</p>
             </div>
           </div>
           <div className="rl-step">
             <span className="rl-num" aria-hidden>2</span>
             <div className="rl-step-b">
-              <label htmlFor="rl-url" className="rl-step-t">Paste it</label>
+              <label htmlFor="rl-url" className="rl-step-t">Paste your listing’s address here</label>
               <div className="rl-paste-row">
-                <input id="rl-url" className="rl-input rl-input-lg" placeholder="https://…" value={url} onChange={(e) => { setUrl(e.target.value); if (readNote) setReadNote('') }} onKeyDown={(e) => { if (e.key === 'Enter') void read('top') }} inputMode="url" autoComplete="off" />
+                <input id="rl-url" className="rl-input rl-input-lg rl-input-paste" placeholder="Paste your listing link" value={url} onChange={(e) => { setUrl(e.target.value); if (readNote) setReadNote('') }} onKeyDown={(e) => { if (e.key === 'Enter') void read('top') }} inputMode="url" autoComplete="off" />
                 <button type="button" className="rl-btn rl-btn-lg" disabled={reading} onClick={() => void read('top')}>{reading ? 'reading…' : 'Get my free kit →'}</button>
               </div>
               {readNote && <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{readNote}</p>}
