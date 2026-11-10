@@ -124,8 +124,8 @@ export function AuthStep() {
       setMsg({
         kind: 'ok',
         text: resend
-          ? 'we sent a new code. use the newest one.'
-          : 'we emailed you a sign-in code. not in your inbox in a minute? check junk or spam.',
+          ? 'we sent a new code. use the newest one, and check spam if it is not in your inbox.'
+          : 'type the code from the email here.',
       })
       track('sign_in_code_sent', { method: 'email', resend, resends: nextResends })
     } catch (e) {
@@ -237,6 +237,11 @@ export function AuthStep() {
         )}
         {emailPhase === 'code' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }} data-testid="email-code-step">
+            {/* Nov 10 2026: a code was sent twice and never entered. Say plainly
+                that it's on its way, and where else to look. */}
+            <div role="status" style={{ background: 'rgba(255,255,255,.07)', border: '1px solid rgba(255,255,255,.16)', borderRadius: 12, padding: '10px 13px', fontFamily: "'Sora',sans-serif", fontSize: 13, lineHeight: 1.45, color: TEXT }}>
+              <b>Code sent{email.trim() ? ` to ${email.trim()}` : ''}.</b> Not in your inbox? Please check your spam or junk folder.
+            </div>
             <div style={{ display: 'flex', gap: 9 }}>
               <input
                 type="text"
