@@ -15,6 +15,13 @@
       "when": 1792289573302,
       "tag": "0001_daily_ideas_signals",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794424648533,
+      "tag": "0002_lock_kits_listings_rooms",
+      "breakpoints": true
     }
   ]
 }
