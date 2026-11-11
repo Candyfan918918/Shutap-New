@@ -50,6 +50,12 @@ import {
   isPaidTier,
 } from './bits/shared'
 
+/** A typed line (Nov 11 2026): longer than a line should be is clipped, never
+ *  refused. A refused line threw before the handler ran, and the phone showed
+ *  "could not reach Shutap" (Nov 10: a story typed into the hook, 100 ms). */
+const LINE_MAX = 1000
+const Line = z.string().transform((s) => s.slice(0, LINE_MAX))
+
 const Ctx = { anon_session_id: z.string().max(64).nullable().optional() }
 
 const ControlsSchema = z
@@ -544,9 +550,9 @@ export const writeBit = createServerFn({ method: 'POST' })
   .inputValidator((d: unknown) =>
     z
       .object({
-        story: z.string().max(4000).optional(),
+        story: z.string().transform((s) => s.slice(0, 4000)).optional(),
         /** the lined box (Nov 5 2026): the lines the person wrote; the writer fills the rest */
-        lines: z.object({ hook: z.string().max(300).optional(), setup: z.string().max(600).optional(), tags: z.array(z.string().max(600)).max(3).optional(), button: z.string().max(600).optional() }).optional(),
+        lines: z.object({ hook: Line.optional(), setup: Line.optional(), tags: z.array(Line).max(3).optional(), button: Line.optional() }).optional(),
         controls: ControlsSchema,
         /** one id per press of "write", reused on the silent retry */
         write_id: z.string().uuid().optional(),
@@ -902,10 +908,10 @@ export type TouchResult =
   | { ok: false; reason: 'limited'; used: number; cap: number; tier: BitTier }
 
 const DraftIn = z.object({
-  hook: z.string().max(300),
-  setup: z.string().max(600),
-  tags: z.array(z.string().max(600)).max(3),
-  button: z.string().max(600),
+  hook: Line,
+  setup: Line,
+  tags: z.array(Line).max(3),
+  button: Line,
 })
 
 /** Three versions of one line of the bit as it stands on the page (edits
@@ -918,7 +924,7 @@ export const touchLine = createServerFn({ method: 'POST' })
       bit_id: z.string().uuid().optional(),
       draft: DraftIn,
       slot: z.enum(SLOTS),
-      avoid: z.array(z.string().max(600)).max(12).optional(),
+      avoid: z.array(Line).max(12).optional(),
       /** the box's settings, when there is no bit to read them from */
       controls: ControlsSchema,
       ...Ctx,

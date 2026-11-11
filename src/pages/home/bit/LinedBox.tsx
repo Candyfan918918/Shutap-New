@@ -153,10 +153,13 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
       setOptions(r.options)
       setTouches({ used: r.used, cap: r.cap })
       offered.current[s] = [...(offered.current[s] ?? []), ...r.options.map((o) => o.line)].slice(-12)
-    } catch {
+    } catch (e) {
       setOpen(null)
-      jokeTrack('touch_failed', tier, { slot: s, where: 'box', box, reason: 'network' })
-      say('could not reach Shutap · try again')
+      // what threw, so a refused request is not logged as a dropped one (Nov 10)
+      const msg = e instanceof Error ? e.message : String(e)
+      const offline = typeof navigator !== 'undefined' && navigator.onLine === false
+      jokeTrack('touch_failed', tier, { slot: s, where: 'box', box, reason: offline ? 'network' : 'threw', detail: msg.replace(/\s+/g, ' ').slice(0, 120), chars: readSlot(lines, s).length })
+      say(offline ? 'could not reach Shutap · try again' : 'that one did not come back · try again')
     } finally {
       setTouching(false)
     }
