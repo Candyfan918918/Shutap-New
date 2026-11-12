@@ -1,4 +1,6 @@
-/* A Shutap Toasts occasion page (Nov 8 2026 redesign, approved by Candy):
+/* A Shutap Toasts occasion page. Nov 12 2026 (approved by Candy): the demo
+ * toast's outputs sit on top (ToastOutputs), then "Your turn" and the form;
+ * a greeting for the occasion above the H1. Earlier layout (Nov 8):
  *   banner · hero (kicker, H1 input → output, the lead, the four-step form,
  *   the trust row | the real toast for this occasion) · three steps · how the
  *   toast is built (mapped to the demo) · the occasion's checks · a mid-page
@@ -13,6 +15,7 @@ import type { ToastDemo } from '@/lib/toasts/demo.functions'
 import { PLANS, TOAST_ONCE, usd } from '@/lib/pricing'
 import { ToastForm, TOAST_STORY_EVENT } from './ToastForm'
 import { DemoTiles } from './DemoTiles'
+import { ToastOutputs } from './ToastOutputs'
 import { trackEvent } from '@/lib/tracking'
 import { phCapture } from '@/lib/posthog'
 import '@/pages/realtors/realtors.css'
@@ -65,15 +68,23 @@ export function OccasionPage({ l, demo, prepaid }: { l: Landing; demo: ToastDemo
         <div className="rl-marq-run">{[...banner, ...banner].map((b, k) => <span key={k}>{b}<i aria-hidden>  ●</i></span>)}</div>
       </div>
 
-      <section className="rl-hero2 tp-hero">
-        <div className="rl-hero2-head">
-          <nav aria-label="Breadcrumb" className="tp-crumb"><Link to="/toasts">Toasts</Link> <span aria-hidden>/</span> <span>{l.name}</span></nav>
-          <p className="rl-kicker">{l.kicker}</p>
-          <h1 className="rl-h1 rl-h1-2">{l.h1[0]}<em>{l.h1[1]}</em></h1>
-          <p className="rl-lead2">{l.lead} {toPractice}</p>
+      <section className="to-hero">
+        <div className="to-head">
+          <div className="to-head-l">
+            <nav aria-label="Breadcrumb" className="tp-crumb"><Link to="/toasts">Toasts</Link> <span aria-hidden>/</span> <span>{l.name}</span></nav>
+            {GREETING[l.slug] && <p className="to-greet">{GREETING[l.slug]}</p>}
+            <p className="rl-kicker">{l.kicker}</p>
+            <h1 className="rl-h1 rl-h1-2">{l.h1[0]}<em>{l.h1[1]}</em></h1>
+          </div>
+          <p className="to-lead">{demo ? 'A realistic demo of a toast made in-house.' : `${l.lead} ${toPractice}`}</p>
         </div>
-        <div className="rl-hero2-aside">
-          <DemoTiles demo={demo} roles={l.roles} step={step} page={page} onTry={toForm} />
+        {demo ? <ToastOutputs demo={demo} roles={l.roles} page={page} /> : <DemoTiles demo={null} roles={l.roles} step={step} page={page} onTry={toForm} />}
+      </section>
+
+      <section className="to-write" id="ts-write">
+        <div className="to-write-h">
+          <h2>Your turn — type your stories.</h2>
+          <span>first toast free · names stay on your device · your stories word for word</span>
         </div>
         <div className="rl-hero2-box">
           <ToastForm occasionIn={l.occasion} preset={l.preset} prepaidSession={prepaid} otherChoice={l.occasion === 'other'} onStep={setStep} />
@@ -94,7 +105,7 @@ export function OccasionPage({ l, demo, prepaid }: { l: Landing; demo: ToastDemo
 
         <section className="tp-sec">
           <h2>{l.built.h2}</h2>
-          <p className="tp-intro">{l.built.intro}{shape.length ? ' Here is that shape in the toast above.' : ''}</p>
+          <p className="tp-intro">{l.built.intro}{shape.length ? ' Here is that shape in the demo toast at the top.' : ''}</p>
           {shape.length > 0 ? (
             <ol className="tp-shape">
               {shape.map((s, k) => <li key={k}><span className="h"><b>{k + 1} · {s.k}</b>{s.mine && <span className="dt-chip mine">your words</span>}</span><span className="v">“{s.v}”</span></li>)}
@@ -170,6 +181,20 @@ export function OccasionPage({ l, demo, prepaid }: { l: Landing; demo: ToastDemo
       </div>
     </div>
   )
+}
+
+/** Nov 12 2026 (Candy): a greeting at the top of the page for its occasion. */
+const GREETING: Partial<Record<string, string>> = {
+  'best-man': 'Congratulations to the happy couple!',
+  'maid-of-honor': 'Congratulations to the happy couple!',
+  'father-of-the-bride': 'Congratulations to the happy couple!',
+  'mother-of-the-bride': 'Congratulations to the happy couple!',
+  thanksgiving: 'Happy Thanksgiving!',
+  christmas: 'Merry Christmas!',
+  'office-holiday-party': 'Congratulations on a great year!',
+  'new-years': 'Congratulations on a great year — Happy New Year!',
+  retirement: 'Congratulations on your retirement!',
+  birthday: 'Happy birthday!',
 }
 
 const STORY_HINT: Partial<Record<string, string>> = {

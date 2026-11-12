@@ -38,7 +38,7 @@ const STEP_LINE = [
   'The tone sets how every line around your stories lands.',
 ]
 
-async function openPdf(kind: 'speech' | 'cards' | 'keepsake', demo: ToastDemo, names: Partial<Names>, page: string) {
+export async function openPdf(kind: 'speech' | 'cards' | 'keepsake', demo: ToastDemo, names: Partial<Names>, page: string) {
   track('sample_pdf_open', { output: kind, page })
   const m = await import('@/lib/toasts/toast-pdf')
   const t = demo.toast
