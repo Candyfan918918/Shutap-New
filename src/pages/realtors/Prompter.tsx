@@ -1,24 +1,27 @@
 /* Shoot mode (Nov 6 2026): the walkthrough or the voiceover as a teleprompter
  * on the phone's browser. Big text, one segment lit at a time, scrolls by
  * itself at a words-per-second pace; tap to pause; − / + for speed; mirror
- * for a glass rig; "cues" hides the grey directions. The screen is kept
+ * for a glass rig; "cues" hides the grey directions and the rose delivery
+ * notes. A pause note ("(pause for the laugh)", "(beat …)") holds the line
+ * PAUSE_MS longer before moving on (Nov 11 2026). The screen is kept
  * awake. No camera, no microphone: record with a second device. */
 import { useEffect, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { getRealtorKit, type KitView } from '@/lib/realtors.functions'
 import { kitTitle } from '@/lib/realtors/kit-text'
 import { phCapture } from '@/lib/posthog'
+import { PAUSE_MS, isPauseCue } from '@/lib/bits/cues'
 import QRCode from 'qrcode'
 import { supabase } from '@/integrations/supabase/client'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { setDurableReturn } from '@/lib/auth-guard'
 
-type Seg = { cue: string; sub?: string; act?: string; line: string }
+type Seg = { cue: string; sub?: string; act?: string; say?: string; line: string }
 
 function segments(k: KitView, which: 'walkthrough' | 'voiceover'): Seg[] {
   const v = k.versions[k.versions.length - 1]!.content
-  if (which === 'voiceover') return v.voiceover.map((x, i) => ({ cue: x.label || `part ${i + 1}`, line: x.text }))
-  return v.walkthrough.shots.map((s, i) => ({ cue: `${i + 1} · ${s.where}`, sub: `${s.seconds}s`, act: s.action, line: s.line }))
+  if (which === 'voiceover') return v.voiceover.map((x, i) => ({ cue: x.label || `part ${i + 1}`, say: x.delivery, line: x.text }))
+  return v.walkthrough.shots.map((s, i) => ({ cue: `${i + 1} · ${s.where}`, sub: `${s.seconds}s`, act: s.action, say: s.delivery, line: s.line }))
 }
 
 export function Prompter({ kitId }: { kitId: string }) {
@@ -83,13 +86,14 @@ export function Prompter({ kitId }: { kitId: string }) {
     window.clearTimeout(timer.current)
     if (!running || !segs.length) return
     const words = segs[idx]!.line.split(/\s+/).filter(Boolean).length
-    const ms = Math.max(1500, (words / wps) * 1000 + 600)
+    const hold = cues && segs[idx]!.say && isPauseCue(segs[idx]!.say!) ? PAUSE_MS : 0
+    const ms = Math.max(1500, (words / wps) * 1000 + 600) + hold
     timer.current = window.setTimeout(() => {
       if (idx + 1 >= segs.length) setRunning(false)
       else setIdx(idx + 1)
     }, ms)
     return () => window.clearTimeout(timer.current)
-  }, [running, idx, wps, segs])
+  }, [running, idx, wps, segs, cues])
 
   if (signedIn === false) return (
     <div className="pr">
@@ -120,6 +124,7 @@ export function Prompter({ kitId }: { kitId: string }) {
           <div key={i} className={`pr-seg${i === idx ? ' on' : ''}`} ref={(el) => { segRefs.current[i] = el }} onClick={(e) => { e.stopPropagation(); setIdx(i) }}>
             <div className="cue">{s.cue}{s.sub && <small>{s.sub}</small>}</div>
             {s.act && <p className="act">{s.act}</p>}
+            {s.say && <p className="say">{s.say}</p>}
             <p className="line">{s.line}</p>
           </div>
         ))}
@@ -131,7 +136,7 @@ export function Prompter({ kitId }: { kitId: string }) {
         <button onClick={() => setWps((w) => Math.min(5, +(w + 0.3).toFixed(1)))}>+</button>
         <button className={mirror ? 'on' : ''} onClick={() => setMirror((m) => !m)}>mirror</button>
         <button onClick={() => { setIdx(0); setRunning(false) }}>restart</button>
-        <button className={cues ? 'on' : ''} onClick={() => setCues((c) => !c)}>cues</button>
+        <button className={cues ? 'on' : ''} onClick={() => { setCues((c) => !c); void phCapture('kit_shoot_cues_toggled', { product: 'realtors', on: !cues }) }}>cues</button>
         </div>
         <span>{wps.toFixed(1)} words a second · the cue is for you, say only the line · tap a line to jump · record with a second device</span>
       </div>

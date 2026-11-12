@@ -301,11 +301,11 @@ function sanitizeKit(input: unknown, base: Kit): Kit {
   const shots = Array.isArray(i?.walkthrough?.shots) ? i.walkthrough.shots : base.walkthrough.shots
   return {
     walkthrough: {
-      shots: shots.slice(0, 14).map((s: any, n: number) => ({ where: t(s?.where, 80) || base.walkthrough.shots[n]?.where || '', action: t(s?.action, 240), line: t(s?.line), seconds: t(s?.seconds, 12), ...(s?.fact ? { fact: t(s.fact, 60) } : {}) })),
+      shots: shots.slice(0, 14).map((s: any, n: number) => ({ where: t(s?.where, 80) || base.walkthrough.shots[n]?.where || '', action: t(s?.action, 240), line: t(s?.line), seconds: t(s?.seconds, 12), ...(s?.fact ? { fact: t(s.fact, 60) } : {}), ...(s?.delivery ? { delivery: t(s.delivery, 60) } : {}) })),
       cut15: t(i?.walkthrough?.cut15, 300) || base.walkthrough.cut15,
       cut60: t(i?.walkthrough?.cut60, 300) || base.walkthrough.cut60,
     },
-    voiceover: (Array.isArray(i?.voiceover) ? i.voiceover : base.voiceover).slice(0, 14).map((x: any) => ({ label: t(x?.label, 60), text: t(x?.text) })).filter((x: any) => x.text),
+    voiceover: (Array.isArray(i?.voiceover) ? i.voiceover : base.voiceover).slice(0, 14).map((x: any) => ({ label: t(x?.label, 60), text: t(x?.text), ...(x?.delivery ? { delivery: t(x.delivery, 60) } : {}) })).filter((x: any) => x.text),
     hooks: (Array.isArray(i?.hooks) ? i.hooks : base.hooks).slice(0, 6).map((x: any) => ({ line: t(x?.line, 200), move: t(x?.move, 60) })).filter((x: any) => x.line),
     open_house: (Array.isArray(i?.open_house) ? i.open_house : base.open_house).slice(0, 8).map((x: any) => ({ label: t(x?.label, 60), text: t(x?.text, 900) })).filter((x: any) => x.text),
     posts: (Array.isArray(i?.posts) ? i.posts : base.posts).slice(0, 10).map((x: any) => ({ label: t(x?.label, 60), text: t(x?.text, 1200) })).filter((x: any) => x.text),

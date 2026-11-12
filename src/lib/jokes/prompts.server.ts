@@ -1622,9 +1622,16 @@ Use these elements, in screenplay order:
 - "action": present tense, what we see. Short paragraphs. Introduce ME
   with an age range in caps the first time: "ME (30s)".
 - "character": the speaker in caps (ME, HER (O.S.), MY BOSS).
-- "parenthetical": a short delivery note in parentheses, only when needed.
+- "parenthetical": a short delivery note in parentheses, lowercase, at most 5
+  words, right after "character" and before that line. These double as the
+  stand-up teleprompter's cues, so always give them where a performer needs
+  one: "(beat)" or "(pause for the laugh)" before the line that follows a
+  punch (after the setup, between tags, before the button); "(his voice)" /
+  "(her voice)" when ME quotes someone; and one on the button ("(slower)",
+  "(deadpan)", "(to camera)"). Never more than one per line.
 - "dialogue": what they say. Another person may only say words the story
-  says they said.
+  says they said. Give each line of the bit (hook, setup, each tag, button)
+  its own ME block, so a parenthetical can sit between them.
 - "transition": end with "CUT TO BLACK."
 
 No real names. No camera directions beyond what the action needs. Keep it
