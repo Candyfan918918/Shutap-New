@@ -34,7 +34,7 @@ const TOASTS: ShotMotionSpec = {
 const REALTORS: ShotMotionSpec = {
   seconds: 7,
   effects: [
-    { kind: 'type', box: { left: 7.83, top: 70.9, width: 20.8, height: 5.04 }, chars: 25, from: 8, to: 45 },
+    { kind: 'type', box: { left: 7.83, top: 66.82, width: 20.8, height: 5.04 }, chars: 25, from: 8, to: 45 },
   ],
 }
 

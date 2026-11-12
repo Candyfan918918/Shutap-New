@@ -42,6 +42,7 @@ function IconLock({ big }: { big?: boolean }) { const n = big ? 18 : 14; return 
 function IconClip() { return <svg {...svgProps} width={16} height={16} className="rl-ic"><rect x="8" y="3" width="8" height="4" rx="1" /><path d="M16 5h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2" /></svg> }
 function IconLink() { return <svg {...svgProps} width={16} height={16} className="rl-ic"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" /><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" /></svg> }
 function IconShield() { return <svg {...svgProps} width={18} height={18} className="rl-ic"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z" /><path d="M9 12l2 2 4-4" /></svg> }
+function IconCam() { return <svg {...svgProps} width={18} height={18} className="rl-ic"><rect x="3" y="6" width="13" height="12" rx="2" /><path d="M16 10l5-3v10l-5-3z" /></svg> }
 function IconDoc() { return <svg {...svgProps} width={18} height={18} className="rl-ic"><path d="M4 4h16v16H4z" /><path d="M8 9h8M8 13h8M8 17h5" /></svg> }
 
 /** Chips you can add with Enter and remove with ×. */
@@ -369,8 +370,8 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, aside
         <div className="rl-hero2" ref={topRef}>
           <div className="rl-hero2-head">
             <p className="rl-kicker">Shutap for Realtors</p>
-            <h1 className="rl-h1 rl-h1-2">Paste a listing.<br />Get a video script <em>and every post to go with it.</em></h1>
-            <p className="rl-lead2">To film: walkthrough, voiceover, hooks. To post: open-house kit, social posts, MLS copy. In your tone, in about 30 seconds.</p>
+            <h1 className="rl-h1 rl-h1-2">Turn every listing into a <em>content campaign.</em></h1>
+            <p className="rl-lead2">Paste the link. Get the video script you say on camera, the voiceover, the teleprompter and every post from just listed to sold. In your tone: professional, luxury, young or funny.</p>
           </div>
           <div className="rl-hero2-aside">{aside}</div>
           <div className="rl-hero2-box">
@@ -378,6 +379,7 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, aside
             <ul className="rl-trust">
               <li><IconShield /><span>Fair-housing checked</span></li>
               <li><IconDoc /><span>Nothing made up</span></li>
+              <li><IconCam /><span>You on camera, not an AI avatar</span></li>
               <li><IconLock big /><span>Private, never trains AI</span></li>
             </ul>
             {mineLine}
