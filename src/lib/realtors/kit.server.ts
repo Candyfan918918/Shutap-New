@@ -14,6 +14,11 @@ export type KitDraft = { kit: Kit; skipped: { where: string; what: string }[]; m
 export type KitResult = { kit: Kit; skipped: { where: string; what: string }[]; candidates: KitDraft[]; winner: number; why: string; ms: number }
 
 const tidy = (v: unknown): string => (typeof v === 'string' ? v.replace(/\s+/g, ' ').trim() : '')
+/** a delivery note, normalized to "(lowercase)"; anything long is not a cue */
+const delivery = (v: unknown): string | undefined => {
+  const t = tidy(v).replace(/^\(+|\)+$/g, '').trim().toLowerCase()
+  return t && t.length <= 60 ? `(${t})` : undefined
+}
 const labeled = (v: unknown): Labeled[] => (Array.isArray(v) ? v : []).map((x: any) => ({ label: tidy(x?.label), text: tidy(x?.text) })).filter((x) => x.label && x.text)
 
 export function listingBlock(l: Listing): string {
@@ -26,12 +31,12 @@ export function listingBlock(l: Listing): string {
 function parseKit(raw: unknown): { kit: Kit; skipped: { where: string; what: string }[] } | null {
   const r = (raw ?? {}) as any
   const shots: Shot[] = (Array.isArray(r.walkthrough?.shots) ? r.walkthrough.shots : [])
-    .map((s: any) => ({ where: tidy(s?.where), action: tidy(s?.action), line: tidy(s?.line).replace(/^["']|["']$/g, ''), seconds: tidy(s?.seconds), fact: tidy(s?.fact) || undefined }))
+    .map((s: any) => ({ where: tidy(s?.where), action: tidy(s?.action), line: tidy(s?.line).replace(/^["']|["']$/g, ''), seconds: tidy(s?.seconds), fact: tidy(s?.fact) || undefined, delivery: delivery(s?.delivery) }))
     .filter((s: Shot) => s.where && s.line)
   const hooks = (Array.isArray(r.hooks) ? r.hooks : []).map((h: any) => ({ line: tidy(h?.line).replace(/^["']|["']$/g, ''), move: tidy(h?.move) })).filter((h: any) => h.line)
   const kit: Kit = {
     walkthrough: { shots, cut15: tidy(r.walkthrough?.cut15), cut60: tidy(r.walkthrough?.cut60) },
-    voiceover: labeled(r.voiceover),
+    voiceover: (Array.isArray(r.voiceover) ? r.voiceover : []).map((x: any) => ({ label: tidy(x?.label), text: tidy(x?.text), delivery: delivery(x?.delivery) })).filter((x: Labeled) => x.label && x.text),
     hooks,
     open_house: labeled(r.open_house),
     posts: labeled(r.posts),
@@ -45,7 +50,7 @@ function parseKit(raw: unknown): { kit: Kit; skipped: { where: string; what: str
 /** Every line of a kit, with where it lives, for the checks. */
 export function kitLines(kit: Kit): { where: string; line: string }[] {
   const out: { where: string; line: string }[] = []
-  kit.walkthrough.shots.forEach((s, i) => out.push({ where: `walkthrough · shot ${i + 1}`, line: `${s.action} ${s.line}` }))
+  kit.walkthrough.shots.forEach((s, i) => out.push({ where: `walkthrough · shot ${i + 1}`, line: [s.action, s.delivery, s.line].filter(Boolean).join(' ') }))
   kit.voiceover.forEach((v) => out.push({ where: `voiceover · ${v.label}`, line: v.text }))
   kit.hooks.forEach((h, i) => out.push({ where: `hook ${i + 1}`, line: h.line }))
   kit.open_house.forEach((v) => out.push({ where: `open house · ${v.label}`, line: v.text }))

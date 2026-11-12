@@ -1352,7 +1352,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         />
       )}
 
-      {standup && <Standup bit={standup} onClose={() => setStandup(null)} />}
+      {standup && <Standup bit={standup} bitId={bit?.id} versionId={standup.id} onClose={() => setStandup(null)} />}
 
       {toast && (
         <div role="status" className="bt-toast">

@@ -5,6 +5,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { SAMPLE_KIT, SAMPLE_LISTING } from '@/lib/realtors/sample-kit'
 import { trackEvent } from '@/lib/tracking'
+import { PAUSE_MS, isPauseCue } from '@/lib/bits/cues'
 
 const WPS = 2.4
 
@@ -32,7 +33,9 @@ export function PrompterDemo() {
   useEffect(() => {
     if (!running) return
     const words = shots[idx]!.line.split(/\s+/).filter(Boolean).length
-    const t = window.setTimeout(() => setIdx((i) => (i + 1) % shots.length), Math.max(1800, (words / WPS) * 1000 + 700))
+    const say = shots[idx]!.delivery
+    const hold = say && isPauseCue(say) ? PAUSE_MS : 0
+    const t = window.setTimeout(() => setIdx((i) => (i + 1) % shots.length), Math.max(1800, (words / WPS) * 1000 + 700) + hold)
     return () => window.clearTimeout(t)
   }, [running, idx, shots])
 
@@ -54,11 +57,12 @@ export function PrompterDemo() {
           <div key={i} ref={(el) => { segs.current[i] = el }} className={`rl-demo-pr-seg${i === idx ? ' on' : ''}`}>
             <div className="cue">{i + 1} · {s.where}<small>{s.seconds}s</small></div>
             <p className="act">{s.action}</p>
+            {s.delivery && <p className="say">{s.delivery}</p>}
             <p className="line">{s.line}</p>
           </div>
         ))}
       </div>
-      <div className="rl-demo-pr-foot">big text, one line at a time, scrolls by itself · mirror for a glass rig · record with a second phone or a laptop</div>
+      <div className="rl-demo-pr-foot">big text, one line at a time, scrolls by itself · rose notes say how to say it · mirror for a glass rig · record with a second phone or a laptop</div>
     </section>
   )
 }

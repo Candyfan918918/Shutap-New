@@ -9,6 +9,7 @@ import { SAMPLE_KIT, SAMPLE_LISTING } from '@/lib/realtors/sample-kit'
 import { TONE_LABEL } from '@/lib/realtors/listing'
 import { SAMPLE_CONTROLS } from '@/lib/realtors/sample-kit'
 import { trackEvent } from '@/lib/tracking'
+import { PAUSE_MS, isPauseCue } from '@/lib/bits/cues'
 
 type Id = 'walkthrough' | 'voiceover' | 'hooks' | 'open_house' | 'posts' | 'straight' | 'shoot'
 type Row = { k?: string; sub?: string; v: string }
@@ -97,7 +98,8 @@ export function SampleTiles() {
   useEffect(() => {
     if (open !== 'shoot' || paused) return
     const words = shots[i]!.line.split(/\s+/).length
-    const t = window.setTimeout(() => setI((x) => (x + 1) % shots.length), Math.max(2200, (words / 2.4) * 1000 + 700))
+    const say = shots[i]!.delivery
+    const t = window.setTimeout(() => setI((x) => (x + 1) % shots.length), Math.max(2200, (words / 2.4) * 1000 + 700) + (say && isPauseCue(say) ? PAUSE_MS : 0))
     return () => window.clearTimeout(t)
   }, [open, paused, i, shots])
 
@@ -184,6 +186,7 @@ export function SampleTiles() {
               <div>
                 <p className="cue">{room(s.where)} · {s.seconds}s</p>
                 <p className="act">{s.action}</p>
+                {s.delivery && <p className="say">{s.delivery}</p>}
                 <p className="line">{s.line}</p>
               </div>
               <p className="dim">{i < shots.length - 1 ? shots[i + 1]!.line : ' '}</p>

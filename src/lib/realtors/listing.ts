@@ -67,9 +67,10 @@ export const OUTPUT_LABEL: Record<Output, string> = {
   straight: 'MLS copy',
 }
 
-export type Shot = { where: string; action: string; line: string; seconds: string; fact?: string }
+/** delivery (Nov 11 2026): how to say the line, shown in shoot mode, e.g. "(deadpan on 'cozy')", "(pause for the laugh)" */
+export type Shot = { where: string; action: string; line: string; seconds: string; fact?: string; delivery?: string }
 export type Hook = { line: string; move: string }
-export type Labeled = { label: string; text: string }
+export type Labeled = { label: string; text: string; delivery?: string }
 
 /** One kit: the six outputs for one tone. */
 export type Kit = {

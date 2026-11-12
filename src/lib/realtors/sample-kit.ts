@@ -29,63 +29,72 @@ export const SAMPLE_KIT: Kit = {
         "action": "Start mid-stride, point at the address numbers, then the door; say the hook.",
         "line": "Welcome to [address], where waterproof floors judge your spill history.",
         "seconds": "0–4",
-        "fact": "address; water proof laminated flooring"
+        "fact": "address; water proof laminated flooring",
+        "delivery": "(big smile, to camera)"
       },
       {
         "where": "entry · swing to living room",
         "action": "Open door, step in, sweep to the insert fireplace and pause hand over it.",
         "line": "Insert fireplace: because matches deserved a tech upgrade and your socks, heat.",
         "seconds": "4–8",
-        "fact": "living room includes an insert fireplace"
+        "fact": "living room includes an insert fireplace",
+        "delivery": "(beat before 'your socks')"
       },
       {
         "where": "living to kitchen · walk and reveal",
         "action": "Walk into kitchen, tap the gas range knobs like a piano for emphasis.",
         "line": "Gas hookups and a gas oven range—finally, flames that aren’t from emails.",
         "seconds": "8–12",
-        "fact": "kitchen with gas hookups and a gas oven range"
+        "fact": "kitchen with gas hookups and a gas oven range",
+        "delivery": "(pause for the laugh)"
       },
       {
         "where": "kitchen window · pan to glass",
         "action": "Press palm to the window, nod approvingly at the reflection.",
         "line": "Double pane windows: outside noise stays outside, like your unread newsletters.",
         "seconds": "12–15",
-        "fact": "double pane windows for energy efficiency"
+        "fact": "double pane windows for energy efficiency",
+        "delivery": "(dry)"
       },
       {
         "where": "hallway · quick stat drop",
         "action": "Walk the hall, hold up fingers counting beds and baths as you pass doors.",
         "line": "4 bed, 2 bath, 1,480 square feet—bring stuff, not excuses.",
         "seconds": "15–19",
-        "fact": "4 bed; 2 bath; 1480 sqft"
+        "fact": "4 bed; 2 bath; 1480 sqft",
+        "delivery": "(quick, matter-of-fact)"
       },
       {
         "where": "primary suite · doorway lean",
         "action": "Lean in the doorway, gesture at the room like it’s a VIP lounge.",
         "line": "Primary suite slash retreat: finally a meeting that could’ve been a nap.",
         "seconds": "19–23",
-        "fact": "primary suite/retreat"
+        "fact": "primary suite/retreat",
+        "delivery": "(deadpan on 'retreat')"
       },
       {
         "where": "secondary bedroom · walk-through",
         "action": "Glide through, toe-tap the waterproof floor for the running gag.",
         "line": "These waterproof floors heard your ‘only water’ promise and said, sure.",
         "seconds": "23–26",
-        "fact": "water proof laminated flooring"
+        "fact": "water proof laminated flooring",
+        "delivery": "(pause for the laugh)"
       },
       {
         "where": "back door view · quick lot nod",
         "action": "Open to the yard, frame the outdoor space with your hands.",
         "line": "Lot is 6005 square feet—room for lawn chairs and questionable hobbies.",
         "seconds": "26–29",
-        "fact": "lot 6005 sqft"
+        "fact": "lot 6005 sqft",
+        "delivery": "(beat before 'questionable')"
       },
       {
         "where": "front door · closing button",
         "action": "Step out, pull door, tap the floor one last time and grin.",
         "line": "Built 1948, upgraded where it counts—like floors that forgive spaghetti.",
         "seconds": "29–32",
-        "fact": "built 1948; water proof laminated flooring"
+        "fact": "built 1948; water proof laminated flooring",
+        "delivery": "(slower, then close the door)"
       }
     ],
     "cut15": "1,2,3,5,9",

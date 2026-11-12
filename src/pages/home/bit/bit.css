@@ -223,6 +223,14 @@
 .bt-stage-guide { position: absolute; left: 0; top: calc(36% + 0.55em); width: 0; height: 0; border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-left: 11px solid #e7548a; z-index: 1; font-size:var(--fs-h2); }
 .bt-stage-count { position: absolute; inset: 0; display: grid; place-items: center; font-size:var(--fs-h2); font-weight: 800; color: #e7548a; background: rgba(18, 16, 20, 0.55); z-index: 2; }
 .bt-stage-hint { position: absolute; left: 50%; bottom: 16%; transform: translateX(-50%); white-space: nowrap; font-size:var(--fs-small); font-weight: 700; color: #f6eef1; background: rgba(34, 28, 32, 0.92); border: 1px solid #3a3036; border-radius: 999px; padding: 9px 16px; z-index: 2; }
+.bt-stage-cue { margin: 0 0 0.5em !important; font-size: 15px; font-weight: 600; font-style: italic; line-height: 1.4; color: #e7548a; display: flex; align-items: center; gap: 10px; }
+.bt-stage-cue.in { display: inline; margin: 0 !important; vertical-align: 3px; }
+.bt-stage-holding { font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #121014; background: #e7548a; border-radius: 999px; padding: 3px 10px; }
+.bt-stage-hint.top { top: 4%; bottom: auto; display: flex; align-items: center; gap: 8px; }
+.bt-stage-hint .dot { width: 8px; height: 8px; border-radius: 999px; background: #e7548a; animation: bt-cue-pulse 1.2s ease-in-out infinite; }
+@keyframes bt-cue-pulse { 50% { opacity: .3; } }
+@media (prefers-reduced-motion: reduce) { .bt-stage-hint .dot { animation: none; } }
+.bt-stage-btn:disabled { opacity: .5; cursor: default; }
 .bt-stage-ctrl { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .bt-stage-btn { height: 44px; min-width: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #3a3036; background: #221c20; color: #f6eef1; font: 700 var(--fs-small) 'Sora', system-ui, sans-serif; cursor: pointer; }
 .bt-stage-btn.go { background: #b8456b; border-color: #b8456b; min-width: 96px; }
