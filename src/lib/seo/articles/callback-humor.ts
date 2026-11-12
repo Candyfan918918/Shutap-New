@@ -52,7 +52,7 @@ const guide: Guide = {
     },
     {
       heading: "Find the callback in your own story",
-      body: "Read your draft and circle every concrete noun in the first third. Then look at your last line. If it doesn't reach back to one of those circled words, try rewriting it so it does. That single pass fixes a lot of endings. If you want something to push against, write your bit into Shutap, the humor amplifier, as a hook, setup, two tags and a button, and tap funnier on the button for other ways to say it. Check whether the button calls back to the setup. If it doesn't, write your own callback there, because the detail that matters most is one only you remember.",
+      body: "Read your draft and circle every concrete noun in the first third. Then look at your last line. If it doesn't reach back to one of those circled words, try rewriting it so it does. That single pass fixes a lot of endings. If you want something to push against, tell your story in Shutap, the humor amplifier, get it back as a hook, setup, two tags and a button, and tap funnier on the button for other ways to say it. Check whether the button calls back to the setup. If it doesn't, write your own callback there, because the detail that matters most is one only you remember.",
     },
   ],
   techniques: [

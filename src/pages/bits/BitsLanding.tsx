@@ -1,17 +1,20 @@
-/* /bits, the Shutap Bits landing (Nov 8 2026 redesign, approved by Candy).
- * Bits helps creators and comedians write their own bit; it never writes one
- * for them. Everything that sells it is in the first screen: what it does,
- * the five-line box (every line theirs, funnier and lock on demand), the
- * trust row, and beside the box what those lines become: the box's own
- * lines, live, and the video's first beat drawn by the real video code.
- * Lower: three steps, the five lines, funnier and lock, the same box again
- * (one draft with the top one), plans, questions, who's behind it. */
-import { useCallback, useEffect, useRef, useState } from 'react'
+/* /bits, the Shutap Bits landing (Nov 12 2026 redesign, approved by Candy).
+ *
+ * Show the output first. Half the visitors come from ChatGPT ads that promise
+ * a video and a teleprompter with delivery cues; the old page opened on an
+ * empty five-line form and 22 of 35 left inside ten seconds. Now the first
+ * screen is the demo bit's four outputs side by side, at the same size: the
+ * 5-second video (playing), stand-up (the teleprompter running, with the
+ * sketch's delivery cues), the sketch page and the skit shot list. A visitor
+ * from a "rehearse" ad (utm_content=rehearse) gets stand-up first.
+ *
+ * Under it: "Your turn — write yours." The box is one story box; "Make it a
+ * bit" cuts what they typed into hook, setup, two tags and button, their
+ * words only. A guest makes that one bit and reads it, then signs in to
+ * watch, rehearse, keep it or make versions. */
+import { useEffect, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { BitSurface } from '@/pages/home/bit/BitSurface'
-import { EMPTY_LINES } from '@/pages/home/bit/LinedBox'
-import type { Draft } from '@/pages/home/bit/EditableBit'
-import { readSlot } from '@/lib/bits/shared'
 import { buildSpec, VIDEO_H, VIDEO_W } from '@/lib/bits/video/spec'
 import { drawFrame } from '@/lib/bits/video/draw'
 import { BIT_CAPS } from '@/lib/bits/plans'
@@ -20,13 +23,13 @@ import { PLANS, usd } from '@/lib/pricing'
 import { Footer } from '@/components/feed/Footer'
 import type { BitDemo } from '@/lib/bits/demo.functions'
 import { trackEvent } from '@/lib/tracking'
+import { cuesForLines } from '@/lib/bits/cues'
 import '@/components/feed/feed.css'
 import './bits.css'
-import { cuesForLines } from '@/lib/bits/cues'
 
-const BANNER = ['Hook', 'Setup', 'Two tags', 'Button', 'Funnier on any line', 'Lock what’s done', '5-second video', 'Stand-up prompter', 'Delivery cues', 'Rehearse the timing', 'Sketch page', 'Skit', 'Your words, word for word', 'No new jokes added']
+const BANNER = ['Tell it your way', 'Every word stays yours', 'Funnier on any line', 'Lock what’s done', '5-second video', 'Stand-up teleprompter', 'Delivery cues', 'Rehearse the timing', 'Sketch page', 'Skit shot list', 'No new jokes added']
 
-export const LINE_INFO: { s: 'hook' | 'setup' | 'tag0' | 'tag1' | 'button'; k: string; d: string }[] = [
+const LINE_INFO: { s: 'hook' | 'setup' | 'tag0' | 'tag1' | 'button'; k: string; d: string }[] = [
   { s: 'hook', k: 'Hook', d: 'The first 2 seconds. What happened, the way you’d say it first: a reason to listen.' },
   { s: 'setup', k: 'Setup', d: 'The one fact the hook left out. Just enough of the story to follow the turn.' },
   { s: 'tag0', k: 'Tag 1', d: 'A laugh after the turn. A picture that lands on a thing you can point at.' },
@@ -35,10 +38,10 @@ export const LINE_INFO: { s: 'hook' | 'setup' | 'tag0' | 'tag1' | 'button'; k: s
 ]
 
 export const BITS_FAQ: { q: string; a: string }[] = [
-  { q: 'Does Shutap write my bit?', a: 'No. You write all five lines: hook, setup, two tags and the button. Funnier offers other ways to say a line only when you tap it, and nothing changes until you pick. The video, stand-up, sketch and skit lay out your lines; they add no new jokes.' },
-  { q: 'Can I rehearse with it?', a: 'Yes. Stand-up is a teleprompter built for practice: your lines scroll at talking pace with delivery cues from your sketch page, like (beat), (pause for the laugh) or (his voice), and it holds for a moment at each pause. Tap cues to hide them when you know it cold.' },
+  { q: 'Does Shutap write my bit?', a: 'No. You tell it your way in the box. Shutap cuts what you typed into a hook, setup, two tags and a button, using only your words, and anything your story didn’t cover is yours to write. Funnier offers other ways to say a line only when you tap it, and nothing changes until you pick. The video, stand-up, sketch and skit lay out your bit; they add no new jokes.' },
+  { q: 'Can I rehearse with it?', a: 'Yes. Stand-up is a teleprompter built for practice: your lines scroll at talking pace with delivery cues from your sketch page, like (beat), (hushed) or (his voice), and it holds for a moment at each pause. Tap cues to hide them when you know it cold.' },
+  { q: 'Do I have to sign up first?', a: 'No. Tell your story and make your bit without an account, and read it. Signing in (free, with Google, Apple or email) opens the video, the teleprompter, the sketch and the skit, keeps the bit in My creations, and unlocks funnier on every line.' },
   { q: 'Will my material end up somewhere else?', a: 'No. Nobody at Shutap reads your bits, they are never used to train AI, and they are never published unless you post them. Names and details are removed before anything is saved.' },
-  { q: 'What if I’m stuck on a line?', a: 'Write a rough version, even a plain sentence, and tap funnier. You get three other ways to say it, built from your other lines, with yours first. Keep yours or pick one.' },
   { q: 'What is free?', a: `${BIT_CAPS.free} bit a day with everything in it: the 5-second video, stand-up, sketch and skit, and funnier and lock on every line. The video and downloads carry the shutap.com mark.` },
 ]
 
@@ -46,96 +49,109 @@ function tap(name: string, props: Record<string, unknown> = {}) {
   void trackEvent(name, { product: 'bits', page: 'bits', ...props })
 }
 
-/** the box's lines, live (the boxes share them on shutap:bit-lines) */
-function useBoxLines(): Draft {
-  const [lines, setLines] = useState<Draft>(EMPTY_LINES)
+type Tile = 'video' | 'standup' | 'sketch' | 'skit'
+
+/** Which output leads: an ad's utm_content (rehearse / video / sketch / skit). */
+function useLead(): Tile {
+  const [lead, setLead] = useState<Tile>('video')
   useEffect(() => {
     try {
-      const raw = sessionStorage.getItem('shutap_bit_lines')
-      const p = raw ? (JSON.parse(raw) as { lines?: Draft }) : null
-      if (p?.lines && typeof p.lines.hook === 'string') setLines({ ...EMPTY_LINES, ...p.lines })
+      const c = new URLSearchParams(window.location.search).get('utm_content')?.toLowerCase() ?? ''
+      const t: Tile | null = /rehears|prompt|cue|standup|stand-up/.test(c) ? 'standup' : /sketch/.test(c) ? 'sketch' : /skit/.test(c) ? 'skit' : /video/.test(c) ? 'video' : null
+      if (t) {
+        setLead(t)
+        tap('bits_lead_tile', { tile: t, utm_content: c.slice(0, 40) })
+      }
     } catch { /* noop */ }
-    const on = (e: Event) => {
-      const d = (e as CustomEvent<{ lines: Draft }>).detail
-      if (d?.lines) setLines(d.lines)
-    }
-    window.addEventListener('shutap:bit-lines', on)
-    return () => window.removeEventListener('shutap:bit-lines', on)
   }, [])
-  return lines
+  return lead
 }
 
-/** The video's first beat, drawn by the same code as the real video, from the
- *  visitor's own lines (the free look, with the mark). Only the first beat:
- *  the whole video is for signed-in visitors. */
-function VideoBeat({ lines }: { lines: Draft }) {
+const reduceMotion = () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+
+/** The video, drawn by the real video code from the demo's lines (the free
+ *  look, with the mark). It plays on its own, on a loop, while it is on
+ *  screen; reduced motion gets the last frame. */
+function DemoVideo({ d }: { d: BitDemo }) {
   const ref = useRef<HTMLCanvasElement>(null)
-  const hook = lines.hook.trim()
   useEffect(() => {
     const c = ref.current
-    if (!c || !hook) return
-    const ctx = c.getContext('2d')
-    if (!ctx) return
-    const scale = c.width / VIDEO_W
-    const story = [lines.hook, lines.setup, ...lines.tags, lines.button].join(' ')
-    const spec = buildSpec({ id: 'bits-preview', hook, tags: lines.tags.filter((t) => t.trim()), button: lines.button.trim() || ' ' }, story)
-    const draw = () => { ctx.setTransform(scale, 0, 0, scale, 0, 0); drawFrame(ctx, 0.8, spec, { watermark: true }) }
-    draw()
-    // the face may still be loading on first paint
-    void document.fonts?.ready.then(draw)
-  }, [hook, lines])
+    const ctx = c?.getContext('2d')
+    if (!c || !ctx) return
+    const l = d.lines
+    const spec = buildSpec({ id: d.id, hook: l.hook, tags: [...l.tags], button: l.button }, [l.hook, l.setup, ...l.tags, l.button].join(' '))
+    const draw = (t: number) => { ctx.setTransform(c.width / VIDEO_W, 0, 0, c.width / VIDEO_W, 0, 0); drawFrame(ctx, t, spec, { watermark: true }) }
+    draw(4.6)
+    void document.fonts?.ready.then(() => draw(4.6))
+    if (reduceMotion()) return
+    let raf = 0
+    let visible = true
+    let t0 = performance.now()
+    const io = typeof IntersectionObserver !== 'undefined' ? new IntersectionObserver(([e]) => { visible = !!e?.isIntersecting; if (visible) t0 = performance.now() }) : null
+    io?.observe(c)
+    const tick = () => {
+      if (visible) {
+        // 5 seconds of video, then a 1.2s hold on the button, then again
+        const t = ((performance.now() - t0) / 1000) % 6.2
+        draw(Math.min(t, 4.99))
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => { cancelAnimationFrame(raf); io?.disconnect() }
+  }, [d])
+  return <canvas ref={ref} className="bo-video" width={360} height={Math.round((360 * VIDEO_H) / VIDEO_W)} aria-label="The 5-second video made from the demo bit" />
+}
+
+/** Stand-up: the teleprompter running through the demo's lines, with the
+ *  delivery cues the real teleprompter shows (from the demo's sketch page). */
+function DemoPrompter({ d }: { d: BitDemo }) {
+  const lines = [d.lines.hook, d.lines.setup, d.lines.tags[0], d.lines.tags[1], d.lines.button]
+  const cues = cuesForLines(lines, d.sketch)
+  const [i, setI] = useState(0)
+  const [on, setOn] = useState(true)
+  useEffect(() => {
+    if (!on || reduceMotion()) return
+    const id = window.setInterval(() => setI((x) => (x + 1) % lines.length), 2600)
+    return () => window.clearInterval(id)
+  }, [on, lines.length])
   return (
-    <span className="bl-phone">
-      {hook ? <canvas ref={ref} width={360} height={Math.round((360 * VIDEO_H) / VIDEO_W)} aria-label="The first beat of your 5-second video, drawn from your hook" /> : (
-        <span className="bl-phone-empty"><b>the bit</b><span>your hook</span><i>draws here as you write</i></span>
-      )}
-    </span>
+    <div className="bo-prompt" aria-label="Stand-up teleprompter running the demo bit">
+      <span className="bo-prompt-h">teleprompter · cues on</span>
+      <span className="bo-guide" aria-hidden="true" />
+      <p className="dim">{i > 0 ? lines[i - 1] : ''}</p>
+      {(cues[i] ?? []).map((c, k) => <p key={k} className="cue">{c.text}</p>)}
+      <p className="lit">{lines[i]}</p>
+      <p className="dim">{i < lines.length - 1 ? lines[i + 1] : ''}</p>
+      <button type="button" className="bo-prompt-btn" onClick={() => { setOn((v) => !v); tap('demo_tile_open', { tile: 'standup', action: on ? 'pause' : 'start' }) }}>{on ? 'pause' : 'start'}</button>
+    </div>
   )
 }
 
-function Preview({ lines }: { lines: Draft }) {
-  const hook = lines.hook.trim()
+function Outputs({ d, lead }: { d: BitDemo; lead: Tile }) {
+  const tiles: { id: Tile; name: string; use: string; foot: string; body: React.ReactNode }[] = [
+    { id: 'video', name: '5-second video', use: 'to post', foot: 'Plays on its own. Cast and place from the story.', body: <DemoVideo d={d} /> },
+    { id: 'standup', name: 'Stand-up', use: 'to rehearse', foot: 'Scrolls at talking pace with delivery cues.', body: <DemoPrompter d={d} /> },
+    {
+      id: 'sketch', name: 'Sketch', use: 'to stage', foot: 'One screenplay page, a PDF.',
+      body: <div className="bo-page" tabIndex={0} aria-label="The demo's sketch page">{(d.sketch ?? []).map((e, k) => <p key={k} className={e.type}>{e.text}</p>)}</div>,
+    },
+    {
+      id: 'skit', name: 'Skit', use: 'to film alone', foot: 'A shot list for your phone; you play both parts.',
+      body: <ol className="bo-shots" tabIndex={0} aria-label="The demo's skit shot list">{(d.skit ?? []).map((b, k) => <li key={k}><b>{k + 1} · {b.shot}</b><span>{b.speaker}: {b.line}</span></li>)}</ol>,
+    },
+  ]
+  const ordered = [...tiles.filter((t) => t.id === lead), ...tiles.filter((t) => t.id !== lead)]
   return (
-    <aside className="bl-side" aria-label="What your five lines become">
-      <div className="bl-side-h"><p className="bl-kick">What your five lines become</p><p className="bl-meta">yours, word for word</p></div>
-      <div className="bl-typed">
-      <div className="bl-yours">
-        <p className="bl-lbl">Your bit</p>
-        {LINE_INFO.map((l) => {
-          const v = readSlot(lines, l.s).trim()
-          return (
-            <div key={l.s} className={`bl-row${v ? ' on' : ''}`}>
-              <span className="k">{l.k}</span>
-              <span className="v">{v || `your ${l.k.toLowerCase()}`}</span>
-              {v && <span className="mine">your words</span>}
-            </div>
-          )
-        })}
-      </div>
-      <p className="bl-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v16M6 14l6 6 6-6" /></svg>Laid out from your lines, no new jokes added</p>
-      </div>
-      <div className="bl-tiles">
-        <div className="bl-tile video">
-          <b>5-second video</b>
-          <VideoBeat lines={lines} />
-          <span className="d">To post. Cast and room from your lines. Free shows the shutap.com mark.</span>
+    <div className="bo-row">
+      {ordered.map((t) => (
+        <div key={t.id} className={`bo-tile${t.id === lead && lead !== 'video' ? ' lead' : ''}`} onPointerDown={() => tap('demo_tile_open', { tile: t.id })}>
+          <div className="bo-tile-h"><b>{t.name}</b><span>{t.use}</span></div>
+          <div className="bo-body">{t.body}</div>
+          <span className="bo-foot">{t.foot}</span>
         </div>
-        <div className="bl-tile">
-          <b>Stand-up</b>
-          <span className="bl-prompt"><i>0:00</i><span className={hook ? 'on' : undefined}>{hook || 'your hook, lit'}</span></span>
-          <span className="d">Teleprompter with delivery cues, to rehearse and film</span>
-        </div>
-        <div className="bl-tile">
-          <b>Sketch</b>
-          <span className="bl-page"><span className="sh">INT. — DAY</span><span className="ch">ME</span><span className={`dl${hook ? ' on' : ''}`}>{hook || 'your lines…'}</span></span>
-          <span className="d">One screenplay page, a PDF</span>
-        </div>
-        <div className="bl-tile wide">
-          <b>Skit</b>
-          <span className="d">A shot list to film alone on your phone. You play both parts; every line you say is from your bit.</span>
-        </div>
-      </div>
-    </aside>
+      ))}
+    </div>
   )
 }
 
@@ -143,114 +159,21 @@ const SLOT_OF = { hook: 'hook', setup: 'setup', tag0: 'tag0', tag1: 'tag1', butt
 function demoLine(d: BitDemo, s: keyof typeof SLOT_OF): string {
   return s === 'tag0' ? d.lines.tags[0] : s === 'tag1' ? d.lines.tags[1] : d.lines[s]
 }
-
-/** The video, drawn by the real video code from the demo's lines: the last
- *  frame still, and the whole 5 seconds on "play". The free look (with the
- *  mark), as a free account gets it. */
-function DemoVideo({ d }: { d: BitDemo }) {
-  const ref = useRef<HTMLCanvasElement>(null)
-  const raf = useRef(0)
-  const [playing, setPlaying] = useState(false)
-  const spec = useRef<ReturnType<typeof buildSpec> | null>(null)
-  useEffect(() => {
-    const l = d.lines
-    spec.current = buildSpec({ id: d.id, hook: l.hook, tags: [...l.tags], button: l.button }, [l.hook, l.setup, ...l.tags, l.button].join(' '))
-    const draw = (t: number) => {
-      const c = ref.current; const ctx = c?.getContext('2d'); if (!c || !ctx || !spec.current) return
-      ctx.setTransform(c.width / VIDEO_W, 0, 0, c.width / VIDEO_W, 0, 0); drawFrame(ctx, t, spec.current, { watermark: true })
-    }
-    draw(4.6)
-    void document.fonts?.ready.then(() => { if (!playing) draw(4.6) })
-    if (!playing) return
-    const t0 = performance.now()
-    const tick = () => { const t = (performance.now() - t0) / 1000; draw(Math.min(t, 4.99)); if (t < 5) raf.current = requestAnimationFrame(tick); else setPlaying(false) }
-    raf.current = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf.current)
-  }, [d, playing])
-  return (
-    <button type="button" className="bl-phone play" onClick={() => { setPlaying(true); tap('demo_tile_open', { tile: 'video' }) }} aria-label="Play the 5-second video for this bit">
-      <canvas ref={ref} width={360} height={Math.round((360 * VIDEO_H) / VIDEO_W)} />
-      {!playing && <span className="bl-play" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M7 4l13 8-13 8z" /></svg></span>}
-    </button>
-  )
-}
-
-function Demo({ d }: { d: BitDemo }) {
-  const [open, setOpen] = useState<null | 'standup' | 'sketch' | 'skit'>(null)
-  const [i, setI] = useState(0)
-  const rows = LINE_INFO.map((l) => ({ ...l, v: demoLine(d, l.s), f: d.funnier.find((f) => f.slot === l.s) }))
-  /** the demo sketch's delivery notes on the stand-up lines, as the real teleprompter shows them */
-  const demoCues = cuesForLines(rows.map((r) => r.v), d.sketch)
-  useEffect(() => {
-    if (open !== 'standup') return
-    setI(0)
-    const id = window.setInterval(() => setI((x) => (x < 4 ? x + 1 : x)), 2600)
-    return () => window.clearInterval(id)
-  }, [open])
-  const go = (t: 'standup' | 'sketch' | 'skit') => { setOpen(t); tap('demo_tile_open', { tile: t }) }
-  return (
-    <aside className="bl-side" aria-label="A real bit">
-      <div className="bl-side-h"><p className="bl-kick">A real bit</p><p className="bl-meta">typed in-house, the way you would</p></div>
-      <div className="bl-typed">
-      <div className="bl-yours">
-        <p className="bl-lbl">What they wrote</p>
-        {rows.map((r) => (
-          <div key={r.s} className="bl-row on">
-            <span className="k">{r.k}</span>
-            <span className="v wrap">{r.v}{r.f && <small>they typed: “{r.f.typed}”</small>}</span>
-            {r.f ? <span className="mine fun">funnier · picked</span> : <span className="mine">their words</span>}
-          </div>
-        ))}
-      </div>
-      <p className="bl-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v16M6 14l6 6 6-6" /></svg>What Shutap made from those lines · no new jokes added</p>
-      </div>
-      <div className="bl-stage">
-        <div className="bl-tiles">
-          <div className="bl-tile video"><b>5-second video</b><DemoVideo d={d} /><span className="d">Tap to play. Free shows the shutap.com mark.</span></div>
-          <button type="button" className="bl-tile" onClick={() => go('standup')}>
-            <b>Stand-up</b>
-            <span className="bl-prompt"><i>0:00</i><span className="on">{d.lines.hook}</span></span>
-            <span className="d">Teleprompter with cues · tap to run it</span>
-          </button>
-          <button type="button" className="bl-tile" onClick={() => go('sketch')} disabled={!d.sketch}>
-            <b>Sketch</b>
-            <span className="bl-page">{(d.sketch ?? []).slice(0, 5).map((e, k) => <span key={k} className={e.type === 'scene_heading' ? 'sh' : e.type === 'character' ? 'ch' : e.type === 'dialogue' ? 'dl on' : 'ac'}>{e.text}</span>)}</span>
-            <span className="d">One screenplay page · tap to read</span>
-          </button>
-          <button type="button" className="bl-tile wide" onClick={() => go('skit')} disabled={!d.skit}>
-            <b>Skit</b>
-            <span className="d">{d.skit?.length ? `${d.skit.length} shots to film alone: ${d.skit[0]!.shot}…` : 'A shot list to film alone'}</span>
-          </button>
-        </div>
-        {open && (
-          <div className={`bl-pop${open === 'standup' ? ' dark' : ''}`} role="dialog" aria-label={open}>
-            <div className="bl-pop-h"><b>{open === 'standup' ? 'Stand-up' : open === 'sketch' ? 'Sketch' : 'Skit'}</b><button type="button" onClick={() => setOpen(null)} aria-label="Close">×</button></div>
-            {open === 'standup' && (
-              <div className="bl-run">
-                <p className="dim">{i > 0 ? rows[i - 1]!.v : ''}</p>
-                {(demoCues[i] ?? []).map((c, k) => <p key={k} className="cue">{c.text}</p>)}
-                <p className="lit">{rows[i]!.v}</p>
-                <p className="dim">{i < 4 ? rows[i + 1]!.v : ''}</p>
-              </div>
-            )}
-            {open === 'sketch' && <div className="bl-script">{(d.sketch ?? []).map((e, k) => <p key={k} className={e.type}>{e.text}</p>)}</div>}
-            {open === 'skit' && <ol className="bl-shots">{(d.skit ?? []).map((b, k) => <li key={k}><b>{b.shot}</b><span>{b.speaker}: {b.line}</span>{b.on_screen && <i>on screen: {b.on_screen}</i>}</li>)}</ol>}
-            <p className="bl-pop-f">Real Shutap output from these five lines, not edited. <a href="#bits-top">Write yours ↑</a></p>
-          </div>
-        )}
-      </div>
-    </aside>
-  )
+/** The demo as it was first typed (a line where funnier was used, as typed). */
+function demoStory(d: BitDemo): string {
+  return LINE_INFO.map((l) => {
+    const f = d.funnier.find((x) => x.slot === l.s)
+    const t = (f?.typed || demoLine(d, l.s)).trim()
+    return /[.!?]["”’]?$/.test(t) ? t : `${t}.`
+  }).join(' ')
 }
 
 export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
-  const lines = useBoxLines()
+  const lead = useLead()
   const [phase, setPhase] = useState<'write' | 'result'>('write')
-  const onPhase = useCallback((p: 'write' | 'result') => setPhase(p), [])
   const toBox = (where: string) => {
     tap('seo_cta_clicked', { kind: where })
-    const el = document.getElementById('bits-top')
-    el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document.getElementById('bits-write')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
   const run = BANNER.flatMap((b) => [<span key={b}>{b}</span>, <i key={b + '·'}>●</i>])
   return (
@@ -259,54 +182,86 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
         <div className="bl-marq-run" aria-hidden>{run}{BANNER.flatMap((b) => [<span key={b + '2'}>{b}</span>, <i key={b + '·2'}>●</i>])}</div>
       </div>
 
-      <section className={`bl-hero${phase === 'result' ? ' result' : ''}`} id="bits-top">
+      {phase === 'write' && (
+        <section className="bo-hero">
+          <div className="bo-head">
+            <div className="bo-head-l">
+              <p className="bl-kick">{lead === 'standup' ? 'Shutap Bits · stand-up teleprompter' : 'Shutap Bits · for creators and comedians'}</p>
+              {lead === 'standup' ? (
+                <h1 className="bl-h1">Rehearse your bit <em>with delivery cues. Then post it, stage it or film it.</em></h1>
+              ) : (
+                <h1 className="bl-h1">Tell it your way. <em>Get a video, a teleprompter with cues, a sketch and a skit.</em></h1>
+              )}
+            </div>
+            <p className="bl-lead">{demo ? 'This story was typed in-house, the way you would. Everything below it is what Shutap made from it. No new jokes added.' : 'Tell your story in the box. Shutap cuts it into a bit, every word yours, and lays it out as a 5-second video, stand-up with delivery cues, a sketch and a skit.'}</p>
+          </div>
+          {demo && <Outputs d={demo} lead={lead} />}
+          {demo && (
+            <p className="bo-under">
+              <span>All four made from the same story{demo.funnier.length ? ` · ${demo.funnier.length === 1 ? 'one line' : `${demo.funnier.length} lines`} used funnier, picked by the writer` : ''} · real output, not edited</span>
+              <a href="#bits-behind" onClick={() => tap('seo_cta_clicked', { kind: 'see_demo_lines' })}>see what they typed ↓</a>
+            </p>
+          )}
+        </section>
+      )}
+
+      <section className={`bo-write${phase === "result" ? " result" : ""}`} id="bits-write">
         {phase === 'write' && (
-          <div className="bl-head">
-            <p className="bl-kick">Shutap Bits · for creators and comedians</p>
-            <h1 className="bl-h1">Write your bit line by line. <em>Funnier only where you ask.</em></h1>
-            <p className="bl-lead">You write the hook, setup, two tags and button. Stuck on one? Tap funnier for three other ways to say it. Then post it as a 5-second video, or perform it as stand-up, a sketch or a skit.</p>
+          <div className="bo-write-h">
+            <h2>Your turn — write yours.</h2>
+            <span>free · no sign-in to start · every word stays yours</span>
           </div>
         )}
-        <div className="bl-box">
-          <BitSurface embed={{ page: 'bits', heading: '', bare: true, onPhase }} />
+        <div className="bl-box" id="bits-top">
+          <BitSurface embed={{ page: 'bits', heading: '', bare: true, onPhase: setPhase, demoStory: demo ? demoStory(demo) : undefined }} />
         </div>
         {phase === 'write' && (
           <ul className="bl-trust">
-            <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f6a45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" /></svg>Every line is yours, word for word</li>
+            <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f6a45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" /></svg>Every word is yours</li>
             <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e1c4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v4l3 2" /></svg>AI writes only when you tap funnier</li>
             <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e1c4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z" /><path d="M9 12l2 2 4-4" /></svg>Your bits never train AI</li>
           </ul>
         )}
-        {phase === 'write' && (demo ? <Demo d={demo} /> : <Preview lines={lines} />)}
       </section>
 
       <div className="bl-lower">
+        {demo && (
+          <div className="bl-block" id="bits-behind">
+            <h2>The bit behind the demo</h2>
+            <p className="bl-p">Typed in-house the way you would, then cut into a bit. Lines marked funnier show what was typed first.</p>
+            <div className="bl-yours">
+              {LINE_INFO.map((l) => {
+                const f = demo.funnier.find((x) => x.slot === l.s)
+                return (
+                  <div key={l.s} className="bl-row on">
+                    <span className="k">{l.k}</span>
+                    <span className="v wrap">{demoLine(demo, l.s)}{f && <small>typed first: “{f.typed}”</small>}</span>
+                    {f ? <span className="mine fun">funnier · picked</span> : <span className="mine">their words</span>}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
         <div className="bl-steps3">
-          <div><p className="n">1</p><h3>Write five lines</h3><p>Hook, setup, two tags, button. All five are yours to write.</p></div>
-          <div><p className="n">2</p><h3>Funnier where you’re stuck</h3><p>Tap it on one line for three other ways to say it. Yours stays first. Lock what’s done.</p></div>
-          <div><p className="n">3</p><h3>Post it or perform it</h3><p>The 5-second video, stand-up with delivery cues to rehearse with, a sketch page or a skit, laid out from your lines.</p></div>
+          <div><p className="n">1</p><h3>Tell it your way</h3><p>Who was there, what they said, what you did, how it ended. Checks show what makes a bit land; nothing is blocked.</p></div>
+          <div><p className="n">2</p><h3>Get your bit</h3><p>Your story, cut into a hook, setup, two tags and a button. Your words only. Tap funnier on a line where you’re stuck; lock what’s done.</p></div>
+          <div><p className="n">3</p><h3>Post it or perform it</h3><p>The 5-second video, stand-up with delivery cues to rehearse with, a sketch page or a skit, laid out from your bit.</p></div>
         </div>
 
         <div className="bl-block">
-          <h2>The five lines of a bit</h2>
-          <p className="bl-p">The shape a comic builds on. Each line in the box asks for one of these.</p>
+          <h2>The shape of a bit</h2>
+          <p className="bl-p">What each part of your bit does. Your story is cut into these, in your words.</p>
           <ol className="bl-shape">
             {LINE_INFO.map((l, i) => <li key={l.s}><b>{i + 1} · {l.k}</b><span>{l.d}</span></li>)}
           </ol>
         </div>
 
         <div className="bl-two">
-          <div><p className="t"><span className="pill">funnier</span><b>one line, when you ask</b></p><p>Three other ways to say the line you tapped, built from the lines you wrote. Yours is always the first choice. Nothing changes until you pick.</p></div>
+          <div><p className="t"><span className="pill">funnier</span><b>one line, when you ask</b></p><p>Three other ways to say the line you tapped, built from the rest of your bit. Yours is always the first choice. Nothing changes until you pick.</p></div>
           <div><p className="t"><span className="pill locked">locked</span><b>done with a line</b></p><p>Lock a line when it’s right. It can’t be changed by accident, and funnier skips it until you unlock it.</p></div>
         </div>
-
-        {phase === 'write' && (
-          <div className="bl-mid">
-            <h2>Write yours.</h2>
-            <p className="bl-p">The same box as the top of the page. Whatever you type here is there too: one draft, one sign-up, nothing lost.</p>
-            <BitSurface embed={{ page: 'bits', heading: '', bare: true, mirror: true }} />
-          </div>
-        )}
 
         <div className="bl-block" id="price">
           <h2>What you get, and what it costs</h2>

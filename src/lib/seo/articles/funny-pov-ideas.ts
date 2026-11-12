@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Turn your own week into POVs",
-      body: "The best POV ideas are already in your camera roll and your texts. Go back through the last seven days and write down every moment where you thought \"of course.\" The meeting that ran long, the delivery left at the wrong door, the group chat that went quiet after your joke. For each one, ask who else was in that moment, including objects, and write the caption from their side. One small week usually gives five premises. Film the one you can explain in a single caption line. If you'd like a second draft to push against, write it as a bit in Shutap, the humor amplifier, line by line, and tap funnier on any line you're stuck on: you get three other ways to say it, yours first, and a 5-second video of the finished bit.",
+      body: "The best POV ideas are already in your camera roll and your texts. Go back through the last seven days and write down every moment where you thought \"of course.\" The meeting that ran long, the delivery left at the wrong door, the group chat that went quiet after your joke. For each one, ask who else was in that moment, including objects, and write the caption from their side. One small week usually gives five premises. Film the one you can explain in a single caption line. If you'd like a second draft to push against, tell it in Shutap, the humor amplifier, get it back as a bit, and tap funnier on any line you're stuck on: you get three other ways to say it, yours first, and a 5-second video of the finished bit.",
     },
   ],
   techniques: [

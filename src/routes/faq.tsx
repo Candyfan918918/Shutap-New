@@ -11,7 +11,7 @@ const TITLE = "Shutap FAQ — The Humor Amplifier";
 const DESCRIPTION =
   "Answers about Shutap, the humor amplifier: is it free, stand-up, sketch and skit, TikTok, who owns the bits, privacy and pricing.";
 const CAPSULE =
-  "Everything people ask about Shutap, the humor amplifier: write your bit line by line, funnier only where you ask, for TikTok, Reels, YouTube Shorts and the stage.";
+  "Everything people ask about Shutap, the humor amplifier: tell it your way and get the bit, funnier only where you ask, for TikTok, Reels, YouTube Shorts and the stage.";
 
 
 

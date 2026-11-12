@@ -8,9 +8,9 @@ const guide: Guide = {
   title: "Shutap vs ChatGPT for Stand-Up Bits: Which to Use | Shutap",
   h1: "Shutap vs ChatGPT for stand-up bits",
   description:
-    "ChatGPT is a flexible brainstorming partner. Shutap helps you write your own stand-up bit, line by line, with funnier on the line you're stuck on. What each does well and when to use which.",
+    "ChatGPT is a flexible brainstorming partner. Shutap turns your own story into a stand-up bit in your words, with funnier on the line you're stuck on. What each does well and when to use which.",
   capsule:
-    "For stand-up bits, ChatGPT is the better open-ended brainstorming partner and Shutap is the better place to write the bit yourself: ChatGPT will riff on any premise you give it, while Shutap gives you the shape of a bit (hook, setup, two tags, button) to write in your own words and offers other ways to say a line only when you tap funnier.",
+    "For stand-up bits, ChatGPT is the better open-ended brainstorming partner and Shutap is the better place to write the bit yourself: ChatGPT will riff on any premise you give it, while Shutap cuts your story into the shape of a bit (hook, setup, two tags, button) in your own words and offers other ways to say a line only when you tap funnier.",
   blurb: "A general chatbot versus a tool where you write the bit and get help only where you ask.",
   preset: { audience: "live", voice: "deadpan", length: "2m", heat: 3 },
   sections: [
@@ -36,7 +36,7 @@ const guide: Guide = {
     },
     {
       heading: "What Shutap does differently",
-      body: "Shutap gives you the shape instead of a prompt: five lines to write in your own words, a hook, a setup, two tags and a button. When a line isn't landing, tap funnier and it offers three other ways to say it, built from your other lines, with lines that would fit anyone's story and jokes aimed at you dropped. You set the audience (live, for a club) and a voice (deadpan, storyteller, roast or dry). Yours always stays the first choice, and you decide what goes on stage. Then rehearse it on the teleprompter.",
+      body: "Shutap gives you the shape instead of a prompt: tell the story your way and it comes back as a hook, a setup, two tags and a button, in your own words. When a line isn't landing, tap funnier and it offers three other ways to say it, built from your other lines, with lines that would fit anyone's story and jokes aimed at you dropped. You set the audience (live, for a club) and a voice (deadpan, storyteller, roast or dry). Yours always stays the first choice, and you decide what goes on stage. Then rehearse it on the teleprompter.",
     },
     {
       heading: "Rehearsing the bit, not just reading it",

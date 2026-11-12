@@ -9,22 +9,22 @@ const guide: Guide = {
   title: "ChatGPT Alternative for Comedy Writing, Compared | Shutap",
   h1: "Shutap vs ChatGPT and other chatbots for comedy writing",
   description:
-    "Why Shutap is a different ChatGPT alternative for comedy writing: you write your own bit line by line, tap funnier where you're stuck, and get it back as a 5-second video, stand-up, a sketch or a skit.",
+    "Why Shutap is a different ChatGPT alternative for comedy writing: you tell your own story and get it back as a bit, tap funnier where you're stuck, and get it back as a 5-second video, stand-up, a sketch or a skit.",
   capsule:
-    "Shutap is a ChatGPT alternative for comedy writing built for writers who want to keep their own voice: you write the bit as five lines (hook, setup, two tags, button), and when a line isn't landing you tap funnier for three other ways to say it, built on a named comedy technique, yours first. The finished bit comes back as a 5-second video, stand-up, a sketch and a skit. With ChatGPT you prompt for jokes; with Shutap you write, and it helps only where you ask.",
+    "Shutap is a ChatGPT alternative for comedy writing built for writers who want to keep their own voice: you tell the story your way and it comes back as a bit (hook, setup, two tags, button), every word yours, and when a line isn't landing you tap funnier for three other ways to say it, built on a named comedy technique, yours first. The finished bit comes back as a 5-second video, stand-up, a sketch and a skit. With ChatGPT you prompt for jokes; with Shutap you write, and it helps only where you ask.",
   blurb: "ChatGPT gives you a blank box. Shutap gives you the shape of a bit, and help on the line you're stuck on.",
   sections: [
     {
       heading: "The short answer",
-      body: "ChatGPT is a general assistant. It can write a joke, a cover letter or a recipe, and it's very good at all three if you know how to ask. Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, only does comedy, and on Shutap Bits it doesn't write the bit for you. You write it, line by line, in the shape comics use: a hook, a setup, two tags and a button. When a line isn't landing, you tap funnier and get three other ways to say it, yours first.",
+      body: "ChatGPT is a general assistant. It can write a joke, a cover letter or a recipe, and it's very good at all three if you know how to ask. Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, only does comedy, and on Shutap Bits it doesn't write the bit for you. You tell it your way and it comes back in the shape comics use, every word yours: a hook, a setup, two tags and a button. When a line isn't landing, you tap funnier and get three other ways to say it, yours first.",
     },
     {
       heading: "One morning, two workflows",
-      body: "Take a real situation: your son tried on three pairs of shoes before he could get out the door on a school morning. In ChatGPT you'd prompt for jokes and pick from what comes back. In Shutap you write the hook yourself (\"He tried on three pairs of shoes.\"), then the setup, two tags and the button. Stuck on the button? Write the plain version and tap funnier: three other ways to say it come back, built from your other lines. When all five lines are yours, the bit comes back as a 5-second video, stand-up, a sketch and a skit.",
+      body: "Take a real situation: your son tried on three pairs of shoes before he could get out the door on a school morning. In ChatGPT you'd prompt for jokes and pick from what comes back. In Shutap you write the hook yourself (\"He tried on three pairs of shoes.\"), then the setup, two tags and the button. Stuck on the button? Write the plain version and tap funnier: three other ways to say it come back, built from your other lines. When every line is yours, the bit comes back as a 5-second video, stand-up, a sketch and a skit.",
     },
     {
       heading: "You write the jokes, with a shape to fill",
-      body: "Most people don't freeze because they lack a story. They freeze at the blank page. Shutap gives the page a shape: five lines, each with a one-line hint about what it's for. The more specific the detail (three pairs, the school bell, the shoe he picked was the first one), the funnier the line. You don't need prompt tricks, and nothing is written for you unless you tap funnier on a line and pick an option.",
+      body: "Most people don't freeze because they lack a story. They freeze at the blank page. Shutap gives the story a shape: your words, cut into a hook, a setup, two tags and a button. The more specific the detail (three pairs, the school bell, the shoe he picked was the first one), the funnier the line. You don't need prompt tricks, and nothing is written for you unless you tap funnier on a line and pick an option.",
     },
     {
       heading: "Built on named comedy techniques",
@@ -58,7 +58,7 @@ const guide: Guide = {
   faq: [
     {
       q: "Is there a ChatGPT alternative made for comedy writing?",
-      a: "Yes. Shutap is built only for comedy. You write your bit as a hook, setup, two tags and a button, tap funnier on any line for three other ways to say it, and get it back as a 5-second video, stand-up, a sketch and a skit.",
+      a: "Yes. Shutap is built only for comedy. You tell your story and get it back as a hook, setup, two tags and a button, every word yours; tap funnier on any line for three other ways to say it, and get it back as a 5-second video, stand-up, a sketch and a skit.",
     },
     {
       q: "Can ChatGPT write funny jokes?",
@@ -66,7 +66,7 @@ const guide: Guide = {
     },
     {
       q: "Do I need to write my own jokes to use Shutap?",
-      a: "Yes, and that is the point: you write the bit yourself as five lines, in plain, specific words. Tap funnier on any line you are stuck on for three other ways to say it, and keep yours or pick one. You decide what stays.",
+      a: "Yes, and that is the point: you tell the story yourself, in plain, specific words, and every word of the bit is yours. Tap funnier on any line you are stuck on for three other ways to say it, and keep yours or pick one. You decide what stays.",
     },
     {
       q: "Does Shutap use comedians' jokes?",

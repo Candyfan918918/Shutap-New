@@ -19,7 +19,7 @@ export function presetLabel(preset: Partial<BitControls>): string {
 
 export function TryItBox({
   page,
-  heading = 'Write your bit, line by line',
+  heading = 'Tell it your way. Get the bit.',
   position = 'bottom',
   preset,
   anchor = false,

@@ -47,13 +47,29 @@ export function isPauseCue(text: string): boolean {
   return PAUSE.test(text)
 }
 
-/** One list of cues per bit line, same order as `lines`. */
+/** Share of the dialogue's words that appear in the bit line: a short line
+ *  ("Shh.") said inside a longer bit line ("I said shh. She announced…"). */
+function inside(line: string, dialogue: string[]): number {
+  if (!dialogue.length) return 0
+  const l = new Set(words(line))
+  return dialogue.filter((x) => l.has(x)).length / dialogue.length
+}
+
+/** One list of cues per bit line, same order as `lines`.
+ *
+ *  Nov 12 2026: a short ME line inside a longer bit line now gets its cue
+ *  (the /bits demo's "(hushed)" on "Shh." never showed). Another speaker's
+ *  delivery note reaches the line that quotes them, when the performer has
+ *  no voice cue of their own there: the person acts that part out on stage
+ *  ("(loudly)" before the daughter's words). Still nothing new is written:
+ *  every cue is a parenthetical from the sketch page. */
 export function cuesForLines(lines: string[], sketch: SketchElement[] | null | undefined): Cue[][] {
   const out: Cue[][] = lines.map(() => [])
   if (!sketch?.length || !lines.length) return out
   let speaker = ''
   let pending: string[] = []
   let cursor = 0
+  const quoted: { at: number; texts: string[] }[] = []
   for (const e of sketch) {
     if (e.type === 'character') {
       speaker = e.text.trim().toUpperCase()
@@ -66,15 +82,25 @@ export function cuesForLines(lines: string[], sketch: SketchElement[] | null | u
       continue
     }
     if (e.type !== 'dialogue') continue
+    const dw = words(e.text)
     if (!/^ME\b/.test(speaker) || cursor >= lines.length) {
+      if (pending.length && speaker) {
+        // the bit line that quotes this speaker (the one just said or the next two)
+        for (let i = Math.max(0, cursor - 1); i < Math.min(lines.length, cursor + 3); i++) {
+          if (dw.length && inside(lines[i]!, dw) >= 0.8) {
+            quoted.push({ at: i, texts: pending })
+            break
+          }
+        }
+      }
       pending = []
       continue
     }
-    const said = new Set(words(e.text))
+    const said = new Set(dw)
     // the first line from the cursor this dialogue says (within two lines)
     let at = -1
     for (let i = cursor; i < Math.min(lines.length, cursor + 3); i++) {
-      if (covered(lines[i]!, said) >= 0.5) {
+      if (covered(lines[i]!, said) >= 0.5 || (dw.length && inside(lines[i]!, dw) >= 0.8)) {
         at = i
         break
       }
@@ -92,6 +118,11 @@ export function cuesForLines(lines: string[], sketch: SketchElement[] | null | u
     let end = at
     while (end + 1 < lines.length && covered(lines[end + 1]!, said) >= 0.6) end++
     cursor = end + 1
+  }
+  for (const q of quoted) {
+    const line = out[q.at]!
+    if (line.some((c) => c.voice)) continue
+    for (const text of q.texts) if (!line.some((c) => c.text === text)) line.push({ text, voice: false, hold: isPauseCue(text) })
   }
   return out
 }

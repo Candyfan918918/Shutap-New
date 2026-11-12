@@ -8,7 +8,7 @@
 // starts beside the Guard to save time; if the Guard fires, its result is
 // thrown away unread. Any path that ends without a bit gives the budget back.
 //
-// Daily new bits: guest 0 (sign in first) · free 1 · basic 3 · pro fair-use.
+// Daily new bits: guest 1 (own lines, read only) · free 1 · basic 3 · pro fair-use.
 // New bits and rewrites (hotter/tighter/storytelling) count. Rewrites, angle
 // swap and mix your own are paid only (free gets the bit as written).
 // Everyone sees the whole bit. Bits are server-only rows; ownership is checked
@@ -23,6 +23,8 @@ import { activePlan } from './plan.server'
 import { downloadsUsed, kitTier, resolveTier } from './bits/tier.server'
 import { BIT_PROMPT_VERSION, heatFor, touchLineDraft, varyBitDraft, writeBitFromStory, type BitFailure, type TouchOption } from './bits/pipeline.server'
 import { allLinesGiven, keptAsWritten } from './bits/kept'
+import { checkedSplit, type SplitLines } from './bits/split'
+import { callAgentBounded, tryParseJson } from './agents/gateway'
 import { forgetPerson, personSignal } from './bits/person.server'
 import { NO_CAP, TOUCH_FAIR_USE, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
 import { DOWNLOAD_KINDS } from './bits/plans'
@@ -306,9 +308,10 @@ async function writeCore(
   const subject = id.subjectKey
   const usageNow = async () => usageView(tier, await readUsed(supabaseAdmin, subject, day).catch(() => 0), resetsAt)
 
-  // Nov 1 2026: signing in comes before the first bit. A guest's press opens
-  // the sign-in sheet, and the story is written right after sign-in.
-  if (!lab && !id.userId) return { status: 'limited', reason: 'daily', tier, usage: usageView(tier, 0, resetsAt) }
+  // Nov 12 2026: a guest makes one bit a day and reads it before signing in,
+  // only from their own five lines (no writer, no model call for the bit).
+  // A story for the writer still takes an account (Nov 1 2026).
+  if (!lab && !id.userId && !allLinesGiven(given)) return { status: 'limited', reason: 'daily', tier, usage: usageView(tier, 0, resetsAt) }
 
   // A press of "write" carries one id, reused on the client's silent retry
   // and when the sign-in return replays it. If that bit already exists, this
@@ -900,12 +903,68 @@ export const getSketch = createServerFn({ method: 'POST' })
 
 /* ───────────────────────── download ───────────────────────── */
 
+/* ───────────────────────── the story box: cut what they typed into a bit ───────────────────────── */
+
+export type SplitResult =
+  | { ok: true; lines: SplitLines; source: 'model' | 'sentences'; notice: string }
+  | { ok: false; reason: 'crisis' | 'rate_limited' | 'failed' | 'no_session' }
+
+const SPLIT_PROMPT = `You cut a person's story into the five parts of a stand-up bit. You never write, add, change or reorder words. Every part you return must be copied exactly, character for character, from the story: one continuous run of its words.
+
+Parts, in story order:
+- hook: the line that grabs first (usually the opening)
+- setup: the one fact needed to follow it
+- tag1: the first laugh after the turn
+- tag2: the next laugh on the same idea (may be several sentences)
+- button: the line they'd stop on (usually the last)
+
+Use every sentence once, in order. If the story is too short for a part, return "" for it. Reply with JSON only: {"hook":"","setup":"","tag1":"","tag2":"","button":""}`
+
+/** Nov 12 2026 (Candy): the /bits box is one big box. This cuts what they
+ *  typed into hook, setup, tag 1, tag 2 and button. Names come out first
+ *  (the Scrubber), the Guard reads it, then a model proposes the cut and the
+ *  code keeps only lines found word for word in their text (split.ts); a line
+ *  the story doesn't cover comes back empty for them to write. Nothing is
+ *  stored and nothing is charged: the bit is made (and counted) on "Make". */
+export const splitStory = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) => z.object({ story: z.string().min(1).transform((s) => s.slice(0, 4000)), ...Ctx }).parse(d))
+  .handler(async ({ data }): Promise<SplitResult> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId && !anonKey(id)) return { ok: false, reason: 'no_session' }
+    const { day } = today()
+    if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+    try {
+      const scrubbed = await runScrub(data.story)
+      const clean = scrubbed.clean_text.trim()
+      if (!clean) return { ok: false, reason: 'failed' }
+      const [crisis, proposed] = await Promise.all([
+        runClassifyCrisis(clean),
+        callAgentBounded({ system: SPLIT_PROMPT, messages: [{ role: 'user', content: clean }], maxTokens: 900, jsonMode: true, model: process.env.BIT_SPLIT_MODEL || undefined, temperature: 0 }, 8_000)
+          .then((r) => (r.error ? null : tryParseJson<Record<string, unknown>>(r.text)))
+          .catch(() => null),
+      ])
+      if (crisis.crisis) {
+        await supabaseAdmin.from('crisis_events').insert({ alias_id: id.userId, category: crisis.category, severity: crisis.severity, resources_shown: true } as never)
+        return { ok: false, reason: 'crisis' }
+      }
+      const { lines, source } = checkedSplit(proposed, clean)
+      return { ok: true, lines, source, notice: scrubbed.replacements?.length ? 'names and details swapped for who they are before anything left your browser' : '' }
+    } catch (e) {
+      console.error('[bits] split failed', e instanceof Error ? e.message : e)
+      return { ok: false, reason: 'failed' }
+    }
+  })
+
 /* ───────────────────────── AI on demand: one line, funnier · keep an edited version ───────────────────────── */
 
 export type TouchResult =
   | { ok: true; options: TouchOption[]; used: number; cap: number | null }
   | { ok: false; reason: 'sign_in' | 'not_found' | 'rate_limited' | 'failed' | 'crisis' }
   | { ok: false; reason: 'limited'; used: number; cap: number; tier: BitTier }
+
+/** Funnier taps a guest gets in the box each day before signing in. */
+const GUEST_TOUCHES = 1
 
 const DraftIn = z.object({
   hook: Line,
@@ -933,14 +992,17 @@ export const touchLine = createServerFn({ method: 'POST' })
   .handler(async ({ data }): Promise<TouchResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
-    if (!id.userId) return { ok: false, reason: 'sign_in' }
+    // Nov 12 2026: a guest gets one funnier tap a day in the box (no bit
+    // yet), so they feel what it adds; the next one asks them to sign in.
+    const guestKey = id.userId ? null : anonKey(id)
+    if (!id.userId && (!guestKey || data.bit_id)) return { ok: false, reason: 'sign_in' }
     const row = data.bit_id ? await loadOwnedBit(supabaseAdmin, data.bit_id, id) : null
     if (data.bit_id && !row) return { ok: false, reason: 'not_found' }
     const tier = await resolveTier(supabaseAdmin, id)
     const { day } = today()
     if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
-    const subject = `touch:${id.userId}`
-    const limit = limitFor('touch', tier)
+    const subject = id.userId ? `touch:${id.userId}` : `touch:guest:${guestKey}`
+    const limit = id.userId ? limitFor('touch', tier) : { cap: GUEST_TOUCHES, period: 'day' as const }
     const chargeId = crypto.randomUUID()
     let used: number
     try {
@@ -948,7 +1010,10 @@ export const touchLine = createServerFn({ method: 'POST' })
     } catch {
       return { ok: false, reason: 'failed' }
     }
-    if (used === -1) return limit.cap === null ? { ok: false, reason: 'rate_limited' } : { ok: false, reason: 'limited', used: limit.cap, cap: limit.cap, tier }
+    if (used === -1) {
+      if (!id.userId) return { ok: false, reason: 'sign_in' }
+      return limit.cap === null ? { ok: false, reason: 'rate_limited' } : { ok: false, reason: 'limited', used: limit.cap, cap: limit.cap, tier }
+    }
     const controls = { ...DEFAULT_CONTROLS, ...(row ? row.controls ?? {} : data.controls ?? {}) } as BitControls
     // Typed lines are the person's own text: names come out before a model sees them.
     const clean = { ...data.draft, why: '' }

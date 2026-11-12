@@ -112,8 +112,9 @@ function AiDisclosurePage() {
         product.
       </p>
       <p>
-        <b>Bits.</b> You write the bit: all five lines are yours, and the bit you make is
-        those lines, word for word. AI writes on a bit only when you ask: tap &ldquo;funnier&rdquo;
+        <b>Bits.</b> You tell your story; a model cuts it into a hook, setup, two tags and a
+        button, and code keeps only lines found word for word in what you typed (it adds no
+        words). The bit you make is those lines, word for word. AI writes on a bit only when you ask: tap &ldquo;funnier&rdquo;
         on a line and a model offers three other ways to say it, built from your lines and one
         technique from the Shutap Humor Amplifier Lab bank (the operation, never anyone&rsquo;s
         material); nothing changes until you pick. Before anything is saved or sent to a model,

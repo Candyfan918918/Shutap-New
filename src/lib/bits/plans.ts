@@ -1,5 +1,8 @@
 // New bits per Pacific day, by tier. Safe to import in the browser.
-// Nov 1 2026: signing in comes before the first bit (guests write none).
+// Nov 12 2026 (Candy): a guest makes one bit and sees it before signing in
+// (supersedes Nov 1's sign-in first). Only from their own words (the story
+// box cut into five lines, no writer); watching, rehearsing, the sketch, the
+// skit, saving and versions all take an account.
 // Free is one bit a day, as written: rewrites (hotter, tighter, storytelling),
 // crowd-work swaps and mix your own are Basic and Pro only. On Basic a
 // rewrite counts as a new bit (swap and mix don't; no model call).
@@ -8,7 +11,7 @@
 import type { BitTier } from './shared'
 
 export const BIT_CAPS: Record<Exclude<BitTier, 'pro'>, number> = {
-  guest: 0, // sign in first
+  guest: 1, // one bit, readable; everything done with it takes an account
   free: 1,
   basic: 3,
 }

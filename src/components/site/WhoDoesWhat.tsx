@@ -5,7 +5,7 @@ const COLS: { title: string; lines: string[] }[] = [
   {
     title: 'You type',
     lines: [
-      'Your bit, line by line: all five lines are yours.',
+      'Your bit, from your story: every word is yours.',
       'A listing link, or your stories about the person for a toast.',
       'Whatever you write stays yours, word for word.',
     ],
