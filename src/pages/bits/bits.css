@@ -135,6 +135,7 @@ button.bl-tile:hover:not(:disabled) { border-color: var(--rose); }
 .bl-run p { margin: 0; font: 400 18px/1.35 var(--news); }
 .bl-run .dim { color: #6f6066; }
 .bl-run .lit { font-size: 26px; font-weight: 500; color: #fff; }
+.bl-run .cue { font: italic 600 14px/1.3 var(--sora, system-ui); color: #e7548a; margin-bottom: -8px; }
 .bl-script { flex: 1; overflow-y: auto; padding: 4px 22px 10px; font: 400 13px/1.45 'Courier New', Courier, monospace; }
 .bl-script p { margin: 0 0 6px; }
 .bl-script .scene_heading { font-weight: 700; }

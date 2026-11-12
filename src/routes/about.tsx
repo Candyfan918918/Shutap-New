@@ -19,11 +19,11 @@ const SECTIONS = [
   },
   {
     heading: "Bits: your bit, funnier",
-    body: "Write your bit line by line. Funnier only where you ask. For creators and comedians: you write all five lines (hook, setup, two tags, button) in your own words, and Shutap keeps them word for word. Stuck on a line? Tap “funnier” for three other ways to say it, yours first; AI runs only then. The finished bit becomes a 5-second video to post, and stand-up on the prompter, a sketch page and a skit to perform. shutap.com/bits",
+    body: "Write your bit line by line. Funnier only where you ask. For creators and comedians: you write all five lines (hook, setup, two tags, button) in your own words, and Shutap keeps them word for word. Stuck on a line? Tap “funnier” for three other ways to say it, yours first; AI runs only then. The finished bit becomes a 5-second video to post, and stand-up on the prompter, with delivery cues to rehearse with (beats, pauses for the laugh, voices), a sketch page and a skit to perform. shutap.com/bits",
   },
   {
     heading: "Realtors: your listing, funnier",
-    body: "Paste a listing. Get a video script and every post to go with it. To film: the walkthrough, the voiceover and the hooks. To post: the open-house kit, social posts and the MLS copy. Pick one of four tones (professional, funny, luxury or young) and the kit is written in about 30 seconds. Fair-housing checked, nothing made up. Shoot it with the teleprompter on your phone. shutap.com/realtors",
+    body: "Paste a listing. Get a video script and every post to go with it. To film: the walkthrough, the voiceover and the hooks. To post: the open-house kit, social posts and the MLS copy. Pick one of four tones (professional, funny, luxury or young) and the kit is written in about 30 seconds. Fair-housing checked, nothing made up. Rehearse and shoot it with the teleprompter on your phone, with a cue on how to say each line. shutap.com/realtors",
   },
   {
     heading: "Toasts: your toast, funnier",

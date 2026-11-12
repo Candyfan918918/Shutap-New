@@ -22,8 +22,9 @@ import type { BitDemo } from '@/lib/bits/demo.functions'
 import { trackEvent } from '@/lib/tracking'
 import '@/components/feed/feed.css'
 import './bits.css'
+import { cuesForLines } from '@/lib/bits/cues'
 
-const BANNER = ['Hook', 'Setup', 'Two tags', 'Button', 'Funnier on any line', 'Lock what’s done', '5-second video', 'Stand-up prompter', 'Sketch page', 'Skit', 'Your words, word for word', 'No new jokes added']
+const BANNER = ['Hook', 'Setup', 'Two tags', 'Button', 'Funnier on any line', 'Lock what’s done', '5-second video', 'Stand-up prompter', 'Delivery cues', 'Rehearse the timing', 'Sketch page', 'Skit', 'Your words, word for word', 'No new jokes added']
 
 export const LINE_INFO: { s: 'hook' | 'setup' | 'tag0' | 'tag1' | 'button'; k: string; d: string }[] = [
   { s: 'hook', k: 'Hook', d: 'The first 2 seconds. What happened, the way you’d say it first: a reason to listen.' },
@@ -35,6 +36,7 @@ export const LINE_INFO: { s: 'hook' | 'setup' | 'tag0' | 'tag1' | 'button'; k: s
 
 export const BITS_FAQ: { q: string; a: string }[] = [
   { q: 'Does Shutap write my bit?', a: 'No. You write all five lines: hook, setup, two tags and the button. Funnier offers other ways to say a line only when you tap it, and nothing changes until you pick. The video, stand-up, sketch and skit lay out your lines; they add no new jokes.' },
+  { q: 'Can I rehearse with it?', a: 'Yes. Stand-up is a teleprompter built for practice: your lines scroll at talking pace with delivery cues from your sketch page, like (beat), (pause for the laugh) or (his voice), and it holds for a moment at each pause. Tap cues to hide them when you know it cold.' },
   { q: 'Will my material end up somewhere else?', a: 'No. Nobody at Shutap reads your bits, they are never used to train AI, and they are never published unless you post them. Names and details are removed before anything is saved.' },
   { q: 'What if I’m stuck on a line?', a: 'Write a rough version, even a plain sentence, and tap funnier. You get three other ways to say it, built from your other lines, with yours first. Keep yours or pick one.' },
   { q: 'What is free?', a: `${BIT_CAPS.free} bit a day with everything in it: the 5-second video, stand-up, sketch and skit, and funnier and lock on every line. The video and downloads carry the shutap.com mark.` },
@@ -121,7 +123,7 @@ function Preview({ lines }: { lines: Draft }) {
         <div className="bl-tile">
           <b>Stand-up</b>
           <span className="bl-prompt"><i>0:00</i><span className={hook ? 'on' : undefined}>{hook || 'your hook, lit'}</span></span>
-          <span className="d">Teleprompter, one line lit at a time</span>
+          <span className="d">Teleprompter with delivery cues, to rehearse and film</span>
         </div>
         <div className="bl-tile">
           <b>Sketch</b>
@@ -177,6 +179,8 @@ function Demo({ d }: { d: BitDemo }) {
   const [open, setOpen] = useState<null | 'standup' | 'sketch' | 'skit'>(null)
   const [i, setI] = useState(0)
   const rows = LINE_INFO.map((l) => ({ ...l, v: demoLine(d, l.s), f: d.funnier.find((f) => f.slot === l.s) }))
+  /** the demo sketch's delivery notes on the stand-up lines, as the real teleprompter shows them */
+  const demoCues = cuesForLines(rows.map((r) => r.v), d.sketch)
   useEffect(() => {
     if (open !== 'standup') return
     setI(0)
@@ -206,7 +210,7 @@ function Demo({ d }: { d: BitDemo }) {
           <button type="button" className="bl-tile" onClick={() => go('standup')}>
             <b>Stand-up</b>
             <span className="bl-prompt"><i>0:00</i><span className="on">{d.lines.hook}</span></span>
-            <span className="d">Teleprompter · tap to run it</span>
+            <span className="d">Teleprompter with cues · tap to run it</span>
           </button>
           <button type="button" className="bl-tile" onClick={() => go('sketch')} disabled={!d.sketch}>
             <b>Sketch</b>
@@ -224,6 +228,7 @@ function Demo({ d }: { d: BitDemo }) {
             {open === 'standup' && (
               <div className="bl-run">
                 <p className="dim">{i > 0 ? rows[i - 1]!.v : ''}</p>
+                {(demoCues[i] ?? []).map((c, k) => <p key={k} className="cue">{c.text}</p>)}
                 <p className="lit">{rows[i]!.v}</p>
                 <p className="dim">{i < 4 ? rows[i + 1]!.v : ''}</p>
               </div>
@@ -279,7 +284,7 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
         <div className="bl-steps3">
           <div><p className="n">1</p><h3>Write five lines</h3><p>Hook, setup, two tags, button. All five are yours to write.</p></div>
           <div><p className="n">2</p><h3>Funnier where you’re stuck</h3><p>Tap it on one line for three other ways to say it. Yours stays first. Lock what’s done.</p></div>
-          <div><p className="n">3</p><h3>Post it or perform it</h3><p>The 5-second video, stand-up, a sketch page or a skit, laid out from your lines.</p></div>
+          <div><p className="n">3</p><h3>Post it or perform it</h3><p>The 5-second video, stand-up with delivery cues to rehearse with, a sketch page or a skit, laid out from your lines.</p></div>
         </div>
 
         <div className="bl-block">
