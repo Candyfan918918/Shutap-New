@@ -59,7 +59,7 @@ function HumorAmplifierPage() {
         },
         {
           heading: 'From your lines to a post',
-          body: 'Download the 5-second video and post it, or run your bit as stand-up on the teleprompter, lay it out as a skit you film alone, or format it as a one-page sketch. The format changes how you use the material; the lines stay yours. Rehearse the pauses before recording or performing.',
+          body: 'Download the 5-second video and post it, or run your bit as stand-up on the teleprompter, with delivery cues to rehearse with, lay it out as a skit you film alone, or format it as a one-page sketch. The format changes how you use the material; the lines stay yours. Rehearse the pauses before recording or performing.',
         },
       ]}
       others={[

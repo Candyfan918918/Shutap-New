@@ -25,7 +25,7 @@ export const Route = createFileRoute('/realtors/')({
 })
 
 /** what one kit covers, scrolling right to left under the header */
-const BANNER = ['Just listed', 'Open-house invite', '3-frame story', 'Sign line', 'Day-before reminder', 'Thank-you text', 'Price improvement', 'Pending', 'Sold', 'Instagram', 'TikTok', 'Facebook', 'LinkedIn', 'MLS description', 'Shoot mode']
+const BANNER = ['Shoot mode', 'Delivery cues', 'Just listed', 'Open-house invite', '3-frame story', 'Sign line', 'Day-before reminder', 'Thank-you text', 'Price improvement', 'Pending', 'Sold', 'Instagram', 'TikTok', 'Facebook', 'LinkedIn', 'MLS description', 'Shoot mode']
 
 function Banner() {
   const run = BANNER.flatMap((b) => [<span key={b}>{b}</span>, <i key={b + '·'} aria-hidden>●</i>])
@@ -69,7 +69,7 @@ function Landing() {
           <div className="rl-steps3">
             <div><p className="n">1</p><h3>Paste</h3><p>Check the facts Shutap read back.</p></div>
             <div><p className="n">2</p><h3>Pick a tone</h3><p>Professional, funny, luxury or young.</p></div>
-            <div><p className="n">3</p><h3>Copy, shoot, post</h3><p>Copy from your phone or film in shoot mode.</p></div>
+            <div><p className="n">3</p><h3>Copy, rehearse, shoot, post</h3><p>Copy from your phone, or rehearse and film in shoot mode, with a cue on how to say each line.</p></div>
           </div>
 
           <MidPaste />

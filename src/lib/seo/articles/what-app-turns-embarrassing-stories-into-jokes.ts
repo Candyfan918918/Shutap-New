@@ -58,7 +58,7 @@ const guide: Guide = {
     },
     {
       q: "Is Shutap an app?",
-      a: "No. Shutap is a website at shutap.com, so there's nothing to install. It runs in the browser on a phone or a computer, and stand-up runs full-screen on the teleprompter on a phone for filming.",
+      a: "No. Shutap is a website at shutap.com, so there's nothing to install. It runs in the browser on a phone or a computer, and stand-up runs full-screen on the teleprompter on a phone, with delivery cues, for rehearsing and filming.",
     },
     {
       q: "Will my real name or other people's names be saved?",

@@ -143,7 +143,7 @@ export function SampleTiles() {
           ))}
           <button type="button" className="st-shoot" onMouseEnter={() => show('shoot', 'hover')} onFocus={() => show('shoot', 'focus')} onClick={() => show('shoot', 'tap')}>
             <span className="pl" aria-hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M7 4l13 8-13 8z" /></svg></span>
-            <span className="tx"><b>Shoot mode</b><span>A teleprompter on your phone while you film</span></span>
+            <span className="tx"><b>Shoot mode</b><span>A teleprompter with delivery cues, to rehearse and film</span></span>
             <span className="go">watch ›</span>
           </button>
         </div>

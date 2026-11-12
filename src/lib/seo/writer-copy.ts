@@ -64,7 +64,7 @@ const BY_CATEGORY: Partial<Record<GuideTopic, WriterCopy>> = {
   },
   'stand-up': {
     heading: 'Try it on your own material.',
-    sub: 'Write the bit you keep telling at the table as a hook, setup, two tags and a button. Rehearse it on the prompter.',
+    sub: 'Write the bit you keep telling at the table as a hook, setup, two tags and a button. Rehearse it on the prompter, with cues for the beats and the pauses.',
     placeholder: 'the thing you keep telling people, in your words…',
   },
   'using-shutap': { heading: 'Write one now.', sub: DEFAULT.sub, placeholder: DEFAULT.placeholder },

@@ -40,7 +40,7 @@ const guide: Guide = {
     },
     {
       heading: "From script to camera",
-      body: "This is where the two differ most for TikTok. A Claude chat ends in text, which you copy into whatever teleprompter or notes app you film with. Shutap's bit opens in a full-screen teleprompter that scrolls at talking pace, so you can prop the phone up and read it in one take. There's also the skit, which lays the bit out beat by beat, handy for spotting the setup line that runs long, and a one-page sketch if you're shooting a two-person skit. Shutap is a website rather than a phone app, so you open it in the browser and film from there.",
+      body: "This is where the two differ most for TikTok. A Claude chat ends in text, which you copy into whatever teleprompter or notes app you film with. Shutap's bit opens in a full-screen teleprompter that scrolls at talking pace, with delivery cues like (beat) and (pause for the laugh) where they go, so you can prop the phone up, rehearse the timing and read it in one take. There's also the skit, which lays the bit out beat by beat, handy for spotting the setup line that runs long, and a one-page sketch if you're shooting a two-person skit. Shutap is a website rather than a phone app, so you open it in the browser and film from there.",
     },
     {
       heading: "Which one to open",
@@ -62,7 +62,7 @@ const guide: Guide = {
     },
     {
       q: "How many words is a 30-second TikTok script?",
-      a: "At a normal talking pace, about 78 words fills 30 seconds, so aim a little under that to leave room for pauses. Shutap's teleprompter scrolls at that pace, which makes it easy to hear where a script runs long.",
+      a: "At a normal talking pace, about 78 words fills 30 seconds, so aim a little under that to leave room for pauses. Shutap's teleprompter scrolls at that pace and holds at each pause cue, which makes it easy to hear where a script runs long.",
     },
     {
       q: "Is Shutap better than Claude for TikTok?",

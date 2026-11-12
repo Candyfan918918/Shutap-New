@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Getting a first draft from the listing",
-      body: "Shutap for Realtors, from the Shutap Humor Amplifier Lab, starts from the listing link or text you paste and returns a walkthrough to shoot (8 to 12 shots, a line per shot, 15, 30 and 60-second cuts) plus a voiceover timed to the cut, in a professional, funny, luxury or young tone. Every number comes from the listing, every line gets a fair-housing check, and shoot mode puts the lines in big text on your phone while you film. Read it, cut what doesn't sound like you, swap in your own lines and shoot it your way. The script is a starting point. The video is yours.",
+      body: "Shutap for Realtors, from the Shutap Humor Amplifier Lab, starts from the listing link or text you paste and returns a walkthrough to shoot (8 to 12 shots, a line per shot, 15, 30 and 60-second cuts) plus a voiceover timed to the cut, in a professional, funny, luxury or young tone. Every number comes from the listing, every line gets a fair-housing check, and shoot mode puts the lines in big text on your phone while you rehearse and film, with a cue on how to say each one. Read it, cut what doesn't sound like you, swap in your own lines and shoot it your way. The script is a starting point. The video is yours.",
     },
   ],
   techniques: [

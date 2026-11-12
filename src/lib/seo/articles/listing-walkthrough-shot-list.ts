@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "From the listing to a shot list you can film",
-      body: "Shutap for Realtors, from the Shutap Humor Amplifier Lab, starts from the listing link or text you paste and returns, among its six outputs, the walkthrough to shoot: 8 to 12 shots, a line per shot, with 15, 30 and 60-second cuts, in a professional, funny, luxury or young tone. Every number comes from the listing, and every line gets a fair-housing check. Shoot mode puts the list in big text on your phone while you film; Shutap never opens the camera. Reorder the shots for the house you're standing in, cut the lines that don't sound like you, and add the swing you only noticed when you got there.",
+      body: "Shutap for Realtors, from the Shutap Humor Amplifier Lab, starts from the listing link or text you paste and returns, among its six outputs, the walkthrough to shoot: 8 to 12 shots, a line per shot, with 15, 30 and 60-second cuts, in a professional, funny, luxury or young tone. Every number comes from the listing, and every line gets a fair-housing check. Shoot mode puts the list in big text on your phone while you rehearse and film, with a cue on how to say each line; Shutap never opens the camera. Reorder the shots for the house you're standing in, cut the lines that don't sound like you, and add the swing you only noticed when you got there.",
     },
   ],
   techniques: [

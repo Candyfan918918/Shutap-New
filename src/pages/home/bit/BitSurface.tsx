@@ -116,7 +116,7 @@ const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
   lock: { title: 'Sign in to lock your lines.', sub: 'Free. Your lines stay in the box and lock the moment you’re in.' },
   funnier: { title: 'Sign in free to use funnier.', sub: 'Three other ways to say that line, built from the lines you wrote, yours first. Unlimited once you’re in; your lines stay in the box.' },
   swap: { title: 'Sign in to swap in a crowd-work angle.', sub: 'Free. Your bit comes with you, with all five angles.' },
-  standup: { title: 'Sign in to run it as stand-up.', sub: 'Free. The teleprompter, at talking pace.' },
+  standup: { title: 'Sign in to run it as stand-up.', sub: 'Free. The teleprompter, at talking pace, with delivery cues.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
   watch: { title: 'Sign in to watch the video.', sub: 'Free. The 5-second video comes with you.' },
   download: { title: 'Sign in to download it.', sub: 'Free: download it as often as you like, with a shutap.com watermark.' },
