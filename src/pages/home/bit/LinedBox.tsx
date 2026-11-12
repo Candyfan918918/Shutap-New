@@ -1,5 +1,7 @@
-/* The lined box (Nov 8 2026 redesign, approved by Candy): the person writes
- * the bit. Five lines (hook, setup, two tags, button), all required, all in
+/* The lined box (Nov 8 2026 redesign, approved by Candy). Since Nov 12 2026
+ * it opens with the lines cut from the story they typed (BitSurface's story
+ * step, their words only); a line the story didn't cover is theirs to write.
+ * Five lines (hook, setup, two tags, button), all required, all in
  * their own words. Shutap never fills a line: AI runs only when "funnier" is
  * tapped on one line, and offers three other ways to say it with theirs
  * first; nothing changes until they pick. "lock" keeps a line from being
@@ -52,10 +54,10 @@ export function listLines(slots: Slot[]): string {
 /** What the box asks for next, from its state alone. */
 export function guideLine(d: Draft, locked: Slot[]): { text: string; ready: boolean } {
   const missing = missingSlots(d)
-  if (missing.length === 5) return { text: 'Write all five lines in your own words. Stuck on one? Write a rough version and tap funnier.', ready: false }
-  if (missing.length) return { text: `Still to write: ${listLines(missing)}. Shutap never fills a line for you.`, ready: false }
+  if (missing.length === 5) return { text: 'Go back to your story, or type a line here. Stuck? Write a rough version and tap funnier.', ready: false }
+  if (missing.length) return { text: `Your story didn’t cover the ${listLines(missing)}. Write it in your words; Shutap never fills a line for you.`, ready: false }
   const open = LINE_SLOTS.filter((s) => !locked.includes(s))
-  return { text: `All five lines are yours${open.length ? '' : ', all locked'}. Next: the 5-second video, stand-up, sketch and skit, laid out from them.`, ready: true }
+  return { text: `Every word is yours${open.length ? '' : ', all locked'}. Next: the 5-second video, stand-up, sketch and skit.`, ready: true }
 }
 
 type Props = {
@@ -137,15 +139,15 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
     const lines = live()
     if (!readSlot(lines, s).trim()) { jokeTap('line_tap_empty', tier, { slot: s, what: 'funnier', box }); return flash(EMPTY_TAP) }
     if (locked.includes(s)) return flash('That line is locked. Unlock it to try funnier.')
-    if (tier === 'guest') { jokeTap('funnier_needs_signin', tier, { slot: s, box }); return onSignIn?.() }
-    jokeTap('line_touched', tier, { slot: s, where: 'box', box, written: written.length })
+    // Nov 12 2026: a guest's first tap is free (the server allows one); the next asks for sign-in
+    jokeTap('line_touched', tier, { slot: s, where: 'box', box, written: written.length, guest: tier === 'guest' })
     setOpen(s); setOptions(null); setPicked(-1); setTouching(true)
     try {
       const r = await touch({ data: { draft: lines, slot: s, avoid: offered.current[s] ?? [], controls, anon_session_id: anonSessionId() } })
       if (!r.ok) {
         setOpen(null)
         if (r.reason === 'limited') { jokeTrack('touch_blocked', tier, { slot: s, where: 'box' }); return onLimit() }
-        if (r.reason === 'sign_in') return onSignIn?.()
+        if (r.reason === 'sign_in') { jokeTap('funnier_needs_signin', tier, { slot: s, box }); return onSignIn?.() }
         if (r.reason === 'crisis') return onCrisis()
         jokeTrack('touch_failed', tier, { slot: s, where: 'box', box, reason: r.reason })
         return say(r.reason === 'rate_limited' ? 'one at a time · try again in a moment' : 'that one did not come back · try again')
@@ -185,7 +187,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
     const now = live()
     const missing = missingSlots(now)
     jokeTap('box_submit', tier, { box, written: 5 - missing.length, locked: locked.length, ready: !missing.length })
-    if (missing.length) return flash(`Write the ${listLines(missing)} to continue. Stuck? Write a rough version and tap funnier.`)
+    if (missing.length) return flash(`Write the ${listLines(missing)} in your words to continue. Stuck? Write a rough version and tap funnier.`)
     setNote(null)
     onMake(now)
   }
@@ -250,7 +252,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
                   <button type="button" className="bt-btn sm" onClick={useOption}>{picked < 0 ? 'keep mine' : 'use this one'}</button>
                   <button type="button" className="bt-mini" disabled={touching} onClick={() => void funnier(s)}>three more</button>
                   <button type="button" className="bt-mini" onClick={() => setOpen(null)}>close</button>
-                  {touches && touches.cap !== null && <span className="bt-note" style={{ marginLeft: 'auto' }}>touch {touches.used} of {touches.cap} today</span>}
+                  {tier === 'guest' ? <span className="bt-note" style={{ marginLeft: 'auto' }}>your free try · sign in for unlimited</span> : touches && touches.cap !== null && <span className="bt-note" style={{ marginLeft: 'auto' }}>touch {touches.used} of {touches.cap} today</span>}
                 </div>
               </div>
             )}
@@ -263,7 +265,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
         <p className={`bt-guide${guide.ready ? ' ready' : ''}`} role="status">{guide.text}</p>
         <div className="bt-lined-cta">
           <button type="button" className="bt-btn bt-go" disabled={busy} aria-busy={busy} onClick={make}>
-            {busy ? 'Making it…' : 'Make my bit →'}
+            {busy ? 'Making it…' : 'Make my video, stand-up, sketch & skit →'}
           </button>
         </div>
       </div>

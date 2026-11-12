@@ -5,7 +5,7 @@ import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
 
 const PATH = '/humor-amplifier'
 const TITLE = 'Shutap Bits — write your bit, funnier only where you ask | Shutap Humor Amplifier Lab'
-const DESCRIPTION = 'Shutap Bits, for creators and comedians: write your bit line by line (hook, setup, two tags, button) in your own words, tap funnier on any line you’re stuck on, and get a 5-second video, stand-up, a sketch and a skit.'
+const DESCRIPTION = 'Shutap Bits, for creators and comedians: tell your story your way and get it back as a bit (hook, setup, two tags, button) in your own words, tap funnier on any line you’re stuck on, and get a 5-second video, stand-up, a sketch and a skit.'
 
 export const Route = createFileRoute('/humor-amplifier')({
   // newnav (Nov 6 2026): the product page is /bits; this URL keeps working
@@ -38,7 +38,7 @@ function HumorAmplifierPage() {
       tryIt="humor-amplifier"
       breadcrumbs={[{ name: 'The humor amplifier', path: PATH }]}
       h1="The humor amplifier: your bit, funnier where you ask"
-      capsule="Shutap amplifies your humor without replacing it. On Shutap Bits you write the bit yourself, line by line: a hook, a setup, two tags and a button. When a line isn't landing, tap funnier for three other ways to say it, yours first. The finished bit comes back as a 5-second video to post, and stand-up, a sketch and a skit to perform."
+      capsule="Shutap amplifies your humor without replacing it. On Shutap Bits you tell it your way and get it back as a bit, every word yours: a hook, a setup, two tags and a button. When a line isn't landing, tap funnier for three other ways to say it, yours first. The finished bit comes back as a 5-second video to post, and stand-up, a sketch and a skit to perform."
       cta={{ label: 'Write your bit. Funnier only where you ask.', href: '/bits' }}
       sections={[
         {
@@ -51,7 +51,7 @@ function HumorAmplifierPage() {
         },
         {
           heading: 'How to amplify your own bit',
-          body: 'Write each of the five lines in your words. Include who did what, the exact words you remember and the small detail that made it ridiculous; leave real names out. If a line is flat, tap funnier on it: you get three other ways to say it, built from your other lines, and nothing changes until you pick. Lock the lines that are done, then make the bit.',
+          body: 'Tell the story your way; Shutap cuts it into the parts of a bit in your words. Include who did what, the exact words you remember and the small detail that made it ridiculous; leave real names out. If a line is flat, tap funnier on it: you get three other ways to say it, built from your other lines, and nothing changes until you pick. Lock the lines that are done, then make the bit.',
         },
         {
           heading: 'For anyone who needs to say it funnier',

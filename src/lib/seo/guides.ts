@@ -267,7 +267,7 @@ const BASE_GUIDES: Guide[] = [
     description:
       "Write your storytime as a hook, setup, two tags and a button, in your own words. Tap funnier on any line you're stuck on, then film it off the teleprompter. Free with an account.",
     capsule:
-      "Shutap helps you shape your storytime into a script you wrote. Write it as five lines: a hook, a setup, two tags and a button. Tap funnier on any line for three other ways to say it, yours first. Then read it off the teleprompter or post the 5-second video. A free account makes one a day.",
+      "Shutap helps you shape your storytime into a script you wrote. Tell it your way and Shutap cuts it into a hook, a setup, two tags and a button, every word yours. Tap funnier on any line for three other ways to say it, yours first. Then read it off the teleprompter or post the 5-second video. A free account makes one a day.",
     blurb: "Write your story as a hook, setup, tags and a button; tap funnier where you're stuck.",
     sections: [
       {
@@ -276,7 +276,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "How it works",
-        body: "Write the story as five lines, the way you would tell a friend: hook, setup, two tags, button. Stuck on one? Write a rough version and tap funnier: you get three other ways to say that line, built from your other lines, with yours first. Lock the lines that are done. Names and places are removed before anything is saved.",
+        body: "Tell the story the way you would tell a friend; Shutap cuts it into a hook, setup, two tags and a button, in your words. Stuck on one? Write a rough version and tap funnier: you get three other ways to say that line, built from your other lines, with yours first. Lock the lines that are done. Names and places are removed before anything is saved.",
       },
       {
         heading: "Film it",
@@ -304,8 +304,8 @@ const BASE_GUIDES: Guide[] = [
     description:
       "Write your bit as a hook, setup, two tags and a button, in your own words. Tap funnier on the line that isn't landing yet, then rehearse it on the prompter, with delivery cues, before the open mic.",
     capsule:
-      "Shutap helps you shape a stand-up bit you write yourself. Put your premise into five lines: a hook, a setup, two tags and a button. When a line isn't landing, tap funnier for three other ways to say it, yours first; nothing changes until you pick. Then rehearse it on the prompter.",
-    blurb: "Shape your own bit line by line, with funnier on the line you're stuck on.",
+      "Shutap helps you shape a stand-up bit you write yourself. Tell your premise your way; it comes back as a hook, a setup, two tags and a button, in your words. When a line isn't landing, tap funnier for three other ways to say it, yours first; nothing changes until you pick. Then rehearse it on the prompter.",
+    blurb: "Tell it your way, get the bit, with funnier on the line you're stuck on.",
     sections: [
       {
         heading: "From story to premise",
@@ -313,7 +313,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What you get",
-        body: "A box with the shape of a bit: a hook to open on, a setup that tells it straight, two tags that keep the laughs coming, and a button to end on. Funnier on any line offers three other ways to say it, built from your lines. Once all five are written, the bit runs as stand-up on the teleprompter, a sketch page or a skit.",
+        body: "A story box that comes back in the shape of a bit: a hook to open on, a setup that tells it straight, two tags that keep the laughs coming, and a button to end on. Funnier on any line offers three other ways to say it, built from your lines. Once every line is yours, the bit runs as stand-up on the teleprompter, a sketch page or a skit.",
       },
       {
         heading: "When you are stuck",
@@ -339,9 +339,9 @@ const BASE_GUIDES: Guide[] = [
     title: "POV & Skit Script Writer | Shutap",
     h1: "POV and skit writer",
     description:
-      "Write your bit line by line, then see it as a skit laid out beat by beat, shot by shot, ready to film alone.",
+      "Tell your story, get the bit, then see it as a skit laid out beat by beat, shot by shot, ready to film alone.",
     capsule:
-      "Write your bit as five lines in your own words, and Shutap lays it out as a skit: a shot list you can film alone, beat by beat, with who says what and when. Every line you say is from your bit.",
+      "Tell your story in your own words; Shutap cuts it into a bit and lays it out as a skit: a shot list you can film alone, beat by beat, with who says what and when. Every line you say is from your bit.",
     blurb: "See your own bit as a skit, beat by beat, ready to shoot.",
     sections: [
       {
@@ -358,7 +358,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Start from something true",
-        body: "Skits built on something that really happened read as specific, and specific is what gets shared. Write the real version as your five lines; the skit keeps your words and adds the shots.",
+        body: "Skits built on something that really happened read as specific, and specific is what gets shared. Tell the real version; the skit keeps your words and adds the shots.",
       },
     ],
     related: ["comedy-screenplay-format", "how-to-turn-a-story-into-a-bit", "storytime-script-writer"],
@@ -383,7 +383,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "How it works",
-        body: "Write your five lines and make the bit. Open stand-up and your lines run full-screen on the teleprompter. Put your phone or camera where you can see it, start the scroll, and read to the lens. Delivery cues from your sketch page show between the lines, and the scroll holds for a moment at each pause so the laugh has room. Tap cues to hide them.",
+        body: "Tell your story and make the bit. Open stand-up and your lines run full-screen on the teleprompter. Put your phone or camera where you can see it, start the scroll, and read to the lens. Delivery cues from your sketch page show between the lines, and the scroll holds for a moment at each pause so the laugh has room. Tap cues to hide them.",
       },
       {
         heading: "Rehearsing a set",
@@ -407,7 +407,7 @@ const BASE_GUIDES: Guide[] = [
     description:
       "Shutap lays your bit out as a screenplay page, with characters and action, ready to shoot, share or hand to someone else.",
     capsule:
-      "Shutap can lay your bit out as a screenplay page, with character names, action and dialogue. Write your five lines, make the bit, and take the page to a shoot, a rehearsal or a writers' room.",
+      "Shutap can lay your bit out as a screenplay page, with character names, action and dialogue. Tell your story, make the bit, and take the page to a shoot, a rehearsal or a writers' room.",
     blurb: "Your bit as a script page, with characters and action.",
     sections: [
       {
@@ -416,7 +416,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "From bit to page",
-        body: "Write your bit as five lines and make it. Switch to the sketch and your lines are laid out as a script page; the layout is told not to add new jokes and to keep your lines close to word for word.",
+        body: "Tell your story and make the bit. Switch to the sketch and your lines are laid out as a script page; the layout is told not to add new jokes and to keep your lines close to word for word.",
       },
       {
         heading: "When it helps",
@@ -440,14 +440,14 @@ const BASE_GUIDES: Guide[] = [
     title: "How Shutap Is Built: The Humor Amplifier You Steer | Shutap",
     h1: "How Shutap is built",
     description:
-      "How Shutap Bits works: you write the bit line by line, and the engine underneath runs only when you ask, for funnier on one line or a rewrite on Basic and Pro.",
+      "How Shutap Bits works: you tell the story, Shutap cuts it into a bit in your words, and the engine underneath runs only when you ask, for funnier on one line or a rewrite on Basic and Pro.",
     capsule:
-      "On Shutap Bits you write the bit: five lines, all yours, kept word for word. The engine described here runs only when you ask for it: funnier on one line offers three other ways to say it, built from your lines and a comedy technique, and on Basic and Pro you can ask for a hotter, tighter or storytelling version.",
+      "On Shutap Bits every word of the bit is yours: your story, cut into its parts and kept word for word. The engine described here runs only when you ask for it: funnier on one line offers three other ways to say it, built from your lines and a comedy technique, and on Basic and Pro you can ask for a hotter, tighter or storytelling version.",
     blurb: "The pipeline in detail: observations, whole bits, rules, a judge, and the steering controls.",
     sections: [
       {
         heading: "What makes it different",
-        body: "Most joke tools take a topic and return a line you either use or do not. Shutap Bits works the other way: you write the bit, line by line, in the shape comics use (hook, setup, tags, button), and AI helps only on the line you tap. You stay the writer. Shutap is the sparring partner.",
+        body: "Most joke tools take a topic and return a line you either use or do not. Shutap Bits works the other way: you tell the story, it comes back in the shape comics use (hook, setup, tags, button) in your words, and AI helps only on the line you tap. You stay the writer. Shutap is the sparring partner.",
       },
       {
         heading: "You write it, not a prompt",
@@ -519,7 +519,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does",
-        body: "You write the bit as five lines: a hook, a setup, two tags and a button. Tap funnier on a line and it offers three other ways to say it, built from your lines and a comedy technique, yours first. The unit of output is your bit, laid out as a 5-second video, stand-up, a sketch page or a skit. A free account makes one a day.",
+        body: "You tell the story; it comes back as a hook, a setup, two tags and a button, every word yours. Tap funnier on a line and it offers three other ways to say it, built from your lines and a comedy technique, yours first. The unit of output is your bit, laid out as a 5-second video, stand-up, a sketch page or a skit. A free account makes one a day.",
       },
       {
         heading: "Who is the writer",
@@ -600,7 +600,7 @@ const BASE_GUIDES: Guide[] = [
     description:
       "A plain comparison of AI joke tools: Shutap, Witscript, Punchlines.ai and ChatGPT. What each takes as input, what it returns, and who it fits.",
     capsule:
-      "AI joke tools fall into three kinds: tools that return one-liners from a setup or headline (Witscript, Punchlines.ai), general chatbots you prompt for jokes (ChatGPT, Claude), and Shutap, where you write your own bit line by line and AI helps only on the line you tap.",
+      "AI joke tools fall into three kinds: tools that return one-liners from a setup or headline (Witscript, Punchlines.ai), general chatbots you prompt for jokes (ChatGPT, Claude), and Shutap, where you tell your own story, get it back as a bit in your words, and AI helps only on the line you tap.",
     blurb: "Shutap, Witscript, Punchlines.ai and ChatGPT side by side: input, output and fit.",
     sections: [
       {
@@ -609,7 +609,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Shutap",
-        body: "Input: your bit, written by you as five lines (hook, setup, two tags, button). Help: tap funnier on any line for three other ways to say it, yours first. Output: your bit as a 5-second video to post, and stand-up on the teleprompter, a skit and a one-page sketch to perform. A free account makes one a day.",
+        body: "Input: your story, told your way, cut into a bit (hook, setup, two tags, button) in your words. Help: tap funnier on any line for three other ways to say it, yours first. Output: your bit as a 5-second video to post, and stand-up on the teleprompter, a skit and a one-page sketch to perform. A free account makes one a day.",
       },
       {
         heading: "Witscript",
@@ -646,7 +646,7 @@ const BASE_GUIDES: Guide[] = [
     title: "Shutap vs Witscript: Which AI Joke Writer Fits? | Shutap",
     h1: "Shutap vs Witscript",
     description:
-      "Witscript turns a setup sentence into jokes. Shutap helps you write your own bit line by line, with funnier on any line you're stuck on. How they differ and who each is for.",
+      "Witscript turns a setup sentence into jokes. Shutap turns your own story into a bit in your words, with funnier on any line you're stuck on. How they differ and who each is for.",
     capsule:
       "Witscript takes a setup sentence, such as a headline, and returns jokes. Shutap is where you write your own bit, a hook, setup, two tags and a button, and tap funnier on any line for three other ways to say it.",
     blurb: "Setup-to-jokes versus story-to-bit.",
@@ -661,7 +661,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does",
-        body: "You write the bit as five lines. Tap funnier on a line and Shutap offers three other ways to say it, built from your lines and one named comedy technique, checked by rules in code; yours stays the first choice. Nothing changes until you pick.",
+        body: "You tell the story and get it back as a bit, every word yours. Tap funnier on a line and Shutap offers three other ways to say it, built from your lines and one named comedy technique, checked by rules in code; yours stays the first choice. Nothing changes until you pick.",
       },
       {
         heading: "Input and output",
@@ -692,7 +692,7 @@ const BASE_GUIDES: Guide[] = [
     description:
       "ChatGPT and Claude can write jokes if you prompt them well. Shutap Bits is built for writers who want to write their own bit, with help on the line they're stuck on. What the difference means in practice.",
     capsule:
-      "ChatGPT and Claude are general assistants that can write jokes when prompted. Shutap Bits is built for one job: helping you write your own bit, line by line, with a hook, setup, tags and a button. AI only offers other ways to say a line when you tap funnier, and the finished bit comes back as a video, stand-up, a sketch and a skit.",
+      "ChatGPT and Claude are general assistants that can write jokes when prompted. Shutap Bits is built for one job: turning your own story into a bit, in your words, with a hook, setup, tags and a button. AI only offers other ways to say a line when you tap funnier, and the finished bit comes back as a video, stand-up, a sketch and a skit.",
     blurb: "A general chatbot versus a tool built for writing your own bits.",
     sections: [
       {
@@ -705,7 +705,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does for you",
-        body: "Shutap gives you the shape of a bit as five lines to fill in, in your words. Tap funnier on any line and it offers three other ways to say it, built from your lines and one named comedy technique, with checks that block advice, jokes at the teller and lines that would work on anyone's story. Yours always stays the first choice.",
+        body: "Shutap cuts your story into the shape of a bit, in your words. Tap funnier on any line and it offers three other ways to say it, built from your lines and one named comedy technique, with checks that block advice, jokes at the teller and lines that would work on anyone's story. Yours always stays the first choice.",
       },
       {
         heading: "What only Shutap has around the tool",
@@ -850,9 +850,9 @@ const BASE_GUIDES: Guide[] = [
     title: "Shutap vs Claude for Writing Jokes and Bits | Shutap",
     h1: "Shutap vs Claude for jokes",
     description:
-      "Claude is a general AI assistant that can draft and edit jokes. Shutap Bits helps you write your own bit line by line, with funnier on demand, daily ideas and technique guides around it.",
+      "Claude is a general AI assistant that can draft and edit jokes. Shutap Bits turns your own story into a bit in your words, with funnier on demand, daily ideas and technique guides around it.",
     capsule:
-      "Claude is a general AI assistant that writes and edits well, jokes included, when you prompt it. Shutap Bits is built for one job: helping you write your own bit, line by line, and offering other ways to say a line only when you tap funnier.",
+      "Claude is a general AI assistant that writes and edits well, jokes included, when you prompt it. Shutap Bits is built for one job: turning your own story into a bit in your words, and offering other ways to say a line only when you tap funnier.",
     blurb: "A general assistant versus a tool built for bits.",
     sections: [
       {
@@ -865,7 +865,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does for you",
-        body: "Shutap gives you the five lines of a bit to write in your words. Tap funnier on any line and it offers three other ways to say it, built from your lines and one named comedy technique, with checks that block advice, jokes at the teller and lines that would work on anyone's story. Yours always stays the first choice.",
+        body: "Shutap cuts your story into the parts of a bit, in your words. Tap funnier on any line and it offers three other ways to say it, built from your lines and one named comedy technique, with checks that block advice, jokes at the teller and lines that would work on anyone's story. Yours always stays the first choice.",
       },
       {
         heading: "What only Shutap has around the tool",

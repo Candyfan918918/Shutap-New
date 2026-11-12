@@ -28,7 +28,7 @@ const guide: Guide = {
     },
     {
       heading: "How it works in Shutap",
-      body: "You write it, in the shape of a bit: a hook (the first two seconds), a setup (the one fact the hook left out), two tags and a button, each in your own words. Stuck on a line? Tap funnier on it and Shutap offers three other ways to say it, built from your other lines, with yours first; nothing changes until you pick. When all five lines are yours, the bit comes back as a 5-second video to post, stand-up on the teleprompter to film to camera, a skit to shoot alone, or a screenplay page.",
+      body: "You write it, in the shape of a bit: a hook (the first two seconds), a setup (the one fact the hook left out), two tags and a button, each in your own words. Stuck on a line? Tap funnier on it and Shutap offers three other ways to say it, built from your other lines, with yours first; nothing changes until you pick. When every line is yours, the bit comes back as a 5-second video to post, stand-up on the teleprompter to film to camera, a skit to shoot alone, or a screenplay page.",
     },
     {
       heading: "Embarrassing doesn't mean the joke is on you",

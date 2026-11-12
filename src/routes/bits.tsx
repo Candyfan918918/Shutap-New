@@ -4,14 +4,13 @@ import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
 import { BitsLanding, BITS_FAQ } from '@/pages/bits/BitsLanding'
 import { getBitDemo } from '@/lib/bits/demo.functions'
 
-// Shutap Bits (Nov 8 2026 redesign, approved by Candy): the person writes
-// all five lines; Shutap helps only where they tap "funnier", and lays the
-// finished bit out as the video, stand-up, sketch and skit. The box, the
-// trust row and a live preview of what the lines become are in the first
-// screen. Server-rendered and indexed.
+// Shutap Bits (Nov 12 2026 redesign, approved by Candy): the demo's four
+// outputs first (video, stand-up with cues, sketch, skit), then the story
+// box; Shutap cuts the story into a bit, their words only. Server-rendered
+// and indexed.
 const PATH = '/bits'
-const TITLE = 'Shutap Bits — write your bit line by line, funnier only where you ask'
-const DESCRIPTION = 'For creators and comedians: write your hook, setup, two tags and button in your own words. Tap funnier on any line for three other ways to say it, yours first. Then post it as a 5-second video, or rehearse and perform it as stand-up with delivery cues, a sketch or a skit. Free to start.'
+const TITLE = 'Shutap Bits — tell it your way, get a video, a teleprompter with cues, a sketch and a skit'
+const DESCRIPTION = 'For creators and comedians: tell your story your way and Shutap cuts it into a bit (hook, setup, two tags, button), every word yours. Tap funnier on any line for three other ways to say it. Post it as a 5-second video, or rehearse and perform it as stand-up with delivery cues, a sketch or a skit. Free, no sign-in to start.'
 
 const faqSchema = {
   '@context': 'https://schema.org',

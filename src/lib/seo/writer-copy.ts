@@ -7,24 +7,24 @@ export type WriterCopy = { heading: string; sub: string; placeholder: string }
 
 const DEFAULT: WriterCopy = {
   heading: 'Try it on what you want to say.',
-  sub: 'Write it line by line, in your words. Tap funnier on any line you’re stuck on. Get the video, stand-up, sketch and skit. Free.',
+  sub: 'Tell it your way; Shutap cuts it into a bit, every word yours. Tap funnier where you’re stuck. Get the video, stand-up, sketch and skit. Free.',
   placeholder: 'a post, a speech, a toast, a slide: what do you want to say funnier?',
 }
 
 const BY_CATEGORY: Partial<Record<GuideTopic, WriterCopy>> = {
   'jokes-for-occasions': {
     heading: 'Write your toast, card or speech here.',
-    sub: 'Who it\'s for and the story everyone already knows, line by line in your words. Tap funnier where you\'re stuck. Free.',
+    sub: 'Who it\'s for and the story everyone already knows, in your words. Tap funnier where you\'re stuck. Free.',
     placeholder: 'who it\'s for, and the story about them everyone already knows…',
   },
   'toasts-and-speeches': {
     heading: 'Write your toast here.',
-    sub: 'Who it\'s for and the story about them, line by line in your words. Tap funnier where you\'re stuck. Free.',
+    sub: 'Who it\'s for and the story about them, in your words. Tap funnier where you\'re stuck. Free.',
     placeholder: 'who it\'s for, and the story about them everyone already knows…',
   },
   'presentations-and-work': {
     heading: 'Write your next talk here.',
-    sub: 'The room you\'re speaking to and the thing that happened at work, line by line. Tap funnier where you\'re stuck. Free.',
+    sub: 'The room you\'re speaking to and the thing that happened at work, in your words. Tap funnier where you\'re stuck. Free.',
     placeholder: 'the meeting, the training, the room you\'re speaking to…',
   },
   roasts: {
@@ -34,17 +34,17 @@ const BY_CATEGORY: Partial<Record<GuideTopic, WriterCopy>> = {
   },
   'storytime-and-pov': {
     heading: 'Write your next video here.',
-    sub: 'What happened this week, as five lines in your words. Tap funnier where you\'re stuck; get the 5-second video. Free.',
+    sub: 'What happened this week, told your way. Tap funnier where you\'re stuck; get the 5-second video. Free.',
     placeholder: 'what happened this week that you\'d tell on camera…',
   },
   'skits-and-sketches': {
     heading: 'Write your next video here.',
-    sub: 'What happened this week, as five lines in your words. Tap funnier where you\'re stuck; get the 5-second video. Free.',
+    sub: 'What happened this week, told your way. Tap funnier where you\'re stuck; get the 5-second video. Free.',
     placeholder: 'the moment that would make a sketch…',
   },
   'finding-ideas': {
     heading: 'Start with what actually happened.',
-    sub: 'One true thing from your week is a better idea than any list. Write it as five lines; get the video.',
+    sub: 'One true thing from your week is a better idea than any list. Tell it your way; get the video.',
     placeholder: 'the most annoying thing that happened this week…',
   },
   'growing-views': {
@@ -79,6 +79,6 @@ export function writerCopyFor(category: GuideTopic | undefined): WriterCopy {
 /** The funniest pages: the technique is the hook. */
 export const FUNNIEST_WRITER: WriterCopy = {
   heading: 'Try the move on your own material.',
-  sub: 'Same technique, your material: write it line by line, tap funnier where you\'re stuck. Free.',
+  sub: 'Same technique, your material: tell it your way, tap funnier where you\'re stuck. Free.',
   placeholder: 'a post, a speech, a toast, a slide: what do you want to say funnier?',
 }

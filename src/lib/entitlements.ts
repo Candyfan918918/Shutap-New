@@ -10,11 +10,13 @@
 // shutap.com mark; Basic, Pro and anything bought one-time are clean.
 //
 //   kind       what it counts                               guest free   basic     pro
-//   bit        a new story, or hotter/tighter/storytelling   0     1/day  3/day     ∞ (server fair-use)
+//   bit        a new story, or hotter/tighter/storytelling   1*    1/day  3/day     ∞ (server fair-use)
 //   kit        a realtor kit written (a rewrite is one too)  0     1 ever 20/month  ∞
 //   toast      a toast written ("change a line" is a new one) 0    1 ever 1/month   ∞
 //   download   the video, picture, PDF or a copied line      0     ∞ mark ∞         ∞     (never counted)
-//   touch      "funnier" on one line (AI on demand)          0     ∞      ∞         ∞
+//   touch      "funnier" on one line (AI on demand)          1*    ∞      ∞         ∞
+// * Nov 12 2026: a guest's one bit (their own words, readable, nothing else
+//   until sign-in) and one funnier tap in the /bits box; both in bits.functions.
 // A kit or a toast bought on its own ($12.99, before or after it's written)
 // never counts.
 import { BIT_CAPS } from './bits/plans'

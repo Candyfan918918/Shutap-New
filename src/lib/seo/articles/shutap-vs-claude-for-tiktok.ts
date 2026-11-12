@@ -8,7 +8,7 @@ const guide: Guide = {
   title: "Shutap vs Claude for TikTok Comedy Scripts | Shutap",
   h1: "Shutap vs Claude for TikTok comedy scripts",
   description:
-    "Claude is a strong writing partner you set up yourself. Shutap helps you write a timed TikTok bit line by line, with funnier where you're stuck. What each does well and how to get funny out of both.",
+    "Claude is a strong writing partner you set up yourself. Shutap turns your story into a timed TikTok bit in your words, with funnier where you're stuck. What each does well and how to get funny out of both.",
   capsule:
     "For TikTok comedy scripts, Claude is the better tool to build your own system in, and Shutap is the faster route from your own lines to a filmable bit. Claude will follow any rules you give it and explain humor well. Shutap gives you the shape of a bit to write in your words, helps only on the line you tap, and hands back a 5-second video and a teleprompter.",
   blurb: "A general assistant you configure versus a tool where you write the bit and get something to film.",
@@ -36,7 +36,7 @@ const guide: Guide = {
     },
     {
       heading: "What Shutap does instead",
-      body: "Shutap gives you that routine as a shape to fill: you write five lines in your own words, a hook for the first two seconds, a setup, two tags and a button. When a line isn't landing, tap funnier for three other ways to say it, built from your other lines, with lines that would work on anyone's story and jokes aimed at you dropped. You set the audience to social and a voice (deadpan, storyteller, roast or dry). The finished bit comes back as a 5-second video and stand-up on the teleprompter. It sounds like you because you wrote it.",
+      body: "Shutap gives you that routine as a shape to fill: you tell the story and it comes back in your own words as a hook for the first two seconds, a setup, two tags and a button. When a line isn't landing, tap funnier for three other ways to say it, built from your other lines, with lines that would work on anyone's story and jokes aimed at you dropped. You set the audience to social and a voice (deadpan, storyteller, roast or dry). The finished bit comes back as a 5-second video and stand-up on the teleprompter. It sounds like you because you wrote it.",
     },
     {
       heading: "From script to camera",

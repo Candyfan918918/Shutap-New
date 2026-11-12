@@ -58,3 +58,26 @@ test('pause words', () => {
   for (const t of ['(beat)', '(pause for the laugh)', '(hold it)', '(let it land)']) assert.ok(isPauseCue(t), t)
   for (const t of ['(slower)', '(deadpan)', '(his voice)']) assert.ok(!isPauseCue(t), t)
 })
+
+test('the /bits demo: a short line inside a longer one, and the quoted voice', () => {
+  const demo = ['My daughter always embarrasses me in public', 'One day we walk past a homeless lady', 'My daughter said: is she homeless?', 'I said shh. She announced, not homeless. Outdoor resident.', 'She logged it twice. Homeless. Homeless.']
+  const sk: SketchElement[] = [
+    { type: 'scene_heading', text: 'EXT. CITY STREET - DAY' },
+    { type: 'character', text: 'ME' },
+    { type: 'dialogue', text: 'My daughter always embarrasses me in public.' },
+    { type: 'action', text: 'They pass a HOMELESS LADY sitting on a crate.' },
+    { type: 'character', text: 'DAUGHTER' },
+    { type: 'dialogue', text: 'Is she homeless?' },
+    { type: 'character', text: 'ME' },
+    { type: 'parenthetical', text: '(hushed)' },
+    { type: 'dialogue', text: 'Shh.' },
+    { type: 'character', text: 'DAUGHTER' },
+    { type: 'parenthetical', text: '(loudly)' },
+    { type: 'dialogue', text: 'Not homeless. Outdoor resident.' },
+    { type: 'character', text: 'DAUGHTER' },
+    { type: 'dialogue', text: 'Homeless. Homeless.' },
+  ]
+  const c = cuesForLines(demo, sk)
+  assert.deepEqual(c[3], [{ text: '(hushed)', voice: false, hold: false }, { text: '(loudly)', voice: false, hold: false }])
+  assert.deepEqual([c[0], c[1], c[2], c[4]], [[], [], [], []])
+})

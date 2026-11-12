@@ -479,3 +479,9 @@
 .bt-lined-note { margin: 0; display: flex; gap: 8px; align-items: center; background: #fff4f7; border: 1px solid rgba(184, 69, 107, .35); border-radius: 12px; padding: 9px 12px; font: 600 13px/1.45 var(--sora); color: var(--wine); }
 .bt-lined-foot .bt-guide { font-size: 13px; }
 .bt-lined-cta .bt-go { min-height: 52px; padding: 0 26px; font-size: 16px; }
+
+/* Nov 12 2026: the story box's four checks (hints only, never block) */
+.bt-checks { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 10px 16px 4px; }
+.bt-checks-lbl { font: 600 12px 'Sora', system-ui, sans-serif; color: #6e6468; margin-right: 2px; }
+.bt-check { font: 700 12px 'Sora', system-ui, sans-serif; border-radius: 999px; padding: 5px 11px; background: #f3eaee; color: #6e6468; }
+.bt-check.ok { background: #e3f3ea; color: #1f6b40; }

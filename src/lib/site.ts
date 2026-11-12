@@ -8,4 +8,4 @@ export const SITE_URL = "https://shutap.com";
 // via `ogImageMeta()` from `@/lib/seo/meta`.
 export const OG_IMAGE = `${SITE_URL}/og/shutap-og-v4.png`;
 export const OG_IMAGE_ALT =
-  "Shutap. Say it funnier. Your humor, amplified. Write your bit line by line, funnier only where you ask. shutap.com";
+  "Shutap. Say it funnier. Your humor, amplified. Tell it your way, get the bit, funnier only where you ask. shutap.com";

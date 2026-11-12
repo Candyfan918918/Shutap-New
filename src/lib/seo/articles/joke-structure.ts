@@ -50,8 +50,8 @@ const guide: Guide = {
       body: "The turn in the setup. If the setup already says \"but it's still a mess,\" the tags have nothing left to reveal. Move the confession out and keep the setup sounding proud. Two tags with the same shape. \"The forks drawer has spoons. The spoons drawer has forks\" is one joke said twice; swap one for a new angle. Words after the laugh. \"I can show you exactly where they'd go, which is ironic\" gives the room a reason to wait instead of laugh. Cut back to the punch word. Most bits that feel flat break here, not in the idea.",
     },
     {
-      heading: "Writing the five lines in Shutap",
-      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, is built on this structure. In Shutap Bits the box has one slot for each line: hook, setup, two tags and button, and you write all five in your own words. When one line won't land, tap funnier on that line and you get three other ways to say it, with yours listed first; lock the lines that are done. You pick, cut and rewrite, and the bit stays yours. Then post it as a five-second video, or run it as stand-up on the teleprompter, a sketch page or a skit.",
+      heading: "From your story to the five lines in Shutap",
+      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, is built on this structure. In Shutap Bits you tell the story your way and it comes back with one line for each part: hook, setup, two tags and button, every word yours. When one line won't land, tap funnier on that line and you get three other ways to say it, with yours listed first; lock the lines that are done. You pick, cut and rewrite, and the bit stays yours. Then post it as a five-second video, or run it as stand-up on the teleprompter, a sketch page or a skit.",
     },
   ],
   techniques: [

@@ -102,7 +102,7 @@ export const TEMPLATES: Record<TemplateId, TemplateEntry> = {
     htmlDesign: welcomeHtml,
     buildBodyText: (v) => `${g(v)}
 
-you're in. write your bit line by line — hook, setup, two tags and a button, all yours — and tap funnier on any line you're stuck on. run it as stand-up, a sketch or a skit.
+you're in. tell it your way and shutap cuts it into a bit — hook, setup, two tags and a button, every word yours — and tap funnier on any line you're stuck on. run it as stand-up, a sketch or a skit.
 
 your profile shows the name and picture from your sign-in. you can change both in your profile.
 
