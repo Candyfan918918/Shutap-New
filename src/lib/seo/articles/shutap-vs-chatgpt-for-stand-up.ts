@@ -40,7 +40,7 @@ const guide: Guide = {
     },
     {
       heading: "Rehearsing the bit, not just reading it",
-      body: "A chat window gives you a block of text, and stand-up isn't read, it's said. Shutap shows the bit three ways. The teleprompter scrolls it full screen at talking pace, so you can run it out loud in your kitchen and hear where it drags. The skit lays it out beat by beat, which makes it easy to see a setup that runs two sentences too long. The sketch formats it as a page for printing if you like marking up paper with a pen before a mic. None of this makes a joke funnier. It does make it faster to find out which line is the problem.",
+      body: "A chat window gives you a block of text, and stand-up isn't read, it's said. Shutap shows the bit three ways. The teleprompter scrolls it full screen at talking pace, with delivery cues where the beats and pauses go, so you can run it out loud in your kitchen and hear where it drags. The skit lays it out beat by beat, which makes it easy to see a setup that runs two sentences too long. The sketch formats it as a page for printing if you like marking up paper with a pen before a mic. None of this makes a joke funnier. It does make it faster to find out which line is the problem.",
     },
     {
       heading: "Which one to open, and when",

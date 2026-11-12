@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Filming it without a crew",
-      body: "Most of the value in a funny listing is the video, and the video is where the words usually fall apart, because nobody remembers their lines while walking backwards through a hallway. Shutap's shoot mode opens the walkthrough on the phone you read from: big text, one line at a time, scrolling by itself. Record with a second phone or a laptop. Shutap never opens your camera. Kits are private to your account, nobody at Shutap reads them, and they never train anything. You stay the one on camera, choosing which lines to keep, cutting the ones that don't sound like you, and adding your own. The tool drafts the shoot. You make it yours.",
+      body: "Most of the value in a funny listing is the video, and the video is where the words usually fall apart, because nobody remembers their lines while walking backwards through a hallway. Shutap's shoot mode opens the walkthrough on the phone you read from: big text, one line at a time, scrolling by itself, with a cue on how to say each line, like (deadpan) or (pause for the laugh). Record with a second phone or a laptop. Shutap never opens your camera. Kits are private to your account, nobody at Shutap reads them, and they never train anything. You stay the one on camera, choosing which lines to keep, cutting the ones that don't sound like you, and adding your own. The tool drafts the shoot. You make it yours.",
     },
     {
       heading: "What it costs",
@@ -65,7 +65,7 @@ const guide: Guide = {
     },
     {
       q: "What's the best AI tool for funny listing videos?",
-      a: "Look for one that writes the shot list, not only the description: a line per shot, hooks, a voiceover and a way to read it while filming. Shutap for Realtors does that from the listing link, in a funny, professional, luxury or young tone, with shoot mode on your phone.",
+      a: "Look for one that writes the shot list, not only the description: a line per shot, hooks, a voiceover and a way to read it while filming. Shutap for Realtors does that from the listing link, in a funny, professional, luxury or young tone, with shoot mode on your phone to rehearse and film.",
     },
     {
       q: "Will an AI tool make things up about my listing?",

@@ -280,7 +280,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Film it",
-        body: "Open the teleprompter view and the script scrolls full-screen while you look at the lens. Reading off a prompter keeps your eyes up and your timing steady, which is most of what makes a storytime feel told instead of read.",
+        body: "Open the teleprompter view and the script scrolls full-screen while you look at the lens. Reading off a prompter keeps your eyes up and your timing steady, which is most of what makes a storytime feel told instead of read. Delivery cues like (beat) and (pause for the laugh) sit where they go, and the scroll holds for a moment at each pause.",
       },
       {
         heading: "Keep it yours",
@@ -302,7 +302,7 @@ const BASE_GUIDES: Guide[] = [
     title: "Stand-Up Bit Writer: Shape Your Own Material | Shutap",
     h1: "Stand-up bit writer",
     description:
-      "Write your bit as a hook, setup, two tags and a button, in your own words. Tap funnier on the line that isn't landing yet, then rehearse it on the prompter before the open mic.",
+      "Write your bit as a hook, setup, two tags and a button, in your own words. Tap funnier on the line that isn't landing yet, then rehearse it on the prompter, with delivery cues, before the open mic.",
     capsule:
       "Shutap helps you shape a stand-up bit you write yourself. Put your premise into five lines: a hook, a setup, two tags and a button. When a line isn't landing, tap funnier for three other ways to say it, yours first; nothing changes until you pick. Then rehearse it on the prompter.",
     blurb: "Shape your own bit line by line, with funnier on the line you're stuck on.",
@@ -321,7 +321,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Rehearse it",
-        body: "Run the bit in the teleprompter to hear the timing out loud, or format it as a one-page sketch to mark it up. Then say it to a room. A bit is not finished until an audience has told you where it is slow.",
+        body: "Run the bit in the teleprompter, with its delivery cues, to hear the timing out loud, or format it as a one-page sketch to mark it up. Then say it to a room. A bit is not finished until an audience has told you where it is slow.",
       },
       {
         heading: "What it will not do",
@@ -372,9 +372,9 @@ const BASE_GUIDES: Guide[] = [
     title: "Teleprompter for Comedy Videos & Open Mics | Shutap",
     h1: "Teleprompter for comedy",
     description:
-      "Every bit you make runs in a full-screen teleprompter, so you can film to camera or rehearse a set with your eyes up.",
+      "Every bit you make runs in a full-screen teleprompter with delivery cues, so you can film to camera or rehearse a set with your eyes up.",
     capsule:
-      "Every bit you make on Shutap can run in a full-screen teleprompter. It scrolls your lines while you look at the lens, so you can film a TikTok, Reel or Short, or rehearse a set, with your eyes up.",
+      "Every bit you make on Shutap can run in a full-screen teleprompter. It scrolls your lines while you look at the lens, with delivery cues where they go, like (beat), (pause for the laugh) or (his voice), so you can film a TikTok, Reel or Short, or rehearse a set, with your eyes up.",
     blurb: "Run any bit full-screen and read it to camera.",
     sections: [
       {
@@ -383,11 +383,11 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "How it works",
-        body: "Write your five lines and make the bit. Open stand-up and your lines run full-screen on the teleprompter. Put your phone or camera where you can see it, start the scroll, and read to the lens.",
+        body: "Write your five lines and make the bit. Open stand-up and your lines run full-screen on the teleprompter. Put your phone or camera where you can see it, start the scroll, and read to the lens. Delivery cues from your sketch page show between the lines, and the scroll holds for a moment at each pause so the laugh has room. Tap cues to hide them.",
       },
       {
         heading: "Rehearsing a set",
-        body: "Use the prompter as a rehearsal tool too. Reading a bit out loud, at speed, shows you which words trip you up and where you need a breath. Fix those lines and run it again.",
+        body: "Use the prompter as a rehearsal tool too. Reading a bit out loud, at speed, shows you which words trip you up and where you need a breath, and the cues show where to take a beat, when to do a voice and when to slow down for the button. Fix those lines and run it again; hide the cues once you know it cold.",
       },
       {
         heading: "Pair it with the right length",
@@ -487,7 +487,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Then film it",
-        body: "Each bit can run in a full-screen teleprompter, as a scene laid out beat by beat with shots, speakers and on-screen text (the skit), or as a one-page sketch with scene headings, action, character names and dialogue. Length is estimated from the word count at about 2.6 words a second.",
+        body: "Each bit can run in a full-screen teleprompter with delivery cues, as a scene laid out beat by beat with shots, speakers and on-screen text (the skit), or as a one-page sketch with scene headings, action, character names and dialogue. Length is estimated from the word count at about 2.6 words a second.",
       },
       {
         heading: "Versioned, tested, and honest about limits",
@@ -527,7 +527,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What you can do with the result",
-        body: "A one-liner goes into a caption or a monologue. A Shutap bit runs as stand-up on a full-screen teleprompter, lays out as a skit beat by beat, or formats as a one-page sketch, so it is ready to film or take to an open mic.",
+        body: "A one-liner goes into a caption or a monologue. A Shutap bit runs as stand-up on a full-screen teleprompter with delivery cues, lays out as a skit beat by beat, or formats as a one-page sketch, so it is ready to film or take to an open mic.",
       },
       {
         heading: "Beyond the bit",
@@ -713,7 +713,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Formats",
-        body: "Shutap lays your bit out as a 5-second video to post, stand-up on a full-screen teleprompter, a skit beat by beat, or a one-page sketch.",
+        body: "Shutap lays your bit out as a 5-second video to post, stand-up on a full-screen teleprompter with delivery cues, a skit beat by beat, or a one-page sketch.",
       },
       {
         heading: "Who should use which",
@@ -873,7 +873,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Formats",
-        body: "Shutap lays your bit out as a 5-second video to post, stand-up on a full-screen teleprompter, a skit beat by beat, or a one-page sketch.",
+        body: "Shutap lays your bit out as a 5-second video to post, stand-up on a full-screen teleprompter with delivery cues, a skit beat by beat, or a one-page sketch.",
       },
       {
         heading: "Who should use which",

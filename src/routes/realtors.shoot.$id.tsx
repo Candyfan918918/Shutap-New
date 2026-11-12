@@ -5,7 +5,7 @@ import '@/pages/realtors/realtors.css'
 
 export const Route = createFileRoute('/realtors/shoot/$id')({
   ssr: false,
-  head: () => ({ meta: [...pageMeta('Shoot mode — Shutap for Realtors', 'The walkthrough as a teleprompter on your phone.', '/realtors'), { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta('Shoot mode — Shutap for Realtors', 'The walkthrough as a teleprompter on your phone, with a cue on how to say each line.', '/realtors'), { name: 'robots', content: 'noindex' }] }),
   component: () => {
     const { id } = Route.useParams()
     return <div data-ph-private style={{ display: 'contents' }}><Prompter kitId={id} /></div>

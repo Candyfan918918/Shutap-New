@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "End on a button and the date",
-      body: "The last line should be the strongest joke and the one practical fact people need. Put the joke first and the date second, so the laugh carries the information. Template: \"[Callback to the room character]. Open house [day] at [time].\" Example: \"The chandelier is still refusing to leave. Open house Saturday at one. Come meet it.\" If you'd like a starting draft, Shutap for Realtors, from the humor amplifier, takes the listing link and returns the walkthrough to shoot with a line per shot, the voiceover, three hooks and the open-house kit in a funny, professional, luxury or young tone. It only uses what the listing says, checks every line for fair housing, and shoot mode puts the lines on your phone as a teleprompter. You pick the lines that sound like you and film it yourself.",
+      body: "The last line should be the strongest joke and the one practical fact people need. Put the joke first and the date second, so the laugh carries the information. Template: \"[Callback to the room character]. Open house [day] at [time].\" Example: \"The chandelier is still refusing to leave. Open house Saturday at one. Come meet it.\" If you'd like a starting draft, Shutap for Realtors, from the humor amplifier, takes the listing link and returns the walkthrough to shoot with a line per shot, the voiceover, three hooks and the open-house kit in a funny, professional, luxury or young tone. It only uses what the listing says, checks every line for fair housing, and shoot mode puts the lines on your phone as a teleprompter, with a cue on how to say each one. You pick the lines that sound like you and film it yourself.",
     },
   ],
   techniques: [

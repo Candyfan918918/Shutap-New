@@ -11,7 +11,7 @@ import { getBitDemo } from '@/lib/bits/demo.functions'
 // screen. Server-rendered and indexed.
 const PATH = '/bits'
 const TITLE = 'Shutap Bits — write your bit line by line, funnier only where you ask'
-const DESCRIPTION = 'For creators and comedians: write your hook, setup, two tags and button in your own words. Tap funnier on any line for three other ways to say it, yours first. Then post it as a 5-second video, or perform it as stand-up, a sketch or a skit. Free to start.'
+const DESCRIPTION = 'For creators and comedians: write your hook, setup, two tags and button in your own words. Tap funnier on any line for three other ways to say it, yours first. Then post it as a 5-second video, or rehearse and perform it as stand-up with delivery cues, a sketch or a skit. Free to start.'
 
 const faqSchema = {
   '@context': 'https://schema.org',

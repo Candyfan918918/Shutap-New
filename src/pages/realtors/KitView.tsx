@@ -277,7 +277,7 @@ export function KitView({ data, usage, onUsage, onLimit, onRewrite, onBuy, onTou
         <button className="rl-btn" disabled={busy !== null} onClick={() => void copyOutput(tab)}>copy {OUTPUT_LABEL[tab]}<small>this tab · unlimited</small></button>
         {tab === 'voiceover' && <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void voiceoverFile()}>voiceover .txt<small>for text-to-voice</small></button>}
         <button className="rl-btn ghost" disabled={busy !== null} onClick={() => void pdf()}>kit PDF<small>all six, one file</small></button>
-        <Link to="/realtors/shoot/$id" params={{ id: data.id }} className="rl-btn ghost" onClick={() => track('kit_shoot_opened_from_kit', {})}>▶ shoot mode<small>opens the teleprompter</small></Link>
+        <Link to="/realtors/shoot/$id" params={{ id: data.id }} className="rl-btn ghost" onClick={() => track('kit_shoot_opened_from_kit', {})}>▶ shoot mode<small>the teleprompter, with delivery cues</small></Link>
         <button className="rl-btn ghost" onClick={onRewrite}>rewrite<small>new tone or controls · a new kit</small></button>
         {free && <button className="rl-btn ghost" onClick={() => { track('kit_buy_clicked', { tier: usage.tier }); onBuy() }}>remove the mark · {usd(KIT_ONCE.amount)}<small>this kit, clean, forever</small></button>}
       </div>

@@ -32,7 +32,7 @@ const guide: Guide = {
     },
     {
       heading: "Ready-to-use formats",
-      body: "A chatbot returns a block of text, and the formatting is your job. Shutap returns your bit in the form you're going to use. Stand-up runs on a full-screen teleprompter so you can rehearse with your eyes up. Sketch lays it out as a screenplay page. Skit splits it into shots, beat by beat, for filming alone. Every bit also comes with a 5-second vertical video whose cartoon cast and setting follow your lines. My creations keeps every bit you've made, so last Tuesday's shoe saga is still there when you need an opener.",
+      body: "A chatbot returns a block of text, and the formatting is your job. Shutap returns your bit in the form you're going to use. Stand-up runs on a full-screen teleprompter, with delivery cues, so you can rehearse with your eyes up. Sketch lays it out as a screenplay page. Skit splits it into shots, beat by beat, for filming alone. Every bit also comes with a 5-second vertical video whose cartoon cast and setting follow your lines. My creations keeps every bit you've made, so last Tuesday's shoe saga is still there when you need an opener.",
     },
     {
       heading: "Where the jokes come from",
