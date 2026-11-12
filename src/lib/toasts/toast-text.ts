@@ -37,3 +37,6 @@ export function toastTitle(o: Occasion, names: Partial<Names>): string {
 }
 
 export { clock }
+
+/** The small heading on the keepsake page (the PDF and its preview on the occasion pages). */
+export const KEEPSAKE_LABEL: Partial<Record<Occasion, string>> = { best_man: "the best man's toast", maid_of_honor: "the maid of honor's toast", parent: 'a toast from the family', retirement: 'a retirement toast', birthday: 'a birthday toast' }

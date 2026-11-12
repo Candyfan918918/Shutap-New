@@ -4,7 +4,7 @@
 // marks. Helvetica + Helvetica-Bold (no fonts embedded). The free toast
 // carries SHUTAP.COM tiled under the text and "— shutap.com" on every page.
 import { OCCASION, TONE_LABEL, fromPlaceholders, toastSeconds, type Names, type Occasion, type Tone, type ToastLine } from './shared'
-import { MARK, clock, lineTimes, toastTitle } from './toast-text'
+import { KEEPSAKE_LABEL, MARK, clock, lineTimes, toastTitle } from './toast-text'
 
 const W = 612
 const H = 792
@@ -238,7 +238,6 @@ export function cueCardsPdf(t: CueCardsIn): Blob {
 
 export type KeepsakeIn = { occasion: Occasion; lines: ToastLine[]; names: Partial<Names>; marked: boolean }
 
-const KEEPSAKE_LABEL: Partial<Record<Occasion, string>> = { best_man: "the best man's toast", maid_of_honor: "the maid of honor's toast", parent: 'a toast from the family', retirement: 'a retirement toast', birthday: 'a birthday toast' }
 
 /** The speech as they'd want to keep it: prose, no stage marks, the true
  *  thing set apart, room for a handwritten note and a signature. */
