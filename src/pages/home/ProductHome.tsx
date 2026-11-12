@@ -93,7 +93,7 @@ const PRODUCTS: ProductLine[] = [
     gets: [['lines', 'Your bit'], ['video', '5-second video'], ['mic', 'Stand-up prompter'], ['page', 'Sketch page'], ['scene', 'Skit']],
     price: 'Free: 1 bit a day, video watermarked · Basic $19.99/mo: 3 a day · Pro $49.99/mo: unlimited',
     cta: 'Write my bit', href: '/bits',
-    shot: { src: '/home/bits.jpg', url: 'shutap.com/bits', w: 1480, h: 953, alt: 'The Shutap Bits writer: five lines typed by the writer, each with funnier and lock, beside what they become' },
+    shot: { src: '/home/bits.jpg', url: 'shutap.com/bits', w: 1480, h: 953, alt: 'Shutap Bits: one real bit as a 5-second video, a stand-up teleprompter with delivery cues, a sketch page and a skit shot list' },
   },
   {
     key: 'realtors', icon: 'realtors', name: 'Realtors', full: 'Shutap for Realtors', aud: 'for agents and brokerages', tab: 'listing videos',

@@ -16,16 +16,9 @@ type ShotEffect = Typing | Writing
 
 type ShotMotionSpec = { seconds: number; effects: ShotEffect[] }
 
-/** Bits (Nov 8 2026, the new /bits first screen): the writer types the hook
- *  (two lines in the capture), then the setup, into the five-line box. */
-const BITS: ShotMotionSpec = {
-  seconds: 10,
-  effects: [
-    { kind: 'type', box: { left: 5.24, top: 50.4, width: 24.64, height: 3.6 }, chars: 36, from: 4, to: 24, then: true },
-    { kind: 'type', box: { left: 5.24, top: 53.77, width: 8.52, height: 3.6 }, chars: 12, from: 25, to: 32 },
-    { kind: 'type', box: { left: 5.24, top: 68.64, width: 27.16, height: 3.6 }, chars: 42, from: 36, to: 58 },
-  ],
-}
+/** Bits (Nov 12 2026, the new /bits first screen): the four outputs of the
+ *  demo bit are the picture; nothing is typed over them, so no motion. */
+const BITS: ShotMotionSpec = { seconds: 10, effects: [] }
 
 /** Toasts: story 1 is typed, two lines. */
 const TOASTS: ShotMotionSpec = {
