@@ -367,14 +367,18 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, aside
   return (
     <div className="rl">
       {landing ? (
-        <div className="rl-hero2" ref={topRef}>
-          <div className="rl-hero2-head">
-            <p className="rl-kicker">Shutap for Realtors</p>
-            <h1 className="rl-h1 rl-h1-2">Turn every listing into a <em>content campaign.</em></h1>
-            <p className="rl-lead2">Paste the link. Get the video script you say on camera, the voiceover, the teleprompter and every post from just listed to sold. In your tone: professional, luxury, young or funny.</p>
+        <div className="rl-hero2 ro-hero" ref={topRef}>
+          {/* Nov 12 2026 (Candy): the sample kit's outputs on top, then the paste box */}
+          <div className="rl-hero2-head ro-head">
+            <div className="ro-head-l">
+              <p className="rl-kicker">Shutap for Realtors</p>
+              <h1 className="rl-h1 rl-h1-2">Turn every listing into a <em>content campaign.</em></h1>
+            </div>
+            <p className="rl-lead2">A realistic demo of a kit made in-house from a real Menlo Park listing.</p>
           </div>
           <div className="rl-hero2-aside">{aside}</div>
           <div className="rl-hero2-box">
+            <div className="ro-write-h"><h2>Your turn — paste your listing.</h2><span>first kit free · copy from your phone</span></div>
             {pasteBox}
             <ul className="rl-trust">
               <li><IconShield /><span>Fair-housing checked</span></li>

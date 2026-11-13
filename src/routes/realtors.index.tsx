@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { z } from 'zod'
 import { KitPage } from '@/pages/realtors/KitPage'
-import { SampleTiles } from '@/pages/realtors/SampleTiles'
+import { RealtorOutputs } from '@/pages/realtors/RealtorOutputs'
 import { pageMeta } from '@/lib/seo/page-meta'
 import { KIT_ONCE, PLANS, usd } from '@/lib/pricing'
 import { Footer } from '@/components/feed/Footer'
@@ -10,7 +10,9 @@ import { trackEvent } from '@/lib/tracking'
 import '@/components/feed/feed.css'
 import '@/pages/realtors/realtors.css'
 
-// Shutap for Realtors, the landing (Nov 8 2026 redesign, approved by Candy):
+// Shutap for Realtors, the landing. Nov 12 2026 (approved by Candy): the
+// sample kit's four outputs on top (RealtorOutputs), then the paste box.
+// Nov 8 2026 redesign:
 // everything a visitor needs is in the first screen: what it does, the paste
 // box, the trust row and a real kit (six tiles + shoot mode). Public and
 // indexed; the kit page behind the box is dark until the realtors flag is on.
@@ -64,7 +66,7 @@ function Landing() {
   return (
     <div className="fd rl">
       {!kit && <Banner />}
-      <KitPage kitId={kit} sessionId={session_id} prepaidSession={prepaid} urlIn={url} textIn={text === '1'} aside={<SampleTiles />}>
+      <KitPage kitId={kit} sessionId={session_id} prepaidSession={prepaid} urlIn={url} textIn={text === '1'} aside={<RealtorOutputs />}>
         <div className="rl-lower">
           <div className="rl-steps3">
             <div><p className="n">1</p><h3>Paste</h3><p>Check the facts Shutap read back.</p></div>
