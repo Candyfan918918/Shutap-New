@@ -1053,7 +1053,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const left = usage && usage.cap !== null ? Math.max(0, usage.cap - usage.used) : null
 
   return (
-    <section className={embed?.bare ? "bt bt-bare" : "bt"} aria-label="Write a bit">
+    <section className={embed?.bare ? "bt bt-bare" : embed && !embed.mirror ? "bt bt-wide" : "bt"} aria-label="Write a bit">
       <div className="bt-col" ref={topRef} style={{ scrollMarginTop: 84 }}>
         {phase === 'write' && opening && (
           <div className="bt-hero" aria-live="polite">
@@ -1065,9 +1065,11 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             {embed?.bare ? (
               <span id="bit-write" aria-hidden="true" />
             ) : embed ? (
-              <div className="bt-hero bt-hero-embed" id="bit-write">
-                <h2 className="bt-h1">{embed.heading}</h2>
-                <p className="bt-sub">{embed.sub ?? 'Tell it your way. Shutap cuts it into a bit, every word yours. Free.'}</p>
+              // Nov 12 2026 (Candy): every guide and funniest page opens its box
+              // the way /bits does, "Your turn — write yours.", same width.
+              <div className="bt-turn" id="bit-write">
+                <h2>Your turn — write yours.</h2>
+                <span>free · no sign-in to start · every word stays yours</span>
               </div>
             ) : (
               <div className="bt-hero">
