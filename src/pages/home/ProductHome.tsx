@@ -8,7 +8,7 @@
  * Every claim here was checked against the code on Nov 6 2026 (outputs,
  * limits, prices, what the crisis check covers). Change a product, change
  * this page. */
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Link } from '@tanstack/react-router'
 import { useCurrentAlias } from '@/hooks/use-current-alias'
 import { trackEvent } from '@/lib/tracking'
@@ -16,6 +16,7 @@ import { Footer } from '@/components/feed/Footer'
 import { ShotMotion } from './ShotMotion'
 import '@/components/feed/feed.css'
 import './product-home.css'
+import './product-motion.css'
 
 type IconName =
   | 'bits' | 'realtors' | 'toasts' | 'ent' | 'arrow' | 'spark' | 'lock' | 'shield' | 'heart' | 'card' | 'page'
@@ -182,17 +183,27 @@ export function ProductHome() {
     forwardToBits()
   }, [])
 
+  // Steps 1·2·3 in each product section light up in turn; a click holds one.
+  const [tick, setTick] = useState(0)
+  const [held, setHeld] = useState<Record<string, number>>({})
+  useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const t = window.setInterval(() => setTick((n) => n + 1), 2800)
+    return () => window.clearInterval(t)
+  }, [])
+
   const startLabel = signedIn ? 'Pick a product' : 'Get started free'
   const startHref = signedIn ? '#products' : '/welcome'
 
   return (
     <div className="ph">
+      <div className="ph-prog" aria-hidden="true" />
       <main>
         <section className="ph-wrap ph-hero">
           <Link to="/toasts" className="ph-announce" onClick={() => tap('home_cta', { cta: 'announce', product: 'toasts' })}>
             <b>New</b>Shutap Toasts, for weddings and the holidays <Icon name="arrow" size={14} color="#b8456b" />
           </Link>
-          <h1 className="ph-h1">Say it <em>funnier.</em></h1>
+          <h1 className="ph-h1">Say it <em className="gig">funnier.</em></h1>
           <a href={startHref} className="ph-btn primary" onClick={() => tap('home_cta', { cta: signedIn ? 'pick_product' : 'get_started', where: 'hero' })}>
             {startLabel}
           </a>
@@ -202,7 +213,7 @@ export function ProductHome() {
         <section className="ph-wrap ph-products" id="products" aria-labelledby="ph-products-h">
           <div className="ph-sec-h">
             <span className="ph-eyebrow"><Icon name="spark" size={14} color="#b8456b" />Four products</span>
-            <h2 className="ph-h2" id="ph-products-h">One idea: <em>say it funnier.</em></h2>
+            <h2 className="ph-h2" id="ph-products-h">One idea: <em className="gig">say it funnier.</em></h2>
           </div>
           <div className="ph-tabs">
             {PRODUCTS.map((p, i) => {
@@ -230,7 +241,7 @@ export function ProductHome() {
                 <div className="in">
                   <div className="txt">
                     <span className="kick"><span className="ic"><Icon name={p.icon} size={18} color={deep ? '#ffffff' : '#b8456b'} /></span>{p.full} · {p.aud}</span>
-                    <h2 className="ph-h3" id={`ph-${p.key}`}>{p.h2[0]}<em>{p.h2[1]}</em></h2>
+                    <h2 className="ph-h3" id={`ph-${p.key}`}>{p.h2[0]}<em className="gig">{p.h2[1]}</em></h2>
                     <p className="does">{p.does}</p>
                     {p.occasions && (
                       <div className="occ">
@@ -240,7 +251,12 @@ export function ProductHome() {
                       </div>
                     )}
                     <ol className="steps">
-                      {p.steps.map((s, n) => <li key={s}><b>{n + 1}</b>{s}</li>)}
+                      {p.steps.map((s, n) => {
+                        const active = (held[p.key] ?? tick % p.steps.length) === n
+                        return (
+                          <li key={s} className={active ? 'on' : undefined} onClick={() => { setHeld((h) => ({ ...h, [p.key]: n })); tap('home_step', { product: p.key, step: n + 1 }) }}><b>{n + 1}</b>{s}</li>
+                        )
+                      })}
                     </ol>
                     {p.shot && (
                       <div className="gets">
@@ -314,7 +330,7 @@ export function ProductHome() {
         <section className="ph-wrap ph-block last">
           <div className="ph-final">
             <div className="in">
-              <h2 className="ph-h2">Say it <em>funnier.</em></h2>
+              <h2 className="ph-h2">Say it <em className="gig">funnier.</em></h2>
               <p>Bring the story, the listing, the toast or the deck. Start free.</p>
               <a href={startHref} className="ph-btn white" onClick={() => tap('home_cta', { cta: signedIn ? 'pick_product' : 'get_started', where: 'closing' })}>
                 {startLabel}
