@@ -714,7 +714,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tier])
   /** Make my bit (Nov 8 2026): all five lines are the person's, handed over
-   *  word for word; Shutap writes no line. The result lays them out as the
+   *  word for word (Nov 13: empty lines are drafted by the AI copilot). The result lays them out as the
    *  video, stand-up, sketch and skit. A guest signs in first; the lines stay
    *  in the box and the bit is made the moment they're in. */
   function makeLined(typedNow?: Draft) {

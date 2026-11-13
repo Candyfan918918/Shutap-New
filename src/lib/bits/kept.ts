@@ -8,16 +8,20 @@ import type { WrittenBit } from './pipeline.server'
 export type GivenLines = Partial<Pick<BitDraft, 'hook' | 'setup' | 'tags' | 'button'>>
 export type AllLines = { hook: string; setup: string; tags: string[]; button: string }
 
-/** Nov 13 2026: hook, setup, one tag and button make a whole bit; the second
- *  tag is optional (a four-sentence story left it empty and the make button
- *  refused, so ad visitors never saw a bit). */
 export function allLinesGiven(g: GivenLines | undefined): g is AllLines {
-  return !!g && [g.hook, g.setup, g.button].every((x) => !!x?.trim()) && (g.tags ?? []).some((t) => !!t?.trim())
+  return !!g && [g.hook, g.setup, g.tags?.[0], g.tags?.[1], g.button].every((x) => !!x?.trim())
+}
+
+/** Nov 13 2026 (Candy): every line is optional. One written line is enough
+ *  to make the bit; a line left empty is drafted by the writer around the
+ *  written ones, which stay word for word (applyGiven). */
+export function anyLineGiven(g: GivenLines | undefined): boolean {
+  return !!g && [g.hook, g.setup, ...(g.tags ?? []), g.button].some((x) => !!x?.trim())
 }
 
 export function keptAsWritten(g: AllLines, promptVersion: string): WrittenBit {
   return {
-    ranked: [{ hook: g.hook.trim(), setup: g.setup.trim(), tags: g.tags.map((t) => (t ?? '').trim()).filter(Boolean), button: g.button.trim(), why: 'kept as written by you' }],
+    ranked: [{ hook: g.hook.trim(), setup: g.setup.trim(), tags: [g.tags[0]!.trim(), g.tags[1]!.trim()], button: g.button.trim(), why: 'kept as written by you' }],
     crowdWork: [],
     premises: [],
     judgeWhy: null,

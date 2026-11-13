@@ -2,7 +2,7 @@
  * it opens with the lines cut from the story they typed (BitSurface's story
  * step, their words only); a line the story didn't cover is theirs to write.
  * Five lines (hook, setup, two tags, button), all required, all in
- * their own words. Shutap never fills a line: AI runs only when "funnier" is
+ * their own words. Empty lines are drafted by the AI copilot at Make (Nov 13); AI also runs when "funnier" is
  * tapped on one line, and offers three other ways to say it with theirs
  * first; nothing changes until they pick. "lock" keeps a line from being
  * changed (and from funnier) until it's unlocked. Both stay gray until the
@@ -42,13 +42,13 @@ export function linesText(d: Draft): string {
 export function writtenSlots(d: Draft): Slot[] {
   return LINE_SLOTS.filter((s) => readSlot(d, s).trim())
 }
-/** Nov 13 2026: Tag 2 is optional. A four-sentence story fills four lines,
- *  and that is a whole bit. */
-export const OPTIONAL_SLOTS: Slot[] = ['tag1']
-/** the required lines still empty (a lone Tag 2 counts as the tag) */
+/** Nov 13 2026 (Candy): every line is optional. An incomplete bit still makes
+ *  the video, stand-up, sketch and skit; one written line is enough, and
+ *  the AI copilot drafts the empty lines around the written ones. */
+export const OPTIONAL_SLOTS: Slot[] = LINE_SLOTS
+/** what has to be written before Make: one line, any line */
 export function missingSlots(d: Draft): Slot[] {
-  const tag = !!(readSlot(d, 'tag0').trim() || readSlot(d, 'tag1').trim())
-  return LINE_SLOTS.filter((s) => !OPTIONAL_SLOTS.includes(s) && !readSlot(d, s).trim() && !(s === 'tag0' && tag))
+  return writtenSlots(d).length ? [] : ['hook']
 }
 /** "the tag 1, tag 2 and button" */
 export function listLines(slots: Slot[]): string {
@@ -60,7 +60,8 @@ export function listLines(slots: Slot[]): string {
 export function guideLine(d: Draft, locked: Slot[]): { text: string; ready: boolean } {
   const missing = missingSlots(d)
   if (!writtenSlots(d).length) return { text: 'Go back to your story, or type a line here. Stuck? Write a rough version and tap funnier.', ready: false }
-  if (missing.length) return { text: `Your story didn’t cover the ${listLines(missing)}. Write it in your words; Shutap never fills a line for you.`, ready: false }
+  const empty = LINE_SLOTS.filter((s) => !readSlot(d, s).trim())
+  if (empty.length) return { text: `Your lines stay word for word. Leave the ${listLines(empty)} empty and the AI copilot drafts ${empty.length > 1 ? 'them' : 'it'}; you can change any line after.`, ready: true }
   const open = LINE_SLOTS.filter((s) => !locked.includes(s))
   return { text: `Every word is yours${open.length ? '' : ', all locked'}. Next: the 5-second video, stand-up, sketch and skit.`, ready: true }
 }
@@ -192,7 +193,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
     const now = live()
     const missing = missingSlots(now)
     jokeTap('box_submit', tier, { box, written: writtenSlots(now).length, missing: missing.length, locked: locked.length, ready: !missing.length })
-    if (missing.length) return flash(`Write the ${listLines(missing)} in your words to continue. Stuck? Write a rough version and tap funnier.`)
+    if (missing.length) return flash('Type a line first, or go back to your story. Stuck? Write a rough version and tap funnier.')
     setNote(null)
     onMake(now)
   }
@@ -207,7 +208,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
         const label = slotLabel(s)
         const state = isLocked ? 'locked' : has || focusSlot === s ? 'typing' : 'empty'
         const optional = OPTIONAL_SLOTS.includes(s)
-        const status = isLocked ? 'locked · word for word' : has ? 'written · not locked' : optional ? 'optional' : 'required'
+        const status = isLocked ? 'locked · word for word' : has ? 'written · not locked' : 'empty · AI drafts it'
         return (
           <div key={s} className={`bt-tline${open === s ? ' open' : ''}`}>
             <div className="bt-tline-head">
@@ -225,7 +226,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
                 onFocus={() => setFocusSlot(s)}
                 onBlur={(e) => { setFocusSlot((f) => (f === s ? null : f)); onType(s, e.currentTarget) }}
                 onKeyDown={keyDown}
-                aria-label={`${meta.title}, ${optional ? 'optional' : 'required'}, type it`}
+                aria-label={`${meta.title}, optional, type it or leave it for AI`}
                 style={s === 'button' ? { fontWeight: 400 } : undefined}
               >
                 {value}

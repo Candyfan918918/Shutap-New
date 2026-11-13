@@ -22,7 +22,7 @@ import { requestAnonId, resolveJokeIdentity, type JokeIdentity } from './jokes/s
 import { activePlan } from './plan.server'
 import { downloadsUsed, kitTier, resolveTier } from './bits/tier.server'
 import { BIT_PROMPT_VERSION, heatFor, touchLineDraft, varyBitDraft, writeBitFromStory, type BitFailure, type TouchOption } from './bits/pipeline.server'
-import { allLinesGiven, keptAsWritten } from './bits/kept'
+import { allLinesGiven, anyLineGiven, keptAsWritten } from './bits/kept'
 import { checkedSplit, type SplitLines } from './bits/split'
 import { callAgentBounded, tryParseJson } from './agents/gateway'
 import { forgetPerson, personSignal } from './bits/person.server'
@@ -308,10 +308,10 @@ async function writeCore(
   const subject = id.subjectKey
   const usageNow = async () => usageView(tier, await readUsed(supabaseAdmin, subject, day).catch(() => 0), resetsAt)
 
-  // Nov 12 2026: a guest makes one bit a day and reads it before signing in,
-  // only from their own five lines (no writer, no model call for the bit).
-  // A story for the writer still takes an account (Nov 1 2026).
-  if (!lab && !id.userId && !allLinesGiven(given)) return { status: 'limited', reason: 'daily', tier, usage: usageView(tier, 0, resetsAt) }
+  // Nov 12 2026: a guest makes one bit a day and reads it before signing in.
+  // Nov 13 2026: from any of their own lines; empty lines are drafted around
+  // them. A bare story with no lines still takes an account (Nov 1 2026).
+  if (!lab && !id.userId && !anyLineGiven(given)) return { status: 'limited', reason: 'daily', tier, usage: usageView(tier, 0, resetsAt) }
 
   // A press of "write" carries one id, reused on the client's silent retry
   // and when the sign-in return replays it. If that bit already exists, this
