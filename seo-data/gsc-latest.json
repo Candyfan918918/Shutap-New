@@ -1,8 +1,8 @@
 {
  "property": "sc-domain:shutap.com",
- "startDate": "2026-10-13",
- "endDate": "2026-11-10",
- "pulledAt": "2026-11-12T21:51:14.210Z",
+ "startDate": "2026-10-14",
+ "endDate": "2026-11-11",
+ "pulledAt": "2026-11-13T21:26:41.245Z",
  "striking": [
   {
    "query": "shutap",
@@ -89,15 +89,15 @@
   {
    "page": "https://shutap.com/",
    "clicks": 132,
-   "impressions": 344,
-   "ctr": 0.3837,
+   "impressions": 343,
+   "ctr": 0.3848,
    "position": 2
   },
   {
    "page": "https://shutap.com/about",
    "clicks": 10,
-   "impressions": 318,
-   "ctr": 0.0314,
+   "impressions": 317,
+   "ctr": 0.0315,
    "position": 3
   },
   {
@@ -166,9 +166,9 @@
   {
    "page": "https://shutap.com/how-it-works",
    "clicks": 1,
-   "impressions": 101,
-   "ctr": 0.0099,
-   "position": 3.1
+   "impressions": 99,
+   "ctr": 0.0101,
+   "position": 3
   },
   {
    "page": "https://shutap.com/pricing",
@@ -575,16 +575,16 @@
    "query": "shutap",
    "page": "https://shutap.com/",
    "clicks": 121,
-   "impressions": 292,
-   "ctr": 0.4144,
+   "impressions": 291,
+   "ctr": 0.4158,
    "position": 1.6
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/about",
    "clicks": 4,
-   "impressions": 281,
-   "ctr": 0.0142,
+   "impressions": 280,
+   "ctr": 0.0143,
    "position": 3
   },
   {
@@ -1055,9 +1055,9 @@
    "query": "shutap",
    "page": "https://shutap.com/how-it-works",
    "clicks": 0,
-   "impressions": 77,
+   "impressions": 76,
    "ctr": 0,
-   "position": 2.6
+   "position": 2.5
   },
   {
    "query": "shutap",
