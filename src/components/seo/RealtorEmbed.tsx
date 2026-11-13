@@ -21,7 +21,7 @@ export function RealtorEmbed({ page }: { page: string }) {
     <div className="rl" id="bit-write" style={{ margin: '0 0 44px' }}>
       <div className="rl-box rl-box2">
         <div className="rl-box-body rl-steps">
-          <p className="rl-step-t" style={{ font: '800 18px/1.3 var(--sora)', color: 'var(--wine)' }}>Paste a listing. Get a video script and every post to go with it.</p>
+          <p className="rl-step-t" style={{ font: '800 18px/1.3 var(--sora)', color: 'var(--wine)' }}>Turn every listing into a content campaign.</p>
           <div className="rl-step">
             <span className="rl-num" aria-hidden>1</span>
             <div className="rl-step-b">
