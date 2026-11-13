@@ -20,21 +20,21 @@ type ShotMotionSpec = { seconds: number; effects: ShotEffect[] }
  *  demo bit are the picture; nothing is typed over them, so no motion. */
 const BITS: ShotMotionSpec = { seconds: 10, effects: [] }
 
-/** Toasts: story 1 is typed, two lines. */
+/** Toasts (Nov 12 2026, the new /toasts/best-man first screen): the demo
+ *  toast's four outputs on top; story 1 types itself in the box below. */
 const TOASTS: ShotMotionSpec = {
   seconds: 9,
   effects: [
-    { kind: 'type', box: { left: 5.35, top: 88.15, width: 67.8, height: 3.8 }, chars: 60, from: 6, to: 40, then: true },
-    { kind: 'type', box: { left: 5.35, top: 91.95, width: 21, height: 3.8 }, chars: 18, from: 41, to: 52 },
+    { kind: 'type', box: { left: 4.15, top: 87.52, width: 35.69, height: 3.12 }, chars: 52, from: 6, to: 45 },
   ],
 }
 
-/** Realtors (Nov 8 2026, the new /realtors first screen): the listing link
- *  is typed into the paste box beside the real sample kit. */
+/** Realtors (Nov 12 2026, the new /realtors first screen): the sample kit's
+ *  four outputs on top; the listing link types itself into the paste box. */
 const REALTORS: ShotMotionSpec = {
   seconds: 7,
   effects: [
-    { kind: 'type', box: { left: 7.83, top: 66.82, width: 20.8, height: 5.04 }, chars: 25, from: 8, to: 45 },
+    { kind: 'type', box: { left: 7.37, top: 86.32, width: 19.25, height: 2.35 }, chars: 25, from: 8, to: 45 },
   ],
 }
 

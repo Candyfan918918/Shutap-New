@@ -105,7 +105,7 @@ const PRODUCTS: ProductLine[] = [
     gets: [['camera', 'Walkthrough'], ['wave', 'Voiceover'], ['bolt', 'Hooks'], ['sign', 'Open house'], ['post', 'Posts'], ['doc', 'MLS copy']],
     price: 'First kit free, marked · one kit $12.99 · Basic: 20 a month · Pro: unlimited',
     cta: 'Get my free kit', href: '/realtors',
-    shot: { src: '/home/realtors.jpg', url: 'shutap.com/realtors', w: 1600, h: 952, alt: 'Shutap for Realtors: the paste box beside a real kit, six outputs and shoot mode' },
+    shot: { src: '/home/realtors.jpg', url: 'shutap.com/realtors', w: 1475, h: 1359, alt: 'Shutap for Realtors: a sample kit from a real Menlo Park listing, the walkthrough, shoot mode with cues, the social posts on a 9:16 phone and the open-house kit, above the paste box' },
   },
   {
     key: 'toasts', icon: 'toasts', name: 'Toasts', full: 'Shutap Toasts', aud: 'for weddings and holidays', tab: 'weddings & holidays',
@@ -116,7 +116,7 @@ const PRODUCTS: ProductLine[] = [
     gets: [['doc', 'Speech'], ['cards', 'Cue cards'], ['phone', 'Prompter'], ['clock', '60-sec cut'], ['timer', 'Rehearse'], ['gift', 'Keepsake']],
     price: 'First toast free, marked · one toast $12.99 · Basic: 1 a month · Pro: unlimited',
     cta: 'Write a toast', href: '/toasts',
-    shot: { src: '/home/toasts.jpg', url: 'shutap.com/toasts', w: 1200, h: 1065, alt: 'The Shutap Toasts form: the occasion, who it is for, and the first story' },
+    shot: { src: '/home/toasts.jpg', url: 'shutap.com/toasts', w: 1475, h: 1203, alt: 'Shutap Toasts: a demo best man toast as the speech, cue cards, the phone prompter and the keepsake, above the box for your first story' },
     occasions: [
       { label: 'best man', href: '/toasts/best-man' },
       { label: 'maid of honor', href: '/toasts/maid-of-honor' },
