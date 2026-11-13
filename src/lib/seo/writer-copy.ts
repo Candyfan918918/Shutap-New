@@ -7,7 +7,7 @@ export type WriterCopy = { heading: string; sub: string; placeholder: string }
 
 const DEFAULT: WriterCopy = {
   heading: 'Try it on what you want to say.',
-  sub: 'Tell it your way; Shutap cuts it into a bit, every word yours. Tap funnier where you’re stuck. Get the video, stand-up, sketch and skit. Free.',
+  sub: 'Tell it your way; Shutap cuts it into a bit, your words word for word, and AI drafts only the lines you leave empty. Tap funnier where you’re stuck. Get the video, stand-up, sketch and skit. Free.',
   placeholder: 'a post, a speech, a toast, a slide: what do you want to say funnier?',
 }
 

@@ -1,7 +1,6 @@
-// Nov 8 2026 (Candy): on Bits the person writes all five lines. When every
-// line is theirs, the bit is those lines, word for word: no writer, no
-// judge, no candidates. AI writes on a bit only when "funnier" is tapped on
-// one line (touchLine). Pure, so it can be tested without the server.
+// Nov 8 2026 (Candy): when every line is the person's, the bit is those
+// lines, word for word: no writer, no judge, no candidates. Nov 13: every
+// line is optional; the AI copilot drafts the empty ones (anyLineGiven). Pure, so it can be tested without the server.
 import type { BitDraft } from './shared'
 import type { WrittenBit } from './pipeline.server'
 

@@ -10,7 +10,7 @@ const guide: Guide = {
   description:
     "ChatGPT is a flexible brainstorming partner. Shutap turns your own story into a stand-up bit in your words, with funnier on the line you're stuck on. What each does well and when to use which.",
   capsule:
-    "For stand-up bits, ChatGPT is the better open-ended brainstorming partner and Shutap is the better place to write the bit yourself: ChatGPT will riff on any premise you give it, while Shutap cuts your story into the shape of a bit (hook, setup, two tags, button) in your own words and offers other ways to say a line only when you tap funnier.",
+    "For stand-up bits, ChatGPT is the better open-ended brainstorming partner and Shutap is the better place to write the bit yourself: ChatGPT will riff on any premise you give it, while Shutap cuts your story into the shape of a bit (hook, setup, two tags, button) in your own words, drafts only the lines your story didn't cover, and offers other ways to say a line when you tap funnier.",
   blurb: "A general chatbot versus a tool where you write the bit and get help only where you ask.",
   preset: { audience: "live", voice: "deadpan", length: "2m", heat: 3 },
   sections: [
@@ -77,7 +77,7 @@ const guide: Guide = {
     { label: "OpenAI, ChatGPT plans and pricing, fetched Oct 2026", url: "https://openai.com/chatgpt/pricing/" },
   ],
   related: ["shutap-vs-chatgpt-for-jokes", "stand-up-comedy", "open-mic-night"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   published: "2026-10-26",
 };
 

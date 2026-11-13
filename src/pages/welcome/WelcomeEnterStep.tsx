@@ -100,7 +100,7 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
       <div style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 16, padding: '18px 20px', textAlign: 'left', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
         <div style={{ flex: 'none', marginTop: 3 }}><EyeMark size={22} /></div>
         <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.55, color: TEXT }}>
-          write your bit. funnier only where you ask.
+          write your bit. ai fills only the gaps.
         </div>
       </div>
       {resuming ? (

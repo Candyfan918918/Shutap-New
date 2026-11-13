@@ -5,7 +5,7 @@ const COLS: { title: string; lines: string[] }[] = [
   {
     title: 'You type',
     lines: [
-      'Your bit, from your story: every word is yours.',
+      'Your story, told your way: your lines stay word for word.',
       'A listing link, or your stories about the person for a toast.',
       'Whatever you write stays yours, word for word.',
     ],
@@ -14,7 +14,7 @@ const COLS: { title: string; lines: string[] }[] = [
     title: 'Shutap does',
     lines: [
       'Removes names and places before anything is saved.',
-      'On a bit, writes only when you tap “funnier” on a line, from its in-house techniques. Drafts realtor kits and toasts from what you give it.',
+      'On a bit, drafts only the lines your story didn’t cover, marked as AI drafts, and offers other ways to say a line when you tap “funnier”. Drafts realtor kits and toasts from what you give it.',
       'Lays it out as a video, stand-up, a sketch, a skit, a shoot kit or a toast.',
     ],
   },

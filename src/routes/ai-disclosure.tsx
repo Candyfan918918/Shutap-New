@@ -7,7 +7,7 @@ import { SITE_URL } from '@/lib/site'
 const URL = `${SITE_URL}/ai-disclosure`
 const TITLE = "AI Disclosure — How Shutap Uses AI | Shutap Humor Amplifier Lab"
 const DESCRIPTION =
-  "Shutap uses AI (Google Gemini and OpenAI models, through the Lovable AI Gateway): on Bits only when you tap funnier on a line; for realtor kits and toasts, to draft from your material. Nobody at Shutap reads what you make, and none of it is used to train AI. AI can be wrong; you decide what to use."
+  "Shutap uses AI (Google Gemini and OpenAI models, through the Lovable AI Gateway): on Bits to cut your story into lines, draft only the lines your story didn't cover, and offer other ways to say a line when you tap funnier; for realtor kits and toasts, to draft from your material. Nobody at Shutap reads what you make, and none of it is used to train AI. AI can be wrong; you decide what to use."
 
 export const Route = createFileRoute('/ai-disclosure')({
   head: () => ({
@@ -89,9 +89,10 @@ function AiDisclosurePage() {
             color: '#e4dfe2',
           }}
         >
-          you bring the material: your bit, your listing, your stories about the person. on a bit,
-          ai only suggests when you tap funnier; realtor kits and toasts are drafted with ai from
-          what you give, and you edit them. nobody at
+          you bring the material: your story, your listing, your stories about the person. on a
+          bit, your lines stay word for word and ai drafts only the lines you leave empty, marked
+          as ai drafts; realtor kits and toasts are drafted with ai from what you give, and you
+          edit them. nobody at
           shutap reads what you make, and none of it is ever used to train anything. ai can get
           things wrong, miss the joke or say something offensive. it&rsquo;s not therapy or advice.
           you decide what to use.
@@ -100,8 +101,8 @@ function AiDisclosurePage() {
       <WhoDoesWhat />
       <h3>What you bring stays yours</h3>
       <p>
-        On Bits the lines are yours: you write them, and they stay unread by staff, out of the
-        dataset and out of training. For realtor kits and toasts you give Shutap the listing or
+        On Bits your lines stay yours, word for word: unread by staff, out of the dataset and out
+        of training. A line the AI drafts for you is yours to change, keep or delete. For realtor kits and toasts you give Shutap the listing or
         your memories of the person, and it drafts from that, using the Lab&rsquo;s in-house
         dataset of jokes written and rated by people at the Lab and the techniques on its
         /funniest and /guides pages. Whatever you type stays yours.
@@ -113,9 +114,12 @@ function AiDisclosurePage() {
       </p>
       <p>
         <b>Bits.</b> You tell your story; a model cuts it into a hook, setup, two tags and a
-        button, and code keeps only lines found word for word in what you typed (it adds no
-        words). The bit you make is those lines, word for word. AI writes on a bit only when you ask: tap &ldquo;funnier&rdquo;
-        on a line and a model offers three other ways to say it, built from your lines and one
+        button, and code keeps only lines found word for word in what you typed. Every line is
+        optional. Any line your story didn&rsquo;t cover is drafted by AI (the copilot), right
+        after the cut, around your lines, and marked &ldquo;AI draft&rdquo; until you change it;
+        your own lines are never rewritten. Write all five lines yourself and nothing is drafted:
+        the bit is your lines, word for word. Tap &ldquo;funnier&rdquo; on a line and a model
+        offers three other ways to say it, built from your lines and one
         technique from the Shutap Humor Amplifier Lab bank (the operation, never anyone&rsquo;s
         material); nothing changes until you pick. Before anything is saved or sent to a model,
         identifying details are removed and the crisis check runs. Rewrites on Basic and Pro

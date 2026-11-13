@@ -19,7 +19,7 @@ const SECTIONS = [
   },
   {
     heading: "Bits: your bit, funnier",
-    body: "Tell it your way, get the bit. Funnier only where you ask. For creators and comedians: you tell the story in your own words, Shutap cuts it into a hook, setup, two tags and a button without adding a word, and keeps them word for word. A line your story didn’t cover, the AI copilot drafts. Stuck on a line? Tap “funnier” for three other ways to say it, yours first. The finished bit becomes a 5-second video to post, and stand-up on the prompter, with delivery cues to rehearse with (beats, pauses for the laugh, voices), a sketch page and a skit to perform. shutap.com/bits",
+    body: "Tell it your way, get the bit. AI fills only the gaps. For creators and comedians: you tell the story in your own words, and Shutap cuts it into a hook, setup, two tags and a button and keeps your words word for word. A line your story didn’t cover, the AI copilot drafts, marked “AI draft” so you can change it or keep it. Every line is optional. Stuck on a line? Tap “funnier” for three other ways to say it, yours first. The finished bit becomes a 5-second video to post, and stand-up on the prompter, with delivery cues to rehearse with (beats, pauses for the laugh, voices), a sketch page and a skit to perform. shutap.com/bits",
   },
   {
     heading: "Realtors: your listing, funnier",

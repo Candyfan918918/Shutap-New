@@ -252,7 +252,7 @@ export interface GuideTechnique {
   tryIt: string;
 }
 
-const CTA = { label: "Write your bit. Funnier only where you ask.", href: "/bits" };
+const CTA = { label: "Write your bit. AI fills only the gaps.", href: "/bits" };
 const BIZ_CTA = { label: "Request pricing and solutions", href: "/business" };
 const PUBLISHED = "2026-10-17";
 
@@ -267,7 +267,7 @@ const BASE_GUIDES: Guide[] = [
     description:
       "Write your storytime as a hook, setup, two tags and a button, in your own words. Tap funnier on any line you're stuck on, then film it off the teleprompter. Free with an account.",
     capsule:
-      "Shutap helps you shape your storytime into a script you wrote. Tell it your way and Shutap cuts it into a hook, a setup, two tags and a button, every word yours. Tap funnier on any line for three other ways to say it, yours first. Then read it off the teleprompter or post the 5-second video. A free account makes one a day.",
+      "Shutap helps you shape your storytime into a script you wrote. Tell it your way and Shutap cuts it into a hook, a setup, two tags and a button, your words kept word for word; any line your story didn't cover, the AI copilot drafts. Tap funnier on any line for three other ways to say it, yours first. Then read it off the teleprompter or post the 5-second video. A free account makes one a day.",
     blurb: "Write your story as a hook, setup, tags and a button; tap funnier where you're stuck.",
     sections: [
       {
@@ -284,7 +284,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Keep it yours",
-        body: "Every line is yours, kept word for word; AI writes only when you tap funnier on a line. You can save, share and post what you make.",
+        body: "Your lines are kept word for word. AI drafts only the lines you leave empty, marked as AI drafts, and offers other ways to say a line when you tap funnier. You can save, share and post what you make.",
       },
       {
         heading: "The one rule",
@@ -440,9 +440,9 @@ const BASE_GUIDES: Guide[] = [
     title: "How Shutap Is Built: The Humor Amplifier You Steer | Shutap",
     h1: "How Shutap is built",
     description:
-      "How Shutap Bits works: you tell the story, Shutap cuts it into a bit in your words, and the engine underneath runs only when you ask, for funnier on one line or a rewrite on Basic and Pro.",
+      "How Shutap Bits works: you tell the story, Shutap cuts it into a bit in your words, and the engine underneath drafts only the lines your story didn't cover, or runs when you ask: funnier on one line, or a rewrite on Basic and Pro.",
     capsule:
-      "On Shutap Bits every word of the bit is yours: your story, cut into its parts and kept word for word. The engine described here runs only when you ask for it: funnier on one line offers three other ways to say it, built from your lines and a comedy technique, and on Basic and Pro you can ask for a hotter, tighter or storytelling version.",
+      "On Shutap Bits your story is cut into its parts and kept word for word. Any part your story didn't cover is drafted by the AI copilot, marked so you can change it or keep it; write all five lines and nothing is drafted. Otherwise the engine described here runs only when you ask for it: funnier on one line offers three other ways to say it, built from your lines and a comedy technique, and on Basic and Pro you can ask for a hotter, tighter or storytelling version.",
     blurb: "The pipeline in detail: observations, whole bits, rules, a judge, and the steering controls.",
     sections: [
       {
@@ -519,7 +519,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does",
-        body: "You tell the story; it comes back as a hook, a setup, two tags and a button, every word yours. Tap funnier on a line and it offers three other ways to say it, built from your lines and a comedy technique, yours first. The unit of output is your bit, laid out as a 5-second video, stand-up, a sketch page or a skit. A free account makes one a day.",
+        body: "You tell the story; it comes back as a hook, a setup, two tags and a button, your words kept word for word, with any line your story didn't cover drafted by the AI copilot. Tap funnier on a line and it offers three other ways to say it, built from your lines and a comedy technique, yours first. The unit of output is your bit, laid out as a 5-second video, stand-up, a sketch page or a skit. A free account makes one a day.",
       },
       {
         heading: "Who is the writer",
@@ -661,7 +661,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does",
-        body: "You tell the story and get it back as a bit, every word yours. Tap funnier on a line and Shutap offers three other ways to say it, built from your lines and one named comedy technique, checked by rules in code; yours stays the first choice. Nothing changes until you pick.",
+        body: "You tell the story and get it back as a bit, your words kept word for word; any line it didn't cover, the AI copilot drafts. Tap funnier on a line and Shutap offers three other ways to say it, built from your lines and one named comedy technique, checked by rules in code; yours stays the first choice. Nothing changes until you pick.",
       },
       {
         heading: "Input and output",
@@ -852,7 +852,7 @@ const BASE_GUIDES: Guide[] = [
     description:
       "Claude is a general AI assistant that can draft and edit jokes. Shutap Bits turns your own story into a bit in your words, with funnier on demand, daily ideas and technique guides around it.",
     capsule:
-      "Claude is a general AI assistant that writes and edits well, jokes included, when you prompt it. Shutap Bits is built for one job: turning your own story into a bit in your words, and offering other ways to say a line only when you tap funnier.",
+      "Claude is a general AI assistant that writes and edits well, jokes included, when you prompt it. Shutap Bits is built for one job: turning your own story into a bit in your words, drafting only the lines your story didn't cover, and offering other ways to say a line when you tap funnier.",
     blurb: "A general assistant versus a tool built for bits.",
     sections: [
       {

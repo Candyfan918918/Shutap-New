@@ -88,7 +88,7 @@ const guide: Guide = {
     },
   ],
   related: ["deadpan-humor", "types-of-humor", "sense-of-humor"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   techniques: [
     {
       name: "The understatement",

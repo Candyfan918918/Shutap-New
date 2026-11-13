@@ -4,7 +4,7 @@ import { SITE_URL } from '@/lib/site'
 import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
 
 const PATH = '/humor-amplifier'
-const TITLE = 'Shutap Bits — write your bit, funnier only where you ask | Shutap Humor Amplifier Lab'
+const TITLE = 'Shutap Bits — write your bit, AI fills only the gaps | Shutap Humor Amplifier Lab'
 const DESCRIPTION = 'Shutap Bits, for creators and comedians: tell your story your way and get it back as a bit (hook, setup, two tags, button) in your own words, tap funnier on any line you’re stuck on, and get a 5-second video, stand-up, a sketch and a skit.'
 
 export const Route = createFileRoute('/humor-amplifier')({
@@ -38,8 +38,8 @@ function HumorAmplifierPage() {
       tryIt="humor-amplifier"
       breadcrumbs={[{ name: 'The humor amplifier', path: PATH }]}
       h1="The humor amplifier: your bit, funnier where you ask"
-      capsule="Shutap amplifies your humor without replacing it. On Shutap Bits you tell it your way and get it back as a bit, every word yours: a hook, a setup, two tags and a button. When a line isn't landing, tap funnier for three other ways to say it, yours first. The finished bit comes back as a 5-second video to post, and stand-up, a sketch and a skit to perform."
-      cta={{ label: 'Write your bit. Funnier only where you ask.', href: '/bits' }}
+      capsule="Shutap amplifies your humor without replacing it. On Shutap Bits you tell it your way and get it back as a bit: a hook, a setup, two tags and a button, your words kept word for word, and any line your story didn't cover drafted by the AI copilot. When a line isn't landing, tap funnier for three other ways to say it, yours first. The finished bit comes back as a 5-second video to post, and stand-up, a sketch and a skit to perform."
+      cta={{ label: 'Write your bit. AI fills only the gaps.', href: '/bits' }}
       sections={[
         {
           heading: 'Your material, not a random one-liner',

@@ -27,7 +27,7 @@ import { cuesForLines } from '@/lib/bits/cues'
 import '@/components/feed/feed.css'
 import './bits.css'
 
-const BANNER = ['Tell it your way', 'Every word stays yours', 'Funnier on any line', 'Lock what’s done', '5-second video', 'Stand-up teleprompter', 'Delivery cues', 'Rehearse the timing', 'Sketch page', 'Skit shot list', 'No new jokes added']
+const BANNER = ['Tell it your way', 'Your lines, word for word', 'AI fills only the gaps', 'Funnier on any line', 'Lock what’s done', '5-second video', 'Stand-up teleprompter', 'Delivery cues', 'Rehearse the timing', 'Sketch page', 'Skit shot list', 'No new jokes added']
 
 const LINE_INFO: { s: 'hook' | 'setup' | 'tag0' | 'tag1' | 'button'; k: string; d: string }[] = [
   { s: 'hook', k: 'Hook', d: 'The first 2 seconds. What happened, the way you’d say it first: a reason to listen.' },
@@ -38,7 +38,7 @@ const LINE_INFO: { s: 'hook' | 'setup' | 'tag0' | 'tag1' | 'button'; k: string; 
 ]
 
 export const BITS_FAQ: { q: string; a: string }[] = [
-  { q: 'Does Shutap write my bit?', a: 'No. You tell it your way in the box. Shutap cuts what you typed into a hook, setup, two tags and a button, using only your words, and anything your story didn’t cover is yours to write. Funnier offers other ways to say a line only when you tap it, and nothing changes until you pick. The video, stand-up, sketch and skit lay out your bit; they add no new jokes.' },
+  { q: 'Does Shutap write my bit?', a: 'Only the lines you leave empty. You tell it your way in the box; Shutap cuts what you typed into a hook, setup, two tags and a button, and your lines stay word for word. Any line your story didn’t cover, the AI copilot drafts, marked “AI draft” so you can change it or keep it. Every line is optional, and one line of yours is enough to make the bit; write all five and nothing is drafted. Funnier offers other ways to say a line only when you tap it, and nothing changes until you pick. The video, stand-up, sketch and skit lay out your bit; they add no new jokes.' },
   { q: 'Can I rehearse with it?', a: 'Yes. Stand-up is a teleprompter built for practice: your lines scroll at talking pace with delivery cues from your sketch page, like (beat), (hushed) or (his voice), and it holds for a moment at each pause. Tap cues to hide them when you know it cold.' },
   { q: 'Do I have to sign up first?', a: 'No. Tell your story and make your bit without an account, and read it. Signing in (free, with Google, Apple or email) opens the video, the teleprompter, the sketch and the skit, keeps the bit in My creations, and unlocks funnier on every line.' },
   { q: 'Will my material end up somewhere else?', a: 'No. Nobody at Shutap reads your bits, they are never used to train AI, and they are never published unless you post them. Names and details are removed before anything is saved.' },
@@ -193,7 +193,7 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
                 <h1 className="bl-h1">Tell it your way. <em>Get a video, a teleprompter with cues, a sketch and a skit.</em></h1>
               )}
             </div>
-            <p className="bl-lead">{demo ? 'This story was typed in-house, the way you would. Everything below it is what Shutap made from it. No new jokes added.' : 'Tell your story in the box. Shutap cuts it into a bit, every word yours, and lays it out as a 5-second video, stand-up with delivery cues, a sketch and a skit.'}</p>
+            <p className="bl-lead">{demo ? 'This story was typed in-house, the way you would. Everything below it is what Shutap made from it. No new jokes added.' : 'Tell your story in the box. Shutap cuts it into a bit, your words word for word, the AI copilot drafts any line your story didn’t cover, and Shutap lays it out as a 5-second video, stand-up with delivery cues, a sketch and a skit.'}</p>
           </div>
           {demo && <Outputs d={demo} lead={lead} />}
           {demo && (
@@ -209,7 +209,7 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
         {phase === 'write' && (
           <div className="bo-write-h">
             <h2>Your turn — write yours.</h2>
-            <span>free · no sign-in to start · every word stays yours</span>
+            <span>free · no sign-in to start · your lines stay word for word</span>
           </div>
         )}
         <div className="bl-box" id="bits-top">
@@ -218,7 +218,7 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
         {phase === 'write' && (
           <ul className="bl-trust">
             <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f6a45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" /></svg>Every word is yours</li>
-            <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e1c4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v4l3 2" /></svg>AI writes only when you tap funnier</li>
+            <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e1c4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v4l3 2" /></svg>AI drafts only the lines you leave empty</li>
             <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e1c4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z" /><path d="M9 12l2 2 4-4" /></svg>Your bits never train AI</li>
           </ul>
         )}

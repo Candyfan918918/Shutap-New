@@ -96,7 +96,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "turn-a-bad-experience-into-comedy", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   techniques: [
     {
       name: "Plan versus reality",

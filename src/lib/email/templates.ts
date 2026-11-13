@@ -84,7 +84,7 @@ const checkin = (id: TemplateId): TemplateEntry => ({
   identity: 'hello',
   emailClass: 'engagement',
   subject: () => 'got a new one?',
-  preview: () => 'write your bit. funnier only where you ask.',
+  preview: () => 'write your bit. ai fills only the gaps.',
   cta: 'open shutap',
   htmlDesign: spillFollowupHtml,
   beatLine: CHECKIN_LINE,
@@ -97,12 +97,12 @@ export const TEMPLATES: Record<TemplateId, TemplateEntry> = {
     identity: 'hello',
     emailClass: 'transactional',
     subject: () => "you're in. SHUTAP. Say it funnier.",
-    preview: () => 'write your bit. funnier only where you ask.',
+    preview: () => 'write your bit. ai fills only the gaps.',
     cta: 'write your first jokes',
     htmlDesign: welcomeHtml,
     buildBodyText: (v) => `${g(v)}
 
-you're in. tell it your way and shutap cuts it into a bit — hook, setup, two tags and a button, every word yours — and tap funnier on any line you're stuck on. run it as stand-up, a sketch or a skit.
+you're in. tell it your way and shutap cuts it into a bit — hook, setup, two tags and a button, your words word for word, and the ai copilot drafts any line your story didn't cover — and tap funnier on any line you're stuck on. run it as stand-up, a sketch or a skit.
 
 your profile shows the name and picture from your sign-in. you can change both in your profile.
 
@@ -136,7 +136,7 @@ write some jokes: ${v.deep_link ?? v.cta_url ?? 'https://shutap.com'}`,
     identity: 'hello',
     emailClass: 'engagement',
     subject: () => 'got a new one?',
-    preview: () => 'write your bit. funnier only where you ask.',
+    preview: () => 'write your bit. ai fills only the gaps.',
     cta: 'open shutap',
     htmlDesign: scanFollowupHtml,
     buildBodyText: (v) => `${g(v)}
