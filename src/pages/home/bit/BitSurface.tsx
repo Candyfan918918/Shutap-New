@@ -1072,7 +1072,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               // the way /bits does, "Your turn — write yours.", same width.
               <div className="bt-turn" id="bit-write">
                 <h2>Your turn — write yours.</h2>
-                <span>free · no sign-in to start · every word stays yours</span>
+                <span>free · no sign-in to start · your lines stay word for word</span>
               </div>
             ) : (
               <div className="bt-hero">
@@ -1089,7 +1089,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               <div className="bt-box-head">
                 <label htmlFor="bit-story" className="bt-box-title">
                   <span className="bt-rec" aria-hidden="true" />
-                  {lined ? (boxStep === 'story' ? 'tell it your way' : 'your bit · cut from what you typed, no words added') : 'what do you want to say funnier?'}
+                  {lined ? (boxStep === 'story' ? 'tell it your way' : 'your bit · your words, word for word · AI drafts only what’s empty') : 'what do you want to say funnier?'}
                 </label>
                 {lined && boxStep === 'lines' ? (
                   <button type="button" className="bt-btn ghost sm" onClick={backToStory}>← back to my story</button>
@@ -1219,7 +1219,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             )}
             <p className="bt-note" style={{ textAlign: 'center' }}>
               {tier === 'guest' ? (lined ? 'free · no sign-in to start · ' : `free: ${FREE_LINE} · sign in with Google or Apple · `) : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
-              names removed before anything is saved · nobody at shutap reads it{lined ? ' · every word stays yours' : ' · ⌘↵ to write it'}
+              names removed before anything is saved · nobody at shutap reads it{lined ? ' · your lines stay word for word' : ' · ⌘↵ to write it'}
             </p>
           </>
         )}

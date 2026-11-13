@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "From your story to the five lines in Shutap",
-      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, is built on this structure. In Shutap Bits you tell the story your way and it comes back with one line for each part: hook, setup, two tags and button, every word yours. When one line won't land, tap funnier on that line and you get three other ways to say it, with yours listed first; lock the lines that are done. You pick, cut and rewrite, and the bit stays yours. Then post it as a five-second video, or run it as stand-up on the teleprompter, a sketch page or a skit.",
+      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, is built on this structure. In Shutap Bits you tell the story your way and it comes back with one line for each part: hook, setup, two tags and button, your words word for word; any part your story didn't cover, the AI copilot drafts. When one line won't land, tap funnier on that line and you get three other ways to say it, with yours listed first; lock the lines that are done. You pick, cut and rewrite, and the bit stays yours. Then post it as a five-second video, or run it as stand-up on the teleprompter, a sketch page or a skit.",
     },
   ],
   techniques: [
@@ -121,7 +121,7 @@ const guide: Guide = {
     },
   ],
   related: ["how-to-make-a-joke-funnier", "how-to-write-comedy-tags", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   published: "2026-11-12",
 };
 

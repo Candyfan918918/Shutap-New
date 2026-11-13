@@ -126,7 +126,7 @@ export function ContentPage({
         {tryIt && realtor && <RealtorEmbed page={tryIt} />}
         {tryIt && !realtor && (
           <div style={{ margin: hero ? "0 0 32px" : "0 0 44px" }}>
-            <BitSurface embed={{ page: tryIt, preset, bare: !!hero, ...(writer ?? { heading: "Try it on what you want to say.", sub: "Tell it your way. Shutap cuts it into a bit, every word yours; tap funnier where you’re stuck. Get the video, stand-up, sketch and skit. Free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
+            <BitSurface embed={{ page: tryIt, preset, bare: !!hero, ...(writer ?? { heading: "Try it on what you want to say.", sub: "Tell it your way. Shutap cuts it into a bit, your words word for word, AI drafting only the lines you leave empty; tap funnier where you’re stuck. Get the video, stand-up, sketch and skit. Free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
           </div>
         )}
 

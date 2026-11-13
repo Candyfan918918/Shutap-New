@@ -130,7 +130,7 @@ const guide: Guide = {
     },
   ],
   related: ["what-is-a-joke", "funny-email-sign-offs", "callback-humor"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   published: "2026-11-03",
 };
 

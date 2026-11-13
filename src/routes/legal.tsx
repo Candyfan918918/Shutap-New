@@ -14,7 +14,7 @@ const ITEMS: Item[] = [
   {
     href: "/how-it-works",
     label: "How it works",
-    sub: "write your bit, funnier only where you ask: stand-up, sketch, skit. what\u2019s free and what Basic and Pro add.",
+    sub: "write your bit, ai fills only the gaps: stand-up, sketch, skit. what\u2019s free and what Basic and Pro add.",
   },
   {
     href: "/faq",

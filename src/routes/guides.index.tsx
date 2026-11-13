@@ -94,7 +94,7 @@ export const Route = createFileRoute("/guides/")({
           ],
         },
       ]}
-      cta={{ label: "Write your bit. Funnier only where you ask.", href: "/" }}
+      cta={{ label: "Write your bit. AI fills only the gaps.", href: "/" }}
       others={[
         { href: "/funniest", label: "The funniest people and their techniques" },
         { href: "/how-it-works", label: "How it works" },

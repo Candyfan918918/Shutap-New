@@ -10,7 +10,7 @@ import { getBitDemo } from '@/lib/bits/demo.functions'
 // and indexed.
 const PATH = '/bits'
 const TITLE = 'Shutap Bits — tell it your way, get a video, a teleprompter with cues, a sketch and a skit'
-const DESCRIPTION = 'For creators and comedians: tell your story your way and Shutap cuts it into a bit (hook, setup, two tags, button), every word yours. Tap funnier on any line for three other ways to say it. Post it as a 5-second video, or rehearse and perform it as stand-up with delivery cues, a sketch or a skit. Free, no sign-in to start.'
+const DESCRIPTION = 'For creators and comedians: tell your story your way and Shutap cuts it into a bit (hook, setup, two tags, button), your words word for word; the AI copilot drafts any line your story didn’t cover. Tap funnier on any line for three other ways to say it. Post it as a 5-second video, or rehearse and perform it as stand-up with delivery cues, a sketch or a skit. Free, no sign-in to start.'
 
 const faqSchema = {
   '@context': 'https://schema.org',

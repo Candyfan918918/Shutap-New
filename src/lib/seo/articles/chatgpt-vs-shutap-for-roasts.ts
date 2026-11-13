@@ -75,7 +75,7 @@ const guide: Guide = {
     { label: "Benzinga (Oct 2023), \"This ChatGPT jailbreak lets you get AI's help to roast people\"", url: "https://www.benzinga.com/news/23/10/35244404/this-chatgpt-jailbreak-lets-you-get-ais-help-to-roast-people" },
   ],
   related: ["ai-roast-tools-compared", "roast-lines", "roast-battle"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   published: "2026-10-26",
 };
 

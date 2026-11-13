@@ -92,7 +92,7 @@ const guide: Guide = {
     },
   ],
   related: ["roast-lines", "ai-roast-tools-compared", "open-mic-night"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   published: "2026-10-25",
 };
 

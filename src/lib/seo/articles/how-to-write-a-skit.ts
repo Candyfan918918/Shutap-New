@@ -92,7 +92,7 @@ const guide: Guide = {
     },
   ],
   related: ["pov-skit-writer", "comedy-screenplay-format", "rule-of-three"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   published: "2026-10-29",
 };
 

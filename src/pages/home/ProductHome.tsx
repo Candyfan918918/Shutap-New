@@ -87,9 +87,9 @@ type ProductLine = {
 const PRODUCTS: ProductLine[] = [
   {
     key: 'bits', icon: 'bits', name: 'Bits', full: 'Shutap Bits', aud: 'for creators and comedians', tab: 'creators & comedians',
-    one: 'Tell it your way. Get the bit, funnier only where you ask.',
+    one: 'Tell it your way. Get the bit; AI fills only the gaps.',
     h2: ['Your bit, ', 'funnier.'],
-    does: 'Tell your story your way; Shutap cuts it into a hook, setup, two tags and a button, every word yours. Tap “funnier” on any line for three other ways to say it, yours first. Then post it as a 5-second video, or perform it as stand-up, a sketch or a skit.',
+    does: 'Tell your story your way; Shutap cuts it into a hook, setup, two tags and a button, your words word for word; any line your story didn’t cover, the AI copilot drafts. Tap “funnier” on any line for three other ways to say it, yours first. Then post it as a 5-second video, or perform it as stand-up, a sketch or a skit.',
     steps: ['Tell it your way', 'Tap “funnier” where you’re stuck', 'Post it, or perform it'],
     gets: [['lines', 'Your bit'], ['video', '5-second video'], ['mic', 'Stand-up prompter'], ['page', 'Sketch page'], ['scene', 'Skit']],
     price: 'Free: 1 bit a day, video watermarked · Basic $19.99/mo: 3 a day · Pro $49.99/mo: unlimited',

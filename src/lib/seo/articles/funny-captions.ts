@@ -88,7 +88,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-email-sign-offs", "types-of-humor", "deadpan-humor"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   techniques: [
     {
       name: "Tell them what the picture can't",

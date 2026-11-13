@@ -80,7 +80,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "how-to-write-comedy-tags", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   techniques: [
     {
       name: "Exaggerate the habit",

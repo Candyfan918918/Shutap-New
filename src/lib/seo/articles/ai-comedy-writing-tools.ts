@@ -74,7 +74,7 @@ const guide: Guide = {
     { label: "Texta, free AI comedy tool page", url: "https://www.texta.ai/ai-tools/free-ai-comedy-generator" },
   ],
   related: ["ai-joke-tools-compared", "how-to-turn-a-story-into-a-bit", "shutap-vs-chatgpt-for-jokes"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   published: "2026-10-20",
 };
 

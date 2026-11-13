@@ -141,7 +141,7 @@ const guide: Guide = {
     },
   ],
   related: ["types-of-humor", "dark-humor", "how-to-write-a-skit"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   preset: { voice: "storyteller", heat: 3 },
   published: "2026-11-05",
 };
