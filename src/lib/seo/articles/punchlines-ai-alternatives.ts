@@ -6,28 +6,28 @@ const guide: Guide = {
   topic: "shutap-vs-other-tools",
   keyword: "punchlines ai alternatives",
   title: "Punchlines.ai Alternatives for Comedy Writers | Shutap",
-  h1: "Punchlines.ai alternatives, compared by the job you need done",
+  h1: "Punchlines.ai and its alternatives, compared by the job you need done",
   description:
-    "Punchlines.ai alternatives for comedians and creators: Witscript, Comedeez AI, Texta, Tars, ChatGPT, Claude and Shutap, compared by input, output and price.",
+    "What Punchlines.ai does, and the alternatives: Witscript, Comedeez, Texta, Tars, ChatGPT, Claude and Shutap, compared by what you put in, what you get and price.",
   capsule:
-    "The best Punchlines.ai alternatives depend on what you start with. Witscript is the closest match for topical jokes from a setup line. Comedeez AI works on jokes you've already written. Texta and Tars take a premise through templates or a guided chat. ChatGPT and Claude are flexible if you bring the structure. Shutap starts from a story that happened to you and returns a draft of the whole bit to rewrite.",
+    "Punchlines.ai takes a joke setup and returns late-night style punchlines, and the best alternative depends on what you start with. Witscript is the closest swap for topical jokes from a setup line, though it's US-only. Comedeez works on jokes you've already written. Texta and Tars take a premise through templates or a guided chat. ChatGPT and Claude are flexible if you bring the structure. Shutap is for a bit built from your own story.",
   blurb: "Seven Punchlines.ai alternatives sorted by what you start with and what you get back.",
   sections: [
     {
       heading: "What Punchlines.ai is good at",
-      body: "Punchlines.ai does one thing. You type a joke setup and it returns punchlines in late-night monologue style. Its own page says it's built on GPT models fine-tuned on thousands of monologue jokes. That makes it quick for topical zingers on a headline and less useful for anything longer than a line. People usually go looking for an alternative for one of three reasons: they want more than one-liners, they're working from their own material rather than the news, or they need the result in a shape they can film or take on stage.",
+      body: "Punchlines.ai does one thing. You type a joke setup and it returns punchlines in late-night monologue style. Its own page says it's built on GPT language models fine-tuned on thousands of late-night monologue jokes, and the page lists no other features and no prices. That makes it quick for topical zingers on a headline and less useful for anything longer than a line. People usually go looking for an alternative for one of three reasons: they want more than one-liners, they're working from their own material rather than the news, or they need the result in a shape they can film or take on stage.",
     },
     {
       heading: "Witscript: the closest like-for-like swap",
-      body: "If you liked the setup-in, jokes-out model, Witscript is the nearest neighbor. It was made by former late-night head writer Joe Toplyn. You give it a setup sentence, a headline, a line from a speech or an observation, and it writes several jokes and picks a favorite. Extra tools punch up a joke, score how funny it is, or pull fresh setups from the news. Per its site it costs $5.99 a month, runs in the browser, and is only available to users in the United States. That last part rules it out for a lot of people.",
+      body: "If you liked the setup-in, jokes-out model, Witscript is the nearest neighbor. It was made by former late-night head writer Joe Toplyn. You give it a setup sentence, a headline, a line from a speech or an observation, and it writes several jokes and picks a favorite. Extra tools punch up a joke, score how funny it is, or pull fresh setups from the news, and it also takes an image description or a remark to reply to. Per its site it costs $5.99 a month with no free tier listed, says you own your inputs and its outputs, and is only available to users in the United States. That last part rules it out for a lot of people.",
     },
     {
-      heading: "Comedeez AI: for comics who already write",
-      body: "Comedeez AI starts from your jokes, not a blank prompt. You paste or import material into a joke book, then use its writing tools to rewrite, find punchlines, expand a premise or break a joke into setup, turn and punch. Sliders set weirdness, edginess, wordiness and formality, and you can pick which AI model runs underneath. Its page lists a free plan with three AI uses a day and a $10 monthly Premium plan. It's the best fit here for a working comic punching up a notebook they already have.",
+      heading: "Comedeez: for comics who already write",
+      body: "Comedeez starts from your jokes, not a blank prompt. You paste or import material into a Joke Book, then pick from more than 24 writing tools to rewrite, find punchlines, analyze a joke or write roast lines. Sliders set how weird, edgy, wordy and formal it gets, and you choose which of four AI models runs underneath. Its page lists a free plan with three AI uses a day shared across tools and a $10 monthly Premium plan with unlimited uses. It was built by a comedian, and it's the best fit here for a working comic punching up a notebook they already have.",
     },
     {
       heading: "Texta and Tars: templates and guided chats",
-      body: "Texta's free comedy tool page has you pick a template (one-liners, observational, sketch, roast, satire and more), a tone such as deadpan or absurdist, a length, a sensitivity level and a target platform. It keeps setup and punchline separate and adds delivery notes. Tars offers a comedic script writing assistant that walks you through format, audience, tone and premise in a conversation, and says its output is a starting point to edit. Both suit someone with a topic and no structure yet. Neither page lists detailed pricing beyond a free start.",
+      body: "Texta's comedy tool page has you pick a template (one-liners, observational bits, sketch starters, roast lines, satire and more), a tone such as deadpan or absurdist, a length, a sensitivity level and a target platform. It keeps setup and punch separate, adds delivery notes, and says it avoids imitating a living performer's material. Tars offers a comedic script writing assistant that walks you through format, audience, tone and premise in a conversation, and says its output is a starting point to edit. Both suit someone with a topic and no structure yet. Texta says a free tier exists and Tars offers a free start; neither page gives figures.",
     },
     {
       heading: "ChatGPT, Claude and Gemini: flexible if you steer",
@@ -35,11 +35,11 @@ const guide: Guide = {
     },
     {
       heading: "Shutap: when the material is your own story",
-      body: "Shutap, the humor amplifier, starts where most of these don't: with something that actually happened to you. You write the story, pick a voice (deadpan, storyteller, roast or dry), a length from 15 seconds to 2 minutes and how wild, from 1 (true to your story) to 5 (goes wild), and you get a draft of the bit with a hook, setup, tags and a button. It runs as stand-up on a teleprompter, lays out as a skit, or formats as a one-page sketch. A free account gets one bit a day. The draft is something to push against: cut the tags that aren't you and rewrite the rest.",
+      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, starts where most of these don't: with something that actually happened to you. You tell the story and it's cut into a hook, a setup, two tags and a button, with your lines kept word for word. A line your story didn't cover gets an AI draft, marked as one, to change or keep. Tap funnier on any line for three other ways to say it, yours listed first, and lock what's done. The bit then runs as a five-second video, stand-up on a teleprompter, a sketch page or a skit. One bit a day is free.",
     },
     {
       heading: "Pick by what you start with",
-      body: "A headline or one setup line: Witscript, or stay on Punchlines.ai. A notebook of your own jokes that need work: Comedeez AI. A topic and a format but no structure: Texta or Tars. Anything at all, with patience for prompting: ChatGPT, Claude or Gemini. A real story from your week that you want to post or perform: Shutap. Plenty of writers use two, one for topical lines and one for personal material, and that's a sensible setup. Try the free tier first wherever one exists.",
+      body: "A headline or one setup line: Witscript, or stay on Punchlines.ai. A notebook of your own jokes that need work: Comedeez AI. A topic and a format but no structure: Texta or Tars. Anything at all, with patience for prompting: ChatGPT, Claude or Gemini. A real story from your week that you want to post or perform, with your own lines kept: Shutap. Plenty of writers use two, one for topical lines and one for personal material, and that's a sensible setup. Try the free tier first wherever one exists.",
     },
     {
       heading: "Keep the jokes yours",
@@ -49,11 +49,11 @@ const guide: Guide = {
   faq: [
     {
       q: "What is the best alternative to Punchlines.ai?",
-      a: "For topical one-liners from a setup line, Witscript is the closest swap, though it's US-only per its site. For working on your own jokes, Comedeez AI. For turning a personal story into a full bit you can film, Shutap.",
+      a: "For topical one-liners from a setup line, Witscript is the closest swap, though its site says it's US-only and $5.99 a month. For working on your own jokes, Comedeez. For turning a personal story into a full bit you can film or perform, Shutap.",
     },
     {
       q: "Is there a free alternative to Punchlines.ai?",
-      a: "Yes. ChatGPT, Claude and Gemini all list free plans, Comedeez AI has a free plan with three AI uses a day, and Texta's comedy page says it has a free tier. Shutap gives a free account one bit a day.",
+      a: "Yes. ChatGPT, Claude and Gemini all list free plans, Comedeez has a free plan with three AI uses a day, and Texta's comedy page says a free tier is available. Shutap's free plan makes one bit a day. Witscript lists no free tier.",
     },
     {
       q: "Can ChatGPT write jokes as well as Punchlines.ai?",
@@ -61,7 +61,7 @@ const guide: Guide = {
     },
     {
       q: "Which AI joke tool is best for stand-up comedians?",
-      a: "Comics with a notebook of material tend to get most from Comedeez AI's punch-up tools. Comics who build sets from their own stories can use Shutap for a first draft of the bit, then rewrite it and test it at a mic.",
+      a: "Comics with a notebook of material can get a lot from Comedeez's punch-up tools. Comics who build sets from their own stories can use Shutap to lay a story out as a bit, keep their lines, ask for funnier only where they're stuck, and test it at a mic.",
     },
     {
       q: "Is using AI to write jokes cheating?",
@@ -69,18 +69,19 @@ const guide: Guide = {
     },
   ],
   sources: [
-    { label: "Punchlines.ai, official site", url: "https://punchlines.ai" },
-    { label: "Witscript by Joe Toplyn, official site (pricing, US-only availability)", url: "https://witscript.joetoplyn.com" },
-    { label: "Comedeez AI, official site (features and plans)", url: "https://www.comedeez.ai" },
-    { label: "Texta, free AI comedy tool page", url: "https://www.texta.ai/ai-tools/free-ai-comedy-generator" },
-    { label: "Tars, comedic script writing assistant", url: "https://hellotars.com/ai-agents/comedian-script-writing-ai-agent" },
-    { label: "ChatGPT pricing", url: "https://chatgpt.com/pricing/" },
-    { label: "Claude pricing", url: "https://claude.com/pricing" },
-    { label: "Google Gemini subscriptions", url: "https://gemini.google/subscriptions/" },
+    { label: "Punchlines.ai, official site (read Nov 13, 2026)", url: "https://punchlines.ai" },
+    { label: "Witscript by Joe Toplyn, official site: pricing, US-only availability (read Nov 13, 2026)", url: "https://witscript.joetoplyn.com" },
+    { label: "Comedeez, official site: tools, models and plans (read Nov 13, 2026)", url: "https://www.comedeez.ai" },
+    { label: "Texta, AI comedy tool page (read Nov 13, 2026)", url: "https://www.texta.ai/ai-tools/free-ai-comedy-generator" },
+    { label: "Tars Technologies, Comedic Script Writing Assistant (read Nov 13, 2026)", url: "https://hellotars.com/ai-agents/comedian-script-writing-ai-agent" },
+    { label: "OpenAI, ChatGPT pricing (read Nov 13, 2026)", url: "https://chatgpt.com/pricing/" },
+    { label: "Anthropic, Claude pricing (read Nov 13, 2026)", url: "https://claude.com/pricing" },
+    { label: "Google, Gemini subscriptions (read Nov 13, 2026)", url: "https://gemini.google/subscriptions/" },
   ],
   related: ["shutap-vs-punchlines-ai", "ai-joke-tools-compared", "shutap-vs-witscript"],
   cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
   published: "2026-10-20",
+  updated: "2026-11-13",
 };
 
 export default guide;
