@@ -6,6 +6,8 @@
 // MUST go through this wrapper.
 import { formatFrom, IDENTITIES, type IdentityId } from './identities'
 import { ensureEmailPrefsToken, type EmailPrefs } from './prefs.server'
+import { nameVars } from './first-name'
+import { recipientFirstName } from './first-name.server'
 import { renderTemplate } from './render'
 import { TEMPLATES, type TemplateId, type TemplateVars } from './templates'
 
@@ -125,7 +127,19 @@ export async function sendEmail(
   // 4. Inject tokenized URLs unless caller already supplied them.
   const unsubscribeUrl = record ? `${APP_ORIGIN}/email/unsubscribe?token=${record.token}` : ''
   const preferencesUrl = record ? `${APP_ORIGIN}/email/preferences?token=${record.token}` : ''
+  // 5. Greeting name. Every email greets by the recipient's real first name
+  // (rules in ./first-name.ts), looked up here so no caller can pass an alias
+  // or a lowercased handle. A caller that already knows the name (daily idea,
+  // enterprise form) passes first_name and wins. No name -> greeting drops it.
+  let greet: Record<string, string> = {}
+  if (vars.first_name === undefined) {
+    const first = record ? await recipientFirstName(record.userId, to).catch(() => null) : null
+    greet = nameVars(first)
+  } else {
+    greet = { ...nameVars(vars.first_name_plain ?? null), first_name: vars.first_name }
+  }
   const finalVars: TemplateVars = {
+    ...greet,
     ...vars,
     unsubscribe_url: vars.unsubscribe_url ?? unsubscribeUrl,
     preferences_url: vars.preferences_url ?? preferencesUrl,
@@ -133,7 +147,7 @@ export async function sendEmail(
 
   const rendered = renderTemplate(templateId, finalVars)
 
-  // 5. RFC 8058 one-click headers for engagement + nontransactional only.
+  // 6. RFC 8058 one-click headers for engagement + nontransactional only.
   const headers: Record<string, string> = {}
   if (tpl.emailClass !== 'transactional' && finalVars.unsubscribe_url) {
     headers['List-Unsubscribe'] = `<${finalVars.unsubscribe_url}>`

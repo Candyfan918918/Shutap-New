@@ -71,7 +71,8 @@ export type TemplateEntry = {
 }
 
 // Salutation for text fallbacks.
-const g = (v: TemplateVars) => (v.alias ? `hey ${v.alias.toLowerCase()},` : 'hey,')
+// Real first name only (set by the send layer); never the alias.
+const g = (v: TemplateVars) => (v.first_name_plain ? `hey ${v.first_name_plain},` : 'hey,')
 
 // Text-fallback builder for the (unused) check-in templates.
 const checkinText = (line: (v: TemplateVars) => string) => (v: TemplateVars) =>

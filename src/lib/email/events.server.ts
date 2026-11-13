@@ -91,9 +91,9 @@ export function emailOnFollow(db: any, a: { userId: string; actorId: string }) {
     if (burst > 1) return
     const to = await emailOf(db, a.userId)
     if (!to) return
-    const [follower, me] = await Promise.all([aliasOf(db, a.actorId), aliasOf(db, a.userId)])
+    const follower = await aliasOf(db, a.actorId)
+    // Greeting name comes from the send layer (real first name, never the alias).
     await sendEmail('hello', 'new_follower', {
-      ...(me === 'someone' ? {} : { first_alias: esc(me.trim().split(/\s+/)[0].toLowerCase()) }),
       follower_alias: esc(follower),
       follower_plain: follower,
       cta_url: SITE,
