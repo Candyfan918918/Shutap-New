@@ -301,6 +301,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const [controls, setControls] = useState<BitControls>(DEFAULT_CONTROLS)
   /** the lined box (slice 4b): the lines typed so far and which are locked */
   const [lines, setLines] = useState<Draft>(EMPTY_LINES)
+  /** lines the AI copilot prefilled after the cut, as drafted (Nov 13 2026) */
+  const [aiLines, setAiLines] = useState<Partial<Record<Slot, string>>>({})
   const [linesLocked, setLinesLocked] = useState<Slot[]>([])
   const [settingsOpen, setSettingsOpen] = useState(true)
   /** Nov 12 2026: the box starts as one story box; its cut opens the lines */
@@ -741,7 +743,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     setError(null)
     setSplitting(true)
     try {
-      const r = await split({ data: { story: text, anon_session_id: anonSessionId() } })
+      const r = await split({ data: { story: text, controls, anon_session_id: anonSessionId() } })
       if (!r.ok) {
         if (r.reason === 'crisis') { setPhase('crisis'); jokeTrack('crisis_route_shown', tier); return }
         setError(r.reason === 'rate_limited' ? 'One at a time · try again in a moment.' : 'That didn’t come back. Press “Make it a bit” again.')
@@ -751,8 +753,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
       const d: Draft = { hook: r.lines.hook, setup: r.lines.setup, tags: [r.lines.tags[0], r.lines.tags[1]], button: r.lines.button }
       setBoxLines(d)
       setBoxLocked([])
+      setAiLines(Object.fromEntries((r.drafted ?? []).map((sl) => [sl, readSlot(d, sl)])))
       setBoxStep('lines')
-      jokeTrack('story_split_done', tier, { source: r.source, filled: writtenSlots(d).length })
+      jokeTrack('story_split_done', tier, { source: r.source, filled: writtenSlots(d).length, drafted: (r.drafted ?? []).length })
       if (r.notice) say(r.notice)
       requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
     } catch {
@@ -1135,6 +1138,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   controls={move ? { ...controls, move: move.id } : controls}
                   lines={lines}
                   onLines={setBoxLines}
+                  aiLines={aiLines}
                   locked={linesLocked}
                   onLocked={setBoxLocked}
                   busy={phaseRef.current === 'writing'}
@@ -1179,7 +1183,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 {lined && boxStep === 'story' && (
                   <div className="bt-box-go">
                     <button className="bt-btn bt-go" disabled={!story.trim() || splitting} aria-busy={splitting} onClick={() => void splitIntoLines()}>
-                      {splitting ? 'cutting it into a bit…' : 'Make it a bit →'}
+                      {splitting ? 'cutting it into a bit · drafting any line it didn’t cover…' : 'Make it a bit →'}
                     </button>
                   </div>
                 )}

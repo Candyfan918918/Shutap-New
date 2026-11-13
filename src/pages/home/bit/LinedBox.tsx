@@ -87,9 +87,11 @@ type Props = {
   say: (m: string) => void
   /** /bit-lab demo maker: a funnier option was used on a line */
   onPicked?: (slot: Slot, typed: string, picked: string, move: string) => void
+  /** lines the AI copilot prefilled after the story was cut, as drafted */
+  aiLines?: Partial<Record<Slot, string>>
 }
 
-export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, busy, onMake, box = 'top', onSignIn, onGuestLock, onLimit, onCrisis, say, onPicked }: Props) {
+export function LinedBox({ tier, controls, lines, onLines, aiLines, locked, onLocked, busy, onMake, box = 'top', onSignIn, onGuestLock, onLimit, onCrisis, say, onPicked }: Props) {
   const touch = useServerFn(touchLine)
   const [open, setOpen] = useState<Slot | null>(null)
   const [options, setOptions] = useState<TouchOption[] | null>(null)
@@ -208,7 +210,8 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
         const label = slotLabel(s)
         const state = isLocked ? 'locked' : has || focusSlot === s ? 'typing' : 'empty'
         const optional = OPTIONAL_SLOTS.includes(s)
-        const status = isLocked ? 'locked · word for word' : has ? 'written · not locked' : 'empty · AI drafts it'
+        const ai = has && !isLocked && !!aiLines?.[s] && aiLines[s] === value
+        const status = isLocked ? 'locked · word for word' : ai ? 'AI draft · change it or keep it' : has ? 'written · not locked' : 'empty · AI drafts it'
         return (
           <div key={s} className={`bt-tline${open === s ? ' open' : ''}`}>
             <div className="bt-tline-head">

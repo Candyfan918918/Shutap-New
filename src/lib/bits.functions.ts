@@ -906,7 +906,7 @@ export const getSketch = createServerFn({ method: 'POST' })
 /* ───────────────────────── the story box: cut what they typed into a bit ───────────────────────── */
 
 export type SplitResult =
-  | { ok: true; lines: SplitLines; source: 'model' | 'sentences'; notice: string }
+  | { ok: true; lines: SplitLines; source: 'model' | 'sentences'; notice: string; drafted: Slot[] }
   | { ok: false; reason: 'crisis' | 'rate_limited' | 'failed' | 'no_session' }
 
 const SPLIT_PROMPT = `You cut a person's story into the five parts of a stand-up bit. You never write, add, change or reorder words. Every part you return must be copied exactly, character for character, from the story: one continuous run of its words.
@@ -927,7 +927,7 @@ Use every sentence once, in order. If the story is too short for a part, return 
  *  the story doesn't cover comes back empty for them to write. Nothing is
  *  stored and nothing is charged: the bit is made (and counted) on "Make". */
 export const splitStory = createServerFn({ method: 'POST' })
-  .inputValidator((d: unknown) => z.object({ story: z.string().min(1).transform((s) => s.slice(0, 4000)), ...Ctx }).parse(d))
+  .inputValidator((d: unknown) => z.object({ story: z.string().min(1).transform((s) => s.slice(0, 4000)), controls: ControlsSchema, ...Ctx }).parse(d))
   .handler(async ({ data }): Promise<SplitResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
@@ -949,7 +949,33 @@ export const splitStory = createServerFn({ method: 'POST' })
         return { ok: false, reason: 'crisis' }
       }
       const { lines, source } = checkedSplit(proposed, clean)
-      return { ok: true, lines, source, notice: scrubbed.replacements?.length ? 'names and details swapped for who they are before anything left your browser' : '' }
+      // Nov 13 2026 (Candy): a line the story didn't cover is prefilled by the
+      // AI copilot, around the person's own lines (which stay word for word).
+      // Each empty line is drafted at once; one that doesn't come back in time
+      // stays empty, and Make drafts it then.
+      const asDraft = { hook: lines.hook, setup: lines.setup, tags: [lines.tags[0], lines.tags[1]], button: lines.button }
+      const empty = (['hook', 'setup', 'tag0', 'tag1', 'button'] as Slot[]).filter((sl) => !readSlot(asDraft, sl).trim())
+      const drafted: Slot[] = []
+      if (empty.length && empty.length < 5) {
+        const controls = { ...DEFAULT_CONTROLS, ...(data.controls ?? {}) } as BitControls
+        const got = await Promise.all(
+          empty.map((sl) =>
+            Promise.race([
+              touchLineDraft(clean, asDraft, sl, controls).catch(() => null),
+              new Promise<null>((r) => setTimeout(() => r(null), 20_000)),
+            ]).then((o) => [sl, o?.[0]?.line?.trim() ?? ''] as const),
+          ),
+        )
+        for (const [sl, line] of got) {
+          if (!line) continue
+          if (sl === 'hook') lines.hook = line
+          else if (sl === 'setup') lines.setup = line
+          else if (sl === 'button') lines.button = line
+          else lines.tags[sl === 'tag0' ? 0 : 1] = line
+          drafted.push(sl)
+        }
+      }
+      return { ok: true, lines, source, drafted, notice: scrubbed.replacements?.length ? 'names and details swapped for who they are before anything left your browser' : '' }
     } catch (e) {
       console.error('[bits] split failed', e instanceof Error ? e.message : e)
       return { ok: false, reason: 'failed' }
