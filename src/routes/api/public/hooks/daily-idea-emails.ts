@@ -16,6 +16,7 @@
 // Status check: POST {"status_of": "<resend email id>"} returns Resend's record
 // for that email (last_event: delivered / bounced / suppressed / complained ...).
 import { createFileRoute } from '@tanstack/react-router'
+import { firstNameFor } from '@/lib/email/first-name'
 
 const SEND_FROM_PACIFIC_HOUR = 8
 const SEND_UNTIL_PACIFIC_HOUR = 14 // last run that sends is 13:05
@@ -58,20 +59,7 @@ function shortWhy(s: string): string {
   return head.join(' ').replace(/[,;:]$/, '') + '…'
 }
 
-// Address everyone by a real first name; never a generic greeting.
-// 1. the name from their Google/Apple sign-in; 2. a profile name they typed themselves;
-// never the auto-assigned alias ("Quiet Welsh Bear") or the "Shutap user" placeholder.
-// The first word is used, unless it is 1-2 letters ("im expensive"), then the whole name exactly as typed.
-function firstNameFor(metaName: string | null | undefined, alias: any): string | null {
-  const auto = alias && [alias.emotion, alias.nation, alias.creature].filter(Boolean).join(' ').toLowerCase()
-  const fromAlias = (alias?.display_name ?? '').trim()
-  const aliasOk = fromAlias && fromAlias.toLowerCase() !== auto && fromAlias.toLowerCase() !== 'shutap user'
-  const name = (metaName ?? '').trim() || (aliasOk ? fromAlias : '')
-  if (!name) return null
-  const first = name.split(/\s+/)[0]!
-  if (first.length <= 2) return name // as they typed it
-  return first.charAt(0).toUpperCase() + first.slice(1)
-}
+// Address everyone by a real first name; never a generic greeting (rules in @/lib/email/first-name).
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -189,7 +177,7 @@ export const Route = createFileRoute('/api/public/hooks/daily-idea-emails')({
         for (const u of batch) {
           const a: any = aliasOf.get(u.id)
           if (a?.email_suppressed) { suppressed++; continue }
-          const firstName = firstNameFor(u.metaName, a)
+          const firstName = firstNameFor({ metaName: u.metaName, alias: a, email: u.email })
           if (!firstName) { noName++; continue } // no real name: skip rather than send a generic greeting
           // A daily email always carries a working unsubscribe link; without a prefs record there is none.
           const prefs = await ensureEmailPrefsToken(u.email).catch(() => null)

@@ -29,15 +29,13 @@ const PLACEHOLDER_RE = /\{\{\{?(\w+)\}?\}\}/g
 // row would cut from its start to the first inner </tr> and break the layout.
 const TR_RE = /<tr\b[^>]*>(?:(?!<tr\b)[\s\S])*?<\/tr>/gi
 
-function firstAlias(alias?: string): string {
-  if (!alias) return 'you'
-  return alias.trim().split(/\s+/)[0]?.toLowerCase() ?? 'you'
-}
+// Greeting pieces that may be empty (no known first name). A row that uses
+// only these must still render, so they're exempt from empty-row pruning.
+const OPTIONAL_VARS = new Set(['name_space', 'name_comma', 'name_lead'])
 
 function buildVarMap(vars: TemplateVars): Record<string, string> {
   const deep_link = vars.deep_link || DEFAULT_DEEP_LINK
   const cta_url = vars.cta_url || deep_link
-  const first_alias = vars.first_alias || firstAlias(vars.alias)
 
   const out: Record<string, string> = {}
   for (const [k, v] of Object.entries(vars)) {
@@ -49,7 +47,7 @@ function buildVarMap(vars: TemplateVars): Record<string, string> {
   out.preferences_url = vars.preferences_url ?? ''
   out.deep_link = deep_link
   out.cta_url = cta_url
-  out.first_alias = first_alias
+  for (const k of OPTIONAL_VARS) out[k] = vars[k] ?? ''
   if (vars.alias) out.alias = vars.alias
   return out
 }
@@ -74,6 +72,7 @@ function stripEmptyRows(html: string, values: Record<string, string>): string {
     const names = placeholdersIn(row)
     if (names.length === 0) return row
     for (const name of names) {
+      if (OPTIONAL_VARS.has(name)) continue
       const v = values[name]
       if (v === undefined || v === '') return ''
     }
