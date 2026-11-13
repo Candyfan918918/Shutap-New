@@ -486,7 +486,7 @@
 .bt-tpill.off, .bt-tpill.off:hover { border: 1px solid rgba(26, 20, 24, .12); background: #f3f1f2; color: #8f878b; cursor: pointer; }
 .bt-lined-note { margin: 0; display: flex; gap: 8px; align-items: center; background: #fff4f7; border: 1px solid rgba(184, 69, 107, .35); border-radius: 12px; padding: 9px 12px; font: 600 13px/1.45 var(--sora); color: var(--wine); }
 .bt-lined-foot .bt-guide { font-size: 13px; }
-.bt-lined-cta .bt-go { min-height: 52px; padding: 0 26px; font-size: 16px; }
+.bt-lined-cta .bt-go { min-height: 52px; padding: 8px 22px; font-size: 16px; min-width: 0; max-width: 100%; white-space: normal; line-height: 1.25; }
 
 /* Nov 12 2026: the story box's four checks (hints only, never block) */
 .bt-checks { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 10px 16px 4px; }

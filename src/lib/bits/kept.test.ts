@@ -4,10 +4,13 @@ import { allLinesGiven, keptAsWritten } from './kept'
 
 const all = { hook: 'My building turned the dryer into a reservation.', setup: 'There is a sign-up sheet. It is laminated.', tags: ['Fifteen-minute slots, booked like a wedding venue.', 'I wash one sock at a time now.'], button: 'The dryer has a waitlist. I have socks.' }
 
-test('five written lines skip the writer; four do not', () => {
+test('hook, setup, a tag and button skip the writer; the second tag is optional', () => {
   assert.equal(allLinesGiven(all), true)
   assert.equal(allLinesGiven({ ...all, button: undefined }), false)
-  assert.equal(allLinesGiven({ ...all, tags: [all.tags[0]!, ' '] }), false)
+  assert.equal(allLinesGiven({ ...all, tags: [all.tags[0]!, ' '] }), true)
+  assert.deepEqual(keptAsWritten({ ...all, tags: [all.tags[0]!, ' '] }, 't').ranked[0]!.tags, [all.tags[0]])
+  assert.equal(allLinesGiven({ ...all, tags: [' ', ''] }), false)
+  assert.equal(allLinesGiven({ ...all, setup: '' }), false)
   assert.equal(allLinesGiven(undefined), false)
 })
 

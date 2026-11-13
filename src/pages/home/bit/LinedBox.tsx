@@ -42,8 +42,13 @@ export function linesText(d: Draft): string {
 export function writtenSlots(d: Draft): Slot[] {
   return LINE_SLOTS.filter((s) => readSlot(d, s).trim())
 }
+/** Nov 13 2026: Tag 2 is optional. A four-sentence story fills four lines,
+ *  and that is a whole bit. */
+export const OPTIONAL_SLOTS: Slot[] = ['tag1']
+/** the required lines still empty (a lone Tag 2 counts as the tag) */
 export function missingSlots(d: Draft): Slot[] {
-  return LINE_SLOTS.filter((s) => !readSlot(d, s).trim())
+  const tag = !!(readSlot(d, 'tag0').trim() || readSlot(d, 'tag1').trim())
+  return LINE_SLOTS.filter((s) => !OPTIONAL_SLOTS.includes(s) && !readSlot(d, s).trim() && !(s === 'tag0' && tag))
 }
 /** "the tag 1, tag 2 and button" */
 export function listLines(slots: Slot[]): string {
@@ -54,7 +59,7 @@ export function listLines(slots: Slot[]): string {
 /** What the box asks for next, from its state alone. */
 export function guideLine(d: Draft, locked: Slot[]): { text: string; ready: boolean } {
   const missing = missingSlots(d)
-  if (missing.length === 5) return { text: 'Go back to your story, or type a line here. Stuck? Write a rough version and tap funnier.', ready: false }
+  if (!writtenSlots(d).length) return { text: 'Go back to your story, or type a line here. Stuck? Write a rough version and tap funnier.', ready: false }
   if (missing.length) return { text: `Your story didn’t cover the ${listLines(missing)}. Write it in your words; Shutap never fills a line for you.`, ready: false }
   const open = LINE_SLOTS.filter((s) => !locked.includes(s))
   return { text: `Every word is yours${open.length ? '' : ', all locked'}. Next: the 5-second video, stand-up, sketch and skit.`, ready: true }
@@ -186,7 +191,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
   function make() {
     const now = live()
     const missing = missingSlots(now)
-    jokeTap('box_submit', tier, { box, written: 5 - missing.length, locked: locked.length, ready: !missing.length })
+    jokeTap('box_submit', tier, { box, written: writtenSlots(now).length, missing: missing.length, locked: locked.length, ready: !missing.length })
     if (missing.length) return flash(`Write the ${listLines(missing)} in your words to continue. Stuck? Write a rough version and tap funnier.`)
     setNote(null)
     onMake(now)
@@ -201,12 +206,13 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
         const meta = LINE[s]!
         const label = slotLabel(s)
         const state = isLocked ? 'locked' : has || focusSlot === s ? 'typing' : 'empty'
-        const status = isLocked ? 'locked · word for word' : has ? 'written · not locked' : 'required'
+        const optional = OPTIONAL_SLOTS.includes(s)
+        const status = isLocked ? 'locked · word for word' : has ? 'written · not locked' : optional ? 'optional' : 'required'
         return (
           <div key={s} className={`bt-tline${open === s ? ' open' : ''}`}>
             <div className="bt-tline-head">
               <b>{meta.title}<span> · {meta.sub}</span></b>
-              <i className={isLocked ? 'ok' : has ? undefined : 'req'}>{status}</i>
+              <i className={isLocked ? 'ok' : has || optional ? undefined : 'req'}>{status}</i>
             </div>
             <div className={`bt-tbox ${state}`}>
               <p
@@ -219,7 +225,7 @@ export function LinedBox({ tier, controls, lines, onLines, locked, onLocked, bus
                 onFocus={() => setFocusSlot(s)}
                 onBlur={(e) => { setFocusSlot((f) => (f === s ? null : f)); onType(s, e.currentTarget) }}
                 onKeyDown={keyDown}
-                aria-label={`${meta.title}, required, type it`}
+                aria-label={`${meta.title}, ${optional ? 'optional' : 'required'}, type it`}
                 style={s === 'button' ? { fontWeight: 400 } : undefined}
               >
                 {value}
