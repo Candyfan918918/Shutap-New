@@ -267,7 +267,7 @@ const BASE_GUIDES: Guide[] = [
     description:
       "Write your storytime as a hook, setup, two tags and a button, in your own words. Tap funnier on any line you're stuck on, then film it off the teleprompter. Free with an account.",
     capsule:
-      "Shutap helps you shape your storytime into a script you wrote. Tell it your way and Shutap cuts it into a hook, a setup, two tags and a button, your words kept word for word; any line your story didn't cover, the AI copilot drafts. Tap funnier on any line for three other ways to say it, yours first. Then read it off the teleprompter or post the 5-second video. A free account makes one a day.",
+      "Shutap helps you shape your storytime into a script you wrote. Tell it your way and Shutap cuts it into a hook, a setup, two tags and a button, your words kept word for word; any line your story didn't cover, the AI copilot drafts. Tap funnier on any line for three other ways to say it, yours first. Then read it off the teleprompter or post the 5-second video. A free account makes 3 free bits.",
     blurb: "Write your story as a hook, setup, tags and a button; tap funnier where you're stuck.",
     sections: [
       {
@@ -519,7 +519,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap does",
-        body: "You tell the story; it comes back as a hook, a setup, two tags and a button, your words kept word for word, with any line your story didn't cover drafted by the AI copilot. Tap funnier on a line and it offers three other ways to say it, built from your lines and a comedy technique, yours first. The unit of output is your bit, laid out as a 5-second video, stand-up, a sketch page or a skit. A free account makes one a day.",
+        body: "You tell the story; it comes back as a hook, a setup, two tags and a button, your words kept word for word, with any line your story didn't cover drafted by the AI copilot. Tap funnier on a line and it offers three other ways to say it, built from your lines and a comedy technique, yours first. The unit of output is your bit, laid out as a 5-second video, stand-up, a sketch page or a skit. A free account makes 3 free bits.",
       },
       {
         heading: "Who is the writer",
@@ -609,7 +609,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Shutap",
-        body: "Input: your story, told your way, cut into a bit (hook, setup, two tags, button) in your words. Help: tap funnier on any line for three other ways to say it, yours first. Output: your bit as a 5-second video to post, and stand-up on the teleprompter, a skit and a one-page sketch to perform. A free account makes one a day.",
+        body: "Input: your story, told your way, cut into a bit (hook, setup, two tags, button) in your words. Help: tap funnier on any line for three other ways to say it, yours first. Output: your bit as a 5-second video to post, and stand-up on the teleprompter, a skit and a one-page sketch to perform. A free account makes 3 free bits.",
       },
       {
         heading: "Witscript",

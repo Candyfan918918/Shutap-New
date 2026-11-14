@@ -73,7 +73,7 @@ const guide: Guide = {
     },
     {
       q: "How much does Shutap for Realtors cost?",
-      a: "The first kit is free with a free account, marked \"— shutap.com\" on each output. One kit is $12.99 with no subscription. Basic is $19.99 a month with 3 kits a day, and Pro is $49.99 a month with unlimited kits.",
+      a: "The first kit is free with a free account, marked \"— shutap.com\" on each output. One kit is $12.99 with no subscription. Basic is $19.99 a month with 20 kits a month, and Pro is $49.99 a month with unlimited kits.",
     },
   ],
   sources: [

@@ -185,7 +185,7 @@ function TermsPage() {
         bought on its own.
       </p>
       <p>
-        Limits reset at midnight Pacific time (Los Angeles) for everyone. Limits are a cost
+        Daily limits reset at midnight Pacific time (Los Angeles) for everyone; a free account's three bits are a total and do not reset. Limits are a cost
         control, not a promise. We may change, reduce or pause them, add rate limits, and refuse
         to write a set for anything our safety checks flag.
       </p>

@@ -1,6 +1,6 @@
 /* The paywall and the Pro upgrade, shown inside the writer's bottom sheet.
  *
- *   PaywallBody   a free account at its daily limit (bit 2), a free account
+ *   PaywallBody   a free account out of its 3 bits (bit 4), a free account
  *                 asking for a rewrite, swap or mix, or anyone
  *                 past the free download or removing the watermark. Free, Basic and
  *                 Pro side by side on the same rows as the pricing page,
