@@ -44,7 +44,7 @@ const guide: Guide = {
     },
     {
       heading: "Which to use",
-      body: "Want to be roasted for fun? ChatGPT with your own profile, set to gently or brutally. Want a list of angles about a friend's choices for a birthday or a roast night? ChatGPT, then you pick. Want a roast-style bit about something that happened, timed to post or say at a mic? Shutap, roast voice, heat to taste. Both can be part of the same week. A free Shutap account gets one bit a day. Whatever you use, the best roasts land because they're true and specific, and both of those come from you, not the tool.",
+      body: "Want to be roasted for fun? ChatGPT with your own profile, set to gently or brutally. Want a list of angles about a friend's choices for a birthday or a roast night? ChatGPT, then you pick. Want a roast-style bit about something that happened, timed to post or say at a mic? Shutap, roast voice, heat to taste. Both can be part of the same week. A free Shutap account gets 3 free bits. Whatever you use, the best roasts land because they're true and specific, and both of those come from you, not the tool.",
     },
   ],
   faq: [

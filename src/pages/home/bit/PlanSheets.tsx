@@ -1,6 +1,6 @@
 /* The paywall and the Pro upgrade, shown inside the writer's bottom sheet.
  *
- *   PaywallBody   a free account at its daily limit (bit 2), a free account
+ *   PaywallBody   a free account out of its 3 bits (bit 4), a free account
  *                 asking for a rewrite, swap or mix, or anyone
  *                 past the free download or removing the watermark. Free, Basic and
  *                 Pro side by side on the same rows as the pricing page,
@@ -107,15 +107,15 @@ export function PaywallBody({
         ? 'Download it clean.'
         : where === 'rewrite'
           ? 'Rewrites are on Basic and Pro.'
-          : "That's today's free bit."
+          : "That's your free bits."
   const sub =
     where === 'download'
       ? 'Free downloads are unlimited and carry the shutap.com watermark. Basic and Pro download clean, as often as they like.'
       : where === 'download_count'
         ? 'Free downloads are unlimited and carry the shutap.com watermark. Basic and Pro download clean, as often as they like.'
         : where === 'rewrite'
-          ? `Free gets one bit a day, as written. Hotter, tighter, storytelling, a crowd-work swap or your own mix come with Basic (${BIT_CAPS.basic} bits a day, rewrites included) and Pro (no limit).`
-          : `Free is one bit a day, downloads unlimited with the shutap.com mark. Basic writes ${BIT_CAPS.basic} a day with rewrites, clean; Pro has no limit. Want to keep going tonight?`
+          ? `Free gets ${BIT_CAPS.free} bits in total, as written. Hotter, tighter, storytelling, a crowd-work swap or your own mix come with Basic (${BIT_CAPS.basic} bits a day, rewrites included) and Pro (no limit).`
+          : `Free is ${BIT_CAPS.free} bits in total, downloads unlimited with the shutap.com mark. Basic writes ${BIT_CAPS.basic} a day with rewrites, clean; Pro has no limit. Want to keep going?`
   return (
     <div className="pw">
       <div className="pw-head">

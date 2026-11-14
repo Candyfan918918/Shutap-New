@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap: when the material is your own story",
-      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, starts with something that happened to you rather than a headline. You tell it your way and Shutap cuts it into a hook, a setup, two tags and a button, with your lines kept word for word. A line your story didn't cover gets an AI draft, marked as one, to keep or change. Tap funnier on any line for three other ways to say it, yours listed first, and lock the lines that are done. The bit then runs as a 5-second video, stand-up on a teleprompter with delivery cues, a sketch page or a skit shot list. One bit a day is free; Basic is $19.99 a month for three a day.",
+      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, starts with something that happened to you rather than a headline. You tell it your way and Shutap cuts it into a hook, a setup, two tags and a button, with your lines kept word for word. A line your story didn't cover gets an AI draft, marked as one, to keep or change. Tap funnier on any line for three other ways to say it, yours listed first, and lock the lines that are done. The bit then runs as a 5-second video, stand-up on a teleprompter with delivery cues, a sketch page or a skit shot list. Three bits are free; Basic is $19.99 a month for three a day.",
     },
     {
       heading: "Pick by what you start with",
@@ -69,7 +69,7 @@ const guide: Guide = {
     },
     {
       q: "Is there a free alternative to Witscript?",
-      a: "Yes. Claude's pricing page lists a free plan, Comedeez is listed as free on Product Hunt, and Shutap's free plan makes one bit a day from your own story.",
+      a: "Yes. Claude's pricing page lists a free plan, Comedeez is listed as free on Product Hunt, and Shutap's free plan makes 3 bits from your own story.",
     },
     {
       q: "Who owns the jokes Witscript writes?",

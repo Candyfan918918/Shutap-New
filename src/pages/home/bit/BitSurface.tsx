@@ -6,7 +6,7 @@
  *            action row. Everyone sees the whole bit, guests included;
  *            a guest signs in (free) to rewrite or save it.
  *
- * New bits a day: guest 1 · free 1 · basic 3 · pro. Nov 12 2026: the box is
+ * New bits: guest 1 a day · free 3 in total (Nov 14 2026) · basic 3 a day · pro. Nov 12 2026: the box is
  * one big story box; "Make it a bit" cuts what they typed into hook, setup,
  * two tags and button (their words only), and a guest makes that one bit and
  * reads it. Watching, rehearsing, sketch, skit, saving and versions take an
@@ -1218,7 +1218,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               </p>
             )}
             <p className="bt-note" style={{ textAlign: 'center' }}>
-              {tier === 'guest' ? (lined ? 'free · no sign-in to start · ' : `free: ${FREE_LINE} · sign in with Google or Apple · `) : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left today · ` : ''}
+              {tier === 'guest' ? (lined ? 'free · no sign-in to start · ' : `free: ${FREE_LINE} · sign in with Google or Apple · `) : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left${tier === 'free' ? '' : ' today'} · ` : ''}
               names removed before anything is saved · nobody at shutap reads it{lined ? ' · your lines stay word for word' : ' · ⌘↵ to write it'}
             </p>
           </>

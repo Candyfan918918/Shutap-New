@@ -74,7 +74,7 @@ export const HUBS: SituationHub[] = [
     paa: [
       { q: "Why is outgrowing someone funny?", a: "Because nothing dramatic happens. The comedy is in the repeats: the same order, the same story, the same plans that never get made." },
       { q: "Can I use the jokes in a set or a video?", a: "Yes. Save them for TikTok, Reels or the stage, or post the best one to a room." },
-      { q: "Do I need to sign in?", a: "Yes, but it's free and one tap with Google or Apple, and your story stays in the box while you do. A free account gets one bit a day; Basic and Pro add rewrites and more." },
+      { q: "Do I need to sign in?", a: "Yes, but it's free and one tap with Google or Apple, and your story stays in the box while you do. A free account gets 3 free bits; Basic and Pro add rewrites and more." },
     ],
   },
   // ── marriage ──
@@ -172,7 +172,7 @@ export const HUBS: SituationHub[] = [
     paa: [
       { q: "Can I use the jokes in a toast?", a: "Save them and use them anywhere: TikTok, Reels, the stage, a toast. Keep them at the situation, not at a guest anyone could identify." },
       { q: "Will names show up?", a: "No. Names and places are removed before anything is saved." },
-      { q: "Do I need an account?", a: "Yes, a free one: one tap with Google or Apple, and your story stays in the box while you do. A free account gets one bit a day; Basic and Pro add rewrites and more." },
+      { q: "Do I need an account?", a: "Yes, a free one: one tap with Google or Apple, and your story stays in the box while you do. A free account gets 3 free bits; Basic and Pro add rewrites and more." },
     ],
   },
   {
@@ -233,7 +233,7 @@ export const HUBS: SituationHub[] = [
     paa: [
       { q: "Will Shutap tell me what I should earn?", a: "No. It's a comedy tool, not salary advice." },
       { q: "Can I name my company?", a: "You can type it, but names, company names and places are removed before anything is saved. The jokes go at the situation, not a company anyone could identify." },
-      { q: "Do I need to sign in?", a: "Yes, but it's free and one tap with Google or Apple, and your story stays in the box while you do. A free account gets one bit a day; Basic and Pro add rewrites and more." },
+      { q: "Do I need to sign in?", a: "Yes, but it's free and one tap with Google or Apple, and your story stays in the box while you do. A free account gets 3 free bits; Basic and Pro add rewrites and more." },
     ],
   },
   {

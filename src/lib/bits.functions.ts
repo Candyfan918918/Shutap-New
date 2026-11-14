@@ -26,7 +26,7 @@ import { allLinesGiven, anyLineGiven, keptAsWritten } from './bits/kept'
 import { checkedSplit, type SplitLines } from './bits/split'
 import { callAgentBounded, tryParseJson } from './agents/gateway'
 import { forgetPerson, personSignal } from './bits/person.server'
-import { NO_CAP, TOUCH_FAIR_USE, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
+import { NEVER_RESETS, NO_CAP, TOUCH_FAIR_USE, bitDay, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
 import { DOWNLOAD_KINDS } from './bits/plans'
 import { limitFor } from './entitlements'
 import {
@@ -306,7 +306,9 @@ async function writeCore(
 
   const { day, resetsAt } = today()
   const subject = id.subjectKey
-  const usageNow = async () => usageView(tier, await readUsed(supabaseAdmin, subject, day).catch(() => 0), resetsAt)
+  // Free counts in one lifetime row; everyone else per Pacific day.
+  const bday = bitDay(tier, day)
+  const usageNow = async () => usageView(tier, await readUsed(supabaseAdmin, subject, bday).catch(() => 0), resetsAt)
 
   // Nov 12 2026: a guest makes one bit a day and reads it before signing in.
   // Nov 13 2026: from any of their own lines; empty lines are drafted around
@@ -341,7 +343,7 @@ async function writeCore(
   /** Give the budget back — unless a bit with this id is stored, which means
    *  another copy of the same press landed and its charge must stand. One
    *  statement in the database, so the check can't go stale. */
-  const refundIfNotLanded = () => refundBitUnlessStored(supabaseAdmin, subject, day, bitId)
+  const refundIfNotLanded = () => refundBitUnlessStored(supabaseAdmin, subject, bday, bitId)
 
   // After sign-in, this browser's guest bit today counts toward the account.
   await mergeGuestToday(supabaseAdmin, id, anonSessionId, day)
@@ -351,7 +353,7 @@ async function writeCore(
   let used = 0
   if (!lab) {
     try {
-      used = await chargeBit(supabaseAdmin, subject, day, capFor(tier), bitId)
+      used = await chargeBit(supabaseAdmin, subject, bday, capFor(tier), bitId)
     } catch (e) {
       // The budget can't be read: refuse rather than write uncounted.
       console.error('[bit] budget unavailable', e instanceof Error ? e.message : e)
@@ -478,7 +480,7 @@ async function writeCore(
         // The empty row stays, so the stored-bit check would keep the charge
         // for nothing: give it back directly.
         console.error('[bit] could not remove a bit without its version', delErr.message)
-        await refundBit(supabaseAdmin, subject, day, bitId)
+        await refundBit(supabaseAdmin, subject, bday, bitId)
       }
       throw e
     }
@@ -488,7 +490,7 @@ async function writeCore(
     if (!lab) {
       try {
         // No cap here: the bit is already written, so it always counts.
-        await chargeBit(supabaseAdmin, subject, day, NO_CAP, bitId)
+        await chargeBit(supabaseAdmin, subject, bday, NO_CAP, bitId)
       } catch (e) {
         console.error('[bit] re-charge after store failed', e instanceof Error ? e.message : e)
       }
@@ -726,7 +728,7 @@ export const listMyBits = createServerFn({ method: 'POST' })
     await mergeGuestToday(supabaseAdmin, id, data.anon_session_id ?? null, day)
     let used = 0
     try {
-      used = await readUsed(supabaseAdmin, id.subjectKey, day)
+      used = await readUsed(supabaseAdmin, id.subjectKey, bitDay(tier, day))
     } catch (e) {
       console.error('[bits] usage read failed', e instanceof Error ? e.message : e)
     }
@@ -1127,7 +1129,7 @@ export const myUsage = createServerFn({ method: 'POST' })
       return new Set((paid ?? []).map((r: any) => r.properties?.stripe_session).filter((x: any) => x && !spent.has(x))).size
     }
     const [bitsUsed, dl, touchesUsed, kitsUsed, kitCreditsN] = await Promise.all([
-      readUsed(supabaseAdmin, id.subjectKey, day).catch(() => 0),
+      readUsed(supabaseAdmin, id.subjectKey, bitDay(tier, day)).catch(() => 0),
       downloadsUsed(supabaseAdmin, id.userId, tier).catch(() => 0),
       readUsed(supabaseAdmin, `touch:${id.userId}`, day).catch(() => 0),
       kitsQ().catch(() => 0),
@@ -1136,7 +1138,7 @@ export const myUsage = createServerFn({ method: 'POST' })
     const d = limitFor('download', tier)
     return {
       tier,
-      bits: { used: bitsUsed, cap: limitFor('bit', tier).cap, resets_at: resetsAt },
+      bits: { used: bitsUsed, cap: limitFor('bit', tier).cap, resets_at: limitFor('bit', tier).period === 'ever' ? NEVER_RESETS : resetsAt },
       downloads: { used: dl, cap: d.cap, period: d.period === 'ever' ? 'day' : d.period },
       touches: { used: touchesUsed, cap: limitFor('touch', tier).cap },
       kits: { used: kitsUsed, cap: k.cap, period: k.period === 'ever' ? 'ever' : 'month', credits: kitCreditsN },

@@ -31,7 +31,7 @@ function TermsPage() {
     <DocLayout
       active="/terms"
       title="Terms of Service"
-      subline="Last updated: November 2, 2026 · Operator: Shutap"
+      subline="Last updated: November 14, 2026 · Operator: Shutap"
     >
       <p>
         These terms are an agreement between you and Shutap. By using Shutap, you agree to them.
@@ -167,9 +167,9 @@ function TermsPage() {
         save and share.
       </p>
 
-      <h3 id="plans">12. Free use and daily limits</h3>
+      <h3 id="plans">12. Free use and limits</h3>
       <p>
-        Writing a bit takes an account. A free account allows <b>one new bit a day</b>, as written,
+        Writing a bit takes an account. A free account allows <b>three new bits in total</b>, as written,
         with stand-up, sketch and skit. Rewrites (hotter, tighter, storytelling), swapping in a
         crowd-work angle and mixing your own are part of the paid plans. Basic allows
         <b>three new bits a day</b>; a rewrite is a new bit (it is written again and its video is
@@ -185,7 +185,7 @@ function TermsPage() {
         bought on its own.
       </p>
       <p>
-        Limits reset at midnight Pacific time (Los Angeles) for everyone. Limits are a cost
+        Daily limits reset at midnight Pacific time (Los Angeles) for everyone; a free account's three bits are a total and do not reset. Limits are a cost
         control, not a promise. We may change, reduce or pause them, add rate limits, and refuse
         to write a set for anything our safety checks flag.
       </p>

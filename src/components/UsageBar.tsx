@@ -29,10 +29,12 @@ export function useMyUsage(enabled: boolean, refreshKey?: unknown): MyUsage | nu
 export const USAGE_COLORS = { bits: '#c1216b', kits: '#3b6fd8' } as const
 
 const kitWhen = (p: string) => (p === 'month' ? 'this month' : 'once')
+/** Free's 3 bits are a total (Nov 14 2026); paid bits are per day. */
+const bitWhen = (u: MyUsage) => (u.tier === 'free' ? 'in total' : 'today')
 
 export function UsageMini({ u, dark = false }: { u: MyUsage; dark?: boolean }) {
   const parts = [
-    { key: 'bits', label: 'bits', used: u.bits.used, cap: u.bits.cap, when: 'today' },
+    { key: 'bits', label: 'bits', used: u.bits.used, cap: u.bits.cap, when: bitWhen(u) },
     { key: 'kits', label: 'realtor kits', used: u.kits.used, cap: u.kits.cap, when: kitWhen(u.kits.period) },
   ] as const
   const ink = dark ? '#ffffff' : '#111111'
@@ -81,14 +83,14 @@ export function usageRows(u: MyUsage): string[] {
   const row = (cap: number | null, used: number, one: string, many: string, when: string) =>
     cap === null ? `unlimited ${many}` : `${Math.max(0, cap - used)} of ${cap} ${cap === 1 ? one : many} left ${when}`
   return [
-    row(u.bits.cap, u.bits.used, 'bit', 'bits', 'today'),
+    row(u.bits.cap, u.bits.used, 'bit', 'bits', bitWhen(u)),
     row(u.kits.cap, u.kits.used, 'realtor kit', 'realtor kits', kitWhen(u.kits.period)),
     'unlimited downloads and copies',
   ]
 }
 
 export function usageLine(u: MyUsage): string {
-  const bits = u.bits.cap === null ? 'bits ∞' : `${u.bits.used}/${u.bits.cap} bits today`
+  const bits = u.bits.cap === null ? 'bits ∞' : `${u.bits.used}/${u.bits.cap} bits ${bitWhen(u)}`
   const kits = u.kits.cap === null ? 'kits ∞' : `${u.kits.used}/${u.kits.cap} kit${u.kits.cap === 1 ? '' : 's'}${u.kits.period === 'month' ? ' this month' : ''}`
   return `${bits} · ${kits} · downloads ∞`
 }
@@ -120,11 +122,11 @@ export function UsageCard({ usage }: { usage: MyUsage }) {
           {usage.tier === 'free' ? 'Free' : usage.tier === 'basic' ? `Basic · ${usd(PLANS.basic.amount)}/mo` : usage.tier === 'pro' ? `Pro · ${usd(PLANS.pro.amount)}/mo` : ''}
         </span>
       </div>
-      <Row label="New bits today" used={usage.bits.used} cap={usage.bits.cap} />
+      <Row label={usage.tier === 'free' ? 'Free bits (3 in total)' : 'New bits today'} used={usage.bits.used} cap={usage.bits.cap} />
       <Row label={usage.kits.period === 'month' ? 'Realtor kits this month' : 'Realtor kit (free, once)'} used={usage.kits.used} cap={usage.kits.cap} note={usage.kits.credits > 0 ? `+ ${usage.kits.credits} bought` : undefined} />
       <Row label="Downloads, copies, prompter, funnier" used={0} cap={null} />
       <p style={{ margin: 0, fontSize: 12.5, color: '#8f898d' }}>
-        You pay to make something new, never to use it. Everything you made lives in My creations: download, copy and run the prompter as often as you like.{usage.tier === 'free' ? ' Free downloads end with "— shutap.com".' : ''} Bits reset at midnight Pacific; realtor kits on the 1st of the month.
+        You pay to make something new, never to use it. Everything you made lives in My creations: download, copy and run the prompter as often as you like.{usage.tier === 'free' ? ' Free downloads end with "— shutap.com".' : ''} {usage.tier === 'free' ? 'Free bits and your free kit don’t reset.' : 'Bits reset at midnight Pacific; realtor kits on the 1st of the month.'}
       </p>
     </section>
   )

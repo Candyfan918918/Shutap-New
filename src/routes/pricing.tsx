@@ -11,10 +11,10 @@ const BASIC = PLANS.basic.amount
 const PRO = PLANS.pro.amount
 
 const TITLE = `Pricing — Shutap, the Humor Amplifier, plans from ${usd(BASIC)}/mo`
-const DESCRIPTION = `One plan for bits, realtor kits and toasts. Free: 1 bit a day, your first kit and your first toast, watermarked. Basic ${usd(BASIC)}/month: 3 bits a day with rewrites, 20 kits and 1 toast a month, no watermark. Pro ${usd(PRO)}/month: unlimited, plus the Mirror. One kit or toast: ${usd(KIT_ONCE.amount)}. Downloads and copies always unlimited.`
+const DESCRIPTION = `One plan for bits, realtor kits and toasts. Free: 3 bits, your first kit and your first toast, watermarked. Basic ${usd(BASIC)}/month: 3 bits a day with rewrites, 20 kits and 1 toast a month, no watermark. Pro ${usd(PRO)}/month: unlimited, plus the Mirror. One kit or toast: ${usd(KIT_ONCE.amount)}. Downloads and copies always unlimited.`
 
 const QA = [
-  { q: 'Is Shutap free?', a: 'Yes. A free account gets 1 bit a day, your first realtor kit and your first toast, marked "— shutap.com".' },
+  { q: 'Is Shutap free?', a: 'Yes. A free account gets 3 bits, your first realtor kit and your first toast, marked "— shutap.com".' },
   { q: 'What do I pay for?', a: 'Only for making something new. Downloads, copies, the prompter and "funnier" are always unlimited, and everything you made stays in My creations.' },
   { q: 'Can I buy just one?', a: `Yes: ${usd(KIT_ONCE.amount)} for one realtor kit or one toast, no subscription.` },
   { q: 'Can I move from Basic to Pro?', a: 'Yes, any time. You pay the difference for the rest of the month, and Pro starts right away.' },

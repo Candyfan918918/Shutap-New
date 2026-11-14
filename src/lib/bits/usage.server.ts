@@ -1,6 +1,7 @@
-// The daily budget of NEW bits, per person (or guest browser) per Pacific day.
+// The budget of NEW bits: per Pacific day for guests, Basic and Pro; in total
+// for Free (Nov 14 2026: 3 ever, see LIFETIME_DAY).
 //
-//   guest 0 (sign in first) · free 1 · basic 3 · pro fair-use
+//   guest 1/day · free 3 total · basic 3/day · pro fair-use
 //
 // Every change goes through the bit_usage functions (migration
 // 20261022190000_bit-usage.sql): one locked write each, keyed by bit id, so
@@ -31,9 +32,24 @@ export function today(now = Date.now()): { day: string; resetsAt: string } {
   return { day: pacificDay(now), resetsAt: nextPacificMidnight(now) }
 }
 
+/** Nov 14 2026 (Candy): Free's bits are 3 in total, never a daily reset.
+ *  Their count lives in one lifetime row of bit_usage under this fixed day,
+ *  so the same locked bit_charge / bit_refund functions guard it and no
+ *  migration is needed. Guest, Basic and Pro keep one row per Pacific day. */
+export const LIFETIME_DAY = '1970-01-01'
+
+/** What a lifetime count reports as its reset: never. */
+export const NEVER_RESETS = '9999-12-31T00:00:00.000Z'
+
+/** The bit_usage day key a tier's new bits are counted under. */
+export function bitDay(tier: BitTier, day: string): string {
+  return limitFor('bit', tier).period === 'ever' ? LIFETIME_DAY : day
+}
+
 /** What the browser is told. Pro's cap is never sent. */
 export function usageView(tier: BitTier, used: number, resetsAt: string): BitUsage {
-  return { used, cap: tier === 'pro' ? null : capFor(tier), resets_at: resetsAt }
+  const ever = limitFor('bit', tier).period === 'ever'
+  return { used, cap: tier === 'pro' ? null : capFor(tier), resets_at: ever ? NEVER_RESETS : resetsAt }
 }
 
 export async function readUsed(admin: any, subjectKey: string, day: string): Promise<number> {
