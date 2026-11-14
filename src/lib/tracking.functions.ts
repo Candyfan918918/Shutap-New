@@ -214,7 +214,7 @@ export const recordVisit = createServerFn({ method: 'POST' })
 
 /** Events only the server writes (from Stripe). A browser can't send them,
  *  so the daily report's payments can't be faked. */
-const SERVER_ONLY_EVENTS = new Set(['paid'])
+const SERVER_ONLY_EVENTS = new Set(['paid', 'payment_problem'])
 
 const EventIn = z.object({
   session_id: z.string().min(1).max(120).optional(),

@@ -1468,7 +1468,10 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             if (e.target === e.currentTarget) {
               if (sheet === 'signin' || sheet === 'signin_write') dismissSignin('backdrop')
               else {
-                if (sheet === 'paywall' || sheet === 'upgrade') clearPending()
+                if (sheet === 'paywall' || sheet === 'upgrade') {
+                  clearPending()
+                  void trackEvent('paywall_closed', { where: paywallWhere, how: 'backdrop', sheet })
+                }
                 setSheet(null)
               }
             }
@@ -1498,6 +1501,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 onPick={(plan) => void trackEvent('plan_chosen', { plan, where: paywallWhere })}
                 onClose={() => {
                   clearPending()
+                  void trackEvent('paywall_closed', { where: paywallWhere, how: 'close', sheet: 'paywall' })
                   setSheet(null)
                 }}
               />
@@ -1509,6 +1513,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 onUpgraded={() => void onUpgraded()}
                 onClose={() => {
                   clearPending()
+                  void trackEvent('paywall_closed', { where: paywallWhere, how: 'close', sheet: 'upgrade' })
                   setSheet(null)
                 }}
               />

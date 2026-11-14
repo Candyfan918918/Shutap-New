@@ -52,8 +52,24 @@ export function setSurfacePage(page: string): void {
 
 /** Every joke event carries the tier. Situation text never rides along. */
 export function jokeTrack(name: string, tier: JokeTier | BitTier, props: Record<string, unknown> = {}): void {
-  void phCapture(name, { product: 'bits', ...props, tier, surface: surfacePage })
+  const p = { product: 'bits', ...props, tier, surface: surfacePage }
+  // Nov 14 2026: the funnel steps the admin guests page counts also go to
+  // the admin events table (trackEvent sends to PostHog as well).
+  if (ADMIN_FUNNEL_EVENTS.has(name)) { void trackEvent(name, p); return }
+  void phCapture(name, p)
 }
+
+/** jokeTrack names that /admin/guests needs in the events table. */
+export const ADMIN_FUNNEL_EVENTS = new Set([
+  'bit_submitted',
+  'bit_written',
+  'bit_write_failed',
+  'limit_shown',
+  'story_split_done',
+  'story_split_failed',
+  'signin_sheet_opened',
+  'signin_dismissed',
+])
 
 /** A tap on a result control (download, copy, watch), in PostHog AND in the
  *  admin events table, the moment it happens and whatever happens next, so a
