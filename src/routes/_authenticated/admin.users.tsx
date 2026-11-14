@@ -1,6 +1,6 @@
 import { pageMeta } from '@/lib/seo/page-meta'
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { adminListUsers } from '@/lib/admin.functions'
 import { AdminShell } from '@/components/AdminShell'
@@ -95,6 +95,30 @@ function AdminUsersPage() {
       ? <th style={th}>{label}</th>
       : <SortableTh col={col as SortCol} label={label} />
 
+  // Top horizontal scrollbar mirrors the grid's own, so wide columns are reachable without scrolling to the bottom.
+  const topBarRef = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
+  const syncing = useRef(false)
+  const [gridWidth, setGridWidth] = useState(0)
+  const syncScroll = (from: 'top' | 'grid') => {
+    if (syncing.current) { syncing.current = false; return }
+    const a = from === 'top' ? topBarRef.current : gridRef.current
+    const b = from === 'top' ? gridRef.current : topBarRef.current
+    if (!a || !b || b.scrollLeft === a.scrollLeft) return
+    syncing.current = true
+    b.scrollLeft = a.scrollLeft
+  }
+  useEffect(() => {
+    const el = gridRef.current
+    if (!el) return
+    const measure = () => setGridWidth(el.scrollWidth)
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    if (el.firstElementChild) ro.observe(el.firstElementChild)
+    return () => ro.disconnect()
+  }, [rows])
+
   return (
     <AdminShell title="users" subtitle="newest sign-up first · people who deleted their account stay listed, without email or name, and are never contacted">
       {top && <BigNumbers total={top.total} dau={top.dau} mau={top.mau} />}
@@ -116,7 +140,16 @@ function AdminUsersPage() {
       ) : rows.length === 0 ? (
         <div style={{ color: '#443c42', fontStyle: 'italic' }}>no users yet</div>
       ) : (
-        <div style={{ background: '#fff', borderRadius: 14, border: '.5px solid rgba(11,8,15,.08)', overflow: 'auto' }}>
+        <>
+        <div
+          ref={topBarRef}
+          onScroll={() => syncScroll('top')}
+          aria-hidden="true"
+          style={{ overflowX: 'auto', overflowY: 'hidden', height: 14, marginBottom: 4, position: 'sticky', top: 0, zIndex: 2, background: '#fdfbf9' }}
+        >
+          <div style={{ width: gridWidth, height: 1 }} />
+        </div>
+        <div ref={gridRef} onScroll={() => syncScroll('grid')} style={{ background: '#fff', borderRadius: 14, border: '.5px solid rgba(11,8,15,.08)', overflow: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ background: '#ffffff', textAlign: 'left', color: '#443c42' }}>
@@ -164,6 +197,7 @@ function AdminUsersPage() {
             </tbody>
           </table>
         </div>
+        </>
       )}
     </AdminShell>
   )
