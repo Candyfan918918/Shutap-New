@@ -9,8 +9,8 @@ import { getBitDemo } from '@/lib/bits/demo.functions'
 // box; Shutap cuts the story into a bit, their words only. Server-rendered
 // and indexed.
 const PATH = '/bits'
-const TITLE = 'Shutap Bits — tell it your way, get a video, a teleprompter with cues, a sketch and a skit'
-const DESCRIPTION = 'For creators and comedians: tell your story your way and Shutap cuts it into a bit (hook, setup, two tags, button), your words word for word; the AI copilot drafts any line your story didn’t cover. Tap funnier on any line for three other ways to say it. Post it as a 5-second video, or rehearse and perform it as stand-up with delivery cues, a sketch or a skit. Free, no sign-in to start.'
+const TITLE = 'Shutap Bits — create, refine, practice and rehearse your bit'
+const DESCRIPTION = 'Create your bit from one line: Shutap cuts what you type into a hook, setup, two tags and a button, your words word for word, and the AI copilot drafts any line your story didn’t cover. Refine it with funnier on any line, practice on a teleprompter with delivery cues, rehearse it as a sketch or a skit, and post the 5-second video. Free, no sign-in to start.'
 
 const faqSchema = {
   '@context': 'https://schema.org',

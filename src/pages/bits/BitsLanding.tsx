@@ -27,7 +27,7 @@ import { cuesForLines } from '@/lib/bits/cues'
 import '@/components/feed/feed.css'
 import './bits.css'
 
-const BANNER = ['Tell it your way', 'Your lines, word for word', 'AI fills only the gaps', 'Funnier on any line', 'Lock what’s done', '5-second video', 'Stand-up teleprompter', 'Delivery cues', 'Rehearse the timing', 'Sketch page', 'Skit shot list', 'No new jokes added']
+const BANNER = ['Create: one line in, a bit out', 'Your lines, word for word', 'AI fills only the gaps', 'Refine: funnier on any line', 'Lock what’s done', 'Practice: teleprompter with cues', 'Rehearse: sketch page and skit shot list', '5-second video to post']
 
 const LINE_INFO: { s: 'hook' | 'setup' | 'tag0' | 'tag1' | 'button'; k: string; d: string }[] = [
   { s: 'hook', k: 'Hook', d: 'The first 2 seconds. What happened, the way you’d say it first: a reason to listen.' },
@@ -173,7 +173,8 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
   const [phase, setPhase] = useState<'write' | 'result'>('write')
   const toBox = (where: string) => {
     tap('seo_cta_clicked', { kind: where })
-    document.getElementById('bits-write')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document.getElementById('bits-write')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    window.setTimeout(() => (document.getElementById('bit-story') as HTMLTextAreaElement | null)?.focus({ preventScroll: true }), 450)
   }
   const run = BANNER.flatMap((b) => [<span key={b}>{b}</span>, <i key={b + '·'}>●</i>])
   return (
@@ -182,47 +183,40 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
         <div className="bl-marq-run" aria-hidden>{run}{BANNER.flatMap((b) => [<span key={b + '2'}>{b}</span>, <i key={b + '·2'}>●</i>])}</div>
       </div>
 
+      {/* Nov 14 2026 (Candy, designs C + A): the ask on the first screen. The
+          headline, then one line to type, then what one story becomes. */}
       {phase === 'write' && (
-        <section className="bo-hero">
+        <section className="bo-hero bo-top">
           <div className="bo-head">
             <div className="bo-head-l">
-              <p className="bl-kick">{lead === 'standup' ? 'Shutap Bits · stand-up teleprompter' : 'Shutap Bits · for creators and comedians'}</p>
-              {lead === 'standup' ? (
-                <h1 className="bl-h1">Rehearse your bit <em>with delivery cues. Then post it, stage it or film it.</em></h1>
-              ) : (
-                <h1 className="bl-h1">Tell it your way. <em>Get a video, a teleprompter with cues, a sketch and a skit.</em></h1>
-              )}
+              <p className="bl-kick">Shutap Bits · for creators and comedians</p>
+              <h1 className="bl-h1">Create your bit. <em>Refine it, practice it, rehearse it.</em></h1>
             </div>
-            <p className="bl-lead">{demo ? 'This story was typed in-house, the way you would. Everything below it is what Shutap made from it. No new jokes added.' : 'Tell your story in the box. Shutap cuts it into a bit, your words word for word, the AI copilot drafts any line your story didn’t cover, and Shutap lays it out as a 5-second video, stand-up with delivery cues, a sketch and a skit.'}</p>
           </div>
-          {demo && <Outputs d={demo} lead={lead} />}
-          {demo && (
-            <p className="bo-under">
-              <span>All four made from the same story{demo.funnier.length ? ` · ${demo.funnier.length === 1 ? 'one line' : `${demo.funnier.length} lines`} used funnier, picked by the writer` : ''} · real output, not edited</span>
-              <a href="#bits-behind" onClick={() => tap('seo_cta_clicked', { kind: 'see_demo_lines' })}>see what they typed ↓</a>
-            </p>
-          )}
         </section>
       )}
 
-      <section className={`bo-write${phase === "result" ? " result" : ""}`} id="bits-write">
-        {phase === 'write' && (
-          <div className="bo-write-h">
-            <h2>Your turn — write yours.</h2>
-            <span>free · no sign-in to start · your lines stay word for word</span>
-          </div>
-        )}
+      <section className={`bo-write bo-write-top${phase === "result" ? " result" : ""}`} id="bits-write">
         <div className="bl-box" id="bits-top">
-          <BitSurface embed={{ page: 'bits', heading: '', bare: true, onPhase: setPhase, demoStory: demo ? demoStory(demo) : undefined }} />
+          <BitSurface embed={{ page: 'bits', heading: '', bare: true, drive: true, onPhase: setPhase, demoStory: demo ? demoStory(demo) : undefined }} />
         </div>
-        {phase === 'write' && (
+      </section>
+
+      {phase === 'write' && demo && (
+        <section className="bo-hero bo-demo">
+          <div className="bo-under">
+            <b>What one story becomes ↓</b>
+            <span>A realistic demo, typed in-house and made by Shutap{demo.funnier.length ? ` · ${demo.funnier.length === 1 ? 'one line' : `${demo.funnier.length} lines`} used funnier` : ''} · not edited · <a href="#bits-behind" onClick={() => tap('seo_cta_clicked', { kind: 'see_demo_lines' })}>see what they typed ↓</a></span>
+          </div>
+          <Outputs d={demo} lead={lead} />
+          <p className="bo-nudge"><button type="button" onClick={() => toBox('demo_nudge')}>Make yours: type one line ↑</button></p>
           <ul className="bl-trust">
-            <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f6a45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" /></svg>Every word is yours</li>
+            <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f6a45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" /></svg>Your lines stay word for word</li>
             <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e1c4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v4l3 2" /></svg>AI drafts only the lines you leave empty</li>
             <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e1c4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z" /><path d="M9 12l2 2 4-4" /></svg>Your bits never train AI</li>
           </ul>
-        )}
-      </section>
+        </section>
+      )}
 
       <div className="bl-lower">
         {demo && (
@@ -244,10 +238,11 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
           </div>
         )}
 
-        <div className="bl-steps3">
-          <div><p className="n">1</p><h3>Tell it your way</h3><p>Who was there, what they said, what you did, how it ended. Checks show what makes a bit land; nothing is blocked.</p></div>
-          <div><p className="n">2</p><h3>Get your bit</h3><p>Your story, cut into a hook, setup, two tags and a button. Your words only. Tap funnier on a line where you’re stuck; lock what’s done.</p></div>
-          <div><p className="n">3</p><h3>Post it or perform it</h3><p>The 5-second video, stand-up with delivery cues to rehearse with, a sketch page or a skit, laid out from your bit.</p></div>
+        <div className="bl-steps3 four">
+          <div><p className="n">1</p><h3>Create</h3><p>Type what happened, even one line. Shutap cuts it into a hook, setup, two tags and a button; your lines stay word for word and the AI copilot drafts the ones your story didn’t cover.</p></div>
+          <div><p className="n">2</p><h3>Refine</h3><p>Tap funnier on a line where you’re stuck for three other ways to say it, yours first. Change any AI draft; lock what’s done.</p></div>
+          <div><p className="n">3</p><h3>Practice</h3><p>Stand-up on the teleprompter: your lines at talking pace, with delivery cues like (beat) and pauses for the laugh.</p></div>
+          <div><p className="n">4</p><h3>Rehearse</h3><p>Run it as a sketch page or a skit shot list, then post the 5-second video or take it to the stage.</p></div>
         </div>
 
         <div className="bl-block">
