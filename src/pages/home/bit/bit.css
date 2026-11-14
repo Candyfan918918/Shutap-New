@@ -565,7 +565,7 @@
   .dv-item:not(.on) { display: none; }
   .dv-set .bt-ctl { grid-template-columns: 1fr; }
 }
-@media (max-width: 760px) { .dv-paper { height: 78px; font-size: 18px; line-height: 25px; padding: 12px 14px; } }
+@media (max-width: 760px) { .dv-paper { flex: none; height: 78px; font-size: 18px; line-height: 25px; padding: 12px 14px; } .dv.open .dv-paper { flex: none; } }
 /* beats `.bt-box textarea` (Sora) so the story reads in Newsreader like the page's quotes */
 .bt-box.dv textarea.dv-paper { font: 400 19px/26px var(--news); }
 .bt-box.dv.open textarea.dv-paper { font: 400 18px/30px var(--news); }

@@ -192,12 +192,6 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
               <p className="bl-kick">Shutap Bits · for creators and comedians</p>
               <h1 className="bl-h1">Create your bit. <em>Refine it, practice it, rehearse it.</em></h1>
             </div>
-            <ol className="bo-steps">
-              <li><b>1 Create</b><span>one line in</span></li>
-              <li><b>2 Refine</b><span>funnier, lock</span></li>
-              <li><b>3 Practice</b><span>prompter, cues</span></li>
-              <li><b>4 Rehearse</b><span>sketch, skit, post</span></li>
-            </ol>
           </div>
         </section>
       )}
