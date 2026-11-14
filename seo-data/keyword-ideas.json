@@ -1,7 +1,7 @@
 {
  "source": "Bing Webmaster GetRelatedKeywords (US, last ~30 days)",
- "pulledAt": "2026-11-13T21:27:16.997Z",
- "seeds": 45,
+ "pulledAt": "2026-11-14T19:58:13.655Z",
+ "seeds": 50,
  "ideas": [
   {
    "query": "zillow",
@@ -100,6 +100,12 @@
    "seed": "how to tell a story"
   },
   {
+   "query": "trulia",
+   "impressions": 94456,
+   "broadImpressions": 114051,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "zillow.com",
    "impressions": 89482,
    "broadImpressions": 104844,
@@ -110,6 +116,12 @@
    "impressions": 71410,
    "broadImpressions": 76820,
    "seed": "how to tell a story"
+  },
+  {
+   "query": "homes.com",
+   "impressions": 70970,
+   "broadImpressions": 82829,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "tt",
@@ -346,6 +358,12 @@
    "seed": "real estate video script"
   },
   {
+   "query": "realtor com",
+   "impressions": 9884,
+   "broadImpressions": 123877,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "how to write a good essay introduction",
    "impressions": 9390,
    "broadImpressions": 9390,
@@ -422,6 +440,12 @@
    "impressions": 6952,
    "broadImpressions": 7279,
    "seed": "tiktok watch time"
+  },
+  {
+   "query": "realtor.com homes for sale",
+   "impressions": 6722,
+   "broadImpressions": 6864,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "tiktok app download",
@@ -868,6 +892,12 @@
    "seed": "real estate video script"
   },
   {
+   "query": "where to buy",
+   "impressions": 2626,
+   "broadImpressions": 36528,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "funny images",
    "impressions": 2564,
    "broadImpressions": 4393,
@@ -1222,6 +1252,12 @@
    "seed": "dry humor"
   },
   {
+   "query": "zillow .com",
+   "impressions": 1712,
+   "broadImpressions": 1821,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "roast beef",
    "impressions": 1698,
    "broadImpressions": 15074,
@@ -1442,6 +1478,12 @@
    "impressions": 1439,
    "broadImpressions": 1439,
    "seed": "listing video"
+  },
+  {
+   "query": "homes for sale near me zillow",
+   "impressions": 1427,
+   "broadImpressions": 1427,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "shorts videos",
@@ -1702,6 +1744,12 @@
    "seed": "listing video"
   },
   {
+   "query": "zillow'",
+   "impressions": 1197,
+   "broadImpressions": 1197,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "excited gif funny",
    "impressions": 1194,
    "broadImpressions": 1194,
@@ -1940,6 +1988,12 @@
    "impressions": 1033,
    "broadImpressions": 11700,
    "seed": "real estate video script"
+  },
+  {
+   "query": "coldwell banker real estate listings",
+   "impressions": 1028,
+   "broadImpressions": 1333,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to write a function from a graph",
@@ -2704,15 +2758,15 @@
    "seed": "how to make a joke funnier"
   },
   {
-   "query": "funny friday memes",
-   "impressions": 719,
-   "broadImpressions": 794,
-   "seed": "funny captions"
-  },
-  {
    "query": "funny songs",
    "impressions": 719,
    "broadImpressions": 763,
+   "seed": "funny captions"
+  },
+  {
+   "query": "funny friday memes",
+   "impressions": 719,
+   "broadImpressions": 794,
    "seed": "funny captions"
   },
   {
@@ -3094,6 +3148,12 @@
    "seed": "tiktok watch time"
   },
   {
+   "query": "zillow miami",
+   "impressions": 636,
+   "broadImpressions": 717,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "roast pork shoulder",
    "impressions": 633,
    "broadImpressions": 870,
@@ -3110,6 +3170,12 @@
    "impressions": 630,
    "broadImpressions": 630,
    "seed": "stand up comedy tips"
+  },
+  {
+   "query": "zillow real estate listings",
+   "impressions": 628,
+   "broadImpressions": 776,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "baked ziti recipe never dry",
@@ -3148,13 +3214,13 @@
    "seed": "tiktok watch time"
   },
   {
-   "query": "how to make a paper airplane easy",
+   "query": "how to make a bed in minecraft",
    "impressions": 609,
    "broadImpressions": 609,
    "seed": "how to make a joke funnier"
   },
   {
-   "query": "how to make a bed in minecraft",
+   "query": "how to make a paper airplane easy",
    "impressions": 609,
    "broadImpressions": 609,
    "seed": "how to make a joke funnier"
@@ -3340,15 +3406,15 @@
    "seed": "how to make a joke funnier"
   },
   {
-   "query": "eye of round roast",
-   "impressions": 572,
-   "broadImpressions": 2875,
-   "seed": "roast jokes"
-  },
-  {
    "query": "beef chuck roast",
    "impressions": 572,
    "broadImpressions": 2578,
+   "seed": "roast jokes"
+  },
+  {
+   "query": "eye of round roast",
+   "impressions": 572,
+   "broadImpressions": 2875,
    "seed": "roast jokes"
   },
   {
@@ -3742,13 +3808,19 @@
    "seed": "funny work stories"
   },
   {
-   "query": "juicy roast turkey",
+   "query": "zillow roanoke va",
+   "impressions": 487,
+   "broadImpressions": 487,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
+   "query": "chuck roast in oven",
    "impressions": 486,
    "broadImpressions": 486,
    "seed": "roast jokes"
   },
   {
-   "query": "chuck roast in oven",
+   "query": "juicy roast turkey",
    "impressions": 486,
    "broadImpressions": 486,
    "seed": "roast jokes"
@@ -3838,13 +3910,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to write a compound inequality from a graph",
+   "query": "how to write a short story with a twist",
    "impressions": 474,
    "broadImpressions": 474,
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a short story with a twist",
+   "query": "how to write a compound inequality from a graph",
    "impressions": 474,
    "broadImpressions": 474,
    "seed": "how to write a joke"
@@ -4132,6 +4204,12 @@
    "seed": "listing video"
   },
   {
+   "query": "homes for sale in west virginia",
+   "impressions": 435,
+   "broadImpressions": 435,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "how to write a memo",
    "impressions": 434,
    "broadImpressions": 444,
@@ -4180,15 +4258,15 @@
    "seed": "how to write a joke"
   },
   {
-   "query": "dry gangrene",
-   "impressions": 426,
-   "broadImpressions": 458,
-   "seed": "dry humor"
-  },
-  {
    "query": "what is dry ice",
    "impressions": 426,
    "broadImpressions": 603,
+   "seed": "dry humor"
+  },
+  {
+   "query": "dry gangrene",
+   "impressions": 426,
+   "broadImpressions": 458,
    "seed": "dry humor"
   },
   {
@@ -4250,6 +4328,12 @@
    "impressions": 416,
    "broadImpressions": 530,
    "seed": "how to make a joke funnier"
+  },
+  {
+   "query": "trulia real estate",
+   "impressions": 416,
+   "broadImpressions": 416,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "comedy events near me 2026 calendar",
@@ -4376,6 +4460,12 @@
    "impressions": 399,
    "broadImpressions": 551,
    "seed": "listing video"
+  },
+  {
+   "query": "berkshire hathaway real estate listings",
+   "impressions": 399,
+   "broadImpressions": 399,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "ben bankas comedy",
@@ -4672,15 +4762,15 @@
    "seed": "how to write a joke"
   },
   {
-   "query": "dry well",
-   "impressions": 362,
-   "broadImpressions": 508,
-   "seed": "dry humor"
-  },
-  {
    "query": "yankee freedom dry tortugas",
    "impressions": 362,
    "broadImpressions": 362,
+   "seed": "dry humor"
+  },
+  {
+   "query": "dry well",
+   "impressions": 362,
+   "broadImpressions": 508,
    "seed": "dry humor"
   },
   {
@@ -4766,6 +4856,12 @@
    "impressions": 352,
    "broadImpressions": 352,
    "seed": "listing video"
+  },
+  {
+   "query": "real estate listings near me",
+   "impressions": 352,
+   "broadImpressions": 1265,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "freeze dry wholesalers",
@@ -4936,6 +5032,18 @@
    "seed": "comedy writing"
   },
   {
+   "query": "century 21 real estate listings",
+   "impressions": 323,
+   "broadImpressions": 382,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
+   "query": "zillow san antonio texas",
+   "impressions": 323,
+   "broadImpressions": 323,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "how to write a personal statement",
    "impressions": 322,
    "broadImpressions": 322,
@@ -4958,6 +5066,12 @@
    "impressions": 322,
    "broadImpressions": 581,
    "seed": "open house script"
+  },
+  {
+   "query": "howard hanna real estate listings",
+   "impressions": 322,
+   "broadImpressions": 483,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to tell if a girl likes you",
@@ -5014,6 +5128,12 @@
    "seed": "listing video"
   },
   {
+   "query": "loopnet commercial real estate listings",
+   "impressions": 318,
+   "broadImpressions": 318,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "how to write a thesis statement examples",
    "impressions": 317,
    "broadImpressions": 317,
@@ -5050,12 +5170,6 @@
    "seed": "listing video"
   },
   {
-   "query": "brad garrett comedy club",
-   "impressions": 312,
-   "broadImpressions": 312,
-   "seed": "comedy writing"
-  },
-  {
    "query": "comedy movies 2026",
    "impressions": 312,
    "broadImpressions": 579,
@@ -5065,6 +5179,12 @@
    "query": "comedy zone charlotte nc",
    "impressions": 312,
    "broadImpressions": 331,
+   "seed": "comedy writing"
+  },
+  {
+   "query": "brad garrett comedy club",
+   "impressions": 312,
+   "broadImpressions": 312,
    "seed": "comedy writing"
   },
   {
@@ -5090,6 +5210,12 @@
    "impressions": 309,
    "broadImpressions": 309,
    "seed": "listing video"
+  },
+  {
+   "query": "houses for sale in north carolina",
+   "impressions": 309,
+   "broadImpressions": 309,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "magoobys joke house",
@@ -5254,15 +5380,15 @@
    "seed": "funny work stories"
   },
   {
-   "query": "how to make a killing",
-   "impressions": 286,
-   "broadImpressions": 1208,
-   "seed": "how to make a joke funnier"
-  },
-  {
    "query": "how to make a new folder",
    "impressions": 286,
    "broadImpressions": 286,
+   "seed": "how to make a joke funnier"
+  },
+  {
+   "query": "how to make a killing",
+   "impressions": 286,
+   "broadImpressions": 1208,
    "seed": "how to make a joke funnier"
   },
   {
@@ -5432,6 +5558,12 @@
    "impressions": 273,
    "broadImpressions": 273,
    "seed": "listing video"
+  },
+  {
+   "query": "redfin real estate listings",
+   "impressions": 273,
+   "broadImpressions": 273,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to start a small business",
@@ -5614,6 +5746,12 @@
    "seed": "rule of three comedy"
   },
   {
+   "query": "west virginia real estate",
+   "impressions": 258,
+   "broadImpressions": 286,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "comedy on state",
    "impressions": 255,
    "broadImpressions": 278,
@@ -5644,15 +5782,15 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to make a baby",
-   "impressions": 254,
-   "broadImpressions": 271,
-   "seed": "how to make a joke funnier"
-  },
-  {
    "query": "how to make a file",
    "impressions": 254,
    "broadImpressions": 1049,
+   "seed": "how to make a joke funnier"
+  },
+  {
+   "query": "how to make a baby",
+   "impressions": 254,
+   "broadImpressions": 271,
    "seed": "how to make a joke funnier"
   },
   {
@@ -5708,6 +5846,12 @@
    "impressions": 250,
    "broadImpressions": 250,
    "seed": "listing video"
+  },
+  {
+   "query": "coldwell banker real estate listings near me",
+   "impressions": 250,
+   "broadImpressions": 250,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "rib roast",
@@ -5776,6 +5920,12 @@
    "seed": "comedy writing"
   },
   {
+   "query": "re/max real estate listings",
+   "impressions": 243,
+   "broadImpressions": 306,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "kountry wayne comedy",
    "impressions": 242,
    "broadImpressions": 242,
@@ -5804,6 +5954,12 @@
    "impressions": 238,
    "broadImpressions": 238,
    "seed": "self deprecating humor"
+  },
+  {
+   "query": "maine real estate listings",
+   "impressions": 238,
+   "broadImpressions": 283,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to be gay",
@@ -6160,6 +6316,12 @@
    "seed": "listing video"
   },
   {
+   "query": "zillow commercial real estate listings",
+   "impressions": 209,
+   "broadImpressions": 209,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "read alouds",
    "impressions": 208,
    "broadImpressions": 2842,
@@ -6274,6 +6436,12 @@
    "seed": "open house script"
   },
   {
+   "query": "zillow nashville",
+   "impressions": 200,
+   "broadImpressions": 686,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "how to write a story",
    "impressions": 199,
    "broadImpressions": 244,
@@ -6328,6 +6496,12 @@
    "seed": "rule of three comedy"
   },
   {
+   "query": "commercial real estate listings near me",
+   "impressions": 197,
+   "broadImpressions": 197,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "funny youtube videos",
    "impressions": 196,
    "broadImpressions": 196,
@@ -6352,13 +6526,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "mccurdy's comedy sarasota",
+   "query": "comedy mask",
    "impressions": 194,
    "broadImpressions": 194,
    "seed": "comedy writing"
   },
   {
-   "query": "comedy mask",
+   "query": "mccurdy's comedy sarasota",
    "impressions": 194,
    "broadImpressions": 194,
    "seed": "comedy writing"
@@ -6424,6 +6598,12 @@
    "seed": "listing video"
   },
   {
+   "query": "zillow milford ct",
+   "impressions": 192,
+   "broadImpressions": 192,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "how to get smarter",
    "impressions": 191,
    "broadImpressions": 191,
@@ -6460,15 +6640,15 @@
    "seed": "dry humor"
   },
   {
-   "query": "how to start a llc",
-   "impressions": 189,
-   "broadImpressions": 189,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "start a business",
    "impressions": 189,
    "broadImpressions": 2616,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start a llc",
+   "impressions": 189,
+   "broadImpressions": 189,
    "seed": "how to start stand up comedy"
   },
   {
@@ -6508,13 +6688,13 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "how to start a meeting in teams",
+   "query": "how to start writing a book",
    "impressions": 186,
    "broadImpressions": 186,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start writing a book",
+   "query": "how to start a meeting in teams",
    "impressions": 186,
    "broadImpressions": 186,
    "seed": "how to start stand up comedy"
@@ -6526,15 +6706,15 @@
    "seed": "how to make a joke funnier"
   },
   {
-   "query": "how to be smart",
-   "impressions": 183,
-   "broadImpressions": 214,
-   "seed": "how to be funny"
-  },
-  {
    "query": "learntobe",
    "impressions": 183,
    "broadImpressions": 380,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be smart",
+   "impressions": 183,
+   "broadImpressions": 214,
    "seed": "how to be funny"
   },
   {
@@ -6592,13 +6772,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "what does lgbtq stand for joke",
+   "query": "batman the killing joke",
    "impressions": 180,
    "broadImpressions": 180,
    "seed": "joke structure"
   },
   {
-   "query": "batman the killing joke",
+   "query": "what does lgbtq stand for joke",
    "impressions": 180,
    "broadImpressions": 180,
    "seed": "joke structure"
@@ -6652,6 +6832,12 @@
    "seed": "funny christmas card messages"
   },
   {
+   "query": "san francisco real estate",
+   "impressions": 178,
+   "broadImpressions": 178,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "christmas greetings",
    "impressions": 177,
    "broadImpressions": 319,
@@ -6662,6 +6848,12 @@
    "impressions": 177,
    "broadImpressions": 187,
    "seed": "funny christmas card messages"
+  },
+  {
+   "query": "mls real estate listings",
+   "impressions": 177,
+   "broadImpressions": 177,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to be pretty",
@@ -6712,27 +6904,27 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "loopnet listing",
-   "impressions": 174,
-   "broadImpressions": 174,
-   "seed": "listing video"
-  },
-  {
    "query": "craigslist listing",
    "impressions": 174,
    "broadImpressions": 174,
    "seed": "listing video"
   },
   {
-   "query": "comedy video",
-   "impressions": 173,
-   "broadImpressions": 281,
-   "seed": "comedy writing"
+   "query": "loopnet listing",
+   "impressions": 174,
+   "broadImpressions": 174,
+   "seed": "listing video"
   },
   {
    "query": "comedy barn",
    "impressions": 173,
    "broadImpressions": 615,
+   "seed": "comedy writing"
+  },
+  {
+   "query": "comedy video",
+   "impressions": 173,
+   "broadImpressions": 281,
    "seed": "comedy writing"
   },
   {
@@ -6784,13 +6976,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "how to start a clothing brand",
+   "query": "how to start page numbers on page 2",
    "impressions": 171,
    "broadImpressions": 171,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start page numbers on page 2",
+   "query": "how to start a clothing brand",
    "impressions": 171,
    "broadImpressions": 171,
    "seed": "how to start stand up comedy"
@@ -6850,15 +7042,15 @@
    "seed": "comedy writing"
   },
   {
-   "query": "keepers babe joke of the day",
-   "impressions": 167,
-   "broadImpressions": 167,
-   "seed": "joke structure"
-  },
-  {
    "query": "best joke of the day",
    "impressions": 167,
    "broadImpressions": 220,
+   "seed": "joke structure"
+  },
+  {
+   "query": "keepers babe joke of the day",
+   "impressions": 167,
+   "broadImpressions": 167,
    "seed": "joke structure"
   },
   {
@@ -6898,6 +7090,12 @@
    "seed": "humorous speech ideas"
   },
   {
+   "query": "homes for sale milford ct",
+   "impressions": 166,
+   "broadImpressions": 166,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "stand up comedy this weekend",
    "impressions": 165,
    "broadImpressions": 165,
@@ -6920,6 +7118,12 @@
    "impressions": 165,
    "broadImpressions": 999,
    "seed": "how to make a joke funnier"
+  },
+  {
+   "query": "for sale property",
+   "impressions": 165,
+   "broadImpressions": 165,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to tell if i'm registered to vote",
@@ -6976,6 +7180,12 @@
    "seed": "best man speech jokes"
   },
   {
+   "query": "houses to buy",
+   "impressions": 163,
+   "broadImpressions": 233,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "standup",
    "impressions": 161,
    "broadImpressions": 3544,
@@ -6988,16 +7198,22 @@
    "seed": "storytime ideas"
   },
   {
+   "query": "federal rule of civil procedure 33",
+   "impressions": 161,
+   "broadImpressions": 161,
+   "seed": "rule of three comedy"
+  },
+  {
    "query": "the rule of law project",
    "impressions": 161,
    "broadImpressions": 161,
    "seed": "rule of three comedy"
   },
   {
-   "query": "federal rule of civil procedure 33",
+   "query": "howard hanna real estate listings near me",
    "impressions": 161,
    "broadImpressions": 161,
-   "seed": "rule of three comedy"
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to write a good hook",
@@ -7096,6 +7312,12 @@
    "seed": "open house script"
   },
   {
+   "query": "comedy clubs",
+   "impressions": 156,
+   "broadImpressions": 7870,
+   "seed": "stand up comedy tips"
+  },
+  {
    "query": "daytime comedy shows near me",
    "impressions": 156,
    "broadImpressions": 156,
@@ -7105,12 +7327,6 @@
    "query": "the stand nyc",
    "impressions": 156,
    "broadImpressions": 156,
-   "seed": "stand up comedy tips"
-  },
-  {
-   "query": "comedy clubs",
-   "impressions": 156,
-   "broadImpressions": 7870,
    "seed": "stand up comedy tips"
   },
   {
@@ -7150,25 +7366,25 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "how to start a conclusion",
-   "impressions": 154,
-   "broadImpressions": 547,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start a group chat in teams",
    "impressions": 154,
    "broadImpressions": 154,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to write a sentence as an equation",
+   "query": "how to start a conclusion",
+   "impressions": 154,
+   "broadImpressions": 547,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to write a memoir",
    "impressions": 153,
    "broadImpressions": 153,
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a memoir",
+   "query": "how to write a sentence as an equation",
    "impressions": 153,
    "broadImpressions": 153,
    "seed": "how to write a joke"
@@ -7190,6 +7406,12 @@
    "impressions": 152,
    "broadImpressions": 152,
    "seed": "stand up comedy tips"
+  },
+  {
+   "query": "houses for sale roanoke va",
+   "impressions": 151,
+   "broadImpressions": 151,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "funny turkey",
@@ -7240,10 +7462,22 @@
    "seed": "best man speech jokes"
   },
   {
+   "query": "homes for sale roanoke va",
+   "impressions": 149,
+   "broadImpressions": 149,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "secret santa gift ideas",
    "impressions": 148,
    "broadImpressions": 187,
    "seed": "funny secret santa ideas"
+  },
+  {
+   "query": "zillow real estate listings near me",
+   "impressions": 148,
+   "broadImpressions": 148,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "something funny",
@@ -7306,13 +7540,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "how to start your own business",
+   "query": "how to start an argumentative essay",
    "impressions": 146,
    "broadImpressions": 146,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start an argumentative essay",
+   "query": "how to start your own business",
    "impressions": 146,
    "broadImpressions": 146,
    "seed": "how to start stand up comedy"
@@ -7420,6 +7654,12 @@
    "seed": "listing video"
   },
   {
+   "query": "commercial real estate listings",
+   "impressions": 141,
+   "broadImpressions": 883,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "how to start a zoom meeting",
    "impressions": 140,
    "broadImpressions": 140,
@@ -7514,6 +7754,12 @@
    "impressions": 136,
    "broadImpressions": 136,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "homes for sale in auburn al",
+   "impressions": 136,
+   "broadImpressions": 136,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "drybar comedy",
@@ -7618,6 +7864,12 @@
    "seed": "joke structure"
   },
   {
+   "query": "zillow auburn al",
+   "impressions": 132,
+   "broadImpressions": 132,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "humor meaning",
    "impressions": 131,
    "broadImpressions": 268,
@@ -7720,15 +7972,15 @@
    "seed": "funny wedding vows"
   },
   {
-   "query": "how to be a hacker",
-   "impressions": 125,
-   "broadImpressions": 144,
-   "seed": "how to be funny"
-  },
-  {
    "query": "how to be a notary",
    "impressions": 125,
    "broadImpressions": 125,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be a hacker",
+   "impressions": 125,
+   "broadImpressions": 144,
    "seed": "how to be funny"
   },
   {
@@ -7742,6 +7994,12 @@
    "impressions": 125,
    "broadImpressions": 125,
    "seed": "how to make a joke funnier"
+  },
+  {
+   "query": "the villages real estate listings",
+   "impressions": 125,
+   "broadImpressions": 125,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "be yourself",
@@ -7804,6 +8062,12 @@
    "seed": "listing video"
   },
   {
+   "query": "homes for sale st petersburg fl",
+   "impressions": 123,
+   "broadImpressions": 123,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "how to write a novel",
    "impressions": 122,
    "broadImpressions": 149,
@@ -7820,6 +8084,12 @@
    "impressions": 122,
    "broadImpressions": 129,
    "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "house for sale on zillow",
+   "impressions": 122,
+   "broadImpressions": 122,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "homura madoka magica",
@@ -7864,6 +8134,12 @@
    "seed": "how to tell a story"
   },
   {
+   "query": "bozeman mt real estate",
+   "impressions": 120,
+   "broadImpressions": 120,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "dry times wow forever",
    "impressions": 119,
    "broadImpressions": 119,
@@ -7888,13 +8164,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "world's funniest videos",
+   "query": "youtube try not to laugh",
    "impressions": 118,
    "broadImpressions": 118,
    "seed": "funny video ideas"
   },
   {
-   "query": "youtube try not to laugh",
+   "query": "world's funniest videos",
    "impressions": 118,
    "broadImpressions": 118,
    "seed": "funny video ideas"
@@ -7930,6 +8206,12 @@
    "seed": "funny wedding vows"
   },
   {
+   "query": "homes for sale in fallbrook ca",
+   "impressions": 117,
+   "broadImpressions": 117,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "comedy even",
    "impressions": 116,
    "broadImpressions": 116,
@@ -7960,13 +8242,13 @@
    "seed": "funny wedding vows"
   },
   {
-   "query": "zillow open houses this weekend",
+   "query": "open house signs",
    "impressions": 116,
    "broadImpressions": 116,
    "seed": "open house script"
   },
   {
-   "query": "open house signs",
+   "query": "zillow open houses this weekend",
    "impressions": 116,
    "broadImpressions": 116,
    "seed": "open house script"
@@ -8236,6 +8518,12 @@
    "seed": "rule of three comedy"
   },
   {
+   "query": "homes for sale in st petersburg florida",
+   "impressions": 105,
+   "broadImpressions": 105,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "kids time story time",
    "impressions": 104,
    "broadImpressions": 104,
@@ -8296,13 +8584,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to be a millionaire",
+   "query": "how to be a femboy",
    "impressions": 99,
    "broadImpressions": 99,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a femboy",
+   "query": "how to be a millionaire",
    "impressions": 99,
    "broadImpressions": 99,
    "seed": "how to be funny"
@@ -8476,6 +8764,12 @@
    "seed": "listing video"
   },
   {
+   "query": "ai tools for writing",
+   "impressions": 94,
+   "broadImpressions": 144,
+   "seed": "ai tools for real estate agents"
+  },
+  {
    "query": "how to tell time",
    "impressions": 93,
    "broadImpressions": 718,
@@ -8510,6 +8804,12 @@
    "impressions": 93,
    "broadImpressions": 626,
    "seed": "open house script"
+  },
+  {
+   "query": "plattsburgh ny real estate",
+   "impressions": 93,
+   "broadImpressions": 93,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "funny fail videos",
@@ -8710,6 +9010,12 @@
    "seed": "funny christmas card messages"
   },
   {
+   "query": "miami houses for sale",
+   "impressions": 87,
+   "broadImpressions": 87,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "how to tell a girl you like her",
    "impressions": 86,
    "broadImpressions": 86,
@@ -8854,15 +9160,15 @@
    "seed": "funny tiktok ideas"
   },
   {
-   "query": "good humor",
-   "impressions": 81,
-   "broadImpressions": 386,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "deep humor",
    "impressions": 81,
    "broadImpressions": 81,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "good humor",
+   "impressions": 81,
+   "broadImpressions": 386,
    "seed": "deadpan humor"
   },
   {
@@ -8894,6 +9200,18 @@
    "impressions": 80,
    "broadImpressions": 80,
    "seed": "storytime ideas"
+  },
+  {
+   "query": "best ai tools for businesses",
+   "impressions": 80,
+   "broadImpressions": 80,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "auburn realty",
+   "impressions": 80,
+   "broadImpressions": 80,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "very funny",
@@ -9034,6 +9352,12 @@
    "seed": "stand up comedy tips"
   },
   {
+   "query": "homes real estate listings",
+   "impressions": 74,
+   "broadImpressions": 74,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "stand-up comedy",
    "impressions": 73,
    "broadImpressions": 603,
@@ -9058,13 +9382,13 @@
    "seed": "tiktok watch time"
   },
   {
-   "query": "federal rule of civil procedure 16",
+   "query": "rule of 70 formula",
    "impressions": 72,
    "broadImpressions": 72,
    "seed": "rule of three comedy"
   },
   {
-   "query": "rule of 70 formula",
+   "query": "federal rule of civil procedure 16",
    "impressions": 72,
    "broadImpressions": 72,
    "seed": "rule of three comedy"
@@ -9092,6 +9416,12 @@
    "impressions": 71,
    "broadImpressions": 71,
    "seed": "funny christmas card messages"
+  },
+  {
+   "query": "movoto real estate listings",
+   "impressions": 71,
+   "broadImpressions": 71,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to start journaling",
@@ -9184,6 +9514,12 @@
    "seed": "tiktok watch time"
   },
   {
+   "query": "cape girardeau mo real estate listings",
+   "impressions": 68,
+   "broadImpressions": 68,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "popular comedians",
    "impressions": 67,
    "broadImpressions": 67,
@@ -9230,6 +9566,18 @@
    "impressions": 65,
    "broadImpressions": 65,
    "seed": "tiktok watch time"
+  },
+  {
+   "query": "belmont ca real estate listings",
+   "impressions": 65,
+   "broadImpressions": 65,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
+   "query": "barefoot bay real estate listings",
+   "impressions": 65,
+   "broadImpressions": 65,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to be single cast",
@@ -9290,6 +9638,12 @@
    "impressions": 63,
    "broadImpressions": 63,
    "seed": "funny work stories"
+  },
+  {
+   "query": "re/max real estate listings near me",
+   "impressions": 63,
+   "broadImpressions": 63,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "what does deadpan mean",
@@ -9382,15 +9736,15 @@
    "seed": "joke structure"
   },
   {
-   "query": "rule of nines chart",
-   "impressions": 59,
-   "broadImpressions": 59,
-   "seed": "rule of three comedy"
-  },
-  {
    "query": "rule of four",
    "impressions": 59,
    "broadImpressions": 82,
+   "seed": "rule of three comedy"
+  },
+  {
+   "query": "rule of nines chart",
+   "impressions": 59,
+   "broadImpressions": 59,
    "seed": "rule of three comedy"
   },
   {
@@ -9472,25 +9826,25 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to tell if you have diabetes",
-   "impressions": 57,
-   "broadImpressions": 57,
-   "seed": "how to tell a story"
-  },
-  {
    "query": "how to tell time on an analog clock",
    "impressions": 57,
    "broadImpressions": 57,
    "seed": "how to tell a story"
   },
   {
-   "query": "wedding vows script",
+   "query": "how to tell if you have diabetes",
+   "impressions": 57,
+   "broadImpressions": 57,
+   "seed": "how to tell a story"
+  },
+  {
+   "query": "wedding vows template",
    "impressions": 57,
    "broadImpressions": 57,
    "seed": "funny wedding vows"
   },
   {
-   "query": "wedding vows template",
+   "query": "wedding vows script",
    "impressions": 57,
    "broadImpressions": 57,
    "seed": "funny wedding vows"
@@ -9502,13 +9856,19 @@
    "seed": "humorous speech ideas"
   },
   {
-   "query": "how to become a better person",
+   "query": "ai tools for students",
+   "impressions": 57,
+   "broadImpressions": 152,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "how to be taller",
    "impressions": 56,
    "broadImpressions": 56,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be taller",
+   "query": "how to become a better person",
    "impressions": 56,
    "broadImpressions": 56,
    "seed": "how to be funny"
@@ -9590,6 +9950,18 @@
    "impressions": 54,
    "broadImpressions": 54,
    "seed": "humorous speech ideas"
+  },
+  {
+   "query": "ai tools for teachers",
+   "impressions": 54,
+   "broadImpressions": 55,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "free ai tools for students",
+   "impressions": 54,
+   "broadImpressions": 54,
+   "seed": "ai tools for real estate agents"
   },
   {
    "query": "tyler vitelli storytime",
@@ -9790,6 +10162,12 @@
    "seed": "listing video"
   },
   {
+   "query": "free ai tools for writing",
+   "impressions": 50,
+   "broadImpressions": 50,
+   "seed": "ai tools for real estate agents"
+  },
+  {
    "query": "312 comedy festival",
    "impressions": 49,
    "broadImpressions": 49,
@@ -9982,13 +10360,19 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "how to be skinny",
+   "query": "homes for sale auburn al",
+   "impressions": 43,
+   "broadImpressions": 43,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
+   "query": "how to be smarter",
    "impressions": 42,
    "broadImpressions": 42,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be smarter",
+   "query": "how to be skinny",
    "impressions": 42,
    "broadImpressions": 42,
    "seed": "how to be funny"
@@ -10042,13 +10426,19 @@
    "seed": "open house script"
   },
   {
-   "query": "how to be famous",
+   "query": "wayne county pa newest real estate listings",
+   "impressions": 42,
+   "broadImpressions": 42,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
+   "query": "how to be a billionaire",
    "impressions": 41,
    "broadImpressions": 41,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a billionaire",
+   "query": "how to be famous",
    "impressions": 41,
    "broadImpressions": 41,
    "seed": "how to be funny"
@@ -10082,6 +10472,12 @@
    "impressions": 41,
    "broadImpressions": 56,
    "seed": "funny maid of honor speech"
+  },
+  {
+   "query": "homes for sale in bisbee az",
+   "impressions": 41,
+   "broadImpressions": 41,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "dad joke for today",
@@ -10120,13 +10516,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "is dark humor millennial or gen z",
+   "query": "millennial humor",
    "impressions": 39,
    "broadImpressions": 39,
    "seed": "deadpan humor"
   },
   {
-   "query": "millennial humor",
+   "query": "is dark humor millennial or gen z",
    "impressions": 39,
    "broadImpressions": 39,
    "seed": "deadpan humor"
@@ -10142,6 +10538,12 @@
    "impressions": 39,
    "broadImpressions": 39,
    "seed": "how to get more views on tiktok"
+  },
+  {
+   "query": "best ai tools for students",
+   "impressions": 39,
+   "broadImpressions": 39,
+   "seed": "ai tools for real estate agents"
   },
   {
    "query": "underground comedy showcase at broadway comedy club new york on 6th november",
@@ -10168,13 +10570,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to be humble",
+   "query": "how to be verified on roblox",
    "impressions": 37,
    "broadImpressions": 37,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be verified on roblox",
+   "query": "how to be humble",
    "impressions": 37,
    "broadImpressions": 37,
    "seed": "how to be funny"
@@ -10282,6 +10684,12 @@
    "seed": "open house script"
   },
   {
+   "query": "remax real estate listings near me",
+   "impressions": 35,
+   "broadImpressions": 35,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "shorts funny",
    "impressions": 34,
    "broadImpressions": 869,
@@ -10300,13 +10708,13 @@
    "seed": "dry humor"
   },
   {
-   "query": "the removal of the vitreous humor and its replacement with a saline solution",
+   "query": "humor vs humour",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "deadpan humor"
   },
   {
-   "query": "humor vs humour",
+   "query": "the removal of the vitreous humor and its replacement with a saline solution",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "deadpan humor"
@@ -10328,6 +10736,12 @@
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "funny christmas card messages"
+  },
+  {
+   "query": "ai tools for research",
+   "impressions": 34,
+   "broadImpressions": 68,
+   "seed": "ai tools for real estate agents"
   },
   {
    "query": "how to be a safe friend and an upstander",
@@ -10384,6 +10798,12 @@
    "seed": "open house script"
   },
   {
+   "query": "ai tools for free",
+   "impressions": 33,
+   "broadImpressions": 33,
+   "seed": "ai tools for real estate agents"
+  },
+  {
    "query": "tell you",
    "impressions": 32,
    "broadImpressions": 1652,
@@ -10412,6 +10832,12 @@
    "impressions": 32,
    "broadImpressions": 32,
    "seed": "funny christmas card messages"
+  },
+  {
+   "query": "merrimack nh real estate listings",
+   "impressions": 32,
+   "broadImpressions": 32,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "youtube story time",
@@ -10492,13 +10918,13 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "how to be a good boyfriend",
+   "query": "how to be smart in school",
    "impressions": 29,
    "broadImpressions": 29,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be smart in school",
+   "query": "how to be a good boyfriend",
    "impressions": 29,
    "broadImpressions": 29,
    "seed": "how to be funny"
@@ -10522,13 +10948,13 @@
    "seed": "dry humor"
   },
   {
-   "query": "humour definition",
+   "query": "define humor",
    "impressions": 29,
    "broadImpressions": 29,
    "seed": "deadpan humor"
   },
   {
-   "query": "define humor",
+   "query": "humour definition",
    "impressions": 29,
    "broadImpressions": 29,
    "seed": "deadpan humor"
@@ -10550,6 +10976,12 @@
    "impressions": 29,
    "broadImpressions": 29,
    "seed": "open house script"
+  },
+  {
+   "query": "new real estate listings massachusetts",
+   "impressions": 29,
+   "broadImpressions": 29,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to be a safe friend online",
@@ -10594,27 +11026,33 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "christmas jokes for adults",
-   "impressions": 28,
-   "broadImpressions": 28,
-   "seed": "funny christmas card messages"
-  },
-  {
    "query": "funny christmas pictures",
    "impressions": 28,
    "broadImpressions": 28,
    "seed": "funny christmas card messages"
   },
   {
-   "query": "how to be good",
-   "impressions": 27,
-   "broadImpressions": 258,
-   "seed": "how to be funny"
+   "query": "christmas jokes for adults",
+   "impressions": 28,
+   "broadImpressions": 28,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "nh real estate listings",
+   "impressions": 28,
+   "broadImpressions": 60,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "how to be sigma",
    "impressions": 27,
    "broadImpressions": 27,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be good",
+   "impressions": 27,
+   "broadImpressions": 258,
    "seed": "how to be funny"
   },
   {
@@ -10654,13 +11092,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to get more badge points in practical basketball",
+   "query": "how to get more fps in minecraft",
    "impressions": 27,
    "broadImpressions": 27,
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to get more fps in minecraft",
+   "query": "how to get more badge points in practical basketball",
    "impressions": 27,
    "broadImpressions": 27,
    "seed": "how to get more views on tiktok"
@@ -10750,27 +11188,27 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "secret santa game",
-   "impressions": 25,
-   "broadImpressions": 32,
-   "seed": "funny secret santa ideas"
-  },
-  {
    "query": "secret santa ideas for coworkers",
    "impressions": 25,
    "broadImpressions": 25,
    "seed": "funny secret santa ideas"
   },
   {
-   "query": "topics for speech",
+   "query": "secret santa game",
    "impressions": 25,
-   "broadImpressions": 103,
-   "seed": "humorous speech ideas"
+   "broadImpressions": 32,
+   "seed": "funny secret santa ideas"
   },
   {
    "query": "persuasive speech topics examples",
    "impressions": 25,
    "broadImpressions": 25,
+   "seed": "humorous speech ideas"
+  },
+  {
+   "query": "topics for speech",
+   "impressions": 25,
+   "broadImpressions": 103,
    "seed": "humorous speech ideas"
   },
   {
@@ -10780,10 +11218,10 @@
    "seed": "listing video"
   },
   {
-   "query": "how to be nice",
-   "impressions": 24,
-   "broadImpressions": 24,
-   "seed": "how to be funny"
+   "query": "ai tools for business",
+   "impressions": 25,
+   "broadImpressions": 29,
+   "seed": "ai tools for real estate agents"
   },
   {
    "query": "how to be a furry",
@@ -10792,15 +11230,21 @@
    "seed": "how to be funny"
   },
   {
-   "query": "powerbuilder how to tell if someone has folder access",
+   "query": "how to be nice",
    "impressions": 24,
    "broadImpressions": 24,
-   "seed": "how to tell a story"
+   "seed": "how to be funny"
   },
   {
    "query": "tell meaning",
    "impressions": 24,
    "broadImpressions": 200,
+   "seed": "how to tell a story"
+  },
+  {
+   "query": "powerbuilder how to tell if someone has folder access",
+   "impressions": 24,
+   "broadImpressions": 24,
    "seed": "how to tell a story"
   },
   {
@@ -10838,6 +11282,18 @@
    "impressions": 24,
    "broadImpressions": 1074,
    "seed": "open house script"
+  },
+  {
+   "query": "ai tools for coding",
+   "impressions": 24,
+   "broadImpressions": 47,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "best ai tools for research",
+   "impressions": 24,
+   "broadImpressions": 24,
+   "seed": "ai tools for real estate agents"
   },
   {
    "query": "how to tell if dental floss is authentic",
@@ -10888,27 +11344,33 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "zillow open houses near me",
-   "impressions": 23,
-   "broadImpressions": 23,
-   "seed": "open house script"
-  },
-  {
    "query": "christmas open house",
    "impressions": 23,
    "broadImpressions": 23,
    "seed": "open house script"
   },
   {
-   "query": "how to be normal",
-   "impressions": 22,
-   "broadImpressions": 22,
-   "seed": "how to be funny"
+   "query": "zillow open houses near me",
+   "impressions": 23,
+   "broadImpressions": 23,
+   "seed": "open house script"
+  },
+  {
+   "query": "plattsburgh real estate ny",
+   "impressions": 23,
+   "broadImpressions": 23,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "by yourself",
    "impressions": 22,
    "broadImpressions": 1025,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be on top during sex",
+   "impressions": 22,
+   "broadImpressions": 22,
    "seed": "how to be funny"
   },
   {
@@ -10918,7 +11380,7 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be on top during sex",
+   "query": "how to be normal",
    "impressions": 22,
    "broadImpressions": 22,
    "seed": "how to be funny"
@@ -10978,13 +11440,13 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "how to be popular in school",
-   "impressions": 21,
-   "broadImpressions": 21,
-   "seed": "how to be funny"
+   "query": "east brunswick nj real estate listings",
+   "impressions": 22,
+   "broadImpressions": 22,
+   "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "how to be anonymous on google doc",
+   "query": "how to be popular in school",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "how to be funny"
@@ -10993,6 +11455,12 @@
    "query": "how to get better",
    "impressions": 21,
    "broadImpressions": 3747,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be anonymous on google doc",
+   "impressions": 21,
+   "broadImpressions": 21,
    "seed": "how to be funny"
   },
   {
@@ -11032,13 +11500,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "the aristocrats joke",
+   "query": "november dad joke",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "joke structure"
   },
   {
-   "query": "november dad joke",
+   "query": "the aristocrats joke",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "joke structure"
@@ -11050,13 +11518,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to get more fps on fortnite",
+   "query": "how to get more fps in roblox",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to get more fps in roblox",
+   "query": "how to get more fps on fortnite",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "how to get more views on tiktok"
@@ -11066,6 +11534,12 @@
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "tiktok watch time"
+  },
+  {
+   "query": "puerto vallarta real estate listings",
+   "impressions": 21,
+   "broadImpressions": 21,
+   "seed": "chatgpt for real estate listings"
   },
   {
    "query": "story times",
@@ -11152,6 +11626,18 @@
    "seed": "best man speech jokes"
   },
   {
+   "query": "st george real estate listings",
+   "impressions": 20,
+   "broadImpressions": 20,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
+   "query": "how to best",
+   "impressions": 19,
+   "broadImpressions": 60,
+   "seed": "how to be funny"
+  },
+  {
    "query": "i want to be",
    "impressions": 19,
    "broadImpressions": 856,
@@ -11164,25 +11650,19 @@
    "seed": "how to be funny"
   },
   {
+   "query": "how to be a witch",
+   "impressions": 19,
+   "broadImpressions": 19,
+   "seed": "how to be funny"
+  },
+  {
    "query": "how to be a better listener",
    "impressions": 19,
    "broadImpressions": 19,
    "seed": "how to be funny"
   },
   {
-   "query": "how to best",
-   "impressions": 19,
-   "broadImpressions": 60,
-   "seed": "how to be funny"
-  },
-  {
    "query": "how to be a cop in rob run",
-   "impressions": 19,
-   "broadImpressions": 19,
-   "seed": "how to be funny"
-  },
-  {
-   "query": "how to be a witch",
    "impressions": 19,
    "broadImpressions": 19,
    "seed": "how to be funny"
@@ -11254,19 +11734,25 @@
    "seed": "funny christmas card messages"
   },
   {
+   "query": "bozeman real estate",
+   "impressions": 19,
+   "broadImpressions": 19,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "learning to",
    "impressions": 18,
    "broadImpressions": 2259,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a dragon",
+   "query": "how to be safe online",
    "impressions": 18,
    "broadImpressions": 18,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be safe online",
+   "query": "how to be a dragon",
    "impressions": 18,
    "broadImpressions": 18,
    "seed": "how to be funny"
@@ -11284,13 +11770,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "how to start a union",
+   "query": "how to start a 501c3",
    "impressions": 18,
    "broadImpressions": 18,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start a 501c3",
+   "query": "how to start a union",
    "impressions": 18,
    "broadImpressions": 18,
    "seed": "how to start stand up comedy"
@@ -11338,6 +11824,18 @@
    "seed": "open house script"
   },
   {
+   "query": "ai tools for productivity",
+   "impressions": 18,
+   "broadImpressions": 20,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "crexi commercial real estate listings",
+   "impressions": 18,
+   "broadImpressions": 18,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "how to be calm",
    "impressions": 17,
    "broadImpressions": 17,
@@ -11374,15 +11872,15 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "tiktok watch live",
-   "impressions": 17,
-   "broadImpressions": 19,
-   "seed": "tiktok watch time"
-  },
-  {
    "query": "tiktok watch videos online",
    "impressions": 17,
    "broadImpressions": 22,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "tiktok watch live",
+   "impressions": 17,
+   "broadImpressions": 19,
    "seed": "tiktok watch time"
   },
   {
@@ -11408,6 +11906,12 @@
    "impressions": 17,
    "broadImpressions": 17,
    "seed": "funny christmas card messages"
+  },
+  {
+   "query": "free ai tools for video creation",
+   "impressions": 17,
+   "broadImpressions": 17,
+   "seed": "ai tools for real estate agents"
   },
   {
    "query": "how to be a good manager",
@@ -11440,7 +11944,7 @@
    "seed": "tiktok watch time"
   },
   {
-   "query": "christmas memes funny",
+   "query": "funny christmas door decorating ideas",
    "impressions": 16,
    "broadImpressions": 16,
    "seed": "funny christmas card messages"
@@ -11452,10 +11956,16 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "funny christmas door decorating ideas",
+   "query": "christmas memes funny",
    "impressions": 16,
    "broadImpressions": 16,
    "seed": "funny christmas card messages"
+  },
+  {
+   "query": "best ai tools for coding",
+   "impressions": 16,
+   "broadImpressions": 16,
+   "seed": "ai tools for real estate agents"
   },
   {
    "query": "kidtime storytime youtube",
@@ -11470,13 +11980,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "funny christmas cards for adults",
+   "query": "funny christmas background",
    "impressions": 15,
    "broadImpressions": 15,
    "seed": "funny christmas card messages"
   },
   {
-   "query": "funny christmas background",
+   "query": "funny christmas cards for adults",
    "impressions": 15,
    "broadImpressions": 15,
    "seed": "funny christmas card messages"
@@ -11500,13 +12010,13 @@
    "seed": "listing video"
   },
   {
-   "query": "try not to laugh funny videos",
+   "query": "funniest fails",
    "impressions": 14,
    "broadImpressions": 14,
    "seed": "funny video ideas"
   },
   {
-   "query": "funniest fails",
+   "query": "try not to laugh funny videos",
    "impressions": 14,
    "broadImpressions": 14,
    "seed": "funny video ideas"
@@ -11530,13 +12040,19 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "how to become smart",
+   "query": "best ai tools for developers",
+   "impressions": 14,
+   "broadImpressions": 14,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "how to be an amazon affiliate",
    "impressions": 13,
    "broadImpressions": 13,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be an amazon affiliate",
+   "query": "how to become smart",
    "impressions": 13,
    "broadImpressions": 13,
    "seed": "how to be funny"
@@ -11554,13 +12070,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "good secret santa gifts",
+   "query": "secret santa wish list ideas",
    "impressions": 13,
    "broadImpressions": 13,
    "seed": "funny secret santa ideas"
   },
   {
-   "query": "secret santa wish list ideas",
+   "query": "good secret santa gifts",
    "impressions": 13,
    "broadImpressions": 13,
    "seed": "funny secret santa ideas"
@@ -11626,12 +12142,6 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "open house game",
-   "impressions": 12,
-   "broadImpressions": 13,
-   "seed": "open house script"
-  },
-  {
    "query": "open housing",
    "impressions": 12,
    "broadImpressions": 12,
@@ -11641,6 +12151,12 @@
    "query": "open house the great experiment",
    "impressions": 12,
    "broadImpressions": 12,
+   "seed": "open house script"
+  },
+  {
+   "query": "open house game",
+   "impressions": 12,
+   "broadImpressions": 13,
    "seed": "open house script"
   },
   {
@@ -11698,7 +12214,7 @@
    "seed": "funny secret santa ideas"
   },
   {
-   "query": "funny christmas stories",
+   "query": "funny christmas decorations",
    "impressions": 11,
    "broadImpressions": 11,
    "seed": "funny christmas card messages"
@@ -11716,19 +12232,19 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "funny christmas decorations",
+   "query": "funny christmas stories",
    "impressions": 11,
    "broadImpressions": 11,
    "seed": "funny christmas card messages"
   },
   {
-   "query": "best way to best",
+   "query": "how to be patient",
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be patient",
+   "query": "best way to best",
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "how to be funny"
@@ -11770,13 +12286,13 @@
    "seed": "tiktok watch time"
   },
   {
-   "query": "fun secret santa gifts",
+   "query": "gift ideas for secret santa",
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "funny secret santa ideas"
   },
   {
-   "query": "gift ideas for secret santa",
+   "query": "fun secret santa gifts",
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "funny secret santa ideas"
@@ -11786,6 +12302,18 @@
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "funny christmas card messages"
+  },
+  {
+   "query": "ai tools for developers",
+   "impressions": 10,
+   "broadImpressions": 24,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "ai tools for marketing",
+   "impressions": 10,
+   "broadImpressions": 10,
+   "seed": "ai tools for real estate agents"
   },
   {
    "query": "how to be a detective",
@@ -11866,7 +12394,7 @@
    "seed": "tiktok watch time"
   },
   {
-   "query": "extremely funny christmas jokes",
+   "query": "funny christmas trivia questions and answers",
    "impressions": 8,
    "broadImpressions": 8,
    "seed": "funny christmas card messages"
@@ -11878,10 +12406,16 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "funny christmas trivia questions and answers",
+   "query": "extremely funny christmas jokes",
    "impressions": 8,
    "broadImpressions": 8,
    "seed": "funny christmas card messages"
+  },
+  {
+   "query": "ai tools for ppt",
+   "impressions": 8,
+   "broadImpressions": 8,
+   "seed": "ai tools for real estate agents"
   },
   {
    "query": "watch tiktok without signing in",
@@ -11890,15 +12424,15 @@
    "seed": "tiktok watch time"
   },
   {
-   "query": "secret santa gift",
-   "impressions": 7,
-   "broadImpressions": 416,
-   "seed": "funny secret santa ideas"
-  },
-  {
    "query": "secret santa game ideas",
    "impressions": 7,
    "broadImpressions": 7,
+   "seed": "funny secret santa ideas"
+  },
+  {
+   "query": "secret santa gift",
+   "impressions": 7,
+   "broadImpressions": 416,
    "seed": "funny secret santa ideas"
   },
   {
@@ -11950,6 +12484,18 @@
    "seed": "funny christmas card messages"
   },
   {
+   "query": "ai tools for academic research",
+   "impressions": 5,
+   "broadImpressions": 5,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "ai tools for small business",
+   "impressions": 5,
+   "broadImpressions": 5,
+   "seed": "ai tools for real estate agents"
+  },
+  {
    "query": "how to be fast",
    "impressions": 4,
    "broadImpressions": 4,
@@ -11978,6 +12524,12 @@
    "impressions": 4,
    "broadImpressions": 4,
    "seed": "open house script"
+  },
+  {
+   "query": "best ai tools for business",
+   "impressions": 4,
+   "broadImpressions": 4,
+   "seed": "ai tools for real estate agents"
   },
   {
    "query": "how to be consistent",
@@ -12040,13 +12592,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to get more double weapon xp bo7",
+   "query": "how to get more brand deals on twitter",
    "impressions": 2,
    "broadImpressions": 2,
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to get more brand deals on twitter",
+   "query": "how to get more double weapon xp bo7",
    "impressions": 2,
    "broadImpressions": 2,
    "seed": "how to get more views on tiktok"
@@ -12076,6 +12628,12 @@
    "seed": "funny video ideas"
   },
   {
+   "query": "how to get more followers on clubhouse",
+   "impressions": 1,
+   "broadImpressions": 1,
+   "seed": "how to get more views on tiktok"
+  },
+  {
    "query": "how to get more youtube subscribers organically",
    "impressions": 1,
    "broadImpressions": 1,
@@ -12085,12 +12643,6 @@
    "query": "how to get more retweets",
    "impressions": 1,
    "broadImpressions": 4,
-   "seed": "how to get more views on tiktok"
-  },
-  {
-   "query": "how to get more followers on clubhouse",
-   "impressions": 1,
-   "broadImpressions": 1,
    "seed": "how to get more views on tiktok"
   },
   {
@@ -12104,6 +12656,12 @@
    "impressions": 1,
    "broadImpressions": 1,
    "seed": "open house script"
+  },
+  {
+   "query": "best ai tools for teachers",
+   "impressions": 1,
+   "broadImpressions": 1,
+   "seed": "ai tools for real estate agents"
   }
  ]
 }
