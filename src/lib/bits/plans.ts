@@ -1,18 +1,21 @@
-// New bits per Pacific day, by tier. Safe to import in the browser.
+// New bits by tier (per Pacific day; Free in total). Safe to import in the browser.
 // Nov 12 2026 (Candy): a guest makes one bit and sees it before signing in
 // (supersedes Nov 1's sign-in first). Only from their own words (the story
 // box cut into five lines, no writer); watching, rehearsing, the sketch, the
 // skit, saving and versions all take an account.
-// Free is one bit a day, as written: rewrites (hotter, tighter, storytelling),
+// Free is 3 bits in total, as written: rewrites (hotter, tighter, storytelling),
 // crowd-work swaps and mix your own are Basic and Pro only. On Basic a
 // rewrite counts as a new bit (swap and mix don't; no model call).
 // Pro's fair-use cap lives on the server only (usage.server.ts), so the
 // browser never shows a number for "unlimited".
 import type { BitTier } from './shared'
 
+// Nov 14 2026 (Candy): Free is 3 bits in total after sign-up (a guest bit made
+// before signing up doesn't use one of them), never reset. Basic stays 3 a
+// day. Guests keep 1 a day per browser.
 export const BIT_CAPS: Record<Exclude<BitTier, 'pro'>, number> = {
   guest: 1, // one bit, readable; everything done with it takes an account
-  free: 1,
+  free: 3, // in total, not per day (entitlements: period 'ever')
   basic: 3,
 }
 

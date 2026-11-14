@@ -64,7 +64,7 @@ export function TryItBox({
       <div style={{ display: 'grid', gap: 4, minWidth: 0, flex: '1 1 220px' }}>
         <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#17131a', lineHeight: 1.3 }}>{heading}</h2>
         <p style={{ margin: 0, fontSize: 15, color: '#443c42', lineHeight: 1.45 }}>
-          {toast ? 'Type the stories about them, in your words. Get the toast with pause marks, cue cards and a phone prompter. First toast free.' : realtor ? 'Turn every listing into a content campaign. Paste the link: the video script, voiceover, teleprompter with delivery cues and every post from just listed to sold. First kit free; copies always unlimited.' : 'Type what happened, in your words; tap funnier where you’re stuck. Get the video, stand-up with delivery cues, sketch and skit. Free: 1 bit a day, downloads unlimited with the shutap.com mark.'}
+          {toast ? 'Type the stories about them, in your words. Get the toast with pause marks, cue cards and a phone prompter. First toast free.' : realtor ? 'Turn every listing into a content campaign. Paste the link: the video script, voiceover, teleprompter with delivery cues and every post from just listed to sold. First kit free; copies always unlimited.' : 'Type what happened, in your words; tap funnier where you’re stuck. Get the video, stand-up with delivery cues, sketch and skit. Free: 3 bits, downloads unlimited with the shutap.com mark.'}
           {!realtor && !toast && preset && presetLabel(preset) ? ` Opens set to ${presetLabel(preset)}; change anything before you write.` : ''}
         </p>
       </div>

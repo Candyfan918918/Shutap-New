@@ -5,8 +5,8 @@ import { can, limitFor } from './entitlements'
 test('guests are asked to sign in for everything', () => {
   for (const k of ['bit', 'download', 'touch', 'kit'] as const) assert.equal(can(k, 'guest', 0).ok, false)
 })
-test('creating is counted: free 1 bit a day, basic 3, pro unlimited', () => {
-  assert.deepEqual(limitFor('bit', 'free'), { cap: 1, period: 'day' })
+test('creating is counted: free 3 bits in total, basic 3 a day, pro unlimited', () => {
+  assert.deepEqual(limitFor('bit', 'free'), { cap: 3, period: 'ever' })
   assert.equal(limitFor('bit', 'basic').cap, 3)
   assert.equal(limitFor('bit', 'pro').cap, null)
   assert.equal(can('bit', 'pro', 999).ok, true)

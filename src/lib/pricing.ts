@@ -70,7 +70,7 @@ export const STRIPE_DESCRIPTIONS: Record<PaidPlan, string> = {
 /** What each plan gives, in the same words on every surface (Nov 6 2026,
  *  Candy: one plan for everything, no per-product lists). */
 export const PLAN_SUMMARY: Record<'free' | PaidPlan, string[]> = {
-  free: [`${BIT_CAPS.free} bit a day`, 'Your first realtor kit', 'Your first toast', 'Marked “— shutap.com”'],
+  free: [`${BIT_CAPS.free} free bits to start`, 'Your first realtor kit', 'Your first toast', 'Marked “— shutap.com”'],
   basic: [`${BIT_CAPS.basic} bits a day, with rewrites`, `${KIT_CAPS.basic} realtor kits a month`, `${TOAST_CAPS.basic} toast a month`, 'No watermark'],
   pro: ['Unlimited bits, kits and toasts', 'No watermark', 'The Mirror'],
 }
@@ -90,7 +90,7 @@ export const PLAN_COMPARE: CompareRow[] = [
     label: 'Bits',
     short: 'Bits',
     cells: {
-      free: { value: `${BIT_CAPS.free} a day`, short: `${BIT_CAPS.free}/day`, on: true },
+      free: { value: `${BIT_CAPS.free} in total`, short: `${BIT_CAPS.free} total`, on: true },
       basic: { value: `${BIT_CAPS.basic} a day, with rewrites`, short: `${BIT_CAPS.basic}/day`, on: true },
       pro: { value: 'Unlimited', short: '∞', on: true },
     },
@@ -133,9 +133,9 @@ export const PLAN_COMPARE: CompareRow[] = [
   },
 ]
 
-/** Free in one line (Nov 6 2026, Candy: "free is 1 bit daily with a watermarked download"):
+/** Free in one line (Nov 14 2026, Candy: 3 free bits in total, watermarked downloads):
  *  every surface that sums up Free uses these words. */
-export const FREE_LINE = `${BIT_CAPS.free} bit a day · downloads unlimited, watermarked`
+export const FREE_LINE = `${BIT_CAPS.free} free bits · downloads unlimited, watermarked`
 
 /** What every plan has, Free included (with a free account). Listed once,
  *  beside the comparison. Rewrites are Basic and Pro since Nov 1 2026. */

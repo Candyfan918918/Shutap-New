@@ -67,7 +67,7 @@ const SECTIONS = [
   },
   {
     heading: "Free to start",
-    body: "A free account (one tap with Google or Apple) gets one bit a day, your first realtor kit and your first toast, each marked \"— shutap.com\". Basic is $19.99 a month: 3 bits a day with rewrites, 20 realtor kits and 1 toast a month, no watermark. Pro is $49.99 a month: unlimited bits, kits and toasts, plus the Mirror. One kit or one toast on its own is $12.99. You pay to make something, never to use it.",
+    body: "A free account (one tap with Google or Apple) gets 3 free bits, your first realtor kit and your first toast, each marked \"— shutap.com\". Basic is $19.99 a month: 3 bits a day with rewrites, 20 realtor kits and 1 toast a month, no watermark. Pro is $49.99 a month: unlimited bits, kits and toasts, plus the Mirror. One kit or one toast on its own is $12.99. You pay to make something, never to use it.",
   },
   {
     heading: "Who makes Shutap",

@@ -40,7 +40,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap, for talking-to-camera bits",
-      body: "Shutap Bits, from the Shutap Humor Amplifier Lab, starts where a TikTok comic starts: with what happened. You type the story, keep the audience on social, pick a voice (deadpan, storyteller, roast or dry), a length of 15, 30 or 60 seconds or 2 minutes, and a heat from 1 to 5. You get a draft of the bit with a hook, setup, tags and a button. Then you push on it: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from lines you liked. The teleprompter scrolls it full screen at talking pace, so you can film it in one take. A free account gets one bit a day, and paid plans add rewrites and remove the download watermark.",
+      body: "Shutap Bits, from the Shutap Humor Amplifier Lab, starts where a TikTok comic starts: with what happened. You type the story, keep the audience on social, pick a voice (deadpan, storyteller, roast or dry), a length of 15, 30 or 60 seconds or 2 minutes, and a heat from 1 to 5. You get a draft of the bit with a hook, setup, tags and a button. Then you push on it: hotter, tighter, storytelling, swap in a crowd-work angle, or mix your own from lines you liked. The teleprompter scrolls it full screen at talking pace, so you can film it in one take. A free account gets 3 free bits, and paid plans add rewrites and remove the download watermark.",
     },
     {
       heading: "Captions are a separate job",
@@ -66,7 +66,7 @@ const guide: Guide = {
     },
     {
       q: "Is there a free AI joke tool for TikTok?",
-      a: "Several. Shutap gives a free account one bit a day, ChatGPT has a free plan, and CapCut says its script-to-video feature is free. Shutap's free downloads carry a watermark that paid plans remove.",
+      a: "Several. Shutap gives a free account 3 free bits, ChatGPT has a free plan, and CapCut says its script-to-video feature is free. Shutap's free downloads carry a watermark that paid plans remove.",
     },
     {
       q: "Will my TikTok jokes sound like everyone else's if I use AI?",

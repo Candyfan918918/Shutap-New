@@ -2,13 +2,13 @@
 // tested in SQL (supabase/tests/bit_usage_test.sql).
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { capFor, chargeBit, chargeNetwork, mergeGuestUsage, proCap, refundBit, today, usageView } from './usage.server'
+import { LIFETIME_DAY, NEVER_RESETS, bitDay, capFor, chargeBit, chargeNetwork, mergeGuestUsage, proCap, refundBit, today, usageView } from './usage.server'
 import { atCap, isPaidTier } from './shared'
 
-test('caps: guest 1 (see it, then sign in), free 1, basic 3, pro 50 by default', () => {
+test('caps: guest 1 (see it, then sign in), free 3 in total, basic 3, pro 50 by default', () => {
   delete process.env['BIT_PRO_DAILY_CAP']
   assert.equal(capFor('guest'), 1)
-  assert.equal(capFor('free'), 1)
+  assert.equal(capFor('free'), 3)
   assert.equal(capFor('basic'), 3)
   assert.equal(capFor('pro'), 50)
 })
@@ -26,7 +26,7 @@ test('pro cap reads BIT_PRO_DAILY_CAP and ignores junk', () => {
 test('the old one-number override does not flatten the tiers', () => {
   process.env['JOKE_DAILY_SETS'] = '5'
   assert.equal(capFor('guest'), 1)
-  assert.equal(capFor('free'), 1)
+  assert.equal(capFor('free'), 3)
   delete process.env['JOKE_DAILY_SETS']
 })
 
@@ -34,9 +34,12 @@ test('the browser never sees the pro cap', () => {
   const u = usageView('pro', 12, '2026-10-23T07:00:00.000Z')
   assert.equal(u.cap, null)
   assert.equal(atCap(u), false)
-  assert.deepEqual(usageView('free', 1, 'x'), { used: 1, cap: 1, resets_at: 'x' })
-  assert.equal(atCap(usageView('free', 1, 'x')), true)
-  assert.equal(atCap(usageView('free', 0, 'x')), false)
+  // Nov 14 2026: Free is 3 in total and never resets
+  assert.deepEqual(usageView('free', 1, 'x'), { used: 1, cap: 3, resets_at: NEVER_RESETS })
+  assert.equal(atCap(usageView('free', 3, 'x')), true)
+  assert.equal(atCap(usageView('free', 3, 'x'), Date.parse('2030-01-01T00:00:00Z')), true)
+  assert.equal(atCap(usageView('free', 2, 'x')), false)
+  assert.equal(usageView('basic', 1, 'x').resets_at, 'x')
   // a guest's one bit: open until it's made, then the next press opens sign-in
   assert.equal(atCap(usageView('guest', 0, 'x')), false)
   assert.equal(atCap(usageView('guest', 1, 'x')), true)
@@ -97,8 +100,15 @@ test('the network layer never limits an account', async () => {
   for (const t of ['free', 'basic', 'pro'] as const) assert.equal(await chargeNetwork(db, t, '2026-10-22', 3), 'ok')
 })
 
-test('a count from before midnight Pacific no longer blocks', () => {
-  const u = usageView('free', 2, '2026-10-23T07:00:00.000Z')
+test('a daily count from before midnight Pacific no longer blocks', () => {
+  const u = usageView('basic', 3, '2026-10-23T07:00:00.000Z')
   assert.equal(atCap(u, Date.parse('2026-10-23T06:59:00Z')), true)
   assert.equal(atCap(u, Date.parse('2026-10-23T07:00:00Z')), false)
+})
+
+test('free counts in one lifetime row; other tiers per day', () => {
+  assert.equal(bitDay('free', '2026-11-14'), LIFETIME_DAY)
+  assert.equal(bitDay('basic', '2026-11-14'), '2026-11-14')
+  assert.equal(bitDay('guest', '2026-11-14'), '2026-11-14')
+  assert.equal(bitDay('pro', '2026-11-14'), '2026-11-14')
 })

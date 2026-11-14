@@ -10,7 +10,7 @@
 // shutap.com mark; Basic, Pro and anything bought one-time are clean.
 //
 //   kind       what it counts                               guest free   basic     pro
-//   bit        a new story, or hotter/tighter/storytelling   1*    1/day  3/day     ∞ (server fair-use)
+//   bit        a new story, or hotter/tighter/storytelling   1*    3 ever 3/day     ∞ (server fair-use)
 //   kit        a realtor kit written (a rewrite is one too)  0     1 ever 20/month  ∞
 //   toast      a toast written ("change a line" is a new one) 0    1 ever 1/month   ∞
 //   download   the video, picture, PDF or a copied line      0     ∞ mark ∞         ∞     (never counted)
@@ -37,7 +37,8 @@ export type Limit = { cap: number | null; period: Period }
 export function limitFor(kind: EntitlementKind, tier: BitTier): Limit {
   switch (kind) {
     case 'bit':
-      return { cap: tier === 'pro' ? null : BIT_CAPS[tier], period: 'day' }
+      // Nov 14 2026 (Candy): Free is 3 bits in total, not a daily allowance.
+      return { cap: tier === 'pro' ? null : BIT_CAPS[tier], period: tier === 'free' ? 'ever' : 'day' }
     case 'download':
       // never counted: a signed-in person downloads and copies freely
       return tier === 'guest' ? { cap: 0, period: 'day' } : { cap: null, period: 'month' }

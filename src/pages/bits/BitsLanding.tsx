@@ -42,7 +42,7 @@ export const BITS_FAQ: { q: string; a: string }[] = [
   { q: 'Can I rehearse with it?', a: 'Yes. Stand-up is a teleprompter built for practice: your lines scroll at talking pace with delivery cues from your sketch page, like (beat), (hushed) or (his voice), and it holds for a moment at each pause. Tap cues to hide them when you know it cold.' },
   { q: 'Do I have to sign up first?', a: 'No. Tell your story and make your bit without an account, and read it. Signing in (free, with Google, Apple or email) opens the video, the teleprompter, the sketch and the skit, keeps the bit in My creations, and unlocks funnier on every line.' },
   { q: 'Will my material end up somewhere else?', a: 'No. Nobody at Shutap reads your bits, they are never used to train AI, and they are never published unless you post them. Names and details are removed before anything is saved.' },
-  { q: 'What is free?', a: `${BIT_CAPS.free} bit a day with everything in it: the 5-second video, stand-up, sketch and skit, and funnier and lock on every line. The video and downloads carry the shutap.com mark.` },
+  { q: 'What is free?', a: `${BIT_CAPS.free} free bits with everything in them: the 5-second video, stand-up, sketch and skit, and funnier and lock on every line. The video and downloads carry the shutap.com mark.` },
 ]
 
 function tap(name: string, props: Record<string, unknown> = {}) {
@@ -267,11 +267,11 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
           <h2>What you get, and what it costs</h2>
           <p className="bl-p">You pay to make bits, never to use them. Downloads, copies, the prompter, funnier and lock are unlimited on every plan.</p>
           <div className="bl-plans">
-            <div className="on"><span>Free</span><b>$0</b><ul><li>{BIT_CAPS.free} bit a day</li><li>The video, stand-up, sketch and skit</li><li>Funnier and lock on every line, unlimited</li><li>shutap.com mark on the video and downloads</li></ul></div>
+            <div className="on"><span>Free</span><b>$0</b><ul><li>{BIT_CAPS.free} free bits</li><li>The video, stand-up, sketch and skit</li><li>Funnier and lock on every line, unlimited</li><li>shutap.com mark on the video and downloads</li></ul></div>
             <div><span>Basic</span><b>{usd(PLANS.basic.amount)}<small>/mo</small></b><ul><li>{BIT_CAPS.basic} bits a day</li><li>No watermark</li><li>Versions on demand: hotter, tighter, storytelling (each counts as a bit)</li><li>{KIT_CAPS.basic} realtor kits and {TOAST_CAPS.basic} toast a month</li></ul></div>
             <div><span>Pro</span><b>{usd(PLANS.pro.amount)}<small>/mo</small></b><ul><li>Unlimited bits</li><li>No watermark</li><li>The Mirror</li><li>Unlimited realtor kits and toasts</li></ul></div>
           </div>
-          <p className="bl-note">Limits reset at midnight Pacific. The same plan covers realtor kits and toasts. <Link to="/pricing" onClick={() => tap('seo_cta_clicked', { kind: 'pricing' })}>All plans</Link></p>
+          <p className="bl-note">Paid limits reset at midnight Pacific. The same plan covers realtor kits and toasts. <Link to="/pricing" onClick={() => tap('seo_cta_clicked', { kind: 'pricing' })}>All plans</Link></p>
         </div>
 
         <div className="bl-block bl-faq">

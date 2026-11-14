@@ -52,7 +52,7 @@ const guide: Guide = {
     },
     {
       heading: "What it costs",
-      body: "You sign in with Google, Apple or email before the first bit. A free account gets one bit a day as written, in stand-up, sketch or skit form, with unlimited downloads (watermarked). Basic is $19.99 a month for three bits a day with no watermark. Pro is $49.99 a month for unlimited bits and rewrites. ChatGPT also has a free plan. The honest test is your own morning: write one thing that happened as a bit and see which tool gets you to something you'd post first.",
+      body: "You sign in with Google, Apple or email before the first bit. A free account gets 3 bits as written, in stand-up, sketch or skit form, with unlimited downloads (watermarked). Basic is $19.99 a month for three bits a day with no watermark. Pro is $49.99 a month for unlimited bits and rewrites. ChatGPT also has a free plan. The honest test is your own morning: write one thing that happened as a bit and see which tool gets you to something you'd post first.",
     },
   ],
   faq: [
