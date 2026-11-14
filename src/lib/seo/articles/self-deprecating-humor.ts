@@ -3,100 +3,95 @@ import type { Guide } from "../guides";
 const guide: Guide = {
   slug: "self-deprecating-humor",
   kind: "guide",
-  preset: { voice: "storyteller" },
-  topic: "types-of-humor",
-  keyword: "self deprecating humor",
-  title: "Self-Deprecating Humor: Examples & How to Write It | Shutap",
-  h1: "Self-deprecating humor: how to write it, with examples",
+  topic: "writing-jokes",
+  keyword: "self deprecating humor examples",
+  title: "Self-Deprecating Humor Examples, With a Full Bit | Shutap",
+  h1: "Self-deprecating humor examples: one full bit and the rewrites behind it",
   description:
-    "What self-deprecating humor is, why it wins a crowd fast, how to aim it at your choices instead of yourself, and original weak-to-strong example lines.",
+    "Self-deprecating humor examples for a set or a video: one full five-line bit at the comic's own expense, plus the weak first draft of every line beside it.",
   capsule:
-    "Self-deprecating humor is joking about your own choices, habits and mishaps so people laugh with you, and it works because lowering your status for a moment makes an audience relax and take your side. The version that lands aims at what you did, gives the flaw a picture, and moves on before anyone feels they need to reassure you.",
-  blurb: "Aim it at your choices, give the flaw a picture, never fish. Original examples.",
+    "Self-deprecating humor is joking about your own choices and mishaps so the audience laughs with you, and the best examples aim at something you did, give it a picture, and end on what it cost you. Below is one full bit at the comic's own expense, hook to button, with the weak first draft of each line next to the version that gets the laugh.",
+  blurb: "One full bit at your own expense, every line before and after. Aim at choices, never fish.",
   sections: [
     {
-      heading: "What self-deprecating humor actually is",
-      body: "Merriam-Webster defines self-deprecating as \"tending or serving to disparage or undervalue oneself,\" a word in use since 1834. In comedy the useful version is narrower. A Harvard piece quoting psychologist Natalie Dattilo puts it well: it's not making fun of yourself so much as taking yourself, or the situation you're in, less seriously. That difference is the whole craft. \"I'm an idiot\" is a verdict on a person. \"I brought a fork to a soup tasting\" is a scene about a decision. The first one makes the room uneasy. The second makes them laugh, because they can see it.",
+      heading: "What self-deprecating humor is, in one line",
+      body: "It's a joke where you are the target. Natalie Dattilo, a psychology instructor at Harvard Medical School, told the Harvard Gazette it is \"taking yourself, or the situation that you're in, less seriously.\" That's the useful definition for a writer, because it points at the situation rather than at your worth. \"I'm a disaster\" is a verdict, and a verdict gives the room nothing to look at. \"I bought a standing desk and I use it as a place to stack the chairs\" is a scene. The first makes people unsure whether to laugh. The second makes them picture your office, and they laugh at the chairs.",
     },
     {
-      heading: "Why it wins a crowd so fast",
-      body: "When you go first as the target, you hand the audience permission to laugh without feeling mean. That's why most storytime videos open with the teller already losing. Viewers decide in a couple of seconds whose side they're on, and a person who admits the dumb part up front is easy to side with. It also buys you room. Once you've taken a hit yourself, a sharper line about the landlord, the airline or the group chat later in the bit reads as fair. You paid for it with your own dignity first.",
+      heading: "The full example: a bit at your own expense",
+      body: "Here's one bit, written by the Lab, in the five lines a bit uses. Hook: \"I paid forty dollars to find out I'm not a morning person.\" Setup: \"I booked a 6 a.m. spin class, because I read that if you pay for something, you'll show up.\" Tag: \"And I did show up. The way a raccoon shows up to a porch light: confused, squinting, already leaving.\" Tag: \"The instructor yelled 'climb!' and I climbed. Off the bike, out the door, into my car.\" Button: \"I still go every Monday. I park, recline the seat, and sleep through a forty-dollar class.\" Every line is about a choice the comic made, and nobody in the room has to feel sorry for anyone.",
     },
     {
-      heading: "Aim at choices, not at things you can't change",
-      body: "The rule that keeps it funny: joke about what you did, chose or keep doing, never about your body, your looks or anything you didn't pick. Choices are infinite and specific, and nobody watching has to wince. Weak: \"I'm so bad at cooking.\" Stronger: \"I set off the smoke alarm making toast. The alarm and I have a routine now. It beeps, I wave a tea towel at it like I'm landing a plane.\" Same flaw. The second one has a kitchen, a towel and a little choreography, and the joke is the routine, not your worth.",
+      heading: "The hook: confess the result, not the trait",
+      body: "First drafts of self-deprecating jokes open on a label. Weak: \"I'm so lazy, honestly.\" That's a trait, and a trait has no story in it yet, so the audience waits to see if you're joking or just low. Funnier: \"I paid forty dollars to find out I'm not a morning person.\" Now there's a price, a discovery and a hint of a bad decision, all in the first two seconds. The label is still in there (not a morning person) but it arrives as the result of an experiment you ran on yourself. People lean in for an experiment. They lean back from a confession.",
     },
     {
-      heading: "Give the flaw a picture or a number",
-      body: "A confession without an image is just information. Two moves fix it. First, fake precision: swap a vague admission for an exact, slightly too specific figure. Weak: \"I never use my gym membership.\" Stronger: \"I've been to the gym three times this year, which works out to forty-six dollars a visit. That's not a gym. That's a very sweaty restaurant.\" Second, give an object a life. Weak: \"I'm terrible with money.\" Stronger: \"My budget app used to say 'heads up' on Fridays. Now it just says 'we need to talk.'\" The app does the judging, so you never have to.",
+      heading: "The setup: point it toward a self-improvement story",
+      body: "A good setup sends the audience the wrong way, and self-improvement is the easiest wrong way there is, because everyone has heard the inspiring version. Weak: \"So I tried to get into fitness and it didn't go well.\" It tells them the ending before you've started. Funnier: \"I booked a 6 a.m. spin class, because I read that if you pay for something, you'll show up.\" That line sounds like the start of a podcast about habits. It gives one fact (6 a.m.), one belief (paying makes you show up) and no hint that it fails. The tags get to break it.",
     },
     {
-      heading: "Pair the flaw with something you're good at",
-      body: "Karim Shamsi-Basha, writing in Writer's Digest in March 2026, advises pairing self-mockery with visible competence so it reads as confidence. In practice that means the joke sits next to proof you know what you're doing. A creator who posts tidy, well-shot videos can say \"this took me eleven takes, and in take four I forgot my own name\" and it lands as charm. Undercut the one skill your audience came for, every video, and the joke starts working against you. Mock the side quest, keep the main quest intact.",
+      heading: "The tags: give the flaw a picture",
+      body: "A confession without an image is just information. Weak tag: \"I was really tired.\" True, and flat. Funnier: \"And I did show up. The way a raccoon shows up to a porch light: confused, squinting, already leaving.\" Your tiredness now has a body, a light and an exit. The second tag should push the same idea further instead of starting a new one. Weak: \"I quit halfway through.\" Funnier: \"The instructor yelled 'climb!' and I climbed. Off the bike, out the door, into my car.\" It takes the instructor's word literally, and the laugh lands on \"car,\" a thing you can point at.",
     },
     {
-      heading: "Joking versus fishing for reassurance",
-      body: "Here's the litmus test Sail Magazine offers: does the line make the listener feel they have to comfort you? If yes, it's fishing, not a joke. Fishing: \"I'm such a mess, nobody would ever hire me.\" Joke: \"I rehearsed my interview answers for two days. The first question was 'did you find us okay?' and I gave them my five-year plan.\" The joke ends on a picture people can enjoy. The fish ends on a hole someone has to fill with a compliment, and that's a weird job to hand a stranger.",
+      heading: "The button: end on what it cost you",
+      body: "Self-deprecating bits tend to end with a shrug. Weak: \"Anyway, I'm just not a morning person, I guess.\" That repeats the hook and asks for nothing. Funnier: \"I still go every Monday. I park, recline the seat, and sleep through a forty-dollar class.\" The button keeps the bad decision going instead of learning from it, which is funnier than any lesson. It also calls back the price from the hook, so the bit closes like a loop. Put the laugh word last (\"class\") and stop. Anything after it, like \"so yeah,\" spends the laugh before the audience can.",
     },
     {
-      heading: "Three shapes you can borrow",
-      body: "Plan versus reality: state the ambitious plan, then the smaller thing that actually happened. \"The plan was to reorganize the closet. By Sunday I'd reorganized it into a different pile on the floor of the same closet.\" The evidence list: two real items, then one that gives you away. \"Things I said I'd start Monday: running, flossing. Things I started Monday: a fourth streaming subscription.\" The lineup: two people fail, and you fail worse. \"Two of us got lost on the hike. He had the map upside down. I had the map in the car.\" Each one keeps you as the target without asking for pity.",
+      heading: "Aim at your choices, never your body",
+      body: "The rule that keeps self-deprecation funny: joke about what you did, chose or keep doing, never about your looks, your body or anything you didn't pick. Choices are endless and specific, and nobody watching has to wince. Weak: \"I'm too short to reach anything.\" Funnier: \"I own a step stool, a second step stool for the car, and a grabber claw I've named. I have a fleet.\" Same subject, but the joke has moved onto the gear you bought, which is a choice and a picture. If a line could make someone in the front row worry about you, rewrite it until it's about a decision.",
     },
     {
-      heading: "How much to use in one video or set",
-      body: "Writer's Digest calls it seasoning, not the meal, and that's about right for a set. One self-deprecating beat early earns goodwill. A whole minute of it starts to sound like a confession with a laugh track. Use it to open, then turn the lens outward to the situation and the other people in it, and maybe bring yourself back for the button. Culture matters too: the Harvard piece notes it shows up more in individualistic cultures, where relatability is prized, so a mixed online audience may read the same line differently.",
+      heading: "Joking versus fishing for compliments",
+      body: "Huwaida Fazel's piece in Sail Magazine gives the cleanest test: does the line leave the listener \"burdened to compliment you,\" or does it make them \"quiet with discomfort\"? Either way it's fishing, not a joke. Fishing: \"Nobody would ever date me, I'm a mess.\" Joke: \"My last date asked what I do for fun and I said 'reorganize my spice rack by expiration date.' She asked for the check during the appetizer.\" The joke ends on a picture people can enjoy. The fish ends on a gap someone has to fill with reassurance, and a crowd at an open mic isn't there to do that job.",
     },
     {
-      heading: "At work, in captions and in your bio",
-      body: "Small, quick self-deprecation travels well in places where a long bit wouldn't. In a work email: \"I've cc'd myself so at least one person reads this.\" In a caption under a failed recipe: \"Followed the recipe exactly. The recipe did not follow me.\" In a creator bio, one line about a harmless habit beats a list of flaws. Keep it about effort, mishaps and taste, never competence at the job you're actually paid for. Nobody wants their accountant's caption to say they're bad with numbers.",
+      heading: "Why it lands for some comics and dies for others",
+      body: "Psychology Today's Laurence Stybel points to the pratfall effect, which Elliot Aronson described in 1966: a mistake makes someone who seems competent more likable, and the same mistake makes someone who seems shaky less likable. On stage that means the jokes need to sit next to proof you know what you're doing. Karim Shamsi-Basha, in Writer's Digest, puts it as balancing it with competence: you aren't tearing yourself down, you're showing you don't take yourself too seriously. A comic who walks up sure-footed can bomb on a spin bike for three minutes. A comic who mumbles the same lines just sounds like they're having a bad week.",
     },
     {
-      heading: "Draft it, then make it sound like you",
-      body: "Start from one real mishap from this week. Write it plainly, find the moment you look worst, and try it in each of the three shapes above. Shutap, the humor amplifier, can give you a draft of the bit from that story in a storyteller, dry or deadpan voice, with a hook, tags and a button. Treat it as something to push against: keep the line that sounds like your own mouth, cut the rest, and rewrite until you'd say it to a friend without reading it.",
+      heading: "Write your own, then make each line funnier",
+      body: "Start from one real bad decision from this week and tell it plainly, the way you'd tell a friend. Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, cuts that story into a hook, a setup, two tags and a button, and keeps your lines word for word. A line your story didn't cover gets an AI draft, marked as one, for you to keep or change. Tap funnier on a line that's still a label instead of a picture and you get three other ways to say it, yours listed first; lock the lines that are done. Then rehearse it on the stand-up teleprompter with delivery cues, or post it as a 5-second video.",
     },
   ],
   faq: [
     {
-      q: "What is self-deprecating humor?",
-      a: "Self-deprecating humor is joking about yourself, usually your choices, habits and small failures, so the audience laughs with you. It works best when it's about something you did rather than who you are, and when it includes a specific, visual detail.",
+      q: "What are some examples of self-deprecating humor?",
+      a: "\"I paid forty dollars to find out I'm not a morning person\" is one. Another: \"I bought a standing desk and I use it as a place to stack the chairs.\" Both mock a choice, include a picture or a number, and never ask the listener to reassure the speaker.",
     },
     {
-      q: "What is an example of self-deprecating humor?",
-      a: "\"I've been to the gym three times this year, which works out to forty-six dollars a visit. That's not a gym, that's a very sweaty restaurant.\" It mocks a choice, uses an exact number, and ends on an image instead of a verdict about the speaker.",
+      q: "How do I write a self-deprecating joke for stand-up?",
+      a: "Pick one real bad decision from this week. Open on the result with a price or a number, set it up like a self-improvement story, give the flaw a picture in two tags, and end on what the decision still costs you, with the laugh word last.",
     },
     {
-      q: "How do you use self-deprecating humor without sounding insecure?",
-      a: "Keep it about choices, not your looks or worth, attach a concrete picture, and don't wait for a reaction. If the line leaves people feeling they should reassure you, it's fishing. Pair it with visible skill so it reads as ease.",
+      q: "What's the difference between self-deprecating and self-defeating humor?",
+      a: "Self-deprecating humor jokes about your choices and mishaps and leaves the audience comfortable. A line that makes listeners feel they should compliment you, or goes quiet with discomfort, has turned into fishing. Aim at what you did, not at your looks or worth.",
     },
     {
-      q: "Is self-deprecating humor good at work?",
-      a: "In small doses, yes. A quick line about a harmless habit, like cc'ing yourself so one person reads the email, makes you easier to approach. Avoid joking that you're bad at the job you're paid to do.",
-    },
-    {
-      q: "Why do comedians use self-deprecating humor?",
-      a: "Going first as the target gives the audience permission to laugh and puts them on the comedian's side early. That goodwill makes sharper jokes about other people and situations later in the set feel fair instead of mean.",
+      q: "Is self-deprecating humor good for a comedy set?",
+      a: "Yes, in small doses. One bit at your own expense early gets the room on your side, then turn to the situation and the people around it. Writer's Digest calls it seasoning, not the meal: a whole set of it reads like a confession.",
     },
   ],
   sources: [
     {
-      label: "Merriam-Webster, \"self-deprecating\" (definition, first known use 1834)",
-      url: "https://www.merriam-webster.com/dictionary/self%20deprecating",
+      label: "Liz Mineo, \"How to take yourself less seriously,\" Harvard Gazette (April 3, 2025), interviewing Natalie Dattilo",
+      url: "https://news.harvard.edu/gazette/story/2025/04/how-to-take-yourself-less-seriously",
     },
     {
-      label: "Neuroscience News, \"The Subtle Power of Self-Deprecating Humor\" (April 5, 2025), republishing Harvard Gazette reporting quoting Natalie Dattilo",
-      url: "https://neurosciencenews.com/self-deprecating-humor-psychology-28552",
-    },
-    {
-      label: "Karim Shamsi-Basha, \"Self-Deprecating Humor Starts When Being Human,\" Writer's Digest (March 26, 2026)",
+      label: "Karim Shamsi-Basha, \"Self-Deprecating Humor Starts When Being Human (On Humor),\" Writer's Digest (March 26, 2026)",
       url: "https://www.writersdigest.com/self-deprecating-humor-starts-when-being-human-on-humor",
     },
     {
-      label: "Huwaida Fazel, \"Self-Deprecating Humor: The Good and The Bad,\" Sail Magazine (July 8, 2020)",
+      label: "Huwaida Fazel, \"Self-Deprecating Humor: The Good and The Bad,\" Sail Magazine (July 2020)",
       url: "https://sailemagazine.com/2020/07/self-deprecating-humor-the-good-and-the-bad/",
     },
+    {
+      label: "Laurence J. Stybel, \"How to Use Self-Deprecation as a Leadership Tool,\" Psychology Today (September 2, 2024)",
+      url: "https://www.psychologytoday.com/za/blog/platform-for-success/202409/how-to-use-self-deprecation-as-a-leadership-tool",
+    },
   ],
-  related: ["types-of-humor", "turn-a-bad-experience-into-comedy", "how-to-turn-a-story-into-a-bit"],
-  cta: { label: "Write your bit. AI fills only the gaps.", href: "/bits" },
+  related: ["how-to-make-a-joke-funnier", "joke-structure", "how-to-turn-a-story-into-a-bit"],
+  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   techniques: [
     {
       name: "Plan versus reality",
@@ -112,8 +107,16 @@ const guide: Guide = {
       example: "Things I said I'd start Monday: running, flossing. Things I started Monday: a fourth streaming subscription.",
       tryIt: "List two virtuous things you meant to do, then the one specific thing you actually did instead.",
     },
+    {
+      name: "The price tag confession",
+      whatTheyDid: "Opens a joke about a personal flaw on what finding it out cost, instead of naming the flaw.",
+      whyItWorks: "A price turns a trait into an experiment with a result, and the number can come back as the button.",
+      example: "I paid forty dollars to find out I'm not a morning person.",
+      tryIt: "Replace \"I'm so [flaw]\" with \"I paid [exact amount] to find out I'm [flaw],\" then end the bit on that amount again.",
+    },
   ],
   published: "2026-10-21",
+  updated: "2026-11-14",
 };
 
 export default guide;
