@@ -223,3 +223,25 @@ button.bl-tile:hover:not(:disabled) { border-color: var(--rose); }
   .bo-write { padding: 20px 16px; }
   .bo-write-h h2 { font-size: 26px; }
 }
+
+/* ============ Nov 14 2026 (Candy, designs C + A): the ask on the first
+   screen. Headline and four steps, the one-line box, then the demo. ============ */
+.bo-top { padding-bottom: 0; }
+.bo-top .bo-head { grid-template-columns: minmax(0, 1fr) 420px; }
+.bo-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.bo-steps li { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); }
+.bo-steps b { font: 800 12.5px var(--sora); color: var(--wine); }
+.bo-steps span { font: 500 11px/1.35 var(--sora); color: var(--ink-2); }
+.bo-write-top { padding-top: 18px; padding-bottom: 8px; }
+.bo-demo { padding-top: 14px; gap: 14px; }
+.bo-demo .bo-under b { font: 800 14px var(--sora); color: var(--wine); }
+.bo-demo .bo-under span { font: 500 12.5px var(--sora); color: var(--ink-2); }
+.bo-nudge { margin: 0; display: flex; justify-content: center; }
+.bo-nudge button { height: 40px; padding: 0 18px; border-radius: 999px; border: 1px dashed var(--rose); background: var(--card); font: 700 13px var(--sora); color: var(--wine); cursor: pointer; }
+.bl-steps3.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 900px) {
+  .bo-top .bo-head { grid-template-columns: 1fr; }
+  .bo-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bo-write-top { padding-top: 12px; }
+  .bl-steps3.four { grid-template-columns: 1fr; }
+}

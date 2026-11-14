@@ -23,7 +23,8 @@ import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { supabase } from '@/integrations/supabase/client'
 import { claimGuestBits, getBit, listMyBits, splitStory, writeBit, type WriteBitResult } from '@/lib/bits.functions'
-import { storyChecks } from '@/lib/bits/split'
+import { splitBySentence, storyChecks } from '@/lib/bits/split'
+import { DriveBox } from './DriveBox'
 import {
   AUDIENCES,
   DEFAULT_CONTROLS,
@@ -256,6 +257,8 @@ export type BitEmbed = {
   onPhase?: (phase: 'write' | 'result') => void
   /** /bits: the demo's story, for "Stuck? Remix the demo story" */
   demoStory?: string
+  /** /bits (Nov 14 2026): the one-line box that opens into the guided box (DriveBox) */
+  drive?: boolean
 }
 
 /** the five lines, shared by the boxes on one page */
@@ -739,15 +742,17 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     const text = story.trim()
     const checks = storyChecks(text)
     jokeTap('story_split', tier, { box: embed?.mirror ? 'mid' : embed ? 'top' : 'home', words: text ? text.split(/\s+/).length : 0, checks: checks.filter((c) => c.ok).map((c) => c.id) })
-    if (text.length < 12) { setError('Tell a little more: who was there and what happened.'); return }
+    // Nov 14 2026: one sentence is enough (the copilot drafts the rest); two words is the floor.
+    if (text.split(/\s+/).filter(Boolean).length < 2) { setError('Add a few words: who was there and what happened.'); return }
     setError(null)
     setSplitting(true)
     try {
       const r = await split({ data: { story: text, controls, anon_session_id: anonSessionId() } })
       if (!r.ok) {
         if (r.reason === 'crisis') { setPhase('crisis'); jokeTrack('crisis_route_shown', tier); return }
-        setError(r.reason === 'rate_limited' ? 'One at a time · try again in a moment.' : 'That didn’t come back. Press “Make it a bit” again.')
         jokeTrack('story_split_failed', tier, { reason: r.reason })
+        if (r.reason === 'rate_limited') { setError('One at a time · try again in a moment.'); return }
+        cutHere(text)
         return
       }
       const d: Draft = { hook: r.lines.hook, setup: r.lines.setup, tags: [r.lines.tags[0], r.lines.tags[1]], button: r.lines.button }
@@ -759,11 +764,26 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
       if (r.notice) say(r.notice)
       requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
     } catch {
-      setError('Couldn’t reach Shutap. Press “Make it a bit” again.')
       jokeTrack('story_split_failed', tier, { reason: 'threw' })
+      cutHere(text)
     } finally {
       setSplitting(false)
     }
+  }
+  /** Nov 14 2026: the cut didn't come back. Every story still becomes a bit:
+   *  cut it here by sentence (their words only) and go on to the lines; the
+   *  lines left empty are drafted at Make, where names are removed and the
+   *  crisis check runs as always. */
+  function cutHere(text: string) {
+    const c = splitBySentence(text)
+    const d: Draft = { hook: c.hook, setup: c.setup, tags: [c.tags[0], c.tags[1]], button: c.button }
+    setError(null)
+    setBoxLines(d)
+    setBoxLocked([])
+    setAiLines({})
+    setBoxStep('lines')
+    jokeTrack('story_split_done', tier, { source: 'browser', filled: writtenSlots(d).length, drafted: 0 })
+    requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
   }
   function backToStory() {
     setBoxStep('story')
@@ -777,6 +797,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     jokeTap('demo_remix', tier, {})
   }
   const checks = storyChecks(story)
+  const drive = !!embed?.drive
+  const driveTrack = useCallback((event: string, props?: Record<string, unknown>) => jokeTap(event, tier, props ?? {}), [tier])
 
   const onPhase = embed?.onPhase
   useEffect(() => { onPhase?.(phase === 'write' ? 'write' : 'result') }, [phase, onPhase])
@@ -1085,142 +1107,163 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             )}
 
             {/* Nov 6 2026: the product pills are gone; the homepage lists the products. */}
-            <div className="bt-box">
-              <div className="bt-box-head">
-                <label htmlFor="bit-story" className="bt-box-title">
-                  <span className="bt-rec" aria-hidden="true" />
-                  {lined ? (boxStep === 'story' ? 'tell it your way' : 'your bit · your words, word for word · AI drafts only what’s empty') : 'what do you want to say funnier?'}
-                </label>
-                {lined && boxStep === 'lines' ? (
-                  <button type="button" className="bt-btn ghost sm" onClick={backToStory}>← back to my story</button>
-                ) : lined && embed?.demoStory ? (
-                  <button type="button" className="bt-btn ghost sm" onClick={remixDemo}>Stuck? Remix the demo story</button>
+            {drive && lined && boxStep === 'story' ? (
+              <DriveBox
+                story={story}
+                onStory={(v) => { typed.current = true; setStory(v) }}
+                checks={checks}
+                busy={splitting}
+                onMake={() => void splitIntoLines()}
+                onRemix={embed?.demoStory ? remixDemo : undefined}
+                settingsLine={`${controls.audience} · ${controls.voice} · ${controls.length} · wild ${controls.heat}`}
+                track={driveTrack}
+                settings={
+                  <div className="bt-ctl">
+                    <Choice label="audience" options={AUDIENCES} value={controls.audience} onPick={(v) => setControls((c) => ({ ...c, audience: v }))} />
+                    <Choice label="voice" options={VOICES} value={controls.voice} onPick={(v) => setControls((c) => ({ ...c, voice: v }))} />
+                    <Choice wide label="length" options={LENGTHS} value={controls.length} onPick={(v) => setControls((c) => ({ ...c, length: v }))} />
+                    <Choice wide label="wild" hint="1 true to your story · 5 goes wild" options={['1', '2', '3', '4', '5'] as const} value={String(controls.heat) as '1'} onPick={(v) => setControls((c) => ({ ...c, heat: Number(v) as BitControls['heat'] }))} />
+                  </div>
+                }
+              />
+            ) : (
+              <div className="bt-box">
+                <div className="bt-box-head">
+                  <label htmlFor="bit-story" className="bt-box-title">
+                    <span className="bt-rec" aria-hidden="true" />
+                    {lined ? (boxStep === 'story' ? 'tell it your way' : 'your bit · your words, word for word · AI drafts only what’s empty') : 'what do you want to say funnier?'}
+                  </label>
+                  {lined && boxStep === 'lines' ? (
+                    <button type="button" className="bt-btn ghost sm" onClick={backToStory}>← back to my story</button>
+                  ) : lined && embed?.demoStory ? (
+                    <button type="button" className="bt-btn ghost sm" onClick={remixDemo}>Stuck? Remix the demo story</button>
+                  ) : (
+                    <span className="bt-box-aside">names get removed</span>
+                  )}
+                </div>
+                {move && (
+                  <div className="bt-move" role="status">
+                    <span>
+                      the move: <b>{move.name}</b>
+                    </span>
+                    <button type="button" className="bt-btn ghost sm" onClick={() => setMove(null)} aria-label="Unpin this move">
+                      unpin
+                    </button>
+                  </div>
+                )}
+                {lined && boxStep === 'story' ? (
+                  <>
+                    <textarea
+                      suppressHydrationWarning
+                      id="bit-story"
+                      ref={paperRef}
+                      className="bt-paper"
+                      placeholder="What happened? Who was there, what they said, what you did, how it ended…"
+                      value={story}
+                      maxLength={4000}
+                      disabled={splitting}
+                      onChange={(e) => { typed.current = true; setStory(e.target.value) }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void splitIntoLines()
+                      }}
+                    />
+                    <div className="bt-checks" aria-label="Checks as you type">
+                      <span className="bt-checks-lbl">checks as you type:</span>
+                      {checks.map((c) => (
+                        <span key={c.id} className={`bt-check${c.ok ? ' ok' : ''}`}>{c.ok ? '✓' : '○'} {c.label}</span>
+                      ))}
+                    </div>
+                  </>
+                ) : lined ? (
+                  <LinedBox
+                    tier={tier}
+                    controls={move ? { ...controls, move: move.id } : controls}
+                    lines={lines}
+                    onLines={setBoxLines}
+                    aiLines={aiLines}
+                    locked={linesLocked}
+                    onLocked={setBoxLocked}
+                    busy={phaseRef.current === 'writing'}
+                    onMake={makeLined}
+                    box={embed?.mirror ? 'mid' : embed ? 'top' : 'home'}
+                    onSignIn={tier === 'guest' ? () => openSignin('funnier') : undefined}
+                    onGuestLock={guestLock}
+                    onLimit={() => openPaywall('rewrite')}
+                    onCrisis={() => { setPhase('crisis'); jokeTrack('crisis_route_shown', tier) }}
+                    say={say}
+                  />
                 ) : (
-                  <span className="bt-box-aside">names get removed</span>
+                  <>
+                    <textarea
+                      suppressHydrationWarning
+                      id="bit-story"
+                      ref={paperRef}
+                      className="bt-paper"
+                      placeholder={embed?.placeholder ?? prompt}
+                      value={story}
+                      maxLength={4000}
+                      onChange={(e) => { typed.current = true; setStory(e.target.value) }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void onWrite()
+                      }}
+                    />
+                    <FuelMeter fuel={fuel} />
+                  </>
                 )}
-              </div>
-              {move && (
-                <div className="bt-move" role="status">
-                  <span>
-                    the move: <b>{move.name}</b>
-                  </span>
-                  <button type="button" className="bt-btn ghost sm" onClick={() => setMove(null)} aria-label="Unpin this move">
-                    unpin
+                <div className="bt-box-foot">
+                  <button
+                    type="button"
+                    className="bt-settings"
+                    aria-expanded={settingsOpen}
+                    aria-controls="bit-settings"
+                    onClick={() => { setSettingsOpen((v) => !v); if (!settingsOpen) jokeTrack('write_settings_opened', tier, {}) }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M4 7h10" /><path d="M18 7h2" /><circle cx="16" cy="7" r="2" /><path d="M4 17h4" /><path d="M12 17h8" /><circle cx="10" cy="17" r="2" /></svg>
+                    <span>{controls.audience} · {controls.voice} · {controls.length} · wild {controls.heat}</span>
+                    <span className="bt-chev" aria-hidden="true">{settingsOpen ? '▴' : '▾'}</span>
                   </button>
+                  {lined && boxStep === 'story' && (
+                    <div className="bt-box-go">
+                      <button className="bt-btn bt-go" disabled={!story.trim() || splitting} aria-busy={splitting} onClick={() => void splitIntoLines()}>
+                        {splitting ? 'cutting it into a bit · drafting any line it didn’t cover…' : 'Make it a bit →'}
+                      </button>
+                    </div>
+                  )}
+                  {!lined && (
+                    <div className="bt-box-go">
+                      {fuel.words > 0 && <span className="bt-count">{fuel.words} {fuel.words === 1 ? 'word' : 'words'}</span>}
+                      <button className="bt-btn bt-go" disabled={!story.trim()} onClick={() => void onWrite()}>
+                        make it funnier →
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-              {lined && boxStep === 'story' ? (
-                <>
-                  <textarea
-                    suppressHydrationWarning
-                    id="bit-story"
-                    ref={paperRef}
-                    className="bt-paper"
-                    placeholder="What happened? Who was there, what they said, what you did, how it ended…"
-                    value={story}
-                    maxLength={4000}
-                    disabled={splitting}
-                    onChange={(e) => { typed.current = true; setStory(e.target.value) }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void splitIntoLines()
-                    }}
-                  />
-                  <div className="bt-checks" aria-label="Checks as you type">
-                    <span className="bt-checks-lbl">checks as you type:</span>
-                    {checks.map((c) => (
-                      <span key={c.id} className={`bt-check${c.ok ? ' ok' : ''}`}>{c.ok ? '✓' : '○'} {c.label}</span>
-                    ))}
-                  </div>
-                </>
-              ) : lined ? (
-                <LinedBox
-                  tier={tier}
-                  controls={move ? { ...controls, move: move.id } : controls}
-                  lines={lines}
-                  onLines={setBoxLines}
-                  aiLines={aiLines}
-                  locked={linesLocked}
-                  onLocked={setBoxLocked}
-                  busy={phaseRef.current === 'writing'}
-                  onMake={makeLined}
-                  box={embed?.mirror ? 'mid' : embed ? 'top' : 'home'}
-                  onSignIn={tier === 'guest' ? () => openSignin('funnier') : undefined}
-                  onGuestLock={guestLock}
-                  onLimit={() => openPaywall('rewrite')}
-                  onCrisis={() => { setPhase('crisis'); jokeTrack('crisis_route_shown', tier) }}
-                  say={say}
-                />
-              ) : (
-                <>
-                  <textarea
-                    suppressHydrationWarning
-                    id="bit-story"
-                    ref={paperRef}
-                    className="bt-paper"
-                    placeholder={embed?.placeholder ?? prompt}
-                    value={story}
-                    maxLength={4000}
-                    onChange={(e) => { typed.current = true; setStory(e.target.value) }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void onWrite()
-                    }}
-                  />
-                  <FuelMeter fuel={fuel} />
-                </>
-              )}
-              <div className="bt-box-foot">
-                <button
-                  type="button"
-                  className="bt-settings"
-                  aria-expanded={settingsOpen}
-                  aria-controls="bit-settings"
-                  onClick={() => { setSettingsOpen((v) => !v); if (!settingsOpen) jokeTrack('write_settings_opened', tier, {}) }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M4 7h10" /><path d="M18 7h2" /><circle cx="16" cy="7" r="2" /><path d="M4 17h4" /><path d="M12 17h8" /><circle cx="10" cy="17" r="2" /></svg>
-                  <span>{controls.audience} · {controls.voice} · {controls.length} · wild {controls.heat}</span>
-                  <span className="bt-chev" aria-hidden="true">{settingsOpen ? '▴' : '▾'}</span>
-                </button>
-                {lined && boxStep === 'story' && (
-                  <div className="bt-box-go">
-                    <button className="bt-btn bt-go" disabled={!story.trim() || splitting} aria-busy={splitting} onClick={() => void splitIntoLines()}>
-                      {splitting ? 'cutting it into a bit · drafting any line it didn’t cover…' : 'Make it a bit →'}
-                    </button>
-                  </div>
-                )}
-                {!lined && (
-                  <div className="bt-box-go">
-                    {fuel.words > 0 && <span className="bt-count">{fuel.words} {fuel.words === 1 ? 'word' : 'words'}</span>}
-                    <button className="bt-btn bt-go" disabled={!story.trim()} onClick={() => void onWrite()}>
-                      make it funnier →
-                    </button>
+                {settingsOpen && (
+                  <div className="bt-ctl" id="bit-settings">
+                    <Choice label="audience" options={AUDIENCES} value={controls.audience} onPick={(v) => setControls((c) => ({ ...c, audience: v }))} />
+                    <Choice label="voice" options={VOICES} value={controls.voice} onPick={(v) => setControls((c) => ({ ...c, voice: v }))} />
+                    <Choice wide label="length" options={LENGTHS} value={controls.length} onPick={(v) => setControls((c) => ({ ...c, length: v }))} />
+                    <Choice
+                      wide
+                      label="wild"
+                      hint="1 true to your story · 5 goes wild"
+                      options={['1', '2', '3', '4', '5'] as const}
+                      value={String(controls.heat) as '1'}
+                      onPick={(v) => setControls((c) => ({ ...c, heat: Number(v) as BitControls['heat'] }))}
+                    />
                   </div>
                 )}
               </div>
-              {settingsOpen && (
-                <div className="bt-ctl" id="bit-settings">
-                  <Choice label="audience" options={AUDIENCES} value={controls.audience} onPick={(v) => setControls((c) => ({ ...c, audience: v }))} />
-                  <Choice label="voice" options={VOICES} value={controls.voice} onPick={(v) => setControls((c) => ({ ...c, voice: v }))} />
-                  <Choice wide label="length" options={LENGTHS} value={controls.length} onPick={(v) => setControls((c) => ({ ...c, length: v }))} />
-                  <Choice
-                    wide
-                    label="wild"
-                    hint="1 true to your story · 5 goes wild"
-                    options={['1', '2', '3', '4', '5'] as const}
-                    value={String(controls.heat) as '1'}
-                    onPick={(v) => setControls((c) => ({ ...c, heat: Number(v) as BitControls['heat'] }))}
-                  />
-                </div>
-              )}
-            </div>
+            )}
             {error && (
               <p role="alert" className="bt-note" style={{ textAlign: 'center', color: 'var(--rose-ink)', fontSize: 'var(--fs-small)' }}>
                 {error}
               </p>
             )}
-            <p className="bt-note" style={{ textAlign: 'center' }}>
+            {!(drive && lined && boxStep === 'story') && <p className="bt-note" style={{ textAlign: 'center' }}>
               {tier === 'guest' ? (lined ? 'free · no sign-in to start · ' : `free: ${FREE_LINE} · sign in with Google or Apple · `) : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left${tier === 'free' ? '' : ' today'} · ` : ''}
               names removed before anything is saved · nobody at shutap reads it{lined ? ' · your lines stay word for word' : ' · ⌘↵ to write it'}
-            </p>
+            </p>}
           </>
         )}
 

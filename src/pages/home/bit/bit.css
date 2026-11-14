@@ -494,3 +494,88 @@
 .bt-check { font: 700 12px 'Sora', system-ui, sans-serif; border-radius: 999px; padding: 5px 11px; background: #f3eaee; color: #6e6468; }
 .bt-check.ok { background: #e3f3ea; color: #1f6b40; }
 .bt.bt-wide .bt-box { border: 2px solid var(--rose); box-shadow: 0 30px 70px -40px rgba(160, 50, 90, .55); }
+
+/* ============ Nov 14 2026: the driving box (DriveBox, /bits). One line on
+   the first screen; opens in place into the story, settings and the rail.
+   Type at page size: story 18px, labels 12-13px. ============ */
+.bt-box.dv { border: 2px solid var(--rose); border-radius: 20px; box-shadow: 0 30px 70px -40px rgba(160, 50, 90, .55); }
+.dv-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.dv-main { display: flex; flex-direction: column; min-width: 0; }
+.dv-write { display: flex; gap: 10px; align-items: center; padding: 14px 14px 10px; }
+.dv-paper { flex: 1; min-width: 0; box-sizing: border-box; height: 54px; resize: none; border: 0; outline: 0; border-radius: 12px; padding: 14px 16px; background: #fbf1f5; font: 400 19px/26px var(--news); color: var(--ink); caret-color: var(--pink); overflow: hidden; }
+.dv-paper::placeholder { color: #8f7d86; opacity: 1; }
+.dv-paper:focus-visible { box-shadow: 0 0 0 2px var(--pink); }
+.dv .dv-make { height: 54px; padding: 0 24px; font-size: 16px; flex: none; }
+.dv-starts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 0 18px 14px; }
+.dv-muted { font: 500 12.5px var(--sora); color: #4f464a; }
+.dv-chip { height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--card); font: 600 12.5px var(--sora); color: var(--ink-2); cursor: pointer; }
+.dv-chip:hover { border-color: var(--rose); color: var(--wine); }
+.dv-free { margin-left: auto; font: 500 12.5px var(--sora); color: #4f464a; }
+
+.bt-box.dv.open { display: grid; grid-template-columns: minmax(0, 1fr) 320px; }
+.dv.open .dv-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 20px; background: #fbf1f5; border-bottom: 1px dashed rgba(184, 69, 107, .30); }
+.dv.open .bt-box-title { font-size: 13px; }
+.dv-remix { height: 30px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--card); font: 600 12px var(--sora); color: var(--ink-2); cursor: pointer; }
+.dv.open .dv-write { padding: 0; }
+.dv.open .dv-paper { height: 210px; min-height: 150px; max-height: 420px; resize: vertical; overflow: auto; border-radius: 0; padding: 4px 22px 0 56px; font: 400 18px/30px var(--news);
+  background-color: #fff;
+  background-image: linear-gradient(90deg, transparent 39px, rgba(231, 84, 138, .35) 39px, rgba(231, 84, 138, .35) 40px, transparent 40px),
+    repeating-linear-gradient(180deg, transparent 0, transparent 29px, rgba(90, 30, 50, .08) 29px, rgba(90, 30, 50, .08) 30px);
+  background-attachment: local; }
+.dv.open .dv-paper:focus-visible { box-shadow: none; }
+.dv-count { display: flex; justify-content: space-between; gap: 12px; padding: 8px 20px; border-top: 1px solid var(--line); font: 500 12px var(--sora); color: #4f464a; }
+.dv-set { background: #fdf8fa; border-top: 1px solid var(--line); }
+.dv-set .bt-ctl { padding: 14px 20px 18px; gap: 12px 24px; }
+.dv-set .bt-lbl { font-size: 11px; letter-spacing: .12em; }
+.dv-set .bt-chip { height: 30px; padding: 0 11px; font-size: 12.5px; }
+
+.dv-rail { display: flex; flex-direction: column; gap: 12px; padding: 18px; background: #f9eef3; border-left: 1px solid rgba(184, 69, 107, .22); min-width: 0; }
+.dv-rail-h { display: flex; justify-content: space-between; align-items: baseline; }
+.dv-rail-h span { font: 700 11px var(--sora); letter-spacing: .12em; text-transform: uppercase; color: var(--wine); }
+.dv-rail-h b { font: 700 12px var(--sora); color: var(--ink-2); }
+.dv-bar { height: 6px; border-radius: 999px; background: #ecd6df; overflow: hidden; }
+.dv-bar span { display: block; height: 100%; border-radius: 999px; background: var(--pink); transition: width .3s; }
+.dv-bar span.full { background: #1f6b40; }
+.dv-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.dv-item { display: flex; gap: 10px; align-items: flex-start; padding: 6px 10px; border-radius: 14px; }
+.dv-item > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dv-item b { font: 600 13.5px/1.3 var(--sora); color: var(--ink-2); }
+.dv-item p { margin: 0; font: 500 12px/1.4 var(--sora); color: #4f464a; }
+.dv-n { flex: none; width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; border: 2px solid #c9b3bc; display: grid; place-items: center; font: 800 11px var(--sora); color: #6e6468; }
+.dv-item.ok .dv-n { border: 0; background: #1f6b40; color: #fff; }
+.dv-item.ok b { color: #1f6b40; }
+.dv-item.on { background: #fff; border: 1.5px solid var(--pink); padding: 11px; gap: 10px; }
+.dv-item.on .dv-n { border-color: var(--pink); color: var(--pink); }
+.dv-item.on b { font-size: 14px; font-weight: 700; color: var(--ink); }
+.dv-item.on p { font-size: 12.5px; line-height: 1.45; }
+.dv-add { align-self: flex-start; margin-top: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px dashed var(--rose); background: #fbf1f5; font: 600 12.5px var(--sora); color: var(--wine); cursor: pointer; }
+.dv-go { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+.dv.open .dv-go .dv-make { width: 100%; height: 46px; font-size: 15px; }
+.dv-go p { margin: 0; font: 500 12px/1.45 var(--sora); color: #4f464a; text-align: center; }
+
+@media (max-width: 760px) {
+  .dv-write { flex-direction: column; align-items: stretch; }
+  .dv .dv-make { width: 100%; height: 50px; }
+  .dv-free { margin-left: 0; }
+  .bt-box.dv.open { display: flex; flex-direction: column; }
+  .dv.open .dv-paper { height: 168px; padding: 2px 14px 0 40px; font-size: 17px; line-height: 28px;
+    background-image: linear-gradient(90deg, transparent 27px, rgba(231, 84, 138, .35) 27px, rgba(231, 84, 138, .35) 28px, transparent 28px),
+      repeating-linear-gradient(180deg, transparent 0, transparent 27px, rgba(90, 30, 50, .08) 27px, rgba(90, 30, 50, .08) 28px); }
+  .dv-rail { border-left: 0; border-top: 1px solid rgba(184, 69, 107, .22); padding: 14px; }
+  .dv-item:not(.on) { display: none; }
+  .dv-set .bt-ctl { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) { .dv-paper { height: 78px; font-size: 18px; line-height: 25px; padding: 12px 14px; } }
+/* beats `.bt-box textarea` (Sora) so the story reads in Newsreader like the page's quotes */
+.bt-box.dv textarea.dv-paper { font: 400 19px/26px var(--news); }
+.bt-box.dv.open textarea.dv-paper { font: 400 18px/30px var(--news); }
+@media (max-width: 760px) {
+  .bt-box.dv textarea.dv-paper { font: 400 18px/25px var(--news); }
+  .bt-box.dv.open textarea.dv-paper { font: 400 17px/28px var(--news); }
+}
+@media (max-width: 760px) {
+  /* on a phone the rail (next question + Make) comes before the settings */
+  .dv.open .dv-main { display: contents; }
+  .dv.open .dv-head { order: 1; } .dv.open .dv-write { order: 2; } .dv.open .dv-count { order: 3; }
+  .dv.open .dv-rail { order: 4; } .dv.open .dv-set { order: 5; }
+}
