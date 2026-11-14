@@ -102,11 +102,25 @@ function guestOrAccount(id: JokeIdentity): BitTier {
 
 
 /** After sign-in, count the guest bits this browser wrote today toward the
- *  account. Idempotent; a failure here never blocks the caller. */
+ *  account, and move those bits onto the account. Idempotent; a failure here
+ *  never blocks the caller.
+ *  Nov 14 2026: the count used to move without the bit (the bit was only
+ *  claimed when a sign-in return note existed), so someone who made a guest
+ *  bit and then signed in from /welcome hit the paywall with 0 bits on their
+ *  account, and admin showed them as active with no bit. */
 async function mergeGuestToday(admin: any, id: JokeIdentity, anonSessionId: string | null, day: string): Promise<void> {
   if (!id.userId) return
   const anon = requestAnonId(anonSessionId)
   if (!anon) return
+  try {
+    await admin
+      .from('bits')
+      .update({ user_id: id.userId, anon_key: null } as never)
+      .is('user_id', null)
+      .eq('anon_key', anon)
+  } catch (e) {
+    console.error('[bits] guest bit claim failed', e instanceof Error ? e.message : e)
+  }
   try {
     await mergeGuestUsage(admin, id.userId, anon, day)
   } catch (e) {
