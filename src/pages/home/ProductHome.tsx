@@ -87,7 +87,7 @@ type ProductLine = {
 const PRODUCTS: ProductLine[] = [
   {
     key: 'bits', icon: 'bits', name: 'Bits', full: 'Shutap Bits', aud: 'for creators and comedians', tab: 'creators & comedians',
-    one: 'Tell it your way. Get the bit; AI fills only the gaps.',
+    one: 'Make your story funnier. Make your joke funnier. Your words first; AI only fills the gaps.',
     h2: ['Your bit, ', 'funnier.'],
     does: 'Tell your story your way; Shutap cuts it into a hook, setup, two tags and a button, your words word for word; any line your story didn’t cover, the AI copilot drafts. Tap “funnier” on any line for three other ways to say it, yours first. Then post it as a 5-second video, or perform it as stand-up, a sketch or a skit.',
     steps: ['Tell it your way', 'Tap “funnier” where you’re stuck', 'Post it, or perform it'],
@@ -98,7 +98,7 @@ const PRODUCTS: ProductLine[] = [
   },
   {
     key: 'realtors', icon: 'realtors', name: 'Realtors', full: 'Shutap for Realtors', aud: 'for agents and brokerages', tab: 'listing videos',
-    one: 'Paste a listing. Get a video script and every post to go with it.',
+    one: 'Paste a listing. Get a funny listing video script and every post to go with it.',
     h2: ['Your listing, ', 'funnier.'],
     does: 'Paste a listing. Get a video script and every post to go with it. To film: walkthrough, voiceover, hooks. To post: open-house kit, social posts, MLS copy. In your tone, in about 30 seconds.',
     steps: ['Paste the listing link', 'Pick a tone', 'Copy, shoot, post'],
@@ -109,7 +109,7 @@ const PRODUCTS: ProductLine[] = [
   },
   {
     key: 'toasts', icon: 'toasts', name: 'Toasts', full: 'Shutap Toasts', aud: 'for weddings and holidays', tab: 'weddings & holidays',
-    one: 'Ready for life’s big moments.',
+    one: 'A funny best man, maid of honor, Thanksgiving, Christmas or office party toast, from your own stories.',
     h2: ['Your toast, ', 'funnier.'],
     does: 'Be ready for the moments that matter. Your stories become the toast, then you rehearse it, carry cue cards, read from the prompter and keep a keepsake.',
     steps: ['Pick the occasion', 'Type your stories', 'Edit, lock, give it'],
@@ -201,7 +201,7 @@ export function ProductHome() {
       <main>
         <section className="ph-wrap ph-hero">
           <Link to="/toasts" className="ph-announce" onClick={() => tap('home_cta', { cta: 'announce', product: 'toasts' })}>
-            <b>New</b>Shutap Toasts, for weddings and the holidays <Icon name="arrow" size={14} color="#b8456b" />
+            <b>New</b>Funny Thanksgiving and Christmas toasts, from your own stories <Icon name="arrow" size={14} color="#b8456b" />
           </Link>
           <h1 className="ph-h1">Say it <em className="gig">funnier.</em></h1>
           <a href={startHref} className="ph-btn primary" onClick={() => tap('home_cta', { cta: signedIn ? 'pick_product' : 'get_started', where: 'hero' })}>

@@ -370,10 +370,10 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, aside
           {/* Nov 12 2026 (Candy): the sample kit's outputs on top, then the paste box */}
           <div className="rl-hero2-head ro-head">
             <div className="ro-head-l">
-              <p className="rl-kicker">Shutap for Realtors</p>
+              <p className="rl-kicker">Shutap for Realtors · funny listing videos and posts</p>
               <h1 className="rl-h1 rl-h1-2">Turn every listing into a <em>content campaign.</em></h1>
             </div>
-            <p className="rl-lead2">A realistic demo of a kit made in-house from a real Menlo Park listing.</p>
+            <p className="rl-lead2">Funny or polished, in four tones. A realistic demo of a kit made in-house from a real Menlo Park listing.</p>
           </div>
           <div className="rl-hero2-aside">{aside}</div>
           <div className="rl-hero2-box">
