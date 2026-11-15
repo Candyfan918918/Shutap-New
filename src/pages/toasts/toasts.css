@@ -272,7 +272,7 @@
 .tp-guide { font: 600 14px var(--sora); color: var(--rose-ink); }
 
 /* the hub */
-.tp-hub { max-width: 1200px; margin: 0 auto; padding: 40px 24px 56px; display: flex; flex-direction: column; gap: 36px; }
+.tp-hub { max-width: var(--page-max); box-sizing: border-box; margin: 0 auto; padding: 40px var(--page-pad) 56px; display: flex; flex-direction: column; gap: 36px; }
 .tp-hub-hd { display: flex; flex-direction: column; gap: 12px; max-width: 820px; }
 .tp-hub-hd .rl-h1-2 em { font: italic 400 1em var(--news); color: var(--rose); }
 .tp-hub-g { display: flex; flex-direction: column; gap: 12px; }
@@ -322,7 +322,7 @@
 
 /* ============ Nov 12 2026 (Candy): the demo toast on top of every occasion
    page, four outputs side by side at the same size, then "Your turn". ============ */
-.to-hero { max-width: 1200px; margin: 0 auto; padding: 26px 24px 8px; display: flex; flex-direction: column; gap: 18px; }
+.to-hero { max-width: var(--page-max); box-sizing: border-box; margin: 0 auto; padding: 26px var(--page-pad) 8px; display: flex; flex-direction: column; gap: 18px; }
 .to-head { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 32px; align-items: end; }
 .to-head-l { display: flex; flex-direction: column; gap: 8px; }
 .to-head .rl-kicker { text-align: left; margin: 0; color: var(--rose-ink); }
@@ -377,7 +377,7 @@ button.to-body:hover, button.to-body:focus-visible { outline: 2px solid rgba(184
 .to-typed .lb { font: 700 11px var(--sora); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
 .to-typed .it { display: flex; flex-direction: column; gap: 3px; font: 400 13.5px/1.35 var(--news); color: var(--ink); }
 .to-typed .it b { font: 700 10.5px var(--sora); color: #2f8a55; }
-.to-write { max-width: 1200px; margin: 0 auto; padding: 30px 24px 24px; display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 80px; }
+.to-write { max-width: var(--page-max); box-sizing: border-box; margin: 0 auto; padding: 30px var(--page-pad) 24px; display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 80px; }
 .to-write-h { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
 .to-write-h h2 { margin: 0; font: 800 32px/1.1 var(--sora); letter-spacing: -0.03em; color: var(--wine); }
 .to-write-h span { font: 600 13px var(--sora); color: var(--muted); }
@@ -445,3 +445,30 @@ button.to-body:hover, button.to-body:focus-visible { outline: 2px solid rgba(184
     .tp-hub .rl-price4 > div:nth-child(4) { animation-range: entry 12% cover 40%; }
   }
 }
+
+/* ============ Nov 14 2026 (Candy): every demo is a phone screen, five of
+   them; the fifth is the text after (or the rehearse timer). ============ */
+.to-row { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.to-body { height: auto; overflow: visible; border-radius: 0; }
+.to-phone { display: block; width: 100%; max-width: 300px; margin: 0 auto; aspect-ratio: 9 / 16; box-sizing: border-box; border: 3px solid var(--ink); border-radius: 22px; overflow: hidden; background: #fff; }
+.to-phone > * { height: 100% !important; border-radius: 0 !important; }
+.to-phone .to-prompt { border: 0; }
+.to-phone .to-speech { border: 0; }
+.to-after { flex-direction: column; justify-content: flex-start !important; align-items: stretch !important; gap: 10px; background: #f6f1f3 !important; padding: 14px 12px !important; }
+.to-msg-h { align-self: center; font: 600 10.5px var(--sora); color: var(--muted); margin-bottom: 18px; }
+.to-after .bub { align-self: flex-end; max-width: 88%; background: #e7548a !important; color: #fff !important; border: 0 !important; border-radius: 18px 18px 4px 18px; font: 400 13.5px/1.4 var(--sora) !important; }
+.to-msg-f { align-self: flex-end; font: 500 10px var(--sora); color: var(--muted); }
+.to-timer { box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: #121014; padding: 20px 14px; }
+.to-timer .big { font: 800 44px var(--sora); color: #fff; letter-spacing: -0.02em; }
+.to-timer .of { font: 600 12px var(--sora); color: #9a8890; margin-bottom: 14px; }
+.to-timer .secs { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.to-timer .secs span { font: 600 11px var(--sora); color: #c9b3bc; border-left: 3px solid #3a3036; padding: 3px 8px; }
+.to-timer .secs span.on { color: #fff; border-left-color: #e7548a; }
+@media (max-width: 900px) {
+  .to-tile { flex: 0 0 64%; }
+  .to-body { height: auto; }
+}
+.to-h span { white-space: nowrap; }
+.to-phone .to-prompt .lit { font-size: 16px; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+.to-phone .to-prompt .dim { -webkit-line-clamp: 1; }
+.to-phone .to-prompt .b button { white-space: nowrap; font-size: 11.5px; padding: 0 10px; }

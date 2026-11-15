@@ -114,6 +114,22 @@ function OpenHouse() {
   )
 }
 
+/** The kit's hooks (Nov 14 2026): the first two seconds of the reel, as
+ *  on-screen text, with the move each one uses. */
+function Hooks() {
+  return (
+    <div className="ro-hooks">
+      <span className="tag">first 2 seconds · on screen</span>
+      {SAMPLE_KIT.hooks.map((h, i) => (
+        <div key={i} className="hk">
+          <b>{h.line}</b>
+          <span>{h.move}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function RealtorOutputs() {
   const L = SAMPLE_LISTING
   const facts = [
@@ -123,7 +139,7 @@ export function RealtorOutputs() {
   const tile = (id: string, title: string, use: string, foot: string, body: React.ReactNode, lead = false) => (
     <div className={`ro-tile${lead ? ' lead' : ''}`} data-tile={id} onPointerDown={() => track('sample_tile_open', { output: id, how: 'tap' })}>
       <span className="ro-h"><b>{title}</b><span>{use}</span></span>
-      <div className="ro-body">{body}</div>
+      <div className="ro-body"><div className="ro-phone">{body}</div></div>
       <span className="ro-foot">{foot}</span>
     </div>
   )
@@ -131,12 +147,13 @@ export function RealtorOutputs() {
     <section className="ro" aria-label="A realistic demo of a kit made in-house">
       <div className="ro-row">
         {tile('walkthrough', 'Walkthrough to film', 'to shoot', 'Shot by shot: where to stand, what to do, what to say.', <Walkthrough />)}
-        {tile('shoot', 'Shoot mode', 'to rehearse & film', 'Teleprompter with a cue on how to say each line.', <Shoot />, true)}
+        {tile('shoot', 'Shoot mode', 'to film', 'Teleprompter with a cue on how to say each line.', <Shoot />, true)}
         {tile('posts', 'Social posts', 'to post', `The caption, typed as you’d post it on your own 9:16 reel (you film it). ${SAMPLE_KIT.posts.length} posts, just listed to sold.`, <Reel />)}
-        {tile('open_house', 'Open-house kit', 'for the weekend', 'Invite, story, sign line, reminder, thank-you text.', <OpenHouse />)}
+        {tile('open_house', 'Open-house kit', 'weekend', 'Invite, story, sign line, reminder, thank-you text.', <OpenHouse />)}
+        {tile('hooks', `${SAMPLE_KIT.hooks.length} hooks`, 'first 2 seconds', 'Three ways to open the reel, so the scroll stops.', <Hooks />)}
       </div>
       <p className="ro-also">
-        <span>Also in every kit: <b>the voiceover</b> ({SAMPLE_KIT.voiceover.length} lines) · <b>{SAMPLE_KIT.hooks.length} hooks</b> for the first 2 seconds · <b>MLS copy</b>, no jokes</span>
+        <span>Also in every kit: <b>the voiceover</b> ({SAMPLE_KIT.voiceover.length} lines) · <b>MLS copy</b>, no jokes</span>
         <span className="mu">{L.beds}-bed, {L.city} · funny tone · fair-housing checked</span>
       </p>
       <div className="ro-facts">

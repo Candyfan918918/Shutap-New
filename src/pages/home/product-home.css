@@ -3,7 +3,7 @@
  * global background (WaveDots). Scoped under .ph. */
 .ph { position: relative; color: #1a1418; font-family: 'Sora', system-ui, sans-serif; }
 .ph em { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
-.ph-wrap { max-width: 1200px; margin: 0 auto; padding: 0 40px; box-sizing: border-box; position: relative; }
+.ph-wrap { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--page-pad); box-sizing: border-box; position: relative; }
 
 .ph-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-sizing: border-box; height: 52px; padding: 0 28px; border-radius: 999px; font: 700 16px 'Sora', sans-serif; text-decoration: none; white-space: nowrap; transition: transform .15s ease, box-shadow .15s ease; }
 .ph-btn:hover { transform: translateY(-1px); }

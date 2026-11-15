@@ -103,9 +103,9 @@ export function ToastOutputs({ demo, roles, page }: { demo: ToastDemo; roles: { 
     <div key={id} className={`to-tile${opts.lead ? ' lead' : ''}`} data-tile={id}>
       <span className="to-h"><b>{title}</b><span>{meta}</span></span>
       {opts.pdf ? (
-        <button type="button" className="to-body" onClick={() => open(id, opts.pdf)} aria-label={`${title}: open the sample PDF`}>{body}</button>
+        <button type="button" className="to-body" onClick={() => open(id, opts.pdf)} aria-label={`${title}: open the sample PDF`}><span className="to-phone">{body}</span></button>
       ) : (
-        <div className="to-body">{body}</div>
+        <div className="to-body"><span className="to-phone">{body}</span></div>
       )}
       <span className="to-foot">{foot}</span>
     </div>
@@ -129,9 +129,30 @@ export function ToastOutputs({ demo, roles, page }: { demo: ToastDemo; roles: { 
   ), { pdf: 'cards' })
   const prompter = tile('prompter', 'Phone prompter', 'on the day', 'On your phone at the mic, with the marks.', <Prompter lines={lines} shown={shown} page={page} />, { lead: true })
   const fourth = spec.keepsake
-    ? tile('keepsake', 'Keepsake', 'one page to hand them', 'The whole toast on one page, to print and hand them after.', <span className="to-keep"><KeepsakePage demo={demo} names={names} /></span>, { pdf: 'keepsake' })
+    ? tile('keepsake', 'Keepsake', 'to hand them', 'The whole toast on one page, to print and hand them after.', <span className="to-keep"><KeepsakePage demo={demo} names={names} /></span>, { pdf: 'keepsake' })
     : demo.toast.text_after
-      ? tile('after', 'The text after', 'send that night', 'A short message to send them after.', <span className="to-after"><span className="bub">{shown(demo.toast.text_after)}</span></span>)
+      ? tile('after', 'The text after', 'that night', 'A short message to send them after.', <span className="to-after"><span className="bub">{shown(demo.toast.text_after)}</span></span>)
+      : null
+  // Nov 14 2026 (Candy): a fifth phone screen. The text to send after when
+  // the keepsake took the fourth, else the rehearse timer with the toast's
+  // own sections, timed as the lab measured it.
+  const sections = Array.from(new Set(lines.map((l) => l.section.replace(/ · tag$/, '')).map((x) => shown(x))))
+  const fifth = spec.keepsake && demo.toast.text_after
+    ? tile('after', 'The text after', 'that night', 'A short message to send them after.', (
+      <span className="to-after">
+        <span className="to-msg-h">to {roles.friend}</span>
+        <span className="bub">{shown(demo.toast.text_after)}</span>
+        <span className="to-msg-f">delivered</span>
+      </span>
+    ))
+    : demo.seconds
+      ? tile('timer', 'Rehearse timer', 'the night before', 'Time it out loud; every section in order.', (
+        <span className="to-timer">
+          <span className="big">{clock(demo.seconds)}</span>
+          <span className="of">of {clock(demo.form.length)}</span>
+          <span className="secs">{sections.map((x, i) => <span key={x} className={i === 0 ? 'on' : undefined}>{x}</span>)}</span>
+        </span>
+      ))
       : null
 
   return (
@@ -141,9 +162,10 @@ export function ToastOutputs({ demo, roles, page }: { demo: ToastDemo; roles: { 
         {cardsTile}
         {prompter}
         {fourth}
+        {fifth}
       </div>
       <p className="to-also">
-        <span>Also in every toast: <b>the 60-second version</b> · <b>a rehearse timer</b>{demo.seconds ? ` (${clock(demo.seconds)} / ${clock(demo.form.length)})` : ''}{spec.keepsake && demo.toast.text_after ? <> · <b>the text to send after</b></> : null}</span>
+        <span>Also in every toast: <b>the 60-second version</b> · <b>a rehearse timer</b>{demo.seconds ? ` (${clock(demo.seconds)} / ${clock(demo.form.length)})` : ''}</span>
         <span className="mu">names shown as [roles] · {TONE_LABEL[demo.form.tone]} · {lengthLabel(demo.form.occasion, demo.form.length)}</span>
       </p>
       <div className="to-typed">

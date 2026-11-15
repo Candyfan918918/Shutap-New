@@ -3,6 +3,10 @@
    Two typefaces (Sora for structure, Newsreader italic for prose),
    nine type steps, four button heights. Nothing else gets invented. */
 :root {
+  /* Nov 14 2026 (Candy): one page width for the whole site, like /bits:
+     about 80% of a 1920 screen, side margins that shrink on small screens. */
+  --page-max: 1680px;
+  --page-pad: clamp(16px, 4vw, 64px);
   /* canvas & ink */
   --bg: #fbf6f7;          /* page canvas */
   --bg-card: #fdf8f9;     /* card fields */

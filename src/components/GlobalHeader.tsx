@@ -230,9 +230,10 @@ export function GlobalHeader() {
 
       <div
         style={{
-          maxWidth: 1100,
+          maxWidth: 'var(--page-max)',
           margin: '0 auto',
-          padding: 'clamp(10px,2vw,11px) clamp(12px,3vw,22px)',
+          padding: 'clamp(10px,2vw,11px) var(--page-pad)',
+          boxSizing: 'border-box',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
