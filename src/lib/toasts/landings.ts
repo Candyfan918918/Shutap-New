@@ -62,6 +62,7 @@ export const LANDINGS: Landing[] = [
     built: { h2: 'How a best man speech is built', intro: 'The shape that works at a reception: the opening laugh, his stories, the turn, the one true thing said plainly, a line to his partner, glasses up.' },
     checks: [GRANDMA, NEVER_MADE_UP],
     faqs: [
+      { q: 'How do I make a best man speech funny?', a: 'Use real stories about the groom, one per beat, and end each on its most specific detail. Roast lightly: the joke is about what happened, never something that would embarrass him in front of his new family. Then turn to the true thing about him and raise a glass. Type three stories above and Shutap builds the speech around them, word for word.' },
       { q: 'How long should a best man speech be?', a: 'Three minutes is the sweet spot; two if the schedule is tight, five at most. Shutap writes to the length you pick and shows a running clock at a relaxed 140 words a minute, pauses counted.' },
       { q: 'Will it sound like me?', a: 'Your stories go in word for word. You can edit any line or tap funnier on any line Shutap wrote until you lock it. Nothing changes unless you pick it.' },
       { q: 'Can I roast the groom?', a: 'Yes. Pick roast-lite and Shutap roasts him, what happened, you and the room, using only what you typed. The wedding rule still applies.' },
@@ -84,6 +85,7 @@ export const LANDINGS: Landing[] = [
     built: { h2: 'How a maid of honor speech is built', intro: 'A friendship story, her qualities shown rather than listed, the turn, your wishes for them, glasses up.' },
     checks: [GRANDMA, NEVER_MADE_UP],
     faqs: [
+      { q: 'How do I make a maid of honor speech funny?', a: 'Use real stories from your friendship, one per beat, and let the laugh come from the specific detail. Tease lightly, never anything she’d rather keep private, then turn to what makes her the friend she is and raise a glass. Type three stories above and Shutap builds the speech around them, word for word.' },
       { q: 'How long should a maid of honor speech be?', a: 'Two to three minutes; five at most. Shutap writes to the length you pick and shows the clock as you edit.' },
       { q: 'Does Shutap write the speech for me?', a: 'It builds the speech around your stories. Your lines stay word for word, you edit anything you like, and nothing changes unless you tap it and pick.' },
       { q: 'Can I make it heartfelt instead of funny?', a: 'Yes. Pick heartfelt: one light laugh from your stories, then mostly the true thing you wrote.' },
@@ -107,6 +109,7 @@ export const LANDINGS: Landing[] = [
     built: { h2: 'How a father of the bride speech is built', intro: 'Welcome the room, tell who she is through your stories, welcome her partner and their family, your wishes, glasses up.' },
     checks: [GRANDMA, NEVER_MADE_UP],
     faqs: [
+      { q: 'How do I make a father of the bride speech funny?', a: 'Keep the humor gentle: a story from when she was little, one about who she grew up to be, and a warm line for the partner. Let the laugh come from the detail, not a dig. Then welcome the new family and raise a glass. Type your stories above and Shutap builds the speech around them, word for word.' },
       { q: 'How long should a father of the bride speech be?', a: 'Three minutes is right for most receptions; two if there are many speeches, five at most. Shutap writes to the length you pick and shows the clock.' },
       { q: 'Can I welcome the groom’s family?', a: 'Yes. Welcoming the new family is part of the shape, and anything you add to must-say goes in.' },
       { q: 'Will it sound like me?', a: 'Your stories go in word for word. Edit any line or tap funnier until you lock it; nothing changes unless you pick it.' },
@@ -129,6 +132,7 @@ export const LANDINGS: Landing[] = [
     built: { h2: 'How a mother of the bride speech is built', intro: 'Welcome the room, tell who she is through your stories, welcome her partner and their family, your wishes, glasses up.' },
     checks: [GRANDMA, NEVER_MADE_UP],
     faqs: [
+      { q: 'How do I make a mother of the bride speech funny?', a: 'Keep the humor gentle: a story from when she was little, one about who she grew up to be, and a warm line for the partner. Let the laugh come from the detail, not a dig. Then welcome the new family and raise a glass. Type your stories above and Shutap builds the speech around them, word for word.' },
       { q: 'How long should a mother of the bride speech be?', a: 'Two to three minutes; five at most. Shutap writes to the length you pick and shows the clock.' },
       { q: 'Can I make it heartfelt instead of funny?', a: 'Yes. Pick heartfelt: one light laugh from your stories, then mostly the true thing you wrote.' },
       { q: 'Will it sound like me?', a: 'Your stories go in word for word. Edit any line or tap funnier until you lock it; nothing changes unless you pick it.' },
@@ -150,6 +154,7 @@ export const LANDINGS: Landing[] = [
     built: { h2: 'How a Thanksgiving toast is built', intro: 'Short and shared. Greet the table, tell one story everybody can follow, say what you’re grateful for, raise a glass.' },
     checks: [HALF_TABLE('Thanksgiving'), NEVER_MADE_UP],
     faqs: [
+      { q: 'How do I make a Thanksgiving toast funny?', a: 'Use a story your family already retells, keep it short, and end it on the detail everyone remembers. One or two laughs is plenty at the table; then say what you’re thankful for and raise a glass. Type your family’s stories above and Shutap builds the toast around them, word for word.' },
       { q: 'How long should a Thanksgiving toast be?', a: 'About a minute, two at most. Shutap writes to the length you pick (1 or 2 minutes) and shows a running clock, counted at a relaxed 140 words a minute with the pauses.' },
       { q: 'Does Shutap make up stories about my family?', a: 'No. Your stories go in word for word. Shutap writes only the lines around them: the opener, the tags, the thanks, the toast. It never invents a story, a fact or a person.' },
       { q: 'Do the names leave my phone?', a: NAMES },
@@ -171,6 +176,7 @@ export const LANDINGS: Landing[] = [
     built: { h2: 'How a Christmas toast is built', intro: 'Greet the table, tell the story everyone knows by heart, say what this year gave you, raise a glass.' },
     checks: [HALF_TABLE('Christmas'), NEVER_MADE_UP],
     faqs: [
+      { q: 'How do I make a Christmas toast funny?', a: 'Use the story your family tells every year, keep it short, and end on the detail everyone waits for. One or two laughs is plenty at the table; then turn to the people around it and raise a glass. Type your stories above and Shutap builds the toast around them, word for word.' },
       { q: 'How long should a Christmas toast be?', a: 'A minute, two at most: the food is on the table. Shutap writes to the length you pick and shows the clock as you edit.' },
       { q: 'Is this for the office party too?', a: 'The office party has its own page, with a workplace check. This one is for family and friends at the table.' },
       { q: 'Do the names leave my phone?', a: NAMES },
@@ -195,6 +201,7 @@ export const LANDINGS: Landing[] = [
       NEVER_MADE_UP,
     ],
     faqs: [
+      { q: 'How do I make an office holiday party toast funny?', a: 'Joke about the year, not about people: the big win, the deadline everyone survived, the thing the whole office knows about. Keep it short, thank the team, and end on next year. Type the year’s big win above; every line Shutap drafts is checked against a workplace check.' },
       { q: 'How long should a holiday party toast be?', a: 'Sixty to ninety seconds. People are standing, holding drinks and talking. Shutap writes to the length you pick and shows the clock as you edit.' },
       { q: 'Can I roast my coworkers?', a: 'Lightly, and only about what you typed. Every line is written and judged against the workplace check: no one person singled out.' },
       { q: 'Does Shutap invent accomplishments?', a: 'No. It builds the toast from the wins you give it and never adds a number, a project or a person you didn’t type.' },
@@ -218,6 +225,7 @@ export const LANDINGS: Landing[] = [
       NEVER_MADE_UP,
     ],
     faqs: [
+      { q: 'How do I make a New Year’s toast funny?', a: 'Sum up the year in one line everyone recognizes, add a quick laugh, and land the last line at midnight. Type the year in one line above; the phone prompter tells you when to start so the last line lands on time.' },
       { q: 'How long should a New Year’s toast be?', a: 'A minute; two at most. Shutap writes to the length you pick, and the prompter works out your start time from it.' },
       { q: 'Does the prompter need Wi-Fi at the party?', a: 'Open it before the countdown: it runs on your phone from there.' },
       { q: 'Do the names leave my phone?', a: NAMES },
@@ -242,6 +250,7 @@ export const LANDINGS: Landing[] = [
       NEVER_MADE_UP,
     ],
     faqs: [
+      { q: 'How do I make a retirement speech funny?', a: 'Use what they’re known for at work: the habit, the catchphrase, the story everyone retells. Tease lightly, then turn to what they gave the team and raise a glass. Type your stories above and Shutap builds the speech around them, word for word.' },
       { q: 'How long should a retirement speech be?', a: 'Two to three minutes. Shutap writes to the length you pick and shows the clock as you edit.' },
       { q: 'Can several of us give it?', a: 'One speaker per toast. Each person can write their own.' },
       { q: 'Do the names leave my device?', a: NAMES },
@@ -265,6 +274,7 @@ export const LANDINGS: Landing[] = [
       NEVER_MADE_UP,
     ],
     faqs: [
+      { q: 'How do I make a birthday toast funny?', a: 'Pick one habit only they have and build the laugh from its most specific detail. Keep it short, tease lightly, then say what they mean to you and raise a glass. Type your stories above and Shutap builds the toast around them, word for word.' },
       { q: 'How long should a birthday toast be?', a: 'About two minutes; three at most. Shutap writes to the length you pick and shows the clock as you edit.' },
       { q: 'Can I roast them?', a: 'Yes. Pick roast-lite and Shutap roasts them, what happened, you and the room, using only what you typed.' },
       { q: 'Do the names leave my device?', a: NAMES },
@@ -286,6 +296,7 @@ export const LANDINGS: Landing[] = [
     built: { h2: 'How a toast is built', intro: 'Open, your stories, the one true thing said plainly, glasses up.' },
     checks: [NEVER_MADE_UP],
     faqs: [
+      { q: 'How do I make a toast funny?', a: 'Start from real stories, one per beat, and end each on its most specific detail. Keep the jokes about what happened, not about anyone in the room, then turn to the true thing and raise a glass. Type three stories above and Shutap builds the toast around them, word for word.' },
       { q: 'Can I write a Toastmasters humorous speech here?', a: 'Yes: pick Toastmasters as the occasion. It writes a 5–7 minute speech with callbacks and no glasses up.' },
       { q: 'Do the names leave my device?', a: NAMES },
       { q: 'What does it cost?', a: COST },
