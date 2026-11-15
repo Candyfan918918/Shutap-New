@@ -3,6 +3,7 @@
 // and can mark the funniest line. Kept and rewritten bits teach the live
 // writer her taste; keep rates decide how often each technique is dealt.
 import { createFileRoute, notFound } from '@tanstack/react-router'
+import { pageMeta } from '@/lib/seo/page-meta'
 import { useEffect, useRef, useState } from 'react'
 import { amIAdmin } from '@/lib/admin.functions'
 import { addDailyStory, getDaily, rateDaily, runDailyStory, type DailyBit, type DailyState } from '@/lib/bit-daily.functions'
@@ -10,7 +11,7 @@ import '@/components/feed/feed.css'
 
 export const Route = createFileRoute('/bit-daily')({
   ssr: false,
-  head: () => ({ meta: [{ title: 'Daily humor training — Shutap' }, { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta('Daily humor training — Shutap', 'Review and rate daily humor exercises in the private training area.', '/bit-daily'), { name: 'robots', content: 'noindex' }] }),
   beforeLoad: async () => {
     try {
       if (!(await amIAdmin())) throw notFound()
