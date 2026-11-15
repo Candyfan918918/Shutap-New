@@ -9,7 +9,6 @@ import { KIT_ONCE, usd } from '@/lib/pricing'
 import { OUTPUT_LABEL, OUTPUTS, TONE_LABEL, listingFacts, type Kit, type Output } from '@/lib/realtors/listing'
 import { copyText, fileStem, kitTitle, voiceoverTxt } from '@/lib/realtors/kit-text'
 import { trackEvent } from '@/lib/tracking'
-import { phCapture } from '@/lib/posthog'
 
 type Props = {
   data: KitData
@@ -24,7 +23,6 @@ type Props = {
 }
 
 const track = (name: string, props: Record<string, unknown>) => {
-  void phCapture(name, { product: 'realtors', ...props })
   void trackEvent(name, { product: 'realtors', ...props })
 }
 

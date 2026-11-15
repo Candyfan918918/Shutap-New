@@ -23,11 +23,10 @@ import QRCode from 'qrcode'
 import type { ToastUsage } from '@/lib/toasts/usage.server'
 import { TOAST_ONCE, usd } from '@/lib/pricing'
 import { trackEvent } from '@/lib/tracking'
-import { phCapture } from '@/lib/posthog'
 import '@/pages/realtors/realtors.css'
 import './toasts.css'
 
-const track = (name: string, props: Record<string, unknown> = {}) => { void phCapture(name, { product: 'toasts', ...props }); void trackEvent(name, { product: 'toasts', ...props }) }
+const track = (name: string, props: Record<string, unknown> = {}) => { void trackEvent(name, { product: 'toasts', ...props }) }
 const mine = (l: ToastLine) => l.source === 'story' || l.source === 'true_thing'
 
 const LockIcon = ({ open, color, size = 14 }: { open?: boolean; color: string; size?: number }) => (

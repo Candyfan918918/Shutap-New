@@ -25,7 +25,6 @@ import { saveNames } from '@/lib/toasts/names-store'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
 import { trackEvent } from '@/lib/tracking'
-import { phCapture } from '@/lib/posthog'
 import '@/pages/realtors/realtors.css'
 import './toasts.css'
 
@@ -35,7 +34,7 @@ const AUTOWRITE_KEY = 'shutap_toast_autowrite'
 /** the mid-page box hands its story to this form */
 export const TOAST_STORY_EVENT = 'shutap:toast-story'
 
-const track = (name: string, props: Record<string, unknown> = {}) => { void phCapture(name, { product: 'toasts', ...props }); void trackEvent(name, { product: 'toasts', ...props }) }
+const track = (name: string, props: Record<string, unknown> = {}) => { void trackEvent(name, { product: 'toasts', ...props }) }
 
 type Story = { text: string; locked: boolean }
 type Draft = {

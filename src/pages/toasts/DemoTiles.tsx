@@ -10,10 +10,9 @@ import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from '
 import { OCCASION, TONE_LABEL, occasionName, clock, fromPlaceholders, lengthLabel, type Names, type ToastLine } from '@/lib/toasts/shared'
 import type { ToastDemo } from '@/lib/toasts/demo.functions'
 import { trackEvent } from '@/lib/tracking'
-import { phCapture } from '@/lib/posthog'
 
 type Id = 'speech' | 'cards' | 'cut' | 'rehearse' | 'after' | 'keepsake' | 'prompter'
-const track = (name: string, props: Record<string, unknown>) => { void trackEvent(name, { product: 'toasts', ...props }); void phCapture(name, { product: 'toasts', ...props }) }
+const track = (name: string, props: Record<string, unknown>) => { void trackEvent(name, { product: 'toasts', ...props }); }
 
 /** the marks, exactly as the toast page shows them */
 function marksOf(l: Pick<ToastLine, 'pause' | 'laugh' | 'glass'>): string {

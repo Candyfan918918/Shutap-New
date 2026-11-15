@@ -13,10 +13,9 @@ import { OCCASION, TONE_LABEL, occasionName, clock, fromPlaceholders, lengthLabe
 import { KEEPSAKE_LABEL, toastTitle } from '@/lib/toasts/toast-text'
 import type { ToastDemo } from '@/lib/toasts/demo.functions'
 import { trackEvent } from '@/lib/tracking'
-import { phCapture } from '@/lib/posthog'
 import { CueCard, openPdf } from './DemoTiles'
 
-const track = (name: string, props: Record<string, unknown>) => { void trackEvent(name, { product: 'toasts', ...props }); void phCapture(name, { product: 'toasts', ...props }) }
+const track = (name: string, props: Record<string, unknown>) => { void trackEvent(name, { product: 'toasts', ...props }); }
 const mine = (l: ToastLine) => l.source === 'story' || l.source === 'true_thing'
 /** the marks, exactly as the toast page shows them */
 function marksOf(l: Pick<ToastLine, 'pause' | 'laugh' | 'glass'>): string {

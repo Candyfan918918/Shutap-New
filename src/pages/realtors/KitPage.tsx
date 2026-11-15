@@ -16,7 +16,6 @@ import { getStripe, getStripeEnvironment } from '@/lib/stripe'
 import { confirmKitPrepay, createKitCheckout, createKitPrepayCheckout, kitPaidStatus } from '@/lib/payments.functions'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { trackEvent } from '@/lib/tracking'
-import { phCapture } from '@/lib/posthog'
 import { KitView } from './KitView'
 import './realtors.css'
 
@@ -29,7 +28,7 @@ const TONE_HINT: Record<Tone, string> = { professional: 'facts first, one dry li
 /** the example shown above the paste box: a real listing, never read as the agent's own */
 const SAMPLE_LINK = 'https://www.zillow.com/homedetails/307-Olive-Hill-Ln-Woodside-CA-94062/15596826_zpid/'
 const SAMPLE_ZPID = '15596826_zpid'
-const track = (name: string, props: Record<string, unknown> = {}) => { void phCapture(name, { product: 'realtors', ...props }); void trackEvent(name, { product: 'realtors', ...props }) }
+const track = (name: string, props: Record<string, unknown> = {}) => { void trackEvent(name, { product: 'realtors', ...props }) }
 
 type Draft = { url: string; text: string; note: string; controls: ListingControls }
 function readDraft(): Draft | null {
