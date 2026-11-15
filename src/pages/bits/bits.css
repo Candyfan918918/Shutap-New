@@ -238,3 +238,6 @@ button.bl-tile:hover:not(:disabled) { border-color: var(--rose); }
     .bo-write-top { padding-top: 12px; }
   .bl-steps3.four { grid-template-columns: 1fr; }
 }
+.bo-num { display: inline-grid; place-items: center; width: 20px; height: 20px; margin-right: 7px; border-radius: 50%; background: var(--wine); color: #fff; font: 800 11px var(--sora); font-style: normal; vertical-align: 1px; }
+.bo-tile-h span { text-transform: lowercase; }
+.bo-full { margin-top: 18px; }

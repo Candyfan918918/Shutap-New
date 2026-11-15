@@ -259,6 +259,8 @@ export type BitEmbed = {
   demoStory?: string
   /** /bits (Nov 14 2026): the one-line box that opens into the guided box (DriveBox) */
   drive?: boolean
+  /** with drive: the id of the place lower on the page where the full box stands open */
+  driveFull?: string
 }
 
 /** the five lines, shared by the boxes on one page */
@@ -1117,6 +1119,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 onRemix={embed?.demoStory ? remixDemo : undefined}
                 settingsLine={`${controls.audience} · ${controls.voice} · ${controls.length} · wild ${controls.heat}`}
                 track={driveTrack}
+                fullSlot={embed?.driveFull}
                 settings={
                   <div className="bt-ctl">
                     <Choice label="audience" options={AUDIENCES} value={controls.audience} onPick={(v) => setControls((c) => ({ ...c, audience: v }))} />

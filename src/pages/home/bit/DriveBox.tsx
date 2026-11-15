@@ -15,6 +15,7 @@
  * The textarea stays the same element in both, so focus and caret never
  * jump. Pure UI: the parent owns the story, the settings and the cut. */
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { StoryCheck } from '@/lib/bits/split'
 
 type Item = { q: string; hint: string; add: string; label: string }
@@ -48,6 +49,7 @@ export function DriveBox({
   settings,
   settingsLine,
   track,
+  fullSlot,
 }: {
   story: string
   onStory: (s: string) => void
@@ -61,16 +63,34 @@ export function DriveBox({
   /** social · deadpan · 30s · wild 3 */
   settingsLine: string
   track: (event: string, props?: Record<string, unknown>) => void
+  /** Nov 14 2026 (/bits): the id of the place lower on the page where the
+   *  full box (A) always stands open. The one line (C) then stays one line on
+   *  top, and both type into the same story. */
+  fullSlot?: string
 }) {
   const ref = useRef<HTMLTextAreaElement>(null)
+  const fullRef = useRef<HTMLTextAreaElement>(null)
   const [opened, setOpened] = useState(false)
-  const open = opened || wantsRoom(story)
+  const [slot, setSlot] = useState<HTMLElement | null>(null)
+  useEffect(() => { if (fullSlot) setSlot(document.getElementById(fullSlot)) }, [fullSlot])
+  const split = !!fullSlot
+  const open = !split && (opened || wantsRoom(story))
   useEffect(() => {
-    if (open && !opened) {
+    if (!split && open && !opened) {
       setOpened(true)
       track('drive_opened', { chars: story.trim().length })
     }
-  }, [open, opened, story, track])
+  }, [split, open, opened, story, track])
+  // the one line grows with what's typed, up to three lines
+  useEffect(() => {
+    const el = ref.current
+    if (!split || !el) return
+    el.style.height = ''
+    if (!story) return
+    const base = el.clientHeight
+    el.style.height = 'auto'
+    el.style.height = `${Math.min(Math.max(el.scrollHeight, base), 132)}px`
+  }, [split, story])
   const focused = useRef(false)
 
   const words = story.trim() ? story.trim().split(/\s+/).length : 0
@@ -78,24 +98,107 @@ export function DriveBox({
   const activeIdx = checks.findIndex((c) => !c.ok)
   const ready = words >= 2 && !busy
 
-  function append(add: string, event: string, what: string) {
+  function append(add: string, event: string, what: string, into: 'top' | 'full' = 'top') {
     const cur = story.replace(/\s+$/, '')
     const next = cur ? `${cur} ${add}` : add
     onStory(next)
     track(event, { what })
     requestAnimationFrame(() => {
-      const el = ref.current
+      const el = into === 'full' ? fullRef.current : ref.current
       if (!el) return
       el.focus()
       el.setSelectionRange(next.length, next.length)
     })
   }
 
-  const make = (
+  const makeBtn = (big: boolean) => (
     <button type="button" className="bt-btn bt-go dv-make" disabled={!ready} aria-busy={busy} onClick={onMake}>
-      {busy ? 'cutting it into a bit…' : open ? 'Make it a bit →' : 'Make my bit →'}
+      {busy ? 'cutting it into a bit…' : big ? 'Make it a bit →' : 'Make my bit →'}
     </button>
   )
+  const make = makeBtn(open)
+  const note = words < 2 ? 'Type a line or two to start.' : checks.every((c) => c.ok) ? 'All four are in. Your lines stay word for word.' : 'Ready now. Your lines stay word for word; the AI copilot drafts only what’s missing.'
+
+  /** the rail: what makes a bit land, the first missing one with a starter */
+  const rail = (into: 'top' | 'full') => (
+    <aside className="dv-rail" aria-label="What makes a bit land">
+      <div className="dv-rail-h">
+        <span>What makes it land</span>
+        <b>{done} of 4</b>
+      </div>
+      <div className="dv-bar" aria-hidden="true"><span style={{ width: `${done * 25}%` }} className={done === 4 ? 'full' : undefined} /></div>
+      <ol className="dv-items">
+        {checks.map((c, i) => {
+          const it = RAIL[c.id]
+          if (i === activeIdx) {
+            return (
+              <li key={c.id} className="dv-item on">
+                <span className="dv-n">{i + 1}</span>
+                <div>
+                  <b>{it.q}</b>
+                  <p>{it.hint}</p>
+                  <button type="button" className="dv-add" onClick={() => append(it.add, 'drive_add', c.id, into)}>+ {it.label}</button>
+                </div>
+              </li>
+            )
+          }
+          return (
+            <li key={c.id} className={`dv-item${c.ok ? ' ok' : ''}`}>
+              <span className="dv-n">{c.ok ? '✓' : i + 1}</span>
+              <div>
+                <b>{it.q}</b>
+                <p>{c.ok ? 'in your story' : 'optional · the AI copilot can draft it'}</p>
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+      <div className="dv-go">
+        {makeBtn(true)}
+        <p>{note}</p>
+      </div>
+    </aside>
+  )
+
+  /** A, always open, in its own place on the page (fullSlot) */
+  const full = split && slot ? createPortal(
+    <div className="bt dv-host">
+      <div className="dv-turn">
+        <h2>Your turn — tell the whole story.</h2>
+        <span>the more you give, the less the AI drafts · your lines stay word for word</span>
+      </div>
+      <div className="bt-box dv open">
+        <div className="dv-main">
+          <div className="dv-head">
+            <label htmlFor="bit-story-full" className="bt-box-title"><span className="bt-rec" aria-hidden="true" />tell it your way</label>
+            {onRemix && <button type="button" className="dv-remix" onClick={onRemix}>Stuck? Start from the demo story</button>}
+          </div>
+          <div className="dv-write">
+            <textarea
+              suppressHydrationWarning
+              id="bit-story-full"
+              ref={fullRef}
+              className="dv-paper"
+              placeholder="Your joke, your story, your stand-up set: write it here and make it funnier…"
+              value={story}
+              maxLength={4000}
+              disabled={busy}
+              onFocus={() => track('box_focus', { box: 'full' })}
+              onChange={(e) => onStory(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (ready) onMake() } }}
+            />
+          </div>
+          <div className="dv-count">
+            <span>{words} {words === 1 ? 'word' : 'words'} · names get removed before anything is saved</span>
+            <span>{settingsLine}</span>
+          </div>
+          <div className="dv-set">{settings}</div>
+        </div>
+        {rail('full')}
+      </div>
+    </div>,
+    slot,
+  ) : null
 
   return (
     <div className={`bt-box dv${open ? ' open' : ''}`}>
@@ -115,7 +218,7 @@ export function DriveBox({
             ref={ref}
             className="dv-paper"
             rows={1}
-            placeholder={open ? 'What happened? Who was there, what they said, how it ended…' : 'What happened? One sentence is enough.'}
+            placeholder={open ? 'Your joke, your story, your stand-up set: write it here and make it funnier…' : 'Make your funny story funnier. One line is enough…'}
             value={story}
             maxLength={4000}
             disabled={busy}
@@ -149,45 +252,8 @@ export function DriveBox({
           </>
         )}
       </div>
-      {open && (
-        <aside className="dv-rail" aria-label="What makes a bit land">
-          <div className="dv-rail-h">
-            <span>What makes it land</span>
-            <b>{done} of 4</b>
-          </div>
-          <div className="dv-bar" aria-hidden="true"><span style={{ width: `${done * 25}%` }} className={done === 4 ? 'full' : undefined} /></div>
-          <ol className="dv-items">
-            {checks.map((c, i) => {
-              const it = RAIL[c.id]
-              if (i === activeIdx) {
-                return (
-                  <li key={c.id} className="dv-item on">
-                    <span className="dv-n">{i + 1}</span>
-                    <div>
-                      <b>{it.q}</b>
-                      <p>{it.hint}</p>
-                      <button type="button" className="dv-add" onClick={() => append(it.add, 'drive_add', c.id)}>+ {it.label}</button>
-                    </div>
-                  </li>
-                )
-              }
-              return (
-                <li key={c.id} className={`dv-item${c.ok ? ' ok' : ''}`}>
-                  <span className="dv-n">{c.ok ? '✓' : i + 1}</span>
-                  <div>
-                    <b>{it.q}</b>
-                    <p>{c.ok ? 'in your story' : 'optional · the AI copilot can draft it'}</p>
-                  </div>
-                </li>
-              )
-            })}
-          </ol>
-          <div className="dv-go">
-            {make}
-            <p>{words < 2 ? 'Type a line or two to start.' : done === 4 ? 'All four are in. Your lines stay word for word.' : 'Ready now. Your lines stay word for word; the AI copilot drafts only what’s missing.'}</p>
-          </div>
-        </aside>
-      )}
+      {open && rail('top')}
+      {full}
     </div>
   )
 }

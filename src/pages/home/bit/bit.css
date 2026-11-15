@@ -579,3 +579,10 @@
   .dv.open .dv-head { order: 1; } .dv.open .dv-write { order: 2; } .dv.open .dv-count { order: 3; }
   .dv.open .dv-rail { order: 4; } .dv.open .dv-set { order: 5; }
 }
+/* A, always open lower on /bits (DriveBox fullSlot) */
+.bt.dv-host { padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.dv-turn { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.dv-turn h2 { margin: 0; font: 800 32px/1.1 var(--sora); letter-spacing: -0.03em; color: var(--wine); }
+.dv-turn span { font: 600 13px var(--sora); color: var(--muted); }
+@media (max-width: 760px) { .dv-turn h2 { font-size: 24px; } }
+.dv-set .bt-note, .dv-set fieldset > p { font-size: 12px; }

@@ -130,23 +130,23 @@ function DemoPrompter({ d }: { d: BitDemo }) {
 
 function Outputs({ d, lead }: { d: BitDemo; lead: Tile }) {
   const tiles: { id: Tile; name: string; use: string; foot: string; body: React.ReactNode }[] = [
-    { id: 'video', name: '5-second video', use: 'to post', foot: 'Plays on its own. Cast and place from the story.', body: <DemoVideo d={d} /> },
-    { id: 'standup', name: 'Stand-up', use: 'to rehearse', foot: 'Scrolls at talking pace with delivery cues.', body: <DemoPrompter d={d} /> },
+    { id: 'video', name: '5-second video', use: 'create', foot: 'Made from one story. Post it today.', body: <DemoVideo d={d} /> },
+    { id: 'standup', name: 'Stand-up', use: 'practice', foot: 'The teleprompter, with delivery cues.', body: <DemoPrompter d={d} /> },
     {
-      id: 'sketch', name: 'Sketch', use: 'to stage', foot: 'One screenplay page, a PDF.',
+      id: 'sketch', name: 'Sketch', use: 'rehearse', foot: 'One page to run it on stage.',
       body: <div className="bo-page" tabIndex={0} aria-label="The demo's sketch page">{(d.sketch ?? []).map((e, k) => <p key={k} className={e.type}>{e.text}</p>)}</div>,
     },
     {
-      id: 'skit', name: 'Skit', use: 'to film alone', foot: 'A shot list for your phone; you play both parts.',
+      id: 'skit', name: 'Skit', use: 'film it', foot: 'A shot list; you play both parts.',
       body: <ol className="bo-shots" tabIndex={0} aria-label="The demo's skit shot list">{(d.skit ?? []).map((b, k) => <li key={k}><b>{k + 1} · {b.shot}</b><span>{b.speaker}: {b.line}</span></li>)}</ol>,
     },
   ]
   const ordered = [...tiles.filter((t) => t.id === lead), ...tiles.filter((t) => t.id !== lead)]
   return (
     <div className="bo-row">
-      {ordered.map((t) => (
+      {ordered.map((t, n) => (
         <div key={t.id} className={`bo-tile${t.id === lead && lead !== 'video' ? ' lead' : ''}`} onPointerDown={() => tap('demo_tile_open', { tile: t.id })}>
-          <div className="bo-tile-h"><b>{t.name}</b><span>{t.use}</span></div>
+          <div className="bo-tile-h"><b><i className="bo-num">{n + 1}</i>{t.name}</b><span>{t.use}</span></div>
           <div className="bo-body">{t.body}</div>
           <span className="bo-foot">{t.foot}</span>
         </div>
@@ -198,7 +198,7 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
 
       <section className={`bo-write bo-write-top${phase === "result" ? " result" : ""}`} id="bits-write">
         <div className="bl-box" id="bits-top">
-          <BitSurface embed={{ page: 'bits', heading: '', bare: true, drive: true, onPhase: setPhase, demoStory: demo ? demoStory(demo) : undefined }} />
+          <BitSurface embed={{ page: 'bits', heading: '', bare: true, drive: true, driveFull: 'bits-full', onPhase: setPhase, demoStory: demo ? demoStory(demo) : undefined }} />
         </div>
       </section>
 
@@ -209,7 +209,8 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
             <span>A realistic demo, typed in-house and made by Shutap{demo.funnier.length ? ` · ${demo.funnier.length === 1 ? 'one line' : `${demo.funnier.length} lines`} used funnier` : ''} · not edited · <a href="#bits-behind" onClick={() => tap('seo_cta_clicked', { kind: 'see_demo_lines' })}>see what they typed ↓</a></span>
           </div>
           <Outputs d={demo} lead={lead} />
-          <p className="bo-nudge"><button type="button" onClick={() => toBox('demo_nudge')}>Make yours: type one line ↑</button></p>
+          {/* A: the full guided box, always open; it types into the same story as the one line on top */}
+          <div id="bits-full" className="bo-full" />
           <ul className="bl-trust">
             <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f6a45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" /></svg>Your lines stay word for word</li>
             <li><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e1c4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v4l3 2" /></svg>AI drafts only the lines you leave empty</li>
@@ -217,6 +218,8 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
           </ul>
         </section>
       )}
+
+      {phase === 'write' && !demo && <section className="bo-hero bo-demo"><div id="bits-full" className="bo-full" /></section>}
 
       <div className="bl-lower">
         {demo && (
@@ -237,21 +240,6 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
             </div>
           </div>
         )}
-
-        <div className="bl-steps3 four">
-          <div><p className="n">1</p><h3>Create</h3><p>Type what happened, even one line. Shutap cuts it into a hook, setup, two tags and a button; your lines stay word for word and the AI copilot drafts the ones your story didn’t cover.</p></div>
-          <div><p className="n">2</p><h3>Refine</h3><p>Tap funnier on a line where you’re stuck for three other ways to say it, yours first. Change any AI draft; lock what’s done.</p></div>
-          <div><p className="n">3</p><h3>Practice</h3><p>Stand-up on the teleprompter: your lines at talking pace, with delivery cues like (beat) and pauses for the laugh.</p></div>
-          <div><p className="n">4</p><h3>Rehearse</h3><p>Run it as a sketch page or a skit shot list, then post the 5-second video or take it to the stage.</p></div>
-        </div>
-
-        <div className="bl-block">
-          <h2>The shape of a bit</h2>
-          <p className="bl-p">What each part of your bit does. Your story is cut into these, in your words.</p>
-          <ol className="bl-shape">
-            {LINE_INFO.map((l, i) => <li key={l.s}><b>{i + 1} · {l.k}</b><span>{l.d}</span></li>)}
-          </ol>
-        </div>
 
         <div className="bl-two">
           <div><p className="t"><span className="pill">funnier</span><b>one line, when you ask</b></p><p>Three other ways to say the line you tapped, built from the rest of your bit. Yours is always the first choice. Nothing changes until you pick.</p></div>
