@@ -16,25 +16,30 @@ type ShotEffect = Typing | Writing
 
 type ShotMotionSpec = { seconds: number; effects: ShotEffect[] }
 
-/** Bits (Nov 12 2026, the new /bits first screen): the four outputs of the
- *  demo bit are the picture; nothing is typed over them, so no motion. */
-const BITS: ShotMotionSpec = { seconds: 10, effects: [] }
-
-/** Toasts (Nov 12 2026, the new /toasts/best-man first screen): the demo
- *  toast's four outputs on top; story 1 types itself in the box below. */
-const TOASTS: ShotMotionSpec = {
+/** Bits (Nov 14 2026, /bits with the new one-line box): the demo's hook
+ *  types itself into the box; the five phone screens below stay as they are. */
+const BITS: ShotMotionSpec = {
   seconds: 9,
   effects: [
-    { kind: 'type', box: { left: 4.15, top: 87.52, width: 35.69, height: 3.12 }, chars: 52, from: 6, to: 45 },
+    { kind: 'type', box: { left: 5.3, top: 5.16, width: 25.99, height: 4.08 }, chars: 43, from: 6, to: 45 },
   ],
 }
 
-/** Realtors (Nov 12 2026, the new /realtors first screen): the sample kit's
- *  four outputs on top; the listing link types itself into the paste box. */
+/** Toasts (Nov 14 2026, /toasts/best-man with five phone screens): the demo
+ *  toast's five outputs on top; story 1 types itself in the box below. */
+const TOASTS: ShotMotionSpec = {
+  seconds: 9,
+  effects: [
+    { kind: 'type', box: { left: 2.78, top: 87.83, width: 20.12, height: 3.09 }, chars: 37, from: 6, to: 45 },
+  ],
+}
+
+/** Realtors (Nov 14 2026, /realtors with five phone screens): the sample
+ *  kit's five outputs on top; the listing link types itself into the paste box. */
 const REALTORS: ShotMotionSpec = {
   seconds: 7,
   effects: [
-    { kind: 'type', box: { left: 7.37, top: 86.32, width: 19.25, height: 2.35 }, chars: 25, from: 8, to: 45 },
+    { kind: 'type', box: { left: 5.45, top: 86.65, width: 15.87, height: 1.98 }, chars: 25, from: 8, to: 45 },
   ],
 }
 
