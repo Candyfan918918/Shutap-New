@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/about";
-const TITLE = "About Shutap, the humor amplifier: make your jokes, toasts and listing videos funnier";
+const TITLE = "About Shutap, the humor amplifier: say it funnier, for jokes, toasts and listing videos";
 // Nov 9 2026: 307 impressions, 10 clicks at position ~3. The snippet now says
 // what Shutap is and names the three products.
 const DESCRIPTION =
