@@ -113,7 +113,7 @@ function AiDisclosurePage() {
         product.
       </p>
       <p>
-        <b>Bits.</b> You tell your story; a model cuts it into a hook, setup, two tags and a
+        <b>Bits (make your story or joke funnier).</b> You tell your story; a model cuts it into a hook, setup, two tags and a
         button, and code keeps only lines found word for word in what you typed. Every line is
         optional. Any line your story didn&rsquo;t cover is drafted by AI (the copilot), right
         after the cut, around your lines, and marked &ldquo;AI draft&rdquo; until you change it;
@@ -128,14 +128,14 @@ function AiDisclosurePage() {
         it is told to add no new jokes; the 5-second video is not AI-generated: a fixed template draws it from your finished bit on your own device.
       </p>
       <p>
-        <b>Realtor kits.</b> Shutap reads the listing page you link, or the text you paste, and
+        <b>Realtor kits (listing video scripts and posts).</b> Shutap reads the listing page you link, or the text you paste, and
         pulls out the facts. Anything it can&rsquo;t read stays blank and is never guessed. AI
         drafts the six outputs in your tone, and every line is checked for fair-housing words, for
         numbers that aren&rsquo;t in the listing, and for your must-say and never-say words.
         &ldquo;Funnier&rdquo; changes only the line you tap. No video is made; you shoot it yourself.
       </p>
       <p>
-        <b>Toasts.</b> Names stay in your browser, and Shutap never receives them; any left in the
+        <b>Toasts (funny toasts and wedding speeches).</b> Names stay in your browser, and Shutap never receives them; any left in the
         text become role labels. The crisis check runs first. Two models draft, and a judge from a
         different model family picks the better one. Your stories and your one true thing are put
         back word for word, so the AI can&rsquo;t rewrite them.

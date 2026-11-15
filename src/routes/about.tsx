@@ -19,15 +19,15 @@ const SECTIONS = [
   },
   {
     heading: "Bits: your bit, funnier",
-    body: "Tell it your way, get the bit. AI fills only the gaps. For creators and comedians: you tell the story in your own words, and Shutap cuts it into a hook, setup, two tags and a button and keeps your words word for word. A line your story didn’t cover, the AI copilot drafts, marked “AI draft” so you can change it or keep it. Every line is optional. Stuck on a line? Tap “funnier” for three other ways to say it, yours first. The finished bit becomes a 5-second video to post, and stand-up on the prompter, with delivery cues to rehearse with (beats, pauses for the laugh, voices), a sketch page and a skit to perform. shutap.com/bits",
+    body: "Make your story or joke funnier. Tell it your way, get the bit; AI fills only the gaps. For creators and comedians: you tell the story in your own words, and Shutap cuts it into a hook, setup, two tags and a button and keeps your words word for word. A line your story didn’t cover, the AI copilot drafts, marked “AI draft” so you can change it or keep it. Every line is optional. Stuck on a line? Tap “funnier” for three other ways to say it, yours first. The finished bit becomes a 5-second video to post, and stand-up on the prompter, with delivery cues to rehearse with (beats, pauses for the laugh, voices), a sketch page and a skit to perform. shutap.com/bits",
   },
   {
     heading: "Realtors: your listing, funnier",
-    body: "Paste a listing. Get a video script and every post to go with it. To film: the walkthrough, the voiceover and the hooks. To post: the open-house kit, social posts and the MLS copy. Pick one of four tones (professional, funny, luxury or young) and the kit is written in about 30 seconds. Fair-housing checked, nothing made up. Rehearse and shoot it with the teleprompter on your phone, with a cue on how to say each line. shutap.com/realtors",
+    body: "Paste a listing. Get a funny listing video script, or a polished one in four tones, and every post to go with it. To film: the walkthrough, the voiceover and the hooks. To post: the open-house kit, social posts and the MLS copy. Pick one of four tones (professional, funny, luxury or young) and the kit is written in about 30 seconds. Fair-housing checked, nothing made up. Rehearse and shoot it with the teleprompter on your phone, with a cue on how to say each line. shutap.com/realtors",
   },
   {
     heading: "Toasts: your toast, funnier",
-    body: "Ready for life’s big moments. Be ready for the moments that matter. Your stories become the toast, then you rehearse it, carry cue cards, read from the prompter and keep a keepsake. Best man, maid of honor, Thanksgiving, the holiday party, New Year’s and more: pick the occasion, type your stories in your words, then edit, lock and give it. Names stay in your browser. shutap.com/toasts",
+    body: "A funny best man or maid of honor speech, or a Thanksgiving, Christmas or office party toast, from your own stories. Your stories become the toast, then you rehearse it, carry cue cards, read from the prompter and keep a keepsake. Best man, maid of honor, Thanksgiving, the holiday party, New Year’s and more: pick the occasion, type your stories in your words, then edit, lock and give it. Names stay in your browser. shutap.com/toasts",
   },
   {
     heading: "Enterprise: your presentation, funnier",
