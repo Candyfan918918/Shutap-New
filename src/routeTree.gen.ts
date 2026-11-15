@@ -88,6 +88,7 @@ import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminBattleRouteImport } from './routes/_authenticated/admin.battle'
 import { Route as AuthenticatedAdminEventsRouteImport } from './routes/_authenticated/admin.events'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated/admin.feedback'
+import { Route as AuthenticatedAdminGuestsRouteImport } from './routes/_authenticated/admin.guests'
 import { Route as AuthenticatedAdminOverviewRouteImport } from './routes/_authenticated/admin.overview'
 import { Route as AuthenticatedAdminPollRouteImport } from './routes/_authenticated/admin.poll'
 import { Route as AuthenticatedAdminRelateRouteImport } from './routes/_authenticated/admin.relate'
@@ -514,6 +515,12 @@ const AuthenticatedAdminFeedbackRoute =
     path: '/admin/feedback',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminGuestsRoute =
+  AuthenticatedAdminGuestsRouteImport.update({
+    id: '/admin/guests',
+    path: '/admin/guests',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminOverviewRoute =
   AuthenticatedAdminOverviewRouteImport.update({
     id: '/admin/overview',
@@ -723,6 +730,7 @@ export interface FileRoutesByFullPath {
   '/admin/battle': typeof AuthenticatedAdminBattleRoute
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
+  '/admin/guests': typeof AuthenticatedAdminGuestsRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/admin/poll': typeof AuthenticatedAdminPollRoute
   '/admin/relate': typeof AuthenticatedAdminRelateRoute
@@ -827,6 +835,7 @@ export interface FileRoutesByTo {
   '/admin/battle': typeof AuthenticatedAdminBattleRoute
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
+  '/admin/guests': typeof AuthenticatedAdminGuestsRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/admin/poll': typeof AuthenticatedAdminPollRoute
   '/admin/relate': typeof AuthenticatedAdminRelateRoute
@@ -933,6 +942,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/battle': typeof AuthenticatedAdminBattleRoute
   '/_authenticated/admin/events': typeof AuthenticatedAdminEventsRoute
   '/_authenticated/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
+  '/_authenticated/admin/guests': typeof AuthenticatedAdminGuestsRoute
   '/_authenticated/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/_authenticated/admin/poll': typeof AuthenticatedAdminPollRoute
   '/_authenticated/admin/relate': typeof AuthenticatedAdminRelateRoute
@@ -1039,6 +1049,7 @@ export interface FileRouteTypes {
     | '/admin/battle'
     | '/admin/events'
     | '/admin/feedback'
+    | '/admin/guests'
     | '/admin/overview'
     | '/admin/poll'
     | '/admin/relate'
@@ -1143,6 +1154,7 @@ export interface FileRouteTypes {
     | '/admin/battle'
     | '/admin/events'
     | '/admin/feedback'
+    | '/admin/guests'
     | '/admin/overview'
     | '/admin/poll'
     | '/admin/relate'
@@ -1248,6 +1260,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/battle'
     | '/_authenticated/admin/events'
     | '/_authenticated/admin/feedback'
+    | '/_authenticated/admin/guests'
     | '/_authenticated/admin/overview'
     | '/_authenticated/admin/poll'
     | '/_authenticated/admin/relate'
@@ -1923,6 +1936,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminFeedbackRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/guests': {
+      id: '/_authenticated/admin/guests'
+      path: '/admin/guests'
+      fullPath: '/admin/guests'
+      preLoaderRoute: typeof AuthenticatedAdminGuestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/overview': {
       id: '/_authenticated/admin/overview'
       path: '/admin/overview'
@@ -2100,6 +2120,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminBattleRoute: typeof AuthenticatedAdminBattleRoute
   AuthenticatedAdminEventsRoute: typeof AuthenticatedAdminEventsRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
+  AuthenticatedAdminGuestsRoute: typeof AuthenticatedAdminGuestsRoute
   AuthenticatedAdminOverviewRoute: typeof AuthenticatedAdminOverviewRoute
   AuthenticatedAdminPollRoute: typeof AuthenticatedAdminPollRoute
   AuthenticatedAdminRelateRoute: typeof AuthenticatedAdminRelateRoute
@@ -2113,6 +2134,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminBattleRoute: AuthenticatedAdminBattleRoute,
   AuthenticatedAdminEventsRoute: AuthenticatedAdminEventsRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
+  AuthenticatedAdminGuestsRoute: AuthenticatedAdminGuestsRoute,
   AuthenticatedAdminOverviewRoute: AuthenticatedAdminOverviewRoute,
   AuthenticatedAdminPollRoute: AuthenticatedAdminPollRoute,
   AuthenticatedAdminRelateRoute: AuthenticatedAdminRelateRoute,

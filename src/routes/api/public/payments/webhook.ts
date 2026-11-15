@@ -199,6 +199,67 @@ async function handleInvoicePaymentFailed(invoice: any, env: StripeEnv) {
   else if (!count) console.error(`[stripe webhook] no subscription row for ${subId} — event out of order?`, { env });
 }
 
+// Nov 14 2026: payment problems for /admin/guests (section 6). One
+// 'payment_problem' event per Stripe object and kind (Stripe retries
+// webhooks). Sandbox ones are kept, marked env, and the page shows live only.
+// Never fails the webhook.
+type PaymentProblemKind = 'renewal_failed' | 'card_declined' | 'checkout_expired'
+async function recordPaymentProblem(kind: PaymentProblemKind, obj: any, env: StripeEnv) {
+  try {
+    const objectId: string | undefined = obj?.id
+    if (!objectId) return
+    const { data: already } = await getSupabase()
+      .from('events')
+      .select('id')
+      .eq('name', 'payment_problem')
+      .eq('properties->>object_id', objectId)
+      .eq('properties->>kind', kind)
+      .limit(1)
+    if (already && already.length) return
+    const customerId: string | null = typeof obj.customer === 'string' ? obj.customer : obj.customer?.id ?? null
+    let userId: string | null =
+      obj.metadata?.userId ??
+      obj.client_reference_id ??
+      obj.parent?.subscription_details?.metadata?.userId ??
+      obj.subscription_details?.metadata?.userId ??
+      null
+    let email: string | null = obj.customer_email ?? obj.customer_details?.email ?? obj.receipt_email ?? null
+    if ((!userId || !email) && customerId) {
+      try {
+        const c: any = await createStripeClient(env).customers.retrieve(customerId)
+        if (c && !c.deleted) {
+          userId = userId ?? c.metadata?.userId ?? null
+          email = email ?? c.email ?? null
+        }
+      } catch (e) {
+        console.error('[stripe webhook] payment problem: could not read the customer', e)
+      }
+    }
+    const err = obj.last_payment_error ?? obj.last_finalization_error ?? null
+    const { error } = await getSupabase().from('events').insert({
+      user_id: userId,
+      session_id: null,
+      name: 'payment_problem',
+      properties: {
+        kind,
+        env,
+        object_id: objectId,
+        email,
+        amount: typeof obj.amount_due === 'number' ? obj.amount_due / 100 : typeof obj.amount === 'number' ? obj.amount / 100 : typeof obj.amount_total === 'number' ? obj.amount_total / 100 : null,
+        currency: obj.currency ?? null,
+        reason: err?.decline_code ?? err?.code ?? err?.message ?? null,
+        billing_reason: obj.billing_reason ?? null,
+        attempt: obj.attempt_count ?? null,
+        mode: obj.mode ?? null,
+        kit_kind: obj.metadata?.kind ?? null,
+      },
+    })
+    if (error) console.error('[stripe webhook] payment problem insert failed', error.message)
+  } catch (e) {
+    console.error('[stripe webhook] payment problem threw', e)
+  }
+}
+
 export const Route = createFileRoute('/api/public/payments/webhook')({
   server: {
     handlers: {
@@ -228,7 +289,18 @@ export const Route = createFileRoute('/api/public/payments/webhook')({
             case 'invoice.paid':
               await handleInvoicePaid(event.data.object, env); break;
             case 'invoice.payment_failed':
-              await handleInvoicePaymentFailed(event.data.object, env); break;
+              await handleInvoicePaymentFailed(event.data.object, env);
+              // the first invoice of a new plan is the checkout itself; a later one is a renewal
+              await recordPaymentProblem(event.data.object?.billing_reason === 'subscription_create' ? 'card_declined' : 'renewal_failed', event.data.object, env);
+              break;
+            case 'payment_intent.payment_failed':
+              // one-time payments only (realtor kits, toasts carry metadata.kind);
+              // subscription declines arrive as invoice.payment_failed
+              if (event.data.object?.metadata?.kind) await recordPaymentProblem('card_declined', event.data.object, env);
+              break;
+            case 'checkout.session.expired':
+              await recordPaymentProblem('checkout_expired', event.data.object, env);
+              break;
             case 'checkout.session.completed': {
               // the one-time realtor kit (Nov 6 2026); subscriptions arrive
               // through their own events above
