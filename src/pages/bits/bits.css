@@ -244,7 +244,7 @@ button.bl-tile:hover:not(:disabled) { border-color: var(--rose); }
 
 /* ============ Nov 14 2026 (Candy): every section on /bits uses the wide
    content width (about 80% of a 1920 screen, like hellyeahai.com). ============ */
-.bl .bo-hero, .bl .bo-write, .bl .bl-lower { max-width: 1680px; padding-left: clamp(16px, 4vw, 64px); padding-right: clamp(16px, 4vw, 64px); box-sizing: border-box; width: 100%; }
+.bl .bo-hero, .bl .bo-write, .bl .bl-lower { max-width: var(--page-max); padding-left: var(--page-pad); padding-right: var(--page-pad); box-sizing: border-box; width: 100%; }
 
 /* ============ Nov 14 2026 (Candy): every demo is a phone screen, and a
    fifth screen shows the bit itself: five lines with funnier and lock. ============ */

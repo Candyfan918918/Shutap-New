@@ -99,7 +99,7 @@ function PlanCard({ plan }: { plan: 'free' | 'basic' | 'pro' }) {
 function PricingPage() {
   return (
     <div className="fd">
-      <div className="fd-col" style={{ maxWidth: 980, gap: 22, paddingTop: 36 }}>
+      <div className="fd-col" style={{ maxWidth: 'var(--page-max)', boxSizing: 'border-box', padding: '36px var(--page-pad) 64px', gap: 22 }}>
         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
           <h1 className="fd-h1" style={{ fontSize: 'clamp(30px,5vw,46px)' }}>One plan for everything</h1>
           <p className="fd-muted" style={{ fontSize: 16, maxWidth: 600, margin: 0 }}>

@@ -166,7 +166,7 @@
 
 /* hero: head + box on the left, the sample kit on the right; on a phone the
    kit sits between the headline and the box */
-.rl-hero2 { max-width: 1200px; margin: 0 auto; padding: 36px 24px 24px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); grid-template-areas: 'head aside' 'box aside'; column-gap: 40px; row-gap: 18px; align-items: start; }
+.rl-hero2 { max-width: var(--page-max); box-sizing: border-box; margin: 0 auto; padding: 36px var(--page-pad) 24px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); grid-template-areas: 'head aside' 'box aside'; column-gap: 40px; row-gap: 18px; align-items: start; }
 .rl-hero2-head { grid-area: head; display: flex; flex-direction: column; gap: 12px; }
 .rl-hero2-aside { grid-area: aside; min-width: 0; }
 .rl-hero2-box { grid-area: box; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
@@ -300,7 +300,7 @@
 }
 
 /* lower sections */
-.rl-lower { max-width: 1200px; margin: 0 auto; padding: 0 24px 56px; display: flex; flex-direction: column; gap: 28px; }
+.rl-lower { max-width: var(--page-max); box-sizing: border-box; margin: 0 auto; padding: 0 var(--page-pad) 56px; display: flex; flex-direction: column; gap: 28px; }
 .rl-steps3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .rl-steps3 > div { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
 .rl-steps3 .n { margin: 0; font: 800 28px var(--sora); color: var(--rose); }

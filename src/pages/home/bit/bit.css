@@ -29,7 +29,7 @@
 .bt-hero-embed .bt-sub { text-align: left; }
 /* Nov 12 2026: the box on a guide or funniest page, the same as on /bits:
    "Your turn — write yours." and the /bits width, wider than the article. */
-.bt.bt-wide { padding: 28px 0 24px; width: min(1136px, calc(100vw - 32px)); margin-left: calc(50% - min(568px, 50vw - 16px)); }
+.bt.bt-wide { padding: 28px 0 24px; --w: min(calc(var(--page-max) - 2 * var(--page-pad)), calc(100vw - 2 * var(--page-pad))); width: var(--w); margin-left: calc(50% - var(--w) / 2); }
 .bt.bt-wide .bt-col { max-width: none; gap: 14px; }
 .bt-turn { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; scroll-margin-top: 84px; }
 .bt-turn h2 { margin: 0; font: 800 32px/1.1 var(--sora); letter-spacing: -0.03em; color: var(--wine); }
