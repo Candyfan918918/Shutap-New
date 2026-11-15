@@ -49,11 +49,11 @@ function tap(name: string, props: Record<string, unknown> = {}) {
   void trackEvent(name, { product: 'bits', page: 'bits', ...props })
 }
 
-type Tile = 'video' | 'standup' | 'sketch' | 'skit'
+type Tile = 'lines' | 'video' | 'standup' | 'sketch' | 'skit'
 
 /** Which output leads: an ad's utm_content (rehearse / video / sketch / skit). */
 function useLead(): Tile {
-  const [lead, setLead] = useState<Tile>('video')
+  const [lead, setLead] = useState<Tile>('lines')
   useEffect(() => {
     try {
       const c = new URLSearchParams(window.location.search).get('utm_content')?.toLowerCase() ?? ''
@@ -128,8 +128,33 @@ function DemoPrompter({ d }: { d: BitDemo }) {
   )
 }
 
+/** The bit itself, as the box shows it (Nov 14 2026): five lines, each with
+ *  funnier and lock. Lines where funnier was used show what was typed first. */
+function DemoLines({ d }: { d: BitDemo }) {
+  return (
+    <div className="bo-lines">
+      <p className="bo-lines-h">your bit · 5 lines</p>
+      {LINE_INFO.map((l) => {
+        const f = d.funnier.find((x) => x.slot === l.s)
+        return (
+          <div key={l.s} className="bo-line">
+            <span className="k">{l.k}</span>
+            <span className="v">{demoLine(d, l.s)}</span>
+            {f && <span className="was">typed first: “{f.typed}”</span>}
+            <span className="ctl">
+              <span className={`c${f ? ' on' : ''}`}>{f ? 'funnier ✓' : 'funnier'}</span>
+              <span className="c lock">{f ? 'lock' : 'locked'}</span>
+            </span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 function Outputs({ d, lead }: { d: BitDemo; lead: Tile }) {
   const tiles: { id: Tile; name: string; use: string; foot: string; body: React.ReactNode }[] = [
+    { id: 'lines', name: 'Your bit', use: 'refine', foot: 'Five lines. Funnier on any line; lock what’s done.', body: <DemoLines d={d} /> },
     { id: 'video', name: '5-second video', use: 'create', foot: 'Made from one story. Post it today.', body: <DemoVideo d={d} /> },
     { id: 'standup', name: 'Stand-up', use: 'practice', foot: 'The teleprompter, with delivery cues.', body: <DemoPrompter d={d} /> },
     {
@@ -145,9 +170,9 @@ function Outputs({ d, lead }: { d: BitDemo; lead: Tile }) {
   return (
     <div className="bo-row">
       {ordered.map((t, n) => (
-        <div key={t.id} className={`bo-tile${t.id === lead && lead !== 'video' ? ' lead' : ''}`} onPointerDown={() => tap('demo_tile_open', { tile: t.id })}>
+        <div key={t.id} className={`bo-tile${t.id === lead && lead !== 'lines' ? ' lead' : ''}`} onPointerDown={() => tap('demo_tile_open', { tile: t.id })}>
           <div className="bo-tile-h"><b><i className="bo-num">{n + 1}</i>{t.name}</b><span>{t.use}</span></div>
-          <div className="bo-body">{t.body}</div>
+          <div className="bo-body"><div className="bo-phone">{t.body}</div></div>
           <span className="bo-foot">{t.foot}</span>
         </div>
       ))}

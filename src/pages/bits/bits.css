@@ -245,3 +245,27 @@ button.bl-tile:hover:not(:disabled) { border-color: var(--rose); }
 /* ============ Nov 14 2026 (Candy): every section on /bits uses the wide
    content width (about 80% of a 1920 screen, like hellyeahai.com). ============ */
 .bl .bo-hero, .bl .bo-write, .bl .bl-lower { max-width: 1680px; padding-left: clamp(16px, 4vw, 64px); padding-right: clamp(16px, 4vw, 64px); box-sizing: border-box; width: 100%; }
+
+/* ============ Nov 14 2026 (Candy): every demo is a phone screen, and a
+   fifth screen shows the bit itself: five lines with funnier and lock. ============ */
+.bl .bo-row { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.bl .bo-body { height: auto; }
+.bo-phone { width: 100%; max-width: 300px; margin: 0 auto; aspect-ratio: 9 / 16; box-sizing: border-box; border: 3px solid var(--ink); border-radius: 22px; overflow: hidden; background: #fff; position: relative; }
+.bo-phone > * { height: 100% !important; border-radius: 0 !important; }
+.bo-phone .bo-video { width: 100%; border: 0; aspect-ratio: auto; }
+.bo-phone .bo-page { border: 0; }
+.bo-phone .bo-shots { border: 0; }
+.bo-lines { box-sizing: border-box; padding: 12px 10px; display: flex; flex-direction: column; gap: 7px; overflow-y: auto; background: #fbf6f8; }
+.bo-lines-h { margin: 0 0 2px; font: 700 10.5px var(--sora); color: var(--rose-ink); }
+.bo-line { display: flex; flex-direction: column; gap: 3px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 7px 8px; }
+.bo-line .k { font: 700 9.5px var(--sora); letter-spacing: .08em; text-transform: uppercase; color: var(--rose-ink); }
+.bo-line .v { font: 400 12.5px/1.3 var(--news); color: var(--ink); }
+.bo-line .was { font: italic 400 10px/1.3 var(--news); color: #6e6468; }
+.bo-line .ctl { display: flex; gap: 4px; justify-content: flex-end; }
+.bo-line .c { font: 600 9.5px var(--sora); color: var(--rose-ink); border: 1px solid var(--line-2); border-radius: 999px; padding: 1px 7px; }
+.bo-line .c.on { background: var(--tint); border-color: var(--rose); }
+.bo-line .c.lock { color: #1f6b40; border-color: rgba(31, 107, 64, .35); }
+@media (max-width: 900px) {
+  .bl .bo-row { display: flex; }
+  .bl .bo-tile { flex: 0 0 64%; }
+}
