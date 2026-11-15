@@ -18,6 +18,14 @@ import '@/pages/toasts/toasts.css'
 const TITLE = 'Shutap Toasts: write a funny toast or wedding speech from your own stories'
 const DESC = 'Write a funny toast or speech in your own words: best man speech, maid of honor speech, Thanksgiving, office holiday party and more. Pick your occasion and see a real toast first. Type your stories, in your words; Shutap builds the toast around them, with pause marks, cue cards, a phone prompter and a 60-second version. Best man, maid of honor, father and mother of the bride, Thanksgiving, Christmas, office holiday party, New Year’s, retirement and birthday.'
 
+// Nov 14 2026 (Candy): hub cards say "Funny best man speech", the words people
+// search with; holiday names keep their capital.
+const PROPER = /^(Thanksgiving|Christmas|New Year)/
+function hubTitle(name: string, kind: 'speech' | 'toast'): string {
+  const n = PROPER.test(name) ? name : name.charAt(0).toLowerCase() + name.slice(1)
+  return `Funny ${n} ${kind}`
+}
+
 export const Route = createFileRoute('/toasts/')({
   validateSearch: (s: Record<string, unknown>) => z.object({ occasion: z.enum(OCCASIONS).optional().catch(undefined), prepaid: z.string().max(200).optional().catch(undefined) }).parse(s),
   beforeLoad: ({ search }) => {
@@ -47,7 +55,7 @@ function ToastsHub() {
               <div className="tp-hub-grid">
                 {OCCASION_PAGES.filter((o) => o.hub.group === g).map((o) => (
                   <Link key={o.slug} to="/toasts/$slug" params={{ slug: o.slug }} className="tp-hub-card" onClick={go(o.slug)}>
-                    <span className="t"><b>{o.name} {['best_man', 'maid_of_honor', 'parent', 'retirement'].includes(o.occasion) ? 'speech' : 'toast'}</b><span>{o.hub.lengths}</span></span>
+                    <span className="t"><b>{hubTitle(o.name, ['best_man', 'maid_of_honor', 'parent', 'retirement'].includes(o.occasion) ? 'speech' : 'toast')}</b><span>{o.hub.lengths}</span></span>
                     <span className="k">You type</span><span className="q">{o.hub.type}</span>
                     <span className="k mu">The shape</span><span className="s">{o.hub.shape}</span>
                     <span className="go">Start here →</span>
