@@ -1,0 +1,62 @@
+name: Auto-merge SEO article PRs
+
+# Candy, 2026-11-15: "Always auto merge to GitHub and push to lovable and
+# publish to lovable." The daily SEO article agent opens PRs from article/<slug>
+# branches. This merges them when they touch only article files (and the
+# keyword seeds) and pass the article gate, so a merge never waits on a person.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: article-automerge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  automerge:
+    if: >-
+      startsWith(github.head_ref, 'article/') &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.base.ref == 'main' &&
+      !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Only article files changed
+        id: files
+        run: |
+          git fetch -q origin main
+          base=$(git merge-base origin/main HEAD)
+          changed=$(git diff --name-only "$base" HEAD)
+          echo "Changed files:"; echo "$changed"
+          bad=$(echo "$changed" | grep -vE '^(src/lib/seo/articles/[a-z0-9-]+\.ts|scripts/seo/keyword-seeds\.txt)$' || true)
+          if [ -n "$bad" ]; then echo "::error::Not auto-merged: files outside the article folder changed:"; echo "$bad"; exit 1; fi
+          arts=$(echo "$changed" | grep -E '^src/lib/seo/articles/' | sed -E 's#.*/([a-z0-9-]+)\.ts#\1#' | tr '\n' ' ')
+          if [ -z "$arts" ]; then echo "::error::No article file in this PR"; exit 1; fi
+          echo "slugs=$arts" >> "$GITHUB_OUTPUT"
+
+      - name: Article gate
+        run: |
+          for s in ${{ steps.files.outputs.slugs }}; do
+            node scripts/seo/article-check.mjs "$s"
+          done
+
+      - name: Squash-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          TITLE: ${{ github.event.pull_request.title }}
+        run: gh pr merge "$PR" --repo "$GITHUB_REPOSITORY" --squash --subject "$TITLE (#$PR)"
