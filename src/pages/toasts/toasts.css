@@ -445,3 +445,30 @@ button.to-body:hover, button.to-body:focus-visible { outline: 2px solid rgba(184
     .tp-hub .rl-price4 > div:nth-child(4) { animation-range: entry 12% cover 40%; }
   }
 }
+
+/* ============ Nov 14 2026 (Candy): every demo is a phone screen, five of
+   them; the fifth is the text after (or the rehearse timer). ============ */
+.to-row { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.to-body { height: auto; overflow: visible; border-radius: 0; }
+.to-phone { display: block; width: 100%; max-width: 300px; margin: 0 auto; aspect-ratio: 9 / 16; box-sizing: border-box; border: 3px solid var(--ink); border-radius: 22px; overflow: hidden; background: #fff; }
+.to-phone > * { height: 100% !important; border-radius: 0 !important; }
+.to-phone .to-prompt { border: 0; }
+.to-phone .to-speech { border: 0; }
+.to-after { flex-direction: column; justify-content: flex-start !important; align-items: stretch !important; gap: 10px; background: #f6f1f3 !important; padding: 14px 12px !important; }
+.to-msg-h { align-self: center; font: 600 10.5px var(--sora); color: var(--muted); margin-bottom: 18px; }
+.to-after .bub { align-self: flex-end; max-width: 88%; background: #e7548a !important; color: #fff !important; border: 0 !important; border-radius: 18px 18px 4px 18px; font: 400 13.5px/1.4 var(--sora) !important; }
+.to-msg-f { align-self: flex-end; font: 500 10px var(--sora); color: var(--muted); }
+.to-timer { box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: #121014; padding: 20px 14px; }
+.to-timer .big { font: 800 44px var(--sora); color: #fff; letter-spacing: -0.02em; }
+.to-timer .of { font: 600 12px var(--sora); color: #9a8890; margin-bottom: 14px; }
+.to-timer .secs { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.to-timer .secs span { font: 600 11px var(--sora); color: #c9b3bc; border-left: 3px solid #3a3036; padding: 3px 8px; }
+.to-timer .secs span.on { color: #fff; border-left-color: #e7548a; }
+@media (max-width: 900px) {
+  .to-tile { flex: 0 0 64%; }
+  .to-body { height: auto; }
+}
+.to-h span { white-space: nowrap; }
+.to-phone .to-prompt .lit { font-size: 16px; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+.to-phone .to-prompt .dim { -webkit-line-clamp: 1; }
+.to-phone .to-prompt .b button { white-space: nowrap; font-size: 11.5px; padding: 0 10px; }

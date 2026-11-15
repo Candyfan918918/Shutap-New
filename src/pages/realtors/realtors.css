@@ -419,3 +419,22 @@
   .ro-body { height: 360px; }
   .ro-write-h h2 { font-size: 24px; }
 }
+
+/* ============ Nov 14 2026 (Candy): every sample is a phone screen, five of
+   them; the fifth is the kit's hooks. ============ */
+.ro-row { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.ro-body { height: auto; overflow: visible; border-radius: 0; }
+.ro-phone { width: 100%; max-width: 300px; margin: 0 auto; aspect-ratio: 9 / 16; box-sizing: border-box; border: 3px solid var(--ink); border-radius: 22px; overflow: hidden; background: #fff; }
+.ro-phone > * { height: 100% !important; border-radius: 0 !important; border: 0 !important; }
+.ro-phone .ro-reel-wrap { padding: 0; }
+.ro-phone .ro-reel { height: 100%; width: 100%; aspect-ratio: auto; border: 0; border-radius: 0; }
+.ro-hooks { box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 16px 14px; background: linear-gradient(180deg, #2a1a22 0%, #8e1c4c 60%, #b8456b 100%); }
+.ro-hooks .tag { align-self: flex-start; font: 700 9px var(--sora); color: #fff; background: rgba(0, 0, 0, .35); border-radius: 999px; padding: 2px 8px; }
+.ro-hooks .hk { display: flex; flex-direction: column; gap: 4px; background: rgba(255, 255, 255, .12); border-radius: 12px; padding: 10px 12px; }
+.ro-hooks .hk b { font: 800 14px/1.25 var(--sora); color: #fff; }
+.ro-hooks .hk span { font: 600 10px var(--sora); color: #ffd6e5; }
+@media (max-width: 900px) {
+  .ro-tile { flex: 0 0 64%; }
+}
+.ro-h span { white-space: nowrap; }
+.ro-phone .ro-prompt .lit { font-size: 16px; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
