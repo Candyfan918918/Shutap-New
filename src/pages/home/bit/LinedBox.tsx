@@ -63,7 +63,7 @@ export function guideLine(d: Draft, locked: Slot[]): { text: string; ready: bool
   const empty = LINE_SLOTS.filter((s) => !readSlot(d, s).trim())
   if (empty.length) return { text: `Your lines stay word for word. Leave the ${listLines(empty)} empty and the AI copilot drafts ${empty.length > 1 ? 'them' : 'it'}; you can change any line after.`, ready: true }
   const open = LINE_SLOTS.filter((s) => !locked.includes(s))
-  return { text: `Every word is yours${open.length ? '' : ', all locked'}. Next: the 5-second video, stand-up, sketch and skit.`, ready: true }
+  return { text: `${open.length ? 'Your lines stay word for word; change any AI draft or keep it' : 'All locked'}. Next: the 5-second video, stand-up, sketch and skit.`, ready: true }
 }
 
 type Props = {

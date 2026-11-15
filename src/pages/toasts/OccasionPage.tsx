@@ -17,11 +17,10 @@ import { ToastForm, TOAST_STORY_EVENT } from './ToastForm'
 import { DemoTiles } from './DemoTiles'
 import { ToastOutputs } from './ToastOutputs'
 import { trackEvent } from '@/lib/tracking'
-import { phCapture } from '@/lib/posthog'
 import '@/pages/realtors/realtors.css'
 import './toasts.css'
 
-const track = (name: string, props: Record<string, unknown>) => { void trackEvent(name, { product: 'toasts', ...props }); void phCapture(name, { product: 'toasts', ...props }) }
+const track = (name: string, props: Record<string, unknown>) => { void trackEvent(name, { product: 'toasts', ...props }); }
 
 const Check = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f6a45" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="rl-ic"><path d="M5 12l5 5 9-10" /></svg>
 

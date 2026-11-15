@@ -19,12 +19,11 @@ import { OCCASION, clock, occasionName, fromPlaceholders, lineSeconds, toastSeco
 import { readNames, saveNames } from '@/lib/toasts/names-store'
 import { lineTimes } from '@/lib/toasts/toast-text'
 import { namesFromHash, saveRun, type RehearseRun } from '@/lib/toasts/on-the-day'
-import { phCapture } from '@/lib/posthog'
 import { trackEvent } from '@/lib/tracking'
 import '@/pages/realtors/realtors.css'
 import './toasts.css'
 
-const track = (name: string, props: Record<string, unknown> = {}) => { void phCapture(name, { product: 'toasts', ...props }); void trackEvent(name, { product: 'toasts', ...props }) }
+const track = (name: string, props: Record<string, unknown> = {}) => { void trackEvent(name, { product: 'toasts', ...props }) }
 
 function nextMidnight(): number {
   const d = new Date()
