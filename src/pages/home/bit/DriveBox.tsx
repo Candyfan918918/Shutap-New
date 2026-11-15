@@ -33,6 +33,40 @@ const STARTERS = [
   { label: 'At the airport…', text: 'At the airport, ' },
 ] as const
 
+/** Nov 14 2026 (Candy): the empty box types its own prompt, changing, and
+ *  says it's free. Stops while the box has focus or text; still for reduced motion. */
+const TYPED_TOP = [
+  'Make your funny story funnier. Try it free…',
+  'My boss replied-all to the whole company…',
+  'Turn one line into a stand-up bit. Free…',
+  'My kid told the waiter we don’t tip…',
+  'Got a joke? Make it funnier, free…',
+]
+const TYPED_FULL = [
+  'Your joke, your story, your stand-up set: make it funnier, free…',
+  'At my cousin’s wedding the DJ played my ringtone…',
+  'Paste your set. Shutap cuts it into a bit. Try it free…',
+  'My landlord texted “quick question” at 2am…',
+]
+function useTypedPrompt(lines: string[], paused: boolean): string {
+  const [text, setText] = useState(lines[0] ?? '')
+  useEffect(() => {
+    if (paused || typeof window === 'undefined') return
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) { setText(lines[0] ?? ''); return }
+    let i = 0, n = 0, dir = 1, hold = 0
+    const t = window.setInterval(() => {
+      const line = lines[i] ?? ''
+      if (hold > 0) { hold--; return }
+      n += dir * (dir > 0 ? 1 : 3)
+      if (n >= line.length) { n = line.length; dir = -1; hold = 38 }
+      else if (n <= 0) { n = 0; dir = 1; i = (i + 1) % lines.length; hold = 6 }
+      setText(line.slice(0, n))
+    }, 45)
+    return () => window.clearInterval(t)
+  }, [lines, paused])
+  return text
+}
+
 /** More than one sentence's worth: open the full box. */
 export function wantsRoom(story: string): boolean {
   const t = story.trim()
@@ -92,6 +126,11 @@ export function DriveBox({
     el.style.height = `${Math.min(Math.max(el.scrollHeight, base), 132)}px`
   }, [split, story])
   const focused = useRef(false)
+  const [focusTop, setFocusTop] = useState(false)
+  const [focusFull, setFocusFull] = useState(false)
+  const [setOpen, setSetOpen] = useState(false)
+  const typedTop = useTypedPrompt(TYPED_TOP, focusTop || !!story)
+  const typedFull = useTypedPrompt(TYPED_FULL, focusFull || !!story)
 
   const words = story.trim() ? story.trim().split(/\s+/).length : 0
   const done = checks.filter((c) => c.ok).length
@@ -161,41 +200,52 @@ export function DriveBox({
   )
 
   /** A, always open, in its own place on the page (fullSlot) */
+  /** A, lighter (Nov 14 2026, Candy: "too wide, feels like work"): one
+   *  narrow column, four lines to write in, the one thing missing as a single
+   *  nudge, settings folded into one line, and Make. */
+  const next = activeIdx >= 0 ? RAIL[checks[activeIdx]!.id] : null
   const full = split && slot ? createPortal(
-    <div className="bt dv-host">
+    <div className="bt dv-host dv-lite">
       <div className="dv-turn">
-        <h2>Your turn — tell the whole story.</h2>
-        <span>the more you give, the less the AI drafts · your lines stay word for word</span>
+        <h2>Got more? Tell the whole story.</h2>
+        <span>free · no sign-in</span>
       </div>
-      <div className="bt-box dv open">
-        <div className="dv-main">
-          <div className="dv-head">
-            <label htmlFor="bit-story-full" className="bt-box-title"><span className="bt-rec" aria-hidden="true" />tell it your way</label>
-            {onRemix && <button type="button" className="dv-remix" onClick={onRemix}>Stuck? Start from the demo story</button>}
-          </div>
-          <div className="dv-write">
-            <textarea
-              suppressHydrationWarning
-              id="bit-story-full"
-              ref={fullRef}
-              className="dv-paper"
-              placeholder="Your joke, your story, your stand-up set: write it here and make it funnier…"
-              value={story}
-              maxLength={4000}
-              disabled={busy}
-              onFocus={() => track('box_focus', { box: 'full' })}
-              onChange={(e) => onStory(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (ready) onMake() } }}
-            />
-          </div>
-          <div className="dv-count">
-            <span>{words} {words === 1 ? 'word' : 'words'} · names get removed before anything is saved</span>
-            <span>{settingsLine}</span>
-          </div>
-          <div className="dv-set">{settings}</div>
+      <div className="bt-box dv">
+        <textarea
+          suppressHydrationWarning
+          id="bit-story-full"
+          ref={fullRef}
+          className="dv-paper dv-paper-full"
+          aria-label="Your story"
+          placeholder={focusFull ? 'Your joke, your story, your stand-up set: write it here and make it funnier…' : typedFull}
+          value={story}
+          maxLength={4000}
+          disabled={busy}
+          onFocus={() => { setFocusFull(true); track('box_focus', { box: 'full' }) }}
+          onBlur={() => setFocusFull(false)}
+          onChange={(e) => onStory(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (ready) onMake() } }}
+        />
+        <div className="dv-nudge">
+          <span className="dv-dots" aria-label={`${done} of 4 in your story`}>
+            {checks.map((c) => <i key={c.id} className={c.ok ? 'ok' : undefined} />)}
+          </span>
+          {next ? (
+            <>
+              <span className="dv-next">{next.q} <em>optional</em></span>
+              <button type="button" className="dv-add" onClick={() => append(next.add, 'drive_add', checks[activeIdx]!.id, 'full')}>+ {next.label.replace(/^(start|add): /, '')}</button>
+            </>
+          ) : (
+            <span className="dv-next ok">All four are in.</span>
+          )}
         </div>
-        {rail('full')}
+        <div className="dv-foot">
+          <button type="button" className="dv-setbtn" aria-expanded={setOpen} onClick={() => { setSetOpen((v) => !v); if (!setOpen) track('write_settings_opened', { box: 'full' }) }}>{settingsLine} {setOpen ? '▴' : '▾'}</button>
+          {makeBtn(true)}
+        </div>
+        {setOpen && <div className="dv-set">{settings}</div>}
       </div>
+      <p className="dv-lite-note">One line is enough. Your lines stay word for word; the AI copilot drafts only what’s missing. You get a 5-second video, stand-up with cues, a sketch and a skit.</p>
     </div>,
     slot,
   ) : null
@@ -218,11 +268,12 @@ export function DriveBox({
             ref={ref}
             className="dv-paper"
             rows={1}
-            placeholder={open ? 'Your joke, your story, your stand-up set: write it here and make it funnier…' : 'Make your funny story funnier. One line is enough…'}
+            placeholder={open ? 'Your joke, your story, your stand-up set: write it here and make it funnier…' : focusTop ? 'Make your funny story funnier. One line is enough…' : typedTop}
             value={story}
             maxLength={4000}
             disabled={busy}
-            onFocus={() => { if (!focused.current) { focused.current = true; track('box_focus', { open }) } }}
+            onFocus={() => { setFocusTop(true); if (!focused.current) { focused.current = true; track('box_focus', { open }) } }}
+            onBlur={() => setFocusTop(false)}
             onChange={(e) => onStory(e.target.value)}
             onKeyDown={(e) => {
               if (e.key !== 'Enter') return
