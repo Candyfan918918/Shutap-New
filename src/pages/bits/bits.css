@@ -241,3 +241,7 @@ button.bl-tile:hover:not(:disabled) { border-color: var(--rose); }
 .bo-num { display: inline-grid; place-items: center; width: 20px; height: 20px; margin-right: 7px; border-radius: 50%; background: var(--wine); color: #fff; font: 800 11px var(--sora); font-style: normal; vertical-align: 1px; }
 .bo-tile-h span { text-transform: lowercase; }
 .bo-full { margin-top: 18px; }
+
+/* ============ Nov 14 2026 (Candy): every section on /bits uses the wide
+   content width (about 80% of a 1920 screen, like hellyeahai.com). ============ */
+.bl .bo-hero, .bl .bo-write, .bl .bl-lower { max-width: 1680px; padding-left: clamp(16px, 4vw, 64px); padding-right: clamp(16px, 4vw, 64px); box-sizing: border-box; width: 100%; }
