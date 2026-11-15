@@ -6,11 +6,11 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 import { GUIDES, GUIDE_TOPICS, guidePath, guidesInTopic, topicPath } from "@/lib/seo/guides";
 
 const PATH = "/guides";
-const TITLE = "Guides for Saying It Funnier — Bits, Listings, Toasts and Talks | Shutap";
+const TITLE = "How to Make Your Joke, Story or Speech Funnier: Guides | Shutap";
 const DESCRIPTION =
-  "Guides from the Shutap Humor Amplifier Lab on how to say it funnier, for any occasion, and the techniques behind them.";
+  "Say it funnier: guides on how to make your joke or story funnier, write a funny listing description or video, and make a wedding speech funny.";
 const CAPSULE =
-  "These guides cover the craft behind everything Shutap makes: turning a story into a bit, shooting a listing people watch to the end, building a toast the room remembers, and landing a laugh in a deck. Every technique here is in the bank Shutap drafts from, so what you read here is what the tool uses.";
+  "To make a joke or story funnier, keep your own words and work one line at a time: a hook, a setup, two tags and a button. These guides from the Shutap Humor Amplifier Lab show how, with full worked examples: making your story or joke funnier, writing a funny listing description or video, and making a wedding speech funny. Every technique here is in the bank Shutap drafts from.";
 
 const toItems = (kind: "tool" | "guide" | "business") =>
   GUIDES.filter((g) => g.kind === kind).map((g) => ({
@@ -76,7 +76,7 @@ export const Route = createFileRoute("/guides/")({
   component: () => (
     <ContentPage
       breadcrumbs={[{ name: "Guides", path: PATH }]}
-      h1="Guides for saying it funnier"
+      h1="How to make it funnier: jokes, stories, listings and wedding speeches"
       capsule={CAPSULE}
       sections={[]}
       linkGroups={[
@@ -94,7 +94,7 @@ export const Route = createFileRoute("/guides/")({
           ],
         },
       ]}
-      cta={{ label: "Write your bit. AI fills only the gaps.", href: "/" }}
+      cta={{ label: "Write your bit. Funnier only where you ask.", href: "/bits" }}
       others={[
         { href: "/funniest", label: "The funniest people and their techniques" },
         { href: "/how-it-works", label: "How it works" },

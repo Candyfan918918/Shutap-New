@@ -91,7 +91,7 @@ function TopicRoute() {
         { name: "Guides", path: "/guides" },
         { name: t.label, path: topicPath(t.id) },
       ]}
-      h1={t.label}
+      h1={t.h1 ?? t.label}
       capsule={t.intro}
       sections={[]}
       linkGroups={[
@@ -100,7 +100,7 @@ function TopicRoute() {
           items: list.map((g) => ({ href: guidePath(g.slug), label: g.h1, blurb: g.blurb })),
         },
       ]}
-      cta={{ label: "Write your bit. AI fills only the gaps.", href: "/" }}
+      cta={t.cta ?? { label: "Write your bit. Funnier only where you ask.", href: "/bits" }}
       others={[
         ...otherTopics.map((x) => ({ href: topicPath(x.id), label: x.label })),
         { href: "/guides", label: "All guides" },

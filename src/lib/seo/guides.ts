@@ -54,6 +54,10 @@ export interface GuideTopicInfo {
   description: string;
   /** Opening paragraph on the hub: what this topic covers. */
   intro: string;
+  /** Optional hub headline in search phrasing; falls back to the label. */
+  h1?: string;
+  /** Optional call to action; falls back to Bits. */
+  cta?: { label: string; href: string };
 }
 
 export const GUIDE_TOPICS: GuideTopicInfo[] = [
@@ -74,16 +78,20 @@ export const GUIDE_TOPICS: GuideTopicInfo[] = [
   {
     id: "writing-jokes",
     label: "Writing jokes",
-    title: "How to Write Jokes: Setups, Punchlines & Tags | Shutap",
-    description: "Guides to writing jokes that land: premises, setups, punchlines, tags, buttons, rewrites and the structures comedians use.",
-    intro: "How a joke is built and how to write one on purpose: finding the premise, writing a setup that points the wrong way, landing the punchline, then tagging it and ending on a button.",
+    h1: "How to write a joke, and make it funnier",
+    title: "How to Write a Joke and Make It Funnier | Shutap",
+    description: "How to write a joke and make your joke funnier: premise, setup, punchline, tags and a button, with the weak line and the funnier line side by side.",
+    intro: "To make a joke funnier, keep your own words and fix one line at a time: a setup that points the wrong way, a punchline that ends on the surprise word, then two tags and a button. These guides show each step with the weak line and the funnier line side by side.",
+    cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   },
   {
     id: "stand-up",
     label: "Stand-up & open mics",
-    title: "Stand-Up Comedy Guides: Writing, Open Mics & Sets | Shutap",
-    description: "Guides for stand-up comedians: writing your first five minutes, open mics, building a set, stage time and working a room.",
-    intro: "From the first open mic to a tight set: how to write material from your own life, how to structure five minutes, and what to do with the bits that die.",
+    h1: "Stand-up guides: make your bits funnier, from open mic to tight five",
+    title: "Stand-Up Guides: Make Your Bits Funnier | Shutap",
+    description: "Guides for comics: turn a true story into a bit, make it funnier line by line, survive open mics and build a tight five minutes.",
+    intro: "From the first open mic to a tight five: how to turn something that happened into a bit, make it funnier one line at a time, fix the bits that die, and put them in an order that builds.",
+    cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
   },
   {
     id: "storytime-and-pov",
@@ -109,16 +117,20 @@ export const GUIDE_TOPICS: GuideTopicInfo[] = [
   {
     id: "realtors",
     label: "For realtors",
-    title: "Funny Real Estate Captions, Listing Videos & More | Shutap",
-    description: "How real estate agents make listings people watch to the end: funny captions, listing videos, open-house lines and hooks, fair-housing safe.",
-    intro: "For agents who have to be funny on a schedule: listing videos, captions, open houses and hooks that get a listing noticed without breaking fair-housing rules or making anything up.",
+    h1: "Funny real estate listings: descriptions, videos and posts",
+    title: "Funny Real Estate Listings, Videos & Captions | Shutap",
+    description: "How agents write a funny listing description, script a funny listing video and post captions people watch to the end, fair-housing safe.",
+    intro: "A funny real estate listing jokes about the house, never the people, and never makes anything up. These guides show how, with full examples: the funny listing description, the listing video script and shot list, hooks, captions and open-house posts.",
+    cta: { label: "Paste the listing. Get the kit.", href: "/realtors" },
   },
   {
     id: "toasts-and-speeches",
     label: "Toasts & speeches",
-    title: "Funny Toasts & Speeches: Wedding, Holiday & More | Shutap",
-    description: "How to write a funny toast or speech: best man, maid of honor, wedding vows, Thanksgiving, Christmas, graduation and more, with original example lines.",
-    intro: "Toasts and speeches where you have to be funny in front of people who know the person: weddings, holidays, graduations and family occasions. How to build it from your own stories, and original lines to start from.",
+    h1: "Funny wedding speeches and toasts",
+    title: "Funny Wedding Speeches & Toasts | Shutap",
+    description: "How to make a wedding speech funny: best man, maid of honor, father and mother of the bride, with full example speeches built from real stories.",
+    intro: "A funny wedding speech is built from one real story, one specific detail and a light roast, then turns to the true thing and ends with glasses up. These guides show full examples for the best man, maid of honor and parents, plus toasts for other occasions.",
+    cta: { label: "Write your wedding speech from your stories.", href: "/toasts" },
   },
   {
     id: "presentations-and-work",
