@@ -5,11 +5,9 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/about";
-const TITLE = "About Shutap, the humor amplifier: say it funnier, for jokes, toasts and listing videos";
-// Nov 9 2026: 307 impressions, 10 clicks at position ~3. The snippet now says
-// what Shutap is and names the three products.
+const TITLE = "About Shutap — Story-Based Jokes, Toasts & Listing Scripts";
 const DESCRIPTION =
-  "Shutap is a humor amplifier on demand: say it funnier for any occasion. Bits for creators and comedians (stand-up bits and jokes), Kits for realtors (listing video scripts and posts), Toasts for special occasions (best man, maid of honor and holiday toasts).";
+  "Meet Shutap: turn your stories into jokes, toasts and listing scripts. Learn how its products work, what makes its approach different and who makes it.";
 const CAPSULE =
   "Shutap is a humor amplifier on demand. It helps people say it funnier on the occasions that matter, with three products: Bits for creators and comedians, Kits for realtors, and Toasts for special occasions. You bring what you want to say; Shutap makes it funnier; you decide what stays. Your stories and words stay yours.";
 const SECTIONS = [

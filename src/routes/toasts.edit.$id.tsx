@@ -12,7 +12,7 @@ import '@/components/feed/feed.css'
 export const Route = createFileRoute('/toasts/edit/$id')({
   ssr: false,
   validateSearch: (s: Record<string, unknown>) => z.object({ session_id: z.string().max(200).optional().catch(undefined), changed: z.string().max(200).optional().catch(undefined) }).parse(s),
-  head: () => ({ meta: [...pageMeta('Your toast — Shutap Toasts', 'Your toast.', '/toasts'), { name: 'robots', content: 'noindex' }] }),
+  head: ({ params }) => ({ meta: [...pageMeta('Your toast — Shutap Toasts', 'Edit your private toast and review its delivery formats.', `/toasts/edit/${params.id}`), { name: 'robots', content: 'noindex' }] }),
   component: EditRoute,
 })
 

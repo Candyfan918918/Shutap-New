@@ -9,7 +9,7 @@ import { ToastPrompter } from '@/pages/toasts/ToastPrompter'
 export const Route = createFileRoute('/toasts/prompter/$id')({
   ssr: false,
   validateSearch: (s: Record<string, unknown>) => z.object({ rehearse: z.string().max(2).optional().catch(undefined), short: z.string().max(2).optional().catch(undefined) }).parse(s),
-  head: () => ({ meta: [...pageMeta('Prompter — Shutap Toasts', 'Your toast, one line at a time.', '/toasts'), { name: 'robots', content: 'noindex' }] }),
+  head: ({ params }) => ({ meta: [...pageMeta('Prompter — Shutap Toasts', 'Your toast, one line at a time.', `/toasts/prompter/${params.id}`), { name: 'robots', content: 'noindex' }] }),
   component: PrompterRoute,
 })
 
