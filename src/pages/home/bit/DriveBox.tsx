@@ -128,7 +128,6 @@ export function DriveBox({
   const focused = useRef(false)
   const [focusTop, setFocusTop] = useState(false)
   const [focusFull, setFocusFull] = useState(false)
-  const [setOpen, setSetOpen] = useState(false)
   const typedTop = useTypedPrompt(TYPED_TOP, focusTop || !!story)
   const typedFull = useTypedPrompt(TYPED_FULL, focusFull || !!story)
 
@@ -200,52 +199,44 @@ export function DriveBox({
   )
 
   /** A, always open, in its own place on the page (fullSlot) */
-  /** A, lighter (Nov 14 2026, Candy: "too wide, feels like work"): one
-   *  narrow column, four lines to write in, the one thing missing as a single
-   *  nudge, settings folded into one line, and Make. */
-  const next = activeIdx >= 0 ? RAIL[checks[activeIdx]!.id] : null
+  /** A (approved design): the story with the rail on the right, settings
+   *  under it; narrower than the page (980px) and at page type sizes. */
   const full = split && slot ? createPortal(
-    <div className="bt dv-host dv-lite">
+    <div className="bt dv-host dv-a">
       <div className="dv-turn">
-        <h2>Got more? Tell the whole story.</h2>
-        <span>free · no sign-in</span>
+        <h2>Your turn — write yours.</h2>
+        <span>free · no sign-in · your lines stay word for word</span>
       </div>
-      <div className="bt-box dv">
-        <textarea
-          suppressHydrationWarning
-          id="bit-story-full"
-          ref={fullRef}
-          className="dv-paper dv-paper-full"
-          aria-label="Your story"
-          placeholder={focusFull ? 'Your joke, your story, your stand-up set: write it here and make it funnier…' : typedFull}
-          value={story}
-          maxLength={4000}
-          disabled={busy}
-          onFocus={() => { setFocusFull(true); track('box_focus', { box: 'full' }) }}
-          onBlur={() => setFocusFull(false)}
-          onChange={(e) => onStory(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (ready) onMake() } }}
-        />
-        <div className="dv-nudge">
-          <span className="dv-dots" aria-label={`${done} of 4 in your story`}>
-            {checks.map((c) => <i key={c.id} className={c.ok ? 'ok' : undefined} />)}
-          </span>
-          {next ? (
-            <>
-              <span className="dv-next">{next.q} <em>optional</em></span>
-              <button type="button" className="dv-add" onClick={() => append(next.add, 'drive_add', checks[activeIdx]!.id, 'full')}>+ {next.label.replace(/^(start|add): /, '')}</button>
-            </>
-          ) : (
-            <span className="dv-next ok">All four are in.</span>
-          )}
+      <div className="bt-box dv open">
+        <div className="dv-main">
+          <div className="dv-head">
+            <label htmlFor="bit-story-full" className="bt-box-title"><span className="bt-rec" aria-hidden="true" />tell it your way</label>
+            {onRemix && <button type="button" className="dv-remix" onClick={onRemix}>Stuck? Start from the demo story</button>}
+          </div>
+          <div className="dv-write">
+            <textarea
+              suppressHydrationWarning
+              id="bit-story-full"
+              ref={fullRef}
+              className="dv-paper"
+              placeholder={focusFull ? 'Your joke, your story, your stand-up set: write it here and make it funnier…' : typedFull}
+              value={story}
+              maxLength={4000}
+              disabled={busy}
+              onFocus={() => { setFocusFull(true); track('box_focus', { box: 'full' }) }}
+              onBlur={() => setFocusFull(false)}
+              onChange={(e) => onStory(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (ready) onMake() } }}
+            />
+          </div>
+          <div className="dv-count">
+            <span>{words} {words === 1 ? 'word' : 'words'} · names get removed before anything is saved</span>
+            <span>{settingsLine}</span>
+          </div>
+          <div className="dv-set">{settings}</div>
         </div>
-        <div className="dv-foot">
-          <button type="button" className="dv-setbtn" aria-expanded={setOpen} onClick={() => { setSetOpen((v) => !v); if (!setOpen) track('write_settings_opened', { box: 'full' }) }}>{settingsLine} {setOpen ? '▴' : '▾'}</button>
-          {makeBtn(true)}
-        </div>
-        {setOpen && <div className="dv-set">{settings}</div>}
+        {rail('full')}
       </div>
-      <p className="dv-lite-note">One line is enough. Your lines stay word for word; the AI copilot drafts only what’s missing. You get a 5-second video, stand-up with cues, a sketch and a skit.</p>
     </div>,
     slot,
   ) : null
