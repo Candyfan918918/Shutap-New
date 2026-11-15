@@ -105,6 +105,7 @@ function AdminGuestsPage() {
             <Paywall r={r} />
             <Payments r={r} />
           </div>
+          <Lines r={r} />
         </div>
       )}
     </AdminShell>
@@ -237,6 +238,33 @@ function Payments({ r }: { r: AdminGuestsResult }) {
         ].map((row) => row.map((c, i) => (i === 2 ? <span style={{ whiteSpace: 'pre-line' }}>{c}</span> : c)))}
       />
       <p style={{ margin: '12px 0 0', fontSize: 12, color: dim }}>active plans {n(p.active_plans)} · canceled {n(p.canceled_plans)}</p>
+    </section>
+  )
+}
+
+function LineFunnel({ title, steps }: { title: string; steps: AdminGuestsResult['lines']['realtors'] }) {
+  const top = steps[0]?.n ?? 0
+  return (
+    <div style={{ minWidth: 0 }}>
+      <h3 style={{ margin: '0 0 10px', fontSize: 14, fontWeight: 700 }}>{title}</h3>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(150px, 230px) 1fr 56px 64px', gap: '8px 12px', alignItems: 'center', fontSize: 13 }}>
+        {steps.map((s) => (
+          <FunnelRow key={s.key} label={s.label} w={top > 0 ? Math.max(0.4, Math.min(100, (s.n / top) * 100)) : 0} n={s.n} note={s.key === 'visited' ? '' : pct(s.n, top)} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Lines({ r }: { r: AdminGuestsResult }) {
+  return (
+    <section style={card}>
+      <h2 style={h2}>7 · realtors &amp; toasts</h2>
+      <p style={sub}>unique people (an account, or a guest’s browser) · each step as a share of the first · made, paid: from the kits and toasts themselves</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: 28 }}>
+        <LineFunnel title="realtor kits" steps={r.lines.realtors} />
+        <LineFunnel title="toasts" steps={r.lines.toasts} />
+      </div>
     </section>
   )
 }
