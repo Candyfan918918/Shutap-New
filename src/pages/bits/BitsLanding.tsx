@@ -214,7 +214,7 @@ export function BitsLanding({ demo }: { demo?: BitDemo | null } = {}) {
         <section className="bo-hero bo-top">
           <div className="bo-head">
             <div className="bo-head-l">
-              <p className="bl-kick">Shutap Bits · for creators and comedians</p>
+              <p className="bl-kick">Shutap Bits · make your story or joke funnier</p>
               <h1 className="bl-h1">Create your bit. <em>Refine it, practice it, rehearse it.</em></h1>
             </div>
           </div>

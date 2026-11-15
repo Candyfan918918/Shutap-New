@@ -37,9 +37,9 @@ function ToastsHub() {
       <div className="rl tp">
         <section className="tp-hub">
           <div className="tp-hub-hd">
-            <p className="rl-kicker" style={{ textAlign: 'left', margin: 0 }}>Shutap Toasts</p>
+            <p className="rl-kicker" style={{ textAlign: 'left', margin: 0 }}>Shutap Toasts · funny toasts and wedding speeches</p>
             <h1 className="rl-h1 rl-h1-2">Type your stories. <em>Get the toast, the cue cards and the prompter.</em></h1>
-            <p className="rl-lead2">Pick your occasion. Each one shows what you get before you type a word, and the form is right there on the page.</p>
+            <p className="rl-lead2">Funny best man and maid of honor speeches, Thanksgiving, Christmas and office party toasts, and more. Pick your occasion; each one shows what you get before you type a word, and the form is right there on the page.</p>
           </div>
           {GROUPS.map((g) => (
             <div key={g} className="tp-hub-g">
