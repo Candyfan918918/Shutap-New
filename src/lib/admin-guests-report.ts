@@ -28,7 +28,12 @@ export type GuestsInput = {
   adminIds: Set<string>
   emails: Map<string, string>
   subs: { status: string; environment: string }[]
+  /** kits and toasts made in the window (Nov 14 2026, section 7) */
+  kits?: { user_id: string; created_at: string; paid: boolean }[]
+  toasts?: { user_id: string; created_at: string; paid: boolean }[]
 }
+
+export type LineStep = { key: string; label: string; n: number }
 
 export type Row = { label: string; n: number }
 
@@ -57,6 +62,8 @@ export type GuestsReport = {
     active_plans: number
     canceled_plans: number
   }
+  /** section 7: the realtor kit and toast funnels, guests and accounts together */
+  lines: { realtors: LineStep[]; toasts: LineStep[] }
 }
 
 /** Events that fire on their own (a view, an impression) — not something the
@@ -350,6 +357,61 @@ export function aggregateGuests(input: GuestsInput): GuestsReport {
   })
   const live = input.subs.filter((s) => s.environment === 'live')
 
+  // ---- section 7: realtors and toasts. One person = an account when signed
+  // in, else a guest's browser session. Admins and dropped sessions are out.
+  const lineEvents = events.filter((e) => !(e.session_id && dropped.has(e.session_id)) && !(e.user_id && adminIds.has(e.user_id)))
+  // a session that signed in or up counts as that account all along
+  const sessionAccount = new Map<string, string>()
+  for (const e of lineEvents) if (e.session_id && e.user_id && accountIds.has(e.user_id) && !sessionAccount.has(e.session_id)) sessionAccount.set(e.session_id, e.user_id)
+  const personKey = (e: GuestEventRow) =>
+    e.user_id && accountIds.has(e.user_id) ? e.user_id
+      : e.session_id ? sessionAccount.get(e.session_id) ?? `s:${e.session_id}`
+        : e.user_id ? `u:${e.user_id}` : null
+  const people = (f: (e: GuestEventRow) => boolean) => {
+    const set = new Set<string>()
+    for (const e of lineEvents) if (f(e)) { const k = personKey(e); if (k) set.add(k) }
+    return set.size
+  }
+  const onPath = (e: GuestEventRow, root: string) => e.name === 'page_view' && (pageOf(e) === root || (pageOf(e) ?? '').startsWith(root + '/'))
+  const ofProduct = (e: GuestEventRow, product: string) => e.properties?.product === product
+  const LINE_PASSIVE = new Set([...PASSIVE, 'kit_prepaid_seen', 'kit_bought_seen', 'kit_limit_shown', 'toast_prepaid_seen', 'toast_limit_shown', 'toast_unmarked_seen', 'toast_guard_shown', 'listing_read', 'listing_read_failed', 'toast_written', 'kit_written', 'toast_midnight_synced'])
+  const signedUpAfter = (root: string) => {
+    let n = 0
+    for (const [, s] of sessions) {
+      if (!s.signedUp) continue
+      if (s.events.some((e) => onPath(e, root))) n++
+    }
+    return n
+  }
+  const owners = (rows: { user_id: string; paid: boolean }[] | undefined, paidOnly = false) =>
+    new Set((rows ?? []).filter((r) => !adminIds.has(r.user_id) && (!paidOnly || r.paid)).map((r) => r.user_id)).size
+  const lines = {
+    realtors: [
+      { key: 'visited', label: 'opened a /realtors page', n: people((e) => onPath(e, '/realtors')) },
+      { key: 'acted', label: 'did something (a tap, not just a view)', n: people((e) => ofProduct(e, 'realtors') && !LINE_PASSIVE.has(e.name)) },
+      { key: 'pasted', label: 'pasted a listing', n: people((e) => e.name === 'paste_box_submit' || e.name === 'listing_read_started') },
+      { key: 'read', label: 'listing read', n: people((e) => e.name === 'listing_read') },
+      { key: 'asked', label: 'asked to sign up', n: people((e) => e.name === 'signin_prompt_seen' && ofProduct(e, 'realtors')) },
+      { key: 'signed_up', label: 'signed up (visit included /realtors)', n: signedUpAfter('/realtors') },
+      { key: 'made', label: 'made a kit', n: owners(input.kits) },
+      { key: 'buy', label: 'tapped buy', n: people((e) => e.name === 'kit_buy_clicked' || e.name === 'kit_prebuy_opened') },
+      { key: 'paid', label: 'paid for a kit', n: owners(input.kits, true) },
+      { key: 'download', label: 'downloaded a kit', n: people((e) => e.name === 'kit_download') },
+    ],
+    toasts: [
+      { key: 'visited', label: 'opened a /toasts page', n: people((e) => onPath(e, '/toasts')) },
+      { key: 'form', label: 'toast form shown', n: people((e) => e.name === 'toast_form_viewed') },
+      { key: 'acted', label: 'did something (a tap, not just a view)', n: people((e) => ofProduct(e, 'toasts') && !LINE_PASSIVE.has(e.name)) },
+      { key: 'started', label: 'started writing a toast', n: people((e) => e.name === 'toast_write_started') },
+      { key: 'asked', label: 'asked to sign up', n: people((e) => (e.name === 'signin_prompt_seen' && ofProduct(e, 'toasts')) || e.name === 'toast_prompter_signin') },
+      { key: 'signed_up', label: 'signed up (visit included /toasts)', n: signedUpAfter('/toasts') },
+      { key: 'made', label: 'got a toast written', n: owners(input.toasts) },
+      { key: 'buy', label: 'tapped buy', n: people((e) => e.name === 'toast_prebuy_opened' || e.name === 'toast_change_checkout_opened' || e.name === 'toast_unmark_opened') },
+      { key: 'paid', label: 'paid for a toast', n: owners(input.toasts, true) },
+      { key: 'download', label: 'downloaded a toast', n: people((e) => e.name === 'toast_downloaded') },
+    ],
+  }
+
   return {
     funnel,
     bounced,
@@ -375,5 +437,6 @@ export function aggregateGuests(input: GuestsInput): GuestsReport {
       active_plans: live.filter((s) => ['active', 'trialing', 'past_due'].includes(s.status)).length,
       canceled_plans: live.filter((s) => s.status === 'canceled').length,
     },
+    lines,
   }
 }

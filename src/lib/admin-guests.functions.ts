@@ -50,12 +50,14 @@ export const adminGuests = createServerFn({ method: 'POST' })
     const db = supabaseAdmin as any
     const since = windowStart(data.days)
 
-    const [events, visits, profiles, roles, subs] = await Promise.all([
+    const [events, visits, profiles, roles, subs, kits, toasts] = await Promise.all([
       fetchAll<GuestEventRow>((f, t) => db.from('events').select('name, user_id, session_id, ts, properties').gte('ts', since).order('ts').range(f, t)),
       fetchAll<GuestVisitRow & { started_at: string }>((f, t) => db.from('visits_classified').select('session_id, is_bot, utm_source, referrer, started_at').gte('started_at', since).order('started_at').range(f, t)),
       fetchAll<{ user_id: string; email: string | null }>((f, t) => db.from('profiles').select('user_id, email').eq('is_anonymous', false).not('email', 'is', null).neq('email', '').order('user_id').range(f, t)),
       fetchAll<{ user_id: string }>((f, t) => db.from('user_roles').select('user_id').eq('role', 'admin').order('user_id').range(f, t)),
       fetchAll<{ status: string; environment: string }>((f, t) => db.from('subscriptions').select('status, environment').order('status').range(f, t)),
+      fetchAll<{ user_id: string; created_at: string; paid: boolean }>((f, t) => db.from('kits').select('user_id, created_at, paid').gte('created_at', since).order('created_at').range(f, t)),
+      fetchAll<{ user_id: string; created_at: string; paid: boolean }>((f, t) => db.from('toasts').select('user_id, created_at, paid').gte('created_at', since).order('created_at').range(f, t)),
     ])
 
     const report = aggregateGuests({
@@ -65,6 +67,8 @@ export const adminGuests = createServerFn({ method: 'POST' })
       adminIds: new Set(roles.map((r) => r.user_id)),
       emails: new Map(profiles.map((p) => [p.user_id, p.email ?? ''])),
       subs,
+      kits,
+      toasts,
     })
     return { ...report, days: data.days, since }
   })

@@ -74,3 +74,26 @@ test('sources', () => {
   assert.equal(sourceOf({ utm_source: 'hello_shutap', referrer: null }), 'Shutap email')
   assert.equal(sourceOf(undefined), 'no source (direct, typed in)')
 })
+
+test('realtors and toasts funnels', () => {
+  const events = [
+    ev('page_view', 'r1', null, { path: '/realtors' }),
+    ev('paste_box_submit', 'r1', null, { product: 'realtors' }),
+    ev('listing_read', 'r1', null, { product: 'realtors' }),
+    ev('sign_up_completed', 'r1', 'acct1'),
+    ev('kit_buy_clicked', 'r1', 'acct1', { product: 'realtors' }),
+    ev('page_view', 'r2', null, { path: '/realtors/sample' }),
+    ev('page_view', 't1', null, { path: '/toasts/maid-of-honor' }),
+    ev('toast_form_viewed', 't1', null, { product: 'toasts' }),
+    ev('page_view', 't2', 'admin1', { path: '/toasts' }),
+  ]
+  const r = aggregateGuests({
+    ...base, events, visits: [],
+    kits: [{ user_id: 'acct1', created_at: '2026-11-14T09:00:00Z', paid: true }, { user_id: 'admin1', created_at: '2026-11-14T09:00:00Z', paid: true }],
+    toasts: [],
+  })
+  const rl = Object.fromEntries(r.lines.realtors.map((x) => [x.key, x.n]))
+  assert.deepEqual([rl.visited, rl.acted, rl.pasted, rl.read, rl.signed_up, rl.made, rl.buy, rl.paid], [2, 1, 1, 1, 1, 1, 1, 1])
+  const tl = Object.fromEntries(r.lines.toasts.map((x) => [x.key, x.n]))
+  assert.deepEqual([tl.visited, tl.form, tl.acted, tl.made], [1, 1, 0, 0])
+})
