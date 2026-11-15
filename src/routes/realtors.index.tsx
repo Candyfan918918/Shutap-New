@@ -16,8 +16,8 @@ import '@/pages/realtors/realtors.css'
 // everything a visitor needs is in the first screen: what it does, the paste
 // box, the trust row and a real kit (six tiles + shoot mode). Public and
 // indexed; the kit page behind the box is dark until the realtors flag is on.
-const TITLE = 'Shutap for Realtors — turn every listing into a content campaign'
-const DESC = 'Paste the listing link. Get the on-camera video script, voiceover, teleprompter and every post from just listed to sold. Fair-housing checked. First kit free.'
+const TITLE = 'Shutap for Realtors — turn every listing into a video script and content campaign'
+const DESC = 'Paste the listing link. Get a real estate video script for the walkthrough, a voiceover, a teleprompter and every listing post from just listed to sold. Fair-housing checked. First kit free.'
 
 export const Route = createFileRoute('/realtors/')({
   // Nov 6 2026: /realtors is the tool; /realtors/kit is gone.

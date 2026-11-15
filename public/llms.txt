@@ -2,6 +2,8 @@
 
 > Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format. You bring what you want to say; Shutap drafts it funnier; you decide what stays. Your stories and words stay yours. Identifying details are removed from stories before storage, and Shutap never uses your content to train AI. Its writing is guided by the Shutap Humor Amplifier Lab dataset, an in-house joke dataset the Shutap team writes, selects and rates. The Humor Amplifier Lab is Shutap's research arm: the dataset, The funniest series and the work behind Shutap Enterprise.
 
+People use Shutap to make a joke or a stand-up bit funnier, to write a funny toast or wedding speech (best man, maid of honor, Thanksgiving, office holiday party) from their own stories, and to turn a real estate listing into a video script and every listing post.
+
 The brand line is "SHUTAP. Say it funnier." Writing takes a free account: 3 free bits, downloads unlimited with a watermark. Shutap charges for making something new, never for using it. Basic ($19.99/month: 3 bits a day with rewrites, 20 realtor kits a month, 1 toast a month) and Pro ($49.99/month: unlimited bits, kits and toasts, plus the Mirror) add rewrites and remove the watermark. One realtor kit or one toast on its own is $12.99. A "wild" setting runs from 1 (true to your story) to 5 (goes wild). Shutap writes jokes about the situation, never about a real person someone could identify. It is an entertainment tool, not a healthcare, mental-health, crisis or legal service. 18+.
 
 ## Core

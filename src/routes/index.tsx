@@ -3,11 +3,14 @@ import { ogImageMeta } from "@/lib/seo/meta";
 import { ProductHome } from '@/pages/home/ProductHome'
 import { SITE_URL } from '@/lib/site'
 
-const HOME_TITLE = "Shutap Humor Amplifier Lab"
+// Nov 14 2026 (Candy): titles and descriptions use the words people search
+// and ask ChatGPT with (make a joke funnier, funny toast, best man speech,
+// listing video script), brand first, banned words never. ChatGPT visits to
+// the homepage fell from 25 a week to 2 after the Oct 29 repositioning.
+const HOME_TITLE = "Shutap Humor Amplifier Lab · Make your jokes, toasts and speeches funnier"
 const HOME_DESCRIPTION =
-  "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format."
-const HOME_OG_DESCRIPTION =
-  "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format."
+  "Say it funnier. Turn your own story into a stand-up bit, write a funny toast or best man speech in your words, or turn a real estate listing into a video script and posts. Your words stay yours."
+const HOME_OG_DESCRIPTION = HOME_DESCRIPTION
 
 const HOME_URL = `${SITE_URL}/`
 
