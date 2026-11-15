@@ -5,9 +5,9 @@ import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 
 const PATH = "/how-it-works";
-const TITLE = "How Shutap works — bits, realtor kits and toasts";
+const TITLE = "How Shutap works — make a joke, toast or listing video script funnier";
 const DESCRIPTION =
-  "How the Shutap Humor Amplifier Lab helps you say it funnier, for any occasion, in any format.";
+  "How the Shutap Humor Amplifier Lab helps you say it funnier: turn your story into a stand-up bit, write a funny toast in your own words, or turn a listing into a video script and posts.";
 const CAPSULE =
   "You bring what you want to say: your bit, a listing link, your stories about the person. Shutap helps make it funnier, and you decide what stays. Here is how each one works.";
 const STEPS = [

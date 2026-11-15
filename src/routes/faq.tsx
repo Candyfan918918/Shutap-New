@@ -7,7 +7,7 @@ import { FAQ_ITEMS as QA } from "@/lib/seo/faq";
 
 const PATH = "/faq";
 const URL = `${SITE_URL}/faq`;
-const TITLE = "Shutap FAQ — The Humor Amplifier";
+const TITLE = "Shutap FAQ — the humor amplifier for jokes, toasts and listing videos";
 const DESCRIPTION =
   "Answers about Shutap, the humor amplifier: is it free, stand-up, sketch and skit, TikTok, who owns the bits, privacy and pricing.";
 const CAPSULE =

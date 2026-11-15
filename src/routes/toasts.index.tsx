@@ -15,8 +15,8 @@ import '@/pages/toasts/toasts.css'
 // opens on a real toast for that occasion and carries the form itself.
 // Old links keep working: ?occasion= goes to that occasion's page, and a
 // $12.99 return (?prepaid=) goes to the any-occasion page, which writes it.
-const TITLE = 'Shutap Toasts: your stories in, the toast, cue cards and prompter out'
-const DESC = 'Pick your occasion and see a real toast first. Type your stories, in your words; Shutap builds the toast around them, with pause marks, cue cards, a phone prompter and a 60-second version. Best man, maid of honor, father and mother of the bride, Thanksgiving, Christmas, office holiday party, New Year’s, retirement and birthday.'
+const TITLE = 'Shutap Toasts: write a funny toast or wedding speech from your own stories'
+const DESC = 'Write a funny toast or speech in your own words: best man speech, maid of honor speech, Thanksgiving, office holiday party and more. Pick your occasion and see a real toast first. Type your stories, in your words; Shutap builds the toast around them, with pause marks, cue cards, a phone prompter and a 60-second version. Best man, maid of honor, father and mother of the bride, Thanksgiving, Christmas, office holiday party, New Year’s, retirement and birthday.'
 
 export const Route = createFileRoute('/toasts/')({
   validateSearch: (s: Record<string, unknown>) => z.object({ occasion: z.enum(OCCASIONS).optional().catch(undefined), prepaid: z.string().max(200).optional().catch(undefined) }).parse(s),
