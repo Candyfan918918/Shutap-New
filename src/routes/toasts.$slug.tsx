@@ -5,7 +5,7 @@
 // real toast for the occasion (the newest lab toast Candy rated "pick"), the
 // four-step form, then the page's guide and FAQ (with FAQPage schema).
 // ?prepaid= is the $12.99 return: the toast is written on this same page.
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import { Navigate, createFileRoute, notFound } from '@tanstack/react-router'
 import { z } from 'zod'
 import { pageMeta } from '@/lib/seo/page-meta'
 import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
@@ -43,9 +43,13 @@ export const Route = createFileRoute('/toasts/$slug')({
 })
 
 function LandingPage() {
-  const { slug, demo } = Route.useLoaderData()
+  // Nov 10 2026: a mangled email link (/toasts/b2ZmaWNlLW) rendered this with
+  // no loader data and threw. An unknown occasion falls back to the list.
+  const data = Route.useLoaderData() as { slug: string; demo: Awaited<ReturnType<typeof import('@/lib/toasts/demo.functions')['getToastDemo']>> | null } | undefined
   const { prepaid } = Route.useSearch()
-  const l = landingBySlug(slug)!
+  const l = data ? landingBySlug(data.slug) : undefined
+  if (!l) return <Navigate to="/toasts" replace />
+  const demo = data!.demo
   return (
     <div className="fd">
       <OccasionPage l={l} demo={demo} prepaid={prepaid} />

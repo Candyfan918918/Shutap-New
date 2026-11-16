@@ -19,6 +19,19 @@ export function reloadOntoNewBuild(): boolean {
 /** The router's own symptom of a page file a deploy removed: it reads a
  *  route's component off nothing (Oct 26–27 "notFoundComponent", Nov 1
  *  "component"). Same cure as a failed import: reload onto the new build. */
+/** True for a few seconds after reloadOntoNewBuild fired: the error that
+ *  triggered it is already being cured by the reload (Nov 16 2026: these
+ *  filled the weekly error digest after every deploy). Only that moment,
+ *  so a real outage (errors with no reload behind them) still reports. */
+export function reloadJustFired(): boolean {
+  if (typeof window === "undefined") return false
+  try {
+    return Date.now() - Number(sessionStorage.getItem(STALE_KEY) || 0) < 5_000
+  } catch {
+    return false
+  }
+}
+
 export function isStaleRouteError(msg: string): boolean {
   return /Importing a module script failed|Failed to fetch dynamically imported module|error loading dynamically imported module|Cannot read properties of undefined \(reading '(notFoundComponent|component|errorComponent|pendingComponent|options)'\)/i.test(msg)
 }

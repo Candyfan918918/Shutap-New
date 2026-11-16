@@ -3,6 +3,7 @@
 // call. The promise NEVER rejects; on failure _ph resolves to null.
 import type { PostHog } from 'posthog-js'
 import { isProdHost } from './env'
+import { isStaleRouteError, reloadJustFired } from './stale-build'
 
 let _ph: PostHog | null = null
 let _initPromise: Promise<void> | null = null
@@ -54,6 +55,9 @@ export function initPostHog(): Promise<void> {
         // from its own injected script, a dozen at a time. Not ours; dropped.
         before_send: (ev) => {
           if (ev && ev.event === '$exception' && /Object Not Found Matching Id/i.test(JSON.stringify(ev.properties?.$exception_list ?? ev.properties?.$exception_values ?? ''))) return null
+          // a tab on the old build after a deploy: the page is reloading onto
+          // the new one right now, so the error is already handled
+          if (ev && ev.event === '$exception' && reloadJustFired() && isStaleRouteError(JSON.stringify(ev.properties?.$exception_list ?? ev.properties?.$exception_values ?? ''))) return null
           return ev
         },
       })
