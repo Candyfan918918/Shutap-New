@@ -50,7 +50,8 @@ import {
   type VaryKind,
 } from './shared'
 import { houseSignal } from './house.server'
-import { judgeStandard, standardBlock, standardLines } from './taste-bank'
+import { judgeStandard, standardBlock, standardLines, type TasteLine } from './taste-bank'
+import { liveStandard } from './jokenet.server'
 import { jobBlock } from './jobs'
 import { TECHNIQUES, bankFromFunniest, costumeToken, dealTechniques, formatTechniques, techniqueCraftFailure, type Dealt, type Technique } from './techniques'
 
@@ -372,7 +373,7 @@ function formatBits(bits: BitDraft[]): string {
     .join('\n\n')
 }
 
-export async function runBitJudge(story: string, controls: BitControls, bits: BitDraft[]): Promise<BitVerdict> {
+export async function runBitJudge(story: string, controls: BitControls, bits: BitDraft[], bar?: TasteLine[]): Promise<BitVerdict> {
   const model = bitJudgeModel()
   const identity = bits.map((_, i) => i)
   if (bits.length < 2) return { order: identity, why: null, model }
@@ -388,7 +389,7 @@ export async function runBitJudge(story: string, controls: BitControls, bits: Bi
         content: fill(BIT_JUDGE_PROMPT, {
           SITUATION: story.slice(0, 2000),
           AUDIENCE: BIT_AUDIENCE[controls.audience] ?? BIT_AUDIENCE.social,
-          STANDARD: judgeStandard(standardLines(4)),
+          STANDARD: judgeStandard(bar ?? standardLines(4)),
           BITS: formatBits(bits),
         }),
       },
@@ -522,6 +523,8 @@ export type WrittenBit = {
   timings: Record<string, number>
   /** the technique dealt to each bit, in writer order (bit-1.3) */
   techniques: string[]
+  /** where THE STANDARD came from: JokeNet, the static bank, or left out */
+  standardFrom?: 'jokenet' | 'static' | 'none'
   rejected: { hook: string; rule: string }[]
   attempts: WriterAttempt[]
 }
@@ -593,6 +596,9 @@ export async function writeBitFromStory(
   const rejected: { hook: string; rule: string }[] = []
   // One deal per run: both writers in the race get the same techniques, so
   // the bit is the same operation whichever model answers first.
+  // THE STANDARD comes from JokeNet (rated lines nearest this story),
+  // fetched alongside the house signal so it adds no wait of its own.
+  const standardP = variant.noStandard ? Promise.resolve(null) : liveStandard(story, 6)
   const house = variant.noTechniques ? { examples: '', weights: {} } : await houseSignal()
   let dealt = variant.noTechniques ? [] : dealTechniques(4, Math.random, variant.pool ?? (await funniestBank()).line, house.weights)
   // "Use this move" from a funniest page: the pinned technique is every
@@ -608,7 +614,8 @@ export async function writeBitFromStory(
   const backupModel = variant.backup ?? backupWriterModel()
   // One standard per run, like the deal: both writers in the race see the
   // same six lines, so the bit is the same operation whichever answers.
-  const standard = variant.noStandard ? '' : standardBlock(standardLines(6))
+  const live = await standardP
+  const standard = live ? standardBlock(live.lines) : ''
   const sortBits = (bits: BitDraft[]) => {
     const ok: BitDraft[] = []
     const craftOnly: BitDraft[] = []
@@ -653,7 +660,7 @@ export async function writeBitFromStory(
   // The judge (a different model family) ranks what passed; BIT_JUDGE=off
   // falls back to the writer's own order.
   const verdict: BitVerdict = (variant.judge ?? judgeOn())
-    ? await runBitJudge(story, controls, passing)
+    ? await runBitJudge(story, controls, passing, live?.lines.slice(0, 4))
     : { order: passing.map((_, i) => i), why: null, model: 'writer-order' }
   const t3 = Date.now()
   if (verdict.error) console.warn('[bit-judge] fell back to writer order', verdict.error)
@@ -673,6 +680,7 @@ export async function writeBitFromStory(
     promptVersion: BIT_PROMPT_VERSION,
     timings: { premises_ms: t1 - t0, write_ms: t2 - t1, judge_ms: t3 - t2 },
     techniques: dealt.map((d) => d.primary.id),
+    standardFrom: live?.from ?? 'none',
     rejected,
     attempts: race.attempts,
   }

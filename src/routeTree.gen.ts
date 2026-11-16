@@ -89,6 +89,7 @@ import { Route as AuthenticatedAdminBattleRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminEventsRouteImport } from './routes/_authenticated/admin.events'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated/admin.feedback'
 import { Route as AuthenticatedAdminGuestsRouteImport } from './routes/_authenticated/admin.guests'
+import { Route as AuthenticatedAdminJokenetRouteImport } from './routes/_authenticated/admin.jokenet'
 import { Route as AuthenticatedAdminOverviewRouteImport } from './routes/_authenticated/admin.overview'
 import { Route as AuthenticatedAdminPollRouteImport } from './routes/_authenticated/admin.poll'
 import { Route as AuthenticatedAdminRelateRouteImport } from './routes/_authenticated/admin.relate'
@@ -521,6 +522,12 @@ const AuthenticatedAdminGuestsRoute =
     path: '/admin/guests',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminJokenetRoute =
+  AuthenticatedAdminJokenetRouteImport.update({
+    id: '/admin/jokenet',
+    path: '/admin/jokenet',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminOverviewRoute =
   AuthenticatedAdminOverviewRouteImport.update({
     id: '/admin/overview',
@@ -731,6 +738,7 @@ export interface FileRoutesByFullPath {
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/guests': typeof AuthenticatedAdminGuestsRoute
+  '/admin/jokenet': typeof AuthenticatedAdminJokenetRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/admin/poll': typeof AuthenticatedAdminPollRoute
   '/admin/relate': typeof AuthenticatedAdminRelateRoute
@@ -836,6 +844,7 @@ export interface FileRoutesByTo {
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/guests': typeof AuthenticatedAdminGuestsRoute
+  '/admin/jokenet': typeof AuthenticatedAdminJokenetRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/admin/poll': typeof AuthenticatedAdminPollRoute
   '/admin/relate': typeof AuthenticatedAdminRelateRoute
@@ -943,6 +952,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/events': typeof AuthenticatedAdminEventsRoute
   '/_authenticated/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin/guests': typeof AuthenticatedAdminGuestsRoute
+  '/_authenticated/admin/jokenet': typeof AuthenticatedAdminJokenetRoute
   '/_authenticated/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/_authenticated/admin/poll': typeof AuthenticatedAdminPollRoute
   '/_authenticated/admin/relate': typeof AuthenticatedAdminRelateRoute
@@ -1050,6 +1060,7 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/guests'
+    | '/admin/jokenet'
     | '/admin/overview'
     | '/admin/poll'
     | '/admin/relate'
@@ -1155,6 +1166,7 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/guests'
+    | '/admin/jokenet'
     | '/admin/overview'
     | '/admin/poll'
     | '/admin/relate'
@@ -1261,6 +1273,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/events'
     | '/_authenticated/admin/feedback'
     | '/_authenticated/admin/guests'
+    | '/_authenticated/admin/jokenet'
     | '/_authenticated/admin/overview'
     | '/_authenticated/admin/poll'
     | '/_authenticated/admin/relate'
@@ -1943,6 +1956,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminGuestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/jokenet': {
+      id: '/_authenticated/admin/jokenet'
+      path: '/admin/jokenet'
+      fullPath: '/admin/jokenet'
+      preLoaderRoute: typeof AuthenticatedAdminJokenetRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/overview': {
       id: '/_authenticated/admin/overview'
       path: '/admin/overview'
@@ -2121,6 +2141,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminEventsRoute: typeof AuthenticatedAdminEventsRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminGuestsRoute: typeof AuthenticatedAdminGuestsRoute
+  AuthenticatedAdminJokenetRoute: typeof AuthenticatedAdminJokenetRoute
   AuthenticatedAdminOverviewRoute: typeof AuthenticatedAdminOverviewRoute
   AuthenticatedAdminPollRoute: typeof AuthenticatedAdminPollRoute
   AuthenticatedAdminRelateRoute: typeof AuthenticatedAdminRelateRoute
@@ -2135,6 +2156,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminEventsRoute: AuthenticatedAdminEventsRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminGuestsRoute: AuthenticatedAdminGuestsRoute,
+  AuthenticatedAdminJokenetRoute: AuthenticatedAdminJokenetRoute,
   AuthenticatedAdminOverviewRoute: AuthenticatedAdminOverviewRoute,
   AuthenticatedAdminPollRoute: AuthenticatedAdminPollRoute,
   AuthenticatedAdminRelateRoute: AuthenticatedAdminRelateRoute,
