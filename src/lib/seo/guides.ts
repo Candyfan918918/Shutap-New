@@ -463,7 +463,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "You write it, not a prompt",
-        body: "You write your lines the way you would tell a friend. Phone numbers and emails are taken out; names and places stay as you wrote them, and are removed from anything you post to a room. If what you write reads as heavy, Shutap does not turn it into a joke. It stops and points to real help instead.",
+        body: "You write your lines the way you would tell a friend. Everything stays as you wrote it, and names, places and contact details are removed from anything you post to a room. If what you write reads as heavy, Shutap does not turn it into a joke. It stops and points to real help instead.",
       },
       {
         heading: "Step one: find what is actually funny",

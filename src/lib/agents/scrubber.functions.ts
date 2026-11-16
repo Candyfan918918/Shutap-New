@@ -63,27 +63,18 @@ export function hasContactDetails(text: string): boolean {
   return regexScrub(String(text ?? '')).replacements.length > 0
 }
 
-/** Nov 16 2026 (Candy): in a person's own work (bits, toasts, realtor kits)
- *  names, places and the rest stay exactly as typed. Only email addresses
- *  and phone numbers come out. No model pass. Public posts (Rooms) still go
+/** Nov 16 2026 (Candy): a person's own work (bits, toasts, realtor kits)
+ *  keeps everything exactly as typed: names, places, addresses, phone
+ *  numbers, emails. Nothing is removed. Public posts (Rooms) still go
  *  through runScrub. Same shape as runScrub, so callers swap one for the
  *  other. */
 export function keepAsTyped(raw: string): ScrubResult {
-  const t = String(raw ?? '').slice(0, 8000)
-  const replacements: ScrubReplacement[] = []
-  let text = t
-  for (const p of [
-    { re: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, type: 'email' as const, token: '[email]' },
-    { re: /(\+?\d[\d\s().-]{7,}\d)/g, type: 'phone' as const, token: '[phone]' },
-  ]) {
-    const m = text.match(p.re)
-    if (m && m.length) { replacements.push({ detected_type: p.type, replacement_token: p.token, count: m.length }); text = text.replace(p.re, p.token) }
-  }
-  return { clean_text: text, replacements, notice: '' }
+  return { clean_text: String(raw ?? '').slice(0, 8000), replacements: [], notice: '' }
 }
-/** an email address or phone number in own work (what keepAsTyped removes) */
-export function hasEmailOrPhone(text: string): boolean {
-  return keepAsTyped(text).replacements.length > 0
+/** Own work removes nothing, so nothing ever needs removing (kept so the
+ *  callers read the same). */
+export function hasEmailOrPhone(_text: string): boolean {
+  return false
 }
 
 const ScrubInput = z.object({ raw: z.string().min(1).max(8000) })

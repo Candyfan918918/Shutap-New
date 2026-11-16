@@ -88,11 +88,9 @@ export function keepPlaceholders(input: string, output: string): string {
 
 /** The Scrubber on every free-text field before a model or a table sees it.
  *  Names the browser already swapped ride through as {friend}/{partner}/{me};
- *  any other name, place or contact detail becomes a role label. Must-say
- *  phrases are the speaker's exact words (a team chant, a toast line): only
- *  contact details are taken out of those. */
+ *  everything else stays as typed (Nov 16 2026, Candy): names, places,
+ *  numbers and emails included. */
 export async function scrubForm(form: ToastForm): Promise<ToastForm> {
-  const { hasContactDetails } = await import('@/lib/agents/scrubber.functions')
   const [relation, what, true_thing, ...stories] = await Promise.all([scrubOne(form.relation), scrubOne(form.what ?? ''), scrubOne(form.true_thing), ...form.stories.map(scrubOne)])
   return {
     ...form,
@@ -100,7 +98,7 @@ export async function scrubForm(form: ToastForm): Promise<ToastForm> {
     what: what || undefined,
     true_thing,
     stories,
-    must_say: form.must_say.filter((m) => !hasContactDetails(m)),
+    must_say: form.must_say,
   }
 }
 

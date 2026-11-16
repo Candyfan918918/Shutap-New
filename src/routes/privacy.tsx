@@ -36,8 +36,8 @@ function PrivacyPage() {
       <h3>1. The short version</h3>
       <p>
         What you write for your own bits, toasts and realtor kits is saved as you typed it,
-        names and places included, so your work comes back the way you wrote it; phone numbers
-        and email addresses are taken out before saving. <b>Your bits stay private unless you
+        names, places, addresses, phone numbers and emails included, so your work comes back
+        the way you wrote it. <b>Your bits stay private unless you
         post them.</b> When you post to a room, our scrubber uses automated checks and an AI model
         to remove names, addresses, places, phone numbers and emails from what is posted. It can
         miss things, so leave out details you don&rsquo;t want public. Your profile and posts show the name and picture
@@ -57,8 +57,7 @@ function PrivacyPage() {
           many times you have signed in.
         </li>
         <li>
-          <b>What you write:</b> phone numbers and email addresses are taken out of your story;
-          the rest, names and places included, is saved as you typed it, with your bits and any rewrites you ask for. The short video is drawn from the bit on your own device; we don&rsquo;t
+          <b>What you write:</b> your story is saved as you typed it, with your bits and any rewrites you ask for. The short video is drawn from the bit on your own device; we don&rsquo;t
           keep a copy of the file.
         </li>
         <li>
@@ -142,7 +141,7 @@ function PrivacyPage() {
         Your text is sent, through the Lovable AI Gateway, to AI models from Google (Gemini) and
         OpenAI to run the crisis check, write and rank your bits, write rewrites, build the Mirror
         and, when you post to a room, remove identifying details from what is posted. Your story
-        reaches these models as you typed it, with phone numbers and emails taken out.{' '}
+        reaches these models as you typed it.{' '}
         <b>We do not use your content to train AI models.</b> We send it to these providers only to
         produce your result, and their handling of what we send is governed by their own terms.
       </p>

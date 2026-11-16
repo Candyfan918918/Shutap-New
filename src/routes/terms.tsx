@@ -42,8 +42,7 @@ function TermsPage() {
         Shutap, from the Shutap Humor Amplifier Lab, helps you say it funnier, for any occasion, in
         any format. You bring the material: what happened (Shutap Bits, with a short video and the
         stand-up, sketch and skit formats), a real-estate listing (Shutap for Realtors) or your
-        stories about a person (Shutap Toasts). Your own work is stored as you wrote it (phone numbers and emails
-        taken out); identifying details are removed from anything you post publicly. On Bits you write the bit and AI suggests only where you tap &ldquo;funnier&rdquo;;
+        stories about a person (Shutap Toasts). Your own work is stored as you wrote it; identifying details are removed from anything you post publicly. On Bits you write the bit and AI suggests only where you tap &ldquo;funnier&rdquo;;
         realtor kits and toasts are drafted from your material. You can download, share or post
         what you make. Shutap amplifies your humor; it never replaces
         it. Shutap is for entertainment only.

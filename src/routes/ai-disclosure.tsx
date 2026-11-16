@@ -122,8 +122,7 @@ function AiDisclosurePage() {
         offers three other ways to say it, built from your lines and one
         technique from the Shutap Humor Amplifier Lab bank (the operation, never anyone&rsquo;s
         material); nothing changes until you pick. Your words reach the model as you typed them,
-        names included, with phone numbers and email addresses taken out, and the crisis check
-        runs first. Rewrites on Basic and Pro
+        and the crisis check runs first. Rewrites on Basic and Pro
         (hotter, tighter, storytelling) and the Mirror are AI-written when you ask for them. The
         sketch and the skit are laid out by a model from your lines, in script and shot form, and
         it is told to add no new jokes; the 5-second video is not AI-generated: a fixed template draws it from your finished bit on your own device.

@@ -969,7 +969,7 @@ export const splitStory = createServerFn({ method: 'POST' })
       // Nov 16 2026: the lines come back now; the AI copilot drafts the empty
       // ones in a second call (draftEmptyLines), so the person sees their own
       // words in a few seconds instead of waiting on every draft.
-      return { ok: true, lines, source, clean, notice: scrubbed.replacements?.length ? 'phone numbers and emails taken out; everything else is as you typed it' : '' }
+      return { ok: true, lines, source, clean, notice: '' }
     } catch (e) {
       console.error('[bits] split failed', e instanceof Error ? e.message : e)
       return { ok: false, reason: 'failed' }
