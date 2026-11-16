@@ -22,7 +22,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { supabase } from '@/integrations/supabase/client'
-import { claimGuestBits, getBit, listMyBits, splitStory, writeBit, type WriteBitResult } from '@/lib/bits.functions'
+import { claimGuestBits, draftEmptyLines, getBit, listMyBits, splitStory, writeBit, type WriteBitResult } from '@/lib/bits.functions'
 import { splitBySentence, storyChecks } from '@/lib/bits/split'
 import { DriveBox } from './DriveBox'
 import {
@@ -61,7 +61,7 @@ import { PerformIt } from './PerformIt'
 import { EMPTY_LINES, LinedBox, linesText, writtenSlots } from './LinedBox'
 import { getFlags } from '@/lib/flags.functions'
 import { NO_FLAGS, type Flags } from '@/lib/flags'
-import { readSlot, type Slot } from '@/lib/bits/shared'
+import { readSlot, writeSlot, type Slot } from '@/lib/bits/shared'
 import { downloadUsage, type DownloadUsage } from '@/lib/bits.functions'
 import { FuelMeter, storyFuel, useTypingPrompt } from './storyBox'
 import './bit.css'
@@ -314,6 +314,11 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const [boxStep, setBoxStep] = useState<'story' | 'lines'>('story')
   const [splitting, setSplitting] = useState(false)
   const split = useServerFn(splitStory)
+  const draftEmpty = useServerFn(draftEmptyLines)
+  /** lines the AI copilot is drafting right now (Nov 16 2026) */
+  const [draftingSlots, setDraftingSlots] = useState<Slot[]>([])
+  const linesNow = useRef(lines)
+  linesNow.current = lines
   const [phase, setPhase] = useState<Phase>('write')
   const [tier, setTier] = useState<BitTier>('guest')
   const [usage, setUsage] = useState<BitUsage | null>(null)
@@ -760,16 +765,45 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
       const d: Draft = { hook: r.lines.hook, setup: r.lines.setup, tags: [r.lines.tags[0], r.lines.tags[1]], button: r.lines.button }
       setBoxLines(d)
       setBoxLocked([])
-      setAiLines(Object.fromEntries((r.drafted ?? []).map((sl) => [sl, readSlot(d, sl)])))
+      setAiLines({})
       setBoxStep('lines')
-      jokeTrack('story_split_done', tier, { source: r.source, filled: writtenSlots(d).length, drafted: (r.drafted ?? []).length })
+      jokeTrack('story_split_done', tier, { source: r.source, filled: writtenSlots(d).length })
       if (r.notice) say(r.notice)
       requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+      void draftTheRest(r.clean, d)
     } catch {
       jokeTrack('story_split_failed', tier, { reason: 'threw' })
       cutHere(text)
     } finally {
       setSplitting(false)
+    }
+  }
+  /** Nov 16 2026: the cut shows at once; then the AI copilot drafts the lines
+   *  the story didn't cover. A line the person typed into meanwhile is kept. */
+  async function draftTheRest(clean: string, d: Draft) {
+    const empty = (['hook', 'setup', 'tag0', 'tag1', 'button'] as Slot[]).filter((sl) => !readSlot(d, sl).trim())
+    if (!empty.length || empty.length === 5 || !clean) return
+    setDraftingSlots(empty)
+    const t0 = performance.now()
+    try {
+      const r = await draftEmpty({ data: { clean, draft: d, slots: empty, controls, anon_session_id: anonSessionId() } })
+      if (!r.ok) {
+        if (r.reason === 'crisis') { setPhase('crisis'); jokeTrack('crisis_route_shown', tier); return }
+        jokeTrack('lines_draft_failed', tier, { reason: r.reason })
+        return
+      }
+      let next = linesNow.current
+      const ai: Partial<Record<Slot, string>> = {}
+      for (const sl of empty) {
+        const line = r.drafted[sl]
+        if (line && !readSlot(next, sl).trim()) { next = writeSlot(next, sl, line); ai[sl] = line }
+      }
+      if (Object.keys(ai).length) { setBoxLines(next); setAiLines((prev) => ({ ...prev, ...ai })) }
+      jokeTrack('lines_drafted', tier, { asked: empty.length, drafted: Object.keys(ai).length, ms: Math.round(performance.now() - t0) })
+    } catch {
+      jokeTrack('lines_draft_failed', tier, { reason: 'threw' })
+    } finally {
+      setDraftingSlots([])
     }
   }
   /** Nov 14 2026: the cut didn't come back. Every story still becomes a bit:
@@ -1184,6 +1218,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                     lines={lines}
                     onLines={setBoxLines}
                     aiLines={aiLines}
+                  drafting={draftingSlots}
                     locked={linesLocked}
                     onLocked={setBoxLocked}
                     busy={phaseRef.current === 'writing'}
@@ -1228,7 +1263,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   {lined && boxStep === 'story' && (
                     <div className="bt-box-go">
                       <button className="bt-btn bt-go" disabled={!story.trim() || splitting} aria-busy={splitting} onClick={() => void splitIntoLines()}>
-                        {splitting ? 'cutting it into a bit · drafting any line it didn’t cover…' : 'Make it a bit →'}
+                        {splitting ? 'cutting it into a bit…' : 'Make it a bit →'}
                       </button>
                     </div>
                   )}

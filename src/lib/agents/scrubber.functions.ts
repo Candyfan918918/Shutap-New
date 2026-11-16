@@ -21,8 +21,13 @@ export type ScrubResult = {
 
 const SCRUBBER_PROMPT = `You are THE SCRUBBER. Find every piece of real personal information in this text and
 replace it so the story stays vivid but no real person or place is identifiable. Replace:
-real human names (including the writer's own) → a relationship/role label if clear
-([my mom], [my boss], [her]) else [a friend]; street addresses → remove; specific
+real human names (including the writer's own) → a relationship/role label taken from
+the story ([my mom], [my boss], [the cashier], [her]), [a friend] only when the story
+gives no role. One person gets ONE label, used every time they come up; never turn one
+person into two labels. When the name itself is part of the story (it's odd, it's two
+names in one, it rhymes, it matches something, it's on a name tag), replace it with a
+label that keeps what matters about it without the name itself: "his name tag said
+[two first names mashed into one]", "named [a name that's also a verb]". Street addresses → remove; specific
 locations → generalize ([my hometown], region only); phones/emails → remove.
 When unsure whether something is identifying, REDACT it. Preserve tone, feeling, and
 readability — never flatten the emotion.
@@ -77,6 +82,8 @@ export async function runScrub(raw: string): Promise<ScrubResult> {
     system: SCRUBBER_PROMPT,
     messages: [{ role: 'user', content: first.text }],
     maxTokens: 800,
+    // a reasoning model thinking at length here held every story ~6 s (Nov 16)
+    reasoningEffort: 'minimal',
   }, 6_000)
 
   const parsed = tryParseJson<ScrubResult>(llm.text)

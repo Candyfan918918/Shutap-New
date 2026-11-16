@@ -89,9 +89,11 @@ type Props = {
   onPicked?: (slot: Slot, typed: string, picked: string, move: string) => void
   /** lines the AI copilot prefilled after the story was cut, as drafted */
   aiLines?: Partial<Record<Slot, string>>
+  /** lines the AI copilot is drafting right now */
+  drafting?: Slot[]
 }
 
-export function LinedBox({ tier, controls, lines, onLines, aiLines, locked, onLocked, busy, onMake, box = 'top', onSignIn, onGuestLock, onLimit, onCrisis, say, onPicked }: Props) {
+export function LinedBox({ tier, controls, lines, onLines, aiLines, drafting = [], locked, onLocked, busy, onMake, box = 'top', onSignIn, onGuestLock, onLimit, onCrisis, say, onPicked }: Props) {
   const touch = useServerFn(touchLine)
   const [open, setOpen] = useState<Slot | null>(null)
   const [options, setOptions] = useState<TouchOption[] | null>(null)
@@ -211,7 +213,8 @@ export function LinedBox({ tier, controls, lines, onLines, aiLines, locked, onLo
         const state = isLocked ? 'locked' : has || focusSlot === s ? 'typing' : 'empty'
         const optional = OPTIONAL_SLOTS.includes(s)
         const ai = has && !isLocked && !!aiLines?.[s] && aiLines[s] === value
-        const status = isLocked ? 'locked · word for word' : ai ? 'AI draft · change it or keep it' : has ? 'written · not locked' : 'empty · AI drafts it'
+        const busyAi = !has && drafting.includes(s)
+        const status = isLocked ? 'locked · word for word' : ai ? 'AI draft · change it or keep it' : has ? 'written · not locked' : busyAi ? 'AI copilot drafting…' : 'empty · AI drafts it'
         return (
           <div key={s} className={`bt-tline${open === s ? ' open' : ''}`}>
             <div className="bt-tline-head">
@@ -225,7 +228,7 @@ export function LinedBox({ tier, controls, lines, onLines, aiLines, locked, onLo
                 contentEditable={!isLocked && !busy}
                 suppressContentEditableWarning
                 spellCheck={false}
-                data-placeholder={`type the ${label} here…`}
+                data-placeholder={busyAi ? 'AI copilot drafting this line… or type your own' : `type the ${label} here…`}
                 onFocus={() => setFocusSlot(s)}
                 onBlur={(e) => { setFocusSlot((f) => (f === s ? null : f)); onType(s, e.currentTarget) }}
                 onKeyDown={keyDown}

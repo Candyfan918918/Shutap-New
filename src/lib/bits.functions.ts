@@ -922,7 +922,7 @@ export const getSketch = createServerFn({ method: 'POST' })
 /* ───────────────────────── the story box: cut what they typed into a bit ───────────────────────── */
 
 export type SplitResult =
-  | { ok: true; lines: SplitLines; source: 'model' | 'sentences'; notice: string; drafted: Slot[] }
+  | { ok: true; lines: SplitLines; source: 'model' | 'sentences'; notice: string; clean: string }
   | { ok: false; reason: 'crisis' | 'rate_limited' | 'failed' | 'no_session' }
 
 const SPLIT_PROMPT = `You cut a person's story into the five parts of a stand-up bit. You never write, add, change or reorder words. Every part you return must be copied exactly, character for character, from the story: one continuous run of its words.
@@ -956,7 +956,7 @@ export const splitStory = createServerFn({ method: 'POST' })
       if (!clean) return { ok: false, reason: 'failed' }
       const [crisis, proposed] = await Promise.all([
         runClassifyCrisis(clean),
-        callAgentBounded({ system: SPLIT_PROMPT, messages: [{ role: 'user', content: clean }], maxTokens: 900, jsonMode: true, model: process.env.BIT_SPLIT_MODEL || undefined, temperature: 0 }, 8_000)
+        callAgentBounded({ system: SPLIT_PROMPT, messages: [{ role: 'user', content: clean }], maxTokens: 900, jsonMode: true, model: process.env.BIT_SPLIT_MODEL || undefined, temperature: 0, reasoningEffort: 'minimal' }, 5_000)
           .then((r) => (r.error ? null : tryParseJson<Record<string, unknown>>(r.text)))
           .catch(() => null),
       ])
@@ -965,35 +965,50 @@ export const splitStory = createServerFn({ method: 'POST' })
         return { ok: false, reason: 'crisis' }
       }
       const { lines, source } = checkedSplit(proposed, clean)
-      // Nov 13 2026 (Candy): a line the story didn't cover is prefilled by the
-      // AI copilot, around the person's own lines (which stay word for word).
-      // Each empty line is drafted at once; one that doesn't come back in time
-      // stays empty, and Make drafts it then.
-      const asDraft = { hook: lines.hook, setup: lines.setup, tags: [lines.tags[0], lines.tags[1]], button: lines.button }
-      const empty = (['hook', 'setup', 'tag0', 'tag1', 'button'] as Slot[]).filter((sl) => !readSlot(asDraft, sl).trim())
-      const drafted: Slot[] = []
-      if (empty.length && empty.length < 5) {
-        const controls = { ...DEFAULT_CONTROLS, ...(data.controls ?? {}) } as BitControls
-        const got = await Promise.all(
-          empty.map((sl) =>
+      // Nov 16 2026: the lines come back now; the AI copilot drafts the empty
+      // ones in a second call (draftEmptyLines), so the person sees their own
+      // words in a few seconds instead of waiting on every draft.
+      return { ok: true, lines, source, clean, notice: scrubbed.replacements?.length ? 'names and details swapped for who they are before anything left your browser' : '' }
+    } catch (e) {
+      console.error('[bits] split failed', e instanceof Error ? e.message : e)
+      return { ok: false, reason: 'failed' }
+    }
+  })
+
+/** Nov 13 2026 (Candy): every line the story didn't cover is prefilled by the
+ *  AI copilot, around the person's own lines (which stay word for word).
+ *  Nov 16: its own call, right after the cut, so the cut shows at once. Each
+ *  empty line is drafted in parallel; one that doesn't come back in time
+ *  stays empty, and Make drafts it then. The story is the cut's clean text
+ *  (already scrubbed); the Guard reads it again here. Nothing is stored. */
+export type DraftLinesResult = { ok: true; drafted: Partial<Record<Slot, string>> } | { ok: false; reason: 'crisis' | 'rate_limited' | 'failed' | 'no_session' }
+export const draftEmptyLines = createServerFn({ method: 'POST' })
+  .inputValidator((d: unknown) => z.object({ clean: z.string().min(3).transform((s) => s.slice(0, 4000)), draft: DraftIn, slots: z.array(z.enum(SLOTS)).min(1).max(5), controls: ControlsSchema, ...Ctx }).parse(d))
+  .handler(async ({ data }): Promise<DraftLinesResult> => {
+    const supabaseAdmin = await adminDb()
+    const id = await resolveJokeIdentity(data.anon_session_id ?? null)
+    if (!id.userId && !anonKey(id)) return { ok: false, reason: 'no_session' }
+    if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), today().day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
+    const controls = { ...DEFAULT_CONTROLS, ...(data.controls ?? {}) } as BitControls
+    const slots = [...new Set(data.slots)].filter((sl) => !readSlot(data.draft, sl).trim())
+    try {
+      const [crisis, got] = await Promise.all([
+        runClassifyCrisis(data.clean),
+        Promise.all(
+          slots.map((sl) =>
             Promise.race([
-              touchLineDraft(clean, asDraft, sl, controls).catch(() => null),
+              touchLineDraft(data.clean, data.draft, sl, controls).catch(() => null),
               new Promise<null>((r) => setTimeout(() => r(null), 20_000)),
             ]).then((o) => [sl, o?.[0]?.line?.trim() ?? ''] as const),
           ),
-        )
-        for (const [sl, line] of got) {
-          if (!line) continue
-          if (sl === 'hook') lines.hook = line
-          else if (sl === 'setup') lines.setup = line
-          else if (sl === 'button') lines.button = line
-          else lines.tags[sl === 'tag0' ? 0 : 1] = line
-          drafted.push(sl)
-        }
-      }
-      return { ok: true, lines, source, drafted, notice: scrubbed.replacements?.length ? 'names and details swapped for who they are before anything left your browser' : '' }
+        ),
+      ])
+      if (crisis.crisis) return { ok: false, reason: 'crisis' }
+      const drafted: Partial<Record<Slot, string>> = {}
+      for (const [sl, line] of got) if (line) drafted[sl] = line
+      return { ok: true, drafted }
     } catch (e) {
-      console.error('[bits] split failed', e instanceof Error ? e.message : e)
+      console.error('[bits] draft lines failed', e instanceof Error ? e.message : e)
       return { ok: false, reason: 'failed' }
     }
   })
