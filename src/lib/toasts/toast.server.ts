@@ -41,10 +41,12 @@ const PROTECT: [string, string][] = [['{friend}', '[friend]'], ['{partner}', '[p
 export async function scrubOne(text: string): Promise<string> {
   const t = text.trim()
   if (!t) return ''
-  const { runScrub } = await import('@/lib/agents/scrubber.functions')
+  // Nov 16 2026 (Candy): the speaker's own words stay as typed, names and
+  // places included; only emails and phone numbers come out.
+  const { keepAsTyped } = await import('@/lib/agents/scrubber.functions')
   let protectedText = t
   for (const [ph, token] of PROTECT) protectedText = protectedText.split(ph).join(token)
-  const r = await runScrub(protectedText)
+  const r = keepAsTyped(protectedText)
   let out = keepPlaceholders(protectedText, (r.clean_text || '').trim() || protectedText)
   for (const [ph, token] of PROTECT) out = out.split(token).join(ph)
   return out

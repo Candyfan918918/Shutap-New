@@ -288,7 +288,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "How it works",
-        body: "Tell the story the way you would tell a friend; Shutap cuts it into a hook, setup, two tags and a button, in your words. Stuck on one? Write a rough version and tap funnier: you get three other ways to say that line, built from your other lines, with yours first. Lock the lines that are done. Names and places are removed before anything is saved.",
+        body: "Tell the story the way you would tell a friend; Shutap cuts it into a hook, setup, two tags and a button, in your words. Stuck on one? Write a rough version and tap funnier: you get three other ways to say that line, built from your other lines, with yours first. Lock the lines that are done. Your words stay as you typed them, and names come out of anything you post.",
       },
       {
         heading: "Film it",
@@ -463,7 +463,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "You write it, not a prompt",
-        body: "You write your lines the way you would tell a friend. Before anything is saved or sent to a model, names, places and contact details are replaced with role labels. If what you write reads as heavy, Shutap does not turn it into a joke. It stops and points to real help instead.",
+        body: "You write your lines the way you would tell a friend. Phone numbers and emails are taken out; names and places stay as you wrote them, and are removed from anything you post to a room. If what you write reads as heavy, Shutap does not turn it into a joke. It stops and points to real help instead.",
       },
       {
         heading: "Step one: find what is actually funny",

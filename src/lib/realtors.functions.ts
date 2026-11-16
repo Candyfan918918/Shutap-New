@@ -243,8 +243,8 @@ export const writeRealtorKit = createServerFn({ method: 'POST' })
       listing = { ...(data.listing as Listing), open_houses: data.listing!.open_houses ?? [], hoa: data.listing!.hoa ?? null, taxes: data.listing!.taxes ?? null, lot_sqft: data.listing!.lot_sqft ?? null, mls: data.listing!.mls ?? null, status: data.listing!.status ?? null }
     }
     // the agent's note is their text: names out before a model or the table sees it
-    const { hasContactDetails, runScrub } = await import('./agents/scrubber.functions')
-    if (listing.note && hasContactDetails(listing.note)) listing.note = (await runScrub(listing.note)).clean_text
+    const { hasEmailOrPhone: hasContactDetails, keepAsTyped } = await import('./agents/scrubber.functions')
+    if (listing.note && hasContactDetails(listing.note)) listing.note = keepAsTyped(listing.note).clean_text
     if (!listingId) {
       const { data: row, error } = await admin.from('listings').insert({
         user_id: userId, source: listing.source, url: listing.url, address: listing.address, city: listing.city, price: listing.price, beds: listing.beds, baths: listing.baths,
@@ -281,10 +281,10 @@ export const keepKitEdit = createServerFn({ method: 'POST' })
     if (!kit) return { ok: false, reason: 'not_found' }
     if (kit.versions.length >= 40) return { ok: false, reason: 'too_many' }
     const content = sanitizeKit(data.content, kit.versions[kit.versions.length - 1]!.content)
-    const { hasContactDetails, runScrub } = await import('./agents/scrubber.functions')
+    const { hasEmailOrPhone: hasContactDetails, keepAsTyped } = await import('./agents/scrubber.functions')
     for (const { where, line } of (await import('./realtors/kit.server')).kitLines(content)) {
       if (hasContactDetails(line)) {
-        const clean = (await runScrub(line)).clean_text
+        const clean = keepAsTyped(line).clean_text
         replaceLine(content, where, line, clean)
       }
     }
@@ -415,8 +415,8 @@ export const touchKitLine = createServerFn({ method: 'POST' })
     try { used = await chargeBit(admin, subject, day, limit.cap ?? TOUCH_FAIR_USE, chargeId) } catch { return { ok: false, reason: 'failed' } }
     if (used === -1) return limit.cap === null ? { ok: false, reason: 'rate_limited' } : { ok: false, reason: 'limited', used: limit.cap, cap: limit.cap, tier }
     const { touchKitLine: touch } = await import('./realtors/kit.server')
-    const { hasContactDetails, runScrub } = await import('./agents/scrubber.functions')
-    const line = data.line && hasContactDetails(data.line) ? (await runScrub(data.line)).clean_text : data.line
+    const { hasEmailOrPhone: hasContactDetails, keepAsTyped } = await import('./agents/scrubber.functions')
+    const line = data.line && hasContactDetails(data.line) ? keepAsTyped(data.line).clean_text : data.line
     const options = await touch(kit.listing, kit.controls, data.where, data.context, line, data.avoid ?? [])
     if (!options) { await refundBit(admin, subject, day, chargeId); return { ok: false, reason: 'failed' } }
     await admin.from('events').insert({ user_id: userId, session_id: null, name: 'kit_line_touched', properties: { product: 'realtors', where: data.where, tier } as never } as never).then(() => {}, () => {})

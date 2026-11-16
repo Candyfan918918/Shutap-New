@@ -57,7 +57,7 @@ const SECTIONS = [
   },
   {
     heading: "The one rule",
-    body: "A bit goes at the situation, never at a real person someone could identify. A toast can tease the person you're toasting, and their name never leaves your browser. Names, places and contact details are removed before anything is saved, and anyone can report a post.",
+    body: "A bit goes at the situation, never at a real person someone could identify. A toast can tease the person you're toasting, and their name never leaves your browser. Your own work keeps the names you typed; names, places and contact details are removed from anything you post to a room, and anyone can report a post.",
   },
   {
     heading: "What's coming next",

@@ -36,7 +36,7 @@ const guide: Guide = {
     },
     {
       heading: "Where the jokes come from",
-      body: "Comedy writers worry, fairly, about AI tools built on other people's material. Shutap's technique bank holds mechanisms, the shape of a move, with original example lines written by the Lab. It doesn't hold comedians' jokes, transcripts or film lines. The Lab's dataset of situations and jokes is written, selected and rated in-house. Your stories and bits are yours: they're never read by staff, never added to the Lab's dataset, never published for search and never used to train models. Names, places and contact details are scrubbed out before anything is stored.",
+      body: "Comedy writers worry, fairly, about AI tools built on other people's material. Shutap's technique bank holds mechanisms, the shape of a move, with original example lines written by the Lab. It doesn't hold comedians' jokes, transcripts or film lines. The Lab's dataset of situations and jokes is written, selected and rated in-house. Your stories and bits are yours: they're never read by staff, never added to the Lab's dataset, never published for search and never used to train models. Names, places and contact details are scrubbed out of anything you post publicly.",
     },
     {
       heading: "When ChatGPT is the better pick",

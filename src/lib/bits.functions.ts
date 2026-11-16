@@ -16,7 +16,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { z } from 'zod'
-import { hasContactDetails, runScrub } from './agents/scrubber.functions'
+import { hasContactDetails, hasEmailOrPhone, keepAsTyped, runScrub } from './agents/scrubber.functions'
 import { runClassifyCrisis } from './agents/guard.functions'
 import { requestAnonId, resolveJokeIdentity, type JokeIdentity } from './jokes/session.server'
 import { activePlan } from './plan.server'
@@ -293,7 +293,7 @@ function cleanLines(l: GivenLines): GivenLines | undefined {
 }
 /** If the Scrubber changed the story, the lines need the same treatment. */
 async function scrubGivenAsync(g: GivenLines): Promise<GivenLines> {
-  const one = async (v?: string) => (v && hasContactDetails(v) ? (await runScrub(v)).clean_text : v)
+  const one = async (v?: string) => (v && hasEmailOrPhone(v) ? keepAsTyped(v).clean_text : v)
   return { hook: await one(g.hook), setup: await one(g.setup), tags: g.tags ? await Promise.all(g.tags.map((t) => one(t).then((x) => x ?? ''))) : undefined, button: await one(g.button) }
 }
 function scrubGiven(g: GivenLines, raw: string, clean: string): GivenLines | Promise<GivenLines> {
@@ -384,8 +384,9 @@ async function writeCore(
   // From here on, any way out without a bit gives the budget back.
   let kept = false
   try {
-    // 2 · scrub: the raw text goes no further than this line
-    const scrubbed = await runScrub(story)
+    // 2 · Nov 16 2026 (Candy): the person's own words stay as typed, names
+    // and places included; only emails and phone numbers come out
+    const scrubbed = keepAsTyped(story)
     const clean = scrubbed.clean_text.trim()
     if (!clean) return { status: 'failed', tier, usage: lab ? usage : await refundedUsage() }
     const tScrub = Date.now()
@@ -951,7 +952,7 @@ export const splitStory = createServerFn({ method: 'POST' })
     const { day } = today()
     if ((await chargeNetwork(supabaseAdmin, guestOrAccount(id), day, 1)) === 'limited') return { ok: false, reason: 'rate_limited' }
     try {
-      const scrubbed = await runScrub(data.story)
+      const scrubbed = keepAsTyped(data.story)
       const clean = scrubbed.clean_text.trim()
       if (!clean) return { ok: false, reason: 'failed' }
       const [crisis, proposed] = await Promise.all([
@@ -968,7 +969,7 @@ export const splitStory = createServerFn({ method: 'POST' })
       // Nov 16 2026: the lines come back now; the AI copilot drafts the empty
       // ones in a second call (draftEmptyLines), so the person sees their own
       // words in a few seconds instead of waiting on every draft.
-      return { ok: true, lines, source, clean, notice: scrubbed.replacements?.length ? 'names and details swapped for who they are before anything left your browser' : '' }
+      return { ok: true, lines, source, clean, notice: scrubbed.replacements?.length ? 'phone numbers and emails taken out; everything else is as you typed it' : '' }
     } catch (e) {
       console.error('[bits] split failed', e instanceof Error ? e.message : e)
       return { ok: false, reason: 'failed' }
@@ -1076,7 +1077,7 @@ export const touchLine = createServerFn({ method: 'POST' })
     const clean = { ...data.draft, why: '' }
     for (const sl of SLOTS) {
       const v = readSlot(clean, sl)
-      if (v && hasContactDetails(v)) Object.assign(clean, writeSlot(clean, sl, (await runScrub(v)).clean_text))
+      if (v && hasEmailOrPhone(v)) Object.assign(clean, writeSlot(clean, sl, keepAsTyped(v).clean_text))
     }
     // In the lined box the lines are the story; the Guard reads them like one.
     let story = row?.story_clean ?? ''
@@ -1116,7 +1117,7 @@ export const keepVersion = createServerFn({ method: 'POST' })
     if (!draft.hook || !draft.setup || !draft.button || !draft.tags.length) return { ok: false, reason: 'failed' }
     for (const sl of SLOTS) {
       const v = readSlot(draft, sl)
-      if (v && hasContactDetails(v)) draft = writeSlot(draft, sl, (await runScrub(v)).clean_text)
+      if (v && hasEmailOrPhone(v)) draft = writeSlot(draft, sl, keepAsTyped(v).clean_text)
     }
     const controls = { ...DEFAULT_CONTROLS, ...(row.controls ?? {}) } as BitControls
     const saved = await insertVersion(supabaseAdmin, row.id, 'edited', draft, controls.heat)
@@ -1356,23 +1357,32 @@ export const postBitToRoom = createServerFn({ method: 'POST' })
       body = [v.setup, ...v.tags, v.button].join('\n\n')
     }
 
-    // The lines were written from a story the Scrubber already cleaned, and
-    // the writer is told never to use names, so the model pass is not run
-    // again here: it redacts "when unsure" and flagged role words ("my
-    // husband") as names, refusing clean bits. The deterministic pass still
-    // runs, and the Guard.
-    if (hasContactDetails(`${v.hook}\n\n${body}`)) return { ok: false, reason: 'names' }
-    const guard = await runClassifyCrisis(`${v.hook}\n\n${body}`)
+    // Nov 16 2026: a person's own bit keeps names and places as typed; a
+    // post to a Room is public, so the Scrubber cleans what is posted (the
+    // bit itself is left as it is).
+    const pub = async (t: string) => (t ? (await runScrub(t)).clean_text || t : t)
+    if (data.kind === 'skit') {
+      const beats = await Promise.all(((postData.beats as SkitBeat[]) ?? []).map(async (b) => ({ ...b, line: await pub(b.line) })))
+      postData = { ...postData, hook: await pub(String(v.hook)), beats }
+      body = beats.map((b, i) => `${i + 1}. ${b.shot} · ${b.speaker}: ${b.line}`).join('\n')
+    } else {
+      const [hook, setup, button, ...tags] = await Promise.all([v.hook, v.setup, v.button, ...(v.tags ?? [])].map((x) => pub(String(x ?? ''))))
+      postData = { ...postData, hook, setup, tags, button }
+      body = [setup, ...tags, button].join('\n\n')
+    }
+    const postHook = String(postData.hook ?? v.hook)
+    if (hasContactDetails(`${postHook}\n\n${body}`)) return { ok: false, reason: 'names' }
+    const guard = await runClassifyCrisis(`${postHook}\n\n${body}`)
     if (guard.crisis) return { ok: false, reason: 'crisis' }
 
     const { data: alias } = await supabaseAdmin.from('aliases').select('display_name, emoji').eq('user_id', id.userId).maybeSingle()
-    const title = String(v.hook).slice(0, 600)
+    const title = postHook.slice(0, 600)
     const { data: situation, error: sitErr } = await supabaseAdmin
       .from('situations')
       .insert({
         alias_id: id.userId,
         pillar: 'family',
-        clean_text: row.story_clean,
+        clean_text: await pub(String(row.story_clean ?? '')),
         kind: 'joke',
         title,
         body,

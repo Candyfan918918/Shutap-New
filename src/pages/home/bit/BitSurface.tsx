@@ -139,7 +139,7 @@ type Notice = { text: string; swaps: string[] }
  *  about 50s in the worst case (scrub + writer race); a normal bit is 10-20s. */
 const WRITE_TIME_LIMIT_MS = 60_000
 
-const STEPS = ['reading it · names removed', 'finding the angle', 'writing four, ranking them', 'timing it at talking pace', 'drawing the video']
+const STEPS = ['reading it', 'finding the angle', 'writing four, ranking them', 'timing it at talking pace', 'drawing the video']
 
 /* ── the note left before sign-in, so the bit comes back after it ── */
 /** What a guest was doing when they were asked to sign in; picked back up
@@ -808,7 +808,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   }
   /** Nov 14 2026: the cut didn't come back. Every story still becomes a bit:
    *  cut it here by sentence (their words only) and go on to the lines; the
-   *  lines left empty are drafted at Make, where names are removed and the
+   *  lines left empty are drafted at Make, where the
    *  crisis check runs as always. */
   function cutHere(text: string) {
     const c = splitBySentence(text)
@@ -1300,7 +1300,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             )}
             {!(drive && lined && boxStep === 'story') && <p className="bt-note" style={{ textAlign: 'center' }}>
               {tier === 'guest' ? (lined ? 'free · no sign-in to start · ' : `free: ${FREE_LINE} · sign in with Google or Apple · `) : tier !== 'pro' && left !== null ? `${WORDS[left] ?? left} left${tier === 'free' ? '' : ' today'} · ` : ''}
-              names removed before anything is saved · nobody at shutap reads it{lined ? ' · your lines stay word for word' : ' · ⌘↵ to write it'}
+              your words as typed · nobody at shutap reads it{lined ? ' · your lines stay word for word' : ' · ⌘↵ to write it'}
             </p>}
           </>
         )}
