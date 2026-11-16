@@ -1,7 +1,7 @@
 {
  "source": "Bing Webmaster GetRelatedKeywords (US, last ~30 days)",
- "pulledAt": "2026-11-15T20:26:04.337Z",
- "seeds": 53,
+ "pulledAt": "2026-11-16T23:46:21.847Z",
+ "seeds": 56,
  "ideas": [
   {
    "query": "zillow",
@@ -362,6 +362,12 @@
    "impressions": 5523,
    "broadImpressions": 5782,
    "seed": "tiktok watch time"
+  },
+  {
+   "query": "ifixit",
+   "impressions": 5235,
+   "broadImpressions": 6139,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "www.tiktok.com login",
@@ -1294,6 +1300,12 @@
    "seed": "real estate video script"
   },
   {
+   "query": "how to fix a leaky faucet",
+   "impressions": 1267,
+   "broadImpressions": 1267,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "funny work memes",
    "impressions": 1266,
    "broadImpressions": 1556,
@@ -1918,6 +1930,12 @@
    "seed": "chatgpt for real estate listings"
   },
   {
+   "query": "how to fix",
+   "impressions": 807,
+   "broadImpressions": 27283,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "comedy events near me tickets this weekend",
    "impressions": 805,
    "broadImpressions": 805,
@@ -2530,6 +2548,12 @@
    "seed": "open house script"
   },
   {
+   "query": "fixit",
+   "impressions": 606,
+   "broadImpressions": 1133,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "comedy events near me tickets free",
    "impressions": 599,
    "broadImpressions": 599,
@@ -2662,15 +2686,15 @@
    "seed": "ai tools for real estate agents"
   },
   {
-   "query": "roast pork",
-   "impressions": 573,
-   "broadImpressions": 5087,
-   "seed": "roast jokes"
-  },
-  {
    "query": "pot roast recipe crock pot",
    "impressions": 573,
    "broadImpressions": 573,
+   "seed": "roast jokes"
+  },
+  {
+   "query": "roast pork",
+   "impressions": 573,
+   "broadImpressions": 5087,
    "seed": "roast jokes"
   },
   {
@@ -2692,13 +2716,13 @@
    "seed": "real estate video script"
   },
   {
-   "query": "best eye drops for dry eyes",
+   "query": "baked ziti recipe never dry",
    "impressions": 569,
    "broadImpressions": 569,
    "seed": "dry humor"
   },
   {
-   "query": "baked ziti recipe never dry",
+   "query": "best eye drops for dry eyes",
    "impressions": 569,
    "broadImpressions": 569,
    "seed": "dry humor"
@@ -3334,6 +3358,12 @@
    "seed": "dry humor"
   },
   {
+   "query": "ifixit website",
+   "impressions": 446,
+   "broadImpressions": 446,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "rump roast recipe",
    "impressions": 445,
    "broadImpressions": 1202,
@@ -3406,10 +3436,22 @@
    "seed": "roast jokes"
   },
   {
+   "query": "fix it",
+   "impressions": 432,
+   "broadImpressions": 9664,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "how to make a bow with ribbon",
    "impressions": 431,
    "broadImpressions": 431,
    "seed": "how to make a joke funnier"
+  },
+  {
+   "query": "how to fix a running toilet",
+   "impressions": 431,
+   "broadImpressions": 431,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "tiktok video",
@@ -3700,15 +3742,15 @@
    "seed": "best man speech jokes"
   },
   {
-   "query": "how to make a youtube video",
-   "impressions": 388,
-   "broadImpressions": 388,
-   "seed": "how to make a joke funnier"
-  },
-  {
    "query": "how to make a pdf",
    "impressions": 388,
    "broadImpressions": 4529,
+   "seed": "how to make a joke funnier"
+  },
+  {
+   "query": "how to make a youtube video",
+   "impressions": 388,
+   "broadImpressions": 388,
    "seed": "how to make a joke funnier"
   },
   {
@@ -3922,15 +3964,15 @@
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "dry mouth remedies",
-   "impressions": 356,
-   "broadImpressions": 356,
-   "seed": "dry humor"
-  },
-  {
    "query": "dry erase boards",
    "impressions": 356,
    "broadImpressions": 419,
+   "seed": "dry humor"
+  },
+  {
+   "query": "dry mouth remedies",
+   "impressions": 356,
+   "broadImpressions": 356,
    "seed": "dry humor"
   },
   {
@@ -4204,13 +4246,13 @@
    "seed": "comedy writing"
   },
   {
-   "query": "don't tell comedy",
+   "query": "michael blaustein comedy",
    "impressions": 317,
    "broadImpressions": 317,
    "seed": "comedy writing"
   },
   {
-   "query": "michael blaustein comedy",
+   "query": "don't tell comedy",
    "impressions": 317,
    "broadImpressions": 317,
    "seed": "comedy writing"
@@ -4276,6 +4318,12 @@
    "seed": "how to make a joke funnier"
   },
   {
+   "query": "how to fix this",
+   "impressions": 310,
+   "broadImpressions": 655,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "how to write a good paragraph",
    "impressions": 309,
    "broadImpressions": 309,
@@ -4288,13 +4336,13 @@
    "seed": "listing video"
   },
   {
-   "query": "how to make a zine",
+   "query": "how to make a paper star",
    "impressions": 309,
    "broadImpressions": 309,
    "seed": "how to make a joke funnier"
   },
   {
-   "query": "how to make a paper star",
+   "query": "how to make a zine",
    "impressions": 309,
    "broadImpressions": 309,
    "seed": "how to make a joke funnier"
@@ -4378,15 +4426,21 @@
    "seed": "dry humor"
   },
   {
-   "query": "how to make a killing 2026",
-   "impressions": 294,
-   "broadImpressions": 294,
-   "seed": "how to make a joke funnier"
+   "query": "how to fix a squeaky door",
+   "impressions": 295,
+   "broadImpressions": 295,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to make a piston",
    "impressions": 294,
    "broadImpressions": 672,
+   "seed": "how to make a joke funnier"
+  },
+  {
+   "query": "how to make a killing 2026",
+   "impressions": 294,
+   "broadImpressions": 294,
    "seed": "how to make a joke funnier"
   },
   {
@@ -4414,15 +4468,15 @@
    "seed": "funny wedding vows"
   },
   {
-   "query": "how to write a good summary",
-   "impressions": 291,
-   "broadImpressions": 291,
-   "seed": "how to write a joke"
-  },
-  {
    "query": "how to write a hypothesis",
    "impressions": 291,
    "broadImpressions": 580,
+   "seed": "how to write a joke"
+  },
+  {
+   "query": "how to write a good summary",
+   "impressions": 291,
+   "broadImpressions": 291,
    "seed": "how to write a joke"
   },
   {
@@ -4490,6 +4544,12 @@
    "impressions": 283,
    "broadImpressions": 296,
    "seed": "how to make a joke funnier"
+  },
+  {
+   "query": "how do i fix this",
+   "impressions": 283,
+   "broadImpressions": 372,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "tik tok viewer",
@@ -4568,6 +4628,12 @@
    "impressions": 276,
    "broadImpressions": 374,
    "seed": "dry humor"
+  },
+  {
+   "query": "how to fix a slow laptop",
+   "impressions": 276,
+   "broadImpressions": 276,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "real estate listings near me",
@@ -4864,15 +4930,15 @@
    "seed": "how to make a joke funnier"
   },
   {
-   "query": "the comedy store",
-   "impressions": 242,
-   "broadImpressions": 294,
-   "seed": "comedy writing"
-  },
-  {
    "query": "comedy zone charlotte nc",
    "impressions": 242,
    "broadImpressions": 261,
+   "seed": "comedy writing"
+  },
+  {
+   "query": "the comedy store",
+   "impressions": 242,
+   "broadImpressions": 294,
    "seed": "comedy writing"
   },
   {
@@ -4942,13 +5008,13 @@
    "seed": "listing video"
   },
   {
-   "query": "how to write a thesis statement examples",
+   "query": "how to write a case study report",
    "impressions": 238,
    "broadImpressions": 238,
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a case study report",
+   "query": "how to write a thesis statement examples",
    "impressions": 238,
    "broadImpressions": 238,
    "seed": "how to write a joke"
@@ -4982,6 +5048,12 @@
    "impressions": 236,
    "broadImpressions": 848,
    "seed": "how to write a joke"
+  },
+  {
+   "query": "how to fix a zipper",
+   "impressions": 236,
+   "broadImpressions": 454,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to write a formal complaint letter",
@@ -5152,6 +5224,12 @@
    "seed": "roast jokes"
   },
   {
+   "query": "ifixit.com",
+   "impressions": 224,
+   "broadImpressions": 313,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "comedy tickets",
    "impressions": 223,
    "broadImpressions": 781,
@@ -5266,15 +5344,15 @@
    "seed": "joke structure"
   },
   {
-   "query": "scott county jail inmate listing",
-   "impressions": 216,
-   "broadImpressions": 351,
-   "seed": "listing video"
-  },
-  {
    "query": "www.estatesales.net listing",
    "impressions": 216,
    "broadImpressions": 216,
+   "seed": "listing video"
+  },
+  {
+   "query": "scott county jail inmate listing",
+   "impressions": 216,
+   "broadImpressions": 351,
    "seed": "listing video"
   },
   {
@@ -5290,6 +5368,12 @@
    "seed": "ai tools for real estate agents"
   },
   {
+   "query": "how to start investing",
+   "impressions": 214,
+   "broadImpressions": 445,
+   "seed": "how to start stand up comedy"
+  },
+  {
    "query": "how to start dropshipping",
    "impressions": 214,
    "broadImpressions": 269,
@@ -5302,16 +5386,16 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start investing",
-   "impressions": 214,
-   "broadImpressions": 445,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "century 21 real estate listings",
    "impressions": 214,
    "broadImpressions": 251,
    "seed": "chatgpt for real estate listings"
+  },
+  {
+   "query": "how to make a squishy dumpling",
+   "impressions": 213,
+   "broadImpressions": 213,
+   "seed": "how to make a joke funnier"
   },
   {
    "query": "how to make a budget",
@@ -5320,10 +5404,10 @@
    "seed": "how to make a joke funnier"
   },
   {
-   "query": "how to make a squishy dumpling",
+   "query": "i fix it",
    "impressions": 213,
-   "broadImpressions": 213,
-   "seed": "how to make a joke funnier"
+   "broadImpressions": 1942,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to write a paragraph",
@@ -5398,15 +5482,15 @@
    "seed": "funny work stories"
   },
   {
-   "query": "comedy near me",
-   "impressions": 208,
-   "broadImpressions": 1556,
-   "seed": "stand up comedy tips"
-  },
-  {
    "query": "local comedy shows near me",
    "impressions": 208,
    "broadImpressions": 208,
+   "seed": "stand up comedy tips"
+  },
+  {
+   "query": "comedy near me",
+   "impressions": 208,
+   "broadImpressions": 1556,
    "seed": "stand up comedy tips"
   },
   {
@@ -5462,6 +5546,12 @@
    "impressions": 206,
    "broadImpressions": 234,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "ifix",
+   "impressions": 206,
+   "broadImpressions": 405,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be single",
@@ -5590,15 +5680,15 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "how to start trading",
-   "impressions": 195,
-   "broadImpressions": 295,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "starting a business",
    "impressions": 195,
    "broadImpressions": 287,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start trading",
+   "impressions": 195,
+   "broadImpressions": 295,
    "seed": "how to start stand up comedy"
   },
   {
@@ -5896,6 +5986,12 @@
    "seed": "joke structure"
   },
   {
+   "query": "roberts rule of order",
+   "impressions": 175,
+   "broadImpressions": 175,
+   "seed": "rule of three comedy"
+  },
+  {
    "query": "rule of 8",
    "impressions": 175,
    "broadImpressions": 494,
@@ -5903,12 +5999,6 @@
   },
   {
    "query": "rule of 8s",
-   "impressions": 175,
-   "broadImpressions": 175,
-   "seed": "rule of three comedy"
-  },
-  {
-   "query": "roberts rule of order",
    "impressions": 175,
    "broadImpressions": 175,
    "seed": "rule of three comedy"
@@ -6082,15 +6172,15 @@
    "seed": "how to write a joke"
   },
   {
-   "query": "how to write a good lab report introduction",
-   "impressions": 167,
-   "broadImpressions": 167,
-   "seed": "how to write a joke"
-  },
-  {
    "query": "how to write a signature",
    "impressions": 167,
    "broadImpressions": 210,
+   "seed": "how to write a joke"
+  },
+  {
+   "query": "how to write a good lab report introduction",
+   "impressions": 167,
+   "broadImpressions": 167,
    "seed": "how to write a joke"
   },
   {
@@ -6124,13 +6214,13 @@
    "seed": "how to write a joke"
   },
   {
-   "query": "bing business listing",
+   "query": "job listing sites",
    "impressions": 165,
    "broadImpressions": 165,
    "seed": "listing video"
   },
   {
-   "query": "job listing sites",
+   "query": "bing business listing",
    "impressions": 165,
    "broadImpressions": 165,
    "seed": "listing video"
@@ -6236,6 +6326,12 @@
    "impressions": 159,
    "broadImpressions": 159,
    "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "how to fix a broken zipper",
+   "impressions": 159,
+   "broadImpressions": 159,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "simple roast turkey",
@@ -6376,13 +6472,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "rule of 8 therapy units",
+   "query": "florida rule of civil procedure 1.280",
    "impressions": 150,
    "broadImpressions": 150,
    "seed": "rule of three comedy"
   },
   {
-   "query": "florida rule of civil procedure 1.280",
+   "query": "rule of 8 therapy units",
    "impressions": 150,
    "broadImpressions": 150,
    "seed": "rule of three comedy"
@@ -6398,6 +6494,12 @@
    "impressions": 150,
    "broadImpressions": 326,
    "seed": "best man speech jokes"
+  },
+  {
+   "query": "ifix it",
+   "impressions": 150,
+   "broadImpressions": 150,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "deadpan meaning",
@@ -6448,13 +6550,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "joke of the day for adults",
+   "query": "college humor",
    "impressions": 147,
    "broadImpressions": 147,
    "seed": "deadpan humor"
   },
   {
-   "query": "college humor",
+   "query": "joke of the day for adults",
    "impressions": 147,
    "broadImpressions": 147,
    "seed": "deadpan humor"
@@ -6502,15 +6604,15 @@
    "seed": "humorous speech ideas"
   },
   {
-   "query": "funn",
-   "impressions": 145,
-   "broadImpressions": 145,
-   "seed": "funny video ideas"
-  },
-  {
    "query": "fails videos",
    "impressions": 145,
    "broadImpressions": 253,
+   "seed": "funny video ideas"
+  },
+  {
+   "query": "funn",
+   "impressions": 145,
+   "broadImpressions": 145,
    "seed": "funny video ideas"
   },
   {
@@ -6688,6 +6790,12 @@
    "seed": "how to start stand up comedy"
   },
   {
+   "query": "federal rule of civil procedure 15",
+   "impressions": 140,
+   "broadImpressions": 140,
+   "seed": "rule of three comedy"
+  },
+  {
    "query": "rule of three",
    "impressions": 140,
    "broadImpressions": 250,
@@ -6695,12 +6803,6 @@
   },
   {
    "query": "federal rule of civil procedure 4",
-   "impressions": 140,
-   "broadImpressions": 140,
-   "seed": "rule of three comedy"
-  },
-  {
-   "query": "federal rule of civil procedure 15",
    "impressions": 140,
    "broadImpressions": 140,
    "seed": "rule of three comedy"
@@ -6718,13 +6820,13 @@
    "seed": "comedy writing"
   },
   {
-   "query": "how to tell what motherboard i have",
+   "query": "how to tell if something is written by ai",
    "impressions": 138,
    "broadImpressions": 138,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if something is written by ai",
+   "query": "how to tell what motherboard i have",
    "impressions": 138,
    "broadImpressions": 138,
    "seed": "how to tell a story"
@@ -6826,6 +6928,12 @@
    "seed": "best man speech jokes"
   },
   {
+   "query": "how to fix a zipper that came off track",
+   "impressions": 134,
+   "broadImpressions": 134,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "how to start a paragraph",
    "impressions": 133,
    "broadImpressions": 147,
@@ -6844,13 +6952,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to start an etsy shop",
+   "query": "how to start recording on pc",
    "impressions": 132,
    "broadImpressions": 132,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start recording on pc",
+   "query": "how to start an etsy shop",
    "impressions": 132,
    "broadImpressions": 132,
    "seed": "how to start stand up comedy"
@@ -7000,13 +7108,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "federal rule of civil procedure 41",
+   "query": "federal rule of civil procedure 33",
    "impressions": 127,
    "broadImpressions": 127,
    "seed": "rule of three comedy"
   },
   {
-   "query": "federal rule of civil procedure 33",
+   "query": "federal rule of civil procedure 41",
    "impressions": 127,
    "broadImpressions": 127,
    "seed": "rule of three comedy"
@@ -7054,15 +7162,15 @@
    "seed": "best man speech jokes"
   },
   {
-   "query": "topics for persuasive speech",
-   "impressions": 125,
-   "broadImpressions": 144,
-   "seed": "humorous speech ideas"
-  },
-  {
    "query": "speech topics",
    "impressions": 125,
    "broadImpressions": 6633,
+   "seed": "humorous speech ideas"
+  },
+  {
+   "query": "topics for persuasive speech",
+   "impressions": 125,
+   "broadImpressions": 144,
    "seed": "humorous speech ideas"
   },
   {
@@ -7072,6 +7180,12 @@
    "seed": "deadpan humor"
   },
   {
+   "query": "rule of thirds examples",
+   "impressions": 124,
+   "broadImpressions": 124,
+   "seed": "rule of three comedy"
+  },
+  {
    "query": "rule of thirds in photography",
    "impressions": 124,
    "broadImpressions": 258,
@@ -7079,12 +7193,6 @@
   },
   {
    "query": "federal rule of evidence 702",
-   "impressions": 124,
-   "broadImpressions": 124,
-   "seed": "rule of three comedy"
-  },
-  {
-   "query": "rule of thirds examples",
    "impressions": 124,
    "broadImpressions": 124,
    "seed": "rule of three comedy"
@@ -7138,13 +7246,13 @@
    "seed": "listing video"
   },
   {
-   "query": "what does humorous mean",
+   "query": "types of humor",
    "impressions": 122,
    "broadImpressions": 122,
    "seed": "deadpan humor"
   },
   {
-   "query": "types of humor",
+   "query": "what does humorous mean",
    "impressions": 122,
    "broadImpressions": 122,
    "seed": "deadpan humor"
@@ -7204,15 +7312,15 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to start podcasting",
-   "impressions": 120,
-   "broadImpressions": 120,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start a conclusion",
    "impressions": 120,
    "broadImpressions": 427,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start podcasting",
+   "impressions": 120,
+   "broadImpressions": 120,
    "seed": "how to start stand up comedy"
   },
   {
@@ -7366,6 +7474,12 @@
    "seed": "ai tools for real estate agents"
   },
   {
+   "query": "how to fix a leaky kitchen faucet",
+   "impressions": 115,
+   "broadImpressions": 115,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "something funny",
    "impressions": 114,
    "broadImpressions": 117,
@@ -7378,13 +7492,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "descartes' rule of signs example",
+   "query": "federal rule of civil procedure 34",
    "impressions": 114,
    "broadImpressions": 114,
    "seed": "rule of three comedy"
   },
   {
-   "query": "federal rule of civil procedure 34",
+   "query": "descartes' rule of signs example",
    "impressions": 114,
    "broadImpressions": 114,
    "seed": "rule of three comedy"
@@ -7478,6 +7592,12 @@
    "impressions": 110,
    "broadImpressions": 110,
    "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "how to fix a hiatal hernia yourself",
+   "impressions": 110,
+   "broadImpressions": 110,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "story time for kids",
@@ -7576,13 +7696,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "funny work anniversary meme",
+   "query": "monday gif funny work",
    "impressions": 107,
    "broadImpressions": 107,
    "seed": "funny work stories"
   },
   {
-   "query": "monday gif funny work",
+   "query": "funny work anniversary meme",
    "impressions": 107,
    "broadImpressions": 107,
    "seed": "funny work stories"
@@ -7594,13 +7714,13 @@
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "humor synonym",
+   "query": "funny jokes of the day",
    "impressions": 106,
    "broadImpressions": 106,
    "seed": "deadpan humor"
   },
   {
-   "query": "funny jokes of the day",
+   "query": "humor synonym",
    "impressions": 106,
    "broadImpressions": 106,
    "seed": "deadpan humor"
@@ -7630,15 +7750,15 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to write a essay",
-   "impressions": 105,
-   "broadImpressions": 213,
-   "seed": "how to write a joke"
-  },
-  {
    "query": "how to write a ratio as a fraction",
    "impressions": 105,
    "broadImpressions": 105,
+   "seed": "how to write a joke"
+  },
+  {
+   "query": "how to write a essay",
+   "impressions": 105,
+   "broadImpressions": 213,
    "seed": "how to write a joke"
   },
   {
@@ -7888,6 +8008,12 @@
    "seed": "chatgpt for real estate listings"
   },
   {
+   "query": "how to fix a leaking faucet",
+   "impressions": 96,
+   "broadImpressions": 96,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "crazy videos",
    "impressions": 95,
    "broadImpressions": 95,
@@ -7904,6 +8030,12 @@
    "impressions": 95,
    "broadImpressions": 95,
    "seed": "rule of three comedy"
+  },
+  {
+   "query": "how to fix a pinched nerve",
+   "impressions": 95,
+   "broadImpressions": 95,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be notified when someone opens a snapchat message",
@@ -7946,6 +8078,12 @@
    "impressions": 94,
    "broadImpressions": 94,
    "seed": "listing video"
+  },
+  {
+   "query": "how to fix a toilet that keeps running",
+   "impressions": 94,
+   "broadImpressions": 94,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be single movie",
@@ -7996,13 +8134,13 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "christmas card sentiments",
+   "query": "christmas greetings messages",
    "impressions": 92,
    "broadImpressions": 92,
    "seed": "funny christmas card messages"
   },
   {
-   "query": "christmas greetings messages",
+   "query": "christmas card sentiments",
    "impressions": 92,
    "broadImpressions": 92,
    "seed": "funny christmas card messages"
@@ -8104,15 +8242,15 @@
    "seed": "funny work stories"
   },
   {
-   "query": "new video",
-   "impressions": 88,
-   "broadImpressions": 10640,
-   "seed": "tiktok watch time"
-  },
-  {
    "query": "tiktok watch online free",
    "impressions": 88,
    "broadImpressions": 92,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "new video",
+   "impressions": 88,
+   "broadImpressions": 10640,
    "seed": "tiktok watch time"
   },
   {
@@ -8176,6 +8314,12 @@
    "seed": "how to start stand up comedy"
   },
   {
+   "query": "how to fix it",
+   "impressions": 85,
+   "broadImpressions": 128,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "how to be a good friend",
    "impressions": 84,
    "broadImpressions": 84,
@@ -8218,21 +8362,33 @@
    "seed": "open house script"
   },
   {
+   "query": "how to fix a zipper that separates",
+   "impressions": 84,
+   "broadImpressions": 84,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to fix a hemorrhoid at home",
+   "impressions": 84,
+   "broadImpressions": 84,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "terrible jokes",
    "impressions": 83,
    "broadImpressions": 83,
    "seed": "deadpan humor"
   },
   {
-   "query": "i started a joke",
-   "impressions": 83,
-   "broadImpressions": 258,
-   "seed": "joke structure"
-  },
-  {
    "query": "joke for kids",
    "impressions": 83,
    "broadImpressions": 289,
+   "seed": "joke structure"
+  },
+  {
+   "query": "i started a joke",
+   "impressions": 83,
+   "broadImpressions": 258,
    "seed": "joke structure"
   },
   {
@@ -8344,13 +8500,13 @@
    "seed": "listing video"
   },
   {
-   "query": "how to be more confident",
+   "query": "how to be a latin lover",
    "impressions": 79,
    "broadImpressions": 79,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a latin lover",
+   "query": "how to be more confident",
    "impressions": 79,
    "broadImpressions": 79,
    "seed": "how to be funny"
@@ -8402,6 +8558,12 @@
    "impressions": 78,
    "broadImpressions": 78,
    "seed": "humorous speech ideas"
+  },
+  {
+   "query": "fix.com",
+   "impressions": 78,
+   "broadImpressions": 163,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "punch line",
@@ -8464,15 +8626,15 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "tiktok search bar",
-   "impressions": 75,
-   "broadImpressions": 75,
-   "seed": "funny tiktok ideas"
-  },
-  {
    "query": "tik tok online",
    "impressions": 75,
    "broadImpressions": 79,
+   "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "tiktok search bar",
+   "impressions": 75,
+   "broadImpressions": 75,
    "seed": "funny tiktok ideas"
   },
   {
@@ -8530,13 +8692,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to start a petition",
+   "query": "how to start a poem",
    "impressions": 74,
    "broadImpressions": 74,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start a poem",
+   "query": "how to start a petition",
    "impressions": 74,
    "broadImpressions": 74,
    "seed": "how to start stand up comedy"
@@ -8554,15 +8716,15 @@
    "seed": "listing video"
   },
   {
-   "query": "zillow open houses this weekend",
-   "impressions": 74,
-   "broadImpressions": 74,
-   "seed": "open house script"
-  },
-  {
    "query": "open houses this weekend",
    "impressions": 74,
    "broadImpressions": 472,
+   "seed": "open house script"
+  },
+  {
+   "query": "zillow open houses this weekend",
+   "impressions": 74,
+   "broadImpressions": 74,
    "seed": "open house script"
   },
   {
@@ -8572,13 +8734,13 @@
    "seed": "ai tools for real estate agents"
   },
   {
-   "query": "homes real estate listings",
+   "query": "bellingham wa zillow",
    "impressions": 74,
    "broadImpressions": 74,
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "bellingham wa zillow",
+   "query": "homes real estate listings",
    "impressions": 74,
    "broadImpressions": 74,
    "seed": "chatgpt for real estate listings"
@@ -8590,13 +8752,13 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "ms joke mha",
+   "query": "tell me a funny joke",
    "impressions": 73,
    "broadImpressions": 73,
    "seed": "joke structure"
   },
   {
-   "query": "tell me a funny joke",
+   "query": "ms joke mha",
    "impressions": 73,
    "broadImpressions": 73,
    "seed": "joke structure"
@@ -8614,13 +8776,13 @@
    "seed": "ai tools for real estate agents"
   },
   {
-   "query": "how to tell if someone blocked your number",
+   "query": "how to tell if you have lice",
    "impressions": 72,
    "broadImpressions": 72,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if you have lice",
+   "query": "how to tell if someone blocked your number",
    "impressions": 72,
    "broadImpressions": 72,
    "seed": "how to tell a story"
@@ -8686,13 +8848,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell your crush you like them",
+   "query": "how to tell if you have a torn rotator cuff",
    "impressions": 71,
    "broadImpressions": 71,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if you have a torn rotator cuff",
+   "query": "how to tell your crush you like them",
    "impressions": 71,
    "broadImpressions": 71,
    "seed": "how to tell a story"
@@ -8720,6 +8882,12 @@
    "impressions": 71,
    "broadImpressions": 71,
    "seed": "how to get more views on tiktok"
+  },
+  {
+   "query": "how to repair",
+   "impressions": 71,
+   "broadImpressions": 2616,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "funny person",
@@ -8782,15 +8950,15 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "read aloud stories for kids",
-   "impressions": 68,
-   "broadImpressions": 68,
-   "seed": "storytime ideas"
-  },
-  {
    "query": "story time youtube",
    "impressions": 68,
    "broadImpressions": 132,
+   "seed": "storytime ideas"
+  },
+  {
+   "query": "read aloud stories for kids",
+   "impressions": 68,
+   "broadImpressions": 68,
    "seed": "storytime ideas"
   },
   {
@@ -8932,13 +9100,19 @@
    "seed": "how to make a story funnier"
   },
   {
-   "query": "storytime online youtube",
+   "query": "how to fix a stiff neck quickly",
+   "impressions": 66,
+   "broadImpressions": 66,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "woohoo storytime",
    "impressions": 65,
    "broadImpressions": 65,
    "seed": "storytime ideas"
   },
   {
-   "query": "woohoo storytime",
+   "query": "storytime online youtube",
    "impressions": 65,
    "broadImpressions": 65,
    "seed": "storytime ideas"
@@ -8962,10 +9136,22 @@
    "seed": "chatgpt for real estate listings"
   },
   {
+   "query": "i fixit",
+   "impressions": 65,
+   "broadImpressions": 65,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "christmas card greetings",
    "impressions": 64,
    "broadImpressions": 92,
    "seed": "funny christmas card messages"
+  },
+  {
+   "query": "how to fix a dripping faucet",
+   "impressions": 64,
+   "broadImpressions": 64,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "self-deprecating definition",
@@ -9046,13 +9232,13 @@
    "seed": "dry humor"
   },
   {
-   "query": "humour or humor",
+   "query": "r/political humor",
    "impressions": 61,
    "broadImpressions": 61,
    "seed": "deadpan humor"
   },
   {
-   "query": "r/political humor",
+   "query": "humour or humor",
    "impressions": 61,
    "broadImpressions": 61,
    "seed": "deadpan humor"
@@ -9100,18 +9286,6 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "rule of 70 formula",
-   "impressions": 59,
-   "broadImpressions": 59,
-   "seed": "rule of three comedy"
-  },
-  {
-   "query": "rule of thirds grid",
-   "impressions": 59,
-   "broadImpressions": 59,
-   "seed": "rule of three comedy"
-  },
-  {
    "query": "rule of four",
    "impressions": 59,
    "broadImpressions": 82,
@@ -9119,6 +9293,18 @@
   },
   {
    "query": "addition rule of probability",
+   "impressions": 59,
+   "broadImpressions": 59,
+   "seed": "rule of three comedy"
+  },
+  {
+   "query": "rule of 70 formula",
+   "impressions": 59,
+   "broadImpressions": 59,
+   "seed": "rule of three comedy"
+  },
+  {
+   "query": "rule of thirds grid",
    "impressions": 59,
    "broadImpressions": 59,
    "seed": "rule of three comedy"
@@ -9134,6 +9320,12 @@
    "impressions": 59,
    "broadImpressions": 60,
    "seed": "chatgpt for real estate listings"
+  },
+  {
+   "query": "how to fix a sore throat",
+   "impressions": 59,
+   "broadImpressions": 59,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "kids story time",
@@ -9158,6 +9350,12 @@
    "impressions": 58,
    "broadImpressions": 58,
    "seed": "listing video"
+  },
+  {
+   "query": "term for how to fix a testicular torsion",
+   "impressions": 58,
+   "broadImpressions": 58,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be chill",
@@ -9262,13 +9460,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "comedians youtube",
+   "query": "buy comedy tickets near me",
    "impressions": 53,
    "broadImpressions": 53,
    "seed": "stand up comedy tips"
   },
   {
-   "query": "buy comedy tickets near me",
+   "query": "comedians youtube",
    "impressions": 53,
    "broadImpressions": 53,
    "seed": "stand up comedy tips"
@@ -9292,6 +9490,12 @@
    "seed": "listing video"
   },
   {
+   "query": "how to fix a clogged toilet",
+   "impressions": 53,
+   "broadImpressions": 53,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "define tell",
    "impressions": 52,
    "broadImpressions": 52,
@@ -9308,6 +9512,12 @@
    "impressions": 52,
    "broadImpressions": 52,
    "seed": "funny christmas card messages"
+  },
+  {
+   "query": "how to fix a leaking toilet",
+   "impressions": 52,
+   "broadImpressions": 52,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be a man",
@@ -9394,15 +9604,15 @@
    "seed": "dry humor"
   },
   {
-   "query": "how to start streaming",
-   "impressions": 50,
-   "broadImpressions": 452,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start journaling",
    "impressions": 50,
    "broadImpressions": 61,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start streaming",
+   "impressions": 50,
+   "broadImpressions": 452,
    "seed": "how to start stand up comedy"
   },
   {
@@ -9430,21 +9640,33 @@
    "seed": "chatgpt for real estate listings"
   },
   {
+   "query": "how to fix a rubik's cube",
+   "impressions": 50,
+   "broadImpressions": 50,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to fix a squeaky door hinge",
+   "impressions": 50,
+   "broadImpressions": 50,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "bad dad joke",
    "impressions": 49,
    "broadImpressions": 70,
    "seed": "joke structure"
   },
   {
-   "query": "multiplication rule of probability",
-   "impressions": 49,
-   "broadImpressions": 49,
-   "seed": "rule of three comedy"
-  },
-  {
    "query": "rule of 7",
    "impressions": 49,
    "broadImpressions": 132,
+   "seed": "rule of three comedy"
+  },
+  {
+   "query": "multiplication rule of probability",
+   "impressions": 49,
+   "broadImpressions": 49,
    "seed": "rule of three comedy"
   },
   {
@@ -9496,13 +9718,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "humor me meaning",
+   "query": "what is humor",
    "impressions": 48,
    "broadImpressions": 48,
    "seed": "deadpan humor"
   },
   {
-   "query": "what is humor",
+   "query": "humor me meaning",
    "impressions": 48,
    "broadImpressions": 48,
    "seed": "deadpan humor"
@@ -9538,13 +9760,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to be a player",
+   "query": "how to be kind",
    "impressions": 46,
    "broadImpressions": 46,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be kind",
+   "query": "how to be a player",
    "impressions": 46,
    "broadImpressions": 46,
    "seed": "how to be funny"
@@ -9580,10 +9802,10 @@
    "seed": "ai tools for real estate agents"
   },
   {
-   "query": "be better",
-   "impressions": 45,
-   "broadImpressions": 359,
-   "seed": "how to be funny"
+   "query": "how to fix a fatty liver",
+   "impressions": 46,
+   "broadImpressions": 46,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be productive",
@@ -9604,6 +9826,12 @@
    "seed": "how to be funny"
   },
   {
+   "query": "be better",
+   "impressions": 45,
+   "broadImpressions": 359,
+   "seed": "how to be funny"
+  },
+  {
    "query": "funny videos youtube",
    "impressions": 45,
    "broadImpressions": 81,
@@ -9616,7 +9844,7 @@
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "how to be more ambitious a tutorial for humans with models",
+   "query": "how to be a good person",
    "impressions": 44,
    "broadImpressions": 44,
    "seed": "how to be funny"
@@ -9628,7 +9856,7 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a good person",
+   "query": "how to be more ambitious a tutorial for humans with models",
    "impressions": 44,
    "broadImpressions": 44,
    "seed": "how to be funny"
@@ -9706,15 +9934,15 @@
    "seed": "how to be funny"
   },
   {
-   "query": "comedians stand up",
-   "impressions": 42,
-   "broadImpressions": 163,
-   "seed": "stand up comedy tips"
-  },
-  {
    "query": "popular comedians",
    "impressions": 42,
    "broadImpressions": 42,
+   "seed": "stand up comedy tips"
+  },
+  {
+   "query": "comedians stand up",
+   "impressions": 42,
+   "broadImpressions": 163,
    "seed": "stand up comedy tips"
   },
   {
@@ -9754,13 +9982,13 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "belmont ca real estate listings",
+   "query": "pei real estate listings",
    "impressions": 42,
    "broadImpressions": 42,
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "pei real estate listings",
+   "query": "belmont ca real estate listings",
    "impressions": 42,
    "broadImpressions": 42,
    "seed": "chatgpt for real estate listings"
@@ -9940,13 +10168,13 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "how to get more disk space on pc",
+   "query": "how to get more microsoft rewards points",
    "impressions": 37,
    "broadImpressions": 37,
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to get more microsoft rewards points",
+   "query": "how to get more disk space on pc",
    "impressions": 37,
    "broadImpressions": 37,
    "seed": "how to get more views on tiktok"
@@ -9970,15 +10198,15 @@
    "seed": "how to be funny"
   },
   {
-   "query": "sense of humor meaning",
-   "impressions": 36,
-   "broadImpressions": 65,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "best joke ever",
    "impressions": 36,
    "broadImpressions": 36,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "sense of humor meaning",
+   "impressions": 36,
+   "broadImpressions": 65,
    "seed": "deadpan humor"
   },
   {
@@ -10024,6 +10252,12 @@
    "seed": "chatgpt for real estate listings"
   },
   {
+   "query": "how to fix a cracked phone screen",
+   "impressions": 35,
+   "broadImpressions": 35,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "how to be better",
    "impressions": 34,
    "broadImpressions": 35,
@@ -10048,13 +10282,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "black humor",
+   "query": "the removal of the vitreous humor and its replacement with a saline solution",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "deadpan humor"
   },
   {
-   "query": "the removal of the vitreous humor and its replacement with a saline solution",
+   "query": "black humor",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "deadpan humor"
@@ -10088,6 +10322,18 @@
    "impressions": 34,
    "broadImpressions": 107,
    "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "how to fix a slow computer",
+   "impressions": 34,
+   "broadImpressions": 34,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to fix a door that won't latch",
+   "impressions": 34,
+   "broadImpressions": 34,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be smarter",
@@ -10144,13 +10390,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to get more vitamin d",
+   "query": "how to get more fiber in your diet",
    "impressions": 33,
    "broadImpressions": 33,
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to get more fiber in your diet",
+   "query": "how to get more vitamin d",
    "impressions": 33,
    "broadImpressions": 33,
    "seed": "how to get more views on tiktok"
@@ -10162,13 +10408,13 @@
    "seed": "how to make a story funnier"
   },
   {
-   "query": "how to be a billionaire",
+   "query": "how to be famous",
    "impressions": 32,
    "broadImpressions": 32,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be famous",
+   "query": "how to be a billionaire",
    "impressions": 32,
    "broadImpressions": 32,
    "seed": "how to be funny"
@@ -10204,13 +10450,19 @@
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "how to start a band",
+   "query": "how do i fix",
+   "impressions": 32,
+   "broadImpressions": 580,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to start a resume",
    "impressions": 31,
    "broadImpressions": 31,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start a resume",
+   "query": "how to start a band",
    "impressions": 31,
    "broadImpressions": 31,
    "seed": "how to start stand up comedy"
@@ -10300,16 +10552,22 @@
    "seed": "deadpan humor"
   },
   {
+   "query": "property listings",
+   "impressions": 29,
+   "broadImpressions": 900,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "new real estate listings massachusetts",
    "impressions": 29,
    "broadImpressions": 29,
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "property listings",
+   "query": "how to fix a stuck zipper",
    "impressions": 29,
-   "broadImpressions": 900,
-   "seed": "chatgpt for real estate listings"
+   "broadImpressions": 29,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be creative",
@@ -10336,13 +10594,13 @@
    "seed": "dry humor"
   },
   {
-   "query": "ill humor crossword clue",
+   "query": "humor or humour",
    "impressions": 28,
    "broadImpressions": 28,
    "seed": "deadpan humor"
   },
   {
-   "query": "humor or humour",
+   "query": "ill humor crossword clue",
    "impressions": 28,
    "broadImpressions": 28,
    "seed": "deadpan humor"
@@ -10438,13 +10696,19 @@
    "seed": "ai tools for real estate agents"
   },
   {
-   "query": "how to be a good student",
+   "query": "how to fix a row in excel",
+   "impressions": 27,
+   "broadImpressions": 27,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to be smart in school",
    "impressions": 26,
    "broadImpressions": 26,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be smart in school",
+   "query": "how to be a good student",
    "impressions": 26,
    "broadImpressions": 26,
    "seed": "how to be funny"
@@ -10468,15 +10732,15 @@
    "seed": "deadpan humor"
   },
   {
-   "query": "kids joke",
-   "impressions": 25,
-   "broadImpressions": 135,
-   "seed": "joke structure"
-  },
-  {
    "query": "inside joke",
    "impressions": 25,
    "broadImpressions": 28,
+   "seed": "joke structure"
+  },
+  {
+   "query": "kids joke",
+   "impressions": 25,
+   "broadImpressions": 135,
    "seed": "joke structure"
   },
   {
@@ -10492,15 +10756,15 @@
    "seed": "tiktok watch time"
   },
   {
-   "query": "secret santa game",
-   "impressions": 25,
-   "broadImpressions": 32,
-   "seed": "funny secret santa ideas"
-  },
-  {
    "query": "secret santa ideas for coworkers",
    "impressions": 25,
    "broadImpressions": 25,
+   "seed": "funny secret santa ideas"
+  },
+  {
+   "query": "secret santa game",
+   "impressions": 25,
+   "broadImpressions": 32,
    "seed": "funny secret santa ideas"
   },
   {
@@ -10510,13 +10774,13 @@
    "seed": "listing video"
   },
   {
-   "query": "how to be a doctor",
+   "query": "how to be a passport bro",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a passport bro",
+   "query": "how to be a doctor",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "how to be funny"
@@ -10654,13 +10918,13 @@
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "how to be a vtuber",
+   "query": "how to be a teacher",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a teacher",
+   "query": "how to be a vtuber",
    "impressions": 21,
    "broadImpressions": 21,
    "seed": "how to be funny"
@@ -10720,6 +10984,12 @@
    "seed": "ai tools for real estate agents"
   },
   {
+   "query": "how to fix a corrupted file",
+   "impressions": 21,
+   "broadImpressions": 21,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "try not to laugh video",
    "impressions": 20,
    "broadImpressions": 20,
@@ -10768,16 +11038,22 @@
    "seed": "ai tools for real estate agents"
   },
   {
+   "query": "gravenhurst real estate listings",
+   "impressions": 20,
+   "broadImpressions": 20,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
    "query": "st george real estate listings",
    "impressions": 20,
    "broadImpressions": 20,
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "gravenhurst real estate listings",
+   "query": "how to fix a keyboard key",
    "impressions": 20,
    "broadImpressions": 20,
-   "seed": "chatgpt for real estate listings"
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be a cop in rob run",
@@ -10786,9 +11062,9 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be good",
+   "query": "how to be a better listener",
    "impressions": 19,
-   "broadImpressions": 194,
+   "broadImpressions": 19,
    "seed": "how to be funny"
   },
   {
@@ -10798,9 +11074,9 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a better listener",
+   "query": "how to be good",
    "impressions": 19,
-   "broadImpressions": 19,
+   "broadImpressions": 194,
    "seed": "how to be funny"
   },
   {
@@ -10816,27 +11092,27 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "tiktok funny",
-   "impressions": 19,
-   "broadImpressions": 72,
-   "seed": "funny tiktok ideas"
-  },
-  {
    "query": "funny videos on tiktok",
    "impressions": 19,
    "broadImpressions": 19,
    "seed": "funny tiktok ideas"
   },
   {
-   "query": "comedy videos",
+   "query": "tiktok funny",
    "impressions": 19,
-   "broadImpressions": 40,
-   "seed": "funny video ideas"
+   "broadImpressions": 72,
+   "seed": "funny tiktok ideas"
   },
   {
    "query": "funny comedy",
    "impressions": 19,
    "broadImpressions": 85,
+   "seed": "funny video ideas"
+  },
+  {
+   "query": "comedy videos",
+   "impressions": 19,
+   "broadImpressions": 40,
    "seed": "funny video ideas"
   },
   {
@@ -10924,21 +11200,27 @@
    "seed": "chatgpt for real estate listings"
   },
   {
+   "query": "how to fix a flickering laptop screen",
+   "impressions": 19,
+   "broadImpressions": 19,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "how to be normal",
    "impressions": 18,
    "broadImpressions": 18,
    "seed": "how to be funny"
   },
   {
-   "query": "tiktok funny videos",
-   "impressions": 18,
-   "broadImpressions": 42,
-   "seed": "funny tiktok ideas"
-  },
-  {
    "query": "youtube tiktok videos",
    "impressions": 18,
    "broadImpressions": 18,
+   "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "tiktok funny videos",
+   "impressions": 18,
+   "broadImpressions": 42,
    "seed": "funny tiktok ideas"
   },
   {
@@ -10960,10 +11242,16 @@
    "seed": "funny secret santa ideas"
   },
   {
-   "query": "how to be a good boyfriend",
-   "impressions": 17,
-   "broadImpressions": 17,
-   "seed": "how to be funny"
+   "query": "how to fix a pinched nerve in neck",
+   "impressions": 18,
+   "broadImpressions": 18,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to fix a squishy",
+   "impressions": 18,
+   "broadImpressions": 18,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be sexy",
@@ -10978,19 +11266,25 @@
    "seed": "how to be funny"
   },
   {
+   "query": "how to be a good boyfriend",
+   "impressions": 17,
+   "broadImpressions": 17,
+   "seed": "how to be funny"
+  },
+  {
    "query": "youtube shots funny",
    "impressions": 17,
    "broadImpressions": 17,
    "seed": "funny video ideas"
   },
   {
-   "query": "how to tell if you have the flu",
+   "query": "how to tell if a cat is a boy or girl",
    "impressions": 17,
    "broadImpressions": 17,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if a cat is a boy or girl",
+   "query": "how to tell if you have the flu",
    "impressions": 17,
    "broadImpressions": 17,
    "seed": "how to tell a story"
@@ -11020,15 +11314,15 @@
    "seed": "funny secret santa ideas"
   },
   {
-   "query": "secret santa themes",
-   "impressions": 17,
-   "broadImpressions": 23,
-   "seed": "funny secret santa ideas"
-  },
-  {
    "query": "office secret santa ideas",
    "impressions": 17,
    "broadImpressions": 17,
+   "seed": "funny secret santa ideas"
+  },
+  {
+   "query": "secret santa themes",
+   "impressions": 17,
+   "broadImpressions": 23,
    "seed": "funny secret santa ideas"
   },
   {
@@ -11048,6 +11342,12 @@
    "impressions": 17,
    "broadImpressions": 17,
    "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "how to fix a squeaky garage door",
+   "impressions": 17,
+   "broadImpressions": 17,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be yourself",
@@ -11098,6 +11398,12 @@
    "seed": "ai tools for real estate agents"
   },
   {
+   "query": "how to be black",
+   "impressions": 15,
+   "broadImpressions": 15,
+   "seed": "how to be funny"
+  },
+  {
    "query": "how to be assertive",
    "impressions": 15,
    "broadImpressions": 15,
@@ -11119,12 +11425,6 @@
    "query": "how to be more ambitious",
    "impressions": 15,
    "broadImpressions": 59,
-   "seed": "how to be funny"
-  },
-  {
-   "query": "how to be black",
-   "impressions": 15,
-   "broadImpressions": 15,
    "seed": "how to be funny"
   },
   {
@@ -11158,6 +11458,12 @@
    "seed": "ai tools for real estate agents"
   },
   {
+   "query": "how to fix a frozen computer",
+   "impressions": 15,
+   "broadImpressions": 15,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "how to be nice",
    "impressions": 14,
    "broadImpressions": 14,
@@ -11188,15 +11494,21 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "how to be popular",
-   "impressions": 13,
-   "broadImpressions": 34,
-   "seed": "how to be funny"
+   "query": "how do i fix it",
+   "impressions": 14,
+   "broadImpressions": 97,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be a therapist",
    "impressions": 13,
    "broadImpressions": 13,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be popular",
+   "impressions": 13,
+   "broadImpressions": 34,
    "seed": "how to be funny"
   },
   {
@@ -11224,13 +11536,13 @@
    "seed": "funny secret santa ideas"
   },
   {
-   "query": "secret santa wish list ideas",
+   "query": "secret santa gift exchange ideas",
    "impressions": 13,
    "broadImpressions": 13,
    "seed": "funny secret santa ideas"
   },
   {
-   "query": "secret santa gift exchange ideas",
+   "query": "secret santa wish list ideas",
    "impressions": 13,
    "broadImpressions": 13,
    "seed": "funny secret santa ideas"
@@ -11248,6 +11560,30 @@
    "seed": "ai tools for real estate agents"
   },
   {
+   "query": "how to fix a clogged sink",
+   "impressions": 13,
+   "broadImpressions": 13,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "simple diy home repairs",
+   "impressions": 13,
+   "broadImpressions": 13,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to fix a computer that won't turn on",
+   "impressions": 13,
+   "broadImpressions": 13,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to fix a column in excel",
+   "impressions": 13,
+   "broadImpressions": 13,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "stand up comedy show",
    "impressions": 12,
    "broadImpressions": 12,
@@ -11260,15 +11596,15 @@
    "seed": "how to tell a story"
   },
   {
-   "query": "humour meaning",
-   "impressions": 12,
-   "broadImpressions": 14,
-   "seed": "deadpan humor"
-  },
-  {
    "query": "absurdist humor",
    "impressions": 12,
    "broadImpressions": 12,
+   "seed": "deadpan humor"
+  },
+  {
+   "query": "humour meaning",
+   "impressions": 12,
+   "broadImpressions": 14,
    "seed": "deadpan humor"
   },
   {
@@ -11296,13 +11632,19 @@
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "stand up comedy near me tickets",
+   "query": "how to fix a leaky kitchen faucet step by step",
+   "impressions": 12,
+   "broadImpressions": 12,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "comedy show near me tomorrow",
    "impressions": 11,
    "broadImpressions": 11,
    "seed": "stand up comedy tips"
   },
   {
-   "query": "comedy show near me tomorrow",
+   "query": "stand up comedy near me tickets",
    "impressions": 11,
    "broadImpressions": 11,
    "seed": "stand up comedy tips"
@@ -11374,19 +11716,25 @@
    "seed": "ai tools for real estate agents"
   },
   {
+   "query": "how to fix a broken headphone jack",
+   "impressions": 11,
+   "broadImpressions": 11,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "how to be patient",
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a baddie",
+   "query": "how to be calm",
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be calm",
+   "query": "how to be a baddie",
    "impressions": 10,
    "broadImpressions": 10,
    "seed": "how to be funny"
@@ -11470,6 +11818,18 @@
    "seed": "chatgpt for real estate listings"
   },
   {
+   "query": "how to fix a dripping kitchen faucet",
+   "impressions": 10,
+   "broadImpressions": 10,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to fix a sagging mattress",
+   "impressions": 10,
+   "broadImpressions": 10,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "best way to best",
    "impressions": 9,
    "broadImpressions": 9,
@@ -11494,13 +11854,13 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "how to be attractive",
+   "query": "how to be flexible",
    "impressions": 8,
    "broadImpressions": 8,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be flexible",
+   "query": "how to be attractive",
    "impressions": 8,
    "broadImpressions": 8,
    "seed": "how to be funny"
@@ -11534,6 +11894,12 @@
    "impressions": 8,
    "broadImpressions": 9,
    "seed": "open house script"
+  },
+  {
+   "query": "how to fix a slow internet connection",
+   "impressions": 8,
+   "broadImpressions": 8,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be disciplined",
@@ -11602,12 +11968,6 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "secret santa gifts for men",
-   "impressions": 6,
-   "broadImpressions": 6,
-   "seed": "funny secret santa ideas"
-  },
-  {
    "query": "secret santa gifts ideas",
    "impressions": 6,
    "broadImpressions": 6,
@@ -11620,10 +11980,28 @@
    "seed": "funny secret santa ideas"
   },
   {
+   "query": "secret santa gifts for men",
+   "impressions": 6,
+   "broadImpressions": 6,
+   "seed": "funny secret santa ideas"
+  },
+  {
    "query": "ai tools for ppt",
    "impressions": 6,
    "broadImpressions": 6,
    "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "how to fix a wobbly barstool",
+   "impressions": 6,
+   "broadImpressions": 6,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to fix a cell in excel formula",
+   "impressions": 6,
+   "broadImpressions": 6,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "how to be a virtual assistant",
@@ -11656,6 +12034,12 @@
    "seed": "tiktok watch time"
   },
   {
+   "query": "how to fix a small hole in a hollow core door",
+   "impressions": 5,
+   "broadImpressions": 5,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "ticktalk watch video",
    "impressions": 4,
    "broadImpressions": 4,
@@ -11674,19 +12058,37 @@
    "seed": "how to make a story funnier"
   },
   {
+   "query": "how to fix a cell in excel",
+   "impressions": 4,
+   "broadImpressions": 4,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to fix a ceiling light fixture",
+   "impressions": 4,
+   "broadImpressions": 4,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
+   "query": "how to fix a cracked tile floor",
+   "impressions": 4,
+   "broadImpressions": 4,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "how to be tall",
    "impressions": 3,
    "broadImpressions": 3,
    "seed": "how to be funny"
   },
   {
-   "query": "best stand up comedy specials 2026",
+   "query": "standup comedy show",
    "impressions": 3,
    "broadImpressions": 3,
    "seed": "stand up comedy tips"
   },
   {
-   "query": "standup comedy show",
+   "query": "best stand up comedy specials 2026",
    "impressions": 3,
    "broadImpressions": 3,
    "seed": "stand up comedy tips"
@@ -11722,6 +12124,12 @@
    "seed": "rule of three comedy"
   },
   {
+   "query": "how to fix a bricked smartphone",
+   "impressions": 3,
+   "broadImpressions": 3,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "comedian video",
    "impressions": 2,
    "broadImpressions": 2,
@@ -11732,6 +12140,12 @@
    "impressions": 2,
    "broadImpressions": 8,
    "seed": "funny tiktok ideas"
+  },
+  {
+   "query": "how to fix a slow macbook",
+   "impressions": 2,
+   "broadImpressions": 2,
+   "seed": "how to fix a joke that bombed"
   },
   {
    "query": "tiktok make my day online",
