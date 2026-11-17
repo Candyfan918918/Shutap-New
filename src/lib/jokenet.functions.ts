@@ -29,7 +29,7 @@ export const JOKENET_TAXONOMY = {
   license: ['own', 'CC-BY', 'CC0', 'unclear'],
 } as const
 
-const COLS = 'id, situation, joke, rating, slot, archetype, target, tone, heat, move, mechanism, voice, source, license, sent, wins, losses, posted_on, notes, founder, added_on, archived_at, created_at, updated_at'
+const COLS = 'id, situation, joke, rating, slot, archetype, target, tone, heat, move, mechanism, voice, source, license, sent, wins, losses, posted_on, notes, founder, added_on, archived_at, created_at, updated_at, origin, ai_score'
 
 export type JokenetRow = {
   id: number
@@ -52,6 +52,10 @@ export type JokenetRow = {
   posted_on: string | null
   notes: string | null
   founder: boolean
+  /** where an automatic row came from: bit_daily:<id>:bit|rewrite|best, nightly:<day>:<n> */
+  origin: string | null
+  /** the nightly judge's 1–10 guess; orders the rating queue, never feeds the writer */
+  ai_score: number | null
   added_on: string
   archived_at: string | null
   created_at: string
@@ -60,6 +64,8 @@ export type JokenetRow = {
 
 export type JokenetStats = {
   total: number
+  /** rows the two automatic feeds added in the last 7 days */
+  autoThisWeek: { nightly: number; bitDaily: number }
   rated: number
   unrated: number
   feedsWriter: number
@@ -78,7 +84,8 @@ const ListInput = z.object({
   source: z.string().max(40).default('all'),
   archetype: z.string().max(40).default('all'),
   view: z.enum(['active', 'archived']).default('active'),
-  sort: z.enum(['newest', 'oldest', 'rating', 'situation']).default('newest'),
+  sort: z.enum(['newest', 'oldest', 'rating', 'situation', 'queue']).default('newest'),
+  feed: z.enum(['all', 'nightly', 'bit_daily', 'manual']).default('all'),
   page: z.number().int().min(0).max(10_000).default(0),
   pageSize: z.number().int().min(10).max(200).default(50),
 })
@@ -98,7 +105,11 @@ export const adminJokenetList = createServerFn({ method: 'POST' })
     if (data.archetype !== 'all') q = data.archetype === 'untagged' ? q.is('archetype', null) : q.eq('archetype', data.archetype)
     const term = data.q.trim().replace(/[%,()]/g, ' ')
     if (term) q = q.or(`situation.ilike.%${term}%,joke.ilike.%${term}%,notes.ilike.%${term}%`)
-    if (data.sort === 'newest') q = q.order('id', { ascending: false })
+    if (data.feed === 'nightly') q = q.like('origin', 'nightly:%')
+    else if (data.feed === 'bit_daily') q = q.like('origin', 'bit_daily:%')
+    else if (data.feed === 'manual') q = q.is('origin', null)
+    if (data.sort === 'queue') q = q.order('ai_score', { ascending: false, nullsFirst: false }).order('id', { ascending: false })
+    else if (data.sort === 'newest') q = q.order('id', { ascending: false })
     else if (data.sort === 'oldest') q = q.order('id', { ascending: true })
     else if (data.sort === 'rating') q = q.order('rating', { ascending: false, nullsFirst: false }).order('id', { ascending: false })
     else q = q.order('situation', { ascending: true }).order('id', { ascending: true })
@@ -122,7 +133,11 @@ async function stats(s: any): Promise<JokenetStats> {
     head((q) => active(q).gte('created_at', weekAgo)),
     ...[1, 2, 3, 4, 5].map((n) => head((q) => active(q).eq('rating', n))),
   ])
-  return { total, rated: total - unrated, unrated, feedsWriter, untagged, noVector, archived, addedThisWeek, byRating: { '1': r1, '2': r2, '3': r3, '4': r4, '5': r5 } }
+  const [nightly, bitDaily] = await Promise.all([
+    head((q) => active(q).like('origin', 'nightly:%').gte('created_at', weekAgo)),
+    head((q) => active(q).like('origin', 'bit_daily:%').gte('created_at', weekAgo)),
+  ])
+  return { total, autoThisWeek: { nightly, bitDaily }, rated: total - unrated, unrated, feedsWriter, untagged, noVector, archived, addedThisWeek, byRating: { '1': r1, '2': r2, '3': r3, '4': r4, '5': r5 } }
 }
 
 /* ── add / edit ── */
@@ -379,4 +394,14 @@ export const adminJokenetPreview = createServerFn({ method: 'POST' })
     await assertAdmin(context)
     const { liveStandard } = await import('@/lib/bits/jokenet.server')
     return liveStandard(data.story, 6)
+  })
+
+/* ── the nightly writer, on demand ── */
+
+export const adminJokenetNightly = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context)
+    const { runJokenetNightly } = await import('@/lib/jokenet-nightly.server')
+    return runJokenetNightly({ force: true })
   })

@@ -45,7 +45,9 @@ export function pickStandard(matches: JokenetMatch[], n: number, rand: () => num
       m.similarity < SAME_STORY &&
       !EVAL_STORIES.has(norm(m.situation)) &&
       // style catalogs imitating a named comedian are reference, not the bar
-      m.source !== 'dataset',
+      m.source !== 'dataset' &&
+      // a whole kept bit is data, not a one-line bar
+      m.joke.trim().split(/\s+/).length <= 45,
   )
   const near = Math.max(1, n - 2)
   const out: TasteLine[] = []

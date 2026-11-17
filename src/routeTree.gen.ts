@@ -106,6 +106,7 @@ import { Route as ToastsPrompterIdRouteImport } from './routes/toasts.prompter.$
 import { Route as ApiPublicHooksBillingReceiptsRouteImport } from './routes/api/public/hooks/billing-receipts'
 import { Route as ApiPublicHooksDailyIdeaEmailsRouteImport } from './routes/api/public/hooks/daily-idea-emails'
 import { Route as ApiPublicHooksDispatchCheckinsRouteImport } from './routes/api/public/hooks/dispatch-checkins'
+import { Route as ApiPublicHooksJokenetNightlyRouteImport } from './routes/api/public/hooks/jokenet-nightly'
 import { Route as ApiPublicHooksMirrorEvolutionRouteImport } from './routes/api/public/hooks/mirror-evolution'
 import { Route as ApiPublicHooksReengagementEmailsRouteImport } from './routes/api/public/hooks/reengagement-emails'
 import { Route as ApiPublicHooksTrialEndingEmailsRouteImport } from './routes/api/public/hooks/trial-ending-emails'
@@ -613,6 +614,12 @@ const ApiPublicHooksDispatchCheckinsRoute =
     path: '/api/public/hooks/dispatch-checkins',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksJokenetNightlyRoute =
+  ApiPublicHooksJokenetNightlyRouteImport.update({
+    id: '/api/public/hooks/jokenet-nightly',
+    path: '/api/public/hooks/jokenet-nightly',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksMirrorEvolutionRoute =
   ApiPublicHooksMirrorEvolutionRouteImport.update({
     id: '/api/public/hooks/mirror-evolution',
@@ -755,6 +762,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
+  '/api/public/hooks/jokenet-nightly': typeof ApiPublicHooksJokenetNightlyRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
@@ -861,6 +869,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
+  '/api/public/hooks/jokenet-nightly': typeof ApiPublicHooksJokenetNightlyRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
@@ -969,6 +978,7 @@ export interface FileRoutesById {
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
+  '/api/public/hooks/jokenet-nightly': typeof ApiPublicHooksJokenetNightlyRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
@@ -1077,6 +1087,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
+    | '/api/public/hooks/jokenet-nightly'
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reengagement-emails'
     | '/api/public/hooks/trial-ending-emails'
@@ -1183,6 +1194,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
+    | '/api/public/hooks/jokenet-nightly'
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reengagement-emails'
     | '/api/public/hooks/trial-ending-emails'
@@ -1290,6 +1302,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
+    | '/api/public/hooks/jokenet-nightly'
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reengagement-emails'
     | '/api/public/hooks/trial-ending-emails'
@@ -1385,6 +1398,7 @@ export interface RootRouteChildren {
   ApiPublicHooksBillingReceiptsRoute: typeof ApiPublicHooksBillingReceiptsRoute
   ApiPublicHooksDailyIdeaEmailsRoute: typeof ApiPublicHooksDailyIdeaEmailsRoute
   ApiPublicHooksDispatchCheckinsRoute: typeof ApiPublicHooksDispatchCheckinsRoute
+  ApiPublicHooksJokenetNightlyRoute: typeof ApiPublicHooksJokenetNightlyRoute
   ApiPublicHooksMirrorEvolutionRoute: typeof ApiPublicHooksMirrorEvolutionRoute
   ApiPublicHooksReengagementEmailsRoute: typeof ApiPublicHooksReengagementEmailsRoute
   ApiPublicHooksTrialEndingEmailsRoute: typeof ApiPublicHooksTrialEndingEmailsRoute
@@ -2075,6 +2089,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksDispatchCheckinsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/jokenet-nightly': {
+      id: '/api/public/hooks/jokenet-nightly'
+      path: '/api/public/hooks/jokenet-nightly'
+      fullPath: '/api/public/hooks/jokenet-nightly'
+      preLoaderRoute: typeof ApiPublicHooksJokenetNightlyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/mirror-evolution': {
       id: '/api/public/hooks/mirror-evolution'
       path: '/api/public/hooks/mirror-evolution'
@@ -2275,6 +2296,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksBillingReceiptsRoute: ApiPublicHooksBillingReceiptsRoute,
   ApiPublicHooksDailyIdeaEmailsRoute: ApiPublicHooksDailyIdeaEmailsRoute,
   ApiPublicHooksDispatchCheckinsRoute: ApiPublicHooksDispatchCheckinsRoute,
+  ApiPublicHooksJokenetNightlyRoute: ApiPublicHooksJokenetNightlyRoute,
   ApiPublicHooksMirrorEvolutionRoute: ApiPublicHooksMirrorEvolutionRoute,
   ApiPublicHooksReengagementEmailsRoute: ApiPublicHooksReengagementEmailsRoute,
   ApiPublicHooksTrialEndingEmailsRoute: ApiPublicHooksTrialEndingEmailsRoute,

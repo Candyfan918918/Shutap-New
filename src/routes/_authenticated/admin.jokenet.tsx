@@ -16,6 +16,7 @@ import {
   adminJokenetExport,
   adminJokenetImport,
   adminJokenetList,
+  adminJokenetNightly,
   adminJokenetPatch,
   adminJokenetPreview,
   adminJokenetSave,
@@ -77,6 +78,12 @@ function JokenetPage() {
   )
 }
 
+function feedLabel(r: JokenetRow): string {
+  if (r.origin?.startsWith('nightly:')) return 'nightly writer'
+  if (r.origin?.startsWith('bit_daily:')) return '/bit-daily'
+  return r.source === 'me' ? 'yours' : r.source
+}
+
 /* ── stats ── */
 
 function StatsRow({ stats }: { stats: JokenetStats | null }) {
@@ -86,7 +93,7 @@ function StatsRow({ stats }: { stats: JokenetStats | null }) {
         ['rated', stats.rated, `${stats.total ? Math.round((stats.rated / stats.total) * 100) : 0}%`],
         ['feed the writer', stats.feedsWriter, 'rated 4–5, own'],
         ['5 · send unedited', stats.byRating['5'] ?? 0],
-        ['added this week', stats.addedThisWeek],
+        ['added this week', stats.addedThisWeek, `${stats.autoThisWeek.nightly} nightly · ${stats.autoThisWeek.bitDaily} from /bit-daily`],
         ['untagged', stats.untagged],
       ]
     : []
@@ -118,7 +125,8 @@ function RateQueue({ onChange, onError }: { onChange: () => void; onError: (e: s
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const r = await list({ data: { rating: 'unrated', sort: 'situation', pageSize: 60 } })
+      // likely-funny first: the nightly judge's score orders the queue
+      const r = await list({ data: { rating: 'unrated', sort: 'queue', pageSize: 60 } })
       setQueue(r.rows.filter((x) => !skipped.current.has(x.id)))
     } catch (e) {
       onError(e instanceof Error ? e.message : 'load failed')
@@ -181,7 +189,7 @@ function RateQueue({ onChange, onError }: { onChange: () => void; onError: (e: s
   return (
     <div style={{ maxWidth: 760 }}>
       <div style={{ ...card, padding: 28, borderRadius: 20 }}>
-        <div style={label}>situation · #{cur.id}{cur.archetype ? ` · ${cur.archetype}` : ''}</div>
+        <div style={label}>situation · #{cur.id}{cur.archetype ? ` · ${cur.archetype}` : ''} · {feedLabel(cur)}{cur.ai_score ? ` · judge ${cur.ai_score}/10` : ''}</div>
         <div style={{ fontSize: 15, lineHeight: 1.5, color: '#443c42', marginTop: 6 }}>{cur.situation}</div>
         <div style={{ ...label, marginTop: 22 }}>joke</div>
         <div style={{ fontSize: 22, lineHeight: 1.4, fontWeight: 700, marginTop: 6, whiteSpace: 'pre-wrap' }}>{cur.joke}</div>
@@ -496,6 +504,7 @@ function AddImport({ onChange, onError, stats }: { onChange: () => void; onError
   const importFn = useServerFn(adminJokenetImport)
   const tagFn = useServerFn(adminJokenetTag)
   const embedFn = useServerFn(adminJokenetEmbed)
+  const nightlyFn = useServerFn(adminJokenetNightly)
   const [added, setAdded] = useState<JokenetRow[]>([])
   const [paste, setPaste] = useState('')
   const [busy, setBusy] = useState<string | null>(null)
@@ -536,6 +545,18 @@ function AddImport({ onChange, onError, stats }: { onChange: () => void; onError
       onChange()
     } catch (e) {
       onError(e instanceof Error ? e.message : 'tagging failed')
+      setBusy(null)
+    }
+  }
+  async function writeBatch() {
+    setBusy('writing tonight’s batch… (about a minute)')
+    try {
+      const r = await nightlyFn()
+      if (r.errors.length) onError(`nightly: ${r.errors.join(' · ')}`)
+      setBusy(`${r.situations} situations · ${r.written} lines written · ${r.kept} kept for your queue`)
+      onChange()
+    } catch (e) {
+      onError(e instanceof Error ? e.message : 'nightly failed')
       setBusy(null)
     }
   }
@@ -593,11 +614,12 @@ function AddImport({ onChange, onError, stats }: { onChange: () => void; onError
       <div style={card}>
         <h2 style={h2}>housekeeping</h2>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <button type="button" onClick={() => void writeBatch()} disabled={!!busy?.endsWith('…') || !!busy?.endsWith(')')} style={btn}>write a batch now</button>
           <button type="button" onClick={() => void tagAll()} disabled={!!busy?.endsWith('…')} style={btn}>AI-tag untagged ({stats?.untagged ?? '…'})</button>
           <button type="button" onClick={() => void embedAll()} disabled={!!busy?.endsWith('…')} style={btn}>index for story matching ({stats?.noVector ?? '…'} waiting)</button>
           {busy && <span style={{ fontSize: 12, color: '#6b4a5c' }}>{busy}</span>}
         </div>
-        <div style={{ fontSize: 12, color: '#6b4a5c', marginTop: 8 }}>AI tags only fill empty labels; yours are never overwritten. New and edited rows are indexed automatically.</div>
+        <div style={{ fontSize: 12, color: '#6b4a5c', marginTop: 8 }}>JokeNet fills itself: every night at 3:23am a batch of new in-house lines is written, scored by a judge and put in your rating queue, and everything you rate on /bit-daily lands here too. AI tags only fill empty labels; yours are never overwritten. New and edited rows are indexed automatically.</div>
       </div>
     </div>
   )
