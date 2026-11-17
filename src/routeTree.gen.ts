@@ -106,6 +106,7 @@ import { Route as ApiPublicHooksBillingReceiptsRouteImport } from './routes/api/
 import { Route as ApiPublicHooksDailyIdeaEmailsRouteImport } from './routes/api/public/hooks/daily-idea-emails'
 import { Route as ApiPublicHooksDispatchCheckinsRouteImport } from './routes/api/public/hooks/dispatch-checkins'
 import { Route as ApiPublicHooksMirrorEvolutionRouteImport } from './routes/api/public/hooks/mirror-evolution'
+import { Route as ApiPublicHooksRedditLeadsRouteImport } from './routes/api/public/hooks/reddit-leads'
 import { Route as ApiPublicHooksReengagementEmailsRouteImport } from './routes/api/public/hooks/reengagement-emails'
 import { Route as ApiPublicHooksTrialEndingEmailsRouteImport } from './routes/api/public/hooks/trial-ending-emails'
 import { Route as ApiPublicPaymentsPricesRouteImport } from './routes/api/public/payments/prices'
@@ -612,6 +613,12 @@ const ApiPublicHooksMirrorEvolutionRoute =
     path: '/api/public/hooks/mirror-evolution',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksRedditLeadsRoute =
+  ApiPublicHooksRedditLeadsRouteImport.update({
+    id: '/api/public/hooks/reddit-leads',
+    path: '/api/public/hooks/reddit-leads',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksReengagementEmailsRoute =
   ApiPublicHooksReengagementEmailsRouteImport.update({
     id: '/api/public/hooks/reengagement-emails',
@@ -748,6 +755,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
+  '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
   '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
@@ -853,6 +861,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
+  '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
   '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
@@ -960,6 +969,7 @@ export interface FileRoutesById {
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
+  '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
   '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
@@ -1067,6 +1077,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
     | '/api/public/hooks/mirror-evolution'
+    | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
     | '/api/public/hooks/trial-ending-emails'
     | '/api/public/payments/prices'
@@ -1172,6 +1183,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
     | '/api/public/hooks/mirror-evolution'
+    | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
     | '/api/public/hooks/trial-ending-emails'
     | '/api/public/payments/prices'
@@ -1278,6 +1290,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
     | '/api/public/hooks/mirror-evolution'
+    | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
     | '/api/public/hooks/trial-ending-emails'
     | '/api/public/payments/prices'
@@ -1373,6 +1386,7 @@ export interface RootRouteChildren {
   ApiPublicHooksDailyIdeaEmailsRoute: typeof ApiPublicHooksDailyIdeaEmailsRoute
   ApiPublicHooksDispatchCheckinsRoute: typeof ApiPublicHooksDispatchCheckinsRoute
   ApiPublicHooksMirrorEvolutionRoute: typeof ApiPublicHooksMirrorEvolutionRoute
+  ApiPublicHooksRedditLeadsRoute: typeof ApiPublicHooksRedditLeadsRoute
   ApiPublicHooksReengagementEmailsRoute: typeof ApiPublicHooksReengagementEmailsRoute
   ApiPublicHooksTrialEndingEmailsRoute: typeof ApiPublicHooksTrialEndingEmailsRoute
   ApiPublicPaymentsPricesRoute: typeof ApiPublicPaymentsPricesRoute
@@ -2062,6 +2076,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksMirrorEvolutionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/reddit-leads': {
+      id: '/api/public/hooks/reddit-leads'
+      path: '/api/public/hooks/reddit-leads'
+      fullPath: '/api/public/hooks/reddit-leads'
+      preLoaderRoute: typeof ApiPublicHooksRedditLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/reengagement-emails': {
       id: '/api/public/hooks/reengagement-emails'
       path: '/api/public/hooks/reengagement-emails'
@@ -2254,6 +2275,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksDailyIdeaEmailsRoute: ApiPublicHooksDailyIdeaEmailsRoute,
   ApiPublicHooksDispatchCheckinsRoute: ApiPublicHooksDispatchCheckinsRoute,
   ApiPublicHooksMirrorEvolutionRoute: ApiPublicHooksMirrorEvolutionRoute,
+  ApiPublicHooksRedditLeadsRoute: ApiPublicHooksRedditLeadsRoute,
   ApiPublicHooksReengagementEmailsRoute: ApiPublicHooksReengagementEmailsRoute,
   ApiPublicHooksTrialEndingEmailsRoute: ApiPublicHooksTrialEndingEmailsRoute,
   ApiPublicPaymentsPricesRoute: ApiPublicPaymentsPricesRoute,
