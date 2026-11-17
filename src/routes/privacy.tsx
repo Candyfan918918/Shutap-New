@@ -6,7 +6,7 @@ import { SITE_URL } from '@/lib/site'
 const URL = `${SITE_URL}/privacy`
 const TITLE = "Privacy Policy — Shutap, the Humor Amplifier"
 const DESCRIPTION =
-  "How Shutap, the humor amplifier, handles your data: names and details removed before saving, bits private until you post, never used to train AI, never sold, delete your account anytime."
+  "How Shutap, the humor amplifier, handles your data: bits private until you post, names removed from anything you post, never used to train AI, never sold, delete your account anytime."
 
 export const Route = createFileRoute('/privacy')({
   head: () => ({
@@ -31,14 +31,16 @@ function PrivacyPage() {
     <DocLayout
       active="/privacy"
       title="Privacy Policy"
-      subline="Last updated: October 29, 2026 · Controller: Shutap"
+      subline="Last updated: November 16, 2026 · Controller: Shutap"
     >
       <h3>1. The short version</h3>
       <p>
-        Before a story you write is saved, our scrubber uses automated checks and an AI model to
-        remove names, addresses, places, phone numbers and emails. <b>We store only the cleaned
-        text.</b> The scrubber can miss things, so leave out details you don&rsquo;t want kept. Your
-        bits stay private unless you post them. Your profile and posts show the name and picture
+        What you write for your own bits, toasts and realtor kits is saved as you typed it,
+        names, places, addresses, phone numbers and emails included, so your work comes back
+        the way you wrote it. <b>Your bits stay private unless you
+        post them.</b> When you post to a room, our scrubber uses automated checks and an AI model
+        to remove names, addresses, places, phone numbers and emails from what is posted. It can
+        miss things, so leave out details you don&rsquo;t want public. Your profile and posts show the name and picture
         from your sign-in, and you can change both. <b>We do not sell your personal data, we do not use your content to train AI
         models, and we never add your stories or bits to the Shutap joke dataset.</b> You can delete
         your posts, comments or whole account at any time.
@@ -55,10 +57,7 @@ function PrivacyPage() {
           many times you have signed in.
         </li>
         <li>
-          <b>What you write:</b> your original story is checked for contact details and sent to an
-          AI model that removes identifying details. If that model doesn&rsquo;t respond, only
-          emails, phone numbers and links are removed before saving. We save the cleaned story,
-          with your bits and any rewrites you ask for. The short video is drawn from the bit on your own device; we don&rsquo;t
+          <b>What you write:</b> your story is saved as you typed it, with your bits and any rewrites you ask for. The short video is drawn from the bit on your own device; we don&rsquo;t
           keep a copy of the file.
         </li>
         <li>
@@ -140,9 +139,9 @@ function PrivacyPage() {
       <h3>5. AI processing</h3>
       <p>
         Your text is sent, through the Lovable AI Gateway, to AI models from Google (Gemini) and
-        OpenAI to remove identifying details, run the crisis check, write and rank your bits,
-        write rewrites and build the Mirror. Your original story goes to the model that removes
-        identifying details; Shutap saves only the cleaned version.{' '}
+        OpenAI to run the crisis check, write and rank your bits, write rewrites, build the Mirror
+        and, when you post to a room, remove identifying details from what is posted. Your story
+        reaches these models as you typed it.{' '}
         <b>We do not use your content to train AI models.</b> We send it to these providers only to
         produce your result, and their handling of what we send is governed by their own terms.
       </p>

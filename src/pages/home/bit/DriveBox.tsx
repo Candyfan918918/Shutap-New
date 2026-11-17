@@ -230,7 +230,7 @@ export function DriveBox({
             />
           </div>
           <div className="dv-count">
-            <span>{words} {words === 1 ? 'word' : 'words'} · names get removed before anything is saved</span>
+            <span>{words} {words === 1 ? 'word' : 'words'} · nobody at shutap reads it</span>
             <span>{settingsLine}</span>
           </div>
           <div className="dv-set">{settings}</div>
@@ -287,7 +287,7 @@ export function DriveBox({
         ) : (
           <>
             <div className="dv-count">
-              <span>{words} {words === 1 ? 'word' : 'words'} · names get removed before anything is saved</span>
+              <span>{words} {words === 1 ? 'word' : 'words'} · nobody at shutap reads it</span>
               <span>{settingsLine}</span>
             </div>
             <div className="dv-set">{settings}</div>

@@ -1,16 +1,16 @@
 {
  "property": "sc-domain:shutap.com",
- "startDate": "2026-10-16",
- "endDate": "2026-11-13",
- "pulledAt": "2026-11-15T20:25:24.773Z",
+ "startDate": "2026-10-17",
+ "endDate": "2026-11-14",
+ "pulledAt": "2026-11-16T23:45:37.471Z",
  "striking": [
   {
    "query": "shutap",
    "page": "https://shutap.com/business",
    "clicks": 1,
-   "impressions": 195,
+   "impressions": 198,
    "ctr": 0.0051,
-   "position": 5.7
+   "position": 5.6
   },
   {
    "query": "shutap",
@@ -24,7 +24,7 @@
    "query": "punchlines.ai",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 26,
+   "impressions": 29,
    "ctr": 0,
    "position": 10.7
   },
@@ -61,6 +61,22 @@
    "position": 9
   },
   {
+   "query": "best man speech brother to brother",
+   "page": "https://shutap.com/guides/best-man-speech-for-brother",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 14
+  },
+  {
+   "query": "best man speech jokes",
+   "page": "https://shutap.com/guides/best-man-speech-jokes",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 19
+  },
+  {
    "query": "funniest philosophers",
    "page": "https://shutap.com/funniest/philosopher",
    "clicks": 0,
@@ -75,6 +91,22 @@
    "impressions": 1,
    "ctr": 0,
    "position": 9
+  },
+  {
+   "query": "funny best man speech openers",
+   "page": "https://shutap.com/guides/best-man-speech-jokes",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 18
+  },
+  {
+   "query": "funny wedding ceremony script",
+   "page": "https://shutap.com/guides/funny-wedding-ceremony-script",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 6
   },
   {
    "query": "shuttap",
@@ -96,9 +128,9 @@
  "pages": [
   {
    "page": "https://shutap.com/",
-   "clicks": 133,
+   "clicks": 134,
    "impressions": 349,
-   "ctr": 0.3811,
+   "ctr": 0.384,
    "position": 2.1
   },
   {
@@ -111,30 +143,30 @@
   {
    "page": "https://shutap.com/business",
    "clicks": 3,
-   "impressions": 214,
-   "ctr": 0.014,
-   "position": 5.8
+   "impressions": 218,
+   "ctr": 0.0138,
+   "position": 5.7
   },
   {
    "page": "https://shutap.com/guides/humor-is-wisdom",
    "clicks": 3,
-   "impressions": 65,
-   "ctr": 0.0462,
-   "position": 3.8
+   "impressions": 68,
+   "ctr": 0.0441,
+   "position": 4.3
   },
   {
    "page": "https://shutap.com/guides/shutap-vs-claude-for-jokes",
    "clicks": 3,
-   "impressions": 10,
-   "ctr": 0.3,
-   "position": 5.2
+   "impressions": 11,
+   "ctr": 0.2727,
+   "position": 4.9
   },
   {
    "page": "https://shutap.com/faq",
    "clicks": 2,
-   "impressions": 122,
-   "ctr": 0.0164,
-   "position": 2.8
+   "impressions": 121,
+   "ctr": 0.0165,
+   "position": 2.6
   },
   {
    "page": "https://shutap.com/guides",
@@ -167,9 +199,9 @@
   {
    "page": "https://shutap.com/guides/ai-comedy-writing-tools",
    "clicks": 1,
-   "impressions": 23,
-   "ctr": 0.0435,
-   "position": 14.1
+   "impressions": 24,
+   "ctr": 0.0417,
+   "position": 13.5
   },
   {
    "page": "https://shutap.com/guides/comedy-teleprompter",
@@ -181,9 +213,9 @@
   {
    "page": "https://shutap.com/how-it-works",
    "clicks": 1,
-   "impressions": 104,
-   "ctr": 0.0096,
-   "position": 3
+   "impressions": 105,
+   "ctr": 0.0095,
+   "position": 2.9
   },
   {
    "page": "https://shutap.com/pricing",
@@ -216,9 +248,9 @@
   {
    "page": "https://shutap.com/funniest",
    "clicks": 0,
-   "impressions": 4,
+   "impressions": 5,
    "ctr": 0,
-   "position": 9.3
+   "position": 13.2
   },
   {
    "page": "https://shutap.com/funniest/athlete",
@@ -226,6 +258,13 @@
    "impressions": 1,
    "ctr": 0,
    "position": 4
+  },
+  {
+   "page": "https://shutap.com/funniest/billionaire",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 3
   },
   {
    "page": "https://shutap.com/funniest/ceo",
@@ -270,6 +309,13 @@
    "position": 36.5
   },
   {
+   "page": "https://shutap.com/funniest/pope",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 14
+  },
+  {
    "page": "https://shutap.com/funniest/us-president",
    "clicks": 0,
    "impressions": 16,
@@ -286,16 +332,16 @@
   {
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 86,
+   "impressions": 98,
    "ctr": 0,
-   "position": 52
+   "position": 50
   },
   {
    "page": "https://shutap.com/guides/ai-joke-tools-compared",
    "clicks": 0,
-   "impressions": 6,
+   "impressions": 7,
    "ctr": 0,
-   "position": 47.3
+   "position": 53.4
   },
   {
    "page": "https://shutap.com/guides/ai-roast-tools-compared",
@@ -303,6 +349,20 @@
    "impressions": 6,
    "ctr": 0,
    "position": 49.2
+  },
+  {
+   "page": "https://shutap.com/guides/best-man-speech-for-brother",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 14
+  },
+  {
+   "page": "https://shutap.com/guides/best-man-speech-jokes",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 18.5
   },
   {
    "page": "https://shutap.com/guides/chatgpt-alternative-for-comedy-writing",
@@ -342,7 +402,7 @@
   {
    "page": "https://shutap.com/guides/funny-for-business",
    "clicks": 0,
-   "impressions": 53,
+   "impressions": 55,
    "ctr": 0,
    "position": 3.7
   },
@@ -352,6 +412,13 @@
    "impressions": 5,
    "ctr": 0,
    "position": 4.8
+  },
+  {
+   "page": "https://shutap.com/guides/funny-new-years-toast",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 7
   },
   {
    "page": "https://shutap.com/guides/funny-podcast-intro-ideas",
@@ -368,6 +435,13 @@
    "position": 5
   },
   {
+   "page": "https://shutap.com/guides/funny-wedding-ceremony-script",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 25
+  },
+  {
    "page": "https://shutap.com/guides/funny-wedding-toast",
    "clicks": 0,
    "impressions": 2,
@@ -375,11 +449,25 @@
    "position": 18
   },
   {
+   "page": "https://shutap.com/guides/how-long-should-a-best-man-speech-be",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 84
+  },
+  {
    "page": "https://shutap.com/guides/how-shutap-is-built",
    "clicks": 0,
    "impressions": 115,
    "ctr": 0,
    "position": 3.4
+  },
+  {
+   "page": "https://shutap.com/guides/how-to-make-a-joke-funnier",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 50
   },
   {
    "page": "https://shutap.com/guides/how-to-turn-a-story-into-a-bit",
@@ -391,9 +479,9 @@
   {
    "page": "https://shutap.com/guides/how-to-write-a-skit",
    "clicks": 0,
-   "impressions": 6,
+   "impressions": 7,
    "ctr": 0,
-   "position": 49.8
+   "position": 43.9
   },
   {
    "page": "https://shutap.com/guides/how-to-write-comedy-tags",
@@ -408,6 +496,13 @@
    "impressions": 2,
    "ctr": 0,
    "position": 41
+  },
+  {
+   "page": "https://shutap.com/guides/office-holiday-party-speech-for-managers",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 90
   },
   {
    "page": "https://shutap.com/guides/pov-skit-generator",
@@ -475,9 +570,9 @@
   {
    "page": "https://shutap.com/guides/thanksgiving-toast-for-coworkers",
    "clicks": 0,
-   "impressions": 1,
+   "impressions": 2,
    "ctr": 0,
-   "position": 7
+   "position": 41
   },
   {
    "page": "https://shutap.com/guides/topic/ai-writing-partner",
@@ -492,6 +587,20 @@
    "impressions": 3,
    "ctr": 0,
    "position": 80
+  },
+  {
+   "page": "https://shutap.com/guides/topic/presentations-and-work",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 4.5
+  },
+  {
+   "page": "https://shutap.com/guides/topic/realtors",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 9.7
   },
   {
    "page": "https://shutap.com/guides/topic/roasts",
@@ -517,9 +626,9 @@
   {
    "page": "https://shutap.com/guides/topic/types-of-humor",
    "clicks": 0,
-   "impressions": 13,
+   "impressions": 14,
    "ctr": 0,
-   "position": 48.6
+   "position": 45.9
   },
   {
    "page": "https://shutap.com/guides/topic/using-shutap",
@@ -538,9 +647,9 @@
   {
    "page": "https://shutap.com/guides/types-of-humor",
    "clicks": 0,
-   "impressions": 36,
+   "impressions": 38,
    "ctr": 0,
-   "position": 23
+   "position": 22.2
   },
   {
    "page": "https://shutap.com/guides/what-is-a-joke",
@@ -587,9 +696,9 @@
   {
    "page": "https://shutap.com/safety",
    "clicks": 0,
-   "impressions": 2,
+   "impressions": 3,
    "ctr": 0,
-   "position": 9.5
+   "position": 7
   },
   {
    "page": "https://shutap.com/story/relationships/a-muslim-girl-in-a-very-traditional-family-7807b4",
@@ -615,9 +724,16 @@
   {
    "page": "https://shutap.com/toasts/office-holiday-party",
    "clicks": 0,
-   "impressions": 2,
+   "impressions": 6,
    "ctr": 0,
-   "position": 5
+   "position": 49.8
+  },
+  {
+   "page": "https://shutap.com/toasts/thanksgiving",
+   "clicks": 0,
+   "impressions": 9,
+   "ctr": 0,
+   "position": 61.3
   },
   {
    "page": "https://shutap.com/trust",
@@ -638,17 +754,17 @@
   {
    "query": "shutap",
    "page": "https://shutap.com/",
-   "clicks": 122,
-   "impressions": 293,
-   "ctr": 0.4164,
+   "clicks": 123,
+   "impressions": 292,
+   "ctr": 0.4212,
    "position": 1.6
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/about",
    "clicks": 4,
-   "impressions": 281,
-   "ctr": 0.0142,
+   "impressions": 280,
+   "ctr": 0.0143,
    "position": 3
   },
   {
@@ -663,24 +779,24 @@
    "query": "shutap",
    "page": "https://shutap.com/business",
    "clicks": 1,
-   "impressions": 195,
+   "impressions": 198,
    "ctr": 0.0051,
-   "position": 5.7
+   "position": 5.6
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/faq",
    "clicks": 1,
-   "impressions": 88,
-   "ctr": 0.0114,
-   "position": 2.4
+   "impressions": 87,
+   "ctr": 0.0115,
+   "position": 2.1
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/guides/humor-is-wisdom",
    "clicks": 1,
-   "impressions": 47,
-   "ctr": 0.0213,
+   "impressions": 49,
+   "ctr": 0.0204,
    "position": 2.9
   },
   {
@@ -714,6 +830,22 @@
    "impressions": 1,
    "ctr": 0,
    "position": 54
+  },
+  {
+   "query": "best man speech brother to brother",
+   "page": "https://shutap.com/guides/best-man-speech-for-brother",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 14
+  },
+  {
+   "query": "best man speech jokes",
+   "page": "https://shutap.com/guides/best-man-speech-jokes",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 19
   },
   {
    "query": "chatgpt ai joke generator",
@@ -780,6 +912,22 @@
    "position": 3
   },
   {
+   "query": "friendsgiving toast",
+   "page": "https://shutap.com/toasts/thanksgiving",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 65
+  },
+  {
+   "query": "funniest people in the world",
+   "page": "https://shutap.com/funniest",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 29
+  },
+  {
    "query": "funniest philosophers",
    "page": "https://shutap.com/funniest/philosopher",
    "clicks": 0,
@@ -804,6 +952,14 @@
    "position": 9
   },
   {
+   "query": "funny best man speech openers",
+   "page": "https://shutap.com/guides/best-man-speech-jokes",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 18
+  },
+  {
    "query": "funny self deprecating jokes",
    "page": "https://shutap.com/guides/self-deprecating-humor",
    "clicks": 0,
@@ -812,12 +968,44 @@
    "position": 89
   },
   {
+   "query": "funny wedding ceremony script",
+   "page": "https://shutap.com/guides/funny-wedding-ceremony-script",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "query": "funny wedding officiant speech",
+   "page": "https://shutap.com/guides/funny-wedding-ceremony-script",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 54
+  },
+  {
    "query": "how big are they?",
    "page": "https://shutap.com/business",
    "clicks": 0,
    "impressions": 1,
    "ctr": 0,
    "position": 1
+  },
+  {
+   "query": "how long should a best man speech be",
+   "page": "https://shutap.com/guides/how-long-should-a-best-man-speech-be",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 73
+  },
+  {
+   "query": "how long should the best man speech be",
+   "page": "https://shutap.com/guides/how-long-should-a-best-man-speech-be",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 95
   },
   {
    "query": "how to be funny",
@@ -868,6 +1056,14 @@
    "position": 72
   },
   {
+   "query": "joke ai generator",
+   "page": "https://shutap.com/guides/ai-joke-generators-compared",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 63
+  },
+  {
    "query": "joke creation on topic by ai",
    "page": "https://shutap.com/ai-joke-generator",
    "clicks": 0,
@@ -882,6 +1078,14 @@
    "impressions": 3,
    "ctr": 0,
    "position": 83.7
+  },
+  {
+   "query": "joke maker ai",
+   "page": "https://shutap.com/guides/ai-joke-generators-compared",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 79
   },
   {
    "query": "joke meaning",
@@ -916,12 +1120,20 @@
    "position": 66
   },
   {
+   "query": "nerdy wedding ceremony script",
+   "page": "https://shutap.com/guides/funny-wedding-ceremony-script",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 3
+  },
+  {
    "query": "punchline generator",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 14,
+   "impressions": 15,
    "ctr": 0,
-   "position": 74.5
+   "position": 75.1
   },
   {
    "query": "punchlines ai",
@@ -935,7 +1147,7 @@
    "query": "punchlines.ai",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 26,
+   "impressions": 29,
    "ctr": 0,
    "position": 10.7
   },
@@ -1087,9 +1299,9 @@
    "query": "shutap",
    "page": "https://shutap.com/guides/funny-for-business",
    "clicks": 0,
-   "impressions": 51,
+   "impressions": 53,
    "ctr": 0,
-   "position": 3.7
+   "position": 3.6
   },
   {
    "query": "shutap",
@@ -1111,9 +1323,9 @@
    "query": "shutap",
    "page": "https://shutap.com/guides/shutap-vs-claude-for-jokes",
    "clicks": 0,
-   "impressions": 3,
+   "impressions": 4,
    "ctr": 0,
-   "position": 1.3
+   "position": 1.5
   },
   {
    "query": "shutap",
@@ -1151,15 +1363,23 @@
    "query": "shutap",
    "page": "https://shutap.com/how-it-works",
    "clicks": 0,
-   "impressions": 79,
+   "impressions": 80,
    "ctr": 0,
-   "position": 2.4
+   "position": 2.3
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/humor-amplifier",
    "clicks": 0,
    "impressions": 4,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "query": "shutap",
+   "page": "https://shutap.com/safety",
+   "clicks": 0,
+   "impressions": 1,
    "ctr": 0,
    "position": 2
   },

@@ -143,7 +143,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           url: "https://shutap.com",
           image: "https://shutap.com/og/shutap-og-v4.png",
           description:
-            "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format. You bring what you want to say; Shutap drafts it funnier; you decide what stays. Your stories and words stay yours. Identifying details are removed before anything is stored, and Shutap never uses your content to train AI. Entertainment, not advice. 18+.",
+            "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format. You bring what you want to say; Shutap drafts it funnier; you decide what stays. Your stories and words stay yours. Your work stays private unless you post it, names are removed from anything posted, and Shutap never uses your content to train AI. Entertainment, not advice. 18+.",
           offers: {
             "@type": "Offer",
             price: "0",

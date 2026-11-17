@@ -7,12 +7,12 @@ const PATH = "/trust";
 const TITLE =
   "Trust & Privacy — Shutap Humor Amplifier Lab";
 const DESCRIPTION =
-  "How Shutap keeps the jokes on the situation and your stories private: names and places removed before saving, private until you post, never used by Shutap to train AI, reporting and takedowns.";
+  "How Shutap keeps the jokes on the situation and your stories private: private until you post, names removed from anything you post publicly, never used by Shutap to train AI, reporting and takedowns.";
 const CAPSULE =
-  "Shutap Humor Amplifier Lab helps everyone say it funnier, and the jokes come from your real stories, listings and memories. So privacy is built in: names and details come out of your story before it is saved, toast names never leave your browser, nothing is public unless you post it, and Shutap never uses your stories to train AI or puts them in the joke dataset.";
+  "Shutap Humor Amplifier Lab helps everyone say it funnier, and the jokes come from your real stories, listings and memories. So privacy is built in: your work stays private to you, toast names never leave your browser, nothing is public unless you post it, names and details come out of anything you post to a room, and Shutap never uses your stories to train AI or puts them in the joke dataset.";
 const SECTIONS = [
   { heading: "Your name, your choice", body: "Your profile starts with the name and picture from your sign-in, or a name made from your email address. You can change both in your profile; new posts use your current name." },
-  { heading: "Names and places removed before saving", body: "Before anything is stored, Shutap uses automated checks and an AI model to remove names, addresses, places, phone numbers and emails from what you write, including comments. Only the cleaned text is kept. It can miss things, so leave out details you don't want kept." },
+  { heading: "Your words as you wrote them, names removed when you post", body: "Your own bits, toasts and realtor kits are saved as you typed them, so they come back exactly as written. When you post to a room, or comment, Shutap uses automated checks and an AI model to remove names, addresses, places, phone numbers and emails from what is posted. It can miss things, so leave out details you don't want public." },
   { heading: "Private until you post", body: "Bits you write stay private, in My creations. Only what you post to a room is public. The Mirror is private to you. Shutap staff don't read the text of your stories or bits, except to fix a problem you report or when the law requires it." },
   { heading: "Jokes about situations, not people", body: "Shutap's jokes go at the situation, never at a real person someone could identify. That keeps your content shareable and keeps rooms from turning into callouts." },
   { heading: "Reporting and takedowns", body: "Anyone can report a post or comment. When a post gets three reports, it's hidden until reviewed. If a post is about you, email hello@shutap.com or use the report page and we'll take a look." },

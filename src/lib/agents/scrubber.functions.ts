@@ -21,8 +21,13 @@ export type ScrubResult = {
 
 const SCRUBBER_PROMPT = `You are THE SCRUBBER. Find every piece of real personal information in this text and
 replace it so the story stays vivid but no real person or place is identifiable. Replace:
-real human names (including the writer's own) → a relationship/role label if clear
-([my mom], [my boss], [her]) else [a friend]; street addresses → remove; specific
+real human names (including the writer's own) → a relationship/role label taken from
+the story ([my mom], [my boss], [the cashier], [her]), [a friend] only when the story
+gives no role. One person gets ONE label, used every time they come up; never turn one
+person into two labels. When the name itself is part of the story (it's odd, it's two
+names in one, it rhymes, it matches something, it's on a name tag), replace it with a
+label that keeps what matters about it without the name itself: "his name tag said
+[two first names mashed into one]", "named [a name that's also a verb]". Street addresses → remove; specific
 locations → generalize ([my hometown], region only); phones/emails → remove.
 When unsure whether something is identifying, REDACT it. Preserve tone, feeling, and
 readability — never flatten the emotion.
@@ -58,6 +63,20 @@ export function hasContactDetails(text: string): boolean {
   return regexScrub(String(text ?? '')).replacements.length > 0
 }
 
+/** Nov 16 2026 (Candy): a person's own work (bits, toasts, realtor kits)
+ *  keeps everything exactly as typed: names, places, addresses, phone
+ *  numbers, emails. Nothing is removed. Public posts (Rooms) still go
+ *  through runScrub. Same shape as runScrub, so callers swap one for the
+ *  other. */
+export function keepAsTyped(raw: string): ScrubResult {
+  return { clean_text: String(raw ?? '').slice(0, 8000), replacements: [], notice: '' }
+}
+/** Own work removes nothing, so nothing ever needs removing (kept so the
+ *  callers read the same). */
+export function hasEmailOrPhone(_text: string): boolean {
+  return false
+}
+
 const ScrubInput = z.object({ raw: z.string().min(1).max(8000) })
 
 // Plain server-side function. Call this directly from other server handlers
@@ -77,6 +96,8 @@ export async function runScrub(raw: string): Promise<ScrubResult> {
     system: SCRUBBER_PROMPT,
     messages: [{ role: 'user', content: first.text }],
     maxTokens: 800,
+    // a reasoning model thinking at length here held every story ~6 s (Nov 16)
+    reasoningEffort: 'minimal',
   }, 6_000)
 
   const parsed = tryParseJson<ScrubResult>(llm.text)

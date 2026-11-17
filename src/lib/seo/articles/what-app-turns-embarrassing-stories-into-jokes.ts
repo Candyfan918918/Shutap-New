@@ -36,7 +36,7 @@ const guide: Guide = {
     },
     {
       heading: "What happens to the names in your story",
-      body: "Embarrassing stories tend to have real people in them: a boss, an ex, the cousin who saw everything. Before anything is saved, Shutap swaps names, places and contact details for role labels like \"my manager\" or \"the coffee shop,\" and shows you what changed so you can fix it. If a story reads as genuinely heavy rather than awkward, Shutap won't turn it into a joke and points to real help instead. That's a feature, not a glitch: some stories aren't ready to be funny yet.",
+      body: "Embarrassing stories tend to have real people in them: a boss, an ex, the cousin who saw everything. Your bit keeps them as you typed them, private to you. If you post a bit to a room, Shutap swaps names, places and contact details for role labels like \"my manager\" or \"the coffee shop\" first. If a story reads as genuinely heavy rather than awkward, Shutap won't turn it into a joke and points to real help instead. That's a feature, not a glitch: some stories aren't ready to be funny yet.",
     },
     {
       heading: "Using a general chat assistant instead",
@@ -62,7 +62,7 @@ const guide: Guide = {
     },
     {
       q: "Will my real name or other people's names be saved?",
-      a: "No. Before a story is saved, Shutap replaces names, places and contact details with role labels like \"my manager,\" and shows you what changed so you can edit it.",
+      a: "They stay in your own bit, as you typed them, private to you. Anything you post to a room has names, places and contact details replaced with role labels like \"my manager\" first.",
     },
     {
       q: "What's the difference between Shutap and Witscript?",

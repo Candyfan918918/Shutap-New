@@ -1393,7 +1393,7 @@ HARD RULES — a bit that breaks one is worthless, however funny:
   gaslighting, trauma, healing, red flag, self-care, closure).
 - No invented facts about real people: no new lover, illness, habit or
   motive. An invented number that is obviously a joke is fine.
-- No real names. Use roles: my roommate, my boss, my mom, her.
+- Use names only as the story gives them (never invent one); otherwise roles: my roommate, my boss, my mom, her.
 - No jokes about bodies, age, looks, weight, intelligence, race, religion,
   sexuality or disability.
 - THE SWAP TEST: if a tag would work just as well on someone else's story,
@@ -1462,7 +1462,7 @@ HARD RULES — a bit that breaks any is out regardless of how funny it is:
 3. No invented facts about the other person (a new lover, illness, habit,
    motive). An obviously comic number is fine.
 4. No ridicule of bodies, age, looks, intelligence, race, religion,
-   sexuality or disability. No real names.
+   sexuality or disability. Use names only as the story gives them (never invent one).
 5. THE SWAP TEST: if the tags would work on a different person's story, out.
 
 THEN RANK what survives, weighted in this order:
@@ -1525,8 +1525,8 @@ retell the story, no invented facts), 1 to 3 tags (each a
 picture that lands on a thing you can point at), button (the last line, a
 verdict or reversal, never a moral). Same hard rules as always: the joke
 goes at the situation and the other party's behaviour, never at the teller;
-no advice; no therapy words; no invented facts about real people; no
-names; nothing about bodies, age, looks or intelligence.
+no advice; no therapy words; no invented facts about real people; names only as the story gives them (never invent one);
+nothing about bodies, age, looks or intelligence.
 Acts, not labels: show something happening (a note left, a rule followed to
 the letter, a number, an object doing something) instead of saying what
 someone "is". At most one such label line. No institution vocabulary the
@@ -1565,7 +1565,7 @@ from the hook. Every version must fit its place: the hook at most 8 words and
 readable in two seconds; a setup only states the one fact the hook left out,
 never retells the story; a tag lands on a thing you can point at; the button
 is a verdict or a reversal, never a moral. The joke goes at the situation,
-never at the teller; no advice, no therapy words, no names, nothing about
+never at the teller; no advice, no therapy words, names only as the story gives them (never invent one), nothing about
 bodies, age, looks or intelligence, no facts the story does not give.
 No two versions may share their last three words.
 
@@ -1601,7 +1601,7 @@ Write 4 to 8 beats. Each beat is one shot:
 - "on_screen": optional caption text, at most 6 words, lowercase. The first
   beat's on_screen is the hook.
 
-No real names. No advice, no therapy words.
+Use names only as the story gives them (never invent one). No advice, no therapy words.
 
 Return only JSON:
 {"beats":[{"shot":"...","speaker":"...","line":"...","on_screen":"..."}]}`
@@ -1634,7 +1634,7 @@ Use these elements, in screenplay order:
   its own ME block, so a parenthetical can sit between them.
 - "transition": end with "CUT TO BLACK."
 
-No real names. No camera directions beyond what the action needs. Keep it
+Use names only as the story gives them (never invent one). No camera directions beyond what the action needs. Keep it
 to one page: about 40 short lines in total.
 
 Return only JSON:

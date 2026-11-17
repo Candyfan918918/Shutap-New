@@ -13,7 +13,7 @@ const COLS: { title: string; lines: string[] }[] = [
   {
     title: 'Shutap does',
     lines: [
-      'Removes names and places before anything is saved.',
+      'Keeps your words as you typed them, names included; removes names from anything you post publicly.',
       'On a bit, drafts only the lines your story didn’t cover, marked as AI drafts, and offers other ways to say a line when you tap “funnier”. Drafts realtor kits and toasts from what you give it.',
       'Lays it out as a video, stand-up, a sketch, a skit, a shoot kit or a toast.',
     ],

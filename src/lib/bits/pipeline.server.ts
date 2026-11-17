@@ -580,13 +580,22 @@ export type BitVariant = {
   noStandard?: boolean
 }
 
+/** Nov 16 2026: the Scrubber swaps names for bracketed labels. A writer read
+ *  "the cashier was named [a friend]" and its tags made the cashier two
+ *  people. Told once, next to the story, what a label is. */
+export function withLabelNote(story: string): string {
+  if (!/\[[^\]]{2,60}\]/.test(story)) return story
+  return `${story}\n\n(Words in square brackets stand in for a real name or place that was removed. Each label is ONE person or thing; the same label always means the same one; never split one label into two people. Where a label describes a name, the joke can be about that kind of name.)`
+}
+
 export async function writeBitFromStory(
-  story: string,
+  storyIn: string,
   controls: BitControls,
   premisesPromise?: Promise<Premise[]>,
   sink?: { failure?: BitFailure },
   variant: BitVariant = {},
 ): Promise<WrittenBit | null> {
+  const story = withLabelNote(storyIn)
   const t0 = Date.now()
   // Since bit-1.1 the writer finds its own angles (BIT_ANGLE_FINDER), which
   // saves the separate premise call. BIT_PREMISE_PASS=on brings it back.
@@ -731,7 +740,7 @@ export async function varyBitDraft(
         {
           role: 'user',
           content: fill(BIT_VARY_PROMPT, {
-            SITUATION: story.slice(0, 2000),
+            SITUATION: withLabelNote(story.slice(0, 2000)),
             BIT: asText,
             AUDIENCE: cv.AUDIENCE,
             VOICE: cv.VOICE,
@@ -806,7 +815,7 @@ export async function touchLineDraft(
         {
           role: 'user',
           content: fill(BIT_TOUCH_PROMPT, {
-            SITUATION: story.slice(0, 2000),
+            SITUATION: withLabelNote(story.slice(0, 2000)),
             BIT: asText,
             SLOT: slotLabel(slot).toUpperCase(),
             LINE: current || '(empty: write this line fresh, from the lines that are written)',
@@ -850,7 +859,7 @@ async function layout<T>(template: string, story: string, bit: Pick<BitDraft, 'h
       temperature: 0.7,
       maxTokens: 2500,
       timeoutMs: BIT_BUDGET.vary(),
-      messages: [{ role: 'user', content: fill(template, { SITUATION: story.slice(0, 2000), BIT: bitAsText(bit) }) }],
+      messages: [{ role: 'user', content: fill(template, { SITUATION: withLabelNote(story.slice(0, 2000)), BIT: bitAsText(bit) }) }],
     })
     if (res.error) {
       console.warn('[bit-layout] gateway error', res.error)
