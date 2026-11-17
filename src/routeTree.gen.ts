@@ -91,6 +91,7 @@ import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminGuestsRouteImport } from './routes/_authenticated/admin.guests'
 import { Route as AuthenticatedAdminOverviewRouteImport } from './routes/_authenticated/admin.overview'
 import { Route as AuthenticatedAdminPollRouteImport } from './routes/_authenticated/admin.poll'
+import { Route as AuthenticatedAdminRedditRouteImport } from './routes/_authenticated/admin.reddit'
 import { Route as AuthenticatedAdminRelateRouteImport } from './routes/_authenticated/admin.relate'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedCheckinIdRouteImport } from './routes/_authenticated/checkin.$id'
@@ -533,6 +534,12 @@ const AuthenticatedAdminPollRoute = AuthenticatedAdminPollRouteImport.update({
   path: '/admin/poll',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminRedditRoute =
+  AuthenticatedAdminRedditRouteImport.update({
+    id: '/admin/reddit',
+    path: '/admin/reddit',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminRelateRoute =
   AuthenticatedAdminRelateRouteImport.update({
     id: '/admin/relate',
@@ -740,6 +747,7 @@ export interface FileRoutesByFullPath {
   '/admin/guests': typeof AuthenticatedAdminGuestsRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/admin/poll': typeof AuthenticatedAdminPollRoute
+  '/admin/reddit': typeof AuthenticatedAdminRedditRoute
   '/admin/relate': typeof AuthenticatedAdminRelateRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/checkin/$id': typeof AuthenticatedCheckinIdRoute
@@ -846,6 +854,7 @@ export interface FileRoutesByTo {
   '/admin/guests': typeof AuthenticatedAdminGuestsRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/admin/poll': typeof AuthenticatedAdminPollRoute
+  '/admin/reddit': typeof AuthenticatedAdminRedditRoute
   '/admin/relate': typeof AuthenticatedAdminRelateRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/checkin/$id': typeof AuthenticatedCheckinIdRoute
@@ -954,6 +963,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/guests': typeof AuthenticatedAdminGuestsRoute
   '/_authenticated/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/_authenticated/admin/poll': typeof AuthenticatedAdminPollRoute
+  '/_authenticated/admin/reddit': typeof AuthenticatedAdminRedditRoute
   '/_authenticated/admin/relate': typeof AuthenticatedAdminRelateRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/checkin/$id': typeof AuthenticatedCheckinIdRoute
@@ -1062,6 +1072,7 @@ export interface FileRouteTypes {
     | '/admin/guests'
     | '/admin/overview'
     | '/admin/poll'
+    | '/admin/reddit'
     | '/admin/relate'
     | '/admin/users'
     | '/checkin/$id'
@@ -1168,6 +1179,7 @@ export interface FileRouteTypes {
     | '/admin/guests'
     | '/admin/overview'
     | '/admin/poll'
+    | '/admin/reddit'
     | '/admin/relate'
     | '/admin/users'
     | '/checkin/$id'
@@ -1275,6 +1287,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/guests'
     | '/_authenticated/admin/overview'
     | '/_authenticated/admin/poll'
+    | '/_authenticated/admin/reddit'
     | '/_authenticated/admin/relate'
     | '/_authenticated/admin/users'
     | '/_authenticated/checkin/$id'
@@ -1971,6 +1984,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPollRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/reddit': {
+      id: '/_authenticated/admin/reddit'
+      path: '/admin/reddit'
+      fullPath: '/admin/reddit'
+      preLoaderRoute: typeof AuthenticatedAdminRedditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/relate': {
       id: '/_authenticated/admin/relate'
       path: '/admin/relate'
@@ -2144,6 +2164,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminGuestsRoute: typeof AuthenticatedAdminGuestsRoute
   AuthenticatedAdminOverviewRoute: typeof AuthenticatedAdminOverviewRoute
   AuthenticatedAdminPollRoute: typeof AuthenticatedAdminPollRoute
+  AuthenticatedAdminRedditRoute: typeof AuthenticatedAdminRedditRoute
   AuthenticatedAdminRelateRoute: typeof AuthenticatedAdminRelateRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedCheckinIdRoute: typeof AuthenticatedCheckinIdRoute
@@ -2158,6 +2179,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminGuestsRoute: AuthenticatedAdminGuestsRoute,
   AuthenticatedAdminOverviewRoute: AuthenticatedAdminOverviewRoute,
   AuthenticatedAdminPollRoute: AuthenticatedAdminPollRoute,
+  AuthenticatedAdminRedditRoute: AuthenticatedAdminRedditRoute,
   AuthenticatedAdminRelateRoute: AuthenticatedAdminRelateRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedCheckinIdRoute: AuthenticatedCheckinIdRoute,
