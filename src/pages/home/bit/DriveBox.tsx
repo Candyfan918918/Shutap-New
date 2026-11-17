@@ -84,6 +84,8 @@ export function DriveBox({
   settingsLine,
   track,
   fullSlot,
+  alwaysOpen = false,
+  placeholder,
 }: {
   story: string
   onStory: (s: string) => void
@@ -101,6 +103,10 @@ export function DriveBox({
    *  full box (A) always stands open. The one line (C) then stays one line on
    *  top, and both type into the same story. */
   fullSlot?: string
+  /** Nov 17 2026 (guides and funniest pages): A from the start, no one line */
+  alwaysOpen?: boolean
+  /** the page's own prompt, shown while the box has focus */
+  placeholder?: string
 }) {
   const ref = useRef<HTMLTextAreaElement>(null)
   const fullRef = useRef<HTMLTextAreaElement>(null)
@@ -108,7 +114,7 @@ export function DriveBox({
   const [slot, setSlot] = useState<HTMLElement | null>(null)
   useEffect(() => { if (fullSlot) setSlot(document.getElementById(fullSlot)) }, [fullSlot])
   const split = !!fullSlot
-  const open = !split && (opened || wantsRoom(story))
+  const open = !split && (alwaysOpen || opened || wantsRoom(story))
   useEffect(() => {
     if (!split && open && !opened) {
       setOpened(true)
@@ -259,7 +265,7 @@ export function DriveBox({
             ref={ref}
             className="dv-paper"
             rows={1}
-            placeholder={open ? 'Your joke, your story, your stand-up set: write it here and make it funnier…' : focusTop ? 'Make your funny story funnier. One line is enough…' : typedTop}
+            placeholder={open ? (focusTop ? (placeholder ?? 'Your joke, your story, your stand-up set: write it here and make it funnier…') : alwaysOpen ? typedFull : 'Your joke, your story, your stand-up set: write it here and make it funnier…') : focusTop ? 'Make your funny story funnier. One line is enough…' : typedTop}
             value={story}
             maxLength={4000}
             disabled={busy}
