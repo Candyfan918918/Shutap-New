@@ -833,7 +833,9 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     jokeTap('demo_remix', tier, {})
   }
   const checks = storyChecks(story)
-  const drive = !!embed?.drive
+  // Nov 17 2026 (Candy): guide and funniest pages get A, the guided notebook box, open from the start
+  const driveA = !!embed && !embed.bare && !embed.mirror && !embed.drive
+  const drive = !!embed?.drive || driveA
   const driveTrack = useCallback((event: string, props?: Record<string, unknown>) => jokeTap(event, tier, props ?? {}), [tier])
 
   const onPhase = embed?.onPhase
@@ -1154,6 +1156,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 settingsLine={`${controls.audience} · ${controls.voice} · ${controls.length} · wild ${controls.heat}`}
                 track={driveTrack}
                 fullSlot={embed?.driveFull}
+                alwaysOpen={driveA}
+                placeholder={embed?.placeholder}
                 settings={
                   <div className="bt-ctl">
                     <Choice label="audience" options={AUDIENCES} value={controls.audience} onPick={(v) => setControls((c) => ({ ...c, audience: v }))} />
