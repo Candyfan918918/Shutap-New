@@ -13,6 +13,7 @@ const NAV: Array<{ to: string; label: string }> = [
   { to: '/admin/feedback', label: 'feedback' },
   { to: '/admin/poll', label: 'poll' },
   { to: '/admin/battle', label: 'battle' },
+  { to: '/admin/jokenet', label: 'jokenet' },
   { to: '/admin/reddit', label: 'reddit' },
 ]
 

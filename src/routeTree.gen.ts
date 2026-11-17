@@ -89,6 +89,7 @@ import { Route as AuthenticatedAdminBattleRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminEventsRouteImport } from './routes/_authenticated/admin.events'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated/admin.feedback'
 import { Route as AuthenticatedAdminGuestsRouteImport } from './routes/_authenticated/admin.guests'
+import { Route as AuthenticatedAdminJokenetRouteImport } from './routes/_authenticated/admin.jokenet'
 import { Route as AuthenticatedAdminOverviewRouteImport } from './routes/_authenticated/admin.overview'
 import { Route as AuthenticatedAdminPollRouteImport } from './routes/_authenticated/admin.poll'
 import { Route as AuthenticatedAdminRedditRouteImport } from './routes/_authenticated/admin.reddit'
@@ -106,6 +107,7 @@ import { Route as ToastsPrompterIdRouteImport } from './routes/toasts.prompter.$
 import { Route as ApiPublicHooksBillingReceiptsRouteImport } from './routes/api/public/hooks/billing-receipts'
 import { Route as ApiPublicHooksDailyIdeaEmailsRouteImport } from './routes/api/public/hooks/daily-idea-emails'
 import { Route as ApiPublicHooksDispatchCheckinsRouteImport } from './routes/api/public/hooks/dispatch-checkins'
+import { Route as ApiPublicHooksJokenetNightlyRouteImport } from './routes/api/public/hooks/jokenet-nightly'
 import { Route as ApiPublicHooksMirrorEvolutionRouteImport } from './routes/api/public/hooks/mirror-evolution'
 import { Route as ApiPublicHooksRedditLeadsRouteImport } from './routes/api/public/hooks/reddit-leads'
 import { Route as ApiPublicHooksReengagementEmailsRouteImport } from './routes/api/public/hooks/reengagement-emails'
@@ -523,6 +525,12 @@ const AuthenticatedAdminGuestsRoute =
     path: '/admin/guests',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminJokenetRoute =
+  AuthenticatedAdminJokenetRouteImport.update({
+    id: '/admin/jokenet',
+    path: '/admin/jokenet',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminOverviewRoute =
   AuthenticatedAdminOverviewRouteImport.update({
     id: '/admin/overview',
@@ -612,6 +620,12 @@ const ApiPublicHooksDispatchCheckinsRoute =
   ApiPublicHooksDispatchCheckinsRouteImport.update({
     id: '/api/public/hooks/dispatch-checkins',
     path: '/api/public/hooks/dispatch-checkins',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksJokenetNightlyRoute =
+  ApiPublicHooksJokenetNightlyRouteImport.update({
+    id: '/api/public/hooks/jokenet-nightly',
+    path: '/api/public/hooks/jokenet-nightly',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicHooksMirrorEvolutionRoute =
@@ -745,6 +759,7 @@ export interface FileRoutesByFullPath {
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/guests': typeof AuthenticatedAdminGuestsRoute
+  '/admin/jokenet': typeof AuthenticatedAdminJokenetRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/admin/poll': typeof AuthenticatedAdminPollRoute
   '/admin/reddit': typeof AuthenticatedAdminRedditRoute
@@ -762,6 +777,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
+  '/api/public/hooks/jokenet-nightly': typeof ApiPublicHooksJokenetNightlyRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
@@ -852,6 +868,7 @@ export interface FileRoutesByTo {
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/guests': typeof AuthenticatedAdminGuestsRoute
+  '/admin/jokenet': typeof AuthenticatedAdminJokenetRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/admin/poll': typeof AuthenticatedAdminPollRoute
   '/admin/reddit': typeof AuthenticatedAdminRedditRoute
@@ -869,6 +886,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
+  '/api/public/hooks/jokenet-nightly': typeof ApiPublicHooksJokenetNightlyRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
@@ -961,6 +979,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/events': typeof AuthenticatedAdminEventsRoute
   '/_authenticated/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin/guests': typeof AuthenticatedAdminGuestsRoute
+  '/_authenticated/admin/jokenet': typeof AuthenticatedAdminJokenetRoute
   '/_authenticated/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/_authenticated/admin/poll': typeof AuthenticatedAdminPollRoute
   '/_authenticated/admin/reddit': typeof AuthenticatedAdminRedditRoute
@@ -978,6 +997,7 @@ export interface FileRoutesById {
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
+  '/api/public/hooks/jokenet-nightly': typeof ApiPublicHooksJokenetNightlyRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
@@ -1070,6 +1090,7 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/guests'
+    | '/admin/jokenet'
     | '/admin/overview'
     | '/admin/poll'
     | '/admin/reddit'
@@ -1087,6 +1108,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
+    | '/api/public/hooks/jokenet-nightly'
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
@@ -1177,6 +1199,7 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/guests'
+    | '/admin/jokenet'
     | '/admin/overview'
     | '/admin/poll'
     | '/admin/reddit'
@@ -1194,6 +1217,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
+    | '/api/public/hooks/jokenet-nightly'
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
@@ -1285,6 +1309,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/events'
     | '/_authenticated/admin/feedback'
     | '/_authenticated/admin/guests'
+    | '/_authenticated/admin/jokenet'
     | '/_authenticated/admin/overview'
     | '/_authenticated/admin/poll'
     | '/_authenticated/admin/reddit'
@@ -1302,6 +1327,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
+    | '/api/public/hooks/jokenet-nightly'
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
@@ -1398,6 +1424,7 @@ export interface RootRouteChildren {
   ApiPublicHooksBillingReceiptsRoute: typeof ApiPublicHooksBillingReceiptsRoute
   ApiPublicHooksDailyIdeaEmailsRoute: typeof ApiPublicHooksDailyIdeaEmailsRoute
   ApiPublicHooksDispatchCheckinsRoute: typeof ApiPublicHooksDispatchCheckinsRoute
+  ApiPublicHooksJokenetNightlyRoute: typeof ApiPublicHooksJokenetNightlyRoute
   ApiPublicHooksMirrorEvolutionRoute: typeof ApiPublicHooksMirrorEvolutionRoute
   ApiPublicHooksRedditLeadsRoute: typeof ApiPublicHooksRedditLeadsRoute
   ApiPublicHooksReengagementEmailsRoute: typeof ApiPublicHooksReengagementEmailsRoute
@@ -1970,6 +1997,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminGuestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/jokenet': {
+      id: '/_authenticated/admin/jokenet'
+      path: '/admin/jokenet'
+      fullPath: '/admin/jokenet'
+      preLoaderRoute: typeof AuthenticatedAdminJokenetRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/overview': {
       id: '/_authenticated/admin/overview'
       path: '/admin/overview'
@@ -2089,6 +2123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksDispatchCheckinsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/jokenet-nightly': {
+      id: '/api/public/hooks/jokenet-nightly'
+      path: '/api/public/hooks/jokenet-nightly'
+      fullPath: '/api/public/hooks/jokenet-nightly'
+      preLoaderRoute: typeof ApiPublicHooksJokenetNightlyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/mirror-evolution': {
       id: '/api/public/hooks/mirror-evolution'
       path: '/api/public/hooks/mirror-evolution'
@@ -2162,6 +2203,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminEventsRoute: typeof AuthenticatedAdminEventsRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminGuestsRoute: typeof AuthenticatedAdminGuestsRoute
+  AuthenticatedAdminJokenetRoute: typeof AuthenticatedAdminJokenetRoute
   AuthenticatedAdminOverviewRoute: typeof AuthenticatedAdminOverviewRoute
   AuthenticatedAdminPollRoute: typeof AuthenticatedAdminPollRoute
   AuthenticatedAdminRedditRoute: typeof AuthenticatedAdminRedditRoute
@@ -2177,6 +2219,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminEventsRoute: AuthenticatedAdminEventsRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminGuestsRoute: AuthenticatedAdminGuestsRoute,
+  AuthenticatedAdminJokenetRoute: AuthenticatedAdminJokenetRoute,
   AuthenticatedAdminOverviewRoute: AuthenticatedAdminOverviewRoute,
   AuthenticatedAdminPollRoute: AuthenticatedAdminPollRoute,
   AuthenticatedAdminRedditRoute: AuthenticatedAdminRedditRoute,
@@ -2296,6 +2339,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksBillingReceiptsRoute: ApiPublicHooksBillingReceiptsRoute,
   ApiPublicHooksDailyIdeaEmailsRoute: ApiPublicHooksDailyIdeaEmailsRoute,
   ApiPublicHooksDispatchCheckinsRoute: ApiPublicHooksDispatchCheckinsRoute,
+  ApiPublicHooksJokenetNightlyRoute: ApiPublicHooksJokenetNightlyRoute,
   ApiPublicHooksMirrorEvolutionRoute: ApiPublicHooksMirrorEvolutionRoute,
   ApiPublicHooksRedditLeadsRoute: ApiPublicHooksRedditLeadsRoute,
   ApiPublicHooksReengagementEmailsRoute: ApiPublicHooksReengagementEmailsRoute,
