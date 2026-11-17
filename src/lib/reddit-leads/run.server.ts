@@ -60,12 +60,14 @@ function cleanTitle(t: string): string {
   return t.replace(/\s*[:|-]\s*r\/[A-Za-z0-9_]+\s*$/i, '').replace(/\s*-\s*Reddit\s*$/i, '').trim()
 }
 
-const SCORE_SYSTEM = `You sort Reddit threads for a humor-writing founder who replies by hand with genuinely helpful jokes and tips.
-Score each thread 1-10 for how much the person who posted it needs help making something funny right now, judging only from the title and snippet.
-9-10: they are asking for help writing a funny speech, toast, story, joke or set, or asking which tool helps with that.
-7-8: they ask how to be funnier, how to tell a story better, or want feedback on jokes, and a reply with concrete jokes or tips would clearly help.
-4-6: loosely related; a reply would feel off-topic or forced.
-1-3: news, memes, finished jokes posted for laughs, someone promoting their own thing, a closed or old discussion, or anything touching grief, death, illness, self-harm, abuse, minors or a crisis. These are always 1.
+// Focus (Candy, Nov 17 2026): comedians, comedy creators and stand-up only.
+const SCORE_SYSTEM = `You sort Reddit threads for a founder who writes comedy and replies by hand, comic to comic, with genuinely useful jokes and craft tips.
+The only people we reply to are stand-up comedians (open mic to working comics), sketch and improv performers, comedy writers, and creators making comedy videos (TikTok, Reels, YouTube).
+Score each thread 1-10 for how much that person needs help with their comedy right now, judging only from the title and snippet.
+9-10: a comic or comedy creator asks for help with a specific joke, tag, punchline, premise, bit, set, tight five, open-mic set, sketch, or the hook of a comedy video.
+7-8: a comic or comedy creator asks a craft question (how to write jokes, find premises, fix a bit that bombed, crowd work, writer's block, making comedy videos funnier) where a reply with concrete lines or tips would clearly help.
+4-6: comedy-adjacent but not about their own material; a reply would feel forced.
+1-3: not a comic or comedy creator (wedding toasts, speeches, work presentations, general "how to be funny in conversation" or social-skills posts), news, memes, finished jokes posted for laughs, someone promoting their own thing, a closed or old discussion, an argument about AI, or anything touching grief, death, illness, self-harm, abuse, minors or a crisis. These are always 1.
 Return JSON only: {"scores":[{"i":<index>,"score":<1-10>,"reason":"<under 12 words>"}]}`
 
 async function scoreLeads(leads: Lead[], errors: string[]): Promise<void> {
@@ -100,9 +102,9 @@ function draftSystem(mention: { ok: boolean; link: string }): string {
   const ending = mention.ok
     ? `End with one short line that says plainly you made it, in your own words, for example: "Full disclosure, I made shutap.com, it writes these if you want more options: ${mention.link}". Use exactly that link, once.`
     : `Do not mention Shutap, any website, app, tool or link. The reply must stand on its own.`
-  return `You write a Reddit comment for Candy, a founder who writes comedy, replying by hand to someone who needs something funny.
+  return `You write a Reddit comment for Candy, a founder who writes comedy, replying by hand to a comic or comedy creator about their material. Talk like a fellow comic who has done open mics, not a coach or a brand.
 Write like a person on Reddit: plain, warm, lowercase-casual is fine, no greeting, no sign-off, no hashtags, no emojis, no bullet-point essays, no marketing words.
-Give real help they can use right now: two or three jokes or lines written for their exact situation, and at most one concrete tip on delivery or structure.
+Give real help they can use tonight: two or three tags, punchlines or alternate lines written for their exact premise, and at most one concrete craft tip (setup length, where the laugh word goes, act-outs, tagging, the first two seconds of a video). Never offer to write their set for them.
 You only see the title and a snippet, so keep jokes to what is stated; never invent names or facts about them.
 Never punch down: nothing about race, religion, nationality, accent, disability, weight or sexuality.
 Under 120 words before the last line.
