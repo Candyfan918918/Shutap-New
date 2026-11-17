@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { MENTIONS_FROM_DAY, isRepeat, mayMention, overlap, parseThreadUrl, pickDrafts, shutapLink } from './rules'
+import { MENTIONS_FROM_DAY, isRepeat, looksComplete, mayMention, overlap, parseThreadUrl, pickDrafts, shutapLink } from './rules'
 
 test('thread links reduce to one canonical URL; other Reddit pages are not threads', () => {
   assert.deepEqual(parseThreadUrl('https://old.reddit.com/r/Standup/comments/1AbC9x/my_first_open_mic/?utm=x'), {
@@ -64,4 +64,13 @@ test('repeat check catches near-copies, not different replies', () => {
   assert.equal(isRepeat(b, [a]), true)
   assert.equal(isRepeat(c, [a]), false)
   assert.equal(isRepeat('short', []), false)
+})
+
+test('cut-off drafts are caught; finished ones pass', () => {
+  const body = 'you can actually lean right into that rule as an opening joke, then go straight to the story about the canoe trip and land on the couple.'
+  assert.equal(looksComplete(body), true)
+  assert.equal(looksComplete(body + ' "google told me the number one rule of a best man speech'), false)
+  assert.equal(looksComplete('the trick to fast reaction time is actually leaning into the slow one so it looks intentional. if you freeze after a compliment or'), false)
+  assert.equal(looksComplete(body + ' Full disclosure, I made this: https://shutap.com/toasts?utm_source=reddit'), true)
+  assert.equal(looksComplete('too short.'), false)
 })

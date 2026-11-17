@@ -16,6 +16,7 @@ import {
   type RedditLead,
   type RedditReport,
 } from '@/lib/reddit-leads/admin.functions'
+import { looksComplete } from '@/lib/reddit-leads/rules'
 
 export const Route = createFileRoute('/_authenticated/admin/reddit')({
   head: () => ({ meta: [...pageMeta('Admin · Reddit — Shutap', 'Review drafted Reddit replies in the private administration area.', '/admin/reddit'), { name: 'robots', content: 'noindex' }] }),
@@ -243,6 +244,7 @@ function DraftCard({ lead, onMark }: { lead: RedditLead; onMark: (action: 'poste
   const [copied, setCopied] = useState(false)
   const [busy, setBusy] = useState(false)
   const mentions = /shutap/i.test(body)
+  const cutOff = !looksComplete(body)
 
   async function copy() {
     try {
@@ -256,6 +258,7 @@ function DraftCard({ lead, onMark }: { lead: RedditLead; onMark: (action: 'poste
 
   async function run(action: 'posted' | 'skipped') {
     let reason: string | undefined
+    if (action === 'posted' && cutOff && !window.confirm('This reply looks cut off mid-sentence. Did you finish it before posting?')) return
     if (action === 'skipped') reason = window.prompt('Why skip? (optional, helps tune the search)') ?? undefined
     setBusy(true)
     await onMark(action, action === 'posted' ? body : undefined, reason)
@@ -278,6 +281,7 @@ function DraftCard({ lead, onMark }: { lead: RedditLead; onMark: (action: 'poste
         rows={Math.min(14, Math.max(5, body.split('\n').length + 2))}
         style={{ width: '100%', boxSizing: 'border-box', padding: 12, borderRadius: 10, border: '.5px solid rgba(11,8,15,.16)', fontFamily: 'inherit', fontSize: 14, lineHeight: 1.5, resize: 'vertical' }}
       />
+      {cutOff && <div style={{ fontSize: 12, color: '#c1216b', marginTop: 6 }}>This reply looks cut off. Finish the last sentence before you post it.</div>}
       {mentions && <div style={{ fontSize: 12, color: '#c1216b', marginTop: 6 }}>This reply mentions Shutap. Keep the "I made this" part.</div>}
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10 }}>
         <button type="button" onClick={() => void copy()} style={btnDark}>{copied ? 'copied' : 'copy reply'}</button>

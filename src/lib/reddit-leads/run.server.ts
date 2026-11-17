@@ -14,6 +14,7 @@ import { pacificDay, pacificMidnight } from '@/lib/pacific-day'
 import {
   MAX_DRAFTS_PER_DAY,
   isRepeat,
+  looksComplete,
   mayMention,
   parseThreadUrl,
   pickDrafts,
@@ -109,7 +110,7 @@ ${ending}
 If the title and snippet are not enough to write something genuinely useful, reply with exactly SKIP.`
 }
 
-async function draftReply(lead: Lead, mention: { ok: boolean; link: string }): Promise<{ text: string; error?: string }> {
+async function draftOnce(lead: Lead, mention: { ok: boolean; link: string }): Promise<{ text: string; error?: string }> {
   const res = await callAgent({
     system: draftSystem(mention),
     messages: [
@@ -118,11 +119,22 @@ async function draftReply(lead: Lead, mention: { ok: boolean; link: string }): P
         content: `Subreddit: r/${lead.subreddit}\nTitle: ${lead.title}\nSnippet: ${lead.snippet || '(none)'}\n\nWrite the comment.`,
       },
     ],
-    maxTokens: 700,
+    // Generous: the model spends part of this budget thinking before it writes,
+    // and a small budget cut drafts off mid-sentence (Nov 17).
+    maxTokens: 4000,
     temperature: 0.9,
-    timeoutMs: 60_000,
+    timeoutMs: 90_000,
   })
   return { text: res.text.trim(), error: res.error }
+}
+
+/** A draft, never a cut-off one: one more try if the first ends mid-sentence. */
+async function draftReply(lead: Lead, mention: { ok: boolean; link: string }): Promise<{ text: string; error?: string }> {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const out = await draftOnce(lead, mention)
+    if (out.error || !out.text || out.text === 'SKIP' || looksComplete(out.text)) return out
+  }
+  return { text: '', error: 'draft came back cut off twice' }
 }
 
 /** Run once for the Pacific day. `force` re-runs a day that already ran (manual

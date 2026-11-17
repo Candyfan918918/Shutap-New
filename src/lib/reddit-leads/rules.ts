@@ -120,6 +120,16 @@ export function overlap(a: string, b: string): number {
   return shared / (x.size + y.size - shared)
 }
 
+/** A finished reply ends on sentence punctuation, a closing quote or bracket,
+ *  or the Shutap link, and is not too short to be a real answer. A reply that
+ *  ends mid-word was cut off and must never reach Candy. */
+export function looksComplete(text: string): boolean {
+  const t = text.trim()
+  if (t.length < 120) return false
+  if (/https?:\/\/\S+$/.test(t)) return true
+  return /[.!?…)"'”’]$/.test(t)
+}
+
 /** True when the draft repeats any earlier reply too closely. Reddit's spam
  *  filters look for the same text posted in several places. */
 export function isRepeat(draft: string, earlier: string[]): boolean {
