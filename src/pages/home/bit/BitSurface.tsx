@@ -261,6 +261,8 @@ export type BitEmbed = {
   drive?: boolean
   /** with drive: the id of the place lower on the page where the full box stands open */
   driveFull?: string
+  /** guide and funniest pages (Nov 17 2026): the slim one-line box, no full box */
+  slim?: boolean
 }
 
 /** the five lines, shared by the boxes on one page */
@@ -1140,7 +1142,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               // the way /bits does, "Your turn — write yours.", same width.
               <div className="bt-turn" id="bit-write">
                 <h2>Your turn — write yours.</h2>
-                <span>free · no sign-in to start · your lines stay word for word</span>
+                {!embed.slim && <span>free · no sign-in to start · your lines stay word for word</span>}
               </div>
             ) : (
               <div className="bt-hero">
@@ -1153,8 +1155,19 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             )}
 
             {/* Nov 6 2026: the product pills are gone; the homepage lists the products. */}
+            {drive && lined && boxStep === 'story' && move && (
+              <div className="bt-move" role="status">
+                <span>
+                  the move: <b>{move.name}</b>
+                </span>
+                <button type="button" className="bt-btn ghost sm" onClick={() => setMove(null)} aria-label="Unpin this move">
+                  unpin
+                </button>
+              </div>
+            )}
             {drive && lined && boxStep === 'story' ? (
               <DriveBox
+                slim={embed?.slim}
                 story={story}
                 onStory={(v) => { typed.current = true; setStory(v) }}
                 checks={checks}

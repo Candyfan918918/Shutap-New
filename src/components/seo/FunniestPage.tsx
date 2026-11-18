@@ -139,7 +139,7 @@ export function FunniestPage({
         <p style={{ fontSize: 17, margin: '0 0 32px' }}>{entry.capsule}</p>
 
         <div style={{ margin: '0 0 44px' }}>
-          {toasts ? <ToastsEmbed page={`funniest/${entry.slug}`} target={toasts} /> : realtor ? <RealtorEmbed page={`funniest/${entry.slug}`} /> : <BitSurface embed={{ page: `funniest/${entry.slug}`, ...FUNNIEST_WRITER }} />}
+          {toasts ? <ToastsEmbed page={`funniest/${entry.slug}`} target={toasts} /> : realtor ? <RealtorEmbed page={`funniest/${entry.slug}`} /> : <BitSurface embed={{ page: `funniest/${entry.slug}`, ...FUNNIEST_WRITER, drive: true, slim: true }} />}
         </div>
 
         <section style={{ marginBottom: 40 }}>
@@ -205,7 +205,7 @@ export function FunniestPage({
                     window.dispatchEvent(new CustomEvent('shutap:move', { detail: { id, name: t.name } }))
                     void import('@/lib/tracking').then((m) => m.trackEvent('move_clicked', { page: `funniest/${entry.slug}`, technique: id })).catch(() => {})
                     document.getElementById('bit-write')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                    window.setTimeout(() => (document.querySelector('#bit-write ~ .bt-box .bt-etext, .bt-box .bt-etext') as HTMLElement | null)?.focus(), 500)
+                    window.setTimeout(() => (document.querySelector('#bit-story, .bt-box .bt-etext') as HTMLElement | null)?.focus({ preventScroll: true }), 500)
                   }}
                   style={{ alignSelf: 'flex-start', marginTop: 4, color: BRAND, fontWeight: 600, fontSize: 15, textDecoration: 'none' }}
                 >
