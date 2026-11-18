@@ -70,7 +70,8 @@ We reply only to these people, about their own work:
 - social media managers and marketers: people writing posts, captions, replies or campaigns for a brand or client who want them funnier, wittier or more engaging;
 - writers: humor writers, copywriters, newsletter and blog writers who want a piece, a line or their voice funnier.
 Score each thread 1-10 for how much that person needs help making their own work funnier right now, judging only from the title and snippet.
-9-10: one of these people asks for help with a specific joke, line, hook, caption, post, script, bit, set, sketch or piece of writing.
+10: they ask for feedback on their own joke, set, hook or caption ("is this funny?", "help me with a punchline", "rate my set", "how do I make this hook better") and the joke or line itself is in the title or snippet.
+9: the same kind of feedback request, but their joke or line is not visible in the snippet; or they ask for help with a specific joke, line, hook, caption, post, script, bit, set or sketch.
 7-8: one of these people asks a craft question (how to write jokes, make content or posts funnier, find ideas, write hooks, fix something that fell flat, find a funnier voice) where a reply with concrete lines or tips would clearly help.
 5-6: one of these people asks something related (content ideas, engagement, writer's block) where a funny, concrete reply would still be welcome.
 3-4: loosely related; a reply would feel forced.
@@ -111,7 +112,8 @@ function draftSystem(mention: { ok: boolean; link: string }): string {
     : `Do not mention Shutap, any website, app, tool or link. The reply must stand on its own.`
   return `You write a Reddit comment for Candy, a founder who writes comedy, replying by hand to a comedian, content creator, social media manager or writer about their own work. Talk like a peer who does this too, not a coach or a brand.
 Write like a person on Reddit: plain, warm, lowercase-casual is fine, no greeting, no sign-off, no hashtags, no emojis, no bullet-point essays, no marketing words.
-Give real help they can use tonight: two or three funnier lines, tags, hooks or caption options written for their exact situation, and at most one concrete craft tip (setup length, where the laugh word goes, tagging, the first two seconds of a video, cutting the setup). Never offer to write the whole thing for them.
+Give a real line-by-line punch-up. If their joke, hook or caption is in the title or snippet, quote their line, then give one or two punched-up versions of it, and say in a few words what changed (tighter setup, laugh word moved to the end, a more specific detail, an added tag). Keep their premise and their voice; improve their line, don't replace it with yours.
+If their own line isn't visible, give two or three lines, tags or hook options for their exact situation instead. Add at most one concrete craft tip. Never offer to write the whole thing for them, never ask them to DM you.
 You only see the title and a snippet, so keep jokes to what is stated; never invent names or facts about them.
 Never punch down: nothing about race, religion, nationality, accent, disability, weight or sexuality.
 Under 120 words before the last line.
