@@ -608,3 +608,5 @@
       repeating-linear-gradient(180deg, transparent 0, transparent 27px, rgba(90, 30, 50, .10) 27px, rgba(90, 30, 50, .10) 28px);
     background-position: 0 8px; }
 }
+/* Nov 17 2026: a pinned move above the slim box (funniest pages) */
+.bt-col > .bt-move { border: 1px dashed rgba(184, 69, 107, 0.40); border-radius: 12px; }

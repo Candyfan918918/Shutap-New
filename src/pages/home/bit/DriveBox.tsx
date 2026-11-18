@@ -84,6 +84,7 @@ export function DriveBox({
   settingsLine,
   track,
   fullSlot,
+  slim = false,
 }: {
   story: string
   onStory: (s: string) => void
@@ -101,13 +102,17 @@ export function DriveBox({
    *  full box (A) always stands open. The one line (C) then stays one line on
    *  top, and both type into the same story. */
   fullSlot?: string
+  /** Nov 17 2026 (guide and funniest pages): the slim one-line box only. It
+   *  never opens in place; it grows to three lines, then scrolls. Settings
+   *  come from the page's preset. */
+  slim?: boolean
 }) {
   const ref = useRef<HTMLTextAreaElement>(null)
   const fullRef = useRef<HTMLTextAreaElement>(null)
   const [opened, setOpened] = useState(false)
   const [slot, setSlot] = useState<HTMLElement | null>(null)
   useEffect(() => { if (fullSlot) setSlot(document.getElementById(fullSlot)) }, [fullSlot])
-  const split = !!fullSlot
+  const split = !!fullSlot || slim
   const open = !split && (opened || wantsRoom(story))
   useEffect(() => {
     if (!split && open && !opened) {
@@ -120,10 +125,13 @@ export function DriveBox({
     const el = ref.current
     if (!split || !el) return
     el.style.height = ''
+    el.style.overflowY = ''
     if (!story) return
     const base = el.clientHeight
     el.style.height = 'auto'
     el.style.height = `${Math.min(Math.max(el.scrollHeight, base), 132)}px`
+    // past three lines the box scrolls instead of hiding what's typed
+    el.style.overflowY = el.scrollHeight > 132 ? 'auto' : ''
   }, [split, story])
   const focused = useRef(false)
   const [focusTop, setFocusTop] = useState(false)
@@ -201,7 +209,7 @@ export function DriveBox({
   /** A, always open, in its own place on the page (fullSlot) */
   /** A (approved design): the story with the rail on the right, settings
    *  under it; narrower than the page (980px) and at page type sizes. */
-  const full = split && slot ? createPortal(
+  const full = !!fullSlot && slot ? createPortal(
     <div className="bt dv-host dv-a">
       <div className="dv-turn">
         <h2>Your turn — write yours.</h2>
