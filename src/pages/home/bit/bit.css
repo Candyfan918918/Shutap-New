@@ -524,6 +524,7 @@
   background-attachment: local; }
 .dv.open .dv-paper:focus-visible { box-shadow: none; }
 .dv-count { display: flex; justify-content: space-between; gap: 12px; padding: 8px 20px; border-top: 1px solid var(--line); font: 500 12px var(--sora); color: #4f464a; }
+.dv-count .dv-long { color: #9a5b12; font-weight: 600; }
 .dv-set { background: #fdf8fa; border-top: 1px solid var(--line); }
 .dv-set .bt-ctl { padding: 14px 20px 18px; gap: 12px 24px; }
 .dv-set .bt-lbl { font-size: 11px; letter-spacing: .12em; }

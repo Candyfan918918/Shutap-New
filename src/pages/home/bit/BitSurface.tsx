@@ -23,7 +23,7 @@ import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { supabase } from '@/integrations/supabase/client'
 import { claimGuestBits, draftEmptyLines, getBit, listMyBits, splitStory, writeBit, type WriteBitResult } from '@/lib/bits.functions'
-import { splitBySentence, storyChecks } from '@/lib/bits/split'
+import { LONG_WORDS, splitBySentence, storyChecks } from '@/lib/bits/split'
 import { DriveBox } from './DriveBox'
 import {
   AUDIENCES,
@@ -846,6 +846,16 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     window.dispatchEvent(new CustomEvent(LINES_EVENT, { detail: { from: boxId.current, lines: next, locked } }))
   }
   function setBoxLines(d: Draft) { typed.current = true; setLines(d); shareLines(d, linesLocked) }
+  /** Nov 17 2026: the person edits the lines. A line that had words and is
+   *  now empty is tracked (split_line_cleared), so a cut they reject shows up
+   *  in the data: which line, how long it was, and what the cut came from. */
+  function editBoxLines(d: Draft) {
+    for (const sl of ['hook', 'setup', 'tag0', 'tag1', 'button'] as Slot[]) {
+      const was = readSlot(lines, sl).trim()
+      if (was && !readSlot(d, sl).trim()) jokeTrack('split_line_cleared', tier, { line: sl, words: was.split(/\s+/).length, ai: !!aiLines[sl], left: writtenSlots(d).length })
+    }
+    setBoxLines(d)
+  }
   function setBoxLocked(l: Slot[]) { setLinesLocked(l); shareLines(lines, l) }
   useEffect(() => {
     const onLinesEv = (e: Event) => {
@@ -1206,6 +1216,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                     />
                     <div className="bt-checks" aria-label="Checks as you type">
                       <span className="bt-checks-lbl">checks as you type:</span>
+                      {(() => { const n = story.trim() ? story.trim().split(/\s+/).length : 0; return <span className="bt-checks-lbl" style={{ marginLeft: 'auto', color: n > LONG_WORDS ? '#9a5b12' : undefined }}>{n} words · {n > LONG_WORDS ? 'long one: each line gets its best part' : `best under ~${LONG_WORDS}`}</span> })()}
                       {checks.map((c) => (
                         <span key={c.id} className={`bt-check${c.ok ? ' ok' : ''}`}>{c.ok ? '✓' : '○'} {c.label}</span>
                       ))}
@@ -1216,7 +1227,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                     tier={tier}
                     controls={move ? { ...controls, move: move.id } : controls}
                     lines={lines}
-                    onLines={setBoxLines}
+                    onLines={editBoxLines}
                     aiLines={aiLines}
                   drafting={draftingSlots}
                     locked={linesLocked}

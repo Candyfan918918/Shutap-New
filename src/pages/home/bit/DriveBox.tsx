@@ -16,7 +16,7 @@
  * jump. Pure UI: the parent owns the story, the settings and the cut. */
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import type { StoryCheck } from '@/lib/bits/split'
+import { LONG_WORDS, type StoryCheck } from '@/lib/bits/split'
 
 type Item = { q: string; hint: string; add: string; label: string }
 const RAIL: Record<StoryCheck['id'], Item> = {
@@ -230,7 +230,7 @@ export function DriveBox({
             />
           </div>
           <div className="dv-count">
-            <span>{words} {words === 1 ? 'word' : 'words'} · nobody at shutap reads it</span>
+            <span className={words > LONG_WORDS ? 'dv-long' : undefined}>{words} {words === 1 ? 'word' : 'words'} · {words > LONG_WORDS ? 'long one: each line gets its best part' : `best under ~${LONG_WORDS}`} · nobody at shutap reads it</span>
             <span>{settingsLine}</span>
           </div>
           <div className="dv-set">{settings}</div>
@@ -287,7 +287,7 @@ export function DriveBox({
         ) : (
           <>
             <div className="dv-count">
-              <span>{words} {words === 1 ? 'word' : 'words'} · nobody at shutap reads it</span>
+              <span className={words > LONG_WORDS ? 'dv-long' : undefined}>{words} {words === 1 ? 'word' : 'words'} · {words > LONG_WORDS ? 'long one: each line gets its best part' : `best under ~${LONG_WORDS}`} · nobody at shutap reads it</span>
               <span>{settingsLine}</span>
             </div>
             <div className="dv-set">{settings}</div>

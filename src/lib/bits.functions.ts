@@ -23,7 +23,7 @@ import { activePlan } from './plan.server'
 import { downloadsUsed, kitTier, resolveTier } from './bits/tier.server'
 import { BIT_PROMPT_VERSION, heatFor, touchLineDraft, varyBitDraft, writeBitFromStory, type BitFailure, type TouchOption } from './bits/pipeline.server'
 import { allLinesGiven, anyLineGiven, keptAsWritten } from './bits/kept'
-import { checkedSplit, type SplitLines } from './bits/split'
+import { checkedSplit, LONG_WORDS, wordCount, type SplitLines } from './bits/split'
 import { callAgentBounded, tryParseJson } from './agents/gateway'
 import { forgetPerson, personSignal } from './bits/person.server'
 import { NEVER_RESETS, NO_CAP, TOUCH_FAIR_USE, bitDay, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
@@ -937,6 +937,22 @@ Parts, in story order:
 
 Use every sentence once, in order. If the story is too short for a part, return "" for it. Reply with JSON only: {"hook":"","setup":"","tag1":"","tag2":"","button":""}`
 
+/** Nov 17 2026 (Candy): a long story (over LONG_WORDS) can't fit five lines
+ *  whole. Each part is the best run of the person's own words; the rest is
+ *  left out. Still copied character for character (checked in split.ts). */
+const LONG_SPLIT_PROMPT = `You cut a person's long story into the five parts of a stand-up bit. You never write, add, change or reorder words. Every part you return must be copied exactly, character for character, from the story: one continuous run of its words.
+
+The story is too long to use whole. For each part, pick the best run of the story's own words: at most 2 sentences and at most 40 words. Leave everything else out.
+
+Parts, in story order (each part comes later in the story than the one before, no part repeats another):
+- hook: the line that grabs first
+- setup: the one fact needed to follow it
+- tag1: the first laugh after the turn
+- tag2: the next laugh on the same idea
+- button: the line they'd stop on (usually near the end)
+
+Reply with JSON only: {"hook":"","setup":"","tag1":"","tag2":"","button":""}`
+
 /** Nov 12 2026 (Candy): the /bits box is one big box. This cuts what they
  *  typed into hook, setup, tag 1, tag 2 and button. Names come out first
  *  (the Scrubber), the Guard reads it, then a model proposes the cut and the
@@ -955,9 +971,12 @@ export const splitStory = createServerFn({ method: 'POST' })
       const scrubbed = keepAsTyped(data.story)
       const clean = scrubbed.clean_text.trim()
       if (!clean) return { ok: false, reason: 'failed' }
+      const long = wordCount(clean) > LONG_WORDS
       const [crisis, proposed] = await Promise.all([
         runClassifyCrisis(clean),
-        callAgentBounded({ system: SPLIT_PROMPT, messages: [{ role: 'user', content: clean }], maxTokens: 900, jsonMode: true, model: process.env.BIT_SPLIT_MODEL || undefined, temperature: 0, reasoningEffort: 'minimal' }, 5_000)
+        // Nov 17 2026: a long story gets its own prompt and more time (a 469-word
+        // story ran past 5s and fell back to the plain sentence cut)
+        callAgentBounded({ system: long ? LONG_SPLIT_PROMPT : SPLIT_PROMPT, messages: [{ role: 'user', content: clean }], maxTokens: long ? 1_200 : 900, jsonMode: true, model: process.env.BIT_SPLIT_MODEL || undefined, temperature: 0, reasoningEffort: 'minimal' }, long ? 15_000 : 5_000)
           .then((r) => (r.error ? null : tryParseJson<Record<string, unknown>>(r.text)))
           .catch(() => null),
       ])

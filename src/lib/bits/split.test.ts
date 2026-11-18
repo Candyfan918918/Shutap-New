@@ -44,3 +44,30 @@ test('checks fill in as the story grows', () => {
   assert.equal(storyChecks('').filter((c) => c.ok).length, 0)
   assert.equal(storyChecks(story).every((c) => c.ok), true)
 })
+
+// Nov 17 2026: a long story (a guest pasted 469 words) put every middle sentence in tag 2.
+const longStory = Array.from({ length: 30 }, (_, i) => `Sentence number ${i + 1} is about my boss and the printer.`).join(' ')
+
+test('long story, no model: tag 2 holds at most two sentences', () => {
+  const s = splitBySentence(longStory)
+  assert.equal(sentences(s.tags[1]).length, 2)
+  assert.equal(s.button, 'Sentence number 30 is about my boss and the printer.')
+})
+
+test('long story with no punctuation: each line is clipped, still word for word', () => {
+  const run = Array.from({ length: 200 }, (_, i) => `word${i}`).join(' ')
+  const s = splitBySentence(run)
+  assert.equal(s.hook.split(' ').length, 50)
+  assert.equal(foundIn(s.hook, run), true)
+})
+
+test('long story: a model cut that picks runs is kept; a giant line is thrown out', () => {
+  const pick = (n: number) => `Sentence number ${n} is about my boss and the printer.`
+  const ok = checkedSplit({ hook: pick(1), setup: pick(4), tag1: pick(12), tag2: `${pick(20)} ${pick(21)}`, button: pick(30) }, longStory)
+  assert.equal(ok.source, 'model')
+  const giant = checkedSplit({ hook: pick(1), setup: pick(2), tag1: pick(3), tag2: Array.from({ length: 26 }, (_, i) => pick(i + 4)).join(' '), button: pick(30) }, longStory)
+  assert.equal(giant.source, 'model')
+  assert.equal(giant.lines.tags[1], '')
+  const noButton = checkedSplit({ hook: pick(1), setup: pick(2) }, longStory)
+  assert.equal(noButton.source, 'sentences')
+})
