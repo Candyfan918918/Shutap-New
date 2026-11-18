@@ -67,6 +67,7 @@ export const ADMIN_FUNNEL_EVENTS = new Set([
   'limit_shown',
   'story_split_done',
   'story_split_failed',
+  'split_line_cleared',
   'signin_sheet_opened',
   'signin_dismissed',
 ])
