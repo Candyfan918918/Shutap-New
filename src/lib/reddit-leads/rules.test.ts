@@ -38,11 +38,11 @@ test('mentions: allowed only after warm-up, where links are allowed, under 1 in 
   assert.equal(mayMention({ ...open, postedTotal: 18, postedWithMention: 1 }).ok, false)
 })
 
-test('picking drafts: best first, score 7+, one per subreddit, none where already replied today, capped', () => {
+test('picking drafts: best first, score 6+, one per subreddit, none where already replied today, capped', () => {
   const leads = [
     { id: 'a', subreddit: 'standup', score: 9 },
     { id: 'b', subreddit: 'standup', score: 8 },
-    { id: 'c', subreddit: 'jokes', score: 6 },
+    { id: 'c', subreddit: 'jokes', score: 5 },
     { id: 'd', subreddit: 'weddingplanning', score: 10 },
     { id: 'e', subreddit: 'socialskills', score: 7 },
     { id: 'f', subreddit: 'bestman', score: 8 },
@@ -51,7 +51,7 @@ test('picking drafts: best first, score 7+, one per subreddit, none where alread
   assert.deepEqual(picked.map((l) => l.id), ['d', 'a'])
   const why = Object.fromEntries(dropped.map((d) => [d.lead.id, d.reason]))
   assert.equal(why.b, 'one draft per subreddit a day')
-  assert.equal(why.c, 'score 6')
+  assert.equal(why.c, 'score 5')
   assert.equal(why.e, 'already replied in this subreddit today')
   assert.equal(why.f, 'daily draft cap')
 })

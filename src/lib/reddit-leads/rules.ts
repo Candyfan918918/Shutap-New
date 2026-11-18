@@ -5,9 +5,9 @@
 // well inside what Reddit and each subreddit allow.
 
 /** Most drafts in one day. */
-export const MAX_DRAFTS_PER_DAY = 5
+export const MAX_DRAFTS_PER_DAY = 10
 /** Lowest score (1-10) that becomes a draft. */
-export const MIN_SCORE = 7
+export const MIN_SCORE = 6
 /** No Shutap mentions before this Pacific day: two weeks of plain helpful replies
  *  first, while the account builds history. */
 export const MENTIONS_FROM_DAY = '2026-12-02'
