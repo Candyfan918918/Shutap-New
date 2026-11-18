@@ -85,3 +85,4 @@ recurring character sketch
 sketch packet
 sketch troupe
 sketch comedian
+chatgpt prompt to make a joke funnier
