@@ -14,7 +14,7 @@ export const Route = createFileRoute('/welcome')({
       { name: 'robots', content: 'noindex' },
     ],
     styles: [
-      { children: 'html,body{background:#100c14}' },
+      { children: 'html,body{background-color:#fbf6f7}' },
     ],
   }),
   headers: () => ({

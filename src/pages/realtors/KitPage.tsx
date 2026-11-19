@@ -15,6 +15,7 @@ import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe
 import { getStripe, getStripeEnvironment } from '@/lib/stripe'
 import { confirmKitPrepay, createKitCheckout, createKitPrepayCheckout, kitPaidStatus } from '@/lib/payments.functions'
 import { setDurableReturn } from '@/lib/auth-guard'
+import { SignInSheet } from '@/components/signin/SignIn'
 import { trackEvent } from '@/lib/tracking'
 import { KitView } from './KitView'
 import './realtors.css'
@@ -80,6 +81,8 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, aside
   const [usage, setUsage] = useState<KitUsage | null>(null)
   const [mine, setMine] = useState<KitSummary[]>([])
   const [sheet, setSheet] = useState<null | 'signin' | 'limit' | 'touch_limit' | 'off' | 'buy' | 'prebuy'>(null)
+  // Signed in on this page (the email code): the sign-in sheet has done its job.
+  useEffect(() => { if (userId) setSheet((x) => (x === 'signin' ? null : x)) }, [userId])
   const [moreOpen, setMoreOpen] = useState(false)
   const [checkoutError, setCheckoutError] = useState('')
   const [toast, setToast] = useState<string | null>(null)
@@ -416,17 +419,20 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, aside
 
       {toast && <div className="rl-toast" role="status">{toast}</div>}
 
-      {sheet && (
+      {sheet === 'signin' && (
+        <SignInSheet
+          where="realtors_kit"
+          title="Sign in to write the kit."
+          sub="Free: your first kit, all six outputs, with “— shutap.com” at the end of each. Your link is kept for after."
+          what="listing"
+          onBefore={(method) => track('signin_clicked', { method, from: 'realtors_kit' })}
+          onClose={(how) => { setSheet(null); track('signin_dismissed', { how, from: 'realtors_kit' }) }}
+        />
+      )}
+
+      {sheet && sheet !== 'signin' && (
         <div className="rl-sheet-scrim" onClick={() => setSheet(null)}>
           <div className="rl-sheet" role="dialog" aria-modal onClick={(e) => e.stopPropagation()}>
-            {sheet === 'signin' && (
-              <>
-                <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>Sign in to write the kit.</h3>
-                <p className="rl-note">Free: your first kit, all six outputs, with "— shutap.com" at the end of each. Your link is kept for after.</p>
-                <Link to="/welcome" className="rl-btn">sign in with Google or Apple</Link>
-                <button className="rl-btn ghost" onClick={() => setSheet(null)}>not now</button>
-              </>
-            )}
             {sheet === 'limit' && (
               <>
                 <h3 style={{ margin: 0, font: '800 20px var(--sora)', color: 'var(--wine)' }}>{usage?.tier === 'free' ? 'That was your free kit.' : `That's your ${usage?.kits.cap ?? 20} kits this month.`}</h3>

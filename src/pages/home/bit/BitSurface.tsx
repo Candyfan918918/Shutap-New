@@ -41,7 +41,7 @@ import {
   isPaidTier,
 } from '@/lib/bits/shared'
 import { setDurableReturn } from '@/lib/auth-guard'
-import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
+import { SignInSheet } from '@/components/signin/SignIn'
 import { FREE_LINE } from '@/lib/pricing'
 import { promptOneTap, cancelOneTap, oneTapAvailable } from '@/lib/google-one-tap'
 import { trackEvent } from '@/lib/tracking'
@@ -1038,35 +1038,24 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     jokeTrack('signin_dismissed', tier, { how, ms })
   }
 
-  async function signInForBit(method: 'google' | 'apple' | 'email', from: string) {
+  /** Right before the browser leaves for Google / Apple, or an email code is
+   *  sent: leave the notes that bring the bit (or the story) back. The
+   *  buttons themselves (SignInButtons) go straight to the provider. */
+  function prepareSignIn(method: 'google' | 'apple' | 'email', from: string) {
     if (from === 'bit_2') {
       // The guest's second bit: keep the story, write it right after sign-in.
       const given = lined ? linedGiven.current : undefined
       const text = (lined ? linesText(lines) : story).trim()
-      if (!text) return
-      writePendingWrite({ story: text, controls, write_id: newWriteId(), anon: anonSessionId(), lines: given })
+      if (text) writePendingWrite({ story: text, controls, write_id: newWriteId(), anon: anonSessionId(), lines: given })
     } else if (bit) {
       writePending(bit.id, anonSessionId(), signinFrom)
     }
-    // Nov 5 2026: "funnier" on a line in the box opens this sheet before any
-    // bit exists. The old `if (!bit) return` made all three buttons do
-    // nothing. With no bit there is nothing to carry: the lines are already
-    // kept in this tab (LINES_KEY) and come back in the box after sign-in.
+    // With no bit yet ("funnier" in the box) there is nothing to carry: the
+    // lines are kept in this tab (LINES_KEY) and come back after sign-in.
     const back = embed ? window.location.pathname : '/'
     try { sessionStorage.setItem('shutap_returnTo', back) } catch { /* noop */ }
     setDurableReturn(back)
     jokeTrack('signin_clicked', tier, { method, from })
-    // Each button goes straight to its own sign-in: Google and Apple to the
-    // provider, email to the email form only. Never to a second chooser.
-    if (method === 'google' || method === 'apple') {
-      const err = await startOAuth(method)
-      if (!err) return
-      say(err)
-      return
-    }
-    // In-app navigation: a full page load of /welcome (client-only) showed a
-    // blank screen while the whole app downloaded again.
-    void navigate({ to: '/welcome', search: { method: 'email' } as never })
   }
 
   function writeAnother() {
@@ -1198,7 +1187,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   ) : lined && embed?.demoStory ? (
                     <button type="button" className="bt-btn ghost sm" onClick={remixDemo}>Stuck? Remix the demo story</button>
                   ) : (
-                    <span className="bt-box-aside">names get removed</span>
+                    <span className="bt-box-aside">your words, as typed</span>
                   )}
                 </div>
                 {move && (
@@ -1566,40 +1555,31 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         </div>
       )}
 
-      {sheet && (
+      {(sheet === 'signin' || sheet === 'signin_write') && (
+        <SignInSheet
+          where={sheet === 'signin_write' ? 'bits_sheet_bit_2' : `bits_sheet_${signinFrom}`}
+          title={sheet === 'signin_write' ? (lined ? 'Sign in free to make another bit.' : 'Sign in to get your bit.') : SIGNIN_COPY[signinFrom].title}
+          sub={sheet === 'signin_write' ? (lined ? `Free: ${FREE_LINE}. Your lines stay in the box, and your bit is made from them the moment you’re in.` : `Free: ${FREE_LINE}. Your story stays in the box, and the bit is written the moment you’re in.`) : SIGNIN_COPY[signinFrom].sub}
+          what="bit"
+          onBefore={(method) => prepareSignIn(method, sheet === 'signin_write' ? 'bit_2' : 'sheet')}
+          onClose={(how) => dismissSignin(how === 'close' ? 'not_now' : how)}
+        />
+      )}
+
+      {sheet && sheet !== 'signin' && sheet !== 'signin_write' && (
         <div
           className="bt-scrim"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
-              if (sheet === 'signin' || sheet === 'signin_write') dismissSignin('backdrop')
-              else {
-                if (sheet === 'paywall' || sheet === 'upgrade') {
-                  clearPending()
-                  void trackEvent('paywall_closed', { where: paywallWhere, how: 'backdrop', sheet })
-                }
-                setSheet(null)
+              if (sheet === 'paywall' || sheet === 'upgrade') {
+                clearPending()
+                void trackEvent('paywall_closed', { where: paywallWhere, how: 'backdrop', sheet })
               }
+              setSheet(null)
             }
           }}
         >
           <div className={`bt-sheet${sheet === 'paywall' ? ' wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="bit-sheet-title">
-            {(sheet === 'signin' || sheet === 'signin_write') && (
-              <>
-                <h3 id="bit-sheet-title">{sheet === 'signin_write' ? (lined ? 'Sign in free to make another bit.' : 'Sign in to get your bit.') : SIGNIN_COPY[signinFrom].title}</h3>
-                <p className="bt-sub" style={{ fontSize: 'var(--fs-body)' }}>
-                  {sheet === 'signin_write' ? (lined ? `Free: ${FREE_LINE}. Your lines stay in the box, and your bit is made from them the moment you’re in.` : `Free: ${FREE_LINE}. Your story stays in the box, and the bit is written the moment you’re in.`) : SIGNIN_COPY[signinFrom].sub}
-                </p>
-                <GoogleButton onClick={() => void signInForBit('google', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />
-                <AppleButton onClick={() => void signInForBit('apple', sheet === 'signin_write' ? 'bit_2' : 'sheet')} />
-                <button className="bt-btn ghost block" onClick={() => void signInForBit('email', sheet === 'signin_write' ? 'bit_2' : 'sheet')}>
-                  continue with email
-                </button>
-                <button className="bt-btn ghost block" onClick={() => dismissSignin('not_now')}>
-                  not now
-                </button>
-                <p className="bt-note" style={{ textAlign: 'center' }}>by continuing you confirm you're 18+ and agree to the terms and privacy policy</p>
-              </>
-            )}
             {sheet === 'paywall' && (
               <PaywallBody
                 where={paywallWhere}
@@ -1676,26 +1656,5 @@ function Choice<T extends string>({
       </div>
       {hint && <span className="bt-note" style={{ fontSize: 'var(--fs-label)', marginTop: 6, display: 'block' }}>{hint}</span>}
     </fieldset>
-  )
-}
-
-function AppleButton({ onClick }: { onClick: () => void }) {
-  const opening = useOAuthPending()
-  return (
-    <button className="bt-btn ghost block" disabled={!!opening} onClick={onClick}>
-      {oauthButtonLabel('apple', opening)}
-    </button>
-  )
-}
-
-function GoogleButton({ onClick }: { onClick: () => void }) {
-  const opening = useOAuthPending()
-  return (
-    <button className="bt-btn block" disabled={!!opening} onClick={onClick}>
-      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-        <path fill="#fff" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82zM12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24zM5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09zM12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z" />
-      </svg>
-      {oauthButtonLabel('google', opening)}
-    </button>
   )
 }

@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from '@/integrations/supabase/client'
+import { LoadingDots } from '@/components/signin/SignIn'
 
 async function resolveSession(): Promise<Session | null> {
   const { data } = await supabase.auth.getSession()
@@ -35,19 +36,8 @@ export const Route = createFileRoute('/_authenticated')({
     return { user: session.user }
   },
   pendingComponent: () => (
-    <div
-      style={{
-        minHeight: '60vh',
-        display: 'grid',
-        placeItems: 'center',
-        background: '#ffffff',
-        color: '#443c42',
-        fontFamily: 'Newsreader,serif',
-        fontStyle: 'italic',
-        fontSize: 16,
-      }}
-    >
-      loading…
+    <div style={{ minHeight: '60vh', display: 'grid', placeItems: 'center' }}>
+      <LoadingDots label="Loading" />
     </div>
   ),
   // Session replay hides all text on these pages (profile, check-ins, admin).

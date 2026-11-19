@@ -1,11 +1,11 @@
 /* Final "enter" step. Lazy-loaded — routes user to their pending intent
  * or the default stream. */
 import { useEffect, useRef, useState } from 'react'
-import { Words } from '@/components/motion'
 import { getRouterRef } from '@/lib/router-ref'
 import { clearIntent, readIntent, takeDurableReturn } from '@/lib/auth-guard'
 import { readJokePending } from '@/pages/home/joke/jokeClient'
-import { EyeMark, primaryBtn, SOFT, TEXT } from './shared'
+import { isWaiting, whatFromPath } from '@/components/signin/SignIn'
+import { peekReturnPath } from '@/lib/auth-guard'
 
 export interface WelcomeEnterStepProps {
   displayName: string
@@ -21,6 +21,9 @@ function safePath(p: string | null | undefined): string | null {
 export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
   const [resuming, setResuming] = useState(false)
   const resumedRef = useRef(false)
+  // read before enterRoom() takes the return notes away
+  const [what] = useState(() => (typeof window === 'undefined' ? null : whatFromPath(peekReturnPath())))
+  const first = (displayName || '').trim().split(/\s+/)[0] || ''
 
   const enterRoom = () => {
     const router = getRouterRef()
@@ -85,31 +88,14 @@ export function WelcomeEnterStep({ displayName }: WelcomeEnterStepProps) {
   }, [])
 
   return (
-    <div className="wstep" style={{ display: 'flex', flexDirection: 'column', gap: 24, textAlign: 'center' }}>
-      <EyeMark />
-      <div>
-        <div data-ph-private>
-          <Words as="div" key={displayName} style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 26, color: '#e2dde0', marginBottom: 10 }}>
-            welcome, {displayName}
-          </Words>
-        </div>
-        <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 16, lineHeight: 1.6, color: SOFT, maxWidth: '34ch', margin: '0 auto' }}>
-          you're in. everything you make is saved to My creations.
-        </div>
+    <div className="si-state">
+      <div className="si-check" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#e7548a" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12l5 5 9-10" /></svg>
       </div>
-      <div style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 16, padding: '18px 20px', textAlign: 'left', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-        <div style={{ flex: 'none', marginTop: 3 }}><EyeMark size={22} /></div>
-        <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 15.5, lineHeight: 1.55, color: TEXT }}>
-          write your bit. ai fills only the gaps.
-        </div>
-      </div>
-      {resuming ? (
-        <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 16, color: SOFT }}>
-          taking you back…
-        </div>
-      ) : (
-        <button style={primaryBtn} onClick={enterRoom}>start →</button>
-      )}
+      <h1 className="si-h1" style={{ fontSize: 30 }} data-ph-private>{first && first !== 'friend' ? `You’re in, ${first}.` : 'You’re in.'}</h1>
+      <p className="si-lead" role="status">{isWaiting(what) ?? (resuming ? 'Taking you back…' : 'Welcome to Shutap.')}</p>
+      <p className="si-small">Everything you make is kept under profile › My creations.</p>
+      <button type="button" className="si-link" onClick={enterRoom}>Go now →</button>
     </div>
   )
 }

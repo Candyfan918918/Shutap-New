@@ -82,6 +82,30 @@ export function takeDurableReturn(): string | null {
   } catch { return null }
 }
 
+/** Where the person will be sent back to after sign-in, read without
+ *  clearing anything (the sign-in page uses it to say "Your bit is
+ *  waiting."). Same-origin paths only. */
+export function peekReturnPath(): string | null {
+  const safe = (p: unknown) => (typeof p === 'string' && p.startsWith('/') && !p.startsWith('//') ? p : null)
+  try {
+    const intent = readIntent()
+    if (intent?.kind === 'custom') { const u = safe(intent.url); if (u) return u }
+  } catch { /* noop */ }
+  try {
+    const s = sessionStorage.getItem(RETURN_KEY)
+    if (s) {
+      if (s.startsWith('http')) { const u = new URL(s); if (u.origin === window.location.origin) return u.pathname + u.search }
+      const u = safe(s); if (u) return u
+    }
+  } catch { /* noop */ }
+  try {
+    const raw = localStorage.getItem(DURABLE_RETURN_KEY)
+    const parsed = raw ? (JSON.parse(raw) as { path?: string; at?: number }) : null
+    if (parsed && typeof parsed.at === 'number' && Date.now() - parsed.at <= DURABLE_RETURN_MAX_AGE_MS) return safe(parsed.path)
+  } catch { /* noop */ }
+  return null
+}
+
 // Module-level cache of whether we have a real (non-anonymous) signed-in user.
 // null = unknown. Refreshed by onAuthStateChange so subsequent CTA clicks
 // decide synchronously without awaiting getSession.
