@@ -1529,6 +1529,96 @@ export type Database = {
         }
         Relationships: []
       }
+      jokenet: {
+        Row: {
+          added_on: string
+          ai_score: number | null
+          archetype: string | null
+          archived_at: string | null
+          created_at: string
+          embedding: string | null
+          founder: boolean
+          heat: number | null
+          id: number
+          joke: string
+          license: string
+          losses: number
+          mechanism: string | null
+          move: string | null
+          notes: string | null
+          origin: string | null
+          posted_on: string | null
+          rating: number | null
+          sent: boolean
+          situation: string
+          slot: string | null
+          source: string
+          target: string | null
+          tone: string | null
+          updated_at: string
+          voice: string | null
+          wins: number
+        }
+        Insert: {
+          added_on?: string
+          ai_score?: number | null
+          archetype?: string | null
+          archived_at?: string | null
+          created_at?: string
+          embedding?: string | null
+          founder?: boolean
+          heat?: number | null
+          id?: number
+          joke: string
+          license?: string
+          losses?: number
+          mechanism?: string | null
+          move?: string | null
+          notes?: string | null
+          origin?: string | null
+          posted_on?: string | null
+          rating?: number | null
+          sent?: boolean
+          situation: string
+          slot?: string | null
+          source?: string
+          target?: string | null
+          tone?: string | null
+          updated_at?: string
+          voice?: string | null
+          wins?: number
+        }
+        Update: {
+          added_on?: string
+          ai_score?: number | null
+          archetype?: string | null
+          archived_at?: string | null
+          created_at?: string
+          embedding?: string | null
+          founder?: boolean
+          heat?: number | null
+          id?: number
+          joke?: string
+          license?: string
+          losses?: number
+          mechanism?: string | null
+          move?: string | null
+          notes?: string | null
+          origin?: string | null
+          posted_on?: string | null
+          rating?: number | null
+          sent?: boolean
+          situation?: string
+          slot?: string | null
+          source?: string
+          target?: string | null
+          tone?: string | null
+          updated_at?: string
+          voice?: string | null
+          wins?: number
+        }
+        Relationships: []
+      }
       kit_downloads: {
         Row: {
           created_at: string
@@ -2310,6 +2400,153 @@ export type Database = {
         }
         Relationships: []
       }
+      reddit_keywords: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          query: string
+          theme: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          query: string
+          theme: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          query?: string
+          theme?: string
+        }
+        Relationships: []
+      }
+      reddit_leads: {
+        Row: {
+          draft: string | null
+          filter_reason: string | null
+          found_at: string
+          found_day: string
+          id: string
+          link_url: string | null
+          mentions_shutap: boolean
+          posted_at: string | null
+          posted_body: string | null
+          query: string | null
+          score: number | null
+          score_reason: string | null
+          skip_reason: string | null
+          snippet: string | null
+          status: string
+          subreddit: string
+          theme: string | null
+          title: string
+          url: string
+        }
+        Insert: {
+          draft?: string | null
+          filter_reason?: string | null
+          found_at?: string
+          found_day: string
+          id?: string
+          link_url?: string | null
+          mentions_shutap?: boolean
+          posted_at?: string | null
+          posted_body?: string | null
+          query?: string | null
+          score?: number | null
+          score_reason?: string | null
+          skip_reason?: string | null
+          snippet?: string | null
+          status?: string
+          subreddit: string
+          theme?: string | null
+          title: string
+          url: string
+        }
+        Update: {
+          draft?: string | null
+          filter_reason?: string | null
+          found_at?: string
+          found_day?: string
+          id?: string
+          link_url?: string | null
+          mentions_shutap?: boolean
+          posted_at?: string | null
+          posted_body?: string | null
+          query?: string | null
+          score?: number | null
+          score_reason?: string | null
+          skip_reason?: string | null
+          snippet?: string | null
+          status?: string
+          subreddit?: string
+          theme?: string | null
+          title?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      reddit_runs: {
+        Row: {
+          drafted: number
+          error: string | null
+          finished_at: string | null
+          found: number
+          id: number
+          new_threads: number
+          queries: number
+          started_at: string
+        }
+        Insert: {
+          drafted?: number
+          error?: string | null
+          finished_at?: string | null
+          found?: number
+          id?: number
+          new_threads?: number
+          queries?: number
+          started_at?: string
+        }
+        Update: {
+          drafted?: number
+          error?: string | null
+          finished_at?: string | null
+          found?: number
+          id?: number
+          new_threads?: number
+          queries?: number
+          started_at?: string
+        }
+        Relationships: []
+      }
+      reddit_subreddits: {
+        Row: {
+          blocked: boolean
+          links_allowed: string
+          name: string
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          blocked?: boolean
+          links_allowed?: string
+          name: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          blocked?: boolean
+          links_allowed?: string
+          name?: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       room_reactions: {
         Row: {
           created_at: string
@@ -3029,6 +3266,20 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      jokenet_match: {
+        Args: { match_count?: number; min_rating?: number; q: string }
+        Returns: {
+          founder: boolean
+          id: number
+          joke: string
+          mechanism: string
+          move: string
+          rating: number
+          similarity: number
+          situation: string
+          source: string
+        }[]
       }
       match_situations: {
         Args: {
