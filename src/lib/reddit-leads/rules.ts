@@ -159,3 +159,13 @@ export function aiTells(text: string): string[] {
   if (quoted > 2) hits.push('list of quoted lines')
   return hits
 }
+
+/** Google's preview of a post is good enough to draft from when it reads like
+ *  the post itself, not the subreddit's blurb or a list of other threads. */
+export function usablePreview(snippet: string | null | undefined): boolean {
+  const t = (snippet ?? '').trim()
+  if (t.length < 60) return false
+  if (/\b\d+(\.\d+)?[KkMm]? (subscribers|members)\b/.test(t)) return false
+  if (/\bcommunity\b.*\bfor\b/i.test(t.slice(0, 80))) return false
+  return true
+}
