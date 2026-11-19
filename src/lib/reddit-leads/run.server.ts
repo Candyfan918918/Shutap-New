@@ -14,6 +14,7 @@ import { pacificDay, pacificMidnight } from '@/lib/pacific-day'
 import {
   MAX_DRAFTS_PER_DAY,
   aiTells,
+  usablePreview,
   isRepeat,
   looksComplete,
   mayMention,
@@ -65,9 +66,8 @@ async function searchReddit(query: string, key: string): Promise<Array<{ link: s
 type Post = { title: string; body: string; closed: boolean }
 
 /** The real post, so the reply answers what they actually asked. Reddit's own
- *  JSON first; if Reddit refuses this server, Serper's page reader. Null when
- *  neither works: then no draft, because a reply to a guessed question is worse
- *  than none (Nov 18: drafts answered Google's snippet, not the post). */
+ *  JSON. Null when Reddit refuses this server (it does as of Nov 19; Serper's
+ *  page reader returned 500 for every Reddit page, so it was dropped). */
 async function readPost(url: string, key: string, errors: string[]): Promise<Post | null> {
   try {
     const r = await fetch(`${url}.json?raw_json=1&limit=1`, {
@@ -87,24 +87,7 @@ async function readPost(url: string, key: string, errors: string[]): Promise<Pos
   } catch {
     /* fall through to the page reader */
   }
-  try {
-    const r = await fetch('https://scrape.serper.dev', {
-      method: 'POST',
-      headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url }),
-    })
-    if (!r.ok) {
-      errors.push(`read post: serper scrape ${r.status}`)
-      return null
-    }
-    const j = (await r.json()) as { text?: string; metadata?: { title?: string } }
-    const text = String(j.text ?? '').trim()
-    if (!text) return null
-    return { title: j.metadata?.title ?? '', body: text.slice(0, 4000), closed: false }
-  } catch (e) {
-    errors.push(`read post: ${e instanceof Error ? e.message : 'failed'}`)
-    return null
-  }
+  return null
 }
 
 type Fresh = { link: string; title: string; snippet: string }
@@ -221,7 +204,7 @@ async function draftOnce(lead: Lead, mention: { ok: boolean; link: string }): Pr
     messages: [
       {
         role: 'user',
-        content: `Subreddit: r/${lead.subreddit}\nTitle: ${lead.title}\nPost:\n${lead.body || '(no text, title only)'}\n\nWrite the comment.`,
+        content: `Subreddit: r/${lead.subreddit}\nTitle: ${lead.title}\n${lead.body && lead.body === lead.snippet ? 'Preview of the post (may be cut off; answer the question in the title, and only use details shown here)' : 'Post'}:\n${lead.body || '(no text, title only)'}\n\nWrite the comment.`,
       },
     ],
     // Generous: the model spends part of this budget thinking before it writes,
@@ -330,7 +313,8 @@ export async function runRedditLeads(opts: { force?: boolean } = {}): Promise<Ru
       }
     })
   }
-  if (via.google > 0 && via.reddit === 0 && sweepSubs.length) errors.push(`sweep read Google for all ${via.google} subreddits (Reddit refused)`)
+  // Reddit refuses this server as of Nov 19, so the sweep reads Google's past-day
+  // results; that is expected, not an error.
   summary.found = found.size
   if (!found.size) return finish()
 
@@ -453,15 +437,23 @@ export async function runRedditLeads(opts: { force?: boolean } = {}): Promise<Ru
       continue
     }
     const post = await readPost(lead.url, key, errors)
-    if (!post || post.closed) {
-      await db
-        .from('reddit_leads')
-        .update({ status: 'filtered', filter_reason: post ? 'thread closed' : 'could not read the post' })
-        .eq('id', lead.id)
+    let previewOnly = false
+    if (post?.closed) {
+      await db.from('reddit_leads').update({ status: 'filtered', filter_reason: 'thread closed' }).eq('id', lead.id)
       continue
     }
-    lead.title = post.title || lead.title
-    lead.body = post.body
+    if (post) {
+      lead.title = post.title || lead.title
+      lead.body = post.body
+    } else if (usablePreview(lead.snippet)) {
+      // Reddit refuses this server, so draft from Google's preview of the post,
+      // and tell Candy to read the thread before posting.
+      lead.body = lead.snippet
+      previewOnly = true
+    } else {
+      await db.from('reddit_leads').update({ status: 'filtered', filter_reason: 'could not read the post' }).eq('id', lead.id)
+      continue
+    }
     const rule = mayMention({
       day,
       linksAllowed: subs.get(lead.subreddit)?.links_allowed ?? 'unknown',
@@ -491,7 +483,13 @@ export async function runRedditLeads(opts: { force?: boolean } = {}): Promise<Ru
     }
     await db
       .from('reddit_leads')
-      .update({ status: 'drafted', draft: out.text, mentions_shutap: mentions, link_url: mentions ? link : null })
+      .update({
+        status: 'drafted',
+        draft: out.text,
+        mentions_shutap: mentions,
+        link_url: mentions ? link : null,
+        ...(previewOnly ? { score_reason: `${lead.score_reason ?? ''} · from Google's preview only: read the thread before posting`.replace(/^ · /, '') } : {}),
+      })
       .eq('id', lead.id)
     earlier.push(out.text)
     draftedNow++

@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { MENTIONS_FROM_DAY, aiTells, isRepeat, looksComplete, mayMention, overlap, parseThreadUrl, pickDrafts, shutapLink } from './rules'
+import { MENTIONS_FROM_DAY, aiTells, usablePreview, isRepeat, looksComplete, mayMention, overlap, parseThreadUrl, pickDrafts, shutapLink } from './rules'
 
 test('thread links reduce to one canonical URL; other Reddit pages are not threads', () => {
   assert.deepEqual(parseThreadUrl('https://old.reddit.com/r/Standup/comments/1AbC9x/my_first_open_mic/?utm=x'), {
@@ -84,4 +84,10 @@ test('AI tells: the Nov 18 drafts are caught, a plain comment passes', () => {
   assert.ok(aiTells(quotes).includes('list of quoted lines'))
   const good = 'Ask a mid-size YouTuber in your niche, not a big one. They answer DMs and a fake SNL is an easy yes for them. For a sketch, do a cold open where your one mod reads the news.'
   assert.deepEqual(aiTells(good), [])
+})
+
+test('preview check: a post excerpt passes, a subreddit blurb does not', () => {
+  assert.ok(usablePreview('I make short explainers about the business behind tech and games. My latest looks at a GTA VI researcher role'))
+  assert.ok(!usablePreview('252K subscribers in the Standup community. For standup comics, Is this a funny or unnecessary remark?'))
+  assert.ok(!usablePreview('short'))
 })
