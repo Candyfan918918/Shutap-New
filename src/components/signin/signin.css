@@ -1,0 +1,109 @@
+/* One sign-in look for the whole site (Nov 19 2026, approved from the canvas
+   "Shutap — sign-in & welcome redesign"): light canvas, the shutap wordmark,
+   Google (white) · Apple (black) · email with the code right here. No eye. */
+.si-page {
+  min-height: calc(100vh - 68px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px 48px;
+  box-sizing: border-box;
+  font-family: 'Sora', system-ui, sans-serif;
+  color: #17131a;
+}
+.si-card {
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid rgba(11, 8, 15, 0.08);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px -36px rgba(20, 16, 22, 0.35);
+  padding: clamp(22px, 5vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: si-up 0.35s ease;
+}
+@keyframes si-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .si-card { animation: none; } }
+.si-head { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
+.si-wm { font: 800 26px/1 'Sora', sans-serif; letter-spacing: -0.04em; color: #17131a; }
+.si-wm span { color: #e7548a; }
+.si-wm.sm { font-size: 20px; }
+.si-wm.lg { font-size: 34px; }
+.si-h1 { margin: 0; font: 800 26px/1.15 'Sora', sans-serif; letter-spacing: -0.03em; color: #0b080f; }
+.si-head .si-h1 { margin-top: 8px; }
+.si-lead { margin: 0; font: 400 17px/1.45 'Newsreader', serif; font-style: italic; color: #443c42; }
+.si-ctx {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 12px;
+  background: #f8eef1; border: 1px dashed rgba(184, 69, 107, 0.45);
+  font: 600 13.5px/1.35 'Sora', sans-serif; color: #7a2f4b;
+}
+.si-ctx::before { content: ''; flex: none; width: 10px; height: 10px; border-radius: 50%; background: #e7548a; }
+.si-stack { display: flex; flex-direction: column; gap: 10px; }
+.si-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; min-height: 52px; padding: 0 18px; box-sizing: border-box;
+  border-radius: 14px; font: 600 15px 'Sora', sans-serif; cursor: pointer;
+  text-decoration: none; transition: transform 0.12s, box-shadow 0.18s, background 0.18s;
+}
+.si-btn:disabled { opacity: 0.6; cursor: default; }
+.si-btn.g { background: #fff; color: #17131a; border: 1.5px solid rgba(23, 19, 26, 0.22); }
+.si-btn.g:hover:not(:disabled) { border-color: #17131a; }
+.si-btn.ap { background: #0b080f; color: #fff; border: 0; }
+.si-btn.ap:hover:not(:disabled) { background: #2b2630; }
+.si-btn.dark { background: linear-gradient(160deg, #2b2630, #0b080f); color: #fff; border: 0; box-shadow: 0 12px 24px -14px rgba(20, 16, 22, 0.42); }
+.si-btn.dark.fit { width: auto; white-space: nowrap; }
+.si-btn.ghost { background: transparent; color: #645b61; border: 0; min-height: 44px; }
+.si-btn.ghost:hover:not(:disabled) { color: #17131a; }
+.si-or { display: flex; align-items: center; gap: 12px; font: italic 14px 'Newsreader', serif; color: #6f666c; }
+.si-or::before, .si-or::after { content: ''; flex: 1; height: 1px; background: rgba(11, 8, 15, 0.12); }
+.si-row { display: flex; gap: 8px; margin: 0; }
+.si-input {
+  flex: 1; min-width: 0; height: 52px; box-sizing: border-box;
+  border-radius: 14px; border: 1.5px solid rgba(23, 19, 26, 0.22); background: #fdf8f9;
+  padding: 0 16px; font: 400 16px 'Sora', sans-serif; color: #17131a; outline: none;
+}
+.si-input:focus { border-color: #b8456b; background: #fff; }
+.si-input.code { flex: none; width: 100%; height: 60px; text-align: center; font: 600 22px 'Sora', sans-serif; letter-spacing: 0.3em; }
+.si-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.si-info { padding: 12px 14px; border-radius: 12px; background: #fdf8f9; border: 1px solid rgba(11, 8, 15, 0.08); font: 400 13.5px/1.5 'Sora', sans-serif; color: #443c42; }
+.si-err { margin: 0; font: 600 13.5px/1.45 'Sora', sans-serif; color: #a3334f; text-align: center; }
+.si-link { background: none; border: 0; padding: 6px; font: 600 13.5px 'Sora', sans-serif; color: #645b61; cursor: pointer; text-decoration: underline; align-self: center; }
+.si-link:disabled { text-decoration: none; opacity: 0.7; cursor: default; }
+.si-legal { margin: 0; text-align: center; font: 400 12.5px/1.5 'Sora', sans-serif; color: #645b61; }
+.si-legal a { color: #443c42; }
+.si-dots { display: flex; gap: 8px; justify-content: center; }
+.si-dots span { width: 10px; height: 10px; border-radius: 50%; background: #e7548a; display: block; opacity: 0.6; }
+@media (prefers-reduced-motion: no-preference) {
+  .si-dots span { animation: si-pd 1.2s infinite; }
+  .si-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .si-dots span:nth-child(3) { animation-delay: 0.4s; }
+}
+@keyframes si-pd { 0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
+.si-state { display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; padding: 24px; }
+.si-state-title { margin: 0; font: 700 19px 'Sora', sans-serif; color: #17131a; }
+.si-check {
+  width: 64px; height: 64px; border-radius: 50%; background: #fff;
+  border: 1.5px solid rgba(231, 84, 138, 0.5); display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 12px 30px -18px rgba(184, 69, 107, 0.6);
+}
+.si-small { margin: 0; font: 400 13.5px/1.5 'Sora', sans-serif; color: #645b61; max-width: 32ch; }
+/* the pop-up */
+.si-scrim {
+  position: fixed; inset: 0; z-index: 10000; background: rgba(16, 12, 20, 0.42);
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.si-sheet { max-width: 460px; border-radius: 24px; gap: 18px; max-height: calc(100vh - 32px); overflow-y: auto; }
+.si-sheet-top { display: flex; justify-content: space-between; align-items: center; }
+.si-x { width: 44px; height: 44px; border-radius: 50%; border: 0; background: #f8eef1; color: #443c42; font: 600 18px 'Sora', sans-serif; cursor: pointer; }
+.si-sheet .si-h1 { font-size: 23px; }
+.si-sheet-copy { display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 560px) {
+  .si-scrim { align-items: flex-end; padding: 0; }
+  .si-sheet { max-width: none; border-radius: 24px 24px 0 0; padding: 22px 18px calc(22px + env(safe-area-inset-bottom)); }
+}
+/* the second-phone gates (prompters) */
+.si-gate { min-height: 100vh; background-color: #fbf6f7; background-image: radial-gradient(ellipse 80% 420px at 50% -80px, rgba(231, 84, 138, 0.16), rgba(231, 84, 138, 0) 72%), radial-gradient(rgba(184, 69, 107, 0.16) 1px, transparent 1.3px); background-size: 100% 100%, 18px 18px; background-repeat: no-repeat, repeat; }

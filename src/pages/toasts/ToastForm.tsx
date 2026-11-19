@@ -23,7 +23,7 @@ import type { ToastUsage } from '@/lib/toasts/usage.server'
 import { PLANS, TOAST_ONCE, usd } from '@/lib/pricing'
 import { saveNames } from '@/lib/toasts/names-store'
 import { setDurableReturn } from '@/lib/auth-guard'
-import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
+import { SignInSheet } from '@/components/signin/SignIn'
 import { trackEvent } from '@/lib/tracking'
 import '@/pages/realtors/realtors.css'
 import './toasts.css'
@@ -197,7 +197,6 @@ function Line(p: {
 export function ToastForm({ occasionIn, preset, prepaidSession, otherChoice, onStep }: { occasionIn: Occasion; preset?: Preset; prepaidSession?: string; otherChoice?: boolean; onStep?: (n: number) => void }) {
   const { userId, ready } = useCurrentAlias()
   const navigate = useNavigate()
-  const opening = useOAuthPending()
   const [d, setD] = useState<Draft>(() => freshDraft(occasionIn, undefined, preset))
   const [step, setStep] = useState(1)
   const [loaded, setLoaded] = useState(false)
@@ -208,7 +207,6 @@ export function ToastForm({ occasionIn, preset, prepaidSession, otherChoice, onS
   const [checkoutError, setCheckoutError] = useState('')
   const [touch, setTouch] = useState<{ index: number; busy: boolean; options?: { line: string; move: string }[]; error?: string } | null>(null)
   const [note, setNote] = useState<string | null>(null)
-  const [signinErr, setSigninErr] = useState('')
   const noteTimer = useRef<number | undefined>(undefined)
   const boxRef = useRef<HTMLFormElement | null>(null)
   const say = (m: string) => { setNote(m); window.clearTimeout(noteTimer.current); noteTimer.current = window.setTimeout(() => setNote(null), 3600) }
@@ -294,22 +292,18 @@ export function ToastForm({ occasionIn, preset, prepaidSession, otherChoice, onS
   function gate() {
     try { sessionStorage.setItem('shutap_returnTo', here()) } catch { /* noop */ }
     setDurableReturn(here())
-    setSigninErr('')
     setSheet('signin')
     track('signin_prompt_seen', { where: 'toasts_form', page: here() })
   }
-  async function signIn(method: 'google' | 'apple' | 'email') {
+  /** right before Google / Apple open, or the email code is sent: write the
+   *  toast as soon as they are back (the buttons go straight to the provider) */
+  function prepareSignIn(method: 'google' | 'apple' | 'email') {
     try { localStorage.setItem(AUTOWRITE_KEY, '1'); sessionStorage.setItem('shutap_returnTo', here()) } catch { /* noop */ }
     setDurableReturn(here())
     track('signin_clicked', { method, from: 'toasts_form', page: here() })
-    // each button goes straight to its own sign-in, never to a second chooser
-    if (method === 'google' || method === 'apple') {
-      const err = await startOAuth(method)
-      if (err) setSigninErr(err)
-      return
-    }
-    void navigate({ to: '/welcome', search: { method: 'email' } as never })
   }
+  // Signed in on this page (the email code): the sign-in sheet has done its job.
+  useEffect(() => { if (userId) setSheet((x) => (x === 'signin' ? null : x)) }, [userId])
 
   /** index 0–2: a story; -1: the last line */
   async function funnier(i: number) {
@@ -519,27 +513,25 @@ export function ToastForm({ occasionIn, preset, prepaidSession, otherChoice, onS
         </div>
       </form>
 
-      {sheet && (
+      {sheet === 'signin' && (
+        <SignInSheet
+          where="toasts_form"
+          title="Sign up to write your free toast."
+          sub="Your form is saved on this device. Shutap writes your toast the moment you’re back."
+          what="toast"
+          onBefore={prepareSignIn}
+          onClose={(how) => { setSheet(null); track('signin_dismissed', { how, from: 'toasts_form' }) }}
+        >
+          <div className="tf-free">
+            <span className="tf-free-card" aria-hidden><span>SHUTAP.COM · SHUTAP.COM</span><span>SHUTAP.COM · SHUTAP.COM</span><span>SHUTAP.COM · SHUTAP.COM</span><span>SHUTAP.COM · SHUTAP.COM</span><span>SHUTAP.COM · SHUTAP.COM</span></span>
+            <span><b>Free: everything, with a shutap.com watermark</b><span>Across every PDF page: the speech, the cue cards{spec.keepsake ? ', the keepsake' : ''}. A clean toast is {usd(TOAST_ONCE.amount)}. No card.</span></span>
+          </div>
+        </SignInSheet>
+      )}
+
+      {sheet && sheet !== 'signin' && (
         <div className="rl-sheet-scrim" onClick={() => setSheet(null)}>
           <div className="rl-sheet ts-sheet" role="dialog" aria-modal onClick={(e) => e.stopPropagation()}>
-            {sheet === 'signin' && (
-              <>
-                <h3 style={{ margin: 0, font: '800 21px/1.2 var(--sora)', color: 'var(--wine)' }}>Sign up to write your free toast.</h3>
-                <p className="rl-note" style={{ fontSize: 14 }}>Your form is saved on this device. Shutap writes your toast the moment you’re back.</p>
-                <div className="tf-free">
-                  <span className="tf-free-card" aria-hidden><span>SHUTAP.COM · SHUTAP.COM</span><span>SHUTAP.COM · SHUTAP.COM</span><span>SHUTAP.COM · SHUTAP.COM</span><span>SHUTAP.COM · SHUTAP.COM</span><span>SHUTAP.COM · SHUTAP.COM</span></span>
-                  <span><b>Free: everything, with a shutap.com watermark</b><span>Across every PDF page: the speech, the cue cards{spec.keepsake ? ', the keepsake' : ''}. A clean toast is {usd(TOAST_ONCE.amount)}.</span></span>
-                </div>
-                <button type="button" className="rl-btn ghost tf-auth" disabled={!!opening} onClick={() => void signIn('google')}>{oauthButtonLabel('google', opening)}</button>
-                <button type="button" className="rl-btn tf-auth dark" disabled={!!opening} onClick={() => void signIn('apple')}>{oauthButtonLabel('apple', opening)}</button>
-                <button type="button" className="rl-btn tf-auth" onClick={() => void signIn('email')}>continue with email</button>
-                {signinErr && <p className="rl-note" role="alert" style={{ color: 'var(--rose-ink)' }}>{signinErr}</p>}
-                <div className="rl-row" style={{ justifyContent: 'space-between' }}>
-                  <span className="rl-note">No card. 18+.</span>
-                  <button type="button" className="rl-mini" onClick={() => setSheet(null)}>not now</button>
-                </div>
-              </>
-            )}
             {sheet === 'limit' && usage && (
               <>
                 <p className="rl-lbl r" style={{ margin: 0 }}>your {usage.tier === 'free' ? 'second' : 'next'} toast · {spec.label}</p>

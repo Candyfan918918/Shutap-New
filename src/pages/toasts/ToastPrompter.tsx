@@ -12,7 +12,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { supabase } from '@/integrations/supabase/client'
-import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
+import { SignInPanel } from '@/components/signin/SignIn'
 import { setDurableReturn } from '@/lib/auth-guard'
 import { getMyToast, type ToastRow } from '@/lib/toasts.functions'
 import { OCCASION, clock, occasionName, fromPlaceholders, lineSeconds, toastSeconds, type Names, type ToastLine } from '@/lib/toasts/shared'
@@ -36,7 +36,6 @@ export function ToastPrompter({ id, rehearse, short }: { id: string; rehearse: b
   const [row, setRow] = useState<ToastRow | null>(null)
   const [err, setErr] = useState('')
   const [names, setNames] = useState<Names | null>(null)
-  const opening = useOAuthPending()
 
   useEffect(() => {
     const h = namesFromHash(window.location.hash)
@@ -51,25 +50,22 @@ export function ToastPrompter({ id, rehearse, short }: { id: string; rehearse: b
     getMyToast({ data: { id } }).then((r) => { if (r.ok) setRow(r.toast); else setErr(r.reason === 'off' ? 'Shutap Toasts opens later today.' : 'this toast belongs to another account · sign in here with the account you made it with') }).catch(() => setErr('could not open the toast · check the connection and try again'))
   }, [id, signedIn])
 
-  async function signIn(method: 'google' | 'apple' | 'email') {
+  function prepareSignIn(method: 'google' | 'apple' | 'email') {
     const back = window.location.pathname + window.location.search + window.location.hash
     try { sessionStorage.setItem('shutap_returnTo', back) } catch { /* noop */ }
     setDurableReturn(back)
     track('toast_prompter_signin', { method })
-    if (method === 'email') { window.location.assign('/welcome?method=email'); return }
-    const e = await startOAuth(method)
-    if (e) setErr(e)
   }
 
   if (signedIn === false) return (
-    <div className="pr">
-      <div className="pr-gate">
-        <h1>Sign in to open your toast on this phone.</h1>
-        <p>Use the same account you made the toast with. The prompter opens right after; once it's open it works without Wi-Fi.</p>
-        <button className="main" disabled={!!opening} onClick={() => void signIn('google')}>{oauthButtonLabel('google', opening)}</button>
-        <button disabled={!!opening} onClick={() => void signIn('apple')}>{oauthButtonLabel('apple', opening)}</button>
-        <button onClick={() => void signIn('email')}>continue with email</button>
-      </div>
+    <div className="si-gate si-page" style={{ minHeight: '100vh' }}>
+      <SignInPanel
+        where="toasts_prompter"
+        title="Sign in to open your toast on this phone."
+        sub="Use the same account you made the toast with. The prompter opens right after; once it’s open it works without Wi-Fi."
+        what="toast"
+        onBefore={prepareSignIn}
+      />
     </div>
   )
   if (err) return <div className="pr"><div className="pr-top"><span>{err}</span><Link to="/toasts/edit/$id" params={{ id }}>your toast</Link></div></div>

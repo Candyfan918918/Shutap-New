@@ -26,7 +26,6 @@ type Variant = 'light' | 'dark'
 
 // Routes that render on dark surfaces get the dark chrome.
 function variantFor(pathname: string): Variant {
-  if (pathname === '/welcome') return 'dark'
   if (pathname === '/mirror' || pathname.startsWith('/mirror/')) return 'dark'
   return 'light'
 }

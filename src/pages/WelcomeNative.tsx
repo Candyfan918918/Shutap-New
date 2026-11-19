@@ -9,19 +9,27 @@ import { friendlyOAuthError } from '@/lib/oauth-signin'
 import { useNoIndex } from '@/components/NoIndex'
 import { AuthStep } from './welcome/AuthStep'
 import { signInMethod, trackSignUpOnce } from '@/lib/after-signin'
-import { BG, TEXT, EyeMark, SOFT } from './welcome/shared'
+import { LoadingDots, Wordmark, isWaiting, whatFromPath } from '@/components/signin/SignIn'
+import { peekReturnPath } from '@/lib/auth-guard'
+import '@/components/signin/signin.css'
 import type { AliasResult } from './welcome/AliasStep'
 
 const WelcomeEnterStep = lazy(() => import('./welcome/WelcomeEnterStep'))
 
 type Step = 'auth' | 'welcome'
 
+/** Signing in (Nov 19 2026): replaces the black screen with the blinking
+ *  eye and "one sec…". */
 function StepFallback() {
+  const [what] = useState(() => (typeof window === 'undefined' ? null : whatFromPath(peekReturnPath())))
+  const after = isWaiting(what)
   return (
-    <div className="wstep" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, textAlign: 'center' }}>
-      <EyeMark />
-      <div style={{ fontFamily: "'Newsreader',serif", fontStyle: 'italic', fontSize: 18, color: SOFT }}>
-        one sec…
+    <div className="si-state">
+      <Wordmark size="lg" />
+      <LoadingDots label="Signing you in" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <p className="si-state-title">Signing you in…</p>
+        {after && <p className="si-lead" style={{ fontSize: 16 }}>{after}</p>}
       </div>
     </div>
   )
@@ -247,33 +255,15 @@ export function WelcomeNativePage() {
   }, [looksLikeAuthCallback])
 
   return (
-    <div style={{ background: BG, color: TEXT, minHeight: '100vh', fontFamily: "'Sora',system-ui,sans-serif", WebkitFontSmoothing: 'antialiased' }}>
-      <style>{`
-        @keyframes weblink {0%,34%,40%,78%,84%,100%{transform:scaleY(1)}37%,81%{transform:scaleY(.1)}}
-        @keyframes wfadeUp {from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-        @keyframes wslotIn {from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-        .wstep{animation:wfadeUp .4s ease}
-        .oauth-btn:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.25)}
-      `}</style>
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-        <div style={{ width: '100%', maxWidth: 420 }}>
-          {checking && <StepFallback />}
-          {!checking && step === 'auth' && (
-            <>
-              <AuthStep />
-              {authError && (
-                <div style={{ marginTop: 12, color: '#ff8a8a', fontSize: 13, textAlign: 'center' }}>
-                  {authError}
-                </div>
-              )}
-            </>
-          )}
-          {!checking && step === 'welcome' && (
-            <Suspense fallback={<StepFallback />}>
-              <WelcomeEnterStep displayName={finalAlias?.display_name ?? existingAlias?.display_name ?? 'friend'} />
-            </Suspense>
-          )}
-        </div>
+    <div className="si-page">
+      <div style={{ width: '100%', maxWidth: 440 }}>
+        {checking && <StepFallback />}
+        {!checking && step === 'auth' && <AuthStep error={authError} />}
+        {!checking && step === 'welcome' && (
+          <Suspense fallback={<StepFallback />}>
+            <WelcomeEnterStep displayName={finalAlias?.display_name ?? existingAlias?.display_name ?? 'friend'} />
+          </Suspense>
+        )}
       </div>
     </div>
   )
