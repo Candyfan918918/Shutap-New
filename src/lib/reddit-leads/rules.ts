@@ -125,7 +125,7 @@ export function overlap(a: string, b: string): number {
  *  ends mid-word was cut off and must never reach Candy. */
 export function looksComplete(text: string): boolean {
   const t = text.trim()
-  if (t.length < 120) return false
+  if (t.length < 60) return false
   if (/https?:\/\/\S+$/.test(t)) return true
   return /[.!?…)"'”’]$/.test(t)
 }
@@ -134,4 +134,28 @@ export function looksComplete(text: string): boolean {
  *  filters look for the same text posted in several places. */
 export function isRepeat(draft: string, earlier: string[]): boolean {
   return earlier.some((e) => overlap(draft, e) > REPEAT_LIMIT)
+}
+
+/** Phrases and marks that made Nov 17-18 drafts read as AI. Any hit sends the
+ *  draft back for another try; two misses and it is dropped. */
+const AI_TELLS: Array<[RegExp, string]> = [
+  [/[\u2014\u2013]/, 'dash'],
+  [/;/, 'semicolon'],
+  [/\blean(ing)? (right |all the way )?into\b/i, 'lean into'],
+  [/\b(craft|pro) tip\b/i, 'tip label'],
+  [/\bhere are (a few|some)\b/i, 'here are a few'],
+  [/\bthe (key|secret) (is|to)\b/i, 'the key is'],
+  [/\b(dissonance|game[- ]changer|instant(ly)?)\b/i, 'stock word'],
+  [/\bplay with\b/i, 'play with'],
+  [/^\s*[-*\u2022]\s/m, 'bullet'],
+  [/^\s*[a-z ]{2,30}:\s*$/im, 'label line'],
+]
+
+export function aiTells(text: string): string[] {
+  const hits = AI_TELLS.filter(([re]) => re.test(text)).map(([, name]) => name)
+  const words = text.trim().split(/\s+/).length
+  if (words > 110) hits.push('too long')
+  const quoted = (text.match(/^\s*"/gm) ?? []).length
+  if (quoted > 2) hits.push('list of quoted lines')
+  return hits
 }

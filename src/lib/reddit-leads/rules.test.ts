@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { MENTIONS_FROM_DAY, isRepeat, looksComplete, mayMention, overlap, parseThreadUrl, pickDrafts, shutapLink } from './rules'
+import { MENTIONS_FROM_DAY, aiTells, isRepeat, looksComplete, mayMention, overlap, parseThreadUrl, pickDrafts, shutapLink } from './rules'
 
 test('thread links reduce to one canonical URL; other Reddit pages are not threads', () => {
   assert.deepEqual(parseThreadUrl('https://old.reddit.com/r/Standup/comments/1AbC9x/my_first_open_mic/?utm=x'), {
@@ -73,4 +73,15 @@ test('cut-off drafts are caught; finished ones pass', () => {
   assert.equal(looksComplete('the trick to fast reaction time is actually leaning into the slow one so it looks intentional. if you freeze after a compliment or'), false)
   assert.equal(looksComplete(body + ' Full disclosure, I made this: https://shutap.com/toasts?utm_source=reddit'), true)
   assert.equal(looksComplete('too short.'), false)
+})
+
+test('AI tells: the Nov 18 drafts are caught, a plain comment passes', () => {
+  const bad = 'lean into the scale—the funniest angle is prestige-tv seriousness.\n\ncraft tip: don\'t hide it; the dissonance gets the laugh.'
+  assert.ok(aiTells(bad).includes('dash'))
+  assert.ok(aiTells(bad).includes('lean into'))
+  assert.ok(aiTells(bad).includes('tip label'))
+  const quotes = 'Try these.\n"one"\n"two"\n"three"'
+  assert.ok(aiTells(quotes).includes('list of quoted lines'))
+  const good = 'Ask a mid-size YouTuber in your niche, not a big one. They answer DMs and a fake SNL is an easy yes for them. For a sketch, do a cold open where your one mod reads the news.'
+  assert.deepEqual(aiTells(good), [])
 })
