@@ -25,7 +25,8 @@ import {
 const SERPER_URL = 'https://google.serper.dev/search'
 const SCORE_BATCH = 15
 const MAX_TO_SCORE = 200 // keeps one run's AI calls bounded; the rest waits for the next run
-const BACKLOG_DAYS = 5 // unscored threads older than this are dropped
+const BACKLOG_DAYS = 5
+const RUN_GAP_HOURS = 4 // two scheduled runs a day, 6 hours apart // unscored threads older than this are dropped
 const SEARCH_PARALLEL = 5
 
 type Keyword = { query: string; theme: string }
@@ -211,10 +212,13 @@ export async function runRedditLeads(opts: { force?: boolean } = {}): Promise<Ru
   const errors: string[] = []
   const summary: RunSummary = { ok: false, day, queries: 0, found: 0, new_threads: 0, drafted: 0, drafts: [], errors }
 
-  // Once a day: the cron may fire twice, and the URL is public.
+  // Twice a day (Candy, Nov 18): ~7am and ~1pm Pacific. The URL is public, so
+  // a run within the last RUN_GAP_HOURS returns at once; the daily draft cap
+  // still holds across both runs.
   if (!opts.force) {
-    const { data: ran } = await db.from('reddit_runs').select('id').gte('started_at', dayStart).limit(1)
-    if (ran && ran.length) return { ...summary, ok: true, skipped: 'already ran today' }
+    const since = new Date(Date.now() - RUN_GAP_HOURS * 3_600_000).toISOString()
+    const { data: ran } = await db.from('reddit_runs').select('id').gte('started_at', since).limit(1)
+    if (ran && ran.length) return { ...summary, ok: true, skipped: `ran in the last ${RUN_GAP_HOURS} hours` }
   }
 
   const key = process.env.SERPER_API_KEY
