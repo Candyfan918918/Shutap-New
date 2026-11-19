@@ -47,7 +47,7 @@ async function searchReddit(query: string, key: string): Promise<Array<{ link: s
   const r = await fetch(SERPER_URL, {
     method: 'POST',
     headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ q: `site:reddit.com ${query}`, tbs: 'qdr:w', num: 10, // 20 made every search fail with 400 (Nov 18) gl: 'us', hl: 'en' }),
+    body: JSON.stringify({ q: `site:reddit.com ${query}`, tbs: 'qdr:w', num: 10, gl: 'us', hl: 'en' }),
   })
   if (!r.ok) {
     const why = (await r.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 120)
