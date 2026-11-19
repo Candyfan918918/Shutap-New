@@ -13,6 +13,7 @@ import { callAgent, tryParseJson } from '@/lib/agents/gateway'
 import { pacificDay, pacificMidnight } from '@/lib/pacific-day'
 import {
   MAX_DRAFTS_PER_DAY,
+  aiTells,
   isRepeat,
   looksComplete,
   mayMention,
@@ -29,7 +30,7 @@ const SEARCH_PARALLEL = 5
 
 type Keyword = { query: string; theme: string }
 type Found = { url: string; subreddit: string; title: string; snippet: string; query: string; theme: string }
-type Lead = Found & { id: string; score: number | null; score_reason: string | null }
+type Lead = Found & { id: string; score: number | null; score_reason: string | null; body?: string }
 
 export type RunSummary = {
   ok: boolean
@@ -57,6 +58,51 @@ async function searchReddit(query: string, key: string): Promise<Array<{ link: s
   return (j.organic ?? [])
     .filter((o) => o.link)
     .map((o) => ({ link: o.link!, title: (o.title ?? '').trim(), snippet: (o.snippet ?? '').trim() }))
+}
+
+type Post = { title: string; body: string; closed: boolean }
+
+/** The real post, so the reply answers what they actually asked. Reddit's own
+ *  JSON first; if Reddit refuses this server, Serper's page reader. Null when
+ *  neither works: then no draft, because a reply to a guessed question is worse
+ *  than none (Nov 18: drafts answered Google's snippet, not the post). */
+async function readPost(url: string, key: string, errors: string[]): Promise<Post | null> {
+  try {
+    const r = await fetch(`${url}.json?raw_json=1&limit=1`, {
+      headers: { 'User-Agent': 'web:shutap-leads:1.0 (by /u/FunnyCandy)', Accept: 'application/json' },
+    })
+    if (r.ok) {
+      const j = (await r.json()) as any
+      const d = j?.[0]?.data?.children?.[0]?.data
+      if (d && typeof d.title === 'string') {
+        return {
+          title: d.title,
+          body: String(d.selftext ?? '').slice(0, 4000),
+          closed: Boolean(d.locked || d.archived || d.removed_by_category),
+        }
+      }
+    }
+  } catch {
+    /* fall through to the page reader */
+  }
+  try {
+    const r = await fetch('https://scrape.serper.dev', {
+      method: 'POST',
+      headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    })
+    if (!r.ok) {
+      errors.push(`read post: serper scrape ${r.status}`)
+      return null
+    }
+    const j = (await r.json()) as { text?: string; metadata?: { title?: string } }
+    const text = String(j.text ?? '').trim()
+    if (!text) return null
+    return { title: j.metadata?.title ?? '', body: text.slice(0, 4000), closed: false }
+  } catch (e) {
+    errors.push(`read post: ${e instanceof Error ? e.message : 'failed'}`)
+    return null
+  }
 }
 
 // Google titles end in " : r/sub" or " - Reddit"; the draft only needs the post title.
@@ -112,16 +158,19 @@ async function scoreLeads(leads: Lead[], errors: string[]): Promise<void> {
 function draftSystem(mention: { ok: boolean; link: string }): string {
   const ending = mention.ok
     ? `End with one short line that says plainly you made it, in your own words, for example: "Full disclosure, I made shutap.com, it writes these if you want more options: ${mention.link}". Use exactly that link, once.`
-    : `Do not mention Shutap, any website, app, tool or link. The reply must stand on its own.`
-  return `You write a Reddit comment for Candy, a founder who writes comedy, replying by hand to a comedian, content creator, social media manager or writer about their own work. Talk like a peer who does this too, not a coach or a brand.
-Write like a person on Reddit: plain, warm, lowercase-casual is fine, no greeting, no sign-off, no hashtags, no emojis, no bullet-point essays, no marketing words.
-Give a real line-by-line punch-up. If their joke, hook or caption is in the title or snippet, quote their line, then give one or two punched-up versions of it, and say in a few words what changed (tighter setup, laugh word moved to the end, a more specific detail, an added tag). Keep their premise and their voice; improve their line, don't replace it with yours.
-If their own line isn't visible, give two or three lines, tags or hook options for their exact situation instead. Add at most one concrete craft tip. Never offer to write the whole thing for them, never ask them to DM you.
-You only see the title and a snippet, so keep jokes to what is stated; never invent names or facts about them.
-Never punch down: nothing about race, religion, nationality, accent, disability, weight or sexuality.
-Under 120 words before the last line.
+    : `Do not mention Shutap, any website, app, tool or link.`
+  return `You write one Reddit comment that Candy, a founder who writes comedy, will post by hand. She is replying to a comedian, content creator, social media manager or writer.
+You get the full post. Read it and work out the one thing they are actually asking. Your first sentence answers that, directly. If they asked for names, give names; if they asked "is this funny", say honestly whether it is and why; if they asked for ideas, give ideas for their exact situation. Don't answer a different question.
+If they shared a joke, hook or caption, punch up their own line: quote it once, give one better version, and say in a few plain words what you changed. Keep their premise and their voice.
+Sound like a real person typing a quick comment, not an assistant:
+- 25 to 80 words. Usually two to four short sentences. Normal capitalization.
+- One specific idea or line beats a list. At most two example lines, and only if they asked for jokes or lines.
+- No headings, no labels like "craft tip:" or "pro tip:", no bullet lists, no em dashes, no semicolons, no emojis, no hashtags, no greeting, no sign-off.
+- Never use these phrases: "lean into", "here are a few", "the key is", "the secret is", "instant", "dissonance", "play with", "honestly", "game changer".
+- Have an opinion. It's fine to be blunt or to admit something didn't land.
+Never invent facts about them. Never punch down: nothing about race, religion, nationality, accent, disability, weight or sexuality. Never offer to write the whole thing, never ask them to DM you.
 ${ending}
-If the title and snippet are not enough to write something genuinely useful, reply with exactly SKIP.`
+If the post is not really asking for help with something funny, or you can't add anything genuinely useful, reply with exactly SKIP.`
 }
 
 async function draftOnce(lead: Lead, mention: { ok: boolean; link: string }): Promise<{ text: string; error?: string }> {
@@ -130,7 +179,7 @@ async function draftOnce(lead: Lead, mention: { ok: boolean; link: string }): Pr
     messages: [
       {
         role: 'user',
-        content: `Subreddit: r/${lead.subreddit}\nTitle: ${lead.title}\nSnippet: ${lead.snippet || '(none)'}\n\nWrite the comment.`,
+        content: `Subreddit: r/${lead.subreddit}\nTitle: ${lead.title}\nPost:\n${lead.body || '(no text, title only)'}\n\nWrite the comment.`,
       },
     ],
     // Generous: the model spends part of this budget thinking before it writes,
@@ -146,9 +195,10 @@ async function draftOnce(lead: Lead, mention: { ok: boolean; link: string }): Pr
 async function draftReply(lead: Lead, mention: { ok: boolean; link: string }): Promise<{ text: string; error?: string }> {
   for (let attempt = 0; attempt < 2; attempt++) {
     const out = await draftOnce(lead, mention)
-    if (out.error || !out.text || out.text === 'SKIP' || looksComplete(out.text)) return out
+    if (out.error || !out.text || out.text === 'SKIP') return out
+    if (looksComplete(out.text) && aiTells(out.text).length === 0) return out
   }
-  return { text: '', error: 'draft came back cut off twice' }
+  return { text: '', error: 'draft came back cut off or sounding like AI twice' }
 }
 
 /** Run once for the Pacific day. `force` re-runs a day that already ran (manual
@@ -300,7 +350,14 @@ export async function runRedditLeads(opts: { force?: boolean } = {}): Promise<Ru
   const { data: postedTodayRows } = await db.from('reddit_leads').select('subreddit').gte('posted_at', dayStart)
   const subsPostedToday = new Set<string>((postedTodayRows ?? []).map((r: any) => r.subreddit))
   const room = Math.max(0, MAX_DRAFTS_PER_DAY - (draftedToday ?? 0))
-  const { picked, dropped } = pickDrafts(scored, room, subsPostedToday)
+  // Only subreddits Candy has added on /admin/reddit (and not blocked) get drafts.
+  const isTarget = (sub: string) => subs.has(sub) && !subs.get(sub)!.blocked
+  const notTarget = scored.filter((l) => !isTarget(l.subreddit))
+  const targets = scored.filter((l) => isTarget(l.subreddit))
+  // Pick extra: some posts can't be read or turn out closed.
+  const { picked, dropped } = pickDrafts(targets, room * 2, subsPostedToday)
+  for (const l of notTarget) dropped.push({ lead: l, reason: 'not a target subreddit' })
+  let draftedNow = 0
 
   const { count: postedTotal } = await db.from('reddit_leads').select('id', { count: 'exact', head: true }).eq('status', 'posted')
   const { count: postedWithMention } = await db
@@ -323,6 +380,20 @@ export async function runRedditLeads(opts: { force?: boolean } = {}): Promise<Ru
   const earlier: string[] = (earlierRows ?? []).map((r: any) => r.posted_body || r.draft).filter(Boolean)
 
   for (const lead of picked) {
+    if (draftedNow >= room) {
+      dropped.push({ lead, reason: 'daily draft cap' })
+      continue
+    }
+    const post = await readPost(lead.url, key, errors)
+    if (!post || post.closed) {
+      await db
+        .from('reddit_leads')
+        .update({ status: 'filtered', filter_reason: post ? 'thread closed' : 'could not read the post' })
+        .eq('id', lead.id)
+      continue
+    }
+    lead.title = post.title || lead.title
+    lead.body = post.body
     const rule = mayMention({
       day,
       linksAllowed: subs.get(lead.subreddit)?.links_allowed ?? 'unknown',
@@ -355,6 +426,7 @@ export async function runRedditLeads(opts: { force?: boolean } = {}): Promise<Ru
       .update({ status: 'drafted', draft: out.text, mentions_shutap: mentions, link_url: mentions ? link : null })
       .eq('id', lead.id)
     earlier.push(out.text)
+    draftedNow++
     if (mentions) mentionsDraftedToday++
     summary.drafted++
     summary.drafts.push({ subreddit: lead.subreddit, title: lead.title, score: lead.score, mentions_shutap: mentions })
