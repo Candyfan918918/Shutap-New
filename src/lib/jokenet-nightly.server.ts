@@ -61,6 +61,30 @@ function words(s: string): number {
   return s.trim().split(/\s+/).filter(Boolean).length
 }
 
+/** Index every row still missing a vector (imports, /bit-daily rows, tonight's
+ *  batch). Runs on every call, even when the writer produced nothing. */
+async function indexMissing(db: any, errors: string[]): Promise<number> {
+  let indexed = 0
+  try {
+    const { embedTexts, toVectorLiteral } = await import('@/lib/agents/embeddings.server')
+    const { data: todo } = await db.from('jokenet').select('id, situation').is('embedding', null).is('archived_at', null).order('rating', { ascending: false, nullsFirst: false }).limit(768)
+    for (let i = 0; i < (todo ?? []).length; i += 64) {
+      const chunk = todo.slice(i, i + 64)
+      const vecs = await embedTexts(chunk.map((r: any) => r.situation))
+      await Promise.all(
+        chunk.map(async (r: any, j: number) => {
+          if (!vecs[j]) return
+          const { error } = await db.from('jokenet').update({ embedding: toVectorLiteral(vecs[j]!) }).eq('id', r.id)
+          if (!error) indexed++
+        }),
+      )
+    }
+  } catch (e) {
+    errors.push(`index: ${e instanceof Error ? e.message : String(e)}`)
+  }
+  return indexed
+}
+
 export async function runJokenetNightly(opts: { force?: boolean } = {}): Promise<NightlyReport> {
   const day = pacificDay()
   const origin = `nightly:${day}`
@@ -70,7 +94,7 @@ export async function runJokenetNightly(opts: { force?: boolean } = {}): Promise
 
   if (!opts.force) {
     const { count } = await db.from('jokenet').select('id', { count: 'exact', head: true }).like('origin', `${origin}:%`)
-    if ((count ?? 0) >= NIGHTLY.enough) return { day, skipped: 'already written tonight', situations: 0, written: 0, kept: 0, indexed: 0, errors }
+    if ((count ?? 0) >= NIGHTLY.enough) return { day, skipped: 'already written tonight', situations: 0, written: 0, kept: 0, indexed: await indexMissing(db, errors), errors }
   }
 
   const { callAgent, tryParseJson, DEFAULT_MODEL } = await import('@/lib/agents/gateway')
@@ -90,18 +114,22 @@ export async function runJokenetNightly(opts: { force?: boolean } = {}): Promise
   } catch {
     // no topic tonight
   }
-  const sit = await callAgent({
-    model: DEFAULT_MODEL,
-    temperature: 1.0,
-    maxTokens: 1500,
-    timeoutMs: 30_000,
-    messages: [{ role: 'user', content: SITUATION_PROMPT.replace('{{N}}', String(NIGHTLY.situations)).replace('{{TOPIC}}', topic).replace('{{AVOID}}', avoid.map((s) => `- ${s}`).join('\n') || '- (none)') }],
-  })
-  const situations = ((tryParseJson<{ situations?: unknown[] }>(sit.text)?.situations ?? []) as unknown[])
-    .map((s) => String(s ?? '').replace(/\s+/g, ' ').trim())
-    .filter((s) => s.length > 20 && s.length < 300)
-    .slice(0, NIGHTLY.situations)
-  if (!situations.length) return { day, situations: 0, written: 0, kept: 0, indexed: 0, errors: [sit.error ?? 'no situations'] }
+  const sitPrompt = SITUATION_PROMPT.replace('{{N}}', String(NIGHTLY.situations)).replace('{{TOPIC}}', topic).replace('{{AVOID}}', avoid.map((s) => `- ${s}`).join('\n') || '- (none)')
+  const readSituations = (text: string) =>
+    ((tryParseJson<{ situations?: unknown[] }>(text)?.situations ?? []) as unknown[])
+      .map((s) => String(s ?? '').replace(/\s+/g, ' ').trim())
+      .filter((s) => s.length > 20 && s.length < 300)
+      .slice(0, NIGHTLY.situations)
+  // Flash can spend its budget thinking and cut the JSON short: give it room,
+  // and ask the bit writer's backup model if it still comes back empty.
+  let situations: string[] = []
+  for (const model of [DEFAULT_MODEL, pipe.backupWriterModel(), pipe.bitWriterModel()]) {
+    const sit = await callAgent({ model, temperature: model.startsWith('openai/') ? undefined : 1.0, reasoningEffort: model.startsWith('openai/gpt-5') ? 'low' : undefined, maxTokens: 4000, timeoutMs: 45_000, messages: [{ role: 'user', content: sitPrompt }] })
+    situations = readSituations(sit.text)
+    if (situations.length) break
+    errors.push(`situations (${model}): ${sit.error ?? `unreadable answer, ${sit.text.length} chars`}`)
+  }
+  if (!situations.length) return { day, situations: 0, written: 0, kept: 0, indexed: await indexMissing(db, errors), errors }
 
   // 2. lines: one writer call per situation, in parallel
   const bank = (await pipe.funniestBank()).line
@@ -130,7 +158,7 @@ export async function runJokenetNightly(opts: { force?: boolean } = {}): Promise
     }),
   )
   const lines = batches.flat()
-  if (!lines.length) return { day, situations: situations.length, written: 0, kept: 0, indexed: 0, errors }
+  if (!lines.length) return { day, situations: situations.length, written: 0, kept: 0, indexed: await indexMissing(db, errors), errors }
 
   // 3. the judge: another family, scores every line
   const judge = pipe.bitJudgeModel()
@@ -176,25 +204,7 @@ export async function runJokenetNightly(opts: { force?: boolean } = {}): Promise
     kept = ins?.length ?? 0
   }
 
-  // 5. index every row still missing a vector (tonight's and /bit-daily's)
-  let indexed = 0
-  try {
-    const { embedTexts, toVectorLiteral } = await import('@/lib/agents/embeddings.server')
-    const { data: todo } = await db.from('jokenet').select('id, situation').is('embedding', null).is('archived_at', null).limit(512)
-    for (let i = 0; i < (todo ?? []).length; i += 64) {
-      const chunk = todo.slice(i, i + 64)
-      const vecs = await embedTexts(chunk.map((r: any) => r.situation))
-      await Promise.all(
-        chunk.map(async (r: any, j: number) => {
-          if (!vecs[j]) return
-          const { error } = await db.from('jokenet').update({ embedding: toVectorLiteral(vecs[j]!) }).eq('id', r.id)
-          if (!error) indexed++
-        }),
-      )
-    }
-  } catch (e) {
-    errors.push(`index: ${e instanceof Error ? e.message : String(e)}`)
-  }
+  const indexed = await indexMissing(db, errors)
 
   return { day, situations: situations.length, written: lines.length, kept, indexed, errors }
 }
