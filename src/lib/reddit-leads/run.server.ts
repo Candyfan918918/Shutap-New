@@ -26,6 +26,7 @@ const SERPER_URL = 'https://google.serper.dev/search'
 const SCORE_BATCH = 15
 const MAX_TO_SCORE = 200 // keeps one run's AI calls bounded; the rest waits for the next run
 const BACKLOG_DAYS = 5
+const SWEEP_HOURS = 36 // how far back the subreddit sweep looks
 const RUN_GAP_HOURS = 4 // two scheduled runs a day, 6 hours apart // unscored threads older than this are dropped
 const SEARCH_PARALLEL = 5
 
@@ -104,6 +105,46 @@ async function readPost(url: string, key: string, errors: string[]): Promise<Pos
     errors.push(`read post: ${e instanceof Error ? e.message : 'failed'}`)
     return null
   }
+}
+
+type Fresh = { link: string; title: string; snippet: string }
+
+/** The newest posts in one subreddit, last SWEEP_HOURS only. Reddit's own JSON
+ *  first (full text, minutes old); if Reddit refuses this server, Google's
+ *  past-day results for that subreddit (Nov 19: keyword searches kept finding
+ *  week-old threads, and few new posts asking for help). */
+async function sweepSubreddit(sub: string, key: string): Promise<{ posts: Fresh[]; via: 'reddit' | 'google' }> {
+  try {
+    const r = await fetch(`https://www.reddit.com/r/${sub}/new.json?limit=50&raw_json=1`, {
+      headers: { 'User-Agent': 'web:shutap-leads:1.0 (by /u/FunnyCandy)', Accept: 'application/json' },
+    })
+    if (r.ok) {
+      const j = (await r.json()) as any
+      const cutoff = Date.now() / 1000 - SWEEP_HOURS * 3600
+      const posts: Fresh[] = (j?.data?.children ?? [])
+        .map((c: any) => c?.data)
+        .filter((d: any) => d && d.created_utc >= cutoff && !d.stickied && !d.locked && !d.over_18)
+        .map((d: any) => ({
+          link: `https://www.reddit.com${d.permalink}`,
+          title: String(d.title ?? ''),
+          snippet: String(d.selftext ?? '').replace(/\s+/g, ' ').slice(0, 600),
+        }))
+      return { posts, via: 'reddit' }
+    }
+  } catch {
+    /* fall back to Google */
+  }
+  const r = await fetch(SERPER_URL, {
+    method: 'POST',
+    headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ q: `site:reddit.com/r/${sub}`, tbs: 'qdr:d', num: 10, gl: 'us', hl: 'en' }),
+  })
+  if (!r.ok) throw new Error(`serper ${r.status}`)
+  const j = (await r.json()) as { organic?: Array<{ link?: string; title?: string; snippet?: string }> }
+  const posts = (j.organic ?? [])
+    .filter((o) => o.link)
+    .map((o) => ({ link: o.link!, title: (o.title ?? '').trim(), snippet: (o.snippet ?? '').trim() }))
+  return { posts, via: 'google' }
 }
 
 // Google titles end in " : r/sub" or " - Reddit"; the draft only needs the post title.
@@ -267,6 +308,29 @@ export async function runRedditLeads(opts: { force?: boolean } = {}): Promise<Ru
       }
     })
   }
+  // 1b. The newest posts in every listed, unblocked subreddit.
+  const { data: sweepRows } = await db.from('reddit_subreddits').select('name').eq('blocked', false)
+  const sweepSubs: string[] = (sweepRows ?? []).map((r: any) => r.name)
+  const via = { reddit: 0, google: 0 }
+  for (let i = 0; i < sweepSubs.length; i += SEARCH_PARALLEL) {
+    const chunk = sweepSubs.slice(i, i + SEARCH_PARALLEL)
+    const results = await Promise.allSettled(chunk.map((sub) => sweepSubreddit(sub, key)))
+    results.forEach((res, j) => {
+      const sub = chunk[j]!
+      summary.queries++
+      if (res.status === 'rejected') {
+        errors.push(`sweep r/${sub}: ${res.reason instanceof Error ? res.reason.message : 'failed'}`)
+        return
+      }
+      via[res.value.via]++
+      for (const p of res.value.posts) {
+        const t = parseThreadUrl(p.link)
+        if (!t || found.has(t.url)) continue
+        found.set(t.url, { url: t.url, subreddit: t.subreddit, title: cleanTitle(p.title), snippet: p.snippet, query: `sweep r/${sub}`, theme: 'humor' })
+      }
+    })
+  }
+  if (via.google > 0 && via.reddit === 0 && sweepSubs.length) errors.push(`sweep read Google for all ${via.google} subreddits (Reddit refused)`)
   summary.found = found.size
   if (!found.size) return finish()
 
