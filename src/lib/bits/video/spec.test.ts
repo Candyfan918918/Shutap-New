@@ -82,3 +82,9 @@ test('a named place beats a word for a person; pronouns draw who the story never
     { role: 'stranger', gender: 'f', kid: false },
   ])
 })
+
+test('"I\'m the barista, the manager and the owner" is the teller, not other people', () => {
+  const s = "I own a tiny cafe. I'm the barista, the manager and the owner. A lady hated her latte and asked for the manager. She asked for the owner."
+  assert.deepEqual(castFor(s), [{ role: 'me', gender: 'n', kid: false }, { role: 'stranger', gender: 'f', kid: false }])
+  assert.equal(sceneFor(s), 'restaurant')
+})
