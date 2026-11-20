@@ -37,6 +37,7 @@ export function VideoCard({
   resume,
   onResumed,
   onWatch,
+  plain,
 }: {
   bitId: string;
   version: BitVersion;
@@ -60,6 +61,9 @@ export function VideoCard({
   onResumed?: () => void;
   /** guests: the video is behind sign-in; this opens the sheet */
   onWatch?: () => void;
+  /** Nov 20 2026: inside the "Use it" panel: the video in a phone frame
+   *  beside one instruction and one button, no card of its own */
+  plain?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [spec, setSpec] = useState<VideoSpec>(() => buildSpec(version, story));
@@ -319,6 +323,52 @@ export function VideoCard({
   ) : (
     <span className="bt-note">video clean, no watermark</span>
   );
+
+  if (plain) {
+    const plainLabel =
+      busy !== null
+        ? `Making the video… ${Math.round(busy * 100)}%`
+        : starting
+          ? "Getting your video ready…"
+          : onSignIn
+            ? "Sign in to watch and save"
+            : "Save video";
+    return (
+      <div className="bt-use-body" aria-label="The 5-second video" data-ph-private>
+        <div className="bt-phone" style={{ background: "#fdf3f6" }}>
+          <canvas
+            ref={canvasRef}
+            width={360}
+            height={Math.round((360 * VIDEO_H) / VIDEO_W)}
+            className="ph-no-capture"
+            style={{ width: "100%", height: "100%", display: "block", cursor: "pointer" }}
+            onClick={tapVideo}
+            role={gated ? "button" : "img"}
+            aria-label={gated ? "The video. Sign in to watch it." : playing ? "The video, playing. Tap to pause." : "The video, paused. Tap to play."}
+          />
+          {!gated && (
+            <button type="button" className="bt-mini" onClick={toggleSound} aria-label="Sound on or off" style={{ position: "absolute", right: 10, bottom: 10 }}>
+              {audioRef.current && audioRef.current.state === "running" ? "sound on" : "sound"}
+            </button>
+          )}
+        </div>
+        <div className="bt-use-side">
+          <b className="bt-use-h">A 5-second video, ready to post.</b>
+          <p className="bt-use-p">Save it, then upload it to TikTok, Instagram or YouTube Shorts. Tag your shop and city so locals find it.</p>
+          <button className="bt-btn block" disabled={busy !== null || starting || support === null} aria-busy={busy !== null || starting} onClick={() => void download()}>
+            {plainLabel}
+          </button>
+          {watermark ? (
+            <button type="button" className="bt-note bt-linkish" onClick={() => onLimit("watermark")}>
+              Free: small shutap.com mark on the video. Basic ({usd(PLANS.basic.amount)}/month): no mark.
+            </button>
+          ) : (
+            <span className="bt-note">No watermark on your plan.</span>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section

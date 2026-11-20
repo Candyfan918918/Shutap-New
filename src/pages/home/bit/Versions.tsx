@@ -7,6 +7,9 @@ import { swapAngle, varyBit } from '@/lib/bits.functions'
 import { VARY_KINDS, type Bit, type BitTier, type BitVersion, type Slot, type VaryKind } from '@/lib/bits/shared'
 import { anonSessionId, jokeTrack } from '../joke/jokeClient'
 
+/** The rewrites in plain words (Nov 20 2026): the kinds keep their names in the data. */
+export const KIND_LABEL: Record<VaryKind, string> = { hotter: 'bolder', tighter: 'shorter', storytelling: 'bigger ending' }
+
 export function chipLabel(v: BitVersion, all: BitVersion[]): string {
   if (v.kind === 'edited' || (v.kind === 'mix' && v.why === 'kept as written by you')) {
     const kept = all.filter((x) => x.kind === 'edited' || (x.kind === 'mix' && x.why === 'kept as written by you'))
@@ -20,7 +23,7 @@ export function chipLabel(v: BitVersion, all: BitVersion[]): string {
     const swaps = all.filter((x) => x.kind === 'tag_swap')
     return swaps.length > 1 ? `tag swap ${swaps.indexOf(v) + 1}` : 'tag swap'
   }
-  return v.kind
+  return KIND_LABEL[v.kind as VaryKind] ?? v.kind
 }
 
 export function Versions({
@@ -120,25 +123,21 @@ export function Versions({
     }
   }
 
+  const others = bit.versions.filter((v) => v.id !== original.id)
   return (
     <>
-      <section className="bt-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }} aria-label="Versions">
-        <span className="bt-lbl">
-          versions
-          {onPaywall ? (
-            <span className="bt-note" style={{ marginLeft: 8, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>
-              rewrites, swaps and your own mix · Basic and Pro
-            </span>
-          ) : left !== undefined && left !== null && !onSignIn ? (
-            <span className="bt-note" style={{ marginLeft: 8, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>
-              a rewrite is a new bit and a new video · {left === 0 ? 'none left today' : `${left} left today`}
-            </span>
-          ) : null}
-        </span>
-        <div className="bt-chips">
-          <button className="bt-chip" aria-pressed={current.id === original.id} onClick={() => onSelect(original.id)}>
-            original
-          </button>
+      <section className="bt-rewrite" aria-label="Rewrite the whole bit">
+        <div className="bt-panel-h sm">
+          <b>Rewrite the whole bit</b>
+          <span>
+            {onPaywall
+              ? 'Basic & Pro · locked lines stay'
+              : left !== undefined && left !== null && !onSignIn
+                ? `each one counts as a bit · ${left === 0 ? 'none left today' : `${left} left today`} · locked lines stay`
+                : 'locked lines stay'}
+          </span>
+        </div>
+        <div className="bt-rewrite-row">
           {VARY_KINDS.map((k) => {
             const made = latestOf(k)
             return (
@@ -150,38 +149,30 @@ export function Versions({
                 disabled={!!busy}
                 onClick={() => void pickKind(k)}
               >
-                {busy === k ? 'writing…' : left === 0 && !onSignIn && !onPaywall ? `${k} · limit` : k}
+                {busy === k ? 'writing…' : left === 0 && !onSignIn && !onPaywall && !made ? `${KIND_LABEL[k]} · limit` : KIND_LABEL[k]}
               </button>
             )
           })}
-          {extras.map((v) => (
-            <button key={v.id} className="bt-chip" aria-pressed={current.id === v.id} onClick={() => onSelect(v.id)}>
-              {chipLabel(v, bit.versions)}
-            </button>
-          ))}
+          <button className="bt-chip" onClick={() => (onSignIn ? onSignIn('mix') : onMix())}>pick &amp; mix</button>
         </div>
-        {current.id !== original.id && (
-          <p className="bt-note" style={{ fontSize: 'var(--fs-small)' }}>
-            The bit above is now the {chipLabel(current, bit.versions)} version. Every version is saved.
-          </p>
-        )}
-        <div className="bt-between" style={{ borderTop: '1px solid var(--line)', paddingTop: 12 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <b style={{ fontSize: 'var(--fs-body)' }}>Mix your own</b>
-            <span className="bt-note" style={{ fontSize: 'var(--fs-small)', color: 'var(--muted)' }}>
-              pick your favorite hook, tag and ending, one at a time
-            </span>
+        {others.length > 0 && (
+          <div className="bt-showing" aria-label="Versions of this bit">
+            <span className="bt-note">showing:</span>
+            <button className="bt-chip sm" aria-pressed={current.id === original.id} onClick={() => onSelect(original.id)}>original</button>
+            {others.map((v) => (
+              <button key={v.id} className="bt-chip sm" aria-pressed={current.id === v.id} onClick={() => onSelect(v.id)}>
+                {chipLabel(v, bit.versions)}
+              </button>
+            ))}
           </div>
-          <button className="bt-btn sm" onClick={() => (onSignIn ? onSignIn('mix') : onMix())}>
-            start
-          </button>
-        </div>
+        )}
       </section>
 
       {bit.crowd_work.length > 0 && (
-        <section data-ph-private style={{ display: 'flex', flexDirection: 'column', gap: 8 }} aria-label="Crowd-work angles">
-          <span className="bt-lbl">crowd-work angles · tap to swap into tag 1</span>
-          <span className="bt-note" style={{ marginTop: -4 }}>five quick angles on the same situation, the way a comic riffs off an answer from the crowd</span>
+        <details className="bt-swaps-more" data-ph-private>
+          <summary>5 other funny lines to swap in</summary>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }} aria-label="Other funny lines">
+          <span className="bt-note">Tap one to put it in as your funny line. Tap it again to undo.</span>
           {bit.crowd_work.map((t, i) => (
             <button
               key={i}
@@ -194,7 +185,8 @@ export function Versions({
               {t}
             </button>
           ))}
-        </section>
+          </div>
+        </details>
       )}
     </>
   )
