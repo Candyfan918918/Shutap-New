@@ -198,7 +198,7 @@ Sound like a real person typing a quick comment, not an assistant:
 - Have an opinion. It's fine to be blunt or to admit something didn't land.
 Never invent facts about them. Never punch down: nothing about race, religion, nationality, accent, disability, weight or sexuality. Never offer to write the whole thing, never ask them to DM you.
 ${ending}
-If the post is not really asking for help with something funny, or you can't add anything genuinely useful, reply with exactly SKIP.`
+Reply with exactly SKIP only if you can't add anything genuinely useful. A small business owner asking how to get traffic, sales, views or content ideas from social media is always worth a reply: give them a concrete video or post idea for their shop, even if their post never mentions humor.`
 }
 
 async function draftOnce(lead: Lead, mention: { ok: boolean; link: string }): Promise<{ text: string; error?: string }> {
