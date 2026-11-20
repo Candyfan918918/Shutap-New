@@ -9,15 +9,15 @@ const TITLE = "About Shutap — Story-Based Jokes, Toasts & Listing Scripts";
 const DESCRIPTION =
   "Meet Shutap: turn your stories into jokes, toasts and listing scripts. Learn how its products work, what makes its approach different and who makes it.";
 const CAPSULE =
-  "Shutap is a humor amplifier on demand. It helps people say it funnier on the occasions that matter, with three products: Bits for creators and comedians, Kits for realtors, and Toasts for special occasions. You bring what you want to say; Shutap makes it funnier; you decide what stays. Your stories and words stay yours.";
+  "Shutap is a humor amplifier on demand. It helps people say it funnier on the occasions that matter, with three products: Bits for funnier short videos, filming and acting, Kits for realtors, and Toasts for special occasions. You bring what you want to say; Shutap makes it funnier; you decide what stays. Your stories and words stay yours.";
 const SECTIONS = [
   {
     heading: "What Shutap is: a humor amplifier, on demand",
-    body: "People who use humor well get listened to. Shutap amplifies the humor you already have, when you need it: a post, a listing, a toast. Bits are for creators and comedians, Kits are for realtors, and Toasts are for weddings, holidays, birthdays and every other occasion with a glass raised. Enterprise brings it to company presentations. Shutap works from your material; you decide what stays. Stay funny, stay human.",
+    body: "People who use humor well get listened to. Shutap amplifies the humor you already have, when you need it: a post, a listing, a toast. Bits are for funnier short videos, filming and acting, Kits are for realtors, and Toasts are for weddings, holidays, birthdays and every other occasion with a glass raised. Enterprise brings it to company presentations. Shutap works from your material; you decide what stays. Stay funny, stay human.",
   },
   {
     heading: "Bits: your bit, funnier",
-    body: "Make your story or joke funnier. Tell it your way, get the bit; AI fills only the gaps. For creators and comedians: you tell the story in your own words, and Shutap cuts it into a hook, setup, two tags and a button and keeps your words word for word. A line your story didn’t cover, the AI copilot drafts, marked “AI draft” so you can change it or keep it. Every line is optional. Stuck on a line? Tap “funnier” for three other ways to say it, yours first. The finished bit becomes a 5-second video to post, and stand-up on the prompter, with delivery cues to rehearse with (beats, pauses for the laugh, voices), a sketch page and a skit to perform. shutap.com/bits",
+    body: "Make your story or joke funnier. Tell it your way, get the bit; AI fills only the gaps. For funnier short videos, filming and acting: you tell the story in your own words, and Shutap cuts it into a hook, setup, two tags and a button and keeps your words word for word. A line your story didn’t cover, the AI copilot drafts, marked “AI draft” so you can change it or keep it. Every line is optional. Stuck on a line? Tap “funnier” for three other ways to say it, yours first. The finished bit becomes a 5-second video to post, and stand-up on the prompter, with delivery cues to rehearse with (beats, pauses for the laugh, voices), a sketch page and a skit to perform. shutap.com/bits",
   },
   {
     heading: "Realtors: your listing, funnier",
@@ -113,7 +113,7 @@ export const Route = createFileRoute("/about")({
             name: "Shutap",
             url: SITE_URL,
             slogan: "Say it funnier.",
-            description: "A humor amplifier on demand. Products: Shutap Bits (for creators and comedians), Shutap for Realtors (listing kits), Shutap Toasts (special occasions).",
+            description: "A humor amplifier on demand. Products: Shutap Bits (funnier short videos, filming and acting), Shutap for Realtors (listing kits), Shutap Toasts (special occasions).",
           },
         }),
       },

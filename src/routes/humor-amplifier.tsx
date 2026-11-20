@@ -5,7 +5,7 @@ import { breadcrumbScript } from '@/lib/seo/breadcrumbs'
 
 const PATH = '/humor-amplifier'
 const TITLE = 'Shutap Bits — write your bit, AI fills only the gaps | Shutap Humor Amplifier Lab'
-const DESCRIPTION = 'Shutap Bits, for creators and comedians: tell your story your way and get it back as a bit (hook, setup, two tags, button) in your own words, tap funnier on any line you’re stuck on, and get a 5-second video, stand-up, a sketch and a skit.'
+const DESCRIPTION = 'Shutap Bits, for funnier short videos, filming and acting: tell your story your way and get it back as a bit (hook, setup, two tags, button) in your own words, tap funnier on any line you’re stuck on, and get a 5-second video, stand-up, a sketch and a skit.'
 
 export const Route = createFileRoute('/humor-amplifier')({
   // newnav (Nov 6 2026): the product page is /bits; this URL keeps working

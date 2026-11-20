@@ -16,7 +16,7 @@ import { NO_FLAGS, type Flags } from '@/lib/flags'
 
 /** The products menu (Nov 6 2026, behind the newnav flag). */
 export const PRODUCTS: Array<{ to: string; name: string; sub: string; soon?: boolean }> = [
-  { to: '/bits', name: 'Shutap Bits', sub: 'for creators and comedians · what happened → the bit, the video, stand-up, sketch, skit' },
+  { to: '/bits', name: 'Shutap Bits', sub: 'for funnier short videos, filming and acting · what happened → the bit, the video, stand-up, sketch, skit' },
   { to: '/realtors', name: 'Shutap for Realtors', sub: 'paste a listing → a video script and every post to go with it' },
   { to: '/toasts', name: 'Shutap Toasts', sub: 'best man, maid of honor, Thanksgiving, Christmas · your stories → the toast, cue cards, prompter' },
   { to: '/business', name: 'Shutap Enterprise', sub: 'request pricing · the deck, the all-hands, the dataset' },
