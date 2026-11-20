@@ -273,13 +273,18 @@ export const writeRealtorKit = createServerFn({ method: 'POST' })
 /** Keep the kit as edited on the page as a version. No model, no charge. */
 export const keepKitEdit = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => KitIdIn.extend({ content: z.any() }).parse(d))
+  .inputValidator((d: unknown) => KitIdIn.extend({ content: z.any(), replace_version_id: z.string().uuid().optional() }).parse(d))
   .handler(async ({ data, context }): Promise<{ ok: true; version: KitVersionRow } | { ok: false; reason: 'not_found' | 'failed' | 'too_many' }> => {
     const { userId } = context as { userId: string }
     const admin = await adminDb()
     const kit = await loadKit(admin, data.kit_id, userId)
     if (!kit) return { ok: false, reason: 'not_found' }
-    if (kit.versions.length >= 40) return { ok: false, reason: 'too_many' }
+    // Nov 20 2026: the kit page saves a line the moment it changes. An edit
+    // on top of the person's own edited version (the newest one) rewrites
+    // that version, so a run of small edits never fills the kit's versions.
+    const last = kit.versions[kit.versions.length - 1]!
+    const replace = data.replace_version_id && last.id === data.replace_version_id && last.kind === 'edited' ? last : null
+    if (!replace && kit.versions.length >= 40) return { ok: false, reason: 'too_many' }
     const content = sanitizeKit(data.content, kit.versions[kit.versions.length - 1]!.content)
     const { hasEmailOrPhone: hasContactDetails, keepAsTyped } = await import('./agents/scrubber.functions')
     for (const { where, line } of (await import('./realtors/kit.server')).kitLines(content)) {
@@ -287,6 +292,11 @@ export const keepKitEdit = createServerFn({ method: 'POST' })
         const clean = keepAsTyped(line).clean_text
         replaceLine(content, where, line, clean)
       }
+    }
+    if (replace) {
+      const { data: upd, error: e2 } = await admin.from('kit_versions').update({ content } as never).eq('id', replace.id).eq('kit_id', kit.id).select('id, kit_id, kind, content, skipped, created_at').single()
+      if (e2 || !upd) return { ok: false, reason: 'failed' }
+      return { ok: true, version: upd as KitVersionRow }
     }
     const { data: row, error } = await admin.from('kit_versions').insert({ kit_id: kit.id, kind: 'edited', content, skipped: [] }).select('id, kit_id, kind, content, skipped, created_at').single()
     if (error || !row) return { ok: false, reason: 'failed' }
