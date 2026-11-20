@@ -1122,7 +1122,7 @@ export const touchLine = createServerFn({ method: 'POST' })
  *  version of its own. The person's words are scrubbed like a story; the
  *  version is theirs, never used anywhere else. No model call, no charge. */
 export const keepVersion = createServerFn({ method: 'POST' })
-  .inputValidator((d: unknown) => z.object({ bit_id: z.string().uuid(), draft: DraftIn, ...Ctx }).parse(d))
+  .inputValidator((d: unknown) => z.object({ bit_id: z.string().uuid(), draft: DraftIn, replace_version_id: z.string().uuid().optional(), ...Ctx }).parse(d))
   .handler(async ({ data }): Promise<VersionResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
@@ -1130,7 +1130,12 @@ export const keepVersion = createServerFn({ method: 'POST' })
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
-    if (versions.length >= MAX_VERSIONS) return { ok: false, reason: 'too_many' }
+    // Nov 20 2026: the result page saves a line the moment it changes. An
+    // edit on top of the person's own edited version rewrites that version
+    // (and drops its laid-out script and shot list, which no longer match),
+    // so a run of small edits never fills the bit's versions.
+    const replace = data.replace_version_id ? versions.find((v) => v.id === data.replace_version_id && (v.kind as string) === 'edited') : undefined
+    if (!replace && versions.length >= MAX_VERSIONS) return { ok: false, reason: 'too_many' }
     let draft = { ...data.draft, tags: data.draft.tags.map((t) => t.trim()).filter(Boolean), why: 'kept as written by you' }
     draft = { ...draft, hook: draft.hook.trim(), setup: draft.setup.trim(), button: draft.button.trim() }
     if (!draft.hook || !draft.setup || !draft.button || !draft.tags.length) return { ok: false, reason: 'failed' }
@@ -1139,6 +1144,19 @@ export const keepVersion = createServerFn({ method: 'POST' })
       if (v && hasEmailOrPhone(v)) draft = writeSlot(draft, sl, keepAsTyped(v).clean_text)
     }
     const controls = { ...DEFAULT_CONTROLS, ...(row.controls ?? {}) } as BitControls
+    if (replace) {
+      const c = await cols(supabaseAdmin)
+      const { data: upd, error } = await supabaseAdmin
+        .from('bit_versions')
+        .update({ hook: draft.hook, setup: draft.setup, tags: draft.tags, button: draft.button, why: draft.why, est_seconds: estSeconds(draft), [c.skit]: null, [c.sketch]: null } as never)
+        .eq('id', replace.id)
+        .eq('bit_id', row.id)
+        .select('id, bit_id, kind, hook, setup, tags, button, why, est_seconds, heat, created_at')
+        .single()
+      if (error || !upd) return { ok: false, reason: 'failed' }
+      forgetPerson(id.userId)
+      return { ok: true, version: toVersion(upd as VersionRow) }
+    }
     const saved = await insertVersion(supabaseAdmin, row.id, 'edited', draft, controls.heat)
     forgetPerson(id.userId)
     return { ok: true, version: toVersion(saved) }

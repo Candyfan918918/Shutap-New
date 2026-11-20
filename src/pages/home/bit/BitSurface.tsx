@@ -56,8 +56,8 @@ import { DownloadSheet } from './DownloadSheet'
 import { PostSheet } from './PostSheet'
 import { PaywallBody, UpgradeBody, type PaywallWhere } from './PlanSheets'
 import { VideoCard } from './VideoCard'
-import { EditableBit, draftOf, type Draft } from './EditableBit'
-import { PerformIt } from './PerformIt'
+import { EditableBit, draftOf, plainLabel, type Draft } from './EditableBit'
+import { UseIt, type UseTab } from './UseIt'
 import { EMPTY_LINES, LinedBox, linesText, writtenSlots } from './LinedBox'
 import { getFlags } from '@/lib/flags.functions'
 import { NO_FLAGS, type Flags } from '@/lib/flags'
@@ -67,6 +67,8 @@ import { FuelMeter, storyFuel, useTypingPrompt } from './storyBox'
 import './bit.css'
 
 const DRAFT_KEY = 'shutap_bit_draft'
+/** a bit link from another device, waiting on sign-in */
+const OPEN_KEY = 'shutap_bit_open'
 const LINES_KEY = 'shutap_bit_lines'
 /** Nov 5 2026: a guest's tap on lock / lock all, done once they're signed in */
 const PENDING_LOCK_KEY = 'shutap_pending_lock'
@@ -118,17 +120,17 @@ type ShownBit = Bit & { locked: boolean }
 /** The sign-in sheet says what signing in unlocks, in the words of what
  *  they just tapped. The bit comes back with them either way. */
 const SIGNIN_COPY: Record<string, { title: string; sub: string }> = {
-  rewrite: { title: 'Sign in to rewrite it.', sub: 'Free. Hotter, tighter, a new tag, or mix your own. Your bit comes with you.' },
+  rewrite: { title: 'Sign in to rewrite it.', sub: 'Free to sign in. Bolder, shorter, a bigger ending, or pick & mix. Your bit comes with you.' },
   lock: { title: 'Sign in to lock your lines.', sub: 'Free. Your lines stay in the box and lock the moment you’re in.' },
   funnier: { title: 'Sign in free for more funnier.', sub: 'You’ve used the free try. Signed in, funnier works on every line, unlimited, yours always first. Your lines stay in the box.' },
   swap: { title: 'Sign in to swap in a crowd-work angle.', sub: 'Free. Your bit comes with you, with all five angles.' },
-  standup: { title: 'Sign in to run it as stand-up.', sub: 'Free. The teleprompter, at talking pace, with delivery cues.' },
+  standup: { title: 'Sign in for the teleprompter.', sub: 'Free. Your lines at talking pace while you film. Your bit comes with you.' },
   mix: { title: 'Sign in to mix your own.', sub: 'Free. Pick your favorite hook, tag and ending. Your bit comes with you.' },
   watch: { title: 'Sign in to watch the video.', sub: 'Free. The 5-second video comes with you.' },
   download: { title: 'Sign in to download it.', sub: 'Free: download it as often as you like, with a shutap.com watermark.' },
   save: { title: 'Sign in to keep it.', sub: 'Free. It goes in My creations with every version you make.' },
-  skit: { title: 'Sign in for the skit.', sub: 'Free. A shot list you film alone, every role yours.' },
-  sketch: { title: 'Sign in for the sketch.', sub: 'Free. One page in script format.' },
+  skit: { title: 'Sign in for the shot list.', sub: 'Free. Short clips to film in order, on your phone. Your bit comes with you.' },
+  sketch: { title: 'Sign in for the script.', sub: 'Free. One page to read through before you film. Your bit comes with you.' },
   post: { title: 'Sign in to post it.', sub: 'Free. Your bit comes with you.' },
   sheet: { title: 'Sign in to use this.', sub: 'Free. One tap with Google or Apple.' },
 }
@@ -381,7 +383,15 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const ctx = useCallback(() => ({ anon_session_id: anonSessionId() }), [])
   const version: BitVersion | null = bit ? (bit.versions.find((v) => v.id === currentId) ?? bit.versions[0] ?? null) : null
   // a new version on the page starts a fresh draft (locks stay: they are the person's choice)
-  useEffect(() => { setDraft(version ? draftOf(version) : null); setYours([]) }, [version?.id])
+  /** the version a saved line just made: its "yours" marks carry over */
+  const keptId = useRef<string | null>(null)
+  /** the Use it card a link from another device asked for */
+  const [useTab, setUseTab] = useState<UseTab | undefined>(undefined)
+  useEffect(() => {
+    setDraft(version ? draftOf(version) : null)
+    if (version && keptId.current === version.id) keptId.current = null
+    else setYours([])
+  }, [version?.id])
 
   const phaseRef = useRef(phase)
   phaseRef.current = phase
@@ -401,6 +411,17 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     if (phaseRef.current === 'bit') setCurrentId(v.id)
     else say(`${v.kind} version ready · it's in your versions`)
     jokeTrack('version_made', tier, { kind: v.kind })
+  }
+
+  /** A line saved from the page (Nov 20 2026): a new version the first time,
+   *  the same version rewritten after that. */
+  function keptVersion(v: BitVersion) {
+    if (bit?.versions.some((x) => x.id === v.id)) {
+      setBit((b) => (b ? { ...b, versions: b.versions.map((x) => (x.id === v.id ? v : x)) } : b))
+      return
+    }
+    keptId.current = v.id
+    addVersion(v)
   }
 
   /* One scroll per screen change. The old pattern (smooth scroll to the top,
@@ -584,23 +605,54 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
   const restoreRef = useRef<(() => Promise<void>) | null>(null)
   restoreRef.current = restore
 
-  /* /?bit=<id> reopens a bit from the set list (or a reload). */
+  /* /?bit=<id> reopens a bit from My creations (or a reload).
+     Nov 20 2026: a QR from "Send to my other device" adds &v=<version> and
+     &open=prompter|shots. The other device is usually signed out, so the
+     link is kept for 30 minutes and the bit opens right after sign-in. */
   const openFromLink = useCallback(async () => {
-    const id = new URLSearchParams(window.location.search).get('bit')
+    const q = new URLSearchParams(window.location.search)
+    let id = q.get('bit')
+    let ver = q.get('v')
+    let open = q.get('open')
+    let stashed = false
+    if (!id) {
+      try {
+        const st = JSON.parse(localStorage.getItem(OPEN_KEY) ?? 'null') as { bit: string; v: string | null; open: string | null; at: number } | null
+        if (st && Date.now() - st.at < 30 * 60_000) { id = st.bit; ver = st.v; open = st.open; stashed = true }
+        else if (st) localStorage.removeItem(OPEN_KEY)
+      } catch { /* noop */ }
+    }
     if (!id || !/^[0-9a-f-]{36}$/i.test(id) || readPending() || readPendingWrite()) return
     // The link opens the bit once; a refresh afterwards lands on a clean box.
-    window.history.replaceState(window.history.state, '', window.location.pathname)
+    if (!stashed) window.history.replaceState(window.history.state, '', window.location.pathname)
     setOpening(true)
+    let opened = false
     try {
       const r = await fetchBit({ data: { bit_id: id, ...ctx() } })
       // Never swap an old bit over a story the visitor has started typing.
       if (r.bit && !typed.current) {
+        opened = true
+        const v = r.bit.versions.find((x) => x.id === ver) ?? r.bit.versions[0] ?? null
         setBit(r.bit)
-        setCurrentId(r.bit.versions[0]?.id ?? null)
+        setCurrentId(v?.id ?? null)
         setPhase('bit')
+        if (open === 'prompter' && v) { setUseTab('prompter'); setStandup(v); jokeTrack('standup_opened', 'free', { kind: v.kind, from: 'device_link' }) }
+        else if (open === 'shots') setUseTab('shots')
+        if (open) jokeTap('use_device_link_opened', 'free', { what: open })
       }
     } catch { /* not theirs, or gone: stay on the box */ }
     finally { setOpening(false) }
+    try {
+      if (opened) localStorage.removeItem(OPEN_KEY)
+      else if (open && !stashed) {
+        const { data: sess } = await supabase.auth.getSession()
+        if (!sess.session || sess.session.user.is_anonymous === true) {
+          localStorage.setItem(OPEN_KEY, JSON.stringify({ bit: id, v: ver, open, at: Date.now() }))
+          openSignin(open === 'prompter' ? 'standup' : 'skit')
+        }
+      }
+    } catch { /* noop */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchBit, ctx])
 
   useEffect(() => {
@@ -619,7 +671,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
         setSheet((s) => (s === 'signin' || s === 'signin_write' ? null : s))
         // restore() re-reads the tier when a return note exists; One Tap on the
         // write box leaves none, so read it here too.
-        void restore().finally(() => void refresh())
+        void restore().finally(() => { void refresh(); void openFromLink() })
       }
     })
     return () => sub.subscription.unsubscribe()
@@ -1367,11 +1419,13 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               </div>
             )}
 
+            <div className="bt-ready">
+              <h2 className="bt-ready-h" tabIndex={-1}>Your bit is ready.</h2>
+              <p>Change any line{flags.ondemand ? '' : ' with a rewrite'}. The video, teleprompter, script and shot list update with it.</p>
+            </div>
             <div className="bt-result">
-              <div className="bt-result-main">
-              <span className="bt-lbl">
-                the bit · ~{version.est_seconds}s · wild {version.heat} · {bit.controls.audience}
-              </span>
+              <div className="bt-result-main bt-card bt-panel">
+                <div className="bt-panel-h"><b>1 · Your bit</b><span>about {version.est_seconds} seconds to say</span></div>
 
               {flags.ondemand && draft ? (
                 <EditableBit
@@ -1385,56 +1439,24 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                   onLocked={setLocked}
                   yours={yours}
                   onYours={setYours}
-                  onKept={addVersion}
+                  onKept={keptVersion}
                   onSignIn={tier === 'guest' ? () => openSignin('rewrite') : undefined}
                   onLimit={() => openPaywall('rewrite')}
                 />
               ) : (
-              <article className="bt-card" aria-label="The bit" data-ph-private style={{ paddingTop: 8 }}>
-                <div className="bt-slot">
-                  <span className="bt-lbl r">hook · on screen, first 2 seconds</span>
-                  <p className="bt-v hook">{version.hook}</p>
-                </div>
-                <div className="bt-slot">
-                  <span className="bt-lbl">setup</span>
-                  <p className="bt-v">{version.setup}</p>
-                </div>
-                {version.tags.map((t, i) => (
-                  <div key={i} className={`bt-slot${i === 0 && version.kind === 'tag_swap' ? ' new' : ''}`}>
-                    <span className={`bt-lbl${i === 0 && version.kind === 'tag_swap' ? ' r' : ''}`}>tag {i + 1}{i === 0 && version.kind === 'tag_swap' ? ' · swapped' : ''}</span>
-                    <p className="bt-v">{t}</p>
+              <article className="bt-edit" aria-label="The bit" data-ph-private>
+                {(['hook', 'setup', ...version.tags.map((_, i) => `tag${i}`), 'button'] as Slot[]).map((s) => (
+                  <div key={s} className="bt-row">
+                    <div className="bt-eslot-main">
+                      <span className="bt-rowk">{plainLabel(s)}</span>
+                      <p className="bt-v">{readSlot(version, s)}</p>
+                    </div>
                   </div>
                 ))}
-                <div className="bt-slot">
-                  <span className="bt-lbl r">button</span>
-                  <p className="bt-v" style={{ fontWeight: 400 }}>{version.button}</p>
-                </div>
               </article>
               )}
 
-              <div className="bt-acts" role="group" aria-label="Keep the bit">
-                <button
-                  className="bt-act"
-                  onClick={() => {
-                    if (tier === 'guest') return openSignin('download')
-                    setDownloadOpen(true)
-                  }}
-                >
-                  <ActionIcon name="download" />
-                  save
-                </button>
-                <button
-                  className="bt-act"
-                  onClick={() => {
-                    if (tier === 'guest') return openSignin('post')
-                    setPostOpen(true)
-                  }}
-                >
-                  <ActionIcon name="post" />
-                  post
-                </button>
-              </div>
-
+              <div className="bt-panel-foot">
               <Versions
                 bit={bit}
                 current={version}
@@ -1454,50 +1476,77 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 onCharged={() => setUsage((u) => (u && u.cap !== null ? { ...u, used: Math.min(u.cap, u.used + 1) } : u))}
                 locked={flags.ondemand ? locked : undefined}
               />
-
-              <div className="bt-row">
-                <button className="bt-btn ghost" onClick={writeAnother}>
-                  write another
-                </button>
-                {tier !== 'guest' ? (
-                  <span className="bt-note">kept in My creations</span>
-                ) : (
-                  <button className="bt-btn sm" onClick={() => openSignin('save')}>
-                    keep it · sign in free
-                  </button>
-                )}
               </div>
               </div>
-              <aside className="bt-result-side" aria-label="Post it">
-                <VideoCard
+              <aside className="bt-result-side" aria-label="Use it">
+                <UseIt
                   bitId={bit.id}
                   version={version}
-                  story={bit.story}
                   tier={tier}
                   say={say}
-                  onSignIn={tier === 'guest' ? () => openSignin('video') : undefined}
-                  onWatch={tier === 'guest' ? () => openSignin('watch') : undefined}
-                  onLimit={(why) => onDownloadLimit(why, 'video')}
-                  onFallbackPicture={() => setDownloadOpen(true)}
-                  downloadsLeft={downloadsLeft}
-                  period={dlUsage?.period ?? 'day'}
-                  onCharged={(r) => setDlUsage((u) => ({ used: r.used, cap: r.cap, tier: r.tier, period: u?.period ?? 'day' }))}
-                  resume={resume === 'video'}
-                  onResumed={() => setResume(null)}
-                />
-                {/* Nov 6 2026: the formats as preview tiles built from this version's lines */}
-                <PerformIt
-                  version={version}
+                  watermark={!isPaidTier(tier)}
+                  initial={useTab}
                   onStandup={() => {
                     // Every action on the result takes an account (Oct 30 2026).
                     if (tier === 'guest') return openSignin('standup')
                     setStandup(version)
                     jokeTrack('standup_opened', tier, { kind: version.kind })
                   }}
-                  onSketch={() => { if (tier === 'guest') return openSignin('sketch'); setPhase('sketch'); jokeTrack('sketch_opened', tier, { kind: version.kind }); toTop() }}
-                  onSkit={() => { if (tier === 'guest') return openSignin('skit'); setPhase('skit'); jokeTrack('skit_opened', tier, { kind: version.kind }); toTop() }}
+                  onSignIn={tier === 'guest' ? (from) => openSignin(from) : undefined}
+                  video={
+                    <VideoCard
+                      plain
+                      bitId={bit.id}
+                      version={version}
+                      story={bit.story}
+                      tier={tier}
+                      say={say}
+                      onSignIn={tier === 'guest' ? () => openSignin('video') : undefined}
+                      onWatch={tier === 'guest' ? () => openSignin('watch') : undefined}
+                      onLimit={(why) => onDownloadLimit(why, 'video')}
+                      onFallbackPicture={() => setDownloadOpen(true)}
+                      downloadsLeft={downloadsLeft}
+                      period={dlUsage?.period ?? 'day'}
+                      onCharged={(r) => setDlUsage((u) => ({ used: r.used, cap: r.cap, tier: r.tier, period: u?.period ?? 'day' }))}
+                      resume={resume === 'video'}
+                      onResumed={() => setResume(null)}
+                    />
+                  }
                 />
               </aside>
+            </div>
+
+            <div className="bt-after">
+              <button className="bt-btn ghost" onClick={writeAnother}>+ Make a new bit</button>
+              {tier !== 'guest' ? (
+                <span className="bt-note">saved in My creations</span>
+              ) : (
+                <button className="bt-btn sm" onClick={() => openSignin('save')}>keep it · sign in free</button>
+              )}
+              <span className="bt-after-more">
+                <button
+                  type="button"
+                  className="bt-note bt-linkish"
+                  onClick={() => {
+                    jokeTap('result_more', tier, { what: 'save_picture' })
+                    if (tier === 'guest') return openSignin('download')
+                    setDownloadOpen(true)
+                  }}
+                >
+                  save as a picture or PDF
+                </button>
+                <button
+                  type="button"
+                  className="bt-note bt-linkish"
+                  onClick={() => {
+                    jokeTap('result_more', tier, { what: 'post_room' })
+                    if (tier === 'guest') return openSignin('post')
+                    setPostOpen(true)
+                  }}
+                >
+                  post it to a Room
+                </button>
+              </span>
             </div>
           </>
         )}
