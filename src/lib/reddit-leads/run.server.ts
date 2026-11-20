@@ -142,14 +142,16 @@ We reply only to these people, about their own work:
 - comedians: stand-up (open mic to working comics), sketch and improv performers, comedy writers;
 - content creators: TikTok, Reels, YouTube and Shorts creators who want their videos, hooks, skits or storytimes funnier or want content ideas;
 - social media managers and marketers: people writing posts, captions, replies or campaigns for a brand or client who want them funnier, wittier or more engaging;
-- writers: humor writers, copywriters, newsletter and blog writers who want a piece, a line or their voice funnier.
-Score each thread 1-10 for how much that person needs help making their own work funnier right now, judging only from the title and snippet.
+- writers: humor writers, copywriters, newsletter and blog writers who want a piece, a line or their voice funnier;
+- small business and shop owners (Etsy, Shopify, TikTok Shop, local shops) asking how to get traffic or customers from social media, how to get more views on TikTok or Reels, or what content to post for their shop.
+Score each thread 1-10 for how much that person needs help making their own work funnier, or (for small business owners) getting views and ideas for their shop's content, right now, judging only from the title and snippet.
 10: they ask for feedback on their own joke, set, hook or caption ("is this funny?", "help me with a punchline", "rate my set", "how do I make this hook better") and the joke or line itself is in the title or snippet.
-9: the same kind of feedback request, but their joke or line is not visible in the snippet; or they ask for help with a specific joke, line, hook, caption, post, script, bit, set or sketch.
+9: the same kind of feedback request, but their joke or line is not visible in the snippet; or they ask for help with a specific joke, line, hook, caption, post, script, bit, set or sketch; or a small business owner asks what to post for their shop, or why their shop's videos get no views.
 7-8: one of these people asks a craft question (how to write jokes, make content or posts funnier, find ideas, write hooks, fix something that fell flat, find a funnier voice) where a reply with concrete lines or tips would clearly help.
-5-6: one of these people asks something related (content ideas, engagement, writer's block) where a funny, concrete reply would still be welcome.
+7-8 also: a small business owner asks how to get traffic or customers from TikTok, Instagram or social media in general.
+5-6: one of these people asks something related (content ideas, engagement, writer's block, marketing a shop on a small budget) where a funny, concrete reply would still be welcome.
 3-4: loosely related; a reply would feel forced.
-1-2: not one of these people (wedding toasts, personal speeches, "how do I be funny at parties" or social-skills posts), news, memes, finished jokes posted for laughs, someone promoting their own thing, hiring posts, a closed or old discussion, an argument about AI, or anything touching grief, death, illness, self-harm, abuse, minors or a crisis. Anything touching those last topics is always 1.
+1-2: not one of these people (paid ads, SEO, Google rankings, pricing, shipping, taxes, legal or hiring questions from business owners; wedding toasts, personal speeches, "how do I be funny at parties" or social-skills posts), news, memes, finished jokes posted for laughs, someone promoting their own thing, hiring posts, a closed or old discussion, an argument about AI, or anything touching grief, death, illness, self-harm, abuse, minors or a crisis. Anything touching those last topics is always 1.
 Return JSON only: {"scores":[{"i":<index>,"score":<1-10>,"reason":"<under 12 words>"}]}`
 
 async function scoreLeads(leads: Lead[], errors: string[]): Promise<void> {
@@ -184,7 +186,8 @@ function draftSystem(mention: { ok: boolean; link: string }): string {
   const ending = mention.ok
     ? `End with one short line that says plainly you made it, in your own words, for example: "Full disclosure, I made shutap.com, it writes these if you want more options: ${mention.link}". Use exactly that link, once.`
     : `Do not mention Shutap, any website, app, tool or link.`
-  return `You write one Reddit comment that Candy, a founder who writes comedy, will post by hand. She is replying to a comedian, content creator, social media manager or writer.
+  return `You write one Reddit comment that Candy, a founder who writes comedy, will post by hand. She is replying to a comedian, content creator, social media manager, writer or small business owner.
+For a small business owner asking about traffic, views or what to post: give one or two concrete video or post ideas for their exact shop and product (a specific hook for the first two seconds, a funny angle on their product or their day running the shop), and at most one practical tip on why their posts get no views. No marketing jargon, no "post consistently" filler.
 You get the full post. Read it and work out the one thing they are actually asking. Your first sentence answers that, directly. If they asked for names, give names; if they asked "is this funny", say honestly whether it is and why; if they asked for ideas, give ideas for their exact situation. Don't answer a different question.
 If they shared a joke, hook or caption, punch up their own line: quote it once, give one better version, and say in a few plain words what you changed. Keep their premise and their voice.
 Sound like a real person typing a quick comment, not an assistant:
