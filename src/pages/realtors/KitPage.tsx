@@ -392,11 +392,11 @@ export function KitPage({ kitId, sessionId, prepaidSession, urlIn, textIn, aside
           </div>
         </div>
       ) : (
-      <div className="rl-col" ref={topRef}>
-        <div>
+      <div className={`rl-col${kit ? ' rl-col-kit' : ''}`} ref={topRef}>
+        {!kit && <div>
           <p className="rl-kicker">shutap for realtors</p>
           <h1 className="rl-h1">Your listing, <em>funnier.</em></h1>
-        </div>
+        </div>}
 
         {kit ? (
           <>
