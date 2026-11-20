@@ -136,6 +136,19 @@ export function sceneFor(story: string): SceneKind {
  *  one person. */
 export function castFor(story: string): Character[] {
   const hits: { at: number; c: Character }[] = []
+  // Nov 19 2026: "I'm the barista, the manager and the owner" names the
+  // teller, not three other people. Those words are masked (same length, so
+  // positions hold) and the teller stands where they first said it.
+  const SELF = /\bI(?:['’]m| am)\s+(?:the|a|an|your)\s+[^.!?"“”]*/gi
+  let self = -1
+  story = story.replace(SELF, (m, at: number) => {
+    if (ROLE_WORDS.some(([, , , re]) => re.test(m))) {
+      if (self < 0) self = at
+      return ' '.repeat(m.length)
+    }
+    return m
+  })
+  if (self >= 0) hits.push({ at: self, c: { role: 'me', gender: 'n', kid: false } })
   for (const [role, gender, kid, re] of ROLE_WORDS) {
     const m = re.exec(story)
     if (m) hits.push({ at: m.index, c: { role, gender, kid } })
