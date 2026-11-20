@@ -143,7 +143,7 @@ We reply only to these people, about their own work:
 - content creators: TikTok, Reels, YouTube and Shorts creators who want their videos, hooks, skits or storytimes funnier or want content ideas;
 - social media managers and marketers: people writing posts, captions, replies or campaigns for a brand or client who want them funnier, wittier or more engaging;
 - writers: humor writers, copywriters, newsletter and blog writers who want a piece, a line or their voice funnier;
-- small business and shop owners (Etsy, Shopify, TikTok Shop, local shops) asking how to get traffic or customers from social media, how to get more views on TikTok or Reels, or what content to post for their shop.
+- small business and shop owners (Etsy, Shopify, TikTok Shop and handmade sellers, local shops, boutiques, restaurants, hair stylists and salons, estheticians and med spas, personal trainers, realtors, plumbers, insurance agents, auto repair shops and car dealerships) asking how to get traffic or customers from social media, how to get more views on TikTok or Reels, or what content to post for their shop.
 Score each thread 1-10 for how much that person needs help making their own work funnier, or (for small business owners) getting views and ideas for their shop's content, right now, judging only from the title and snippet.
 10: they ask for feedback on their own joke, set, hook or caption ("is this funny?", "help me with a punchline", "rate my set", "how do I make this hook better") and the joke or line itself is in the title or snippet.
 9: the same kind of feedback request, but their joke or line is not visible in the snippet; or they ask for help with a specific joke, line, hook, caption, post, script, bit, set or sketch; or a small business owner asks what to post for their shop, or why their shop's videos get no views.
@@ -187,7 +187,7 @@ function draftSystem(mention: { ok: boolean; link: string }): string {
     ? `End with one short line that says plainly you made it, in your own words, for example: "Full disclosure, I made shutap.com, it writes these if you want more options: ${mention.link}". Use exactly that link, once.`
     : `Do not mention Shutap, any website, app, tool or link.`
   return `You write one Reddit comment that Candy, a founder who writes comedy, will post by hand. She is replying to a comedian, content creator, social media manager, writer or small business owner.
-For a small business owner asking about traffic, views or what to post: give one or two concrete video or post ideas for their exact shop and product (a specific hook for the first two seconds, a funny angle on their product or their day running the shop), and at most one practical tip on why their posts get no views. No marketing jargon, no "post consistently" filler.
+For a small business owner asking about traffic, views or what to post: give one or two concrete video or post ideas for their exact shop and product (a specific hook for the first two seconds, a funny angle on their product or their day running the shop). The best angle is usually the customer moment everyone in their trade knows: for a stylist, "just a trim" plus a photo of a bob; for a plumber, the customer who already tried a YouTube video, a coat hanger and half a bottle of drain cleaner; for a trainer, "toned, not bulky". Keep the joke on the situation, never on a real or identifiable customer, and never claim results, coverage or prices. and at most one practical tip on why their posts get no views. No marketing jargon, no "post consistently" filler.
 You get the full post. Read it and work out the one thing they are actually asking. Your first sentence answers that, directly. If they asked for names, give names; if they asked "is this funny", say honestly whether it is and why; if they asked for ideas, give ideas for their exact situation. Don't answer a different question.
 If they shared a joke, hook or caption, punch up their own line: quote it once, give one better version, and say in a few plain words what you changed. Keep their premise and their voice.
 Sound like a real person typing a quick comment, not an assistant:
@@ -198,7 +198,7 @@ Sound like a real person typing a quick comment, not an assistant:
 - Have an opinion. It's fine to be blunt or to admit something didn't land.
 Never invent facts about them. Never punch down: nothing about race, religion, nationality, accent, disability, weight or sexuality. Never offer to write the whole thing, never ask them to DM you.
 ${ending}
-If the post is not really asking for help with something funny, or you can't add anything genuinely useful, reply with exactly SKIP.`
+Reply with exactly SKIP only if you can't add anything genuinely useful. A small business owner asking how to get traffic, sales, views or content ideas from social media is always worth a reply: give them a concrete video or post idea for their shop, even if their post never mentions humor.`
 }
 
 async function draftOnce(lead: Lead, mention: { ok: boolean; link: string }): Promise<{ text: string; error?: string }> {
