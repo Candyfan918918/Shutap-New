@@ -86,8 +86,8 @@ type ProductLine = {
 
 const PRODUCTS: ProductLine[] = [
   {
-    key: 'bits', icon: 'bits', name: 'Bits', full: 'Shutap Bits', aud: 'for creators and comedians', tab: 'creators & comedians',
-    one: 'Make your story funnier. Make your joke funnier. Your words first; AI only fills the gaps.',
+    key: 'bits', icon: 'bits', name: 'Bits', full: 'Shutap Bits', aud: 'for more views and engagement', tab: 'more views & engagement',
+    one: 'Make your story funnier, made for more views, likes and shares. Your words first; AI only fills the gaps.',
     h2: ['Your bit, ', 'funnier.'],
     does: 'Tell your story your way; Shutap cuts it into a hook, setup, two tags and a button, your words word for word; any line your story didn’t cover, the AI copilot drafts. Tap “funnier” on any line for three other ways to say it, yours first. Then post it as a 5-second video, or perform it as stand-up, a sketch or a skit.',
     steps: ['Tell it your way', 'Tap “funnier” where you’re stuck', 'Post it, or perform it'],
