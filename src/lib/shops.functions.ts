@@ -421,3 +421,83 @@ export const touchMySkitLine = createServerFn({ method: 'POST' })
     await track(admin, userId, 'shop_line_funnier', { set_id: data.set_id, key: data.key, got: options?.length ?? 0, day: today().day })
     return options ? { ok: true, options } : { ok: false, reason: 'failed' }
   })
+
+/* ───────────────────────── the lab (Nov 21 2026) ─────────────────────────
+   Admin only, and it works while the product is dark: the founder types a
+   shop and a day, sees every candidate set with what the checks flagged, and
+   rates it pick / cut / rewrite. Nothing is counted and nothing is shown to
+   anyone else. The lab runs the real writer (the two models and the checks)
+   but not the Guard or the Scrubber: it is the founder's own test text. */
+import type { SkitDraft } from './shops/skit.server'
+
+const LabShopIn = z.object({
+  name: z.string().trim().min(2).max(120),
+  city: z.string().trim().min(1).max(80),
+  country: z.enum(COUNTRY_KEYS),
+  business_type: z.enum(BUSINESS_TYPE_KEYS),
+  known_for: z.array(Chip).max(12),
+  voice: z.enum(VOICE_KEYS),
+  length: z.union([z.literal(LENGTHS[0]), z.literal(LENGTHS[1]), z.literal(LENGTHS[2])]),
+  camera: z.enum(CAMERA_KEYS),
+  offer: z.enum(OFFER_KEYS),
+  offer_text: z.string().trim().max(80),
+})
+const LabAskIn = z.object({ day: z.string().trim().max(600), promote: z.string().trim().max(120), idea: z.string().trim().max(80), topics: z.array(z.string().trim().min(1).max(120)).max(6) })
+
+export type LabSkitsResult =
+  | { ok: true; eval_id: string | null; prompt_version: string; ms: number; winner: number; candidates: SkitDraft[] }
+  | { ok: false; reason: 'failed'; candidates: SkitDraft[] }
+
+/** Admin only: write the three skits for a shop typed into the lab. Every
+ *  candidate comes back, including the ones the checks rejected. */
+export const labWriteSkits = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ shop: LabShopIn, ask: LabAskIn }).parse(d))
+  .handler(async ({ data, context }): Promise<LabSkitsResult> => {
+    await requireAdmin(context)
+    const { writeSkitsLab } = await import('./shops/skit.server')
+    const { SKIT_PROMPT_VERSION } = await import('./shops/prompts.server')
+    const r = await writeSkitsLab(data.shop as SkitShop, { ...data.ask, date: pacificDateLine(), avoid: [] })
+    if (r.winner < 0) return { ok: false, reason: 'failed', candidates: r.candidates }
+    let evalId: string | null = null
+    try {
+      const admin = await adminDb()
+      const { data: row } = await admin.from('skit_evals').insert({ shop: data.shop, ask: data.ask, result: { winner: r.winner, ms: r.ms, candidates: r.candidates }, prompt_version: SKIT_PROMPT_VERSION }).select('id').single()
+      evalId = row?.id ?? null
+    } catch (e) {
+      console.warn('[skit-lab] eval not stored (table missing?)', e instanceof Error ? e.message : e)
+    }
+    return { ok: true, eval_id: evalId, prompt_version: SKIT_PROMPT_VERSION, ms: r.ms, winner: r.winner, candidates: r.candidates }
+  })
+
+/** Admin only: rate a lab run. */
+export const rateLabSkits = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ eval_id: z.string().uuid(), rating: z.enum(['pick', 'cut', 'rewrite']), notes: z.string().max(1000).optional() }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: boolean }> => {
+    await requireAdmin(context)
+    const admin = await adminDb()
+    const { error } = await admin.from('skit_evals').update({ rating: data.rating, notes: data.notes ?? null }).eq('id', data.eval_id)
+    return { ok: !error }
+  })
+
+/** Admin only: the lab's ledger. */
+export const labSkitEvals = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({}).parse(d ?? {}))
+  .handler(async ({ context }): Promise<{ total: number; pick: number; cut: number; rewrite: number; unrated: number; by_version: Record<string, { pick: number; cut: number; rewrite: number }> }> => {
+    await requireAdmin(context)
+    const admin = await adminDb()
+    const { data } = await admin.from('skit_evals').select('rating, prompt_version')
+    const rows: { rating: string | null; prompt_version: string }[] = data ?? []
+    const by: Record<string, { pick: number; cut: number; rewrite: number }> = {}
+    let pick = 0, cut = 0, rewrite = 0, unrated = 0
+    for (const r of rows) {
+      by[r.prompt_version] ??= { pick: 0, cut: 0, rewrite: 0 }
+      if (r.rating === 'pick') { pick++; by[r.prompt_version]!.pick++ }
+      else if (r.rating === 'cut') { cut++; by[r.prompt_version]!.cut++ }
+      else if (r.rating === 'rewrite') { rewrite++; by[r.prompt_version]!.rewrite++ }
+      else unrated++
+    }
+    return { total: rows.length, pick, cut, rewrite, unrated, by_version: by }
+  })

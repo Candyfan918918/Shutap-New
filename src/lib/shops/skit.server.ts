@@ -89,6 +89,13 @@ async function writeOnce(model: string, prompt: string, timeoutMs: number): Prom
  *  writer's when both pass). Null when nothing passed: the owner is never
  *  shown a skit that broke a rule. */
 export async function writeSkits(shop: SkitShop, ask: SkitAsk): Promise<SkitResult | null> {
+  const r = await writeSkitsLab(shop, ask)
+  return r.winner < 0 ? null : { skits: r.candidates[r.winner]!.skits, candidates: r.candidates, winner: r.winner, ms: r.ms }
+}
+
+/** The same run with nothing hidden: every candidate and what the checks
+ *  flagged, and winner -1 when none passed. The lab shows it all. */
+export async function writeSkitsLab(shop: SkitShop, ask: SkitAsk): Promise<{ candidates: SkitDraft[]; winner: number; ms: number }> {
   const t0 = Date.now()
   const prompt = promptFor(shop, ask)
   const ctx = contextFor(shop, ask)
@@ -110,9 +117,7 @@ export async function writeSkits(shop: SkitShop, ask: SkitAsk): Promise<SkitResu
     if (!fails.length) break
     feedback = `\n\nYOUR LAST ATTEMPT BROKE THESE RULES. Fix every one; everything else may stay:\n${[...new Set(fails)].slice(0, 12).join('\n')}`
   }
-  const winner = candidates.findIndex((c) => !c.checks.length)
-  if (winner < 0) return null
-  return { skits: candidates[winner]!.skits, candidates, winner, ms: Date.now() - t0 }
+  return { candidates, winner: candidates.findIndex((c) => !c.checks.length), ms: Date.now() - t0 }
 }
 
 const unquote = (s: string): string => s.replace(/\s+/g, ' ').trim().replace(/^["'“”]+|["'“”]+$/g, '').trim()
