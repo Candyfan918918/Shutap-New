@@ -105,7 +105,7 @@ function SkitLab() {
       <div className="fd-col" style={{ maxWidth: 900 }}>
         <h1 className="fd-h1">Small business lab</h1>
         <p className="fd-muted" style={{ margin: 0 }}>
-          Admin only. Shutap for small business, before anyone sees it: type a shop and what happened today, write the three skits, rate the run. Runs the real writer (two models and the checks); nothing is counted. Use invented shops or your own, never a customer’s.
+          Admin only. Shutap for small business, before anyone sees it: type a business and what happened today, write the three skits, rate the run. Runs the real writer (two models and the checks); nothing is counted. Use invented businesses or your own, never a customer’s.
         </p>
         {ledger && (
           <p style={{ margin: 0, fontSize: 13 }}>
@@ -120,7 +120,7 @@ function SkitLab() {
             {SAMPLES.map((s) => <button key={s.label} type="button" className="fd-chip" onClick={() => { setShop(s.shop); setAsk(s.ask) }}>{s.label}</button>)}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-            <div><label style={LABEL}>shop name</label><input style={INPUT} value={shop.name} onChange={(e) => setShop({ ...shop, name: e.target.value })} /></div>
+            <div><label style={LABEL}>business name</label><input style={INPUT} value={shop.name} onChange={(e) => setShop({ ...shop, name: e.target.value })} /></div>
             <div><label style={LABEL}>city</label><input style={INPUT} value={shop.city} onChange={(e) => setShop({ ...shop, city: e.target.value })} /></div>
           </div>
           {pick('business type', shop.business_type, BUSINESS_TYPES, (v) => setShop({ ...shop, business_type: v }))}

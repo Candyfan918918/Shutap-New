@@ -17,7 +17,8 @@ export type SkitSource = (typeof SKIT_SOURCES)[number]
 export const SOURCE_LABEL: Record<SkitSource, string> = {
   day: 'FROM YOUR DAY',
   today: 'FROM TODAY',
-  shop: 'FROM YOUR SHOP',
+  // Nov 21 2026 (Candy): owners read "business", never "shop"
+  shop: 'FROM YOUR BUSINESS',
 }
 
 export type SkitShot = {
