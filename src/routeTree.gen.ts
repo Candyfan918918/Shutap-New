@@ -53,6 +53,7 @@ import { Route as StreamRouteImport } from './routes/stream'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ToastLabRouteImport } from './routes/toast-lab'
+import { Route as SkitLabRouteImport } from './routes/skit-lab'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as WelcomeRouteImport } from './routes/welcome'
@@ -335,6 +336,11 @@ const TermsRoute = TermsRouteImport.update({
 const ToastLabRoute = ToastLabRouteImport.update({
   id: '/toast-lab',
   path: '/toast-lab',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkitLabRoute = SkitLabRouteImport.update({
+  id: '/skit-lab',
+  path: '/skit-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrustRoute = TrustRouteImport.update({
@@ -723,6 +729,7 @@ export interface FileRoutesByFullPath {
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
+  '/skit-lab': typeof SkitLabRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -832,6 +839,7 @@ export interface FileRoutesByTo {
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
+  '/skit-lab': typeof SkitLabRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -943,6 +951,7 @@ export interface FileRoutesById {
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
+  '/skit-lab': typeof SkitLabRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -1054,6 +1063,7 @@ export interface FileRouteTypes {
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
+    | '/skit-lab'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1163,6 +1173,7 @@ export interface FileRouteTypes {
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
+    | '/skit-lab'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1273,6 +1284,7 @@ export interface FileRouteTypes {
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
+    | '/skit-lab'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1384,6 +1396,7 @@ export interface RootRouteChildren {
   SubscribeRoute: typeof SubscribeRouteWithChildren
   TermsRoute: typeof TermsRoute
   ToastLabRoute: typeof ToastLabRoute
+  SkitLabRoute: typeof SkitLabRoute
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   WelcomeRoute: typeof WelcomeRoute
@@ -1743,6 +1756,13 @@ declare module '@tanstack/react-router' {
       path: '/toast-lab'
       fullPath: '/toast-lab'
       preLoaderRoute: typeof ToastLabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skit-lab': {
+      id: '/skit-lab'
+      path: '/skit-lab'
+      fullPath: '/skit-lab'
+      preLoaderRoute: typeof SkitLabRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/trust': {
@@ -2298,6 +2318,7 @@ const rootRouteChildren: RootRouteChildren = {
   SubscribeRoute: SubscribeRouteWithChildren,
   TermsRoute: TermsRoute,
   ToastLabRoute: ToastLabRoute,
+  SkitLabRoute: SkitLabRoute,
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   WelcomeRoute: WelcomeRoute,

@@ -13,6 +13,7 @@
 //   bit        a new story, or hotter/tighter/storytelling   1*    3 ever 3/day     ∞ (server fair-use)
 //   kit        a realtor kit written (a rewrite is one too)  0     1 ever 20/month  ∞
 //   toast      a toast written ("change a line" is a new one) 0    1 ever 1/month   ∞
+//   shopvideo  a small-business video made (Nov 21 2026)     0     3 ever 1/day     ∞
 //   download   the video, picture, PDF or a copied line      0     ∞ mark ∞         ∞     (never counted)
 //   touch      "funnier" on one line (AI on demand)          1*    ∞      ∞         ∞
 // * Nov 12 2026: a guest's one bit (their own words, readable, nothing else
@@ -28,7 +29,12 @@ export const KIT_CAPS = { free: 1, basic: 20 } as const
 /** Toasts written, by plan (Nov 6 2026): Free the first one ever, Basic 1 a month, Pro unlimited. */
 export const TOAST_CAPS = { free: 1, basic: 1 } as const
 
-export type EntitlementKind = 'bit' | 'download' | 'touch' | 'kit' | 'toast'
+/** Small-business videos made, by plan (Nov 21 2026, Candy): Free the first 3
+ *  ever, Basic 1 new video every Pacific day (an unused day does not carry
+ *  over), Pro unlimited. */
+export const SHOP_VIDEO_CAPS = { free: 3, basic: 1 } as const
+
+export type EntitlementKind = 'bit' | 'download' | 'touch' | 'kit' | 'toast' | 'shopvideo'
 export type Period = 'day' | 'month' | 'ever'
 
 export type Limit = { cap: number | null; period: Period }
@@ -48,6 +54,8 @@ export function limitFor(kind: EntitlementKind, tier: BitTier): Limit {
       return tier === 'pro' ? { cap: null, period: 'month' } : tier === 'guest' ? { cap: 0, period: 'day' } : tier === 'free' ? { cap: KIT_CAPS.free, period: 'ever' } : { cap: KIT_CAPS.basic, period: 'month' }
     case 'toast':
       return tier === 'pro' ? { cap: null, period: 'month' } : tier === 'guest' ? { cap: 0, period: 'day' } : tier === 'free' ? { cap: TOAST_CAPS.free, period: 'ever' } : { cap: TOAST_CAPS.basic, period: 'month' }
+    case 'shopvideo':
+      return tier === 'pro' ? { cap: null, period: 'day' } : tier === 'guest' ? { cap: 0, period: 'day' } : tier === 'free' ? { cap: SHOP_VIDEO_CAPS.free, period: 'ever' } : { cap: SHOP_VIDEO_CAPS.basic, period: 'day' }
   }
 }
 
