@@ -49,11 +49,12 @@ import { Route as RoomRouteImport } from './routes/room'
 import { Route as SafetyRouteImport } from './routes/safety'
 import { Route as SetListRouteImport } from './routes/set-list'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SmallbusinessRouteImport } from './routes/smallbusiness'
+import { Route as SmallbusinessLabRouteImport } from './routes/smallbusiness-lab'
 import { Route as StreamRouteImport } from './routes/stream'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ToastLabRouteImport } from './routes/toast-lab'
-import { Route as SmallbusinessLabRouteImport } from './routes/smallbusiness-lab'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as WelcomeRouteImport } from './routes/welcome'
@@ -318,6 +319,16 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SmallbusinessRoute = SmallbusinessRouteImport.update({
+  id: '/smallbusiness',
+  path: '/smallbusiness',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmallbusinessLabRoute = SmallbusinessLabRouteImport.update({
+  id: '/smallbusiness-lab',
+  path: '/smallbusiness-lab',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StreamRoute = StreamRouteImport.update({
   id: '/stream',
   path: '/stream',
@@ -336,11 +347,6 @@ const TermsRoute = TermsRouteImport.update({
 const ToastLabRoute = ToastLabRouteImport.update({
   id: '/toast-lab',
   path: '/toast-lab',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SmallbusinessLabRoute = SmallbusinessLabRouteImport.update({
-  id: '/smallbusiness-lab',
-  path: '/smallbusiness-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrustRoute = TrustRouteImport.update({
@@ -725,11 +731,12 @@ export interface FileRoutesByFullPath {
   '/safety': typeof SafetyRoute
   '/set-list': typeof SetListRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smallbusiness': typeof SmallbusinessRoute
+  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
-  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -835,11 +842,12 @@ export interface FileRoutesByTo {
   '/safety': typeof SafetyRoute
   '/set-list': typeof SetListRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smallbusiness': typeof SmallbusinessRoute
+  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
-  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -947,11 +955,12 @@ export interface FileRoutesById {
   '/safety': typeof SafetyRoute
   '/set-list': typeof SetListRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smallbusiness': typeof SmallbusinessRoute
+  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
-  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -1059,11 +1068,12 @@ export interface FileRouteTypes {
     | '/safety'
     | '/set-list'
     | '/sitemap.xml'
+    | '/smallbusiness'
+    | '/smallbusiness-lab'
     | '/stream'
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
-    | '/smallbusiness-lab'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1169,11 +1179,12 @@ export interface FileRouteTypes {
     | '/safety'
     | '/set-list'
     | '/sitemap.xml'
+    | '/smallbusiness'
+    | '/smallbusiness-lab'
     | '/stream'
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
-    | '/smallbusiness-lab'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1280,11 +1291,12 @@ export interface FileRouteTypes {
     | '/safety'
     | '/set-list'
     | '/sitemap.xml'
+    | '/smallbusiness'
+    | '/smallbusiness-lab'
     | '/stream'
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
-    | '/smallbusiness-lab'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1392,11 +1404,12 @@ export interface RootRouteChildren {
   SafetyRoute: typeof SafetyRoute
   SetListRoute: typeof SetListRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SmallbusinessRoute: typeof SmallbusinessRoute
+  SmallbusinessLabRoute: typeof SmallbusinessLabRoute
   StreamRoute: typeof StreamRoute
   SubscribeRoute: typeof SubscribeRouteWithChildren
   TermsRoute: typeof TermsRoute
   ToastLabRoute: typeof ToastLabRoute
-  SmallbusinessLabRoute: typeof SmallbusinessLabRoute
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   WelcomeRoute: typeof WelcomeRoute
@@ -1730,6 +1743,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/smallbusiness': {
+      id: '/smallbusiness'
+      path: '/smallbusiness'
+      fullPath: '/smallbusiness'
+      preLoaderRoute: typeof SmallbusinessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smallbusiness-lab': {
+      id: '/smallbusiness-lab'
+      path: '/smallbusiness-lab'
+      fullPath: '/smallbusiness-lab'
+      preLoaderRoute: typeof SmallbusinessLabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stream': {
       id: '/stream'
       path: '/stream'
@@ -1756,13 +1783,6 @@ declare module '@tanstack/react-router' {
       path: '/toast-lab'
       fullPath: '/toast-lab'
       preLoaderRoute: typeof ToastLabRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/smallbusiness-lab': {
-      id: '/smallbusiness-lab'
-      path: '/smallbusiness-lab'
-      fullPath: '/smallbusiness-lab'
-      preLoaderRoute: typeof SmallbusinessLabRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/trust': {
@@ -2314,11 +2334,12 @@ const rootRouteChildren: RootRouteChildren = {
   SafetyRoute: SafetyRoute,
   SetListRoute: SetListRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SmallbusinessRoute: SmallbusinessRoute,
+  SmallbusinessLabRoute: SmallbusinessLabRoute,
   StreamRoute: StreamRoute,
   SubscribeRoute: SubscribeRouteWithChildren,
   TermsRoute: TermsRoute,
   ToastLabRoute: ToastLabRoute,
-  SmallbusinessLabRoute: SmallbusinessLabRoute,
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   WelcomeRoute: WelcomeRoute,
