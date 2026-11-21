@@ -53,7 +53,7 @@ import { Route as StreamRouteImport } from './routes/stream'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ToastLabRouteImport } from './routes/toast-lab'
-import { Route as SkitLabRouteImport } from './routes/skit-lab'
+import { Route as SmallbusinessLabRouteImport } from './routes/smallbusiness-lab'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as WelcomeRouteImport } from './routes/welcome'
@@ -338,9 +338,9 @@ const ToastLabRoute = ToastLabRouteImport.update({
   path: '/toast-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SkitLabRoute = SkitLabRouteImport.update({
-  id: '/skit-lab',
-  path: '/skit-lab',
+const SmallbusinessLabRoute = SmallbusinessLabRouteImport.update({
+  id: '/smallbusiness-lab',
+  path: '/smallbusiness-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrustRoute = TrustRouteImport.update({
@@ -729,7 +729,7 @@ export interface FileRoutesByFullPath {
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
-  '/skit-lab': typeof SkitLabRoute
+  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -839,7 +839,7 @@ export interface FileRoutesByTo {
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
-  '/skit-lab': typeof SkitLabRoute
+  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -951,7 +951,7 @@ export interface FileRoutesById {
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
   '/toast-lab': typeof ToastLabRoute
-  '/skit-lab': typeof SkitLabRoute
+  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/welcome': typeof WelcomeRoute
@@ -1063,7 +1063,7 @@ export interface FileRouteTypes {
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
-    | '/skit-lab'
+    | '/smallbusiness-lab'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1173,7 +1173,7 @@ export interface FileRouteTypes {
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
-    | '/skit-lab'
+    | '/smallbusiness-lab'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1284,7 +1284,7 @@ export interface FileRouteTypes {
     | '/subscribe'
     | '/terms'
     | '/toast-lab'
-    | '/skit-lab'
+    | '/smallbusiness-lab'
     | '/trust'
     | '/unsubscribe'
     | '/welcome'
@@ -1396,7 +1396,7 @@ export interface RootRouteChildren {
   SubscribeRoute: typeof SubscribeRouteWithChildren
   TermsRoute: typeof TermsRoute
   ToastLabRoute: typeof ToastLabRoute
-  SkitLabRoute: typeof SkitLabRoute
+  SmallbusinessLabRoute: typeof SmallbusinessLabRoute
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   WelcomeRoute: typeof WelcomeRoute
@@ -1758,11 +1758,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToastLabRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/skit-lab': {
-      id: '/skit-lab'
-      path: '/skit-lab'
-      fullPath: '/skit-lab'
-      preLoaderRoute: typeof SkitLabRouteImport
+    '/smallbusiness-lab': {
+      id: '/smallbusiness-lab'
+      path: '/smallbusiness-lab'
+      fullPath: '/smallbusiness-lab'
+      preLoaderRoute: typeof SmallbusinessLabRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/trust': {
@@ -2318,7 +2318,7 @@ const rootRouteChildren: RootRouteChildren = {
   SubscribeRoute: SubscribeRouteWithChildren,
   TermsRoute: TermsRoute,
   ToastLabRoute: ToastLabRoute,
-  SkitLabRoute: SkitLabRoute,
+  SmallbusinessLabRoute: SmallbusinessLabRoute,
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   WelcomeRoute: WelcomeRoute,

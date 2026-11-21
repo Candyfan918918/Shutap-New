@@ -1,5 +1,6 @@
 import { pageMeta } from '@/lib/seo/page-meta'
-// Skit lab (Nov 21 2026): the admin bench for Shutap for small business.
+// Small business lab (Nov 21 2026; first called the skit lab, renamed the
+// same day at Candy's ask): the admin bench for Shutap for small business.
 // Type a shop and what happened today, see every candidate set of three
 // skits and what the checks flagged, rate the run pick / cut / rewrite.
 // Nothing here is counted or shown to anyone else; the product stays dark
@@ -12,9 +13,9 @@ import { BUSINESS_TYPES, CAMERAS, COUNTRIES, LENGTHS, OFFERS, VOICES, type Busin
 import { SOURCE_LABEL, skitLines } from '@/lib/shops/skit'
 import '@/components/feed/feed.css'
 
-export const Route = createFileRoute('/skit-lab')({
+export const Route = createFileRoute('/smallbusiness-lab')({
   ssr: false,
-  head: () => ({ meta: [...pageMeta('Skit lab — Shutap', 'Private bench for the small-business skit writer.', '/skit-lab'), { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [...pageMeta('Small business lab — Shutap', 'Private bench for the small-business skit writer.', '/smallbusiness-lab'), { name: 'robots', content: 'noindex' }] }),
   beforeLoad: async () => {
     try {
       if (!(await amIAdmin())) throw notFound()
@@ -102,7 +103,7 @@ function SkitLab() {
   return (
     <div className="fd">
       <div className="fd-col" style={{ maxWidth: 900 }}>
-        <h1 className="fd-h1">Skit lab</h1>
+        <h1 className="fd-h1">Small business lab</h1>
         <p className="fd-muted" style={{ margin: 0 }}>
           Admin only. Shutap for small business, before anyone sees it: type a shop and what happened today, write the three skits, rate the run. Runs the real writer (two models and the checks); nothing is counted. Use invented shops or your own, never a customer’s.
         </p>
