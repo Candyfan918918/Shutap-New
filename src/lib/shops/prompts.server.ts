@@ -4,7 +4,12 @@
 // invents a fact about the business. Same bones as the realtor kit and the
 // toasts: two writers, checks before anyone sees a line.
 // SKIT_PROMPT_VERSION is stamped on every set; bump on any edit.
-export const SKIT_PROMPT_VERSION = 'skit-0.1'
+export const SKIT_PROMPT_VERSION = 'skit-0.2'
+// 0.2 (Nov 21 2026, Candy: "don't ban politics and news"): a news or
+// political topic is allowed when the owner brought it up or it is in today's
+// topics. The writer never recalls a news story on its own (it can be stale
+// or wrong); it jokes about how the shop lives the topic, never states a fact
+// it was not given, never at a named person, never tells anyone how to vote.
 
 /** The kind of funny the owner picked. There is no not-funny option. */
 export const SKIT_VOICES: Record<string, string> = {
@@ -24,7 +29,8 @@ export const SKIT_CAMERAS: Record<string, string> = {
 export const SKIT_RULES = `HARD RULES (every skit, every line):
 - NEVER INVENT A FACT ABOUT THE BUSINESS: no price, discount, giveaway, opening hours, award, product, service or staff member the owner did not give. A price, a percent or the word "free" may appear only if it is in WHAT THE OWNER IS PROMOTING or THE OWNER'S OFFER below, word for word.
 - THE JOKE'S TARGET IS THE SITUATION, or the shop itself. Never a person. A customer may be the person in the setup, unnamed and impossible to identify; the turn lands on what happened or on the shop's own reaction, never on the customer's looks, body, age, intelligence, money, accent or who they are. No names of real people. No competitor is named or mocked.
-- NO CLAIMS: nothing about health, results, safety or guarantees. No politics, no religion, no news story, no tragedy.
+- NO CLAIMS: nothing about health, results, safety or guarantees.
+- NEWS AND POLITICS ARE ALLOWED, ON TWO CONDITIONS. (1) Only a topic the owner brought up (in WHAT HAPPENED, WHAT THE OWNER IS PROMOTING or the idea they tapped) or one listed under TODAY'S TOPICS: never bring up a news story from your own memory, it may be old or wrong. (2) The joke is how this shop and its customers live the topic (the line, the small talk, the sign on the door), never a statement of fact about the story that is not given below, never a named politician or public figure, never which side is right, never how to vote. Nothing about a death, a disaster or violence. No religion.
 - FILMABLE BY THIS SHOP TODAY: three shots, each one single action a normal person can do in their own shop with a phone, in under ten seconds, with no props they would need to buy and no editing tricks. No dialogue to memorize: the text on screen does the talking. Never ask them to film a real customer.
 - ON-SCREEN TEXT is read in two seconds: at most {{TEXT_WORDS}} words per shot, the hook at most 12. Plain words, the turn word last. No emojis, no hashtags. US English unless the country says otherwise.
 - THE THREE SHOTS ARE ONE JOKE: shot 1 sets it up, shot 2 makes it worse, shot 3 turns it. The hook is on screen first and makes a stranger stop scrolling without giving the turn away.
@@ -49,6 +55,8 @@ WHAT HAPPENED AT THE SHOP TODAY (the owner's words; names already removed):
 WHAT THE OWNER IS PROMOTING TODAY: {{PROMOTE}}
 THE OWNER'S OFFER FOR SAYING THE CODE WORD: {{OFFER}}
 TODAY: {{DATE}}. {{IDEA}}
+TODAY'S TOPICS (what people are talking about; use at most one, or none):
+{{TOPICS}}
 
 WRITE THREE SKITS, one from each place:
 {{SOURCES}}
@@ -60,7 +68,7 @@ Return only JSON, no prose:
 {"skits":[{"source":"day|today|shop","title":"2 to 5 words","pitch":"one line: what the joke is","hook":"on screen first","shots":[{"text":"on screen","action":"what to film, said to the owner as 'You …'"},{"text":"…","action":"…"},{"text":"…","action":"…"}],"word":"the code word","caption":"under 100 characters"}, {…}, {…}]}`
 
 export const SOURCE_DAY = `- source "day": from WHAT HAPPENED AT THE SHOP TODAY. Use the thing itself; exaggerate how the shop reacts, never what the customer is like.`
-export const SOURCE_TODAY = `- source "today": from the calendar. A season, a holiday, the weather that season brings or the day of the week, as this kind of shop lives it. Only something everyone in {{COUNTRY}} knows is happening; never a news event.`
+export const SOURCE_TODAY = `- source "today": from the calendar. A season, a holiday, the weather that season brings or the day of the week, as this kind of shop lives it. Only something everyone in {{COUNTRY}} knows is happening, or one of TODAY'S TOPICS.`
 export const SOURCE_SHOP = `- source "shop": from WHAT IT IS KNOWN FOR and the everyday truth of running a {{BUSINESS}}: the thing every customer says, the rush, the one request that is never "just" that.`
 export const SOURCE_SHOP_2 = `- a second source "shop" skit, on a different thing from the list.`
 

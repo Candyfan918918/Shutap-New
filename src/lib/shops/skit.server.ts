@@ -17,7 +17,9 @@ import { SKIT_CAMERAS, SKIT_PROMPT, SKIT_TOUCH_PROMPT, SKIT_VOICES, SOURCE_DAY, 
 /** What the writer needs to know about the shop. */
 export type SkitShop = { name: string; city: string; country: Country; business_type: BusinessType; known_for: string[]; voice: Voice; length: Length; camera: Camera; offer: Offer; offer_text: string }
 /** What the owner said today. `day` has been through the Scrubber. */
-export type SkitAsk = { day: string; promote: string; idea: string; date: string; avoid: string[] }
+/** `topics` is what people are talking about today (news, politics, trends),
+ *  from the site's own daily list; the writer never recalls news by itself. */
+export type SkitAsk = { day: string; promote: string; idea: string; date: string; avoid: string[]; topics?: string[] }
 
 export type GuardVerdict = { crisis: boolean; category: string }
 
@@ -65,6 +67,7 @@ export function promptFor(shop: SkitShop, ask: SkitAsk): string {
     OFFER: shop.offer === 'none' || !shop.offer_text.trim() ? '(none: mention no offer)' : shop.offer_text,
     DATE: ask.date,
     IDEA: ask.idea.trim() ? `The owner tapped this idea for today: ${ask.idea.trim()}. Use it for the "today" skit.` : '',
+    TOPICS: ask.topics?.length ? ask.topics.slice(0, 6).map((t) => `- ${t}`).join('\n') : '(none listed today)',
     SOURCES: sources,
     STANDARD: standardBlock(standardLines(4)),
     AVOID: ask.avoid.length ? `\nTHE OWNER ALREADY SAW THESE AND ASKED FOR DIFFERENT ONES. Do not reuse their premise:\n${ask.avoid.map((a) => `- ${a}`).join('\n')}\n` : '',
