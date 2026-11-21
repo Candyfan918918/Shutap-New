@@ -16,10 +16,11 @@ import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 import { BUSINESS_TYPE_KEYS, CAMERA_KEYS, COUNTRY_KEYS, LENGTHS, OFFER_KEYS, VOICE_KEYS, type BusinessType, type Camera, type Country, type Length, type Offer, type Voice } from './shops/shop'
 import type { ShopMatch } from './shops/places.server'
 
-/** Google lookups one account may make in a Pacific day (a search and the
- *  read of the picked shop each count one). Each can cost money; an owner
- *  setting up needs two, so this leaves room for typos and a second try. */
-export const LOOKUPS_A_DAY = 12
+/** Google lookups in a Pacific day (a search and the read of the picked shop
+ *  each count one). Each can cost money; an owner setting up needs two. A
+ *  visitor who has not signed up yet gets room for one retry; an account
+ *  gets room for typos and a change of mind. */
+export const LOOKUPS_A_DAY = { guest: 4, account: 12 } as const
 
 async function requireAdmin(context: unknown): Promise<void> {
   const c = context as { supabase: any; userId: string }
@@ -46,18 +47,48 @@ async function track(admin: any, userId: string, name: string, properties: Recor
   await admin.from('events').insert({ user_id: userId, session_id: null, name, product: 'smallbusiness', properties: { product: 'smallbusiness', ...properties } }).then(() => {}, () => {})
 }
 
-/** May this account look something up on Google now? Counts the lookup when
- *  it may. A count that cannot be read refuses: a paid service is never
- *  called on a guess. */
-async function takeLookup(admin: any, userId: string, kind: 'search' | 'details'): Promise<boolean> {
+/** Who is looking a shop up. The lookup runs before sign-up, so it cannot
+ *  require an account: a signed-in owner is named by their account, anyone
+ *  else by their browser's guest id. A caller with neither is refused. */
+type Looker = { subject: string; userId: string | null }
+async function looker(anonSessionId: string | null): Promise<Looker | null> {
+  const { resolveJokeIdentity } = await import('./jokes/session.server')
+  const id = await resolveJokeIdentity(anonSessionId)
+  if (id.userId) return { subject: 'user:' + id.userId, userId: id.userId }
+  return id.subjectKey && id.subjectKey !== 'anon:unknown' ? { subject: id.subjectKey, userId: null } : null
+}
+
+/** The product is open to this caller: the flag is on, or they are an admin. */
+async function shopsOpenFor(admin: any, userId: string | null): Promise<boolean> {
+  const { readFlags } = await import('./flags')
+  if (readFlags().smallbusiness) return true
+  if (!userId) return false
+  const { data } = await admin.rpc('has_role', { _user_id: userId, _role: 'admin' })
+  return !!data
+}
+
+/** May this caller look something up on Google now? Counts the lookup when
+ *  they may. Guests are also held per network, like guest bits. A count
+ *  that cannot be read refuses: a paid service is never called on a guess. */
+async function takeLookup(admin: any, who: Looker, kind: 'search' | 'details'): Promise<boolean> {
   const { today } = await import('./bits/tier.server')
   const day = today().day
-  const { count, error } = await admin.from('shop_lookups').select('id', { count: 'exact', head: true }).eq('user_id', userId).eq('day', day)
+  const { count, error } = await admin.from('shop_lookups').select('id', { count: 'exact', head: true }).eq('subject', who.subject).eq('day', day)
   if (error) { console.error('[shops] lookup count failed', error.message); return false }
-  if ((count ?? 0) >= LOOKUPS_A_DAY) return false
-  const { error: insErr } = await admin.from('shop_lookups').insert({ user_id: userId, kind, day })
+  if ((count ?? 0) >= (who.userId ? LOOKUPS_A_DAY.account : LOOKUPS_A_DAY.guest)) return false
+  if (!who.userId) {
+    const { chargeNetwork } = await import('./bits/usage.server')
+    if ((await chargeNetwork(admin, 'guest', day).catch(() => 'limited' as const)) === 'limited') return false
+  }
+  const { error: insErr } = await admin.from('shop_lookups').insert({ subject: who.subject, user_id: who.userId, kind, day })
   if (insErr) { console.error('[shops] lookup insert failed', insErr.message); return false }
   return true
+}
+
+/** A lookup's event: under the account when there is one, else under the
+ *  guest browser's session id. */
+async function trackLookup(admin: any, who: Looker, properties: Record<string, unknown>): Promise<void> {
+  await admin.from('events').insert({ user_id: who.userId, session_id: who.userId ? null : who.subject.replace(/^anon:/, ''), name: 'shop_lookup', product: 'smallbusiness', properties: { product: 'smallbusiness', ...properties } }).then(() => {}, () => {})
 }
 
 export type FindShopResult =
@@ -65,19 +96,19 @@ export type FindShopResult =
   | { ok: false; reason: 'off' | 'none' | 'unavailable' | 'slow_down' }
 
 /** The shops on Google matching a name and city, for "Which one is yours?".
- *  Works before sign-up (the visitor's guest session is enough). Every
- *  failure is one the screen answers with "I'll type it in". */
+ *  Works before sign-up: a guest is named by their browser's guest id.
+ *  Every failure is one the screen answers with "I'll type it in". */
 export const findMyShop = createServerFn({ method: 'POST' })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ name: z.string().trim().min(2).max(120), city: z.string().trim().min(1).max(80), country: z.enum(COUNTRY_KEYS) }).parse(d))
-  .handler(async ({ data, context }): Promise<FindShopResult> => {
-    if (!(await shopsOpen(context))) return { ok: false, reason: 'off' }
-    const { userId } = context as { userId: string }
+  .inputValidator((d: unknown) => z.object({ name: z.string().trim().min(2).max(120), city: z.string().trim().min(1).max(80), country: z.enum(COUNTRY_KEYS), anon_session_id: z.string().max(64).optional() }).parse(d))
+  .handler(async ({ data }): Promise<FindShopResult> => {
     const admin = await adminDb()
-    if (!(await takeLookup(admin, userId, 'search'))) return { ok: false, reason: 'slow_down' }
+    const who = await looker(data.anon_session_id ?? null)
+    if (!(await shopsOpenFor(admin, who?.userId ?? null))) return { ok: false, reason: 'off' }
+    if (!who) return { ok: false, reason: 'unavailable' }
+    if (!(await takeLookup(admin, who, 'search'))) return { ok: false, reason: 'slow_down' }
     const { searchShops } = await import('./shops/places.server')
     const r = await searchShops({ name: data.name, city: data.city, country: data.country })
-    await track(admin, userId, 'shop_lookup', { kind: 'search', country: data.country, found: r.ok ? r.matches.length : 0, reason: r.ok ? null : r.reason })
+    await trackLookup(admin, who, { kind: 'search', country: data.country, found: r.ok ? r.matches.length : 0, reason: r.ok ? null : r.reason })
     if (r.ok) return { ok: true, matches: r.matches }
     return { ok: false, reason: r.reason === 'none' || r.reason === 'bad_input' ? 'none' : 'unavailable' }
   })
@@ -90,16 +121,16 @@ export type PickShopResult = { ok: true; shop: PickedShop } | { ok: false; reaso
  *  to the browser and not stored; a later slice reads it on the server to
  *  suggest what the videos can mention. */
 export const pickMyShop = createServerFn({ method: 'POST' })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ place_id: z.string().regex(/^[A-Za-z0-9_-]{10,200}$/) }).parse(d))
-  .handler(async ({ data, context }): Promise<PickShopResult> => {
-    if (!(await shopsOpen(context))) return { ok: false, reason: 'off' }
-    const { userId } = context as { userId: string }
+  .inputValidator((d: unknown) => z.object({ place_id: z.string().regex(/^[A-Za-z0-9_-]{10,200}$/), anon_session_id: z.string().max(64).optional() }).parse(d))
+  .handler(async ({ data }): Promise<PickShopResult> => {
     const admin = await adminDb()
-    if (!(await takeLookup(admin, userId, 'details'))) return { ok: false, reason: 'slow_down' }
+    const who = await looker(data.anon_session_id ?? null)
+    if (!(await shopsOpenFor(admin, who?.userId ?? null))) return { ok: false, reason: 'off' }
+    if (!who) return { ok: false, reason: 'unavailable' }
+    if (!(await takeLookup(admin, who, 'details'))) return { ok: false, reason: 'slow_down' }
     const { shopDetails } = await import('./shops/places.server')
     const r = await shopDetails(data.place_id)
-    await track(admin, userId, 'shop_lookup', { kind: 'details', found: r.ok ? 1 : 0, reason: r.ok ? null : r.reason })
+    await trackLookup(admin, who, { kind: 'details', found: r.ok ? 1 : 0, reason: r.ok ? null : r.reason })
     if (!r.ok) return { ok: false, reason: r.reason === 'none' || r.reason === 'bad_input' ? 'none' : 'unavailable' }
     const { place_id, name, address, kind, website, summary } = r.shop
     return { ok: true, shop: { place_id, name, address, kind, website, summary } }
@@ -224,10 +255,12 @@ export const setShopReminder = createServerFn({ method: 'POST' })
 /* ───────────────────────── the skits (slice 3, Nov 21 2026) ─────────────────────────
    Signed-in owners with a saved shop. The owner says what happened (or
    nothing: "Surprise me"); the Guard reads it first (a crisis never sees a
-   skit or a paywall), then the plan's allowance, the Scrubber, the two
-   writers and the checks. Three skits come back; the owner picks one, makes
-   each line theirs ("Funnier", edit) and goes to film. What's stored: the
-   scrubbed day story and the skits. A write that fails never counts. */
+   skit or a paywall), then the plan's allowance, the two writers and the
+   checks. The writer sees the owner's day as typed, the founder's rated
+   JokeNet lines nearest it, and today's topics from the site's daily list.
+   Three skits come back; the owner picks one, makes each line theirs
+   ("Funnier", edit) and goes to film. What's stored: the day story as typed
+   and the skits. A write that fails never counts. */
 import { LINE_KEYS, type LineKey, type Skit } from './shops/skit'
 import type { ShopUsage } from './shops/allowance'
 import type { SkitShop } from './shops/skit.server'
@@ -287,7 +320,7 @@ export const writeMySkits = createServerFn({ method: 'POST' })
     const admin = await adminDb()
     const shop = await myShopRow(admin, userId)
     if (!shop) return { ok: false, reason: 'no_shop' }
-    const { guardDay, scrubDay, writeSkits } = await import('./shops/skit.server')
+    const { guardDay, keepDay, writeSkits } = await import('./shops/skit.server')
     // the Guard overrides everything: no paywall, no skit
     const guard = await guardDay(data.day)
     if (guard.crisis) {
@@ -312,17 +345,19 @@ export const writeMySkits = createServerFn({ method: 'POST' })
         avoid = (Array.isArray(prev.skits) ? prev.skits : []).map((s: any) => `${s?.title}: ${s?.pitch}`).filter((x: string) => x.length > 3)
       }
     }
-    if (!data.again) dayText = await scrubDay(data.day)
-    const result = await writeSkits(shop, { day: dayText, promote: data.promote, idea: data.idea, date: pacificDateLine(), avoid })
-    if (!result) { await track(admin, userId, 'shop_skits_failed', { again: !!data.again }); return { ok: false, reason: 'failed' } }
+    if (!data.again) dayText = keepDay(data.day)
     const { today } = await import('./bits/tier.server')
+    const { todaysTopics } = await import('./shops/topics.server')
+    const topics = await todaysTopics(admin, today().day)
+    const result = await writeSkits(shop, { day: dayText, promote: data.promote, idea: data.idea, date: pacificDateLine(), avoid, topics })
+    if (!result) { await track(admin, userId, 'shop_skits_failed', { again: !!data.again }); return { ok: false, reason: 'failed' } }
     const { SKIT_PROMPT_VERSION } = await import('./shops/prompts.server')
     const { data: row, error } = await admin.from('shop_skit_sets').insert({
       user_id: userId, shop_id: shop.id, day: today().day, day_text: dayText, promote: data.promote, idea: data.idea,
       skits: result.skits, prompt_version: SKIT_PROMPT_VERSION, tier: usage.tier,
     }).select(SET_COLS).single()
     if (error || !row) { console.error('[shops] skit set insert failed', error?.message); return { ok: false, reason: 'failed' } }
-    await track(admin, userId, 'shop_skits_written', { set_id: row.id, again: !!data.again, has_day: !!dayText, has_promote: !!data.promote, idea: !!data.idea, ms: result.ms, tier: usage.tier, voice: shop.voice, length: shop.length, camera: shop.camera, business_type: shop.business_type, model: result.candidates[result.winner]?.model })
+    await track(admin, userId, 'shop_skits_written', { set_id: row.id, again: !!data.again, has_day: !!dayText, has_promote: !!data.promote, idea: !!data.idea, ms: result.ms, standard: result.standard, topics: topics.length, tier: usage.tier, voice: shop.voice, length: shop.length, camera: shop.camera, business_type: shop.business_type, model: result.candidates[result.winner]?.model })
     return { ok: true, set: setFromRow(row), usage: { ...usage, sets_today: usage.sets_today + 1 } }
   })
 
@@ -427,7 +462,7 @@ export const touchMySkitLine = createServerFn({ method: 'POST' })
    shop and a day, sees every candidate set with what the checks flagged, and
    rates it pick / cut / rewrite. Nothing is counted and nothing is shown to
    anyone else. The lab runs the real writer (the two models and the checks)
-   but not the Guard or the Scrubber: it is the founder's own test text. */
+   but not the Guard: it is the founder's own test text. */
 import type { SkitDraft } from './shops/skit.server'
 
 const LabShopIn = z.object({
@@ -445,8 +480,8 @@ const LabShopIn = z.object({
 const LabAskIn = z.object({ day: z.string().trim().max(600), promote: z.string().trim().max(120), idea: z.string().trim().max(80), topics: z.array(z.string().trim().min(1).max(120)).max(6) })
 
 export type LabSkitsResult =
-  | { ok: true; eval_id: string | null; prompt_version: string; ms: number; winner: number; candidates: SkitDraft[] }
-  | { ok: false; reason: 'failed'; candidates: SkitDraft[] }
+  | { ok: true; eval_id: string | null; prompt_version: string; ms: number; winner: number; candidates: SkitDraft[]; standard: 'jokenet' | 'static'; topics: string[] }
+  | { ok: false; reason: 'failed'; candidates: SkitDraft[]; standard: 'jokenet' | 'static'; topics: string[] }
 
 /** Admin only: write the three skits for a shop typed into the lab. Every
  *  candidate comes back, including the ones the checks rejected. */
@@ -457,17 +492,24 @@ export const labWriteSkits = createServerFn({ method: 'POST' })
     await requireAdmin(context)
     const { writeSkitsLab } = await import('./shops/skit.server')
     const { SKIT_PROMPT_VERSION } = await import('./shops/prompts.server')
-    const r = await writeSkitsLab(data.shop as SkitShop, { ...data.ask, date: pacificDateLine(), avoid: [] })
-    if (r.winner < 0) return { ok: false, reason: 'failed', candidates: r.candidates }
+    // an empty topics box means "what an owner would get": today's list
+    let topics = data.ask.topics
+    if (!topics.length) {
+      const { today } = await import('./bits/tier.server')
+      const { todaysTopics } = await import('./shops/topics.server')
+      topics = await todaysTopics(await adminDb(), today().day)
+    }
+    const r = await writeSkitsLab(data.shop as SkitShop, { ...data.ask, topics, date: pacificDateLine(), avoid: [] })
+    if (r.winner < 0) return { ok: false, reason: 'failed', candidates: r.candidates, standard: r.standard, topics }
     let evalId: string | null = null
     try {
       const admin = await adminDb()
-      const { data: row } = await admin.from('skit_evals').insert({ shop: data.shop, ask: data.ask, result: { winner: r.winner, ms: r.ms, candidates: r.candidates }, prompt_version: SKIT_PROMPT_VERSION }).select('id').single()
+      const { data: row } = await admin.from('skit_evals').insert({ shop: data.shop, ask: { ...data.ask, topics }, result: { winner: r.winner, ms: r.ms, standard: r.standard, candidates: r.candidates }, prompt_version: SKIT_PROMPT_VERSION }).select('id').single()
       evalId = row?.id ?? null
     } catch (e) {
       console.warn('[smallbusiness-lab] eval not stored (table missing?)', e instanceof Error ? e.message : e)
     }
-    return { ok: true, eval_id: evalId, prompt_version: SKIT_PROMPT_VERSION, ms: r.ms, winner: r.winner, candidates: r.candidates }
+    return { ok: true, eval_id: evalId, prompt_version: SKIT_PROMPT_VERSION, ms: r.ms, winner: r.winner, candidates: r.candidates, standard: r.standard, topics }
   })
 
 /** Admin only: rate a lab run. */
