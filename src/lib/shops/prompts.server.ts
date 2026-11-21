@@ -4,7 +4,12 @@
 // invents a fact about the business. Same bones as the realtor kit and the
 // toasts: two writers, checks before anyone sees a line.
 // SKIT_PROMPT_VERSION is stamped on every set; bump on any edit.
-export const SKIT_PROMPT_VERSION = 'skit-0.2'
+export const SKIT_PROMPT_VERSION = 'skit-0.3'
+// 0.3 (Nov 21 2026, Candy): THE STANDARD is the founder's rated JokeNet lines
+// nearest the owner's day and business (the static bank when JokeNet does not
+// answer); today's topics come from the site's daily list; the owner's day
+// story reaches the writer as typed, names included (her Nov 16 rule). A
+// customer the owner named is still never named in a skit.
 // 0.2 (Nov 21 2026, Candy: "don't ban politics and news"): a news or
 // political topic is allowed when the owner brought it up or it is in today's
 // topics. The writer never recalls a news story on its own (it can be stale
@@ -28,7 +33,7 @@ export const SKIT_CAMERAS: Record<string, string> = {
 
 export const SKIT_RULES = `HARD RULES (every skit, every line):
 - NEVER INVENT A FACT ABOUT THE BUSINESS: no price, discount, giveaway, opening hours, award, product, service or staff member the owner did not give. A price, a percent or the word "free" may appear only if it is in WHAT THE OWNER IS PROMOTING or THE OWNER'S OFFER below, word for word.
-- THE JOKE'S TARGET IS THE SITUATION, or the shop itself. Never a person. A customer may be the person in the setup, unnamed and impossible to identify; the turn lands on what happened or on the shop's own reaction, never on the customer's looks, body, age, intelligence, money, accent or who they are. No names of real people. No competitor is named or mocked.
+- THE JOKE'S TARGET IS THE SITUATION, or the shop itself. Never a person. A customer may be the person in the setup, unnamed and impossible to identify; the turn lands on what happened or on the shop's own reaction, never on the customer's looks, body, age, intelligence, money, accent or who they are. No names of real people: if the owner's words name a customer or anyone else, the skit says "a customer" or "a regular", never the name. The owner's own first name and the staff's may be used only if the owner wrote them. No competitor is named or mocked.
 - NO CLAIMS: nothing about health, results, safety or guarantees.
 - NEWS AND POLITICS ARE ALLOWED, ON TWO CONDITIONS. (1) Only a topic the owner brought up (in WHAT HAPPENED, WHAT THE OWNER IS PROMOTING or the idea they tapped) or one listed under TODAY'S TOPICS: never bring up a news story from your own memory, it may be old or wrong. (2) The joke is how this shop and its customers live the topic (the line, the small talk, the sign on the door), never a statement of fact about the story that is not given below, never a named politician or public figure, never which side is right, never how to vote. Nothing about a death, a disaster or violence. No religion.
 - FILMABLE BY THIS SHOP TODAY: three shots, each one single action a normal person can do in their own shop with a phone, in under ten seconds, with no props they would need to buy and no editing tricks. No dialogue to memorize: the text on screen does the talking. Never ask them to film a real customer.
@@ -49,7 +54,7 @@ WHO IS ON CAMERA: {{CAMERA}}
 
 THE VIDEO: {{LENGTH}} seconds, vertical, three shots.
 
-WHAT HAPPENED AT THE SHOP TODAY (the owner's words; names already removed):
+WHAT HAPPENED AT THE SHOP TODAY (the owner's words, as typed):
 {{DAY}}
 
 WHAT THE OWNER IS PROMOTING TODAY: {{PROMOTE}}

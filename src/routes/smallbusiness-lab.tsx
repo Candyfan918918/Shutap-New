@@ -136,7 +136,7 @@ function SkitLab() {
             <div><label style={LABEL}>promoting today (optional)</label><input style={INPUT} value={ask.promote} onChange={(e) => setAsk({ ...ask, promote: e.target.value })} placeholder="Croissants, fresh at 7" /></div>
             <div><label style={LABEL}>idea tapped (optional)</label><input style={INPUT} value={ask.idea} onChange={(e) => setAsk({ ...ask, idea: e.target.value })} placeholder="Thanksgiving pies" /></div>
           </div>
-          <div><label style={LABEL}>today’s topics: news, politics, trends (optional, comma-separated)</label><input style={INPUT} value={ask.topics} onChange={(e) => setAsk({ ...ask, topics: e.target.value })} placeholder="the big game on Sunday, the first frost" /></div>
+          <div><label style={LABEL}>today’s topics: news, politics, trends (comma-separated; empty = today’s list from the site)</label><input style={INPUT} value={ask.topics} onChange={(e) => setAsk({ ...ask, topics: e.target.value })} placeholder="the big game on Sunday, the first frost" /></div>
           <div><button type="button" className="fd-chip" aria-pressed disabled={shop.name.trim().length < 2 || !shop.city.trim()} onClick={() => void write()}>write the three skits</button></div>
         </section>
 
@@ -147,6 +147,7 @@ function SkitLab() {
               {run.ask.day ? <> · “{run.ask.day}”</> : <> · surprise me</>}
             </p>
             {run.busy && <p className="fd-muted" style={{ margin: 0 }}>writing… (up to a minute)</p>}
+            {run.result && <p className="fd-muted" style={{ margin: 0, fontSize: 12.5 }}>the bar the writer saw: {run.result.standard === 'jokenet' ? 'your rated JokeNet lines nearest this business and day' : 'the built-in list (JokeNet did not answer)'} · today’s topics: {run.result.topics.length ? run.result.topics.join(' · ') : 'none listed'}</p>}
             {run.error && <p style={{ margin: 0, color: '#b3261e' }}>{run.error}</p>}
             {run.result && !run.result.ok && <p style={{ margin: 0, color: '#b3261e' }}>No set passed the checks. An owner would see “try again”. The rejected sets are below.</p>}
             {run.result && run.result.candidates.map((c, ci) => {

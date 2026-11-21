@@ -2,21 +2,22 @@
 // "funnier" on one line. Server only.
 //
 // Before writing: the Guard reads what the owner said happened (a crisis
-// never sees a skit or a paywall), then the Scrubber takes names, places and
-// contact details out of that day story. The shop's own name, city and
-// known-for lines are not scrubbed: the owner's own business, which the
-// videos name.
+// never sees a skit or a paywall). The day story is then kept as typed,
+// names included (Candy, Nov 21 2026, the same as her Nov 16 rule for bits,
+// toasts and kits); the writer is told never to name a customer in a skit.
+// THE STANDARD the writer sees is the founder's rated JokeNet lines nearest
+// this owner's day and business.
 import { callAgent, tryParseJson } from '@/lib/agents/gateway'
 import { fill } from '@/lib/jokes/prompts.server'
 import { backupWriterModel, bitWriterModel, BIT_BUDGET } from '@/lib/bits/pipeline.server'
-import { standardBlock, standardLines } from '@/lib/bits/taste-bank'
+import { standardBlock, standardLines, type TasteLine } from '@/lib/bits/taste-bank'
 import { BUSINESS_TYPES, COUNTRIES, type BusinessType, type Camera, type Country, type Length, type Offer, type Voice } from './shop'
 import { HOOK_WORD_CAP, checkLine, checkSet, checkSkit, parseSkits, textWordCap, type LineKey, type Skit, type SkitCheck, type SkitContext } from './skit'
 import { SKIT_CAMERAS, SKIT_PROMPT, SKIT_TOUCH_PROMPT, SKIT_VOICES, SOURCE_DAY, SOURCE_SHOP, SOURCE_SHOP_2, SOURCE_TODAY } from './prompts.server'
 
 /** What the writer needs to know about the shop. */
 export type SkitShop = { name: string; city: string; country: Country; business_type: BusinessType; known_for: string[]; voice: Voice; length: Length; camera: Camera; offer: Offer; offer_text: string }
-/** What the owner said today. `day` has been through the Scrubber. */
+/** What the owner said today. `day` is as typed. */
 /** `topics` is what people are talking about today (news, politics, trends),
  *  from the site's own daily list; the writer never recalls news by itself. */
 export type SkitAsk = { day: string; promote: string; idea: string; date: string; avoid: string[]; topics?: string[] }
@@ -35,13 +36,22 @@ export async function guardDay(day: string): Promise<GuardVerdict> {
   return { crisis: !!r.crisis, category: r.category }
 }
 
-/** The owner's day story with names, places and contact details taken out. */
-export async function scrubDay(day: string): Promise<string> {
-  const text = day.trim()
-  if (!text) return ''
-  const { runScrub } = await import('@/lib/agents/scrubber.functions')
-  const r = await runScrub(text)
-  return (r.clean_text || '').trim()
+/** The owner's day story as it is stored and written from: as typed. */
+export function keepDay(day: string): string {
+  return day.replace(/\s+/g, ' ').trim().slice(0, 600)
+}
+
+/** THE STANDARD for this ask: the founder's rated JokeNet lines nearest the
+ *  owner's day and business, or the static bank when JokeNet does not answer
+ *  (no key, no table, a slow gateway). Never throws. */
+export async function standardFor(shop: SkitShop, ask: Pick<SkitAsk, 'day'>): Promise<{ lines: TasteLine[]; from: 'jokenet' | 'static' }> {
+  const seed = [ask.day.trim(), `a ${businessName(shop.business_type)}`, shop.known_for.join(', ')].filter(Boolean).join('. ')
+  try {
+    const { liveStandard } = await import('@/lib/bits/jokenet.server')
+    return await liveStandard(seed, 4)
+  } catch {
+    return { lines: standardLines(4), from: 'static' }
+  }
 }
 
 const businessName = (t: BusinessType): string => (t === 'other' ? 'small business' : (BUSINESS_TYPES.find((b) => b.key === t)?.name ?? 'small business').toLowerCase())
@@ -51,7 +61,7 @@ export function contextFor(shop: SkitShop, ask: Pick<SkitAsk, 'day' | 'promote'>
   return { length: shop.length, camera: shop.camera, hasDay: !!ask.day.trim(), ownWords: `${ask.promote} ${shop.offer === 'none' ? '' : shop.offer_text}` }
 }
 
-export function promptFor(shop: SkitShop, ask: SkitAsk): string {
+export function promptFor(shop: SkitShop, ask: SkitAsk, standard: TasteLine[] = standardLines(4)): string {
   const hasDay = !!ask.day.trim()
   const vars = { BUSINESS: businessName(shop.business_type), COUNTRY: countryName(shop.country) }
   const sources = (hasDay ? [SOURCE_DAY, SOURCE_TODAY, SOURCE_SHOP] : [SOURCE_TODAY, SOURCE_SHOP, SOURCE_SHOP_2]).map((s) => fill(s, vars)).join('\n')
@@ -69,13 +79,14 @@ export function promptFor(shop: SkitShop, ask: SkitAsk): string {
     IDEA: ask.idea.trim() ? `The owner tapped this idea for today: ${ask.idea.trim()}. Use it for the "today" skit.` : '',
     TOPICS: ask.topics?.length ? ask.topics.slice(0, 6).map((t) => `- ${t}`).join('\n') : '(none listed today)',
     SOURCES: sources,
-    STANDARD: standardBlock(standardLines(4)),
+    STANDARD: standardBlock(standard),
     AVOID: ask.avoid.length ? `\nTHE OWNER ALREADY SAW THESE AND ASKED FOR DIFFERENT ONES. Do not reuse their premise:\n${ask.avoid.map((a) => `- ${a}`).join('\n')}\n` : '',
   })
 }
 
 export type SkitDraft = { skits: Skit[]; model: string; ms: number; checks: SkitCheck[] }
-export type SkitResult = { skits: Skit[]; candidates: SkitDraft[]; winner: number; ms: number }
+export type SkitRun = { candidates: SkitDraft[]; winner: number; ms: number; standard: 'jokenet' | 'static' }
+export type SkitResult = { skits: Skit[]; candidates: SkitDraft[]; winner: number; ms: number; standard: 'jokenet' | 'static' }
 
 async function writeOnce(model: string, prompt: string, timeoutMs: number): Promise<{ raw: unknown; ms: number } | null> {
   const t0 = Date.now()
@@ -90,14 +101,15 @@ async function writeOnce(model: string, prompt: string, timeoutMs: number): Prom
  *  shown a skit that broke a rule. */
 export async function writeSkits(shop: SkitShop, ask: SkitAsk): Promise<SkitResult | null> {
   const r = await writeSkitsLab(shop, ask)
-  return r.winner < 0 ? null : { skits: r.candidates[r.winner]!.skits, candidates: r.candidates, winner: r.winner, ms: r.ms }
+  return r.winner < 0 ? null : { skits: r.candidates[r.winner]!.skits, candidates: r.candidates, winner: r.winner, ms: r.ms, standard: r.standard }
 }
 
 /** The same run with nothing hidden: every candidate and what the checks
  *  flagged, and winner -1 when none passed. The lab shows it all. */
-export async function writeSkitsLab(shop: SkitShop, ask: SkitAsk): Promise<{ candidates: SkitDraft[]; winner: number; ms: number }> {
+export async function writeSkitsLab(shop: SkitShop, ask: SkitAsk): Promise<SkitRun> {
   const t0 = Date.now()
-  const prompt = promptFor(shop, ask)
+  const standard = await standardFor(shop, ask)
+  const prompt = promptFor(shop, ask, standard.lines)
   const ctx = contextFor(shop, ask)
   const models = [bitWriterModel(), backupWriterModel()]
   const candidates: SkitDraft[] = []
@@ -117,7 +129,7 @@ export async function writeSkitsLab(shop: SkitShop, ask: SkitAsk): Promise<{ can
     if (!fails.length) break
     feedback = `\n\nYOUR LAST ATTEMPT BROKE THESE RULES. Fix every one; everything else may stay:\n${[...new Set(fails)].slice(0, 12).join('\n')}`
   }
-  return { candidates, winner: candidates.findIndex((c) => !c.checks.length), ms: Date.now() - t0 }
+  return { candidates, winner: candidates.findIndex((c) => !c.checks.length), ms: Date.now() - t0, standard: standard.from }
 }
 
 const unquote = (s: string): string => s.replace(/\s+/g, ' ').trim().replace(/^["'“”]+|["'“”]+$/g, '').trim()

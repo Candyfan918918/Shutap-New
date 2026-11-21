@@ -255,10 +255,12 @@ export const setShopReminder = createServerFn({ method: 'POST' })
 /* ───────────────────────── the skits (slice 3, Nov 21 2026) ─────────────────────────
    Signed-in owners with a saved shop. The owner says what happened (or
    nothing: "Surprise me"); the Guard reads it first (a crisis never sees a
-   skit or a paywall), then the plan's allowance, the Scrubber, the two
-   writers and the checks. Three skits come back; the owner picks one, makes
-   each line theirs ("Funnier", edit) and goes to film. What's stored: the
-   scrubbed day story and the skits. A write that fails never counts. */
+   skit or a paywall), then the plan's allowance, the two writers and the
+   checks. The writer sees the owner's day as typed, the founder's rated
+   JokeNet lines nearest it, and today's topics from the site's daily list.
+   Three skits come back; the owner picks one, makes each line theirs
+   ("Funnier", edit) and goes to film. What's stored: the day story as typed
+   and the skits. A write that fails never counts. */
 import { LINE_KEYS, type LineKey, type Skit } from './shops/skit'
 import type { ShopUsage } from './shops/allowance'
 import type { SkitShop } from './shops/skit.server'
@@ -318,7 +320,7 @@ export const writeMySkits = createServerFn({ method: 'POST' })
     const admin = await adminDb()
     const shop = await myShopRow(admin, userId)
     if (!shop) return { ok: false, reason: 'no_shop' }
-    const { guardDay, scrubDay, writeSkits } = await import('./shops/skit.server')
+    const { guardDay, keepDay, writeSkits } = await import('./shops/skit.server')
     // the Guard overrides everything: no paywall, no skit
     const guard = await guardDay(data.day)
     if (guard.crisis) {
@@ -343,17 +345,19 @@ export const writeMySkits = createServerFn({ method: 'POST' })
         avoid = (Array.isArray(prev.skits) ? prev.skits : []).map((s: any) => `${s?.title}: ${s?.pitch}`).filter((x: string) => x.length > 3)
       }
     }
-    if (!data.again) dayText = await scrubDay(data.day)
-    const result = await writeSkits(shop, { day: dayText, promote: data.promote, idea: data.idea, date: pacificDateLine(), avoid })
-    if (!result) { await track(admin, userId, 'shop_skits_failed', { again: !!data.again }); return { ok: false, reason: 'failed' } }
+    if (!data.again) dayText = keepDay(data.day)
     const { today } = await import('./bits/tier.server')
+    const { todaysTopics } = await import('./shops/topics.server')
+    const topics = await todaysTopics(admin, today().day)
+    const result = await writeSkits(shop, { day: dayText, promote: data.promote, idea: data.idea, date: pacificDateLine(), avoid, topics })
+    if (!result) { await track(admin, userId, 'shop_skits_failed', { again: !!data.again }); return { ok: false, reason: 'failed' } }
     const { SKIT_PROMPT_VERSION } = await import('./shops/prompts.server')
     const { data: row, error } = await admin.from('shop_skit_sets').insert({
       user_id: userId, shop_id: shop.id, day: today().day, day_text: dayText, promote: data.promote, idea: data.idea,
       skits: result.skits, prompt_version: SKIT_PROMPT_VERSION, tier: usage.tier,
     }).select(SET_COLS).single()
     if (error || !row) { console.error('[shops] skit set insert failed', error?.message); return { ok: false, reason: 'failed' } }
-    await track(admin, userId, 'shop_skits_written', { set_id: row.id, again: !!data.again, has_day: !!dayText, has_promote: !!data.promote, idea: !!data.idea, ms: result.ms, tier: usage.tier, voice: shop.voice, length: shop.length, camera: shop.camera, business_type: shop.business_type, model: result.candidates[result.winner]?.model })
+    await track(admin, userId, 'shop_skits_written', { set_id: row.id, again: !!data.again, has_day: !!dayText, has_promote: !!data.promote, idea: !!data.idea, ms: result.ms, standard: result.standard, topics: topics.length, tier: usage.tier, voice: shop.voice, length: shop.length, camera: shop.camera, business_type: shop.business_type, model: result.candidates[result.winner]?.model })
     return { ok: true, set: setFromRow(row), usage: { ...usage, sets_today: usage.sets_today + 1 } }
   })
 
@@ -458,7 +462,7 @@ export const touchMySkitLine = createServerFn({ method: 'POST' })
    shop and a day, sees every candidate set with what the checks flagged, and
    rates it pick / cut / rewrite. Nothing is counted and nothing is shown to
    anyone else. The lab runs the real writer (the two models and the checks)
-   but not the Guard or the Scrubber: it is the founder's own test text. */
+   but not the Guard: it is the founder's own test text. */
 import type { SkitDraft } from './shops/skit.server'
 
 const LabShopIn = z.object({
@@ -476,8 +480,8 @@ const LabShopIn = z.object({
 const LabAskIn = z.object({ day: z.string().trim().max(600), promote: z.string().trim().max(120), idea: z.string().trim().max(80), topics: z.array(z.string().trim().min(1).max(120)).max(6) })
 
 export type LabSkitsResult =
-  | { ok: true; eval_id: string | null; prompt_version: string; ms: number; winner: number; candidates: SkitDraft[] }
-  | { ok: false; reason: 'failed'; candidates: SkitDraft[] }
+  | { ok: true; eval_id: string | null; prompt_version: string; ms: number; winner: number; candidates: SkitDraft[]; standard: 'jokenet' | 'static'; topics: string[] }
+  | { ok: false; reason: 'failed'; candidates: SkitDraft[]; standard: 'jokenet' | 'static'; topics: string[] }
 
 /** Admin only: write the three skits for a shop typed into the lab. Every
  *  candidate comes back, including the ones the checks rejected. */
@@ -488,17 +492,24 @@ export const labWriteSkits = createServerFn({ method: 'POST' })
     await requireAdmin(context)
     const { writeSkitsLab } = await import('./shops/skit.server')
     const { SKIT_PROMPT_VERSION } = await import('./shops/prompts.server')
-    const r = await writeSkitsLab(data.shop as SkitShop, { ...data.ask, date: pacificDateLine(), avoid: [] })
-    if (r.winner < 0) return { ok: false, reason: 'failed', candidates: r.candidates }
+    // an empty topics box means "what an owner would get": today's list
+    let topics = data.ask.topics
+    if (!topics.length) {
+      const { today } = await import('./bits/tier.server')
+      const { todaysTopics } = await import('./shops/topics.server')
+      topics = await todaysTopics(await adminDb(), today().day)
+    }
+    const r = await writeSkitsLab(data.shop as SkitShop, { ...data.ask, topics, date: pacificDateLine(), avoid: [] })
+    if (r.winner < 0) return { ok: false, reason: 'failed', candidates: r.candidates, standard: r.standard, topics }
     let evalId: string | null = null
     try {
       const admin = await adminDb()
-      const { data: row } = await admin.from('skit_evals').insert({ shop: data.shop, ask: data.ask, result: { winner: r.winner, ms: r.ms, candidates: r.candidates }, prompt_version: SKIT_PROMPT_VERSION }).select('id').single()
+      const { data: row } = await admin.from('skit_evals').insert({ shop: data.shop, ask: { ...data.ask, topics }, result: { winner: r.winner, ms: r.ms, standard: r.standard, candidates: r.candidates }, prompt_version: SKIT_PROMPT_VERSION }).select('id').single()
       evalId = row?.id ?? null
     } catch (e) {
       console.warn('[smallbusiness-lab] eval not stored (table missing?)', e instanceof Error ? e.message : e)
     }
-    return { ok: true, eval_id: evalId, prompt_version: SKIT_PROMPT_VERSION, ms: r.ms, winner: r.winner, candidates: r.candidates }
+    return { ok: true, eval_id: evalId, prompt_version: SKIT_PROMPT_VERSION, ms: r.ms, winner: r.winner, candidates: r.candidates, standard: r.standard, topics }
   })
 
 /** Admin only: rate a lab run. */
