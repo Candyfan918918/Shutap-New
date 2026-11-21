@@ -36,3 +36,14 @@ test('using is never counted: downloads and touches unlimited for every signed-i
     assert.equal(can('touch', t, 10_000).ok, true)
   }
 })
+test('small-business videos: free 3 ever, basic 1 a day, pro unlimited, guests sign in', () => {
+  assert.deepEqual(limitFor('shopvideo', 'free'), { cap: 3, period: 'ever' })
+  assert.deepEqual(limitFor('shopvideo', 'basic'), { cap: 1, period: 'day' })
+  assert.equal(can('shopvideo', 'free', 2).ok, true)
+  assert.equal(can('shopvideo', 'free', 3).ok, false)
+  assert.equal(can('shopvideo', 'basic', 0).ok, true)
+  assert.equal(can('shopvideo', 'basic', 1).ok, false)
+  assert.equal(limitFor('shopvideo', 'pro').cap, null)
+  assert.equal(can('shopvideo', 'pro', 999).ok, true)
+  assert.equal(can('shopvideo', 'guest', 0).ok, false)
+})
