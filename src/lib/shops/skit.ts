@@ -85,6 +85,9 @@ export type SkitContext = {
   /** words the owner themselves gave (their promotion, their offer): a
    *  price or a percent may appear only if it is in here */
   ownWords: string
+  /** the freebie or promotion for saying the code word, if any: the code
+   *  word must not be the offer said back */
+  offer?: string
 }
 
 const EMOJI = /\p{Extended_Pictographic}/u
@@ -95,6 +98,15 @@ const CLAIM = /\b(cure[sd]?|heal(s|ed|ing)?|guarantee[sd]?|clinically|lose weigh
 const AT_A_PERSON = /\b(fat|ugly|stupid|idiot|dumb|moron|broke|poor|crazy|psycho|karen)\b/i
 const FACE = /\b(face|faces|smile|smiles|smiling|wink|eye contact|look(s|ing)? (at|into) (the )?camera|selfie|expression|stare[sd]?|staring)\b/i
 const TEAM = /\b(teammate|coworker|co-worker|employee|staff|someone else|a friend|another person|your (barista|stylist|mechanic|server))\b/i
+
+const OFFER_WORDS = /\b(free|discount|deal|off|coupon|promo|promotion)\b/i
+/** The code word says the offer back ("free cookie" for a free cookie): it
+ *  uses an offer word, or a word of four letters or more from the offer. */
+export function repeatsOffer(word: string, offer: string): boolean {
+  if (OFFER_WORDS.test(word)) return true
+  const offerWords = new Set(offer.toLowerCase().match(/[a-z]{4,}/g) ?? [])
+  return (word.toLowerCase().match(/[a-z]{4,}/g) ?? []).some((w) => offerWords.has(w))
+}
 
 /** The fatal checks. A skit that breaks one is rewritten or dropped; it is
  *  never shown. */
@@ -117,6 +129,7 @@ export function checkSkit(s: Skit, ctx: SkitContext): SkitCheck[] {
   }
   const words = wordCount(s.word)
   if (words < 1 || words > 3) out.push({ rule: 'the code word is one to three words', where: 'word', line: s.word })
+  if (repeatsOffer(s.word, ctx.offer ?? '')) out.push({ rule: 'the code word is an inside joke from the skit, never the offer itself', where: 'word', line: s.word })
   if (s.caption.length > CAPTION_CHAR_CAP) out.push({ rule: `the caption is under ${CAPTION_CHAR_CAP} characters`, where: 'caption', line: s.caption })
   s.shots.forEach((sh, i) => {
     if (ctx.camera === 'faceless' && FACE.test(sh.action)) out.push({ rule: 'no faces: film hands and products only', where: `shot ${i + 1} action`, line: sh.action })

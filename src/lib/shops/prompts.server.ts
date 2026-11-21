@@ -4,7 +4,11 @@
 // invents a fact about the business. Same bones as the realtor kit and the
 // toasts: two writers, checks before anyone sees a line.
 // SKIT_PROMPT_VERSION is stamped on every set; bump on any edit.
-export const SKIT_PROMPT_VERSION = 'skit-0.3'
+export const SKIT_PROMPT_VERSION = 'skit-0.4'
+// 0.4 (Nov 21 2026, from the first lab run Candy shared): the text on a shot
+// narrated the shot ("The dog observes the request") and the code word was
+// the offer itself ("free cookie" for a free cookie). The text is the joke,
+// never a description of the picture; the code word never repeats the offer.
 // 0.3 (Nov 21 2026, Candy): THE STANDARD is the founder's rated JokeNet lines
 // nearest the owner's day and business (the static bank when JokeNet does not
 // answer); today's topics come from the site's daily list; the owner's day
@@ -37,9 +41,10 @@ export const SKIT_RULES = `HARD RULES (every skit, every line):
 - NO CLAIMS: nothing about health, results, safety or guarantees.
 - NEWS AND POLITICS ARE ALLOWED, ON TWO CONDITIONS. (1) Only a topic the owner brought up (in WHAT HAPPENED, WHAT THE OWNER IS PROMOTING or the idea they tapped) or one listed under TODAY'S TOPICS: never bring up a news story from your own memory, it may be old or wrong. (2) The joke is how this shop and its customers live the topic (the line, the small talk, the sign on the door), never a statement of fact about the story that is not given below, never a named politician or public figure, never which side is right, never how to vote. Nothing about a death, a disaster or violence. No religion.
 - FILMABLE BY THIS SHOP TODAY: three shots, each one single action a normal person can do in their own shop with a phone, in under ten seconds, with no props they would need to buy and no editing tricks. No dialogue to memorize: the text on screen does the talking. Never ask them to film a real customer.
+- THE TEXT IS THE JOKE, NEVER A DESCRIPTION OF THE PICTURE. The viewer can already see the shot; text that says what the camera shows is dead weight. The text adds what the picture cannot: a time stamp, something somebody said (in quotation marks), what the owner is thinking, a label that makes the plain picture mean something else. Each shot's text must be funny or tense with the picture covered up.
 - ON-SCREEN TEXT is read in two seconds: at most {{TEXT_WORDS}} words per shot, the hook at most 12. Plain words, the turn word last. No emojis, no hashtags. US English unless the country says otherwise.
 - THE THREE SHOTS ARE ONE JOKE: shot 1 sets it up, shot 2 makes it worse, shot 3 turns it. The hook is on screen first and makes a stranger stop scrolling without giving the turn away.
-- THE CODE WORD is one to three plain words lifted from the skit's own turn, something a customer could say at the counter without embarrassment.
+- THE CODE WORD is one to three plain words lifted from the skit's own turn, something a customer could say at the counter without embarrassment. It is an inside joke for people who watched: never the offer itself, never a word from THE OWNER'S OFFER, never "free", "discount" or "deal".
 - THE CAPTION is under 100 characters, one more small joke, no hashtags.`
 
 export const SKIT_PROMPT = `You write short, funny videos that a small shop films on a phone and posts. The owner told you about their shop; you draft three different skits and they pick one. The humor is theirs: build on what they gave you.

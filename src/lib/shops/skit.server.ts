@@ -58,7 +58,8 @@ const businessName = (t: BusinessType): string => (t === 'other' ? 'small busine
 const countryName = (c: Country): string => (c === 'other' ? 'their country' : COUNTRIES.find((x) => x.key === c)?.name ?? 'their country')
 
 export function contextFor(shop: SkitShop, ask: Pick<SkitAsk, 'day' | 'promote'>): SkitContext {
-  return { length: shop.length, camera: shop.camera, hasDay: !!ask.day.trim(), ownWords: `${ask.promote} ${shop.offer === 'none' ? '' : shop.offer_text}` }
+  const offer = shop.offer === 'none' ? '' : shop.offer_text
+  return { length: shop.length, camera: shop.camera, hasDay: !!ask.day.trim(), ownWords: `${ask.promote} ${offer}`, offer }
 }
 
 export function promptFor(shop: SkitShop, ask: SkitAsk, standard: TasteLine[] = standardLines(4)): string {
