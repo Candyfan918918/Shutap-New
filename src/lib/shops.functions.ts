@@ -465,7 +465,7 @@ export const labWriteSkits = createServerFn({ method: 'POST' })
       const { data: row } = await admin.from('skit_evals').insert({ shop: data.shop, ask: data.ask, result: { winner: r.winner, ms: r.ms, candidates: r.candidates }, prompt_version: SKIT_PROMPT_VERSION }).select('id').single()
       evalId = row?.id ?? null
     } catch (e) {
-      console.warn('[skit-lab] eval not stored (table missing?)', e instanceof Error ? e.message : e)
+      console.warn('[smallbusiness-lab] eval not stored (table missing?)', e instanceof Error ? e.message : e)
     }
     return { ok: true, eval_id: evalId, prompt_version: SKIT_PROMPT_VERSION, ms: r.ms, winner: r.winner, candidates: r.candidates }
   })

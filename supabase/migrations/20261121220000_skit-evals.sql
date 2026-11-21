@@ -1,5 +1,5 @@
 -- Shutap for small business (Nov 21 2026): the founder's ratings from
--- /skit-lab, before the product is turned on. One row per lab run: the shop
+-- /smallbusiness-lab, before the product is turned on. One row per lab run: the shop
 -- and the ask as typed into the lab (invented or the founder's own; never an
 -- owner's), every candidate set with what the checks flagged, and the rating.
 -- Only the server reads or writes this. Safe to run twice.
