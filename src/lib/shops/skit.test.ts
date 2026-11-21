@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { checkLine, checkSet, checkSkit, parseSkit, parseSkits, skitLines, textWordCap, type Skit, type SkitContext } from './skit'
+import { checkLine, checkSet, checkSkit, parseSkit, parseSkits, repeatsOffer, skitLines, textWordCap, type Skit, type SkitContext } from './skit'
 
 const CTX: SkitContext = { length: 15, camera: 'team', hasDay: true, ownWords: '' }
 const skit = (over: Partial<Skit> = {}): Skit => ({
@@ -85,4 +85,14 @@ test('an edited line is checked like the original', () => {
   assert.equal(checkLine('hook', '   ', CTX), 'a line cannot be empty')
   assert.match(checkLine('shot1', 'one two three four five six seven eight', { ...CTX, length: 7 })!, /at most 7 words/)
   assert.match(checkLine('shot2', 'guaranteed to cure it', CTX)!, /claims/)
+})
+test('the code word is never the offer said back', () => {
+  assert.equal(repeatsOffer('free cookie', 'a free cookie'), true)
+  assert.equal(repeatsOffer('cookie time', 'a free cookie'), true)
+  assert.equal(repeatsOffer('ten percent off', ''), true)
+  assert.equal(repeatsOffer('new password', 'a free cookie'), false)
+  assert.equal(repeatsOffer('last pie', '10% off any pastry'), false)
+  const ctx = { ...CTX, ownWords: 'a free cookie', offer: 'a free cookie' }
+  assert.equal(checkSkit(skit({ word: 'free cookie' }), ctx).some((c) => /inside joke/.test(c.rule)), true)
+  assert.deepEqual(checkSkit(skit(), ctx), [])
 })
