@@ -139,3 +139,15 @@ textarea.sb-input { font-size: 20px; line-height: 1.4; border-radius: 24px; padd
 .sb-made span.soon { color: var(--rose); font-weight: 600; }
 .sb-made .sb-grid2 { margin-top: 12px; }
 .sb-made .sb-white { min-height: 44px; font-size: 15px; background: #fdeef3; box-shadow: none; }
+
+/* on a computer: send the owner to their phone (Nov 21 2026) */
+.sb-desk { align-items: center; padding: 48px 24px; box-sizing: border-box; }
+.sb-desk-in { width: 100%; max-width: 980px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 56px; align-items: center; }
+.sb-desk-txt { display: flex; flex-direction: column; gap: 16px; }
+.sb-desk-txt .sb-h1 { font-size: 44px; }
+.sb-desk-steps { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.sb-desk-steps li { display: flex; align-items: center; gap: 12px; font: 600 17px var(--inter); color: var(--ink); }
+.sb-desk-steps b { width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center; background: var(--rose); color: #fff; font-size: 14px; flex-shrink: 0; }
+.sb-desk-card { background: #fff; border-radius: 32px; padding: 28px; box-shadow: 0 30px 60px -30px rgba(142, 16, 67, .35); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.sb-desk-icons { transform: scale(.7); transform-origin: bottom center; height: 200px; display: flex; align-items: flex-end; }
+.sb-desk-card canvas { border-radius: 12px; }

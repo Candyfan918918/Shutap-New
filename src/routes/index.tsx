@@ -1,6 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ogImageMeta } from "@/lib/seo/meta";
 import { ProductHome } from '@/pages/home/ProductHome'
+import { SmallBusinessHome } from '@/pages/home/sb/SmallBusinessHome'
+import { getFlags } from '@/lib/flags.functions'
+import { useSmallBusinessOpen } from '@/hooks/use-smallbusiness-open'
 import { SITE_URL } from '@/lib/site'
 
 // Nov 14 2026 (Candy): titles and descriptions use the words people search
@@ -37,9 +40,14 @@ export const Route = createFileRoute('/')({
     ],
   }),
 
+  // Nov 21 2026: the small-business homepage shows once /smallbusiness is
+  // open (its flag on); admins see it earlier, checked in the browser.
+  loader: async () => ({ sb: (await getFlags().catch(() => null))?.smallbusiness ?? false }),
   component: HomeRouteComponent,
 })
 
 function HomeRouteComponent() {
-  return <ProductHome />
+  const { sb } = Route.useLoaderData()
+  const open = useSmallBusinessOpen(sb)
+  return open ? <SmallBusinessHome /> : <ProductHome />
 }

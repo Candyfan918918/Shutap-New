@@ -26,6 +26,8 @@ import type { ShopUsage } from '@/lib/shops/allowance'
 import { PLANS, usd } from '@/lib/pricing'
 import { RisingIcons } from './RisingIcons'
 import { Film, fileName, give } from './Film'
+import { DeskGate, isDesk } from './Desk'
+import { amIAdmin } from '@/lib/admin.functions'
 import './smallbusiness.css'
 
 type Step = 'welcome' | 'type' | 'where' | 'which' | 'confirm' | 'signin' | 'funny' | 'look' | 'code' | 'day' | 'promote' | 'pick' | 'lines' | 'film' | 'done' | 'creations' | 'limit' | 'crisis'
@@ -100,6 +102,14 @@ function recognizer(): Recognizer | null {
 }
 
 export function SmallBusinessFlow() {
+  // a computer gets the send-to-your-phone screen (admins may carry on)
+  const [desk, setDesk] = useState<'unknown' | 'desk' | 'phone'>('unknown')
+  const [admin, setAdmin] = useState(false)
+  useEffect(() => {
+    const d = isDesk()
+    setDesk(d ? 'desk' : 'phone')
+    if (d) void amIAdmin().then((a) => setAdmin(Boolean(a))).catch(() => {})
+  }, [])
   const { userId, ready } = useCurrentAlias()
   const [d, setD] = useState<Draft>(EMPTY)
   const [loaded, setLoaded] = useState(false)
@@ -360,6 +370,8 @@ export function SmallBusinessFlow() {
   const back = BACK[step]
   const lit = PROGRESS[step]
   const free = !usage || usage.tier === 'free'
+
+  if (desk === 'desk') return <DeskGate admin={admin} onContinue={() => setDesk('phone')} />
 
   return (
     <div className="sb" data-ph-private>
