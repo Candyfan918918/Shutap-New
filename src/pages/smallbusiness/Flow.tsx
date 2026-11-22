@@ -335,14 +335,17 @@ export function SmallBusinessFlow() {
     go('lines')
   }
 
-  async function keep(text: string, how: 'edit' | 'funnier') {
+  async function keep(text: string, how: 'edit' | 'funnier', at = li) {
+    const line = lines[at]
     if (!set || !line) return
     const r = await keepSkitLine({ data: { set_id: set.id, key: line.key as LineKey, text, how } }).catch(() => null)
     if (r?.ok) { setSet(r.set); setEditing(null); setOptions(null); setNote(null); return }
     setNote(r && !r.ok && r.reason === 'rule' && r.rule ? `That line needs a change: ${r.rule}.` : 'That didn’t save. Try again.')
   }
 
-  async function funnier() {
+  async function funnier(at = li) {
+    const line = lines[at]
+    setLi(at); setEditing(null); setOptions(null); setNote(null)
     if (!set || !line || line.key === 'code') return
     setBusy('Making it funnier…')
     const r = await touchMySkitLine({ data: { set_id: set.id, key: line.key as 'hook' | 'shot1' | 'shot2' | 'shot3', tried } }).catch(() => null)
@@ -510,25 +513,33 @@ export function SmallBusinessFlow() {
           </div>
         ) : step === 'lines' && skit && line ? (
           <div className="sb-screen">
-            <div className="sb-head"><h1 className="sb-h1">Make it <b>sound like you</b></h1></div>
-            <div className="sb-mid">
-              <p className="sb-tag">Line {li + 1} of {lines.length} · {line.label}</p>
-              {editing !== null ? (
-                <textarea className="sb-input" rows={4} maxLength={200} aria-label="Edit this line" value={editing} onChange={(e) => setEditing(e.target.value)} />
-              ) : options ? (
-                <>{options.map((o) => <button key={o} type="button" className="sb-card" onClick={() => void keep(o, 'funnier')}><b style={{ fontWeight: 500 }}>{o}</b></button>)}<button type="button" className="sb-quiet" onClick={() => setOptions(null)}>Keep mine</button></>
-              ) : (
-                <p className="sb-line">{line.text}</p>
-              )}
-              {note && <p className="sb-err">{note}</p>}
-              {!options && (
-                <div className="sb-grid2">
-                  <button type="button" className="sb-white" style={{ color: '#8e1043', fontWeight: 700 }} disabled={line.key === 'code' || editing !== null} onClick={() => void funnier()}>Funnier</button>
-                  <button type="button" className="sb-white" onClick={() => (editing !== null ? (editing.trim() && editing.trim() !== line.text ? void keep(editing.trim(), 'edit') : setEditing(null)) : setEditing(line.text))}>{editing !== null ? 'Done' : 'Edit'}</button>
-                </div>
-              )}
+            <div className="sb-head"><h1 className="sb-h1">Make it <b>sound like you</b></h1><p className="sb-sub">Every line of your video. Change any of them, or film it as it is.</p></div>
+            {/* all the lines on one screen (Candy, Nov 21 2026); the list scrolls when it is long */}
+            <div className="sb-mid top sb-lines">
+              {lines.map((l, i) => {
+                const on = i === li
+                return (
+                  <div key={l.key} className="sb-card sb-linecard" style={{ cursor: 'default' }}>
+                    <p className="src">{l.label.toUpperCase()}</p>
+                    {on && editing !== null ? (
+                      <textarea className="sb-input" rows={3} maxLength={200} aria-label={`Edit ${l.label}`} value={editing} onChange={(e) => setEditing(e.target.value)} />
+                    ) : on && options ? (
+                      <>{options.map((o) => <button key={o} type="button" className="sb-opt" onClick={() => void keep(o, 'funnier', i)}>{o}</button>)}<button type="button" className="sb-quiet" onClick={() => setOptions(null)}>Keep mine: {l.text}</button></>
+                    ) : (
+                      <b className="say">{l.text}</b>
+                    )}
+                    {on && note && <p className="sb-err">{note}</p>}
+                    {!(on && options) && (
+                      <div className="sb-grid2">
+                        <button type="button" className="sb-white" style={{ color: '#8e1043', fontWeight: 700 }} disabled={l.key === 'code' || (on && editing !== null)} onClick={() => void funnier(i)}>Funnier</button>
+                        <button type="button" className="sb-white" onClick={() => { if (on && editing !== null) { if (editing.trim() && editing.trim() !== l.text) void keep(editing.trim(), 'edit', i); else setEditing(null) } else { setLi(i); setOptions(null); setNote(null); setEditing(l.text) } }}>{on && editing !== null ? 'Done' : 'Edit'}</button>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
-            <div className="sb-foot"><button type="button" className="sb-btn" disabled={editing !== null || !!options} onClick={nextLine}>{li + 1 >= lines.length ? 'Looks good, film it' : 'Looks good'}</button>{li + 1 < lines.length && <button type="button" className="sb-quiet" onClick={() => go('film')}>Keep the rest, go film</button>}</div>
+            <div className="sb-foot"><button type="button" className="sb-btn" disabled={editing !== null || !!options} onClick={() => go('film')}>Looks good, film it</button></div>
           </div>
         ) : step === 'film' && set && skit ? (
           <Film

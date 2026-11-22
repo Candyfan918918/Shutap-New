@@ -14,7 +14,7 @@
 .sb-h1 b { font-weight: 700; color: var(--ink); }
 .sb-sub { margin: 10px 0 0; font-size: 16px; line-height: 1.45; color: var(--muted); }
 .sb-mid { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 18px 0; }
-.sb-mid.top { justify-content: flex-start; }
+.sb-mid.top { justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .sb-foot { flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; }
 .sb-btn { min-height: 60px; border: 0; border-radius: 999px; background: var(--rose); color: #fff; box-shadow: 0 10px 24px rgba(194, 24, 91, .28); font: 600 18px var(--inter); cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 0 20px; }
 .sb-btn:disabled, .sb-btn[aria-disabled='true'] { background: #eadfe4; color: #6b6470; box-shadow: none; cursor: default; }
@@ -139,3 +139,11 @@ textarea.sb-input { font-size: 20px; line-height: 1.4; border-radius: 24px; padd
 .sb-made span.soon { color: var(--rose); font-weight: 600; }
 .sb-made .sb-grid2 { margin-top: 12px; }
 .sb-made .sb-white { min-height: 44px; font-size: 15px; background: #fdeef3; box-shadow: none; }
+/* every line of the skit on one screen */
+.sb-lines { overflow-y: auto; -webkit-overflow-scrolling: touch; gap: 12px; padding-bottom: 8px; }
+.sb-linecard { flex-shrink: 0; padding: 14px 16px; }
+.sb-linecard .say { font-size: 19px; font-weight: 600; line-height: 1.3; }
+.sb-linecard .sb-grid2 { margin-top: 12px; }
+.sb-linecard .sb-white { min-height: 42px; font-size: 15px; background: #fdeef3; box-shadow: none; }
+.sb-linecard .sb-input { font-size: 18px; background: #faf5f7; box-shadow: none; padding: 12px 14px; border-radius: 16px; }
+.sb-opt { display: block; width: 100%; text-align: left; border: 0; border-radius: 16px; padding: 12px 14px; margin-top: 8px; background: #fdeef3; font: 500 17px/1.3 var(--inter); color: var(--ink); cursor: pointer; }
