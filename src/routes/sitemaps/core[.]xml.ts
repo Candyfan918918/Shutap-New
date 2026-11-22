@@ -28,6 +28,8 @@ export function getCoreEntries(): SitemapEntry[] {
   { path: "/bits", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.9" },
   { path: "/realtors", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.9" },
   { path: "/toasts", lastmod: "2026-11-06", changefreq: "monthly", priority: "0.9" },
+  // Nov 21 2026: Shutap for small business opened to everyone
+  { path: "/smallbusiness", lastmod: "2026-11-21", changefreq: "weekly", priority: "0.9" },
   // Nov 6 2026: Toasts launched; one landing page per occasion
   ...LANDINGS.map((l): SitemapEntry => ({ path: `/toasts/${l.slug}`, lastmod: "2026-11-06", changefreq: "monthly", priority: "0.8" })),
   ...GUIDE_TOPICS.filter((t) => guidesInTopic(t.id).length > 0).map((t): SitemapEntry => ({

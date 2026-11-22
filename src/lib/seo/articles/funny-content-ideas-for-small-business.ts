@@ -85,7 +85,7 @@ const guide: Guide = {
     },
   ],
   related: ["funny-social-media-content-plan", "how-to-make-a-story-funnier", "how-to-write-a-skit"],
-  cta: { label: "Write your bit. Funnier only where you ask.", href: "/bits" },
+  cta: { label: "Make a funny video about your business", href: "/smallbusiness" },
   published: "2026-11-21",
   sources: [
     {
