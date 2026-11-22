@@ -51,7 +51,6 @@ Disallow: /bit-eval
 Disallow: /kit-lab
 Disallow: /toast-lab
 Disallow: /smallbusiness-lab
-Disallow: /smallbusiness
 Disallow: /realtors/shoot
 Disallow: /toasts/edit
 Disallow: /toasts/prompter

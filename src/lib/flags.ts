@@ -16,10 +16,12 @@ export type Flag = (typeof FLAGS)[number]
 export type Flags = Record<Flag, boolean>
 
 /** Flags that are off until the server turns them on. */
-const DEFAULT_OFF: readonly Flag[] = ['smallbusiness']
+// Nov 21 2026 (Candy: "open it"): small business is open to everyone. Nothing
+// defaults off now; SHUTAP_FLAG_SMALLBUSINESS=0 switches it off again.
+const DEFAULT_OFF: readonly Flag[] = []
 
 /** What the page assumes before the server answers. */
-export const NO_FLAGS: Flags = { realtors: true, ondemand: true, newnav: true, toasts: true, smallbusiness: false }
+export const NO_FLAGS: Flags = { realtors: true, ondemand: true, newnav: true, toasts: true, smallbusiness: true }
 
 /** Server only: the flags as the environment sets them. A live flag is on
  *  unless =0; a dark one is off unless =1 (or true). */

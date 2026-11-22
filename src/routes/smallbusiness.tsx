@@ -1,14 +1,9 @@
 import { pageMeta } from '@/lib/seo/page-meta'
-// Shutap for small business (Nov 21 2026). Hidden until the smallbusiness
-// flag is on: until then the page opens only for an admin, is client-only,
-// noindex and disallowed in robots.txt.
-//
-// Once the flag is on, the same route is server-rendered with its title,
-// description and the questions marked up for search, with nothing else to
-// change here. TO OPEN IT TO SEARCH, in the same change that turns the flag
-// on: in public/robots.txt replace "Disallow: /smallbusiness" (it stays for
-// /smallbusiness-lab), add /smallbusiness to the sitemap, and add it to
-// staticPaths in scripts/seo/article-check.mjs.
+// Shutap for small business. Opened to everyone on Nov 21 2026 (Candy:
+// "open it"): server-rendered, in the sitemap, with its search title,
+// description and the questions marked up. SHUTAP_FLAG_SMALLBUSINESS=0
+// hides it again: then it opens only for an admin, client-only and noindex
+// (and public/robots.txt should get its "Disallow: /smallbusiness" back).
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { amIAdmin } from '@/lib/admin.functions'
 import { getFlags } from '@/lib/flags.functions'
