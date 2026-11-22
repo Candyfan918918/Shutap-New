@@ -203,3 +203,13 @@ textarea.sb-input { font-size: 20px; line-height: 1.4; border-radius: 24px; padd
 .sbi-faq details[open] summary span { transform: rotate(45deg); }
 .sbi-faq details p { margin-top: 10px; }
 .sbi-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 56px; padding: 0 28px; margin-top: 26px; border: 0; border-radius: 999px; background: var(--rose); color: #fff; font: 600 17px 'Inter', system-ui, sans-serif; box-shadow: 0 10px 24px rgba(194, 24, 91, .28); cursor: pointer; }
+/* waiting for the skits */
+.sb-waitbar { height: 10px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1px #f1e4ea; overflow: hidden; }
+.sb-waitbar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #e0457f, #c2185b); transition: width .3s linear; }
+.sb-waitsteps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.sb-waitsteps li { position: relative; padding-left: 30px; font: 500 16px/1.35 var(--inter); color: var(--faint); }
+.sb-waitsteps li::before { content: ''; position: absolute; left: 4px; top: 5px; width: 12px; height: 12px; border-radius: 999px; background: #f1dbe4; }
+.sb-waitsteps li.on { color: var(--ink); font-weight: 600; }
+.sb-waitsteps li.on::before { background: var(--rose); animation: sb-breathe 1.1s ease-in-out infinite; }
+.sb-waitsteps li.done { color: var(--muted); }
+.sb-waitsteps li.done::before { background: var(--rose); }

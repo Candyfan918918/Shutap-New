@@ -101,6 +101,33 @@ function recognizer(): Recognizer | null {
   try { return new R() as Recognizer } catch { return null }
 }
 
+const WRITING = 'Writing your three skits…'
+/** What is happening while the skits are written, in the order it happens. */
+const WAIT_STEPS = ['Reading what you said', 'Two writers are drafting three skits each', 'Checking every line against your business', 'Picking the funnier ones']
+/** Usually done in under this many seconds (measured Nov 21 2026: 6 to 20). */
+const WAIT_SECONDS = 30
+
+/** The wait for the skits (Candy, Nov 21 2026: show progress or the wait, or
+ *  people leave here): what is happening now, how long it usually takes, and
+ *  a bar that moves. The bar is an honest estimate from the clock, and never
+ *  reaches the end before the skits do. */
+export function SkitWait() {
+  const [s, setS] = useState(0)
+  useEffect(() => { const t0 = Date.now(); const id = window.setInterval(() => setS((Date.now() - t0) / 1000), 250); return () => window.clearInterval(id) }, [])
+  const part = Math.min(0.94, 1 - Math.exp(-s / (WAIT_SECONDS / 2.6)))
+  const at = Math.min(WAIT_STEPS.length - 1, Math.floor((s / WAIT_SECONDS) * WAIT_STEPS.length))
+  return (
+    <div className="sb-screen">
+      <div className="sb-head"><h1 className="sb-h1">Writing your <b>three skits</b></h1><p className="sb-sub">{s < WAIT_SECONDS ? `Usually under ${WAIT_SECONDS} seconds. Keep this screen open.` : 'Taking longer than usual. Still working, keep this screen open.'}</p></div>
+      <div className="sb-mid">
+        <div className="sb-waitbar" role="progressbar" aria-label="Writing your three skits" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(part * 100)}><i style={{ width: `${part * 100}%` }} /></div>
+        <ol className="sb-waitsteps">{WAIT_STEPS.map((w, i) => <li key={w} className={i < at ? 'done' : i === at ? 'on' : ''}>{w}</li>)}</ol>
+        <p className="sb-note" aria-live="off">{Math.floor(s)} seconds</p>
+      </div>
+    </div>
+  )
+}
+
 export function SmallBusinessFlow({ onStep }: { /** told which screen is showing ('desk' for the computer screen), so the page can show its information only under the first one */ onStep?: (at: string) => void } = {}) {
   // a computer gets the send-to-your-phone screen (admins may carry on)
   const [desk, setDesk] = useState<'unknown' | 'desk' | 'phone'>('unknown')
@@ -365,7 +392,7 @@ export function SmallBusinessFlow({ onStep }: { /** told which screen is showing
   }
 
   async function write(again?: string) {
-    setBusy('Writing your three skits…')
+    setBusy(WRITING)
     const r = await writeMySkits({ data: { day: dayMode === 'idle' ? '' : day, promote, idea: '', ...(again ? { again } : {}) } }).catch(() => null)
     setBusy(null)
     if (!r) { setNote('That didn’t work. Try again.'); return }
@@ -432,7 +459,7 @@ export function SmallBusinessFlow({ onStep }: { /** told which screen is showing
         </div>
 
         {busy ? (
-          <div className="sb-screen"><div className="sb-mid" style={{ alignItems: 'center' }}><LoadingDots label={busy} /><p className="sb-small">{busy}</p></div></div>
+          busy === WRITING ? <SkitWait /> : <div className="sb-screen"><div className="sb-mid" style={{ alignItems: 'center' }}><LoadingDots label={busy} /><p className="sb-small">{busy}</p></div></div>
         ) : step === 'welcome' ? (
           <div className="sb-screen">
             <div className="sb-hero"><RisingIcons variant="hero" /></div>

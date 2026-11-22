@@ -112,14 +112,16 @@ function skitJudgeModel(writers: string[]): string {
   return ['openai/gpt-5-mini', 'google/gemini-2.5-flash'].find((m) => !writers.includes(m) && m.split('/')[0] !== j.split('/')[0]) ?? 'openai/gpt-5-mini'
 }
 
-async function writeOnce(model: string, prompt: string, timeoutMs: number): Promise<{ raw: unknown; ms: number } | { error: string }> {
+async function writeOnce(model: string, prompt: string, timeoutMs: number): Promise<{ raw: unknown; ms: number; chars: number } | { error: string }> {
   const t0 = Date.now()
   const thinks = /^openai\/(gpt-5|o[1-9])/i.test(model)
-  // a reasoning model spends part of its answer thinking: it gets more room,
-  // or the three skits come back cut off and cannot be read
-  const res = await callAgent({ model, temperature: 1.0, maxTokens: thinks ? 6000 : 3000, timeoutMs, messages: [{ role: 'user', content: prompt }], reasoningEffort: thinks ? 'low' : undefined })
+  // A reasoning model spends part of its answer thinking, and the gateway
+  // caps an answer at 4096 tokens. With more thinking ('low') the three skits
+  // came back cut off and unreadable, and the owner waited longer for
+  // nothing (Nov 21 2026). So: the least thinking, and all the room there is.
+  const res = await callAgent({ model, temperature: 1.0, maxTokens: thinks ? 4096 : 3000, timeoutMs, messages: [{ role: 'user', content: prompt }], reasoningEffort: thinks ? 'minimal' : undefined })
   if (res.error) { console.warn('[skit] gateway error', { model, error: res.error }); return { error: String(res.error).slice(0, 80) } }
-  return { raw: tryParseJson(res.text), ms: Date.now() - t0 }
+  return { raw: tryParseJson(res.text), ms: Date.now() - t0, chars: res.text.length }
 }
 
 /** Two writers, the checks, up to two rounds: the second tells each writer
@@ -148,14 +150,15 @@ export async function writeSkitsLab(shop: SkitShop, ask: SkitAsk): Promise<SkitR
     results.forEach((r, i) => {
       if ('error' in r) { lost.push(`${models[i]}: ${r.error}`); return }
       const skits = parseSkits(r.raw)
-      if (!skits) { console.warn('[skit] unparseable', { model: models[i] }); lost.push(`${models[i]}: unreadable`); return }
+      if (!skits) { console.warn('[skit] unparseable', { model: models[i] }); lost.push(`${models[i]}: unreadable (${r.raw === null ? 'not JSON' : 'wrong shape'}, ${r.chars} chars, ${Math.round(r.ms / 1000)}s)`); return }
       const checks = [...checkSet(skits, ctx), ...skits.flatMap((s) => checkSkit(s, ctx).map((c) => ({ ...c, where: `"${s.title}" ${c.where}` })))]
       candidates.push({ skits, model: models[i]!, ms: r.ms, checks })
       for (const c of checks) fails.push(`- ${c.where}: ${c.rule}${c.line ? ` — "${c.line.slice(0, 140)}"` : ''}`)
     })
-    // stop when the first writer has a clean set (the backup alone is not
-    // enough to stop on: its sets are the weaker ones), or nothing broke
-    if (candidates.some((c) => !c.checks.length && c.model === models[0])) break
+    // one clean set is enough to stop: a second round doubles the owner's
+    // wait (Candy, Nov 21 2026: people would leave here). Both writers are
+    // strong now, so the first writer no longer needs its own second try.
+    if (candidates.some((c) => !c.checks.length)) break
     if (!fails.length) break
     feedback = `\n\nYOUR LAST ATTEMPT BROKE THESE RULES. Fix every one; everything else may stay:\n${[...new Set(fails)].slice(0, 12).join('\n')}`
   }

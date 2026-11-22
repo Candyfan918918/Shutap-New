@@ -10,7 +10,9 @@ export const SKIT_PROMPT_VERSION = 'skit-0.7'
 // faith, the skit keeps what they said. The earlier limits (no named
 // politician, no sides, nothing about a death or disaster, no religion) now
 // apply only to what the writer would add by itself: it never brings those
-// in, and never adds a fact or an opinion the owner did not give.
+// in, and never adds a fact or an opinion the owner did not give. Names the
+// owner gave (customers included) are kept too; the joke still never lands
+// on a person.
 // 0.6 (Nov 21 2026, Candy's second phone run: "make it funnier"): both drafts
 // came from the cheapest model (the first writer's answer never arrived, so
 // there was nothing to judge), and one skit copied the example in these
@@ -58,7 +60,7 @@ export const SKIT_CAMERAS: Record<string, string> = {
 
 export const SKIT_RULES = `HARD RULES (every skit, every line):
 - NEVER INVENT A FACT ABOUT THE BUSINESS: no price, discount, giveaway, opening hours, award, product, service or staff member the owner did not give. A price, a percent or the word "free" may appear only if it is in WHAT THE OWNER IS PROMOTING or THE OWNER'S OFFER below, word for word.
-- THE JOKE'S TARGET IS THE SITUATION, or the shop itself. Never a person. A customer may be the person in the setup, unnamed and impossible to identify; the turn lands on what happened or on the shop's own reaction, never on the customer's looks, body, age, intelligence, money, accent or who they are. No names of private people: if the owner's words name a customer, a neighbor or anyone else who is not a public figure, the skit says "a customer" or "a regular", never the name. A public figure the owner named may be named, as the owner did. The owner's own first name and the staff's may be used only if the owner wrote them. No competitor is named or mocked.
+- THE JOKE'S TARGET IS THE SITUATION, or the shop itself. Never a person. A customer may be the person in the setup, unnamed and impossible to identify; the turn lands on what happened or on the shop's own reaction, never on the customer's looks, body, age, intelligence, money, accent or who they are. Names the owner gave are kept: a customer, a neighbor or a public figure the owner named may be named in the skit exactly as the owner did (Candy, Nov 21 2026: keep all input information). Never add a name the owner did not give, and never add anything about a named person that the owner did not say. Naming someone does not make them the target: the turn still lands on what happened or on the shop. The owner's own first name and the staff's may be used only if the owner wrote them. No competitor is named or mocked.
 - NO CLAIMS: nothing about health, results, safety or guarantees.
 - THE OWNER'S OWN WORDS ARE KEPT. If WHAT HAPPENED, WHAT THE OWNER IS PROMOTING or the idea they tapped names a public figure, takes a side, or touches a news story, a hard event or a faith, the skit may say so in the owner's terms: it is their business and their voice. Keep what they said; do not soften it into something else and do not go further than they did. Add no fact, no claim and no opinion about that topic that the owner did not give, and keep the turn on how the business and its customers live it.
 - WHAT YOU MAY NOT BRING IN YOURSELF: a news story, a public figure, a side in an argument, a death, a disaster, violence or religion that is neither in the owner's words nor under TODAY'S TOPICS. Never recall a news story from your own memory; it may be old or wrong. For a topic taken from TODAY'S TOPICS (not from the owner), name no public figure and take no side.
