@@ -524,8 +524,23 @@ export function SmallBusinessFlow({ onStep }: { /** told which screen is showing
           </div>
         ) : step === 'signin' ? (
           <div className="sb-screen">
-            <div className="sb-head"><h1 className="sb-h1">Sign in <b>free</b></h1><p className="sb-sub">It saves your business, so your skits and videos are here tomorrow.</p><ul className="sb-free"><li>Free to sign in</li><li>No card</li><li>First 3 videos free</li></ul></div>
-            <div className="sb-mid"><SignInButtons where="smallbusiness" onBefore={() => rememberReturnTo('/smallbusiness')} onSignedIn={() => go('funny')} /><SignInLegal /></div>
+            <div className="sb-si-top">
+              <div className="sb-si-biz">
+                <span className="pic" aria-hidden="true">{(d.name.trim()[0] || 'S').toUpperCase()}</span>
+                <span className="who"><b>{d.name || 'Your business'}</b><span>{[d.kind, d.city].filter(Boolean).join(' · ') || 'Ready for its first video'}</span></span>
+                <span className="ok" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg></span>
+              </div>
+            </div>
+            <div className="sb-sheet sb-si-sheet">
+              <p className="sb-eyebrow">FIRST 3 VIDEOS FREE</p>
+              <h1 className="sb-h1">Sign in free to <b>save your business</b></h1>
+              <div className="sb-si-in"><SignInButtons where="smallbusiness" onBefore={() => rememberReturnTo('/smallbusiness')} onSignedIn={() => go('funny')} /></div>
+              <ul className="sb-si-trust">
+                <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5" /><path d="M2.5 10h19" /><path d="M4 20L20 4" /></svg>No card needed</li>
+                <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" /><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" /></svg>Your videos stay yours</li>
+              </ul>
+              <SignInLegal />
+            </div>
           </div>
         ) : step === 'funny' ? (
           <div className="sb-screen">
