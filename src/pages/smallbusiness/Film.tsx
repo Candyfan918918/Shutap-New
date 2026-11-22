@@ -3,8 +3,9 @@
 //
 //   ask     "Turn on camera and mic": what each is for, what the phone will
 //           ask, and what to do if it didn't ask
-//   film    the camera, one shot at a time: the instruction, flip, record
-//           (it stops itself at the shot's length), redo
+//   film    the camera, full screen, one shot at a time; the instruction,
+//           flip, record (it stops itself at the shot's length) and redo
+//           sit over it on see-through panels
 //   make    the video being put together while the owner watches
 //   ready   the video, "Save for TikTok, Instagram and other apps"
 //   clips   the phone cannot put it together: the three clips to save
@@ -29,6 +30,8 @@ export type FilmProps = {
   camera: Camera
   length: Length
   onDone: (video: ShopVideo | null) => void
+  /** leave the camera and go back to the lines */
+  onBack: () => void
 }
 
 function fileName(title: string, ext: string, n?: number): string {
@@ -55,7 +58,7 @@ async function give(blob: Blob, name: string): Promise<'shared' | 'saved' | 'can
   return 'saved'
 }
 
-export function Film({ setId, title, actions, texts, camera, length, onDone }: FilmProps) {
+export function Film({ setId, title, actions, texts, camera, length, onDone, onBack }: FilmProps) {
   const [phase, setPhase] = useState<Phase>('ask')
   const [facing, setFacing] = useState<Facing>(defaultFacing(camera))
   const [clips, setClips] = useState<Blob[]>([])
@@ -218,28 +221,34 @@ export function Film({ setId, title, actions, texts, camera, length, onDone }: F
   }
 
   if (phase === 'film') {
+    // Full screen (Candy, Nov 21 2026): the camera fills the phone and
+    // everything else sits over it on see-through panels.
     return (
-      <div className="sb-screen">
-        <div className="sb-head"><h1 className="sb-h1">Film <b>shot {shot + 1} of 3</b></h1></div>
-        <div className="sb-mid top" style={{ gap: 12 }}>
-          <div className="sb-cam">
-            <video ref={live} muted playsInline autoPlay style={{ transform: facing === 'front' ? 'scaleX(-1)' : undefined }} />
-            <div className="sb-cam-top">
-              <div><p className="act">{allIn ? 'All 3 shots are in.' : actions[shot]}</p><p className="tip">{cameraTip(camera, facing)}</p></div>
-              <button type="button" className="sb-flip" aria-label={facing === 'front' ? 'Flip to back camera' : 'Flip to front camera'} disabled={recording} onClick={() => void flip()}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M4 9a8 8 0 0 1 14-3l2 2" /><path d="M20 4v4h-4" /><path d="M20 15a8 8 0 0 1-14 3l-2-2" /><path d="M4 20v-4h4" /></svg>
-              </button>
-            </div>
-            <p className="sb-cam-foot">{recording ? `Recording · ${left}s` : allIn ? 'Ready to make your video' : `Tap the button · up to ${Math.ceil(per)}s`} · Don’t film real customers.</p>
+      <div className="sb-full">
+        <video ref={live} muted playsInline autoPlay style={{ transform: facing === 'front' ? 'scaleX(-1)' : undefined }} />
+        <div className="sb-full-top">
+          <button type="button" className="sb-glass sb-round" aria-label="Back to your lines" disabled={recording} onClick={() => { stopCamera(); onBack() }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M15 5l-7 7 7 7" /></svg>
+          </button>
+          <div className="sb-glass sb-brief">
+            <p className="n">{allIn ? 'All 3 shots are in' : `Shot ${shot + 1} of 3`}</p>
+            {!allIn && <p className="act">{actions[shot]}</p>}
+            <p className="tip">{cameraTip(camera, facing)}</p>
           </div>
-          {note && <p className="sb-err">{note}</p>}
-          <div className="sb-rec-row">
-            <div className="sb-thumbs">{[0, 1, 2].map((k) => <span key={k} className={k < clips.length ? 'on' : ''}>{k < clips.length ? '✓' : k + 1}</span>)}</div>
-            <button type="button" className={`sb-rec${recording ? ' on' : ''}`} aria-label={recording ? 'Stop recording' : 'Start recording'} disabled={allIn} onClick={record} />
-            <button type="button" className="sb-white" style={{ width: 104, minHeight: 48, fontSize: 15 }} disabled={recording || !clips.length} onClick={redo}>Redo</button>
-          </div>
+          <button type="button" className="sb-glass sb-round" aria-label={facing === 'front' ? 'Flip to back camera' : 'Flip to front camera'} disabled={recording} onClick={() => void flip()}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M4 9a8 8 0 0 1 14-3l2 2" /><path d="M20 4v4h-4" /><path d="M20 15a8 8 0 0 1-14 3l-2-2" /><path d="M4 20v-4h4" /></svg>
+          </button>
         </div>
-        <div className="sb-foot"><button type="button" className="sb-btn" disabled={!allIn || recording} onClick={() => void make()}>{allIn ? 'Make my video' : 'Film all 3 shots first'}</button></div>
+        <div className="sb-full-bottom">
+          {note && <p className="sb-glass sb-status" role="alert">{note}</p>}
+          <p className={`sb-glass sb-status${recording ? ' rec' : ''}`}>{recording ? `Recording · ${left}s · Don’t film real customers.` : allIn ? 'Ready to make your video' : `Tap to record · up to ${Math.ceil(per)}s · Don’t film real customers.`}</p>
+          <div className="sb-rec-row">
+            <div className="sb-thumbs sb-glass">{[0, 1, 2].map((k) => <span key={k} className={k < clips.length ? 'on' : ''}>{k < clips.length ? '✓' : k + 1}</span>)}</div>
+            <button type="button" className={`sb-rec${recording ? ' on' : ''}`} aria-label={recording ? 'Stop recording' : 'Start recording'} disabled={allIn} onClick={record} />
+            <button type="button" className="sb-glass sb-redo" disabled={recording || !clips.length} onClick={redo}>Redo</button>
+          </div>
+          {allIn ? <button type="button" className="sb-btn" disabled={recording} onClick={() => void make()}>Make my video</button> : <p className="sb-glass sb-status quiet">Film all 3 shots first</p>}
+        </div>
       </div>
     )
   }

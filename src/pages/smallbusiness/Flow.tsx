@@ -419,6 +419,7 @@ export function SmallBusinessFlow() {
             camera={shop?.camera ?? d.camera}
             length={shop?.length ?? d.length}
             onDone={(v) => { if (v) setMade(true); go('done') }}
+            onBack={() => go('lines')}
           />
         ) : step === 'done' ? (
           <div className="sb-screen">
