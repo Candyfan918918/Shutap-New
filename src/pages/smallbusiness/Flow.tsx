@@ -4,8 +4,9 @@
 // videos look → code word → "Anything fun happen today?" → promote → pick a
 // skit → the lines, one at a time (Funnier, Edit, Looks good).
 //
-// Filming, the finished video, My creations and the week come in the next
-// slices; until then the flow ends on a plain "your lines are saved" screen.
+// Then filming and the finished video (Film.tsx). My creations and the week
+// come in the next slices; until then the flow ends on a short "today's
+// video" screen.
 // The whole page is dark behind the smallbusiness flag (admins see it).
 //
 // What the owner typed before signing up is kept in this browser (the draft)
@@ -24,14 +25,15 @@ import type { ShopMatch } from '@/lib/shops/places.server'
 import type { ShopUsage } from '@/lib/shops/allowance'
 import { PLANS, usd } from '@/lib/pricing'
 import { RisingIcons } from './RisingIcons'
+import { Film } from './Film'
 import './smallbusiness.css'
 
-type Step = 'welcome' | 'type' | 'where' | 'which' | 'confirm' | 'signin' | 'funny' | 'look' | 'code' | 'day' | 'promote' | 'pick' | 'lines' | 'saved' | 'limit' | 'crisis'
+type Step = 'welcome' | 'type' | 'where' | 'which' | 'confirm' | 'signin' | 'funny' | 'look' | 'code' | 'day' | 'promote' | 'pick' | 'lines' | 'film' | 'done' | 'limit' | 'crisis'
 
 /** The order the top-corner icons fill in (15 icons across the whole product;
  *  filming and after take the rest). */
-const PROGRESS: Record<Step, number> = { welcome: 0, type: 1, where: 2, which: 3, confirm: 3, signin: 4, funny: 5, look: 6, code: 7, day: 8, promote: 9, pick: 10, lines: 11, saved: 11, limit: 10, crisis: 8 }
-const BACK: Partial<Record<Step, Step>> = { type: 'welcome', where: 'type', which: 'where', confirm: 'where', signin: 'confirm', funny: 'confirm', look: 'funny', code: 'look', promote: 'day', pick: 'day', lines: 'pick', limit: 'day', crisis: 'day' }
+const PROGRESS: Record<Step, number> = { welcome: 0, type: 1, where: 2, which: 3, confirm: 3, signin: 4, funny: 5, look: 6, code: 7, day: 8, promote: 9, pick: 10, lines: 11, film: 12, done: 13, limit: 10, crisis: 8 }
+const BACK: Partial<Record<Step, Step>> = { type: 'welcome', where: 'type', which: 'where', confirm: 'where', signin: 'confirm', funny: 'confirm', look: 'funny', code: 'look', promote: 'day', pick: 'day', lines: 'pick', film: 'lines', limit: 'day', crisis: 'day' }
 
 type Draft = {
   step: Step
@@ -52,7 +54,7 @@ type Draft = {
 }
 const EMPTY: Draft = { step: 'welcome', business_type: null, name: '', city: '', country: null, website: '', place_id: null, address: null, kind: null, known_for: [], voice: 'warm', length: DEFAULT_LENGTH, camera: 'me', offer: 'freebie', offer_text: '' }
 const DRAFT_KEY = 'shutap_sb_draft'
-const AFTER_SETUP: Step[] = ['day', 'promote', 'pick', 'lines', 'saved', 'limit', 'crisis']
+const AFTER_SETUP: Step[] = ['day', 'promote', 'pick', 'lines', 'film', 'done', 'limit', 'crisis']
 const AFTER_SIGNIN: Step[] = ['funny', 'look', 'code', ...AFTER_SETUP]
 
 function readDraft(): Draft {
@@ -91,6 +93,7 @@ export function SmallBusinessFlow() {
   const [editing, setEditing] = useState<string | null>(null)
   const [options, setOptions] = useState<string[] | null>(null)
   const [tried, setTried] = useState<string[]>([])
+  const [made, setMade] = useState(false)
   const rec = useRef<Recognizer | null>(null)
 
   const step = d.step
@@ -234,7 +237,7 @@ export function SmallBusinessFlow() {
 
   function nextLine() {
     setEditing(null); setOptions(null); setTried([]); setNote(null)
-    if (li + 1 >= lines.length) { go('saved'); return }
+    if (li + 1 >= lines.length) { go('film'); return }
     setLi(li + 1)
   }
 
@@ -398,13 +401,30 @@ export function SmallBusinessFlow() {
                 </div>
               )}
             </div>
-            <div className="sb-foot"><button type="button" className="sb-btn" disabled={editing !== null || !!options} onClick={nextLine}>{li + 1 >= lines.length ? 'Looks good, film it' : 'Looks good'}</button>{li + 1 < lines.length && <button type="button" className="sb-quiet" onClick={() => go('saved')}>Keep the rest, go film</button>}</div>
+            <div className="sb-foot"><button type="button" className="sb-btn" disabled={editing !== null || !!options} onClick={nextLine}>{li + 1 >= lines.length ? 'Looks good, film it' : 'Looks good'}</button>{li + 1 < lines.length && <button type="button" className="sb-quiet" onClick={() => go('film')}>Keep the rest, go film</button>}</div>
           </div>
-        ) : step === 'saved' ? (
+        ) : step === 'film' && set && skit ? (
+          <Film
+            setId={set.id}
+            title={skit.title}
+            actions={skit.shots.map((s) => s.action)}
+            texts={{
+              hook: lines.find((l) => l.key === 'hook')?.text ?? skit.hook,
+              shots: [1, 2, 3].map((n) => lines.find((l) => l.key === `shot${n}`)?.text ?? skit.shots[n - 1]?.text ?? ''),
+              end: lines.find((l) => l.key === 'code')?.text ?? shop?.name ?? '',
+              endSmall: lines.some((l) => l.key === 'code') ? shop?.name ?? '' : shop?.city ?? '',
+              // Free's videos carry the shutap.com mark, like every free download
+              marked: !usage || usage.tier === 'free',
+            }}
+            camera={shop?.camera ?? d.camera}
+            length={shop?.length ?? d.length}
+            onDone={(v) => { if (v) setMade(true); go('done') }}
+          />
+        ) : step === 'done' ? (
           <div className="sb-screen">
-            <div className="sb-head"><h1 className="sb-h1">Your lines <b>are saved</b></h1><p className="sb-sub">Filming is the next part we’re building. Your skit will be waiting here.</p></div>
-            <div className="sb-mid">{skit && lines.map((l) => <div key={l.key} className="sb-card" style={{ cursor: 'default' }}><p className="src">{l.label.toUpperCase()}</p><b style={{ fontWeight: 500 }}>{l.text}</b></div>)}</div>
-            <div className="sb-foot"><button type="button" className="sb-quiet" onClick={() => { setLi(0); go('lines') }}>Change a line</button></div>
+            <div className="sb-head">{made ? <><h1 className="sb-h1">That’s <b>today’s video</b></h1><p className="sb-sub">Post it while it’s fresh. Come back when something else happens.</p></> : <><h1 className="sb-h1">Your skit <b>is saved</b></h1><p className="sb-sub">Film it whenever you’re ready. It will be waiting here today.</p></>}</div>
+            <div className="sb-mid">{skit && <div className="sb-card" style={{ cursor: 'default' }}><p className="src">TODAY’S SKIT</p><b className="title">{skit.title}</b><span style={{ fontSize: 15 }}>{skit.pitch}</span></div>}</div>
+            <div className="sb-foot">{!made && <button type="button" className="sb-btn" onClick={() => go('film')}>Film it now</button>}<button type="button" className="sb-quiet" onClick={() => { setDay(''); setDayMode('idle'); setPromote(''); go('day') }}>Start another skit</button></div>
           </div>
         ) : step === 'limit' ? (
           <div className="sb-screen">

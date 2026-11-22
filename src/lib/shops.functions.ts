@@ -543,3 +543,69 @@ export const labSkitEvals = createServerFn({ method: 'POST' })
     }
     return { total: rows.length, pick, cut, rewrite, unrated, by_version: by }
   })
+
+/* ───────────────────────── the video (slice 5, Nov 21 2026) ─────────────────────────
+   The video is made on the owner's phone from the three clips they filmed;
+   nothing is uploaded in this slice. A finished video is what the plan
+   counts, so making one is recorded here (and where the week is counted
+   from: a save or a send each mark the video as posted). */
+export type ShopVideo = { id: string; title: string; day: string; delete_on: string; saved: boolean; sent_tiktok: boolean; created_at: string }
+const VIDEO_COLS = 'id, title, day, delete_on, saved, sent_tiktok, created_at'
+
+export type RecordVideoResult = { ok: true; video: ShopVideo; usage: ShopUsage } | { ok: false; reason: 'off' | 'not_found' | 'failed' }
+
+/** A video was made from this skit. Counts one video on the owner's plan.
+ *  Making the same skit's video again the same day (a re-film, another text
+ *  style) is the same video and is not counted twice. */
+export const recordMyVideo = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ set_id: z.string().uuid(), seconds: z.number().min(0).max(120), ext: z.enum(['mp4', 'webm']), audio: z.boolean(), facing: z.enum(['front', 'back']) }).parse(d))
+  .handler(async ({ data, context }): Promise<RecordVideoResult> => {
+    if (isAnon(context) || !(await shopsOpen(context))) return { ok: false, reason: 'off' }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const [mine, shop] = await Promise.all([pickedSkit(admin, userId, data.set_id), myShopRow(admin, userId)])
+    if (!mine || !shop) return { ok: false, reason: 'not_found' }
+    const { today, kitTier } = await import('./bits/tier.server')
+    const { deleteDay } = await import('./shops/shop')
+    const day = today().day
+    const { data: had } = await admin.from('shop_videos').select(VIDEO_COLS).eq('user_id', userId).eq('skit_set_id', data.set_id).eq('day', day).maybeSingle()
+    let row = had
+    if (!row) {
+      const tier = await kitTier(admin, userId)
+      const ins = await admin.from('shop_videos').insert({ user_id: userId, shop_id: shop.id, skit_set_id: data.set_id, title: mine.skit.title.slice(0, 120), day, delete_on: deleteDay(day), tier }).select(VIDEO_COLS).single()
+      if (ins.error || !ins.data) { console.error('[shops] video insert failed', ins.error?.message); return { ok: false, reason: 'failed' } }
+      row = ins.data
+    }
+    await track(admin, userId, 'shop_video_made', { set_id: data.set_id, video_id: row.id, again: !!had, seconds: data.seconds, ext: data.ext, audio: data.audio, facing: data.facing, length: shop.length, camera: shop.camera })
+    return { ok: true, video: row as ShopVideo, usage: await usageOf(admin, userId) }
+  })
+
+/** The owner saved the video to their phone (or shared it from the share
+ *  sheet). Shutap cannot see whether it was posted: the week's count trusts
+ *  the owner. */
+export const markMyVideo = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ video_id: z.string().uuid(), how: z.enum(['saved', 'shared']) }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: boolean }> => {
+    if (isAnon(context) || !(await shopsOpen(context))) return { ok: false }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: row, error } = await admin.from('shop_videos').update({ saved: true }).eq('id', data.video_id).eq('user_id', userId).select('id').maybeSingle()
+    if (error || !row) return { ok: false }
+    await track(admin, userId, 'shop_video_saved', { video_id: data.video_id, how: data.how })
+    return { ok: true }
+  })
+
+/** Something on the film screen that only the browser knows about (the
+ *  camera was refused, the phone could not put the video together): counted
+ *  so the admin funnel shows where owners stop. */
+export const noteFilmProblem = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ what: z.enum(['camera_blocked', 'no_camera', 'cannot_record', 'cannot_compose', 'compose_failed', 'clips_saved']), detail: z.string().max(200).optional() }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: boolean }> => {
+    if (isAnon(context)) return { ok: false }
+    const { userId } = context as { userId: string }
+    await track(await adminDb(), userId, 'shop_film_problem', { what: data.what, detail: data.detail ?? null })
+    return { ok: true }
+  })
