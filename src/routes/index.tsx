@@ -17,28 +17,39 @@ const HOME_OG_DESCRIPTION = HOME_DESCRIPTION
 
 const HOME_URL = `${SITE_URL}/`
 
+// Nov 21 2026: once Shutap for small business is open to everyone (its flag
+// on), the homepage leads with it, and so do its title and description.
+const SB_TITLE = "Shutap for small business · Funny videos about your business, filmed on your phone"
+const SB_DESCRIPTION =
+  "The creative team your small business doesn’t have. Tell Shutap one thing that happened today, pick one of three funny skits about your business, and film it shot by shot on your phone. First 3 videos free."
+
 export const Route = createFileRoute('/')({
   headers: () => ({
     'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400',
   }),
   // Nov 6 2026: the homepage presents the four product lines; the write box
   // lives on /bits (old box links are forwarded there by ProductHome).
-  head: () => ({
+  head: ({ loaderData }) => {
+    const sb = Boolean(loaderData?.sb)
+    const title = sb ? SB_TITLE : HOME_TITLE
+    const description = sb ? SB_DESCRIPTION : HOME_DESCRIPTION
+    return {
     meta: [
-      { title: HOME_TITLE },
-      { name: "description", content: HOME_DESCRIPTION },
-      { property: "og:title", content: "Shutap Humor Amplifier Lab" },
-      { property: "og:description", content: HOME_OG_DESCRIPTION },
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: sb ? "Shutap for small business" : "Shutap Humor Amplifier Lab" },
+      { property: "og:description", content: sb ? SB_DESCRIPTION : HOME_OG_DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: HOME_URL },
       ...ogImageMeta(),
-      { name: "twitter:title", content: "Shutap Humor Amplifier Lab" },
-      { name: "twitter:description", content: HOME_DESCRIPTION },
+      { name: "twitter:title", content: sb ? "Shutap for small business" : "Shutap Humor Amplifier Lab" },
+      { name: "twitter:description", content: description },
     ],
     links: [
       { rel: "canonical", href: HOME_URL },
     ],
-  }),
+    }
+  },
 
   // Nov 21 2026: the small-business homepage shows once /smallbusiness is
   // open (its flag on); admins see it earlier, checked in the browser.
