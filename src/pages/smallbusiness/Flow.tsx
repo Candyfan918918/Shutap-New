@@ -67,7 +67,7 @@ function readDraft(): Draft {
 
 const ev = (name: string, props: Record<string, unknown> = {}) => { void trackEvent(name, { product: 'smallbusiness', ...props }) }
 
-type Recognizer = { start: () => void; stop: () => void; onresult: ((e: any) => void) | null; onend: (() => void) | null; onerror: (() => void) | null; lang: string; interimResults: boolean; continuous: boolean }
+type Recognizer = { start: () => void; stop: () => void; onresult: ((e: any) => void) | null; onend: (() => void) | null; onerror: ((e: any) => void) | null; onaudiostart: (() => void) | null; onsoundstart: (() => void) | null; onsoundend: (() => void) | null; onspeechstart: (() => void) | null; onspeechend: (() => void) | null; lang: string; interimResults: boolean; continuous: boolean }
 function recognizer(): Recognizer | null {
   const w = window as any
   const R = w.SpeechRecognition ?? w.webkitSpeechRecognition
@@ -86,6 +86,10 @@ export function SmallBusinessFlow() {
   const [chip, setChip] = useState('')
   const [day, setDay] = useState('')
   const [dayMode, setDayMode] = useState<'idle' | 'listening' | 'type' | 'done'>('idle')
+  const [live, setLive] = useState('')
+  const [loud, setLoud] = useState(false)
+  const [micOn, setMicOn] = useState(false)
+  const micStop = useRef(false)
   const [promote, setPromote] = useState('')
   const [set, setSet] = useState<SkitSet | null>(null)
   const [usage, setUsage] = useState<ShopUsage | null>(null)
@@ -182,17 +186,55 @@ export function SmallBusinessFlow() {
     go('day')
   }
 
+  // The phone's own speech-to-text. On iPhone it stops itself after a short
+  // quiet, so while the owner has not tapped stop we start it again and keep
+  // what was already heard. The words show as they are heard, and the bars
+  // move only when the phone reports sound: that is the proof it works.
   function mic() {
-    if (dayMode === 'listening') { rec.current?.stop(); return }
-    const r = recognizer()
-    if (!r) { setDayMode('type'); ev('sb_mic', { how: 'unsupported' }); return }
-    rec.current = r
-    r.lang = 'en-US'; r.interimResults = false; r.continuous = false
-    let heard = ''
-    r.onresult = (e) => { heard = Array.from(e.results as ArrayLike<any>).map((x: any) => x[0]?.transcript ?? '').join(' ').trim() }
-    r.onerror = () => { setDayMode('type'); setNote('Your mic is off. Turn it on, or just type what happened.'); ev('sb_mic', { how: 'blocked' }) }
-    r.onend = () => { if (heard) { setDay(heard.slice(0, 600)); setDayMode('done'); ev('sb_mic', { how: 'heard' }) } else setDayMode((m) => (m === 'listening' ? 'idle' : m)) }
-    try { r.start(); setDayMode('listening'); setNote(null) } catch { setDayMode('type') }
+    if (dayMode === 'listening') { micStop.current = true; rec.current?.stop(); return }
+    micStop.current = false
+    const kept: string[] = []
+    let tries = 0
+    let blocked = false
+    const began = Date.now()
+    const finish = () => {
+      const heard = kept.join(' ').replace(/\s+/g, ' ').trim()
+      setLive(''); setLoud(false); setMicOn(false)
+      if (heard) { setDay(heard.slice(0, 600)); setDayMode('done'); ev('sb_mic', { how: 'heard' }) }
+      else { setDayMode((m) => (m === 'listening' ? 'idle' : m)); setNote('I didn’t hear anything. Tap and try again, or type it.'); ev('sb_mic', { how: 'silent' }) }
+    }
+    const listen = () => {
+      const r = recognizer()
+      if (!r) { setDayMode('type'); ev('sb_mic', { how: 'unsupported' }); return }
+      rec.current = r
+      r.lang = 'en-US'; r.interimResults = true; r.continuous = true
+      let done = ''
+      let part = ''
+      r.onaudiostart = () => setMicOn(true)
+      r.onsoundstart = () => setLoud(true)
+      r.onspeechstart = () => setLoud(true)
+      r.onsoundend = () => setLoud(false)
+      r.onspeechend = () => setLoud(false)
+      r.onresult = (e) => {
+        done = ''; part = ''
+        for (const x of Array.from(e.results as ArrayLike<any>)) { const t = x[0]?.transcript ?? ''; if (x.isFinal) done += ' ' + t; else part += ' ' + t }
+        setMicOn(true); setLoud(true)
+        setLive([...kept, done, part].join(' ').replace(/\s+/g, ' ').trim())
+      }
+      r.onerror = (e) => {
+        const why = String(e?.error ?? '')
+        if (why === 'not-allowed' || why === 'service-not-allowed' || why === 'audio-capture') { blocked = true; micStop.current = true; setLive(''); setLoud(false); setMicOn(false); setDayMode('type'); setNote('Your mic is off. Turn it on, or just type what happened.'); ev('sb_mic', { how: 'blocked', why }) }
+      }
+      r.onend = () => {
+        if (blocked) return
+        const got = (done + ' ' + part).trim()
+        if (got) kept.push(got)
+        if (!micStop.current && tries < 8 && Date.now() - began < 60000) { tries += 1; try { listen(); return } catch { /* fall through */ } }
+        finish()
+      }
+      r.start()
+    }
+    try { listen(); setDayMode('listening'); setNote(null); setLive('') } catch { setDayMode('type') }
   }
 
   async function write(again?: string) {
@@ -350,7 +392,9 @@ export function SmallBusinessFlow() {
               <>
                 <div className="sb-mid" style={{ alignItems: 'center' }}>
                   <div className="sb-mic"><button type="button" className={dayMode === 'listening' ? 'on' : ''} aria-label={dayMode === 'listening' ? 'Stop listening' : 'Tap and tell me what happened'} onClick={mic}><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0" /><path d="M12 18v3" /></svg></button></div>
-                  <p style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>{dayMode === 'listening' ? 'I’m listening… tap when you’re done' : 'Tap and tell me'}</p>
+                  {dayMode === 'listening' && <div className={'sb-wave' + (loud ? ' loud' : '') + (micOn ? ' live' : '')} aria-hidden>{[0, 1, 2, 3, 4, 5, 6].map((i) => <i key={i} style={{ animationDelay: `${i * 0.09}s` }} />)}</div>}
+                  <p style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>{dayMode !== 'listening' ? 'Tap and tell me' : loud ? 'I hear you… tap when you’re done' : micOn ? 'Mic is on. Go ahead.' : 'Turning on your mic…'}</p>
+                  {dayMode === 'listening' && live && <p className="sb-heard" aria-live="polite">{live}</p>}
                   {note && <p className="sb-err">{note}</p>}
                 </div>
                 <div className="sb-foot"><div className="sb-grid2"><button type="button" className="sb-white" onClick={() => setDayMode('type')}>Type it</button><button type="button" className="sb-white" onClick={() => { setDay(''); setDayMode('idle'); go('promote') }}>Surprise me</button></div></div>
