@@ -23,7 +23,31 @@ export type VideoTexts = {
   marked: boolean
 }
 
-export type ComposeResult = { blob: Blob; ext: 'mp4' | 'webm'; seconds: number; audio: boolean }
+/** What happened while the video was made: sent with the event so a video
+ *  that came out wrong on a real phone can be understood afterwards. */
+export type ComposeNotes = { tries: number; want: number; made: number | null; chunks: number; bytes: number; clips: number[]; stalls: number; errors: string[] }
+export type ComposeResult = { blob: Blob; ext: 'mp4' | 'webm'; seconds: number; audio: boolean; notes: ComposeNotes }
+
+/** How long a made video really is, by opening it. Null when the browser
+ *  will not say (some report no length for a file they just recorded). */
+export async function videoSeconds(blob: Blob): Promise<number | null> {
+  const v = document.createElement('video')
+  const url = URL.createObjectURL(blob)
+  try {
+    v.preload = 'metadata'; v.muted = true; v.playsInline = true
+    v.src = url
+    await once(v, 'loadedmetadata', 5000)
+    if (!Number.isFinite(v.duration)) {
+      // a just-recorded file: seeking far ahead makes the browser work it out
+      v.currentTime = 1e7
+      await once(v, 'durationchange', 3000).catch(() => {})
+    }
+    return Number.isFinite(v.duration) && v.duration > 0 ? v.duration : null
+  } catch { return null } finally { v.removeAttribute('src'); try { v.load() } catch { /* noop */ } URL.revokeObjectURL(url) }
+}
+
+/** A made video this much shorter than its clips is cut off, not rounded. */
+export const SHORT_BY_SECONDS = 1.2
 
 const MP4 = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2', 'video/mp4;codecs=avc1,mp4a', 'video/mp4']
 const WEBM = ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm']
@@ -114,6 +138,21 @@ function once(el: HTMLMediaElement, ok: string, ms: number): Promise<void> {
  *  record a canvas that is on screen. `host` is where the hidden clip
  *  players are placed. */
 export async function composeVideo(opts: { clips: Blob[]; texts: VideoTexts; canvas: HTMLCanvasElement; host: HTMLElement; onProgress?: (p: number) => void }): Promise<ComposeResult> {
+  // A video that came out cut short is never handed over: it is made once
+  // more, and if it is short again the owner is told (they keep the clips).
+  let last: ComposeResult | null = null
+  for (let n = 1; n <= 2; n++) {
+    const out = await composeOnce(opts)
+    out.notes.tries = n
+    out.notes.made = await videoSeconds(out.blob)
+    last = out
+    if (out.notes.made === null || out.notes.made >= out.notes.want - SHORT_BY_SECONDS) return out
+    opts.onProgress?.(0)
+  }
+  throw new Error(`cut short: ${JSON.stringify(last?.notes)}`.slice(0, 200))
+}
+
+async function composeOnce(opts: { clips: Blob[]; texts: VideoTexts; canvas: HTMLCanvasElement; host: HTMLElement; onProgress?: (p: number) => void }): Promise<ComposeResult> {
   const format = pickMime()
   if (!format || !canCompose()) throw new Error('this phone cannot put the video together')
   const { clips, texts, canvas, host } = opts
@@ -159,8 +198,18 @@ export async function composeVideo(opts: { clips: Blob[]; texts: VideoTexts; can
   if (audioTrack) stream.addTrack(audioTrack)
   const recorder = new MediaRecorder(stream, { mimeType: format.mime, videoBitsPerSecond: 4_000_000, audioBitsPerSecond: 128_000 })
   const chunks: Blob[] = []
-  recorder.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data) }
+  const errors: string[] = []
+  let stalls = 0
+  let asked = false
+  let lastData: () => void = () => {}
+  const gotLast = new Promise<void>((resolve) => { lastData = resolve })
+  recorder.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); if (asked) lastData() }
+  recorder.onerror = (e) => { errors.push(String((e as any)?.error?.name ?? 'recorder error')) }
   const stopped = new Promise<void>((resolve) => { recorder.onstop = () => resolve() })
+  // some phones only pass a frame on when the picture changed: one corner
+  // pixel flips every frame so a held picture still counts as a new frame
+  let flip = false
+  const nudge = () => { flip = !flip; ctx.fillStyle = flip ? '#1d1a22' : '#1c1a22'; ctx.fillRect(0, 0, 2, 2) }
 
   const cleanup = () => {
     for (const v of players) { try { v.pause() } catch { /* noop */ } v.remove() }
@@ -170,17 +219,26 @@ export async function composeVideo(opts: { clips: Blob[]; texts: VideoTexts; can
   }
 
   const t0 = performance.now()
+  let want = 0
+  let clipSeconds: number[] = []
   try {
     for (const v of players) if (v.readyState < 2) await once(v, 'loadeddata', 8000)
     const lengths = players.map((v) => (Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0))
     const total = lengths.reduce((a, b) => a + b, 0) + END_CARD_SECONDS
+    want = total
+    clipSeconds = lengths.map((x) => Math.round(x * 10) / 10)
     let done = 0
-    recorder.start(1000)
+    // one piece at the end: pieces handed over every second went missing on
+    // an iPhone (Nov 21 2026: a 9-second video came out 4 seconds long)
+    recorder.start()
     for (let i = 0; i < players.length; i++) {
       const v = players[i]!
       await v.play()
       await new Promise<void>((resolve, reject) => {
         let raf = 0
+        let at = -1
+        let moved = performance.now()
+        let nudged = false
         const fail = () => { cancelAnimationFrame(raf); reject(new Error('the clip stopped')) }
         v.addEventListener('error', fail, { once: true })
         const tick = () => {
@@ -188,8 +246,15 @@ export async function composeVideo(opts: { clips: Blob[]; texts: VideoTexts; can
           if (crop.sw && crop.sh) ctx.drawImage(v, crop.sx, crop.sy, crop.sw, crop.sh, 0, 0, VIDEO_W, VIDEO_H)
           drawWords(ctx, lineAt(i, v.currentTime, lengths[i] || v.duration || 5, texts), VIDEO_H * 0.72)
           if (texts.marked) drawMark(ctx)
+          nudge()
           opts.onProgress?.(Math.min(0.99, (done + v.currentTime) / (total || 1)))
           if (v.ended) { v.removeEventListener('error', fail); resolve(); return }
+          // a clip that stops moving: push it once, then give up on it so the
+          // owner is never left watching a frozen screen
+          const now = performance.now()
+          if (v.currentTime !== at) { at = v.currentTime; moved = now; nudged = false }
+          else if (now - moved > 1500 && !nudged) { nudged = true; stalls += 1; void v.play().catch(() => {}) }
+          else if (now - moved > 5000) { errors.push(`clip ${i + 1} froze at ${at.toFixed(1)}`); v.removeEventListener('error', fail); reject(new Error(`clip ${i + 1} froze`)); return }
           raf = requestAnimationFrame(tick)
         }
         tick()
@@ -202,6 +267,7 @@ export async function composeVideo(opts: { clips: Blob[]; texts: VideoTexts; can
       const tick = () => {
         drawEndCard(ctx, texts)
         if (texts.marked) drawMark(ctx)
+        nudge()
         const t = (performance.now() - endStart) / 1000
         opts.onProgress?.(Math.min(0.99, (done + t) / (total || 1)))
         if (t >= END_CARD_SECONDS) { resolve(); return }
@@ -209,8 +275,11 @@ export async function composeVideo(opts: { clips: Blob[]; texts: VideoTexts; can
       }
       tick()
     })
+    asked = true
     recorder.stop()
     await stopped
+    // the last piece can arrive just after the stop on some phones
+    if (!chunks.length) await Promise.race([gotLast, new Promise((r) => setTimeout(r, 1500))])
   } catch (e) {
     try { if (recorder.state !== 'inactive') recorder.stop() } catch { /* noop */ }
     cleanup()
@@ -220,5 +289,5 @@ export async function composeVideo(opts: { clips: Blob[]; texts: VideoTexts; can
   opts.onProgress?.(1)
   const blob = new Blob(chunks, { type: format.mime.split(';')[0] })
   if (!blob.size) throw new Error('the recording came out empty')
-  return { blob, ext: format.ext, seconds: Math.round((performance.now() - t0) / 100) / 10, audio: !!audioTrack }
+  return { blob, ext: format.ext, seconds: Math.round((performance.now() - t0) / 100) / 10, audio: !!audioTrack, notes: { tries: 1, want: Math.round(want * 10) / 10, made: null, chunks: chunks.length, bytes: blob.size, clips: clipSeconds, stalls, errors } }
 }
