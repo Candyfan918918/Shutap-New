@@ -27,7 +27,7 @@ const entry: FunniestEntry = {
     {
       name: "Destiny Clayton",
       role: "Manager of 3 Point Coffee + Event Space, Stanberry, Missouri",
-      why: "KSHB 41's Charlie Keegan reported in June 2025 that her shop's 25-second secret-order clip got more than 7.6 million views in 10 days, in a town of about 1,150.",
+      why: "KSHB 41's Charlie Keegan reported in 2025 that her shop's 25-second secret-order clip got more than 7.6 million views in 10 days, in a town of about 1,150.",
     },
   ],
   style: [
@@ -71,7 +71,7 @@ const entry: FunniestEntry = {
     {
       name: "Say one order, pass another",
       whatTheyDid:
-        "At 3 Point Coffee, a regular orders plain black coffee out loud while sliding a note across the counter for a pink lotus drink. Manager Destiny Clayton told KSHB the idea was \"Let's create some funny videos that people want to see.\"",
+        "At 3 Point Coffee, a regular orders plain black coffee out loud while sliding a note across the counter for a pink lotus drink. Manager Destiny Clayton told KQTV the idea was \"Let's create some funny videos that people want to see.\"",
       whyItWorks:
         "The gap between what someone says and what they really want is an instant two-beat joke, and it makes the menu's most colorful drink the star. The tone is warm: the viewer is in on the secret with the customer, not laughing at him.",
       example:
@@ -150,6 +150,13 @@ const entry: FunniestEntry = {
       accessed: "2026-11-22",
       kind: "reference",
     },
+    {
+      label: "KQTV via KESQ (CNN regional): Small-town coffee shop goes viral for coffee order video",
+      url: "https://kesq.com/cnn-regional/2025/05/28/small-town-coffee-shop-goes-viral-for-coffee-order-video/",
+      publisher: "KQTV",
+      accessed: "2026-11-22",
+      kind: "quote-check",
+    },
   ],
   faq: [
     {
@@ -158,7 +165,7 @@ const entry: FunniestEntry = {
     },
     {
       q: "Who are other funny coffee shop owners on TikTok?",
-      a: "Josh Rashid of Coffee Milano Cafe in Middleborough, Massachusetts, whose free-coffee dance video passed nine million views, per Fresh Cup in February 2025; and 3 Point Coffee in Stanberry, Missouri, where manager Destiny Clayton's secret-order clip passed 7.6 million views in 10 days, per KSHB 41 in June 2025.",
+      a: "Josh Rashid of Coffee Milano Cafe in Middleborough, Massachusetts, whose free-coffee dance video passed nine million views, per Fresh Cup in February 2025; and 3 Point Coffee in Stanberry, Missouri, where manager Destiny Clayton's secret-order clip passed 7.6 million views in 10 days, per KSHB 41 in 2025.",
     },
     {
       q: "What kind of humor does Judy Wang use?",
