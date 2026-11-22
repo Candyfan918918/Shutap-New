@@ -92,7 +92,9 @@ textarea.sb-input { font-size: 20px; line-height: 1.4; border-radius: 24px; padd
 .sb-brief { flex: 1; min-width: 0; border-radius: 22px; padding: 12px 16px 14px; }
 .sb-brief p { margin: 0; }
 .sb-brief .n { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #f7b6cf; }
-.sb-brief .act { margin-top: 4px; font-size: 17px; font-weight: 600; line-height: 1.35; }
+.sb-brief .say { margin-top: 6px; font-size: 24px; font-weight: 800; line-height: 1.22; letter-spacing: -.01em; }
+.sb-brief .say span { display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #f7b6cf; margin-bottom: 2px; }
+.sb-brief .act { margin-top: 8px; font-size: 14px; font-weight: 500; line-height: 1.35; color: rgba(255, 255, 255, .86); }
 .sb-brief .tip { margin-top: 6px; font-size: 13px; line-height: 1.4; color: rgba(255, 255, 255, .82); }
 .sb-full-bottom { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 20px calc(env(safe-area-inset-bottom, 0px) + 32px); display: flex; flex-direction: column; gap: 14px; }
 .sb-status { margin: 0; align-self: center; border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 500; text-align: center; }

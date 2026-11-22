@@ -233,8 +233,9 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
           </button>
           <div className="sb-glass sb-brief">
             <p className="n">{allIn ? 'All 3 shots are in' : `Shot ${shot + 1} of 3`}</p>
+            {!allIn && (shot === 0 && texts.hook ? <p className="say"><span>Say</span>{texts.hook} {texts.shots[0]}</p> : texts.shots[shot] ? <p className="say"><span>Say</span>{texts.shots[shot]}</p> : null)}
             {!allIn && <p className="act">{actions[shot]}</p>}
-            <p className="tip">{cameraTip(camera, facing)}</p>
+            {!recording && <p className="tip">{cameraTip(camera, facing)}</p>}
           </div>
           <button type="button" className="sb-glass sb-round" aria-label={facing === 'front' ? 'Flip to back camera' : 'Flip to front camera'} disabled={recording} onClick={() => void flip()}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M4 9a8 8 0 0 1 14-3l2 2" /><path d="M20 4v4h-4" /><path d="M20 15a8 8 0 0 1-14 3l-2-2" /><path d="M4 20v-4h4" /></svg>
