@@ -244,7 +244,11 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
           <p className={`sb-glass sb-status${recording ? ' rec' : ''}`}>{recording ? `Recording · ${left}s · Don’t film real customers.` : allIn ? 'Ready to make your video' : `Tap to record · up to ${Math.ceil(per)}s · Don’t film real customers.`}</p>
           <div className="sb-rec-row">
             <div className="sb-thumbs sb-glass">{[0, 1, 2].map((k) => <span key={k} className={k < clips.length ? 'on' : ''}>{k < clips.length ? '✓' : k + 1}</span>)}</div>
-            <button type="button" className={`sb-rec${recording ? ' on' : ''}`} aria-label={recording ? 'Stop recording' : 'Start recording'} disabled={allIn} onClick={record} />
+            <div className="sb-rec-wrap">
+              <button type="button" className={`sb-rec${recording ? ' on' : ''}`} aria-label={recording ? 'Stop recording' : 'Start recording'} disabled={allIn} onClick={record} />
+              {/* the countdown: a thin pale-pink ring on the record button's own rim, no bigger than the button */}
+              {recording && <svg className="sb-count" viewBox="0 0 76 76" aria-hidden><circle cx="38" cy="38" r="35" style={{ animationDuration: `${per}s` }} /></svg>}
+            </div>
             <button type="button" className="sb-glass sb-redo" disabled={recording || !clips.length} onClick={redo}>Redo</button>
           </div>
           {allIn ? <button type="button" className="sb-btn" disabled={recording} onClick={() => void make()}>Make my video</button> : <p className="sb-glass sb-status quiet">Film all 3 shots first</p>}
