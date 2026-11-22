@@ -9,6 +9,9 @@ import { productFor } from '@/lib/seo/product-for'
 import { ToastsEmbed } from '@/components/seo/ToastsEmbed'
 import { FUNNIEST_WRITER } from '@/lib/seo/writer-copy'
 import { WriterBar } from '@/components/seo/WriterBar'
+import { SmallBusinessEmbed } from '@/components/seo/SmallBusinessEmbed'
+import { isSmallBusinessContent } from '@/lib/smallbusiness/is-small-business'
+import { useSmallBusinessOpen } from '@/hooks/use-smallbusiness-open'
 import type { Crumb } from '@/lib/seo/breadcrumbs'
 import type { FunniestEntry, FunniestSource } from '@/lib/seo/funniest'
 
@@ -69,6 +72,10 @@ export function FunniestPage({
   const product = productFor(entry)
   const realtor = product.kind === 'realtors'
   const toasts = product.kind === 'toasts' ? product : null
+  // a funniest page about small business gets the business-name box once /smallbusiness is open (Nov 21 2026)
+  const sbPage = !realtor && !toasts && isSmallBusinessContent(entry.slug, entry.h1)
+  const sbOpen = useSmallBusinessOpen()
+  const sb = sbPage && !!sbOpen
   const basis = entry.sources.filter((s) => s.kind === 'ranking' || s.kind === 'profile').slice(0, 3)
   return (
     <main
@@ -139,7 +146,7 @@ export function FunniestPage({
         <p style={{ fontSize: 17, margin: '0 0 32px' }}>{entry.capsule}</p>
 
         <div style={{ margin: '0 0 44px' }}>
-          {toasts ? <ToastsEmbed page={`funniest/${entry.slug}`} target={toasts} /> : realtor ? <RealtorEmbed page={`funniest/${entry.slug}`} /> : <BitSurface embed={{ page: `funniest/${entry.slug}`, ...FUNNIEST_WRITER, drive: true, slim: true }} />}
+          {toasts ? <ToastsEmbed page={`funniest/${entry.slug}`} target={toasts} /> : realtor ? <RealtorEmbed page={`funniest/${entry.slug}`} /> : (sbPage ? <SmallBusinessEmbed page={`funniest/${entry.slug}`} fallback={<BitSurface embed={{ page: `funniest/${entry.slug}`, ...FUNNIEST_WRITER, drive: true, slim: true }} />} /> : <BitSurface embed={{ page: `funniest/${entry.slug}`, ...FUNNIEST_WRITER, drive: true, slim: true }} />)}
         </div>
 
         <section style={{ marginBottom: 40 }}>
@@ -237,8 +244,8 @@ export function FunniestPage({
           </section>
         )}
 
-        <TryItBox page={`funniest/${entry.slug}`} heading={toasts ? `Try these techniques in your ${toasts.occasionLabel}` : realtor ? 'Try these techniques on your listing' : 'Try these techniques on your own bit'} anchor realtor={realtor} toast={!!toasts} />
-        <WriterBar page={`funniest/${entry.slug}`} label={toasts ? 'Your stories. Your toast, funnier.' : realtor ? 'Paste a listing. Get the video script and posts.' : FUNNIEST_WRITER.heading} realtor={realtor} toast={!!toasts} />
+        <TryItBox page={`funniest/${entry.slug}`} heading={toasts ? `Try these techniques in your ${toasts.occasionLabel}` : realtor ? 'Try these techniques on your listing' : sb ? 'Try these techniques on your business' : 'Try these techniques on your own bit'} anchor realtor={realtor} toast={!!toasts} smallbusiness={sb} />
+        <WriterBar page={`funniest/${entry.slug}`} label={toasts ? 'Your stories. Your toast, funnier.' : realtor ? 'Paste a listing. Get the video script and posts.' : sb ? 'A funny video about your business, filmed on your phone.' : FUNNIEST_WRITER.heading} realtor={realtor} toast={!!toasts} smallbusiness={sb} />
 
         <section style={{ marginBottom: 32 }}>
           <h2 style={{ ...h2Style, fontSize: 18 }}>Sources</h2>

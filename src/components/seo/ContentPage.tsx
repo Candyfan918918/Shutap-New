@@ -12,6 +12,9 @@ import { BitSurface } from '@/pages/home/bit/BitSurface'
 import { RealtorEmbed } from '@/components/seo/RealtorEmbed'
 import { isRealtorContent } from '@/lib/realtors/is-realtor'
 import { WriterBar } from '@/components/seo/WriterBar'
+import { SmallBusinessEmbed } from '@/components/seo/SmallBusinessEmbed'
+import { isSmallBusinessContent } from '@/lib/smallbusiness/is-small-business'
+import { useSmallBusinessOpen } from '@/hooks/use-smallbusiness-open'
 import { WhoDoesWhat } from '@/components/site/WhoDoesWhat'
 import type { WriterCopy } from '@/lib/seo/writer-copy'
 
@@ -64,6 +67,11 @@ export function ContentPage({
   // a page about listings, open houses, agents or loan officers gets the
   // realtor box; its CTAs point at the kit too
   const realtor = !!tryIt && isRealtorContent(tryIt, h1, capsule)
+  // a page about small business content gets the business-name box once
+  // /smallbusiness is open (Nov 21 2026); its CTAs point there too
+  const sbPage = !!tryIt && !realtor && isSmallBusinessContent(tryIt, h1, capsule)
+  const sbOpen = useSmallBusinessOpen()
+  const sb = sbPage && !!sbOpen
   return (
     <main
       style={{
@@ -124,11 +132,15 @@ export function ContentPage({
         )}
 
         {tryIt && realtor && <RealtorEmbed page={tryIt} />}
-        {tryIt && !realtor && (
+        {tryIt && !realtor && (sbPage ? (
+          <SmallBusinessEmbed page={tryIt} fallback={<div style={{ margin: hero ? "0 0 32px" : "0 0 44px" }}>
+            <BitSurface embed={{ page: tryIt, preset, bare: !!hero, drive: true, slim: true, ...(writer ?? { heading: "Try it on what you want to say.", sub: "Tell it your way. Shutap cuts it into a bit, your words word for word, AI drafting only the lines you leave empty; tap funnier where you’re stuck. Get the video, stand-up, sketch and skit. Free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
+          </div>} />
+        ) : (
           <div style={{ margin: hero ? "0 0 32px" : "0 0 44px" }}>
             <BitSurface embed={{ page: tryIt, preset, bare: !!hero, drive: true, slim: true, ...(writer ?? { heading: "Try it on what you want to say.", sub: "Tell it your way. Shutap cuts it into a bit, your words word for word, AI drafting only the lines you leave empty; tap funnier where you’re stuck. Get the video, stand-up, sketch and skit. Free.", placeholder: "what happened, the way you'd tell your funniest friend…" }) }} />
           </div>
-        )}
+        ))}
 
         {sample && <SampleBit sample={sample} />}
 
@@ -256,8 +268,8 @@ export function ContentPage({
           </nav>
         )}
 
-        {tryIt && !hero && <TryItBox page={tryIt} preset={preset} anchor heading={realtor ? "Paste your listing above" : (writer?.heading ?? "Write yours above")} realtor={realtor} />}
-        {tryIt && <WriterBar page={tryIt} label={realtor ? "Paste a listing. Get the video script and posts." : (writer?.heading ?? "Try it on what you want to say.")} realtor={realtor} />}
+        {tryIt && !hero && <TryItBox page={tryIt} preset={preset} anchor heading={realtor ? "Paste your listing above" : sb ? "Your business, funnier" : (writer?.heading ?? "Write yours above")} realtor={realtor} smallbusiness={sb} />}
+        {tryIt && <WriterBar page={tryIt} label={realtor ? "Paste a listing. Get the video script and posts." : sb ? "A funny video about your business, filmed on your phone." : (writer?.heading ?? "Try it on what you want to say.")} realtor={realtor} smallbusiness={sb} />}
 
         <p style={{ marginTop: hero ? 24 : 40, fontSize: 15 }}>
           <Link
