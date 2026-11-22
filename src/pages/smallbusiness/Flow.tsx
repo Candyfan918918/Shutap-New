@@ -18,22 +18,22 @@ import { rememberReturnTo } from '@/lib/auth'
 import { trackEvent } from '@/lib/tracking'
 import { anonSessionId } from '@/pages/home/joke/jokeClient'
 import { LoadingDots, SignInButtons, SignInLegal } from '@/components/signin/SignIn'
-import { findMyShop, getMyShop, getMySkits, keepSkitLine, pickMyShop, pickMySkit, saveMyShop, touchMySkitLine, writeMySkits, type Shop, type SkitSet } from '@/lib/shops.functions'
+import { deleteMyVideo, findMyShop, getMyCreations, getMyShop, getMySkits, keepSkitLine, pickMyShop, pickMySkit, saveMyShop, touchMySkitLine, writeMySkits, type Creation, type Shop, type SkitSet } from '@/lib/shops.functions'
 import { BUSINESS_TYPES, CAMERAS, COUNTRIES, DEFAULT_LENGTH, LENGTHS, OFFERS, VOICES, type BusinessType, type Camera, type Country, type Length, type Offer, type Voice } from '@/lib/shops/shop'
 import { SOURCE_LABEL, skitLines, type LineKey } from '@/lib/shops/skit'
 import type { ShopMatch } from '@/lib/shops/places.server'
 import type { ShopUsage } from '@/lib/shops/allowance'
 import { PLANS, usd } from '@/lib/pricing'
 import { RisingIcons } from './RisingIcons'
-import { Film } from './Film'
+import { Film, fileName, give } from './Film'
 import './smallbusiness.css'
 
-type Step = 'welcome' | 'type' | 'where' | 'which' | 'confirm' | 'signin' | 'funny' | 'look' | 'code' | 'day' | 'promote' | 'pick' | 'lines' | 'film' | 'done' | 'limit' | 'crisis'
+type Step = 'welcome' | 'type' | 'where' | 'which' | 'confirm' | 'signin' | 'funny' | 'look' | 'code' | 'day' | 'promote' | 'pick' | 'lines' | 'film' | 'done' | 'creations' | 'limit' | 'crisis'
 
 /** The order the top-corner icons fill in (15 icons across the whole product;
  *  filming and after take the rest). */
-const PROGRESS: Record<Step, number> = { welcome: 0, type: 1, where: 2, which: 3, confirm: 3, signin: 4, funny: 5, look: 6, code: 7, day: 8, promote: 9, pick: 10, lines: 11, film: 12, done: 13, limit: 10, crisis: 8 }
-const BACK: Partial<Record<Step, Step>> = { type: 'welcome', where: 'type', which: 'where', confirm: 'where', signin: 'confirm', funny: 'confirm', look: 'funny', code: 'look', promote: 'day', pick: 'day', lines: 'pick', film: 'lines', limit: 'day', crisis: 'day' }
+const PROGRESS: Record<Step, number> = { welcome: 0, type: 1, where: 2, which: 3, confirm: 3, signin: 4, funny: 5, look: 6, code: 7, day: 8, promote: 9, pick: 10, lines: 11, film: 12, done: 13, creations: 13, limit: 10, crisis: 8 }
+const BACK: Partial<Record<Step, Step>> = { type: 'welcome', where: 'type', which: 'where', confirm: 'where', signin: 'confirm', funny: 'confirm', look: 'funny', code: 'look', promote: 'day', pick: 'day', lines: 'pick', film: 'lines', creations: 'day', limit: 'day', crisis: 'day' }
 
 type Draft = {
   step: Step
@@ -78,7 +78,7 @@ async function smallLogo(file: File): Promise<string | null> {
   } catch { return null }
 }
 const DRAFT_KEY = 'shutap_sb_draft'
-const AFTER_SETUP: Step[] = ['day', 'promote', 'pick', 'lines', 'film', 'done', 'limit', 'crisis']
+const AFTER_SETUP: Step[] = ['day', 'promote', 'pick', 'lines', 'film', 'done', 'creations', 'limit', 'crisis']
 const AFTER_SIGNIN: Step[] = ['funny', 'look', 'code', ...AFTER_SETUP]
 
 function readDraft(): Draft {
@@ -110,6 +110,9 @@ export function SmallBusinessFlow() {
   const [chip, setChip] = useState('')
   const [day, setDay] = useState('')
   const [dayMode, setDayMode] = useState<'idle' | 'listening' | 'type' | 'done'>('idle')
+  const [creations, setCreations] = useState<Creation[] | null>(null)
+  const [busyId, setBusyId] = useState<string | null>(null)
+  const [askDelete, setAskDelete] = useState<string | null>(null)
   const [live, setLive] = useState('')
   const [loud, setLoud] = useState(false)
   const [micOn, setMicOn] = useState(false)
@@ -234,6 +237,33 @@ export function SmallBusinessFlow() {
     ev('sb_logo_picked')
   }
 
+  async function openCreations() {
+    go('creations')
+    setCreations(null)
+    const r = await getMyCreations({ data: {} }).catch(() => null)
+    setCreations(r?.ok ? r.videos : [])
+    ev('sb_creations', { n: r?.videos.length ?? 0 })
+  }
+  async function downloadCreation(v: Creation) {
+    if (!v.url || !v.ext) return
+    setBusyId(v.id)
+    try {
+      const blob = await fetch(v.url).then((r) => (r.ok ? r.blob() : Promise.reject(new Error('gone'))))
+      const how = await give(blob, fileName(v.title, v.ext))
+      if (how !== 'cancelled') ev('sb_creation_saved', { how })
+    } catch { setNote('That video didn’t download. Try again.') }
+    setBusyId(null)
+  }
+  async function removeCreation(v: Creation) {
+    if (askDelete !== v.id) { setAskDelete(v.id); return }
+    setBusyId(v.id)
+    const r = await deleteMyVideo({ data: { video_id: v.id } }).catch(() => null)
+    if (r?.ok) setCreations((c) => (c ?? []).filter((x) => x.id !== v.id))
+    else setNote('That didn’t delete. Try again.')
+    setAskDelete(null)
+    setBusyId(null)
+  }
+
   function mic() {
     if (dayMode === 'listening') { micStop.current = true; rec.current?.stop(); return }
     micStop.current = false
@@ -350,7 +380,7 @@ export function SmallBusinessFlow() {
             <div className="sb-hero"><RisingIcons variant="hero" /></div>
             <div className="sb-sheet">
               <p className="sb-eyebrow">SAY IT FUNNIER</p>
-              <h1 className="sb-h1" style={{ marginBottom: 26 }}>The <b>creative team</b> your shop doesn’t have.</h1>
+              <h1 className="sb-h1" style={{ marginBottom: 26 }}>The <b>creative team</b> your small business doesn’t have.</h1>
               <button type="button" className="sb-btn" style={{ alignSelf: 'stretch' }} onClick={() => go('type')}>Make my first video</button>
               <p className="sb-note" style={{ marginTop: 16 }}>First 3 videos free</p>
             </div>
@@ -440,7 +470,7 @@ export function SmallBusinessFlow() {
           </div>
         ) : step === 'day' ? (
           <div className="sb-screen">
-            <div className="sb-head">{shop && <p className="sb-tag" style={{ marginBottom: 8 }}>Hey, {shop.name} · <button type="button" className="sb-link" onClick={editBusiness}>edit business</button></p>}<h1 className="sb-h1">Anything fun <b>happen today?</b></h1><p className="sb-sub">Crazy customer? Weird order? Those are our favorite.</p></div>
+            <div className="sb-head">{shop && <p className="sb-tag" style={{ marginBottom: 8 }}>Hey, {shop.name} · <button type="button" className="sb-link" onClick={editBusiness}>edit business</button> · <button type="button" className="sb-link" onClick={() => void openCreations()}>my creations</button></p>}<h1 className="sb-h1">Anything fun <b>happen today?</b></h1><p className="sb-sub">Crazy customer? Weird order? Those are our favorite.</p></div>
             {dayMode === 'idle' || dayMode === 'listening' ? (
               <>
                 <div className="sb-mid" style={{ alignItems: 'center' }}>
@@ -512,8 +542,8 @@ export function SmallBusinessFlow() {
               place: shop?.address ?? shop?.city ?? '',
               code: lines.find((l) => l.key === 'code')?.text ?? '',
               logo: shop?.logo ?? null,
-              // Free's videos carry the shutap.com mark, like every free download
-              marked: !usage || usage.tier === 'free',
+              // no Shutap mark on any plan's video (Candy, Nov 21 2026): it is the owner's video
+              marked: false,
             }}
             camera={shop?.camera ?? d.camera}
             length={shop?.length ?? d.length}
@@ -524,7 +554,25 @@ export function SmallBusinessFlow() {
           <div className="sb-screen">
             <div className="sb-head">{made ? <><h1 className="sb-h1">That’s <b>today’s video</b></h1><p className="sb-sub">Post it while it’s fresh. Come back when something else happens.</p></> : <><h1 className="sb-h1">Your skit <b>is saved</b></h1><p className="sb-sub">Film it whenever you’re ready. It will be waiting here today.</p></>}</div>
             <div className="sb-mid">{skit && <div className="sb-card" style={{ cursor: 'default' }}><p className="src">TODAY’S SKIT</p><b className="title">{skit.title}</b><span style={{ fontSize: 15 }}>{skit.pitch}</span></div>}</div>
-            <div className="sb-foot">{!made && <button type="button" className="sb-btn" onClick={() => go('film')}>Film it now</button>}<button type="button" className="sb-quiet" onClick={() => { setDay(''); setDayMode('idle'); setPromote(''); go('day') }}>Start another skit</button></div>
+            <div className="sb-foot">{!made && <button type="button" className="sb-btn" onClick={() => go('film')}>Film it now</button>}<button type="button" className="sb-quiet" onClick={() => { setDay(''); setDayMode('idle'); setPromote(''); go('day') }}>Start another skit</button>{made && <button type="button" className="sb-quiet" onClick={() => void openCreations()}>My creations</button>}</div>
+          </div>
+        ) : step === 'creations' ? (
+          <div className="sb-screen">
+            <div className="sb-head"><h1 className="sb-h1">My <b>creations</b></h1><p className="sb-sub">We keep each video for 30 days, then delete it. Download the ones you want to keep.</p></div>
+            <div className="sb-mid top">
+              {creations === null ? <p className="sb-note">One moment…</p> : !creations.length ? <p className="sb-note">No videos yet. Your next one will be kept here.</p> : creations.map((v) => (
+                <div key={v.id} className="sb-card sb-made" style={{ cursor: 'default' }}>
+                  <b>{v.title || 'Your video'}</b>
+                  <span className={v.deletes.soon ? 'soon' : ''}>{v.deletes.text}</span>
+                  <div className="sb-grid2">
+                    <button type="button" className="sb-white" disabled={!v.url || busyId === v.id} onClick={() => void downloadCreation(v)}>{v.url ? (busyId === v.id ? 'One moment…' : 'Download') : 'Not kept here'}</button>
+                    <button type="button" className="sb-white" disabled={busyId === v.id} onClick={() => void removeCreation(v)}>{askDelete === v.id ? 'Yes, delete it' : 'Delete'}</button>
+                  </div>
+                </div>
+              ))}
+              {note && <p className="sb-err">{note}</p>}
+            </div>
+            <div className="sb-foot"><p className="sb-note">Only you can see these. <a href="/privacy" style={{ color: 'inherit' }}>Privacy</a></p><button type="button" className="sb-quiet" onClick={() => go('day')}>Back</button></div>
           </div>
         ) : step === 'limit' ? (
           <div className="sb-screen">

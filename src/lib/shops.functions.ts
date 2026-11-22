@@ -316,7 +316,12 @@ async function myShopRow(admin: any, userId: string): Promise<(SkitShop & { id: 
 async function usageOf(admin: any, userId: string): Promise<ShopUsage> {
   const { kitTier } = await import('./bits/tier.server')
   const { shopUsage } = await import('./shops/usage.server')
-  return shopUsage(admin, userId, await kitTier(admin, userId))
+  const usage = await shopUsage(admin, userId, await kitTier(admin, userId))
+  // The founder tests on the live site all day: an admin account is never
+  // stopped by the video limit or the skits-a-day limit. Everything is still
+  // counted and still looks like their real plan (the Free mark included).
+  const { data: isAdmin } = await admin.rpc('has_role', { _user_id: userId, _role: 'admin' })
+  return isAdmin ? { ...usage, videos: { ...usage.videos, cap: null }, sets_cap: 500 } : usage
 }
 
 /** "Sat, Nov 21 2026" in Los Angeles, for the writer's calendar skit. */
@@ -573,6 +578,9 @@ export const labSkitEvals = createServerFn({ method: 'POST' })
    counts, so making one is recorded here (and where the week is counted
    from: a save or a send each mark the video as posted). */
 export type ShopVideo = { id: string; title: string; day: string; delete_on: string; saved: boolean; sent_tiktok: boolean; created_at: string }
+/** A video in My creations: `url` is a link to the owner's own file, good for
+ *  an hour; null while it is still on its way up or was never stored. */
+export type Creation = ShopVideo & { url: string | null; ext: 'mp4' | 'webm' | null; deletes: { text: string; soon: boolean } }
 const VIDEO_COLS = 'id, title, day, delete_on, saved, sent_tiktok, created_at'
 
 export type RecordVideoResult = { ok: true; video: ShopVideo; usage: ShopUsage } | { ok: false; reason: 'off' | 'not_found' | 'failed' }
@@ -625,10 +633,96 @@ export const markMyVideo = createServerFn({ method: 'POST' })
  *  so the admin funnel shows where owners stop. */
 export const noteFilmProblem = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ what: z.enum(['camera_blocked', 'no_camera', 'cannot_record', 'cannot_compose', 'compose_failed', 'clips_saved']), detail: z.string().max(200).optional() }).parse(d))
+  .inputValidator((d: unknown) => z.object({ what: z.enum(['camera_blocked', 'no_camera', 'cannot_record', 'cannot_compose', 'compose_failed', 'clips_saved', 'not_stored']), detail: z.string().max(200).optional() }).parse(d))
   .handler(async ({ data, context }): Promise<{ ok: boolean }> => {
     if (isAnon(context)) return { ok: false }
     const { userId } = context as { userId: string }
     await track(await adminDb(), userId, 'shop_film_problem', { what: data.what, detail: data.detail ?? null })
+    return { ok: true }
+  })
+
+/* ───────────────────────── My creations (Nov 21 2026) ─────────────────────────
+   The finished video is kept 30 days in a private bucket so the owner can
+   download it again; then the nightly job deletes it. The phone uploads it
+   straight to storage with a one-time link made here. Only the owner is ever
+   given a link to their file. They can delete one themselves at any time. */
+
+/** A one-time link the phone uploads the finished video to. Making the same
+ *  video again (another text style) replaces the file. */
+export const videoUploadLink = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ video_id: z.string().uuid(), ext: z.enum(['mp4', 'webm']) }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true; path: string; token: string } | { ok: false }> => {
+    if (isAnon(context) || !(await shopsOpen(context))) return { ok: false }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: row } = await admin.from('shop_videos').select('id, storage_path').eq('id', data.video_id).eq('user_id', userId).is('deleted_at', null).maybeSingle()
+    if (!row) return { ok: false }
+    const { VIDEO_BUCKET, videoPath } = await import('./shops/creations.server')
+    const path = videoPath(userId, data.video_id, data.ext)
+    const old = (row as { storage_path: string | null }).storage_path
+    if (old && old !== path) await admin.storage.from(VIDEO_BUCKET).remove([old])
+    const link = await admin.storage.from(VIDEO_BUCKET).createSignedUploadUrl(path, { upsert: true })
+    if (link.error || !link.data) { console.error('[shops] upload link failed', link.error?.message); return { ok: false } }
+    return { ok: true, path, token: link.data.token }
+  })
+
+/** The upload finished: remember where the file is. */
+export const videoStored = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ video_id: z.string().uuid(), ext: z.enum(['mp4', 'webm']), bytes: z.number().int().min(1).max(90_000_000) }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: boolean }> => {
+    if (isAnon(context) || !(await shopsOpen(context))) return { ok: false }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { videoPath } = await import('./shops/creations.server')
+    const { data: row, error } = await admin.from('shop_videos').update({ storage_path: videoPath(userId, data.video_id, data.ext) }).eq('id', data.video_id).eq('user_id', userId).is('deleted_at', null).select('id').maybeSingle()
+    if (error || !row) return { ok: false }
+    await track(admin, userId, 'shop_video_stored', { video_id: data.video_id, ext: data.ext, mb: Math.round(data.bytes / 104857.6) / 10 })
+    return { ok: true }
+  })
+
+/** My creations: every video still kept, newest first, each with the day it
+ *  will be deleted and an hour-long link to the owner's own file. */
+export const getMyCreations = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({}).parse(d ?? {}))
+  .handler(async ({ context }): Promise<{ ok: boolean; videos: Creation[] }> => {
+    if (isAnon(context) || !(await shopsOpen(context))) return { ok: false, videos: [] }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { today } = await import('./bits/tier.server')
+    const { deleteLabel } = await import('./shops/shop')
+    const { VIDEO_BUCKET } = await import('./shops/creations.server')
+    const day = today().day
+    const { data, error } = await admin.from('shop_videos').select(`${VIDEO_COLS}, storage_path`).eq('user_id', userId).is('deleted_at', null).gt('delete_on', day).order('created_at', { ascending: false }).limit(60)
+    if (error) { console.error('[shops] creations read failed', error.message); return { ok: false, videos: [] } }
+    const rows = (data ?? []) as (ShopVideo & { storage_path: string | null })[]
+    const paths = rows.map((r) => r.storage_path).filter((p): p is string => !!p)
+    const links = new Map<string, string>()
+    if (paths.length) {
+      const signed = await admin.storage.from(VIDEO_BUCKET).createSignedUrls(paths, 3600)
+      for (const x of signed.data ?? []) if (x.path && x.signedUrl) links.set(x.path, x.signedUrl)
+    }
+    return { ok: true, videos: rows.map(({ storage_path, ...v }) => ({ ...v, url: storage_path ? links.get(storage_path) ?? null : null, ext: storage_path ? (storage_path.endsWith('.webm') ? 'webm' : 'mp4') : null, deletes: deleteLabel(v.day, day) })) }
+  })
+
+/** The owner deletes one of their videos now. The file goes; the row stays
+ *  marked, so a Free or Basic video that was made still counts as made. */
+export const deleteMyVideo = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ video_id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: boolean }> => {
+    if (isAnon(context) || !(await shopsOpen(context))) return { ok: false }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: row } = await admin.from('shop_videos').select('id, storage_path').eq('id', data.video_id).eq('user_id', userId).is('deleted_at', null).maybeSingle()
+    if (!row) return { ok: false }
+    const path = (row as { storage_path: string | null }).storage_path
+    const { VIDEO_BUCKET } = await import('./shops/creations.server')
+    if (path) { const rm = await admin.storage.from(VIDEO_BUCKET).remove([path]); if (rm.error) { console.error('[shops] video delete failed', rm.error.message); return { ok: false } } }
+    const up = await admin.from('shop_videos').update({ deleted_at: new Date().toISOString(), storage_path: null }).eq('id', data.video_id).eq('user_id', userId)
+    if (up.error) return { ok: false }
+    await track(admin, userId, 'shop_video_deleted', { video_id: data.video_id, by: 'owner' })
     return { ok: true }
   })
