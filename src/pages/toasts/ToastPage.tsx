@@ -25,6 +25,7 @@ import { TOAST_ONCE, usd } from '@/lib/pricing'
 import { trackEvent } from '@/lib/tracking'
 import '@/pages/realtors/realtors.css'
 import './toasts.css'
+import { Thumb } from '@/pages/realtors/KitView'
 
 const track = (name: string, props: Record<string, unknown> = {}) => { void trackEvent(name, { product: 'toasts', ...props }) }
 const mine = (l: ToastLine) => l.source === 'story' || l.source === 'true_thing'
@@ -135,17 +136,30 @@ function NamesStrip({ row, names, onNames }: { row: ToastRow; names: Names; onNa
   )
 }
 
-function Header({ row, names, right }: { row: ToastRow; names: Names; right: React.ReactNode }) {
-  const spec = OCCASION[row.occasion]
+/* Nov 20 2026 (Candy): the same two panels as the bit result. 1 · Your
+ * toast (funnier on Shutap's lines, your own words locked); 2 · Use it:
+ * 6 ways, all in view as picture cards. They open when the toast is locked. */
+type Way = 'speech' | 'cards' | 'prompter' | 'cut' | 'rehearse' | 'after'
+function waysFor(keepsake: boolean): { id: Way; name: string; use: string; thumb: 'page' | 'card' | 'dark' | 'lines' | 'list'; what: string }[] {
+  return [
+    { id: 'speech', name: 'Speech', use: 'to read', thumb: 'page', what: 'The whole speech as a PDF in large type, with pause marks and the clock in the margin. Or copy the text.' },
+    { id: 'cards', name: 'Cue cards', use: 'to hold', thumb: 'card', what: 'One beat a card: a few cue words to glance at and the line to land. Print, cut, hold in one hand.' },
+    { id: 'prompter', name: 'Prompter', use: 'on your phone', thumb: 'dark', what: 'Your speech scrolling on your phone at speaking pace. Scan a code to open it there.' },
+    { id: 'cut', name: '60-second cut', use: 'if time is short', thumb: 'lines', what: 'A one-minute version made from this speech when you ask for it. Your stories stay.' },
+    { id: 'rehearse', name: 'Rehearse', use: 'to practice', thumb: 'list', what: 'Read it out loud against the clock. See your time and which part ran long. Nothing is recorded.' },
+    keepsake
+      ? { id: 'after', name: 'Keepsake', use: 'to give them', thumb: 'page', what: 'A one-page copy to give them, and a short text to send that night.' }
+      : { id: 'after', name: 'Text after', use: 'to send tonight', thumb: 'lines', what: 'A short text to send that night.' },
+  ]
+}
+function WayCards({ ways, way, onPick, locked }: { ways: ReturnType<typeof waysFor>; way: Way; onPick: (w: Way) => void; locked?: boolean }) {
   return (
-    <div className="rl-row" style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <p className="rl-lbl r" style={{ margin: 0 }}>{occasionName(row.occasion, row.form)} · {TONE_LABEL[row.tone]} · target {clock(row.length)}</p>
-        <h1 style={{ margin: 0, font: '800 clamp(28px, 4vw, 38px)/1.1 var(--sora)', letterSpacing: '-0.03em', color: 'var(--wine)' }}>
-          {row.locked_at ? 'Your toast ' : ''}{toastTitle(row.occasion, names).replace(/^For /, row.locked_at ? 'for ' : 'For ')}
-        </h1>
-      </div>
-      {right}
+    <div className="rl-cards three" role="tablist" aria-label="The six ways to use your toast">
+      {ways.map((w) => (
+        <button key={w.id} type="button" role="tab" aria-selected={way === w.id} className={`rl-cd${way === w.id ? ' on' : ''}${locked ? ' shut' : ''}`} onClick={() => onPick(w.id)}>
+          <Thumb kind={w.thumb} /><span><b>{w.name}</b><small>{w.use}</small></span>
+        </button>
+      ))}
     </div>
   )
 }
@@ -164,6 +178,8 @@ function Editor({ row, names, say, onNames, onLocked }: { row: ToastRow; names: 
   const timer = useRef<number | undefined>(undefined)
   const first = useRef(true)
   const spec = OCCASION[row.occasion]
+  const ways = waysFor(!!spec.keepsake)
+  const [way, setWay] = useState<Way>('speech')
 
   const stored = (ls: ToastLine[]) => ls.map((l) => ({ ...l, text: back(l.text) }))
   const secs = toastSeconds(lines)
@@ -216,37 +232,32 @@ function Editor({ row, names, say, onNames, onLocked }: { row: ToastRow; names: 
   return (
     <div className="rl">
       <div className="ts-wrap">
-        <Header row={row} names={names} right={<span className="rl-row" style={{ gap: 8 }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, height: 34, padding: '0 14px', borderRadius: 999, background: '#eef4ef', color: '#2f4a37', font: '700 13px var(--sora)' }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2f8a55' }} />editing · open until you lock</span><span className="rl-note">{saved === 'saving' ? 'saving…' : saved === 'unsaved' ? 'unsaved' : saved === 'failed' ? 'not saved · keep typing to retry' : 'saved'}</span></span>} />
+        <div className="rl-ready">
+          <h1>Your toast is ready.</h1>
+          <p>{toastTitle(row.occasion, names)} · {occasionName(row.occasion, row.form)} · {TONE_LABEL[row.tone]}. Change any line on the left, then lock it to get everything on the right.</p>
+        </div>
         <NamesStrip row={row} names={names} onNames={(n) => { setLines((ls) => ls.map((l) => ({ ...l, text: fromPlaceholders(toPlaceholders(l.text, names), n) }))); onNames(n) }} />
 
-        <div className="ts-cols">
-          <section className="rl-box">
-            <div className="rl-box-head">
-              <span>● the speech</span>
-              <span className="rl-row" style={{ fontWeight: 500, color: 'var(--muted)', gap: 12 }}>
-                <span><b style={{ color: 'var(--rose)' }}>‖</b> pause</span>
-                <span><b style={{ color: 'var(--rose)' }}>(wait)</b> let them laugh</span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><span style={{ width: 12, height: 12, borderRadius: 3, background: '#f3f8f4', border: '2px solid #2f8a55' }} />your lines</span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><span style={{ width: 12, height: 12, borderRadius: 3, background: '#fff', border: '1.5px dashed var(--rose)' }} />tap to edit</span>
-              </span>
+        <div className="rl-k2">
+        <div className="rl-two">
+          <section className="rl-card rl-panel" aria-label="Your toast">
+            <div className="rl-panel-h"><b>1 · Your toast</b><span>{clock(secs)} to say · your target is {spec.range ? `${clock(spec.range[0])}–${clock(spec.range[1])}` : clock(row.length)}</span></div>
+            <div className="rl-key two">
+              <div><span className="rl-mini fb" aria-hidden>funnier</span><span>Shows 3 new ways to say a line Shutap drafted. “Keep it as it is” stays first. You can also type in it.</span></div>
+              <div><span className="rl-mini lk" aria-hidden>locked</span><span>Your own words are kept exactly. Tap “locked” on one to change it.</span></div>
             </div>
-            <div style={{ padding: '6px 20px 4px' }}>
+            <div>
               {lines.map((l, i) => {
                 const theirs = mine(l)
                 const frozen = theirs && !unlocked.has(i)
                 return (
-                  <div key={i} style={{ display: 'grid', gridTemplateColumns: '50px minmax(0, 1fr) auto', gap: 12, padding: '12px 0', borderBottom: '1px solid var(--line)', alignItems: 'start' }}>
-                    <span style={{ font: '700 13px var(--sora)', color: 'var(--rose)', paddingTop: 22 }}>{clock(times[i]!)}</span>
+                  <div key={i} className={`rl-item ts-line${theirs ? ' mine' : ''}`}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
-                      <span className="rl-lbl">{shown(l.section)}{theirs ? ' · yours' : l.source === 'bridge' ? ' · bridge' : ''}</span>
+                      <span className="ts-meta">{clock(times[i]!)} · {shown(l.section)}{theirs && <i>your words</i>}</span>
                       {frozen ? (
-                        <p style={{ margin: '0 0 0 -10px', font: '400 19px/1.45 var(--news)', color: 'var(--ink)', background: '#f3f8f4', border: '2px solid #2f8a55', borderRadius: 10, padding: '6px 10px', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-                          <button type="button" aria-label={`unlock line ${i + 1} to change it`} title="unlock to change your own line" onClick={() => setUnlocked((s) => new Set(s).add(i))} style={{ border: 0, background: 'none', padding: '4px 0 0', cursor: 'pointer' }}><LockIcon color="#2f6a45" size={16} /></button>
-                          <span>{l.text}</span>
-                        </p>
+                        <p className="ts-text">{l.text}</p>
                       ) : (
-                        <textarea aria-label={`line ${i + 1}`} rows={1} value={l.text} onChange={(e) => setText(i, e.target.value)}
-                          style={{ margin: '0 0 0 -10px', font: '400 19px/1.45 var(--news)', color: 'var(--ink)', border: theirs ? '2px solid #2f8a55' : '1.5px dashed rgba(184,69,107,.45)', borderRadius: 10, background: '#fff', padding: '6px 10px', resize: 'none', fieldSizing: 'content', minHeight: '1.45em' } as React.CSSProperties} />
+                        <textarea className="ts-text" aria-label={`line ${i + 1}`} rows={1} value={l.text} onChange={(e) => setText(i, e.target.value)} style={{ fieldSizing: 'content' } as React.CSSProperties} />
                       )}
                       {(l.pause || l.laugh || l.glass || l.note) && (
                         <span style={{ font: '600 12.5px var(--sora)', color: 'var(--rose-ink)' }}>
@@ -254,9 +265,10 @@ function Editor({ row, names, say, onNames, onLocked }: { row: ToastRow; names: 
                         </span>
                       )}
                     </div>
-                    <div style={{ paddingTop: 20 }}>
-                      {!frozen && !theirs && <button type="button" className={`rl-mini${touch?.index === i ? ' on' : ''}`} disabled={touch?.busy} onClick={() => void funnier(i)}>{touch?.index === i && touch.busy ? 'three ways…' : 'funnier'}</button>}
-                      {theirs && !frozen && <button type="button" className="rl-mini" onClick={() => setUnlocked((s) => { const n = new Set(s); n.delete(i); return n })}>lock</button>}
+                    <div className="ctl">
+                      {!theirs && <button type="button" className={`rl-mini fb${touch?.index === i ? ' on' : ''}`} disabled={touch?.busy} onClick={() => void funnier(i)}>{touch?.index === i && touch.busy ? 'three ways…' : 'funnier'}</button>}
+                      {theirs && frozen && <button type="button" className="rl-mini lk" aria-pressed aria-label={`line ${i + 1} is locked. Unlock it to change it.`} onClick={() => { setUnlocked((s) => new Set(s).add(i)); track('toast_line_unlocked', { line: i + 1 }) }}><LockIcon color="#fff" size={12} /> locked</button>}
+                      {theirs && !frozen && <button type="button" className="rl-mini" aria-pressed={false} onClick={() => setUnlocked((s) => { const n = new Set(s); n.delete(i); return n })}>lock</button>}
                     </div>
                     {touch?.index === i && !touch.busy && (
                       <div className="rl-pop" style={{ gridColumn: '1 / -1' }}>
@@ -274,29 +286,32 @@ function Editor({ row, names, say, onNames, onLocked }: { row: ToastRow; names: 
                 )
               })}
             </div>
-            <div style={{ padding: '14px 20px 18px', display: 'flex', flexDirection: 'column', gap: 8, borderTop: '1px solid var(--line)' }}>
+            <span className="rl-note" role="status">{saved === 'saving' ? 'saving…' : saved === 'unsaved' ? 'saving in a moment…' : saved === 'failed' ? 'not saved · keep typing to retry' : 'Changes save by themselves.'}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div className="rl-row" style={{ justifyContent: 'space-between', font: '700 13px var(--sora)' }}>
                 <span>{clock(secs)} <span style={{ fontWeight: 500, color: 'var(--muted)' }}>of {spec.range ? `${clock(spec.range[0])}–${clock(spec.range[1])}` : clock(row.length)} · at a relaxed 140 words a minute, pauses counted</span></span>
                 <span style={{ color: over > 0 ? 'var(--rose-ink)' : '#2f6a45' }}>{over > 0 ? `${over} seconds over` : `${-over} seconds to spare`}</span>
               </div>
               <div style={{ height: 10, borderRadius: 999, background: 'var(--surface)', overflow: 'hidden' }}><div style={{ width: `${Math.min(100, (secs / window_[1]) * 100)}%`, height: '100%', background: over > 0 ? 'var(--wine)' : 'var(--rose)', borderRadius: 999 }} /></div>
             </div>
+            <div className="rl-panel-foot ts-lockrow">
+              <span className="rl-note">Locking makes this your final toast: no more edits. After that, changing a line is a new toast ({usd(TOAST_ONCE.amount)}, free on Pro).</span>
+              <button type="button" className="rl-btn big" style={{ width: 'auto' }} onClick={() => { setSheet(true); track('toast_lock_sheet_opened', { from: 'panel' }) }}>Lock it &amp; get my toast</button>
+            </div>
           </section>
 
-          <aside className="ts-side">
-            <div className="rl-card">
-              <span className="rl-lbl r">unlocks when you lock</span>
-              {['the speech PDF', 'cue cards', 'the prompter', 'the 60-second version', 'rehearse', spec.keepsake ? 'keepsake + the text after' : 'the text after'].map((g) => (
-                <div key={g} style={{ display: 'flex', gap: 10, alignItems: 'center', color: 'var(--muted)', font: '600 14px var(--sora)' }}><LockIcon color="#9c9196" size={16} />{g}</div>
-              ))}
+          <section className="rl-card rl-panel rl-use" aria-label="Use it: 6 ways">
+            <div className="rl-panel-h"><b>2 · Use it: 6 ways</b><span>these open when you lock</span></div>
+            <WayCards ways={ways} way={way} locked onPick={(w) => { setWay(w); track('toast_way_previewed', { way: w }) }} />
+            <div className="ts-way shut">
+              <LockIcon color="#9c9196" size={22} />
+              <b className="rl-use-h">{ways.find((w) => w.id === way)!.name}</b>
+              <p className="rl-use-p">{ways.find((w) => w.id === way)!.what}</p>
+              <button type="button" className="rl-btn big" onClick={() => { setSheet(true); track('toast_lock_sheet_opened', { from: 'ways' }) }}>Lock it &amp; get my toast</button>
+              <span className="rl-note">Nothing more to pay to lock. Find your toast any time under profile → My creations.</span>
             </div>
-            <div className="ts-how">
-              <p style={{ font: '700 15px/1.4 var(--sora)', color: 'var(--wine)' }}>Edit anything until it sounds like you.</p>
-              <p style={{ fontSize: 13.5 }}>Tap any dashed line and type over it, or tap funnier. Your own lines stay word for word; tap the lock on one to change it. When you lock, this is your final version: no more edits, and the downloads open. A change after that is a new toast, {usd(TOAST_ONCE.amount)}.</p>
-              <button type="button" className="rl-btn" style={{ height: 52, fontSize: 16 }} onClick={() => { setSheet(true); track('toast_lock_sheet_opened', {}) }}>lock it &amp; get my toast</button>
-              <p className="rl-note" style={{ textAlign: 'center' }}>nothing more to pay · locking is final, no more edits</p>
-            </div>
-          </aside>
+          </section>
+        </div>
         </div>
       </div>
 
@@ -339,13 +354,16 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
   const [copying, setCopying] = useState(false)
   const [runs, setRuns] = useState<RehearseRun[]>([])
   const qrRef = useRef<HTMLCanvasElement | null>(null)
+  const ways = waysFor(!!spec.keepsake)
+  const [way, setWay] = useState<Way>('speech')
+  const nextWay = ways[(ways.findIndex((w) => w.id === way) + 1) % ways.length]!
   const shown = (s: string) => fromPlaceholders(s, names)
   const phoneLink = typeof window === 'undefined' ? '' : prompterLink(window.location.origin, row.id, names)
   useEffect(() => { setRuns(readRuns(row.id)) }, [row.id])
   useEffect(() => {
     if (!qrRef.current || !phoneLink) return
     QRCode.toCanvas(qrRef.current, phoneLink, { width: 150, margin: 1, color: { dark: '#1a1418', light: '#ffffff' } }).catch(() => {})
-  }, [phoneLink])
+  }, [phoneLink, way])
   const openPrompter = (opts: { short?: boolean; rehearse?: boolean } = {}) => {
     track(opts.rehearse ? 'toast_rehearse_opened' : 'toast_prompter_opened_here', { short: !!opts.short })
     window.location.assign(prompterLink(window.location.origin, row.id, names, opts))
@@ -389,35 +407,48 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
     return (r as { clientSecret: string }).clientSecret
   }
 
-  const card = (n: string, title: string, meta: string, body: React.ReactNode, accent = false) => (
-    <article className="rl-card" style={{ borderRadius: 18, ...(accent ? { border: '1.5px solid var(--rose)' } : {}) }}>
-      <div className="rl-row" style={{ justifyContent: 'space-between', alignItems: 'baseline' }}><h2 style={{ margin: 0, font: '700 17px var(--sora)', color: 'var(--wine)' }}>{n} · {title}</h2><span className="rl-note">{meta}</span></div>
+  const ORDER: Record<string, Way> = { '1': 'speech', '2': 'cards', '3': 'prompter', '4': 'cut', '5': 'rehearse', '6': 'after' }
+  /** one way open at a time: only the picked one is drawn */
+  const card = (n: string, _title: string, meta: string, body: React.ReactNode, _accent = false) => ORDER[n] !== way ? null : (
+    <div className="ts-way" key={n}>
+      <div className="rl-panel-h sm"><b>{ways.find((w) => w.id === way)!.name}</b><span>{meta}</span></div>
       {body}
-    </article>
+      <button type="button" className="rl-next" onClick={() => { setWay(nextWay.id); track('toast_way_opened', { way: nextWay.id, how: 'next' }) }}>Next: {nextWay.name} →</button>
+    </div>
   )
 
   return (
     <div className="rl">
       <div className="ts-wrap">
-        <div className="rl-row" style={{ justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <span style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 8, height: 32, padding: '0 14px', borderRadius: 999, background: 'var(--ink)', color: '#fff', font: '700 13px var(--sora)' }}><LockIcon color="#fff" />locked · the words are final</span>
-            <h1 style={{ margin: 0, font: '800 clamp(28px, 4vw, 38px)/1.1 var(--sora)', letterSpacing: '-0.03em', color: 'var(--wine)' }}>Your toast {toastTitle(row.occasion, names).replace(/^For /, 'for ')}</h1>
-            <p style={{ margin: 0, fontSize: 15, color: 'var(--ink-2)' }}>{occasionName(row.occasion, row.form)} · {TONE_LABEL[row.tone]} · {clock(toastSeconds(t.lines))} of {clock(row.length)}</p>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
-            <button type="button" className="rl-btn ghost" disabled={copying} onClick={() => void changeALine()}>{copying ? 'copying…' : `change a line → new toast${pro ? ', free on Pro' : `, ${usd(TOAST_ONCE.amount)}`}`}</button>
-            <span className="rl-note">starts from this one · this one stays as it is</span>
-          </div>
+        <div className="rl-ready">
+          <h1>Your toast is locked and ready.</h1>
+          <p>{toastTitle(row.occasion, names)} · {occasionName(row.occasion, row.form)} · {TONE_LABEL[row.tone]} · {clock(toastSeconds(t.lines))} of {clock(row.length)}. The words are final. Pick how you want to use it on the right.</p>
         </div>
         <NamesStrip row={row} names={names} onNames={onNames} />
 
-        <div role="note" style={{ display: 'flex', gap: 14, alignItems: 'center', background: 'var(--wine)', color: '#fff', borderRadius: 16, padding: '14px 18px', flexWrap: 'wrap' }}>
-          <span style={{ font: '600 15px/1.45 var(--sora)', flex: '1 1 320px' }}><b>This toast is yours to keep.</b> Come back any time: <b>profile → My creations → toasts</b>. Every download and copy, unlimited, forever, on any device you sign in on.</span>
-          <Link to="/creations" search={{ show: 'toasts' } as never} style={{ height: 40, padding: '0 16px', borderRadius: 999, background: '#fff', color: 'var(--wine)', font: '700 14px/40px var(--sora)', textDecoration: 'none' }}>go to My creations</Link>
-        </div>
+        <div className="rl-k2">
+        <div className="rl-two">
+          <section className="rl-card rl-panel" aria-label="Your toast">
+            <div className="rl-panel-h"><b>1 · Your toast</b><span>{clock(toastSeconds(t.lines))} to say · locked</span></div>
+            <div>
+              {t.lines.map((l, i) => (
+                <div key={i} className={`rl-item ts-line${mine(l) ? ' mine' : ''}`}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
+                    <span className="ts-meta">{shown(l.section)}{mine(l) && <i>your words</i>}</span>
+                    <p className="ts-text">{shown(l.text)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="rl-panel-foot">
+              <div className="rl-panel-h sm"><b>Want to change a line?</b><span>that is a new toast · this one stays as it is</span></div>
+              <button type="button" className="rl-btn ghost" style={{ alignSelf: 'flex-start' }} disabled={copying} onClick={() => void changeALine()}>{copying ? 'copying…' : `Change a line → new toast${pro ? ', free on Pro' : `, ${usd(TOAST_ONCE.amount)}`}`}</button>
+            </div>
+          </section>
 
-        <div className="rl-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16 }}>
+          <section className="rl-card rl-panel rl-use" aria-label="Use it: 6 ways">
+            <div className="rl-panel-h"><b>2 · Use it: 6 ways</b><span>tap one to open it</span></div>
+            <WayCards ways={ways} way={way} onPick={(w) => { setWay(w); track('toast_way_opened', { way: w, how: 'card' }) }} />
           {card('1', 'the speech', 'PDF · Letter', (
             <>
               <div style={{ maxHeight: 220, overflow: 'auto', border: '1px solid var(--line)', borderRadius: 10, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -495,13 +526,15 @@ function Locked({ row, names, usage, say, onNames, onRow }: { row: ToastRow; nam
               <div className="rl-row"><button type="button" className="rl-btn ghost sm" onClick={() => void copy(withMark(shown(t.text_after), marked), 'text_after')}>copy</button></div>
             </>
           ))}
+            <p className="rl-note">
+              {marked
+                ? <>Free toast: a shutap.com watermark across every PDF page, and “— shutap.com” at the end of every copy. <button type="button" className="rl-linkish" onClick={() => { setCheckoutError(''); setSheet('unmark'); track('toast_unmark_opened', {}) }}>Remove the mark: {usd(TOAST_ONCE.amount)}</button></>
+                : 'Every page and copy of this toast is clean.'}
+            </p>
+          </section>
         </div>
-
-        <p className="rl-note" style={{ textAlign: 'center', fontSize: 13 }}>
-          {marked
-            ? <>Your free toast: a shutap.com watermark across every PDF page, and “— shutap.com” at the end of every copy · <button type="button" className="rl-mini" onClick={() => { setCheckoutError(''); setSheet('unmark'); track('toast_unmark_opened', {}) }}>remove the mark, {usd(TOAST_ONCE.amount)}</button></>
-            : 'Every page and copy of this toast is clean.'}
-        </p>
+        </div>
+        <p className="rl-note">This toast is yours to keep, with unlimited downloads: <Link to="/creations" search={{ show: 'toasts' } as never} className="rl-linkish">profile → My creations → toasts</Link>.</p>
       </div>
 
       {sheet && (

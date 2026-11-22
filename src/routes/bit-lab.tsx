@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import { amIAdmin } from '@/lib/admin.functions'
 import { labWriteBit, varyBit } from '@/lib/bits.functions'
 import { saveBitDemo, type DemoFunnier } from '@/lib/bits/demo.functions'
+import { adminJokenetSave } from '@/lib/jokenet.functions'
 import { EMPTY_LINES, LinedBox, missingSlots } from '@/pages/home/bit/LinedBox'
 import type { Draft } from '@/pages/home/bit/EditableBit'
 import type { Slot } from '@/lib/bits/shared'
@@ -127,7 +128,27 @@ function BitLab() {
   )
 }
 
-function Slots({ b, heat }: { b: BitDraft; heat?: number }) {
+/** Sends one line to JokeNet (unrated, source shutap) to rate in /admin/jokenet. */
+function ToJokenet({ story, line }: { story?: string; line: string }) {
+  const [state, setState] = useState<'idle' | 'busy' | 'done' | 'error'>('idle')
+  if (!story || !line.trim()) return null
+  async function send() {
+    setState('busy')
+    try {
+      await adminJokenetSave({ data: { situation: story!, joke: line, source: 'shutap', founder: false } })
+      setState('done')
+    } catch {
+      setState('error')
+    }
+  }
+  return (
+    <button type="button" className="fd-btn ghost sm" style={{ marginLeft: 8, padding: '0 8px', minHeight: 24, fontSize: 11 }} disabled={state === 'busy' || state === 'done'} onClick={() => void send()}>
+      {state === 'done' ? 'in JokeNet ✓' : state === 'busy' ? '…' : state === 'error' ? 'retry → JokeNet' : '→ JokeNet'}
+    </button>
+  )
+}
+
+function Slots({ b, heat, story }: { b: BitDraft; heat?: number; story?: string }) {
   return (
     <div style={{ display: 'grid', gap: 8 }}>
       <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--wine)', letterSpacing: '-.03em' }}>{b.hook}</div>
@@ -136,11 +157,13 @@ function Slots({ b, heat }: { b: BitDraft; heat?: number }) {
         <p key={i} style={{ margin: 0, fontFamily: 'var(--news)', fontSize: 17 }}>
           <span className="fd-faint">tag {i + 1} · </span>
           {t}
+          <ToJokenet story={story} line={t} />
         </p>
       ))}
       <p style={{ margin: 0, fontFamily: 'var(--news)', fontSize: 17, fontWeight: 500 }}>
         <span className="fd-faint">button · </span>
         {b.button}
+        <ToJokenet story={story} line={b.button} />
       </p>
       {b.why && <p className="fd-muted" style={{ margin: 0, fontStyle: 'italic' }}>{b.why}{heat ? ` · heat ${heat}` : ''}</p>}
     </div>
@@ -176,7 +199,7 @@ function RunCard({ story, busy, result, error }: { story: string; busy: boolean;
             {ok.lab.timings.premises_ms}ms · write {ok.lab.timings.write_ms}ms · judge {ok.lab.timings.judge_ms}ms
           </div>
           {ok.notice && <div className="fd-muted">scrubber: {ok.notice}</div>}
-          <Slots b={ok.lab.ranked[0]!} />
+          <Slots b={ok.lab.ranked[0]!} story={story} />
           {ok.lab.judge_why && <div className="fd-muted">judge: {ok.lab.judge_why}</div>}
 
           <div className="fd-row" style={{ flexWrap: 'wrap' }}>
@@ -189,7 +212,7 @@ function RunCard({ story, busy, result, error }: { story: string; busy: boolean;
           {versions.map((v) => (
             <div key={v.id} style={{ borderTop: '1px solid var(--line)', paddingTop: 12 }}>
               <div className="fd-faint" style={{ marginBottom: 6 }}>{v.kind} · ~{v.est_seconds}s</div>
-              <Slots b={v} heat={v.heat} />
+              <Slots b={v} heat={v.heat} story={story} />
             </div>
           ))}
 
@@ -201,7 +224,7 @@ function RunCard({ story, busy, result, error }: { story: string; busy: boolean;
               {ok.lab.ranked.slice(1).map((b, i) => (
                 <div key={i} style={{ borderTop: '1px solid var(--line)', paddingTop: 10 }}>
                   <div className="fd-faint">rank {i + 2}</div>
-                  <Slots b={b} />
+                  <Slots b={b} story={story} />
                 </div>
               ))}
               {ok.lab.rejected.map((r, i) => (

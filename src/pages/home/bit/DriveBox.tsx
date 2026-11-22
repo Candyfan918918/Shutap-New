@@ -16,7 +16,7 @@
  * jump. Pure UI: the parent owns the story, the settings and the cut. */
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import type { StoryCheck } from '@/lib/bits/split'
+import { LONG_WORDS, type StoryCheck } from '@/lib/bits/split'
 
 type Item = { q: string; hint: string; add: string; label: string }
 const RAIL: Record<StoryCheck['id'], Item> = {
@@ -86,6 +86,7 @@ export function DriveBox({
   fullSlot,
   alwaysOpen = false,
   placeholder,
+  slim = false,
 }: {
   story: string
   onStory: (s: string) => void
@@ -107,13 +108,17 @@ export function DriveBox({
   alwaysOpen?: boolean
   /** the page's own prompt, shown while the box has focus */
   placeholder?: string
+  /** Nov 17 2026 (guide and funniest pages): the slim one-line box only. It
+   *  never opens in place; it grows to three lines, then scrolls. Settings
+   *  come from the page's preset. */
+  slim?: boolean
 }) {
   const ref = useRef<HTMLTextAreaElement>(null)
   const fullRef = useRef<HTMLTextAreaElement>(null)
   const [opened, setOpened] = useState(false)
   const [slot, setSlot] = useState<HTMLElement | null>(null)
   useEffect(() => { if (fullSlot) setSlot(document.getElementById(fullSlot)) }, [fullSlot])
-  const split = !!fullSlot
+  const split = !!fullSlot || slim
   const open = !split && (alwaysOpen || opened || wantsRoom(story))
   useEffect(() => {
     if (!split && open && !opened) {
@@ -126,10 +131,13 @@ export function DriveBox({
     const el = ref.current
     if (!split || !el) return
     el.style.height = ''
+    el.style.overflowY = ''
     if (!story) return
     const base = el.clientHeight
     el.style.height = 'auto'
     el.style.height = `${Math.min(Math.max(el.scrollHeight, base), 132)}px`
+    // past three lines the box scrolls instead of hiding what's typed
+    el.style.overflowY = el.scrollHeight > 132 ? 'auto' : ''
   }, [split, story])
   const focused = useRef(false)
   const [focusTop, setFocusTop] = useState(false)
@@ -207,7 +215,7 @@ export function DriveBox({
   /** A, always open, in its own place on the page (fullSlot) */
   /** A (approved design): the story with the rail on the right, settings
    *  under it; narrower than the page (980px) and at page type sizes. */
-  const full = split && slot ? createPortal(
+  const full = !!fullSlot && slot ? createPortal(
     <div className="bt dv-host dv-a">
       <div className="dv-turn">
         <h2>Your turn — write yours.</h2>
@@ -236,7 +244,7 @@ export function DriveBox({
             />
           </div>
           <div className="dv-count">
-            <span>{words} {words === 1 ? 'word' : 'words'} · nobody at shutap reads it</span>
+            <span className={words > LONG_WORDS ? 'dv-long' : undefined}>{words} {words === 1 ? 'word' : 'words'} · {words > LONG_WORDS ? 'long one: each line gets its best part' : `best under ~${LONG_WORDS}`} · nobody at shutap reads it</span>
             <span>{settingsLine}</span>
           </div>
           <div className="dv-set">{settings}</div>
@@ -293,7 +301,7 @@ export function DriveBox({
         ) : (
           <>
             <div className="dv-count">
-              <span>{words} {words === 1 ? 'word' : 'words'} · nobody at shutap reads it</span>
+              <span className={words > LONG_WORDS ? 'dv-long' : undefined}>{words} {words === 1 ? 'word' : 'words'} · {words > LONG_WORDS ? 'long one: each line gets its best part' : `best under ~${LONG_WORDS}`} · nobody at shutap reads it</span>
               <span>{settingsLine}</span>
             </div>
             <div className="dv-set">{settings}</div>

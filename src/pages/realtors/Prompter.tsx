@@ -13,7 +13,7 @@ import { phCapture } from '@/lib/posthog'
 import { PAUSE_MS, isPauseCue } from '@/lib/bits/cues'
 import QRCode from 'qrcode'
 import { supabase } from '@/integrations/supabase/client'
-import { startOAuth, useOAuthPending, oauthButtonLabel } from '@/lib/oauth-signin'
+import { SignInPanel } from '@/components/signin/SignIn'
 import { setDurableReturn } from '@/lib/auth-guard'
 
 type Seg = { cue: string; sub?: string; act?: string; say?: string; line: string }
@@ -47,7 +47,6 @@ export function Prompter({ kitId }: { kitId: string }) {
   /** Nov 6 2026: the phone that scanned the QR is usually signed out. Ask it
    *  to sign in (same account), then come straight back here, ready. */
   const [signedIn, setSignedIn] = useState<boolean | null>(null)
-  const opening = useOAuthPending()
   useEffect(() => {
     void supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session && data.session.user.is_anonymous !== true))
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => { if (session && session.user.is_anonymous !== true) setSignedIn(true) })
@@ -63,12 +62,9 @@ export function Prompter({ kitId }: { kitId: string }) {
     try { sessionStorage.setItem('shutap_returnTo', back) } catch { /* noop */ }
     setDurableReturn(back)
   }
-  async function signIn(method: 'google' | 'apple' | 'email') {
+  function prepareSignIn(method: 'google' | 'apple' | 'email') {
     comeBackHere()
     void phCapture('kit_shoot_signin', { product: 'realtors', method })
-    if (method === 'email') { window.location.assign('/welcome?method=email'); return }
-    const e = await startOAuth(method)
-    if (e) setErr(e)
   }
 
   // keep the screen on while it runs
@@ -96,14 +92,14 @@ export function Prompter({ kitId }: { kitId: string }) {
   }, [running, idx, wps, segs, cues])
 
   if (signedIn === false) return (
-    <div className="pr">
-      <div className="pr-gate">
-        <h1>Sign in to open your kit on this phone.</h1>
-        <p>Use the same account you made the kit with. The teleprompter opens right after, ready to roll.</p>
-        <button className="main" disabled={!!opening} onClick={() => void signIn('google')}>{oauthButtonLabel('google', opening)}</button>
-        <button disabled={!!opening} onClick={() => void signIn('apple')}>{oauthButtonLabel('apple', opening)}</button>
-        <button onClick={() => void signIn('email')}>continue with email</button>
-      </div>
+    <div className="si-gate si-page" style={{ minHeight: '100vh' }}>
+      <SignInPanel
+        where="realtors_prompter"
+        title="Sign in to open your kit on this phone."
+        sub="Use the same account you made the kit with. The teleprompter opens right after, ready to roll."
+        what="kit"
+        onBefore={prepareSignIn}
+      />
     </div>
   )
   if (err) return <div className="pr"><div className="pr-top"><span>{err}</span><Link to="/realtors">the kit page</Link></div></div>

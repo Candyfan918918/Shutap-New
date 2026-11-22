@@ -7,15 +7,19 @@
 //   ondemand — AI on demand: editable lines, "funnier" per line, locks
 //   newnav   — the restructured site: products menu, /bits, /for/*, one pricing page
 //   toasts   — Shutap Toasts (the form → the speech; admins see it while dark)
-export const FLAGS = ['realtors', 'ondemand', 'newnav', 'toasts'] as const
+//   smallbusiness — Shutap for small business (/smallbusiness: one thing that
+//              happened → a skit → 3 clips → one video). Nov 21 2026: DARK. It
+//              stays off until the server sets SHUTAP_FLAG_SMALLBUSINESS=1,
+//              after Candy's end-to-end test.
+export const FLAGS = ['realtors', 'ondemand', 'newnav', 'toasts', 'smallbusiness'] as const
 export type Flag = (typeof FLAGS)[number]
 export type Flags = Record<Flag, boolean>
 
-/** Flags that are off until the server turns them on (none since Toasts launched). */
-const DEFAULT_OFF: readonly Flag[] = []
+/** Flags that are off until the server turns them on. */
+const DEFAULT_OFF: readonly Flag[] = ['smallbusiness']
 
 /** What the page assumes before the server answers. */
-export const NO_FLAGS: Flags = { realtors: true, ondemand: true, newnav: true, toasts: true }
+export const NO_FLAGS: Flags = { realtors: true, ondemand: true, newnav: true, toasts: true, smallbusiness: false }
 
 /** Server only: the flags as the environment sets them. A live flag is on
  *  unless =0; a dark one is off unless =1 (or true). */

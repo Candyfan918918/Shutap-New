@@ -472,3 +472,22 @@ button.to-body:hover, button.to-body:focus-visible { outline: 2px solid rgba(184
 .to-phone .to-prompt .lit { font-size: 16px; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
 .to-phone .to-prompt .dim { -webkit-line-clamp: 1; }
 .to-phone .to-prompt .b button { white-space: nowrap; font-size: 11.5px; padding: 0 10px; }
+
+/* The toast result as two panels (Nov 20 2026); shares .rl-two, .rl-panel,
+   .rl-cards and .rl-cd with the kit (realtors.css). */
+.ts-wrap { max-width: 1272px; }
+.rl-key.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.rl-key.two > div { display: flex; gap: 10px; align-items: flex-start; }
+.rl-k2 .rl-item.ts-line { grid-template-columns: minmax(0, 1fr) auto; }
+.ts-meta { font: 700 11px var(--sora); color: var(--muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ts-meta i { font: 700 9.5px var(--sora); font-style: normal; letter-spacing: .06em; text-transform: uppercase; color: #1f6b40; background: #e8f5ee; border-radius: 999px; padding: 2px 7px; }
+.ts-text { margin: 0; font: 400 18px/1.45 var(--news); color: var(--ink); }
+textarea.ts-text { width: 100%; box-sizing: border-box; border: 1.5px dashed rgba(184, 69, 107, .45); border-radius: 10px; background: #fff; padding: 6px 10px; resize: none; min-height: 1.45em; }
+textarea.ts-text:focus { outline: none; border-style: solid; border-color: var(--rose); }
+.ts-lockrow { flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.ts-lockrow .rl-note { flex: 1 1 260px; max-width: 360px; }
+.rl-cd.shut { background: #faf6f8; }
+.rl-cd.shut .rl-thumb { opacity: .55; }
+.ts-way { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.ts-way.shut { align-items: flex-start; justify-content: center; background: #fbf4f7; border-radius: 16px; padding: 20px; }
+@media (max-width: 640px) { .rl-key.two { grid-template-columns: 1fr; } .rl-k2 .rl-item.ts-line { grid-template-columns: 1fr; } }

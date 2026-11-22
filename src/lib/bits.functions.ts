@@ -23,7 +23,7 @@ import { activePlan } from './plan.server'
 import { downloadsUsed, kitTier, resolveTier } from './bits/tier.server'
 import { BIT_PROMPT_VERSION, heatFor, touchLineDraft, varyBitDraft, writeBitFromStory, type BitFailure, type TouchOption } from './bits/pipeline.server'
 import { allLinesGiven, anyLineGiven, keptAsWritten } from './bits/kept'
-import { checkedSplit, type SplitLines } from './bits/split'
+import { checkedSplit, LONG_WORDS, wordCount, type SplitLines } from './bits/split'
 import { callAgentBounded, tryParseJson } from './agents/gateway'
 import { forgetPerson, personSignal } from './bits/person.server'
 import { NEVER_RESETS, NO_CAP, TOUCH_FAIR_USE, bitDay, capFor, chargeBit, chargeNetwork, mergeGuestUsage, readUsed, refundBit, refundBitUnlessStored, today, usageView } from './bits/usage.server'
@@ -937,6 +937,22 @@ Parts, in story order:
 
 Use every sentence once, in order. If the story is too short for a part, return "" for it. Reply with JSON only: {"hook":"","setup":"","tag1":"","tag2":"","button":""}`
 
+/** Nov 17 2026 (Candy): a long story (over LONG_WORDS) can't fit five lines
+ *  whole. Each part is the best run of the person's own words; the rest is
+ *  left out. Still copied character for character (checked in split.ts). */
+const LONG_SPLIT_PROMPT = `You cut a person's long story into the five parts of a stand-up bit. You never write, add, change or reorder words. Every part you return must be copied exactly, character for character, from the story: one continuous run of its words.
+
+The story is too long to use whole. For each part, pick the best run of the story's own words: at most 2 sentences and at most 40 words. Leave everything else out.
+
+Parts, in story order (each part comes later in the story than the one before, no part repeats another):
+- hook: the line that grabs first
+- setup: the one fact needed to follow it
+- tag1: the first laugh after the turn
+- tag2: the next laugh on the same idea
+- button: the line they'd stop on (usually near the end)
+
+Reply with JSON only: {"hook":"","setup":"","tag1":"","tag2":"","button":""}`
+
 /** Nov 12 2026 (Candy): the /bits box is one big box. This cuts what they
  *  typed into hook, setup, tag 1, tag 2 and button. Names come out first
  *  (the Scrubber), the Guard reads it, then a model proposes the cut and the
@@ -955,9 +971,12 @@ export const splitStory = createServerFn({ method: 'POST' })
       const scrubbed = keepAsTyped(data.story)
       const clean = scrubbed.clean_text.trim()
       if (!clean) return { ok: false, reason: 'failed' }
+      const long = wordCount(clean) > LONG_WORDS
       const [crisis, proposed] = await Promise.all([
         runClassifyCrisis(clean),
-        callAgentBounded({ system: SPLIT_PROMPT, messages: [{ role: 'user', content: clean }], maxTokens: 900, jsonMode: true, model: process.env.BIT_SPLIT_MODEL || undefined, temperature: 0, reasoningEffort: 'minimal' }, 5_000)
+        // Nov 17 2026: a long story gets its own prompt and more time (a 469-word
+        // story ran past 5s and fell back to the plain sentence cut)
+        callAgentBounded({ system: long ? LONG_SPLIT_PROMPT : SPLIT_PROMPT, messages: [{ role: 'user', content: clean }], maxTokens: long ? 1_200 : 900, jsonMode: true, model: process.env.BIT_SPLIT_MODEL || undefined, temperature: 0, reasoningEffort: 'minimal' }, long ? 15_000 : 5_000)
           .then((r) => (r.error ? null : tryParseJson<Record<string, unknown>>(r.text)))
           .catch(() => null),
       ])
@@ -1103,7 +1122,7 @@ export const touchLine = createServerFn({ method: 'POST' })
  *  version of its own. The person's words are scrubbed like a story; the
  *  version is theirs, never used anywhere else. No model call, no charge. */
 export const keepVersion = createServerFn({ method: 'POST' })
-  .inputValidator((d: unknown) => z.object({ bit_id: z.string().uuid(), draft: DraftIn, ...Ctx }).parse(d))
+  .inputValidator((d: unknown) => z.object({ bit_id: z.string().uuid(), draft: DraftIn, replace_version_id: z.string().uuid().optional(), ...Ctx }).parse(d))
   .handler(async ({ data }): Promise<VersionResult> => {
     const supabaseAdmin = await adminDb()
     const id = await resolveJokeIdentity(data.anon_session_id ?? null)
@@ -1111,7 +1130,12 @@ export const keepVersion = createServerFn({ method: 'POST' })
     const row = await loadOwnedBit(supabaseAdmin, data.bit_id, id)
     if (!row) return { ok: false, reason: 'not_found' }
     const versions = await loadVersions(supabaseAdmin, row.id)
-    if (versions.length >= MAX_VERSIONS) return { ok: false, reason: 'too_many' }
+    // Nov 20 2026: the result page saves a line the moment it changes. An
+    // edit on top of the person's own edited version rewrites that version
+    // (and drops its laid-out script and shot list, which no longer match),
+    // so a run of small edits never fills the bit's versions.
+    const replace = data.replace_version_id ? versions.find((v) => v.id === data.replace_version_id && (v.kind as string) === 'edited') : undefined
+    if (!replace && versions.length >= MAX_VERSIONS) return { ok: false, reason: 'too_many' }
     let draft = { ...data.draft, tags: data.draft.tags.map((t) => t.trim()).filter(Boolean), why: 'kept as written by you' }
     draft = { ...draft, hook: draft.hook.trim(), setup: draft.setup.trim(), button: draft.button.trim() }
     if (!draft.hook || !draft.setup || !draft.button || !draft.tags.length) return { ok: false, reason: 'failed' }
@@ -1120,6 +1144,19 @@ export const keepVersion = createServerFn({ method: 'POST' })
       if (v && hasEmailOrPhone(v)) draft = writeSlot(draft, sl, keepAsTyped(v).clean_text)
     }
     const controls = { ...DEFAULT_CONTROLS, ...(row.controls ?? {}) } as BitControls
+    if (replace) {
+      const c = await cols(supabaseAdmin)
+      const { data: upd, error } = await supabaseAdmin
+        .from('bit_versions')
+        .update({ hook: draft.hook, setup: draft.setup, tags: draft.tags, button: draft.button, why: draft.why, est_seconds: estSeconds(draft), [c.skit]: null, [c.sketch]: null } as never)
+        .eq('id', replace.id)
+        .eq('bit_id', row.id)
+        .select('id, bit_id, kind, hook, setup, tags, button, why, est_seconds, heat, created_at')
+        .single()
+      if (error || !upd) return { ok: false, reason: 'failed' }
+      forgetPerson(id.userId)
+      return { ok: true, version: toVersion(upd as VersionRow) }
+    }
     const saved = await insertVersion(supabaseAdmin, row.id, 'edited', draft, controls.heat)
     forgetPerson(id.userId)
     return { ok: true, version: toVersion(saved) }

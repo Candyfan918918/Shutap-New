@@ -13,10 +13,14 @@ import { useMyUsage, UsageMini } from '@/components/UsageBar'
 import { myAlias } from '@/lib/feed.functions'
 import { getFlags } from '@/lib/flags.functions'
 import { NO_FLAGS, type Flags } from '@/lib/flags'
+import { useSmallBusinessOpen } from '@/hooks/use-smallbusiness-open'
 
 /** The products menu (Nov 6 2026, behind the newnav flag). */
+/** Nov 21 2026: Shutap for small business leads the menu once it is open
+ *  (flag on, or an admin while it is dark). */
+export const SMALL_BUSINESS_PRODUCT = { to: '/smallbusiness', name: 'Shutap for small business', sub: 'one thing that happened today → a funny video about your business, filmed on your phone' }
 export const PRODUCTS: Array<{ to: string; name: string; sub: string; soon?: boolean }> = [
-  { to: '/bits', name: 'Shutap Bits', sub: 'for creators and comedians · what happened → the bit, the video, stand-up, sketch, skit' },
+  { to: '/bits', name: 'Shutap Bits', sub: 'for funnier short videos, filming and acting · what happened → the bit, the video, stand-up, sketch, skit' },
   { to: '/realtors', name: 'Shutap for Realtors', sub: 'paste a listing → a video script and every post to go with it' },
   { to: '/toasts', name: 'Shutap Toasts', sub: 'best man, maid of honor, Thanksgiving, Christmas · your stories → the toast, cue cards, prompter' },
   { to: '/business', name: 'Shutap Enterprise', sub: 'request pricing · the deck, the all-hands, the dataset' },
@@ -26,7 +30,6 @@ type Variant = 'light' | 'dark'
 
 // Routes that render on dark surfaces get the dark chrome.
 function variantFor(pathname: string): Variant {
-  if (pathname === '/welcome') return 'dark'
   if (pathname === '/mirror' || pathname.startsWith('/mirror/')) return 'dark'
   return 'light'
 }
@@ -93,6 +96,8 @@ export function GlobalHeader() {
   const alias = aliasRow ?? (userId ? { name: '', emoji: '', avatar: null } : null)
   const admin = useIsAdmin()
   const [flags, setFlags] = useState<Flags>(NO_FLAGS)
+  const sbOpen = useSmallBusinessOpen()
+  const menu: typeof PRODUCTS = sbOpen ? [SMALL_BUSINESS_PRODUCT, ...PRODUCTS] : PRODUCTS
   useEffect(() => { getFlags().then(setFlags).catch(() => {}) }, [])
   const [productsOpen, setProductsOpen] = useState(false)
   const productsRef = useRef<HTMLDivElement>(null)
@@ -270,13 +275,13 @@ export function GlobalHeader() {
                     productsRef.current?.style.setProperty('--gh-menu-y', `${Math.round(r.bottom + 8)}px`)
                     setProductsOpen((v) => !v)
                   }}
-                  style={{ fontFamily: "'Sora',system-ui,sans-serif", fontWeight: isHome ? 500 : 600, fontSize: isHome ? 'var(--fs-body)' : 14, color: productsOpen || ['/bits', '/realtors', '/toasts', '/business'].some((p) => pathname.startsWith(p)) ? inkActive : inkMuted, background: 'transparent', border: 0, padding: '6px 10px', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                  style={{ fontFamily: "'Sora',system-ui,sans-serif", fontWeight: isHome ? 500 : 600, fontSize: isHome ? 'var(--fs-body)' : 14, color: productsOpen || ['/smallbusiness', '/bits', '/realtors', '/toasts', '/business'].some((p) => pathname.startsWith(p)) ? inkActive : inkMuted, background: 'transparent', border: 0, padding: '6px 10px', cursor: 'pointer', whiteSpace: 'nowrap' }}
                 >
                   products <span aria-hidden style={{ fontSize: 10 }}>{productsOpen ? '▴' : '▾'}</span>
                 </button>
                 {productsOpen && (
                   <div role="menu" style={{ position: 'fixed', left: 'max(12px, min(var(--gh-menu-x, 12px), calc(100vw - 372px)))', top: 'var(--gh-menu-y, 56px)', width: 'min(360px, calc(100vw - 24px))', background: '#fff', color: '#111', borderRadius: 16, boxShadow: '0 24px 60px -24px rgba(60,20,40,.45)', border: '1px solid rgba(90,30,50,.12)', padding: 8, zIndex: 50 }}>
-                    {PRODUCTS.map((pr) => (
+                    {menu.map((pr) => (
                       <Link key={pr.to} to={pr.to} role="menuitem" onClick={() => setProductsOpen(false)} style={{ display: 'block', padding: '10px 12px', borderRadius: 12, textDecoration: 'none', color: '#111', whiteSpace: 'normal' }}>
                         <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: "'Sora',system-ui,sans-serif", fontWeight: 700, fontSize: 14 }}>
                           {pr.name}

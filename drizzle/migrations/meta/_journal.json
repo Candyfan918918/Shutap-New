@@ -22,6 +22,13 @@
       "when": 1794424648533,
       "tag": "0002_lock_kits_listings_rooms",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795213603450,
+      "tag": "0003_scope_match_user_patterns",
+      "breakpoints": true
     }
   ]
 }

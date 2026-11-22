@@ -1,17 +1,28 @@
 /* AI on demand (Nov 5 2026): the bit as an editable page. Every line can be
  * typed in; nothing changes until the person taps. "funnier" offers three
  * versions of that one line (keep yours first); "lock" keeps a line through
- * every rewrite. Lines the person wrote or picked are marked yours. The
- * page is kept as a version only when they tap "keep this as a version".
+ * every rewrite. Lines the person wrote or picked are marked yours.
+ * Nov 20 2026 (Candy): a changed line is saved at once (no "keep this as
+ * a version" step), so the video, teleprompter, script and shot list
+ * always match the lines on the page. Saving never counts as a bit.
  * Behind the ondemand flag; the plain article renders otherwise. */
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useServerFn } from '@tanstack/react-start'
 import { keepVersion, touchLine } from '@/lib/bits.functions'
 import type { TouchOption } from '@/lib/bits/pipeline.server'
-import { SLOTS, readSlot, slotLabel, writeSlot, type BitTier, type BitVersion, type Slot } from '@/lib/bits/shared'
+import { SLOTS, readSlot, writeSlot, type BitTier, type BitVersion, type Slot } from '@/lib/bits/shared'
 import { anonSessionId, jokeTap, jokeTrack } from '../joke/jokeClient'
 
 export type Draft = { hook: string; setup: string; tags: string[]; button: string }
+
+/** The line names on the result page, in plain words (Nov 20 2026). */
+export function plainLabel(s: Slot): string {
+  if (s === 'hook') return 'Opening line'
+  if (s === 'setup') return 'What happened'
+  if (s === 'button') return 'Last line'
+  const n = Number(s.slice(3))
+  return n === 0 ? 'Funny line' : n === 1 ? 'Funnier line' : `Funny line ${n + 1}`
+}
 
 export function draftOf(v: BitVersion): Draft {
   return { hook: v.hook, setup: v.setup, tags: [...v.tags], button: v.button }
@@ -41,25 +52,67 @@ export function EditableBit({ bitId, version, tier, say, draft, onDraft, locked,
   const [options, setOptions] = useState<TouchOption[] | null>(null)
   const [picked, setPicked] = useState<number>(-1) // -1 = keep yours
   const [busy, setBusy] = useState(false)
-  const [keeping, setKeeping] = useState(false)
+  const [saved, setSaved] = useState<'idle' | 'saving' | 'saved' | 'failed'>('idle')
+  const saving = useRef(false)
+  const queued = useRef<Draft | null>(null)
+  /** a save lands as a new (or rewritten) version: keep this page's undo across it */
+  const keepUndo = useRef(false)
   const [touches, setTouches] = useState<{ used: number; cap: number | null } | null>(null)
   const offered = useRef<Record<string, string[]>>({})
   /** each line's paragraph: funnier reads what is typed right now */
   const els = useRef<Partial<Record<Slot, HTMLElement | null>>>({})
   /** one level of undo per line */
   const undo = useRef<Partial<Record<Slot, string>>>({})
-  const dirty = SLOTS.some((s) => readSlot(draft, s) !== readSlot(version, s) && (s.startsWith('tag') ? Number(s.slice(3)) < version.tags.length : true))
+  const differs = (d: Draft) => SLOTS.some((s) => readSlot(d, s) !== readSlot(version, s) && (s.startsWith('tag') ? Number(s.slice(3)) < version.tags.length : true))
+  const versionRef = useRef(version)
+  versionRef.current = version
 
   useEffect(() => {
     // a new version on the page: fresh draft, nothing locked carried over
-    setOpen(null); setOptions(null); undo.current = {}
+    setOpen(null); setOptions(null)
+    if (keepUndo.current) keepUndo.current = false
+    else { undo.current = {}; setSaved('idle') }
   }, [version.id])
+
+  /** Save the lines as they stand. One save at a time; the latest wins. */
+  async function save(next: Draft) {
+    if (tier === 'guest') return
+    if (!next.hook.trim() || !next.setup.trim() || !next.button.trim() || !next.tags.some((t) => t.trim())) return
+    if (saving.current) { queued.current = next; return }
+    saving.current = true
+    setSaved('saving')
+    try {
+      const v = versionRef.current
+      const r = await keep({ data: { bit_id: bitId, draft: next, replace_version_id: v.kind === 'edited' ? v.id : undefined, anon_session_id: anonSessionId() } })
+      if (!r.ok) {
+        setSaved('failed')
+        jokeTrack('line_save_failed', tier, { reason: r.reason })
+        if (r.reason === 'too_many') say('this bit has all the versions it can hold · make a new bit to keep editing')
+        else say('could not save that line · try again')
+      } else {
+        keepUndo.current = r.version.id !== v.id
+        jokeTap('version_kept', tier, { yours: yours.length, locked: locked.length, auto: true, replaced: r.version.id === v.id })
+        onKept(r.version)
+        setSaved('saved')
+      }
+    } catch {
+      setSaved('failed')
+      say('could not reach Shutap · your line is not saved yet')
+    } finally {
+      saving.current = false
+      const q = queued.current
+      queued.current = null
+      if (q) void save(q)
+    }
+  }
 
   const slots: Slot[] = ['hook', 'setup', ...draft.tags.map((_, i) => `tag${i}` as Slot), 'button']
 
   function setLine(s: Slot, line: string, markYours: boolean) {
-    onDraft(writeSlot(draft, s, line))
+    const next = writeSlot(draft, s, line)
+    onDraft(next)
     if (markYours && !yours.includes(s)) onYours([...yours, s])
+    if (differs(next)) void save(next)
   }
 
   function onType(s: Slot, el: HTMLElement) {
@@ -137,64 +190,51 @@ export function EditableBit({ bitId, version, tier, say, draft, onDraft, locked,
     jokeTap('line_locked', tier, { slot: s, on })
   }
 
-  async function keepIt() {
-    if (tier === 'guest') return onSignIn?.()
-    setKeeping(true)
-    try {
-      const r = await keep({ data: { bit_id: bitId, draft, anon_session_id: anonSessionId() } })
-      if (!r.ok) return say(r.reason === 'too_many' ? 'that bit has all the versions it can hold' : 'could not keep it · try again')
-      jokeTap('version_kept', tier, { yours: yours.length, locked: locked.length })
-      onKept(r.version)
-      say('kept · it is a version now')
-    } finally {
-      setKeeping(false)
-    }
-  }
-
   function keyDown(e: KeyboardEvent<HTMLParagraphElement>) {
     if (e.key === 'Enter') { e.preventDefault(); (e.target as HTMLElement).blur() }
   }
 
   return (
     <>
-      <article className="bt-card bt-edit" aria-label="The bit, editable" data-ph-private style={{ paddingTop: 8 }}>
+      <div className="bt-key" aria-label="What funnier and lock do">
+        <div><span className="bt-mini fb" aria-hidden>funnier</span><span>Shows 3 new ways to say that line. Yours stays first: pick one or keep yours.</span></div>
+        <div><span className="bt-mini lock on" aria-hidden>lock</span><span>Keeps that line word for word when you rewrite the whole bit.</span></div>
+      </div>
+      <article className="bt-edit" aria-label="The bit, editable" data-ph-private>
         {slots.map((s) => {
           const isLocked = locked.includes(s)
           const isYours = yours.includes(s)
-          const isHook = s === 'hook'
-          const label = isHook ? 'hook · first 2 seconds' : slotLabel(s)
+          const label = plainLabel(s)
           return (
-            <div key={s} className={`bt-slot bt-eslot${open === s ? ' open' : ''}`}>
+            <div key={s} className={`bt-row${open === s ? ' open' : ''}${isLocked ? ' locked' : ''}`}>
               <div className="bt-eslot-main">
-                <span className={`bt-lbl${isHook || s === 'button' ? ' r' : ''}`}>
+                <span className="bt-rowk">
                   {label}
-                  {isLocked && <span className="bt-mark lock">locked</span>}
                   {isYours && !isLocked && <span className="bt-mark yours">yours</span>}
                 </span>
                 <p
                   ref={(el) => { els.current[s] = el }}
-                  className={`bt-v${isHook ? ' hook' : ''} bt-etext`}
+                  className="bt-v bt-etext"
                   contentEditable={!isLocked}
                   suppressContentEditableWarning
                   spellCheck={false}
                   onBlur={(e) => onType(s, e.currentTarget)}
                   onKeyDown={keyDown}
                   aria-label={`${label}, editable`}
-                  style={s === 'button' ? { fontWeight: 400 } : undefined}
                 >
                   {readSlot(draft, s)}
                 </p>
               </div>
               <div className="bt-ectl">
-                <button className={`bt-mini${open === s ? ' on' : ''}`} disabled={busy && open === s} onClick={() => void funnier(s)}>
-                  {busy && open === s ? '…' : 'funnier'}
-                </button>
-                <button className={`bt-mini lock${isLocked ? ' on' : ''}`} aria-pressed={isLocked} onClick={() => toggleLock(s)}>
-                  {isLocked ? 'locked' : 'lock'}
-                </button>
                 {undo.current[s] !== undefined && (
                   <button className="bt-mini" onClick={() => undoLine(s)}>undo</button>
                 )}
+                <button className={`bt-mini fb${open === s ? ' on' : ''}`} disabled={busy && open === s} onClick={() => void funnier(s)}>
+                  {busy && open === s ? '…' : 'funnier'}
+                </button>
+                <button className={`bt-mini lock${isLocked ? ' on' : ''}`} aria-pressed={isLocked} onClick={() => toggleLock(s)}>
+                  <LockIcon open={!isLocked} />{isLocked ? 'locked' : 'lock'}
+                </button>
               </div>
               {open === s && options && (
                 <div className="bt-pop" role="dialog" aria-label={`${label}, three ways`}>
@@ -221,16 +261,18 @@ export function EditableBit({ bitId, version, tier, say, draft, onDraft, locked,
           )
         })}
       </article>
-      <div className="bt-between" style={{ marginTop: -6 }}>
-        <span className="bt-note">
-          type in any line · nothing changes until you tap · "funnier" changes that line only · locked lines survive every rewrite
-        </span>
-        {dirty && (
-          <button className="bt-btn sm" disabled={keeping} onClick={() => void keepIt()}>
-            {keeping ? 'keeping…' : '+ keep this as a version'}
-          </button>
-        )}
-      </div>
+      <span className="bt-note" role="status" style={{ minHeight: '1.4em' }}>
+        {saved === 'saving' ? 'saving your line…' : saved === 'saved' ? 'Saved. The video, teleprompter, script and shot list now use your new line.' : saved === 'failed' ? 'That line is not saved yet.' : 'You can also type in any line. Changes save by themselves.'}
+      </span>
     </>
+  )
+}
+
+function LockIcon({ open }: { open: boolean }) {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d={open ? 'M8 11V8a4 4 0 0 1 7.5-2' : 'M8 11V8a4 4 0 0 1 8 0v3'} />
+    </svg>
   )
 }

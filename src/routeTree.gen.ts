@@ -49,6 +49,8 @@ import { Route as RoomRouteImport } from './routes/room'
 import { Route as SafetyRouteImport } from './routes/safety'
 import { Route as SetListRouteImport } from './routes/set-list'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SmallbusinessRouteImport } from './routes/smallbusiness'
+import { Route as SmallbusinessLabRouteImport } from './routes/smallbusiness-lab'
 import { Route as StreamRouteImport } from './routes/stream'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -89,9 +91,12 @@ import { Route as AuthenticatedAdminBattleRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminEventsRouteImport } from './routes/_authenticated/admin.events'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated/admin.feedback'
 import { Route as AuthenticatedAdminGuestsRouteImport } from './routes/_authenticated/admin.guests'
+import { Route as AuthenticatedAdminJokenetRouteImport } from './routes/_authenticated/admin.jokenet'
 import { Route as AuthenticatedAdminOverviewRouteImport } from './routes/_authenticated/admin.overview'
 import { Route as AuthenticatedAdminPollRouteImport } from './routes/_authenticated/admin.poll'
+import { Route as AuthenticatedAdminRedditRouteImport } from './routes/_authenticated/admin.reddit'
 import { Route as AuthenticatedAdminRelateRouteImport } from './routes/_authenticated/admin.relate'
+import { Route as AuthenticatedAdminSmallbusinessRouteImport } from './routes/_authenticated/admin.smallbusiness'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedCheckinIdRouteImport } from './routes/_authenticated/checkin.$id'
 import { Route as ApiFeedbackEventsRouteImport } from './routes/api/feedback/events'
@@ -105,8 +110,12 @@ import { Route as ToastsPrompterIdRouteImport } from './routes/toasts.prompter.$
 import { Route as ApiPublicHooksBillingReceiptsRouteImport } from './routes/api/public/hooks/billing-receipts'
 import { Route as ApiPublicHooksDailyIdeaEmailsRouteImport } from './routes/api/public/hooks/daily-idea-emails'
 import { Route as ApiPublicHooksDispatchCheckinsRouteImport } from './routes/api/public/hooks/dispatch-checkins'
+import { Route as ApiPublicHooksJokenetNightlyRouteImport } from './routes/api/public/hooks/jokenet-nightly'
 import { Route as ApiPublicHooksMirrorEvolutionRouteImport } from './routes/api/public/hooks/mirror-evolution'
+import { Route as ApiPublicHooksRedditLeadsRouteImport } from './routes/api/public/hooks/reddit-leads'
 import { Route as ApiPublicHooksReengagementEmailsRouteImport } from './routes/api/public/hooks/reengagement-emails'
+import { Route as ApiPublicHooksShopReminderEmailsRouteImport } from './routes/api/public/hooks/shop-reminder-emails'
+import { Route as ApiPublicHooksShopVideoCleanupRouteImport } from './routes/api/public/hooks/shop-video-cleanup'
 import { Route as ApiPublicHooksTrialEndingEmailsRouteImport } from './routes/api/public/hooks/trial-ending-emails'
 import { Route as ApiPublicPaymentsPricesRouteImport } from './routes/api/public/payments/prices'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -311,6 +320,16 @@ const SetListRoute = SetListRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmallbusinessRoute = SmallbusinessRouteImport.update({
+  id: '/smallbusiness',
+  path: '/smallbusiness',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmallbusinessLabRoute = SmallbusinessLabRouteImport.update({
+  id: '/smallbusiness-lab',
+  path: '/smallbusiness-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StreamRoute = StreamRouteImport.update({
@@ -521,6 +540,12 @@ const AuthenticatedAdminGuestsRoute =
     path: '/admin/guests',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminJokenetRoute =
+  AuthenticatedAdminJokenetRouteImport.update({
+    id: '/admin/jokenet',
+    path: '/admin/jokenet',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminOverviewRoute =
   AuthenticatedAdminOverviewRouteImport.update({
     id: '/admin/overview',
@@ -532,10 +557,22 @@ const AuthenticatedAdminPollRoute = AuthenticatedAdminPollRouteImport.update({
   path: '/admin/poll',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminRedditRoute =
+  AuthenticatedAdminRedditRouteImport.update({
+    id: '/admin/reddit',
+    path: '/admin/reddit',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminRelateRoute =
   AuthenticatedAdminRelateRouteImport.update({
     id: '/admin/relate',
     path: '/admin/relate',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminSmallbusinessRoute =
+  AuthenticatedAdminSmallbusinessRouteImport.update({
+    id: '/admin/smallbusiness',
+    path: '/admin/smallbusiness',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
@@ -606,16 +643,40 @@ const ApiPublicHooksDispatchCheckinsRoute =
     path: '/api/public/hooks/dispatch-checkins',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksJokenetNightlyRoute =
+  ApiPublicHooksJokenetNightlyRouteImport.update({
+    id: '/api/public/hooks/jokenet-nightly',
+    path: '/api/public/hooks/jokenet-nightly',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksMirrorEvolutionRoute =
   ApiPublicHooksMirrorEvolutionRouteImport.update({
     id: '/api/public/hooks/mirror-evolution',
     path: '/api/public/hooks/mirror-evolution',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksRedditLeadsRoute =
+  ApiPublicHooksRedditLeadsRouteImport.update({
+    id: '/api/public/hooks/reddit-leads',
+    path: '/api/public/hooks/reddit-leads',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksReengagementEmailsRoute =
   ApiPublicHooksReengagementEmailsRouteImport.update({
     id: '/api/public/hooks/reengagement-emails',
     path: '/api/public/hooks/reengagement-emails',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksShopReminderEmailsRoute =
+  ApiPublicHooksShopReminderEmailsRouteImport.update({
+    id: '/api/public/hooks/shop-reminder-emails',
+    path: '/api/public/hooks/shop-reminder-emails',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksShopVideoCleanupRoute =
+  ApiPublicHooksShopVideoCleanupRouteImport.update({
+    id: '/api/public/hooks/shop-video-cleanup',
+    path: '/api/public/hooks/shop-video-cleanup',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicHooksTrialEndingEmailsRoute =
@@ -691,6 +752,8 @@ export interface FileRoutesByFullPath {
   '/safety': typeof SafetyRoute
   '/set-list': typeof SetListRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smallbusiness': typeof SmallbusinessRoute
+  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
@@ -731,9 +794,12 @@ export interface FileRoutesByFullPath {
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/guests': typeof AuthenticatedAdminGuestsRoute
+  '/admin/jokenet': typeof AuthenticatedAdminJokenetRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/admin/poll': typeof AuthenticatedAdminPollRoute
+  '/admin/reddit': typeof AuthenticatedAdminRedditRoute
   '/admin/relate': typeof AuthenticatedAdminRelateRoute
+  '/admin/smallbusiness': typeof AuthenticatedAdminSmallbusinessRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/checkin/$id': typeof AuthenticatedCheckinIdRoute
   '/api/feedback/events': typeof ApiFeedbackEventsRoute
@@ -747,8 +813,12 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
+  '/api/public/hooks/jokenet-nightly': typeof ApiPublicHooksJokenetNightlyRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
+  '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
+  '/api/public/hooks/shop-reminder-emails': typeof ApiPublicHooksShopReminderEmailsRoute
+  '/api/public/hooks/shop-video-cleanup': typeof ApiPublicHooksShopVideoCleanupRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
   '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -796,6 +866,8 @@ export interface FileRoutesByTo {
   '/safety': typeof SafetyRoute
   '/set-list': typeof SetListRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smallbusiness': typeof SmallbusinessRoute
+  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
@@ -836,9 +908,12 @@ export interface FileRoutesByTo {
   '/admin/events': typeof AuthenticatedAdminEventsRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/guests': typeof AuthenticatedAdminGuestsRoute
+  '/admin/jokenet': typeof AuthenticatedAdminJokenetRoute
   '/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/admin/poll': typeof AuthenticatedAdminPollRoute
+  '/admin/reddit': typeof AuthenticatedAdminRedditRoute
   '/admin/relate': typeof AuthenticatedAdminRelateRoute
+  '/admin/smallbusiness': typeof AuthenticatedAdminSmallbusinessRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/checkin/$id': typeof AuthenticatedCheckinIdRoute
   '/api/feedback/events': typeof ApiFeedbackEventsRoute
@@ -852,8 +927,12 @@ export interface FileRoutesByTo {
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
+  '/api/public/hooks/jokenet-nightly': typeof ApiPublicHooksJokenetNightlyRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
+  '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
+  '/api/public/hooks/shop-reminder-emails': typeof ApiPublicHooksShopReminderEmailsRoute
+  '/api/public/hooks/shop-video-cleanup': typeof ApiPublicHooksShopVideoCleanupRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
   '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -903,6 +982,8 @@ export interface FileRoutesById {
   '/safety': typeof SafetyRoute
   '/set-list': typeof SetListRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smallbusiness': typeof SmallbusinessRoute
+  '/smallbusiness-lab': typeof SmallbusinessLabRoute
   '/stream': typeof StreamRoute
   '/subscribe': typeof SubscribeRouteWithChildren
   '/terms': typeof TermsRoute
@@ -943,9 +1024,12 @@ export interface FileRoutesById {
   '/_authenticated/admin/events': typeof AuthenticatedAdminEventsRoute
   '/_authenticated/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin/guests': typeof AuthenticatedAdminGuestsRoute
+  '/_authenticated/admin/jokenet': typeof AuthenticatedAdminJokenetRoute
   '/_authenticated/admin/overview': typeof AuthenticatedAdminOverviewRoute
   '/_authenticated/admin/poll': typeof AuthenticatedAdminPollRoute
+  '/_authenticated/admin/reddit': typeof AuthenticatedAdminRedditRoute
   '/_authenticated/admin/relate': typeof AuthenticatedAdminRelateRoute
+  '/_authenticated/admin/smallbusiness': typeof AuthenticatedAdminSmallbusinessRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/checkin/$id': typeof AuthenticatedCheckinIdRoute
   '/api/feedback/events': typeof ApiFeedbackEventsRoute
@@ -959,8 +1043,12 @@ export interface FileRoutesById {
   '/api/public/hooks/billing-receipts': typeof ApiPublicHooksBillingReceiptsRoute
   '/api/public/hooks/daily-idea-emails': typeof ApiPublicHooksDailyIdeaEmailsRoute
   '/api/public/hooks/dispatch-checkins': typeof ApiPublicHooksDispatchCheckinsRoute
+  '/api/public/hooks/jokenet-nightly': typeof ApiPublicHooksJokenetNightlyRoute
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
+  '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
+  '/api/public/hooks/shop-reminder-emails': typeof ApiPublicHooksShopReminderEmailsRoute
+  '/api/public/hooks/shop-video-cleanup': typeof ApiPublicHooksShopVideoCleanupRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
   '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -1010,6 +1098,8 @@ export interface FileRouteTypes {
     | '/safety'
     | '/set-list'
     | '/sitemap.xml'
+    | '/smallbusiness'
+    | '/smallbusiness-lab'
     | '/stream'
     | '/subscribe'
     | '/terms'
@@ -1050,9 +1140,12 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/guests'
+    | '/admin/jokenet'
     | '/admin/overview'
     | '/admin/poll'
+    | '/admin/reddit'
     | '/admin/relate'
+    | '/admin/smallbusiness'
     | '/admin/users'
     | '/checkin/$id'
     | '/api/feedback/events'
@@ -1066,8 +1159,12 @@ export interface FileRouteTypes {
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
+    | '/api/public/hooks/jokenet-nightly'
     | '/api/public/hooks/mirror-evolution'
+    | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
+    | '/api/public/hooks/shop-reminder-emails'
+    | '/api/public/hooks/shop-video-cleanup'
     | '/api/public/hooks/trial-ending-emails'
     | '/api/public/payments/prices'
     | '/api/public/payments/webhook'
@@ -1115,6 +1212,8 @@ export interface FileRouteTypes {
     | '/safety'
     | '/set-list'
     | '/sitemap.xml'
+    | '/smallbusiness'
+    | '/smallbusiness-lab'
     | '/stream'
     | '/subscribe'
     | '/terms'
@@ -1155,9 +1254,12 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/feedback'
     | '/admin/guests'
+    | '/admin/jokenet'
     | '/admin/overview'
     | '/admin/poll'
+    | '/admin/reddit'
     | '/admin/relate'
+    | '/admin/smallbusiness'
     | '/admin/users'
     | '/checkin/$id'
     | '/api/feedback/events'
@@ -1171,8 +1273,12 @@ export interface FileRouteTypes {
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
+    | '/api/public/hooks/jokenet-nightly'
     | '/api/public/hooks/mirror-evolution'
+    | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
+    | '/api/public/hooks/shop-reminder-emails'
+    | '/api/public/hooks/shop-video-cleanup'
     | '/api/public/hooks/trial-ending-emails'
     | '/api/public/payments/prices'
     | '/api/public/payments/webhook'
@@ -1221,6 +1327,8 @@ export interface FileRouteTypes {
     | '/safety'
     | '/set-list'
     | '/sitemap.xml'
+    | '/smallbusiness'
+    | '/smallbusiness-lab'
     | '/stream'
     | '/subscribe'
     | '/terms'
@@ -1261,9 +1369,12 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/events'
     | '/_authenticated/admin/feedback'
     | '/_authenticated/admin/guests'
+    | '/_authenticated/admin/jokenet'
     | '/_authenticated/admin/overview'
     | '/_authenticated/admin/poll'
+    | '/_authenticated/admin/reddit'
     | '/_authenticated/admin/relate'
+    | '/_authenticated/admin/smallbusiness'
     | '/_authenticated/admin/users'
     | '/_authenticated/checkin/$id'
     | '/api/feedback/events'
@@ -1277,8 +1388,12 @@ export interface FileRouteTypes {
     | '/api/public/hooks/billing-receipts'
     | '/api/public/hooks/daily-idea-emails'
     | '/api/public/hooks/dispatch-checkins'
+    | '/api/public/hooks/jokenet-nightly'
     | '/api/public/hooks/mirror-evolution'
+    | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
+    | '/api/public/hooks/shop-reminder-emails'
+    | '/api/public/hooks/shop-video-cleanup'
     | '/api/public/hooks/trial-ending-emails'
     | '/api/public/payments/prices'
     | '/api/public/payments/webhook'
@@ -1328,6 +1443,8 @@ export interface RootRouteChildren {
   SafetyRoute: typeof SafetyRoute
   SetListRoute: typeof SetListRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SmallbusinessRoute: typeof SmallbusinessRoute
+  SmallbusinessLabRoute: typeof SmallbusinessLabRoute
   StreamRoute: typeof StreamRoute
   SubscribeRoute: typeof SubscribeRouteWithChildren
   TermsRoute: typeof TermsRoute
@@ -1372,8 +1489,12 @@ export interface RootRouteChildren {
   ApiPublicHooksBillingReceiptsRoute: typeof ApiPublicHooksBillingReceiptsRoute
   ApiPublicHooksDailyIdeaEmailsRoute: typeof ApiPublicHooksDailyIdeaEmailsRoute
   ApiPublicHooksDispatchCheckinsRoute: typeof ApiPublicHooksDispatchCheckinsRoute
+  ApiPublicHooksJokenetNightlyRoute: typeof ApiPublicHooksJokenetNightlyRoute
   ApiPublicHooksMirrorEvolutionRoute: typeof ApiPublicHooksMirrorEvolutionRoute
+  ApiPublicHooksRedditLeadsRoute: typeof ApiPublicHooksRedditLeadsRoute
   ApiPublicHooksReengagementEmailsRoute: typeof ApiPublicHooksReengagementEmailsRoute
+  ApiPublicHooksShopReminderEmailsRoute: typeof ApiPublicHooksShopReminderEmailsRoute
+  ApiPublicHooksShopVideoCleanupRoute: typeof ApiPublicHooksShopVideoCleanupRoute
   ApiPublicHooksTrialEndingEmailsRoute: typeof ApiPublicHooksTrialEndingEmailsRoute
   ApiPublicPaymentsPricesRoute: typeof ApiPublicPaymentsPricesRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -1663,6 +1784,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/smallbusiness': {
+      id: '/smallbusiness'
+      path: '/smallbusiness'
+      fullPath: '/smallbusiness'
+      preLoaderRoute: typeof SmallbusinessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smallbusiness-lab': {
+      id: '/smallbusiness-lab'
+      path: '/smallbusiness-lab'
+      fullPath: '/smallbusiness-lab'
+      preLoaderRoute: typeof SmallbusinessLabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stream': {
       id: '/stream'
       path: '/stream'
@@ -1943,6 +2078,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminGuestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/jokenet': {
+      id: '/_authenticated/admin/jokenet'
+      path: '/admin/jokenet'
+      fullPath: '/admin/jokenet'
+      preLoaderRoute: typeof AuthenticatedAdminJokenetRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/overview': {
       id: '/_authenticated/admin/overview'
       path: '/admin/overview'
@@ -1957,11 +2099,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPollRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/reddit': {
+      id: '/_authenticated/admin/reddit'
+      path: '/admin/reddit'
+      fullPath: '/admin/reddit'
+      preLoaderRoute: typeof AuthenticatedAdminRedditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/relate': {
       id: '/_authenticated/admin/relate'
       path: '/admin/relate'
       fullPath: '/admin/relate'
       preLoaderRoute: typeof AuthenticatedAdminRelateRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/smallbusiness': {
+      id: '/_authenticated/admin/smallbusiness'
+      path: '/admin/smallbusiness'
+      fullPath: '/admin/smallbusiness'
+      preLoaderRoute: typeof AuthenticatedAdminSmallbusinessRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/users': {
@@ -2055,6 +2211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksDispatchCheckinsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/jokenet-nightly': {
+      id: '/api/public/hooks/jokenet-nightly'
+      path: '/api/public/hooks/jokenet-nightly'
+      fullPath: '/api/public/hooks/jokenet-nightly'
+      preLoaderRoute: typeof ApiPublicHooksJokenetNightlyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/mirror-evolution': {
       id: '/api/public/hooks/mirror-evolution'
       path: '/api/public/hooks/mirror-evolution'
@@ -2062,11 +2225,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksMirrorEvolutionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/reddit-leads': {
+      id: '/api/public/hooks/reddit-leads'
+      path: '/api/public/hooks/reddit-leads'
+      fullPath: '/api/public/hooks/reddit-leads'
+      preLoaderRoute: typeof ApiPublicHooksRedditLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/reengagement-emails': {
       id: '/api/public/hooks/reengagement-emails'
       path: '/api/public/hooks/reengagement-emails'
       fullPath: '/api/public/hooks/reengagement-emails'
       preLoaderRoute: typeof ApiPublicHooksReengagementEmailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/shop-reminder-emails': {
+      id: '/api/public/hooks/shop-reminder-emails'
+      path: '/api/public/hooks/shop-reminder-emails'
+      fullPath: '/api/public/hooks/shop-reminder-emails'
+      preLoaderRoute: typeof ApiPublicHooksShopReminderEmailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/shop-video-cleanup': {
+      id: '/api/public/hooks/shop-video-cleanup'
+      path: '/api/public/hooks/shop-video-cleanup'
+      fullPath: '/api/public/hooks/shop-video-cleanup'
+      preLoaderRoute: typeof ApiPublicHooksShopVideoCleanupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/trial-ending-emails': {
@@ -2121,9 +2305,12 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminEventsRoute: typeof AuthenticatedAdminEventsRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminGuestsRoute: typeof AuthenticatedAdminGuestsRoute
+  AuthenticatedAdminJokenetRoute: typeof AuthenticatedAdminJokenetRoute
   AuthenticatedAdminOverviewRoute: typeof AuthenticatedAdminOverviewRoute
   AuthenticatedAdminPollRoute: typeof AuthenticatedAdminPollRoute
+  AuthenticatedAdminRedditRoute: typeof AuthenticatedAdminRedditRoute
   AuthenticatedAdminRelateRoute: typeof AuthenticatedAdminRelateRoute
+  AuthenticatedAdminSmallbusinessRoute: typeof AuthenticatedAdminSmallbusinessRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedCheckinIdRoute: typeof AuthenticatedCheckinIdRoute
 }
@@ -2135,9 +2322,12 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminEventsRoute: AuthenticatedAdminEventsRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminGuestsRoute: AuthenticatedAdminGuestsRoute,
+  AuthenticatedAdminJokenetRoute: AuthenticatedAdminJokenetRoute,
   AuthenticatedAdminOverviewRoute: AuthenticatedAdminOverviewRoute,
   AuthenticatedAdminPollRoute: AuthenticatedAdminPollRoute,
+  AuthenticatedAdminRedditRoute: AuthenticatedAdminRedditRoute,
   AuthenticatedAdminRelateRoute: AuthenticatedAdminRelateRoute,
+  AuthenticatedAdminSmallbusinessRoute: AuthenticatedAdminSmallbusinessRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedCheckinIdRoute: AuthenticatedCheckinIdRoute,
 }
@@ -2208,6 +2398,8 @@ const rootRouteChildren: RootRouteChildren = {
   SafetyRoute: SafetyRoute,
   SetListRoute: SetListRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SmallbusinessRoute: SmallbusinessRoute,
+  SmallbusinessLabRoute: SmallbusinessLabRoute,
   StreamRoute: StreamRoute,
   SubscribeRoute: SubscribeRouteWithChildren,
   TermsRoute: TermsRoute,
@@ -2253,8 +2445,12 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksBillingReceiptsRoute: ApiPublicHooksBillingReceiptsRoute,
   ApiPublicHooksDailyIdeaEmailsRoute: ApiPublicHooksDailyIdeaEmailsRoute,
   ApiPublicHooksDispatchCheckinsRoute: ApiPublicHooksDispatchCheckinsRoute,
+  ApiPublicHooksJokenetNightlyRoute: ApiPublicHooksJokenetNightlyRoute,
   ApiPublicHooksMirrorEvolutionRoute: ApiPublicHooksMirrorEvolutionRoute,
+  ApiPublicHooksRedditLeadsRoute: ApiPublicHooksRedditLeadsRoute,
   ApiPublicHooksReengagementEmailsRoute: ApiPublicHooksReengagementEmailsRoute,
+  ApiPublicHooksShopReminderEmailsRoute: ApiPublicHooksShopReminderEmailsRoute,
+  ApiPublicHooksShopVideoCleanupRoute: ApiPublicHooksShopVideoCleanupRoute,
   ApiPublicHooksTrialEndingEmailsRoute: ApiPublicHooksTrialEndingEmailsRoute,
   ApiPublicPaymentsPricesRoute: ApiPublicPaymentsPricesRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
