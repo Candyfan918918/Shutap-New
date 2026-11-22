@@ -113,6 +113,7 @@ import { Route as ApiPublicHooksJokenetNightlyRouteImport } from './routes/api/p
 import { Route as ApiPublicHooksMirrorEvolutionRouteImport } from './routes/api/public/hooks/mirror-evolution'
 import { Route as ApiPublicHooksRedditLeadsRouteImport } from './routes/api/public/hooks/reddit-leads'
 import { Route as ApiPublicHooksReengagementEmailsRouteImport } from './routes/api/public/hooks/reengagement-emails'
+import { Route as ApiPublicHooksShopVideoCleanupRouteImport } from './routes/api/public/hooks/shop-video-cleanup'
 import { Route as ApiPublicHooksTrialEndingEmailsRouteImport } from './routes/api/public/hooks/trial-ending-emails'
 import { Route as ApiPublicPaymentsPricesRouteImport } from './routes/api/public/payments/prices'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -658,6 +659,12 @@ const ApiPublicHooksReengagementEmailsRoute =
     path: '/api/public/hooks/reengagement-emails',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksShopVideoCleanupRoute =
+  ApiPublicHooksShopVideoCleanupRouteImport.update({
+    id: '/api/public/hooks/shop-video-cleanup',
+    path: '/api/public/hooks/shop-video-cleanup',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksTrialEndingEmailsRoute =
   ApiPublicHooksTrialEndingEmailsRouteImport.update({
     id: '/api/public/hooks/trial-ending-emails',
@@ -795,6 +802,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
+  '/api/public/hooks/shop-video-cleanup': typeof ApiPublicHooksShopVideoCleanupRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
   '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -906,6 +914,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
+  '/api/public/hooks/shop-video-cleanup': typeof ApiPublicHooksShopVideoCleanupRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
   '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -1019,6 +1028,7 @@ export interface FileRoutesById {
   '/api/public/hooks/mirror-evolution': typeof ApiPublicHooksMirrorEvolutionRoute
   '/api/public/hooks/reddit-leads': typeof ApiPublicHooksRedditLeadsRoute
   '/api/public/hooks/reengagement-emails': typeof ApiPublicHooksReengagementEmailsRoute
+  '/api/public/hooks/shop-video-cleanup': typeof ApiPublicHooksShopVideoCleanupRoute
   '/api/public/hooks/trial-ending-emails': typeof ApiPublicHooksTrialEndingEmailsRoute
   '/api/public/payments/prices': typeof ApiPublicPaymentsPricesRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -1132,6 +1142,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
+    | '/api/public/hooks/shop-video-cleanup'
     | '/api/public/hooks/trial-ending-emails'
     | '/api/public/payments/prices'
     | '/api/public/payments/webhook'
@@ -1243,6 +1254,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
+    | '/api/public/hooks/shop-video-cleanup'
     | '/api/public/hooks/trial-ending-emails'
     | '/api/public/payments/prices'
     | '/api/public/payments/webhook'
@@ -1355,6 +1367,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/mirror-evolution'
     | '/api/public/hooks/reddit-leads'
     | '/api/public/hooks/reengagement-emails'
+    | '/api/public/hooks/shop-video-cleanup'
     | '/api/public/hooks/trial-ending-emails'
     | '/api/public/payments/prices'
     | '/api/public/payments/webhook'
@@ -1454,6 +1467,7 @@ export interface RootRouteChildren {
   ApiPublicHooksMirrorEvolutionRoute: typeof ApiPublicHooksMirrorEvolutionRoute
   ApiPublicHooksRedditLeadsRoute: typeof ApiPublicHooksRedditLeadsRoute
   ApiPublicHooksReengagementEmailsRoute: typeof ApiPublicHooksReengagementEmailsRoute
+  ApiPublicHooksShopVideoCleanupRoute: typeof ApiPublicHooksShopVideoCleanupRoute
   ApiPublicHooksTrialEndingEmailsRoute: typeof ApiPublicHooksTrialEndingEmailsRoute
   ApiPublicPaymentsPricesRoute: typeof ApiPublicPaymentsPricesRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -2191,6 +2205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksReengagementEmailsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/shop-video-cleanup': {
+      id: '/api/public/hooks/shop-video-cleanup'
+      path: '/api/public/hooks/shop-video-cleanup'
+      fullPath: '/api/public/hooks/shop-video-cleanup'
+      preLoaderRoute: typeof ApiPublicHooksShopVideoCleanupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/trial-ending-emails': {
       id: '/api/public/hooks/trial-ending-emails'
       path: '/api/public/hooks/trial-ending-emails'
@@ -2385,6 +2406,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksMirrorEvolutionRoute: ApiPublicHooksMirrorEvolutionRoute,
   ApiPublicHooksRedditLeadsRoute: ApiPublicHooksRedditLeadsRoute,
   ApiPublicHooksReengagementEmailsRoute: ApiPublicHooksReengagementEmailsRoute,
+  ApiPublicHooksShopVideoCleanupRoute: ApiPublicHooksShopVideoCleanupRoute,
   ApiPublicHooksTrialEndingEmailsRoute: ApiPublicHooksTrialEndingEmailsRoute,
   ApiPublicPaymentsPricesRoute: ApiPublicPaymentsPricesRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,

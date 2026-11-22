@@ -134,3 +134,8 @@ textarea.sb-input { font-size: 20px; line-height: 1.4; border-radius: 24px; padd
 .sb-styles button.on { background: #fff; color: var(--ink); border-color: #fff; }
 .sb-styles.light button { background: #fff; color: var(--ink); border-color: #ecd9e1; }
 .sb-styles.light button.on { background: var(--rose); color: #fff; border-color: var(--rose); }
+/* My creations */
+.sb-made { flex-shrink: 0; }
+.sb-made span.soon { color: var(--rose); font-weight: 600; }
+.sb-made .sb-grid2 { margin-top: 12px; }
+.sb-made .sb-white { min-height: 44px; font-size: 15px; background: #fdeef3; box-shadow: none; }

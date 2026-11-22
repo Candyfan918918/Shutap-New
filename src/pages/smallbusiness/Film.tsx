@@ -13,7 +13,8 @@
 // The clips stay on this phone; nothing is uploaded here.
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { trackEvent } from '@/lib/tracking'
-import { markMyVideo, noteFilmProblem, recordMyVideo, type ShopVideo } from '@/lib/shops.functions'
+import { markMyVideo, noteFilmProblem, recordMyVideo, videoStored, videoUploadLink, type ShopVideo } from '@/lib/shops.functions'
+import { supabase } from '@/integrations/supabase/client'
 import { cameraTip, defaultFacing, type Camera, type Facing, type Length } from '@/lib/shops/shop'
 import { canCompose, canFilm, composeVideo, pickMime, type VideoTexts } from '@/lib/shops/video/compose'
 import { DEFAULT_TEXT_STYLE, TEXT_STYLES, textStyle, type TextStyleKey } from '@/lib/shops/video/styles'
@@ -36,14 +37,14 @@ export type FilmProps = {
   onBack: () => void
 }
 
-function fileName(title: string, ext: string, n?: number): string {
+export function fileName(title: string, ext: string, n?: number): string {
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'video'
   return `shutap-${slug}${n ? `-shot-${n}` : ''}.${ext}`
 }
 
 /** Hand a file to the phone: the share sheet where there is one (it is how
  *  an iPhone saves a video to Photos), a download otherwise. */
-async function give(blob: Blob, name: string): Promise<'shared' | 'saved' | 'cancelled'> {
+export async function give(blob: Blob, name: string): Promise<'shared' | 'saved' | 'cancelled'> {
   const file = new File([blob], name, { type: blob.type })
   const nav = navigator as Navigator & { canShare?: (d: { files: File[] }) => boolean }
   if (nav.canShare?.({ files: [file] }) && typeof nav.share === 'function') {
@@ -93,7 +94,7 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
   }, [])
   useEffect(() => () => { stopCamera(); if (result) URL.revokeObjectURL(result.url) }, [stopCamera]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const problem = (what: 'camera_blocked' | 'no_camera' | 'cannot_record' | 'cannot_compose' | 'compose_failed' | 'clips_saved', detail?: string) => { void noteFilmProblem({ data: { what, ...(detail ? { detail: detail.slice(0, 200) } : {}) } }).catch(() => {}) }
+  const problem = (what: 'camera_blocked' | 'no_camera' | 'cannot_record' | 'cannot_compose' | 'compose_failed' | 'clips_saved' | 'not_stored', detail?: string) => { void noteFilmProblem({ data: { what, ...(detail ? { detail: detail.slice(0, 200) } : {}) } }).catch(() => {}) }
 
   async function openCamera(want: Facing): Promise<boolean> {
     if (!canFilm()) { setNote('This browser can’t film. Open Shutap in Safari or Chrome on your phone.'); problem('cannot_record'); return false }
@@ -176,7 +177,20 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
       setPhase('ready')
       ev('sb_video_ready', { style: look, seconds: out.seconds, ext: out.ext, audio: out.audio, ...out.notes, errors: out.notes.errors.join('; ').slice(0, 160) })
       const rec = await recordMyVideo({ data: { set_id: setId, seconds: Math.min(120, out.seconds), ext: out.ext, audio: out.audio, facing } }).catch(() => null)
-      if (rec?.ok) setVideo(rec.video)
+      if (rec?.ok) {
+        setVideo(rec.video)
+        // keep it in My creations for 30 days: straight from this phone to
+        // private storage, in the background; saving to the phone never waits
+        void (async () => {
+          try {
+            const link = await videoUploadLink({ data: { video_id: rec.video.id, ext: out.ext } })
+            if (!link.ok) throw new Error('no link')
+            const up = await supabase.storage.from('shop-videos').uploadToSignedUrl(link.path, link.token, out.blob, { contentType: out.blob.type || `video/${out.ext}`, upsert: true })
+            if (up.error) throw new Error(up.error.message)
+            await videoStored({ data: { video_id: rec.video.id, ext: out.ext, bytes: out.blob.size } })
+          } catch (e) { problem('not_stored', e instanceof Error ? e.message : String(e)) }
+        })()
+      }
     } catch (e) {
       problem('compose_failed', e instanceof Error ? e.message : String(e))
       setPhase('clips')
