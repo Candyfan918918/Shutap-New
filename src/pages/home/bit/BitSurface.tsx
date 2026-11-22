@@ -887,7 +887,10 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
     jokeTap('demo_remix', tier, {})
   }
   const checks = storyChecks(story)
-  const drive = !!embed?.drive
+  // Nov 17 2026 (Candy): guide and funniest pages get A, the guided notebook box, open from the start
+  // Nov 21 2026 (Candy): no more slim box; guide and funniest pages get A, open from the start
+  const driveA = !!embed && !embed.mirror && !embed.driveFull && (!!embed.slim || (!embed.bare && !embed.drive))
+  const drive = !!embed?.drive || driveA
   const driveTrack = useCallback((event: string, props?: Record<string, unknown>) => jokeTap(event, tier, props ?? {}), [tier])
 
   const onPhase = embed?.onPhase
@@ -1183,7 +1186,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
               // the way /bits does, "Your turn — write yours.", same width.
               <div className="bt-turn" id="bit-write">
                 <h2>Your turn — write yours.</h2>
-                {!embed.slim && <span>free · no sign-in to start · your lines stay word for word</span>}
+                {!(embed.slim && !driveA) && <span>free · no sign-in to start · your lines stay word for word</span>}
               </div>
             ) : (
               <div className="bt-hero">
@@ -1208,7 +1211,7 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
             )}
             {drive && lined && boxStep === 'story' ? (
               <DriveBox
-                slim={embed?.slim}
+                slim={driveA ? false : embed?.slim}
                 story={story}
                 onStory={(v) => { typed.current = true; setStory(v) }}
                 checks={checks}
@@ -1218,6 +1221,8 @@ export function BitSurface({ embed }: { embed?: BitEmbed } = {}) {
                 settingsLine={`${controls.audience} · ${controls.voice} · ${controls.length} · wild ${controls.heat}`}
                 track={driveTrack}
                 fullSlot={embed?.driveFull}
+                alwaysOpen={driveA}
+                placeholder={embed?.placeholder}
                 settings={
                   <div className="bt-ctl">
                     <Choice label="audience" options={AUDIENCES} value={controls.audience} onPick={(v) => setControls((c) => ({ ...c, audience: v }))} />
