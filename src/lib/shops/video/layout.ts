@@ -13,10 +13,18 @@ export const END_CARD_SECONDS = 2
 /** the hook stays this long, or half the first clip if that is shorter */
 export const HOOK_SECONDS = 2.2
 
-/** How long one shot may run, by the video length the owner picked: the
- *  three shots share the length, and a shot is never under two seconds. */
-export function shotSeconds(length: number): number {
-  return Math.max(2, Math.round((length / 3) * 10) / 10)
+/** How long each of the three shots may run, by the video length the owner
+ *  picked. 15 and 30 seconds share the length equally. 7 seconds is 2, 3, 2
+ *  (Candy, Nov 21 2026): the middle shot, where the joke gets worse, gets
+ *  the extra second. A shot is never under two seconds. */
+export function shotLengths(length: number): [number, number, number] {
+  if (length === 7) return [2, 3, 2]
+  const each = Math.max(2, Math.round((length / 3) * 10) / 10)
+  return [each, each, each]
+}
+/** How long shot `index` (0..2) may run. */
+export function shotSeconds(length: number, index = 0): number {
+  return shotLengths(length)[Math.min(2, Math.max(0, index))]!
 }
 
 /** The line on screen `t` seconds into clip `clip` (0..2). */
