@@ -4,7 +4,15 @@
 // invents a fact about the business. Same bones as the realtor kit and the
 // toasts: two writers, checks before anyone sees a line.
 // SKIT_PROMPT_VERSION is stamped on every set; bump on any edit.
-export const SKIT_PROMPT_VERSION = 'skit-0.4'
+export const SKIT_PROMPT_VERSION = 'skit-0.5'
+// 0.5 (Nov 21 2026, Candy's first phone run: "the joke is not funny at all"):
+// the set she saw came from the backup writer alone with nothing ranking it,
+// its third lines were labels, not turns ("It is a green tea coffee"), and
+// what the mic heard was a hello and a description of the café, not something
+// that happened. Now a judge from another model family picks the funnier
+// skit for each of the three places; the third line must be a turn a viewer
+// could not guess; and spoken words that are not a story are read as facts
+// about the business, with greetings and mic checks ignored.
 // 0.4 (Nov 21 2026, from the first lab run Candy shared): the text on a shot
 // narrated the shot ("The dog observes the request") and the code word was
 // the offer itself ("free cookie" for a free cookie). The text is the joke,
@@ -43,7 +51,8 @@ export const SKIT_RULES = `HARD RULES (every skit, every line):
 - FILMABLE BY THIS SHOP TODAY: three shots, each one single action a normal person can do in their own shop with a phone, in under ten seconds, with no props they would need to buy and no editing tricks. No dialogue to memorize: the text on screen does the talking. Never ask them to film a real customer.
 - THE TEXT IS THE JOKE, NEVER A DESCRIPTION OF THE PICTURE. The viewer can already see the shot; text that says what the camera shows is dead weight. The text adds what the picture cannot: a time stamp, something somebody said (in quotation marks), what the owner is thinking, a label that makes the plain picture mean something else. Each shot's text must be funny or tense with the picture covered up.
 - ON-SCREEN TEXT is read in two seconds: at most {{TEXT_WORDS}} words per shot, the hook at most 12. Plain words, the turn word last. No emojis, no hashtags. US English unless the country says otherwise.
-- THE THREE SHOTS ARE ONE JOKE: shot 1 sets it up, shot 2 makes it worse, shot 3 turns it. The hook is on screen first and makes a stranger stop scrolling without giving the turn away.
+- THE THREE SHOTS ARE ONE JOKE: shot 1 sets it up, shot 2 makes it worse, shot 3 turns it. SHOT 3 IS THE LAUGH: a reversal, an admission or a consequence the viewer did not see coming, never a summary, a label or a nice thought ("It is a green tea coffee" and "It is a beautiful mess" are labels, not turns). Test: if a stranger could guess shot 3 from shots 1 and 2, it is not a joke yet; write a different one.
+- SPECIFIC BEATS GENERAL: a number, a time of day, the exact thing somebody said. "A customer was confused" is nothing; "\"Is the matcha decaf?\" Sir, it is 4pm" is a skit. The hook is on screen first and makes a stranger stop scrolling without giving the turn away.
 - THE CODE WORD is one to three plain words lifted from the skit's own turn, something a customer could say at the counter without embarrassment. It is an inside joke for people who watched: never the offer itself, never a word from THE OWNER'S OFFER, never "free", "discount" or "deal".
 - THE CAPTION is under 100 characters, one more small joke, no hashtags.`
 
@@ -59,8 +68,9 @@ WHO IS ON CAMERA: {{CAMERA}}
 
 THE VIDEO: {{LENGTH}} seconds, vertical, three shots.
 
-WHAT HAPPENED AT THE SHOP TODAY (the owner's words, as typed):
+WHAT HAPPENED AT THE SHOP TODAY (the owner's words, typed or spoken into the phone):
 {{DAY}}
+(Spoken words can arrive misheard, with a hello or a mic check in front: ignore those. If the words describe the business and not something that happened, they are facts about the shop to use in every skit, and the "day" skit is the everyday moment those facts most often cause.)
 
 WHAT THE OWNER IS PROMOTING TODAY: {{PROMOTE}}
 THE OWNER'S OFFER FOR SAYING THE CODE WORD: {{OFFER}}
@@ -96,3 +106,24 @@ ALREADY TRIED, do not repeat: {{AVOID}}
 RULES: at most {{TEXT_WORDS}} words. The turn word last. It still fits the shot it sits on and the lines around it. No new fact about the business: no price, discount, giveaway, product or person the skit does not already have. Never at a person. No emojis, no hashtags.
 
 Return only JSON: {"options":["…","…","…"]}`
+
+/** The judge: another model family reads every clean draft, not knowing who
+ *  wrote which, and picks the funnier skit for each of the three places. */
+export const SKIT_JUDGE_PROMPT = `You pick which short shop videos are funnier. A small {{BUSINESS}} will film one on a phone: three shots with text on screen, {{LENGTH}} seconds. Strangers scrolling see it with no context.
+
+WHAT THE OWNER SAID HAPPENED TODAY: {{DAY}}
+THE KIND OF FUNNY THEY ASKED FOR: {{VOICE}}
+
+Below are {{N}} drafts, each with three skits in the same three places. For each place, pick the draft whose skit is funnier.
+
+FUNNIER MEANS, in this order:
+1. The third text is a real turn: a stranger laughs or exhales, and could not have guessed it from the first two.
+2. It is about this business and what the owner said, not a joke any shop could post.
+3. The text adds what the picture cannot show. Text that describes the shot loses.
+4. The hook would stop a scroll without giving the turn away.
+A skit whose third text is a label, a summary or a nice thought loses to one with a turn, however neat it is.
+
+THE DRAFTS:
+{{DRAFTS}}
+
+Return only JSON: {"places":[<draft number for place 1>,<for place 2>,<for place 3>],"best":<the draft that is funnier overall>,"why":"one short sentence"}`

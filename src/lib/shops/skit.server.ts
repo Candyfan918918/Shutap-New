@@ -9,11 +9,11 @@
 // this owner's day and business.
 import { callAgent, tryParseJson } from '@/lib/agents/gateway'
 import { fill } from '@/lib/jokes/prompts.server'
-import { backupWriterModel, bitWriterModel, BIT_BUDGET } from '@/lib/bits/pipeline.server'
+import { backupWriterModel, bitJudgeModel, bitWriterModel, BIT_BUDGET } from '@/lib/bits/pipeline.server'
 import { standardBlock, standardLines, type TasteLine } from '@/lib/bits/taste-bank'
 import { BUSINESS_TYPES, COUNTRIES, type BusinessType, type Camera, type Country, type Length, type Offer, type Voice } from './shop'
 import { HOOK_WORD_CAP, checkLine, checkSet, checkSkit, parseSkits, textWordCap, type LineKey, type Skit, type SkitCheck, type SkitContext } from './skit'
-import { SKIT_CAMERAS, SKIT_PROMPT, SKIT_TOUCH_PROMPT, SKIT_VOICES, SOURCE_DAY, SOURCE_SHOP, SOURCE_SHOP_2, SOURCE_TODAY } from './prompts.server'
+import { SKIT_CAMERAS, SKIT_JUDGE_PROMPT, SKIT_PROMPT, SKIT_TOUCH_PROMPT, SKIT_VOICES, SOURCE_DAY, SOURCE_SHOP, SOURCE_SHOP_2, SOURCE_TODAY } from './prompts.server'
 
 /** What the writer needs to know about the shop. */
 export type SkitShop = { name: string; city: string; country: Country; business_type: BusinessType; known_for: string[]; voice: Voice; length: Length; camera: Camera; offer: Offer; offer_text: string }
@@ -86,8 +86,12 @@ export function promptFor(shop: SkitShop, ask: SkitAsk, standard: TasteLine[] = 
 }
 
 export type SkitDraft = { skits: Skit[]; model: string; ms: number; checks: SkitCheck[] }
-export type SkitRun = { candidates: SkitDraft[]; winner: number; ms: number; standard: 'jokenet' | 'static' }
-export type SkitResult = { skits: Skit[]; candidates: SkitDraft[]; winner: number; ms: number; standard: 'jokenet' | 'static' }
+/** How the shown set was chosen. `from` is the candidate each of the three
+ *  skits came from; `judge` is null when there was nothing to choose between
+ *  or the judge did not answer (then the first writer's clean set is shown). */
+export type SkitPick = { skits: Skit[]; from: number[]; judge: string | null; why: string | null; clean: number }
+export type SkitRun = { candidates: SkitDraft[]; winner: number; ms: number; standard: 'jokenet' | 'static'; pick: SkitPick | null }
+export type SkitResult = { skits: Skit[]; candidates: SkitDraft[]; winner: number; ms: number; standard: 'jokenet' | 'static'; pick: SkitPick }
 
 async function writeOnce(model: string, prompt: string, timeoutMs: number): Promise<{ raw: unknown; ms: number } | null> {
   const t0 = Date.now()
@@ -102,7 +106,7 @@ async function writeOnce(model: string, prompt: string, timeoutMs: number): Prom
  *  shown a skit that broke a rule. */
 export async function writeSkits(shop: SkitShop, ask: SkitAsk): Promise<SkitResult | null> {
   const r = await writeSkitsLab(shop, ask)
-  return r.winner < 0 ? null : { skits: r.candidates[r.winner]!.skits, candidates: r.candidates, winner: r.winner, ms: r.ms, standard: r.standard }
+  return r.winner < 0 || !r.pick ? null : { skits: r.pick.skits, candidates: r.candidates, winner: r.winner, ms: r.ms, standard: r.standard, pick: r.pick }
 }
 
 /** The same run with nothing hidden: every candidate and what the checks
@@ -126,11 +130,44 @@ export async function writeSkitsLab(shop: SkitShop, ask: SkitAsk): Promise<SkitR
       candidates.push({ skits, model: models[i]!, ms: r.ms, checks })
       for (const c of checks) fails.push(`- ${c.where}: ${c.rule}${c.line ? ` — "${c.line.slice(0, 140)}"` : ''}`)
     })
-    if (candidates.some((c) => !c.checks.length)) break
+    // stop when the first writer has a clean set (the backup alone is not
+    // enough to stop on: its sets are the weaker ones), or nothing broke
+    if (candidates.some((c) => !c.checks.length && c.model === models[0])) break
     if (!fails.length) break
     feedback = `\n\nYOUR LAST ATTEMPT BROKE THESE RULES. Fix every one; everything else may stay:\n${[...new Set(fails)].slice(0, 12).join('\n')}`
   }
-  return { candidates, winner: candidates.findIndex((c) => !c.checks.length), ms: Date.now() - t0, standard: standard.from }
+  const pick = await pickSkits(shop, ask, candidates, ctx)
+  const winner = pick ? (pick.from.every((f) => f === pick.from[0]) ? pick.from[0]! : candidates.findIndex((c) => !c.checks.length)) : -1
+  return { candidates, winner, ms: Date.now() - t0, standard: standard.from, pick }
+}
+
+/** Choose what the owner sees from the clean sets. One clean set: that one.
+ *  More: the judge picks the funnier skit for each place; the mix is shown
+ *  only if it passes the set checks, else the judge's best whole set. */
+async function pickSkits(shop: SkitShop, ask: SkitAsk, candidates: SkitDraft[], ctx: SkitContext): Promise<SkitPick | null> {
+  const clean = candidates.map((c, i) => ({ c, i })).filter((x) => !x.c.checks.length && x.c.skits.length === 3)
+  if (!clean.length) return null
+  const first = clean[0]!
+  const plain: SkitPick = { skits: first.c.skits, from: [first.i, first.i, first.i], judge: null, why: null, clean: clean.length }
+  if (clean.length < 2) return plain
+  const model = bitJudgeModel()
+  const drafts = clean.map((x, n) => `DRAFT ${n + 1}\n` + x.c.skits.map((k, p) => `  place ${p + 1}: hook "${k.hook}" | 1 "${k.shots[0]?.text}" | 2 "${k.shots[1]?.text}" | 3 "${k.shots[2]?.text}"`).join('\n')).join('\n\n')
+  const res = await callAgent({
+    model, temperature: 0, maxTokens: 1200, timeoutMs: BIT_BUDGET.judge(), reasoningEffort: /^openai\/(gpt-5|o[1-9])/i.test(model) ? 'low' : undefined,
+    messages: [{ role: 'user', content: fill(SKIT_JUDGE_PROMPT, { BUSINESS: businessName(shop.business_type), LENGTH: String(shop.length), DAY: ask.day.trim() || '(nothing)', VOICE: SKIT_VOICES[shop.voice] ?? SKIT_VOICES['warm']!, N: String(clean.length), DRAFTS: drafts }) }],
+  })
+  if (res.error) { console.warn('[skit] judge error', { model, error: res.error }); return plain }
+  const v = tryParseJson(res.text) as { places?: unknown; best?: unknown; why?: unknown } | null
+  const at = (x: unknown) => (Number.isInteger(x) && (x as number) >= 1 && (x as number) <= clean.length ? clean[(x as number) - 1]! : null)
+  const places = Array.isArray(v?.places) && v.places.length === 3 ? v.places.map(at) : null
+  const why = typeof v?.why === 'string' ? v.why.slice(0, 200) : null
+  if (places && places.every(Boolean)) {
+    const skits = places.map((x, p) => x!.c.skits[p]!)
+    const mixed = new Set(places.map((x) => x!.i)).size > 1
+    if (!mixed || !checkSet(skits, ctx).length) return { skits, from: places.map((x) => x!.i), judge: model, why, clean: clean.length }
+  }
+  const best = at(v?.best)
+  return best ? { skits: best.c.skits, from: [best.i, best.i, best.i], judge: model, why, clean: clean.length } : plain
 }
 
 const unquote = (s: string): string => s.replace(/\s+/g, ' ').trim().replace(/^["'“”]+|["'“”]+$/g, '').trim()
