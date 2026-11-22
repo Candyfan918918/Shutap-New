@@ -10,6 +10,7 @@
 // (the planned exception to the Scrubber: the owner's own business, which
 // the videos name). Nothing Google returned is stored except the place id
 // and what the owner confirmed on the "Is this your shop?" screen.
+import { LOGO_DATA } from './shops/logo'
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
@@ -153,6 +154,10 @@ export const ShopIn = z.object({
   camera: z.enum(CAMERA_KEYS),
   offer: z.enum(OFFER_KEYS),
   offer_text: z.string().trim().max(80),
+  /** the owner's own logo photo, made small on their phone; null to leave the logo as it is */
+  logo: z.string().max(220_000).regex(LOGO_DATA).nullable().optional(),
+  /** true: take the logo off */
+  logo_clear: z.boolean().optional(),
 })
 
 export type Shop = {
@@ -171,6 +176,9 @@ export type Shop = {
   offer: Offer
   offer_text: string
   remind: boolean
+  /** a data: image for the end of the videos, or null */
+  logo: string | null
+  logo_from: 'upload' | 'website' | null
   created_at: string
 }
 
@@ -178,11 +186,11 @@ function shopFromRow(r: any): Shop {
   return {
     id: r.id, place_id: r.place_id ?? null, name: r.name, city: r.city, country: r.country, address: r.address ?? null, website: r.website ?? null,
     business_type: r.business_type, known_for: Array.isArray(r.known_for) ? r.known_for.filter((x: unknown) => typeof x === 'string') : [],
-    voice: r.voice, length: r.length, camera: r.camera, offer: r.offer, offer_text: r.offer_text ?? '', remind: !!r.remind, created_at: r.created_at,
+    voice: r.voice, length: r.length, camera: r.camera, offer: r.offer, offer_text: r.offer_text ?? '', remind: !!r.remind, logo: typeof r.logo === 'string' && r.logo ? r.logo : null, logo_from: r.logo_from === 'upload' || r.logo_from === 'website' ? r.logo_from : null, created_at: r.created_at,
   }
 }
 
-const SHOP_COLS = 'id, place_id, name, city, country, address, website, business_type, known_for, voice, length, camera, offer, offer_text, remind, created_at'
+const SHOP_COLS = 'id, place_id, name, city, country, address, website, business_type, known_for, voice, length, camera, offer, offer_text, remind, logo, logo_from, created_at'
 
 /** The same line twice (any case) is kept once, in the order given. */
 function uniqueChips(chips: string[]): string[] {
@@ -215,10 +223,25 @@ export const saveMyShop = createServerFn({ method: 'POST' })
       business_type: s.business_type, known_for: uniqueChips(s.known_for), voice: s.voice, length: s.length, camera: s.camera,
       offer: s.offer, offer_text: s.offer === 'none' ? '' : s.offer_text, updated_at: new Date().toISOString(),
     }
-    const { data: had } = await admin.from('shops').select('id').eq('user_id', userId).maybeSingle()
-    const { data: saved, error } = await admin.from('shops').upsert(row, { onConflict: 'user_id' }).select(SHOP_COLS).single()
+    const { data: had } = await admin.from('shops').select('id, website, logo, logo_from').eq('user_id', userId).maybeSingle()
+    // The logo: the owner's own photo always wins and stays. Otherwise the
+    // icon from their website, fetched when there is none yet or the website
+    // changed. A site with no icon leaves the end card without a logo.
+    const was = had as { website: string | null; logo: string | null; logo_from: string | null } | null
+    let logoWhy = 'kept'
+    const logo: { logo?: string | null; logo_from?: string | null } = {}
+    if (s.logo) { logo.logo = s.logo; logo.logo_from = 'upload'; logoWhy = 'upload' }
+    else if (s.logo_clear) { logo.logo = null; logo.logo_from = null; logoWhy = 'cleared' }
+    if (!s.logo && (s.logo_clear || was?.logo_from !== 'upload') && row.website && (s.logo_clear || !was?.logo || was.website !== row.website)) {
+      const { fetchSiteLogo } = await import('./shops/logo.server')
+      const got = await fetchSiteLogo(row.website)
+      logoWhy = got.why
+      if (got.logo) { logo.logo = got.logo; logo.logo_from = 'website' }
+      else if (was?.logo_from === 'website' && was.website !== row.website) { logo.logo = null; logo.logo_from = null }
+    } else if (!s.logo && !row.website && was?.logo_from === 'website') { logo.logo = null; logo.logo_from = null; logoWhy = 'no_site' }
+    const { data: saved, error } = await admin.from('shops').upsert({ ...row, ...logo }, { onConflict: 'user_id' }).select(SHOP_COLS).single()
     if (error || !saved) { console.error('[shops] save failed', error?.message); return { ok: false, reason: 'failed' } }
-    await track(admin, userId, had ? 'shop_updated' : 'shop_saved', { business_type: s.business_type, country: s.country, from_google: !!s.place_id, has_website: !!s.website, chips: row.known_for.length, voice: s.voice, length: s.length, camera: s.camera, offer: s.offer })
+    await track(admin, userId, had ? 'shop_updated' : 'shop_saved', { business_type: s.business_type, country: s.country, from_google: !!s.place_id, has_website: !!s.website, chips: row.known_for.length, voice: s.voice, length: s.length, camera: s.camera, offer: s.offer, logo: logoWhy, has_logo: !!(saved as { logo?: string | null }).logo })
     return { ok: true, shop: shopFromRow(saved) }
   })
 

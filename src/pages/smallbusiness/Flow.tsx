@@ -51,8 +51,32 @@ type Draft = {
   camera: Camera
   offer: Offer
   offer_text: string
+  /** a logo photo the owner just picked on this phone (small data: image) */
+  logo: string | null
 }
-const EMPTY: Draft = { step: 'welcome', business_type: null, name: '', city: '', country: null, website: '', place_id: null, address: null, kind: null, known_for: [], voice: 'warm', length: DEFAULT_LENGTH, camera: 'me', offer: 'freebie', offer_text: '' }
+const EMPTY: Draft = { step: 'welcome', business_type: null, name: '', city: '', country: null, website: '', place_id: null, address: null, kind: null, known_for: [], voice: 'warm', length: DEFAULT_LENGTH, camera: 'me', offer: 'freebie', offer_text: '', logo: null }
+
+/** A photo from the phone, made small enough to keep: 256 px at most, the
+ *  whole picture kept (never cropped), see-through corners left as they are. */
+async function smallLogo(file: File): Promise<string | null> {
+  try {
+    const url = URL.createObjectURL(file)
+    const img = new Image()
+    img.src = url
+    await img.decode()
+    const k = Math.min(1, 256 / Math.max(img.naturalWidth, img.naturalHeight))
+    const c = document.createElement('canvas')
+    c.width = Math.max(1, Math.round(img.naturalWidth * k))
+    c.height = Math.max(1, Math.round(img.naturalHeight * k))
+    const x = c.getContext('2d')!
+    x.imageSmoothingQuality = 'high'
+    x.drawImage(img, 0, 0, c.width, c.height)
+    URL.revokeObjectURL(url)
+    let out = c.toDataURL('image/png')
+    if (out.length > 200_000) { x.globalCompositeOperation = 'destination-over'; x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); out = c.toDataURL('image/jpeg', 0.85) }
+    return out.length <= 200_000 ? out : null
+  } catch { return null }
+}
 const DRAFT_KEY = 'shutap_sb_draft'
 const AFTER_SETUP: Step[] = ['day', 'promote', 'pick', 'lines', 'film', 'done', 'limit', 'crisis']
 const AFTER_SIGNIN: Step[] = ['funny', 'look', 'code', ...AFTER_SETUP]
@@ -179,10 +203,11 @@ export function SmallBusinessFlow() {
   async function save() {
     if (!d.business_type || !d.country) return
     setBusy('Saving your business…')
-    const r = await saveMyShop({ data: { shop: { place_id: d.place_id, name: d.name.trim(), city: d.city.trim(), country: d.country, address: d.address, website: d.website.trim() || null, business_type: d.business_type, known_for: d.known_for, voice: d.voice, length: d.length, camera: d.camera, offer: d.offer, offer_text: d.offer_text.trim() } } }).catch(() => null)
+    const r = await saveMyShop({ data: { shop: { place_id: d.place_id, name: d.name.trim(), city: d.city.trim(), country: d.country, address: d.address, website: d.website.trim() || null, business_type: d.business_type, known_for: d.known_for, voice: d.voice, length: d.length, camera: d.camera, offer: d.offer, offer_text: d.offer_text.trim(), logo: d.logo } } }).catch(() => null)
     setBusy(null)
     if (!r?.ok) { setNote(r?.reason === 'sign_in' ? 'Please sign in first.' : 'That didn’t save. Try again.'); if (r?.reason === 'sign_in') go('signin'); return }
     setShop(r.shop)
+    patch({ logo: null })
     go('day')
   }
 
@@ -190,6 +215,25 @@ export function SmallBusinessFlow() {
   // quiet, so while the owner has not tapped stop we start it again and keep
   // what was already heard. The words show as they are heard, and the bars
   // move only when the phone reports sound: that is the proof it works.
+  /** A returning owner changes their business, logo or choices: the saved
+   *  business goes back into the setup screens, starting at "Is this your
+   *  business?". */
+  function editBusiness() {
+    if (!shop) return
+    setD((x) => ({ ...x, business_type: shop.business_type, name: shop.name, city: shop.city, country: shop.country, website: shop.website ?? '', place_id: shop.place_id, address: shop.address, kind: null, known_for: shop.known_for, voice: shop.voice, length: shop.length, camera: shop.camera, offer: shop.offer, offer_text: shop.offer_text, logo: null }))
+    ev('sb_edit_business')
+    go('confirm')
+  }
+
+  async function pickLogo(file: File | undefined) {
+    if (!file) return
+    const small = await smallLogo(file)
+    if (!small) { setNote('That picture didn’t work. Try another one.'); return }
+    setNote(null)
+    patch({ logo: small })
+    ev('sb_logo_picked')
+  }
+
   function mic() {
     if (dayMode === 'listening') { micStop.current = true; rec.current?.stop(); return }
     micStop.current = false
@@ -351,6 +395,15 @@ export function SmallBusinessFlow() {
                 <button type="submit" className="sb-white" style={{ background: '#1d1a22', color: '#fff', minHeight: 48 }}>Add</button>
               </form>
             </div>
+            <div className="sb-logo">
+              <div className="pic" aria-hidden>{(d.logo ?? shop?.logo) ? <img src={(d.logo ?? shop?.logo)!} alt="" /> : <span>Logo</span>}</div>
+              <div className="how">
+                <b>Your logo, at the end of every video</b>
+                <label className="sb-label" style={{ gap: 6 }}>Website<input className="sb-input" style={{ fontSize: 16, padding: '12px 16px' }} type="url" inputMode="url" value={d.website} maxLength={300} placeholder="yourbusiness.com" onChange={(e) => patch({ website: e.target.value })} /></label>
+                <p className="sb-note" style={{ textAlign: 'left', margin: 0 }}>{d.logo ? 'Using the photo you picked.' : shop?.logo_from === 'upload' ? 'Using your own photo.' : 'We fetch your logo from your website when you save.'}</p>
+                <label className="sb-white sb-file">{d.logo || shop?.logo_from === 'upload' ? 'Pick a different photo' : 'Or use a photo from this phone'}<input type="file" accept="image/*" onChange={(e) => { void pickLogo(e.target.files?.[0]); e.target.value = '' }} /></label>
+              </div>
+            </div>
             <div className="sb-foot"><button type="button" className="sb-btn" onClick={() => go(userId ? 'funny' : 'signin')}>Yes, that’s us</button></div>
           </div>
         ) : step === 'signin' ? (
@@ -387,7 +440,7 @@ export function SmallBusinessFlow() {
           </div>
         ) : step === 'day' ? (
           <div className="sb-screen">
-            <div className="sb-head">{shop && <p className="sb-tag" style={{ marginBottom: 8 }}>Hey, {shop.name}</p>}<h1 className="sb-h1">Anything fun <b>happen today?</b></h1><p className="sb-sub">Crazy customer? Weird order? Those are our favorite.</p></div>
+            <div className="sb-head">{shop && <p className="sb-tag" style={{ marginBottom: 8 }}>Hey, {shop.name} · <button type="button" className="sb-link" onClick={editBusiness}>edit business</button></p>}<h1 className="sb-h1">Anything fun <b>happen today?</b></h1><p className="sb-sub">Crazy customer? Weird order? Those are our favorite.</p></div>
             {dayMode === 'idle' || dayMode === 'listening' ? (
               <>
                 <div className="sb-mid" style={{ alignItems: 'center' }}>
@@ -455,8 +508,10 @@ export function SmallBusinessFlow() {
             texts={{
               hook: lines.find((l) => l.key === 'hook')?.text ?? skit.hook,
               shots: [1, 2, 3].map((n) => lines.find((l) => l.key === `shot${n}`)?.text ?? skit.shots[n - 1]?.text ?? ''),
-              end: lines.find((l) => l.key === 'code')?.text ?? shop?.name ?? '',
-              endSmall: lines.some((l) => l.key === 'code') ? shop?.name ?? '' : shop?.city ?? '',
+              name: shop?.name ?? d.name,
+              place: shop?.address ?? shop?.city ?? '',
+              code: lines.find((l) => l.key === 'code')?.text ?? '',
+              logo: shop?.logo ?? null,
               // Free's videos carry the shutap.com mark, like every free download
               marked: !usage || usage.tier === 'free',
             }}
