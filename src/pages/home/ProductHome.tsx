@@ -159,7 +159,7 @@ function tap(name: string, props: Record<string, unknown>) {
 }
 
 /** Old homepage links that expected the write box go to /bits, untouched. */
-function forwardToBits(): boolean {
+export function forwardToBits(): boolean {
   if (typeof window === 'undefined') return false
   const { search, hash } = window.location
   const p = new URLSearchParams(search)
