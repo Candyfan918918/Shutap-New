@@ -733,3 +733,46 @@ export const deleteMyVideo = createServerFn({ method: 'POST' })
     await track(admin, userId, 'shop_video_deleted', { video_id: data.video_id, by: 'owner' })
     return { ok: true }
   })
+
+/* ───────────────────────── Your week (Nov 21 2026) ─────────────────────────
+   The goal is 3 videos a week; 5 earns the badge. A video counts once the
+   owner saved it to post (Shutap cannot see a post, so the count trusts the
+   save). The code-word counter is the owner's own tally: they tap +1 when a
+   customer says it. */
+export type MyWeek = { posted: number; goalMet: boolean; badge: boolean; toGoal: number; toBadge: number; code_says: number; remind: boolean; has_code: boolean }
+
+async function weekOf(admin: any, userId: string): Promise<MyWeek | null> {
+  const { today } = await import('./bits/tier.server')
+  const { weekStart, weekStatus } = await import('./shops/shop')
+  const { data: shop } = await admin.from('shops').select('remind, code_says, offer').eq('user_id', userId).maybeSingle()
+  if (!shop) return null
+  const { count } = await admin.from('shop_videos').select('id', { count: 'exact', head: true }).eq('user_id', userId).eq('saved', true).gte('day', weekStart(today().day))
+  return { ...weekStatus(count ?? 0), code_says: Number(shop.code_says ?? 0), remind: !!shop.remind, has_code: shop.offer !== 'none' }
+}
+
+export const getMyWeek = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({}).parse(d ?? {}))
+  .handler(async ({ context }): Promise<{ ok: boolean; week: MyWeek | null }> => {
+    if (isAnon(context) || !(await shopsOpen(context))) return { ok: false, week: null }
+    const { userId } = context as { userId: string }
+    const week = await weekOf(await adminDb(), userId)
+    return { ok: !!week, week }
+  })
+
+/** A customer said the code word (+1), or the owner tapped by mistake (-1). */
+export const countCodeWord = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ by: z.union([z.literal(1), z.literal(-1)]) }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: boolean; code_says: number }> => {
+    if (isAnon(context) || !(await shopsOpen(context))) return { ok: false, code_says: 0 }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: shop } = await admin.from('shops').select('code_says').eq('user_id', userId).maybeSingle()
+    if (!shop) return { ok: false, code_says: 0 }
+    const next = Math.max(0, Math.min(100000, Number(shop.code_says ?? 0) + data.by))
+    const { error } = await admin.from('shops').update({ code_says: next }).eq('user_id', userId)
+    if (error) return { ok: false, code_says: Number(shop.code_says ?? 0) }
+    await track(admin, userId, 'shop_code_said', { by: data.by, total: next })
+    return { ok: true, code_says: next }
+  })

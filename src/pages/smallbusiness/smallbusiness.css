@@ -159,3 +159,15 @@ textarea.sb-input { font-size: 20px; line-height: 1.4; border-radius: 24px; padd
 .sb-linecard .sb-white { min-height: 42px; font-size: 15px; background: #fdeef3; box-shadow: none; }
 .sb-linecard .sb-input { font-size: 18px; background: #faf5f7; box-shadow: none; padding: 12px 14px; border-radius: 16px; }
 .sb-opt { display: block; width: 100%; text-align: left; border: 0; border-radius: 16px; padding: 12px 14px; margin-top: 8px; background: #fdeef3; font: 500 17px/1.3 var(--inter); color: var(--ink); cursor: pointer; }
+/* the week */
+.sb-weekchip { display: inline-flex; align-items: center; align-self: flex-start; border: 0; border-radius: 999px; padding: 6px 12px; margin: 0 0 10px; background: #fff; box-shadow: 0 2px 8px rgba(142, 16, 67, .08); font: 700 13px var(--inter); color: var(--rose); cursor: pointer; }
+.sb-badge { align-self: center; padding: 8px 16px; border-radius: 999px; background: var(--rose); color: #fff; font: 700 15px var(--sora); }
+.sb-tally, .sb-switch { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-shrink: 0; }
+.sb-tally .row { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.sb-tally .row button { width: 44px; height: 44px; border: 0; border-radius: 999px; background: #fdeef3; color: var(--rose); font: 700 22px var(--inter); cursor: pointer; }
+.sb-tally .row button:disabled { opacity: .4; }
+.sb-tally .row output { min-width: 28px; text-align: center; font: 700 22px var(--sora); }
+.sb-switch input { appearance: none; -webkit-appearance: none; width: 52px; height: 32px; border-radius: 999px; background: #e3d5db; position: relative; flex-shrink: 0; cursor: pointer; transition: background .2s; }
+.sb-switch input::after { content: ''; position: absolute; left: 3px; top: 3px; width: 26px; height: 26px; border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transition: transform .2s; }
+.sb-switch input:checked { background: var(--rose); }
+.sb-switch input:checked::after { transform: translateX(20px); }

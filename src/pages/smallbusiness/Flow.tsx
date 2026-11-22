@@ -18,8 +18,8 @@ import { rememberReturnTo } from '@/lib/auth'
 import { trackEvent } from '@/lib/tracking'
 import { anonSessionId } from '@/pages/home/joke/jokeClient'
 import { LoadingDots, SignInButtons, SignInLegal } from '@/components/signin/SignIn'
-import { deleteMyVideo, findMyShop, getMyCreations, getMyShop, getMySkits, keepSkitLine, pickMyShop, pickMySkit, saveMyShop, touchMySkitLine, writeMySkits, type Creation, type Shop, type SkitSet } from '@/lib/shops.functions'
-import { BUSINESS_TYPES, CAMERAS, COUNTRIES, DEFAULT_LENGTH, LENGTHS, OFFERS, VOICES, type BusinessType, type Camera, type Country, type Length, type Offer, type Voice } from '@/lib/shops/shop'
+import { countCodeWord, deleteMyVideo, findMyShop, getMyWeek, setShopReminder, getMyCreations, getMyShop, getMySkits, keepSkitLine, pickMyShop, pickMySkit, saveMyShop, touchMySkitLine, writeMySkits, type Creation, type MyWeek, type Shop, type SkitSet } from '@/lib/shops.functions'
+import { WEEK_GOAL, BUSINESS_TYPES, CAMERAS, COUNTRIES, DEFAULT_LENGTH, LENGTHS, OFFERS, VOICES, type BusinessType, type Camera, type Country, type Length, type Offer, type Voice } from '@/lib/shops/shop'
 import { SOURCE_LABEL, skitLines, type LineKey } from '@/lib/shops/skit'
 import type { ShopMatch } from '@/lib/shops/places.server'
 import type { ShopUsage } from '@/lib/shops/allowance'
@@ -30,12 +30,12 @@ import { DeskGate, isDesk } from './Desk'
 import { amIAdmin } from '@/lib/admin.functions'
 import './smallbusiness.css'
 
-type Step = 'welcome' | 'type' | 'where' | 'which' | 'confirm' | 'signin' | 'funny' | 'look' | 'code' | 'day' | 'promote' | 'pick' | 'lines' | 'film' | 'done' | 'creations' | 'limit' | 'crisis'
+type Step = 'welcome' | 'type' | 'where' | 'which' | 'confirm' | 'signin' | 'funny' | 'look' | 'code' | 'day' | 'promote' | 'pick' | 'lines' | 'film' | 'done' | 'creations' | 'week' | 'limit' | 'crisis'
 
 /** The order the top-corner icons fill in (15 icons across the whole product;
  *  filming and after take the rest). */
-const PROGRESS: Record<Step, number> = { welcome: 0, type: 1, where: 2, which: 3, confirm: 3, signin: 4, funny: 5, look: 6, code: 7, day: 8, promote: 9, pick: 10, lines: 11, film: 12, done: 13, creations: 13, limit: 10, crisis: 8 }
-const BACK: Partial<Record<Step, Step>> = { type: 'welcome', where: 'type', which: 'where', confirm: 'where', signin: 'confirm', funny: 'confirm', look: 'funny', code: 'look', promote: 'day', pick: 'day', lines: 'pick', film: 'lines', creations: 'day', limit: 'day', crisis: 'day' }
+const PROGRESS: Record<Step, number> = { welcome: 0, type: 1, where: 2, which: 3, confirm: 3, signin: 4, funny: 5, look: 6, code: 7, day: 8, promote: 9, pick: 10, lines: 11, film: 12, done: 13, creations: 13, week: 13, limit: 10, crisis: 8 }
+const BACK: Partial<Record<Step, Step>> = { type: 'welcome', where: 'type', which: 'where', confirm: 'where', signin: 'confirm', funny: 'confirm', look: 'funny', code: 'look', promote: 'day', pick: 'day', lines: 'pick', film: 'lines', creations: 'day', week: 'day', limit: 'day', crisis: 'day' }
 
 type Draft = {
   step: Step
@@ -80,7 +80,7 @@ async function smallLogo(file: File): Promise<string | null> {
   } catch { return null }
 }
 const DRAFT_KEY = 'shutap_sb_draft'
-const AFTER_SETUP: Step[] = ['day', 'promote', 'pick', 'lines', 'film', 'done', 'creations', 'limit', 'crisis']
+const AFTER_SETUP: Step[] = ['day', 'promote', 'pick', 'lines', 'film', 'done', 'creations', 'week', 'limit', 'crisis']
 const AFTER_SIGNIN: Step[] = ['funny', 'look', 'code', ...AFTER_SETUP]
 
 function readDraft(): Draft {
@@ -119,7 +119,8 @@ export function SmallBusinessFlow() {
   const [note, setNote] = useState<string | null>(null)
   const [chip, setChip] = useState('')
   const [day, setDay] = useState('')
-  const [dayMode, setDayMode] = useState<'idle' | 'listening' | 'type' | 'done'>('idle')
+  const [dayMode, setDayMode] = useState<'idle' | 'listening' | 'type' | 'done' | 'micoff'>('idle')
+  const [week, setWeek] = useState<MyWeek | null>(null)
   const [creations, setCreations] = useState<Creation[] | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
   const [askDelete, setAskDelete] = useState<string | null>(null)
@@ -155,6 +156,7 @@ export function SmallBusinessFlow() {
       if (skits?.usage) setUsage(skits.usage)
       if (mine?.shop) {
         setShop(mine.shop)
+        void loadWeek()
         const latest = skits?.sets[0] ?? null
         if (latest) setSet(latest)
         setD((x) => ({ ...x, step: latest ? (latest.picked === null ? 'pick' : 'lines') : 'day' }))
@@ -249,6 +251,25 @@ export function SmallBusinessFlow() {
     ev('sb_logo_picked')
   }
 
+  async function loadWeek() {
+    const r = await getMyWeek({ data: {} }).catch(() => null)
+    if (r?.week) setWeek(r.week)
+  }
+  function openWeek() { go('week'); void loadWeek(); ev('sb_week') }
+  async function codeSaid(by: 1 | -1) {
+    if (!week) return
+    setWeek({ ...week, code_says: Math.max(0, week.code_says + by) })
+    const r = await countCodeWord({ data: { by } }).catch(() => null)
+    if (r?.ok) setWeek((w) => (w ? { ...w, code_says: r.code_says } : w))
+  }
+  async function remindMe(on: boolean) {
+    if (!week) return
+    setWeek({ ...week, remind: on })
+    const r = await setShopReminder({ data: { on } }).catch(() => null)
+    setWeek((w) => (w ? { ...w, remind: r?.ok ? r.remind : !on } : w))
+    ev('sb_remind', { on })
+  }
+
   async function openCreations() {
     go('creations')
     setCreations(null)
@@ -309,7 +330,7 @@ export function SmallBusinessFlow() {
       }
       r.onerror = (e) => {
         const why = String(e?.error ?? '')
-        if (why === 'not-allowed' || why === 'service-not-allowed' || why === 'audio-capture') { blocked = true; micStop.current = true; setLive(''); setLoud(false); setMicOn(false); setDayMode('type'); setNote('Your mic is off. Turn it on, or just type what happened.'); ev('sb_mic', { how: 'blocked', why }) }
+        if (why === 'not-allowed' || why === 'service-not-allowed' || why === 'audio-capture') { blocked = true; micStop.current = true; setLive(''); setLoud(false); setMicOn(false); setDayMode('micoff'); setNote(null); ev('sb_mic', { how: 'blocked', why }) }
       }
       r.onend = () => {
         if (blocked) return
@@ -452,7 +473,7 @@ export function SmallBusinessFlow() {
                 <label className="sb-white sb-file">{d.logo || shop?.logo_from === 'upload' ? 'Pick a different photo' : 'Or use a photo from this phone'}<input type="file" accept="image/*" onChange={(e) => { void pickLogo(e.target.files?.[0]); e.target.value = '' }} /></label>
               </div>
             </div>
-            <div className="sb-foot"><button type="button" className="sb-btn" onClick={() => go(userId ? 'funny' : 'signin')}>Yes, that’s us</button></div>
+            <div className="sb-foot"><button type="button" className="sb-btn" onClick={() => go(userId ? 'funny' : 'signin')}>Yes, that’s us</button>{!d.place_id && note && <button type="button" className="sb-quiet" onClick={() => { setNote(null); go('where') }}>Try another name</button>}</div>
           </div>
         ) : step === 'signin' ? (
           <div className="sb-screen">
@@ -488,8 +509,17 @@ export function SmallBusinessFlow() {
           </div>
         ) : step === 'day' ? (
           <div className="sb-screen">
-            <div className="sb-head">{shop && <p className="sb-tag" style={{ marginBottom: 8 }}>Hey, {shop.name} · <button type="button" className="sb-link" onClick={editBusiness}>edit business</button> · <button type="button" className="sb-link" onClick={() => void openCreations()}>my creations</button></p>}<h1 className="sb-h1">Anything fun <b>happen today?</b></h1><p className="sb-sub">Crazy customer? Weird order? Those are our favorite.</p></div>
-            {dayMode === 'idle' || dayMode === 'listening' ? (
+            <div className="sb-head">{shop && <p className="sb-tag" style={{ marginBottom: 8 }}>Hey, {shop.name} · <button type="button" className="sb-link" onClick={editBusiness}>edit business</button> · <button type="button" className="sb-link" onClick={() => void openCreations()}>my creations</button></p>}{shop && week && <button type="button" className="sb-weekchip" onClick={openWeek}>{week.badge ? `${week.posted} this week · badge earned` : `${week.posted} of ${WEEK_GOAL} this week`}</button>}<h1 className="sb-h1">Anything fun <b>happen today?</b></h1><p className="sb-sub">Crazy customer? Weird order? Those are our favorite.</p></div>
+            {dayMode === 'micoff' ? (
+              <>
+                <div className="sb-mid">
+                  <p className="sb-tag">Your mic is off. Turn it on, or just type what happened.</p>
+                  <div className="sb-card" style={{ cursor: 'default' }}><p className="src">IPHONE</p><span style={{ color: '#1d1a22', fontSize: 15 }}>Open Settings, find Safari, and set Camera and Microphone to Allow.</span></div>
+                  <div className="sb-card" style={{ cursor: 'default' }}><p className="src">ANDROID</p><span style={{ color: '#1d1a22', fontSize: 15 }}>Tap the icon beside the web address, then Permissions, and allow Camera and Microphone.</span></div>
+                </div>
+                <div className="sb-foot"><button type="button" className="sb-btn" onClick={() => setDayMode('type')}>Type it instead</button><button type="button" className="sb-quiet" onClick={() => { setDayMode('idle'); mic() }}>Try the mic again</button></div>
+              </>
+            ) : dayMode === 'idle' || dayMode === 'listening' ? (
               <>
                 <div className="sb-mid" style={{ alignItems: 'center' }}>
                   <div className="sb-mic"><button type="button" className={dayMode === 'listening' ? 'on' : ''} aria-label={dayMode === 'listening' ? 'Stop listening' : 'Tap and tell me what happened'} onClick={mic}><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0" /><path d="M12 18v3" /></svg></button></div>
@@ -580,7 +610,7 @@ export function SmallBusinessFlow() {
           <div className="sb-screen">
             <div className="sb-head">{made ? <><h1 className="sb-h1">That’s <b>today’s video</b></h1><p className="sb-sub">Post it while it’s fresh. Come back when something else happens.</p></> : <><h1 className="sb-h1">Your skit <b>is saved</b></h1><p className="sb-sub">Film it whenever you’re ready. It will be waiting here today.</p></>}</div>
             <div className="sb-mid">{skit && <div className="sb-card" style={{ cursor: 'default' }}><p className="src">TODAY’S SKIT</p><b className="title">{skit.title}</b><span style={{ fontSize: 15 }}>{skit.pitch}</span></div>}</div>
-            <div className="sb-foot">{!made && <button type="button" className="sb-btn" onClick={() => go('film')}>Film it now</button>}<button type="button" className="sb-quiet" onClick={() => { setDay(''); setDayMode('idle'); setPromote(''); go('day') }}>Start another skit</button>{made && <button type="button" className="sb-quiet" onClick={() => void openCreations()}>My creations</button>}</div>
+            <div className="sb-foot">{!made && <button type="button" className="sb-btn" onClick={() => go('film')}>Film it now</button>}<button type="button" className="sb-quiet" onClick={() => { setDay(''); setDayMode('idle'); setPromote(''); go('day') }}>Start another skit</button>{made && <button type="button" className="sb-quiet" onClick={openWeek}>See my week</button>}{made && <button type="button" className="sb-quiet" onClick={() => void openCreations()}>My creations</button>}</div>
           </div>
         ) : step === 'creations' ? (
           <div className="sb-screen">
@@ -600,6 +630,28 @@ export function SmallBusinessFlow() {
             </div>
             <div className="sb-foot"><p className="sb-note">Only you can see these. <a href="/privacy" style={{ color: 'inherit' }}>Privacy</a></p><button type="button" className="sb-quiet" onClick={() => go('day')}>Back</button></div>
           </div>
+        ) : step === 'week' ? (
+          <div className="sb-screen">
+            <div className="sb-head"><h1 className="sb-h1">Your <b>week</b></h1><p className="sb-sub">{!week ? 'One moment…' : week.badge ? 'Five videos this week. That’s the badge.' : week.goalMet ? `Goal met. ${week.toBadge} more for this week’s badge.` : `${week.toGoal} more to reach this week’s goal of ${WEEK_GOAL}.`}</p></div>
+            <div className="sb-mid">
+              <div style={{ alignSelf: 'center' }}><RisingIcons variant="week" posted={week?.posted ?? 0} label={`${week?.posted ?? 0} videos saved to post this week`} /></div>
+              {week?.badge && <div className="sb-badge" role="img" aria-label="This week’s badge">★ 5 in a week</div>}
+              <p className="sb-note">A video counts when you save it to post. A new week starts Monday.</p>
+              {week?.has_code && (
+                <div className="sb-card sb-tally" style={{ cursor: 'default' }}>
+                  <div><b>Customers who said the code word</b><span>Tap + each time someone says it.</span></div>
+                  <div className="row"><button type="button" aria-label="One fewer" disabled={!week.code_says} onClick={() => void codeSaid(-1)}>−</button><output aria-live="polite">{week.code_says}</output><button type="button" aria-label="One more" onClick={() => void codeSaid(1)}>+</button></div>
+                </div>
+              )}
+              {week && (
+                <label className="sb-card sb-switch" style={{ cursor: 'pointer' }}>
+                  <div><b>Remind me tomorrow</b><span>One email in the morning to your sign-up address, on days you haven’t made a video. Turn it off here any time.</span></div>
+                  <input type="checkbox" role="switch" checked={week.remind} onChange={(e) => void remindMe(e.target.checked)} />
+                </label>
+              )}
+            </div>
+            <div className="sb-foot"><button type="button" className="sb-btn" onClick={() => go('day')}>Make a video</button><button type="button" className="sb-quiet" onClick={() => void openCreations()}>My creations</button></div>
+          </div>
         ) : step === 'limit' ? (
           <div className="sb-screen">
             <div className="sb-head">{free ? <><h1 className="sb-h1">That’s your <b>3 free videos</b></h1><p className="sb-sub">They stay yours to download. Pick a plan to keep going.</p></> : <><h1 className="sb-h1">Today’s video <b>is done</b></h1><p className="sb-sub">A new one unlocks tomorrow.</p></>}</div>
@@ -607,7 +659,7 @@ export function SmallBusinessFlow() {
               <div style={{ alignSelf: 'center' }}><RisingIcons variant="week" posted={5} label={free ? 'All three free videos used' : 'Today’s video made'} /></div>
               {free && <div className="sb-card" aria-pressed="true" style={{ cursor: 'default' }}><b>Basic · {usd(PLANS.basic.amount)} / month</b><span>1 new video every day, just you</span></div>}
             </div>
-            <div className="sb-foot">{free ? <Link to="/pricing" className="sb-btn" onClick={() => ev('sb_limit_cta', { tier: 'free' })}>Choose Basic</Link> : <Link to="/creations" className="sb-btn">My creations</Link>}</div>
+            <div className="sb-foot">{free ? <><Link to="/pricing" className="sb-btn" onClick={() => ev('sb_limit_cta', { tier: 'free' })}>Choose Basic</Link><button type="button" className="sb-quiet" onClick={() => void openCreations()}>Not now</button></> : <><button type="button" className="sb-btn" onClick={openWeek}>See my week</button><button type="button" className="sb-quiet" onClick={() => void openCreations()}>My creations</button></>}</div>
           </div>
         ) : step === 'crisis' ? (
           <div className="sb-screen">
