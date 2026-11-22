@@ -2699,6 +2699,251 @@ export type Database = {
           },
         ]
       }
+      shop_lookups: {
+        Row: {
+          created_at: string
+          day: string
+          found: number
+          id: string
+          kind: string
+          subject: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          day: string
+          found?: number
+          id?: string
+          kind: string
+          subject?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          found?: number
+          id?: string
+          kind?: string
+          subject?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      shop_reminder_emails: {
+        Row: {
+          day: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          day: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          day?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      shop_skit_sets: {
+        Row: {
+          created_at: string
+          day: string
+          day_text: string
+          id: string
+          idea: string
+          lines: Json
+          picked: number | null
+          promote: string
+          prompt_version: string
+          shop_id: string
+          skits: Json
+          tier: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          day: string
+          day_text?: string
+          id?: string
+          idea?: string
+          lines?: Json
+          picked?: number | null
+          promote?: string
+          prompt_version: string
+          shop_id: string
+          skits: Json
+          tier: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          day_text?: string
+          id?: string
+          idea?: string
+          lines?: Json
+          picked?: number | null
+          promote?: string
+          prompt_version?: string
+          shop_id?: string
+          skits?: Json
+          tier?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shop_skit_sets_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shop_videos: {
+        Row: {
+          created_at: string
+          day: string
+          delete_on: string
+          deleted_at: string | null
+          id: string
+          saved: boolean
+          sent_tiktok: boolean
+          shop_id: string
+          skit_set_id: string | null
+          storage_path: string | null
+          tier: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          day: string
+          delete_on: string
+          deleted_at?: string | null
+          id?: string
+          saved?: boolean
+          sent_tiktok?: boolean
+          shop_id: string
+          skit_set_id?: string | null
+          storage_path?: string | null
+          tier: string
+          title?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          delete_on?: string
+          deleted_at?: string | null
+          id?: string
+          saved?: boolean
+          sent_tiktok?: boolean
+          shop_id?: string
+          skit_set_id?: string | null
+          storage_path?: string | null
+          tier?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shop_videos_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shop_videos_skit_set_id_fkey"
+            columns: ["skit_set_id"]
+            isOneToOne: false
+            referencedRelation: "shop_skit_sets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shops: {
+        Row: {
+          address: string | null
+          business_type: string
+          camera: string
+          city: string
+          code_says: number
+          country: string
+          created_at: string
+          id: string
+          kind: string | null
+          known_for: Json
+          length: number
+          logo: string | null
+          logo_from: string | null
+          name: string
+          offer: string
+          offer_text: string
+          place_id: string | null
+          remind: boolean
+          updated_at: string
+          user_id: string
+          voice: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          business_type: string
+          camera?: string
+          city: string
+          code_says?: number
+          country: string
+          created_at?: string
+          id?: string
+          kind?: string | null
+          known_for?: Json
+          length?: number
+          logo?: string | null
+          logo_from?: string | null
+          name: string
+          offer?: string
+          offer_text?: string
+          place_id?: string | null
+          remind?: boolean
+          updated_at?: string
+          user_id: string
+          voice?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          business_type?: string
+          camera?: string
+          city?: string
+          code_says?: number
+          country?: string
+          created_at?: string
+          id?: string
+          kind?: string | null
+          known_for?: Json
+          length?: number
+          logo?: string | null
+          logo_from?: string | null
+          name?: string
+          offer?: string
+          offer_text?: string
+          place_id?: string | null
+          remind?: boolean
+          updated_at?: string
+          user_id?: string
+          voice?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       situations: {
         Row: {
           alias_id: string
@@ -2829,6 +3074,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      skit_evals: {
+        Row: {
+          ask: Json
+          created_at: string
+          id: string
+          notes: string | null
+          prompt_version: string
+          rating: string | null
+          result: Json
+          shop: Json
+        }
+        Insert: {
+          ask: Json
+          created_at?: string
+          id?: string
+          notes?: string | null
+          prompt_version: string
+          rating?: string | null
+          result: Json
+          shop: Json
+        }
+        Update: {
+          ask?: Json
+          created_at?: string
+          id?: string
+          notes?: string | null
+          prompt_version?: string
+          rating?: string | null
+          result?: Json
+          shop?: Json
+        }
+        Relationships: []
       }
       subscriptions: {
         Row: {
