@@ -1,3 +1,5 @@
+import { SB_STEPS } from "@/lib/shops/page-copy";
+import { useSmallBusinessOpen } from "@/hooks/use-smallbusiness-open";
 import { createFileRoute } from "@tanstack/react-router";
 import { ogImageMeta } from "@/lib/seo/meta";
 import { ContentPage } from "@/components/seo/ContentPage";
@@ -76,14 +78,25 @@ export const Route = createFileRoute("/how-it-works")({
       breadcrumbScript([{ name: "How it works", path: PATH }]),
     ],
   }),
-  component: () => (
+  component: HowItWorksPage,
+});
+
+/** Shutap for small business (Nov 21 2026): added only for someone who can
+ *  open it (launched, or an admin while it is hidden), before Realtor kits. */
+const SB_SECTION = { heading: "Small business: say what happened, film it on your phone", body: SB_STEPS.map((x, i) => `${i + 1}. ${x.title}. ${x.body}`).join(" ") };
+
+function HowItWorksPage() {
+  const sbOpen = useSmallBusinessOpen();
+  const at = SECTIONS.findIndex((x) => x.heading.startsWith("Realtor kits"));
+  const sections = sbOpen && at >= 0 ? [...SECTIONS.slice(0, at), SB_SECTION, ...SECTIONS.slice(at)] : SECTIONS;
+  return (
     <ContentPage
       breadcrumbs={[{ name: "How it works", path: PATH }]}
       h1="How the Shutap Humor Amplifier Lab works"
       capsule={CAPSULE}
-      sections={SECTIONS}
+      sections={sections}
       others={OTHERS}
       whoDoesWhat
     />
-  ),
-});
+  );
+}
