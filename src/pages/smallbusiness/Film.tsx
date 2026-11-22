@@ -169,7 +169,7 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
       const url = URL.createObjectURL(out.blob)
       setResult({ blob: out.blob, ext: out.ext, url })
       setPhase('ready')
-      ev('sb_video_ready', { seconds: out.seconds, ext: out.ext, audio: out.audio })
+      ev('sb_video_ready', { seconds: out.seconds, ext: out.ext, audio: out.audio, ...out.notes, errors: out.notes.errors.join('; ').slice(0, 160) })
       const rec = await recordMyVideo({ data: { set_id: setId, seconds: Math.min(120, out.seconds), ext: out.ext, audio: out.audio, facing } }).catch(() => null)
       if (rec?.ok) setVideo(rec.video)
     } catch (e) {
