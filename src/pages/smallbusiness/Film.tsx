@@ -75,8 +75,9 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
   const timer = useRef<number | null>(null)
   const canvas = useRef<HTMLCanvasElement | null>(null)
   const host = useRef<HTMLDivElement | null>(null)
-  const per = shotSeconds(length)
   const shot = Math.min(clips.length, 2)
+  // this shot's own length: a 7-second video is 2, 3, 2
+  const per = shotSeconds(length, shot)
   const allIn = clips.length >= 3
 
   const stopCamera = useCallback(() => {

@@ -1,14 +1,18 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { coverCrop, fitText, lineAt, shotSeconds, wrapLines } from './layout'
+import { coverCrop, fitText, lineAt, shotLengths, shotSeconds, wrapLines } from './layout'
 
 const perChar = (px: number) => (s: string) => s.length * px
 
-test('three shots share the video length; never under two seconds', () => {
-  assert.equal(shotSeconds(15), 5)
-  assert.equal(shotSeconds(30), 10)
-  assert.equal(shotSeconds(7), 2.3)
-  assert.equal(shotSeconds(3), 2)
+test('15 and 30 seconds share the length equally; 7 seconds is 2, 3, 2', () => {
+  assert.deepEqual(shotLengths(15), [5, 5, 5])
+  assert.deepEqual(shotLengths(30), [10, 10, 10])
+  assert.deepEqual(shotLengths(7), [2, 3, 2])
+  assert.equal(shotLengths(7).reduce((a, b) => a + b, 0), 7)
+  assert.equal(shotSeconds(7, 1), 3)
+  assert.equal(shotSeconds(7, 2), 2)
+  assert.equal(shotSeconds(15, 2), 5)
+  assert.deepEqual(shotLengths(3), [2, 2, 2]) // never under two seconds
 })
 test('the hook opens the first clip, then each clip carries its own line', () => {
   const texts = { hook: 'HOOK', shots: ['one', 'two', 'three'] }
