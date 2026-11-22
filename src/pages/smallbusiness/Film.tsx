@@ -16,6 +16,7 @@ import { trackEvent } from '@/lib/tracking'
 import { markMyVideo, noteFilmProblem, recordMyVideo, type ShopVideo } from '@/lib/shops.functions'
 import { cameraTip, defaultFacing, type Camera, type Facing, type Length } from '@/lib/shops/shop'
 import { canCompose, canFilm, composeVideo, pickMime, type VideoTexts } from '@/lib/shops/video/compose'
+import { DEFAULT_TEXT_STYLE, TEXT_STYLES, textStyle, type TextStyleKey } from '@/lib/shops/video/styles'
 import { shotSeconds } from '@/lib/shops/video/layout'
 
 type Phase = 'ask' | 'help' | 'film' | 'make' | 'ready' | 'clips'
@@ -26,7 +27,8 @@ export type FilmProps = {
   title: string
   /** what to film, one per shot */
   actions: string[]
-  texts: VideoTexts
+  /** everything on the video but the look of the words, which is picked here */
+  texts: Omit<VideoTexts, 'style'>
   camera: Camera
   length: Length
   onDone: (video: ShopVideo | null) => void
@@ -69,6 +71,9 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
   const [result, setResult] = useState<{ blob: Blob; ext: 'mp4' | 'webm'; url: string } | null>(null)
   const [video, setVideo] = useState<ShopVideo | null>(null)
   const [saved, setSaved] = useState(false)
+  // the look of the words: remembered on this phone for next time
+  const [style, setStyle] = useState<TextStyleKey>(() => { try { return textStyle(localStorage.getItem('shutap_sb_style')).key } catch { return DEFAULT_TEXT_STYLE } })
+  const pickStyle = (k: TextStyleKey) => { setStyle(k); try { localStorage.setItem('shutap_sb_style', k) } catch { /* noop */ } ev('sb_text_style', { style: k }) }
   const live = useRef<HTMLVideoElement | null>(null)
   const stream = useRef<MediaStream | null>(null)
   const recorder = useRef<MediaRecorder | null>(null)
@@ -157,7 +162,7 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
     ev('sb_redo')
   }
 
-  async function make() {
+  async function make(look: TextStyleKey = style) {
     if (!allIn) return
     if (!canCompose()) { stopCamera(); setPhase('clips'); problem('cannot_compose'); return }
     stopCamera()
@@ -165,11 +170,11 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
     setProgress(0)
     await new Promise((r) => setTimeout(r, 0))
     try {
-      const out = await composeVideo({ clips, texts, canvas: canvas.current!, host: host.current!, onProgress: setProgress })
+      const out = await composeVideo({ clips, texts: { ...texts, style: look }, canvas: canvas.current!, host: host.current!, onProgress: setProgress })
       const url = URL.createObjectURL(out.blob)
       setResult({ blob: out.blob, ext: out.ext, url })
       setPhase('ready')
-      ev('sb_video_ready', { seconds: out.seconds, ext: out.ext, audio: out.audio, ...out.notes, errors: out.notes.errors.join('; ').slice(0, 160) })
+      ev('sb_video_ready', { style: look, seconds: out.seconds, ext: out.ext, audio: out.audio, ...out.notes, errors: out.notes.errors.join('; ').slice(0, 160) })
       const rec = await recordMyVideo({ data: { set_id: setId, seconds: Math.min(120, out.seconds), ext: out.ext, audio: out.audio, facing } }).catch(() => null)
       if (rec?.ok) setVideo(rec.video)
     } catch (e) {
@@ -233,8 +238,9 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
           </button>
           <div className="sb-glass sb-brief">
             <p className="n">{allIn ? 'All 3 shots are in' : `Shot ${shot + 1} of 3`}</p>
+            {!allIn && (shot === 0 && texts.hook ? <p className="say"><span>Say</span>{texts.hook} {texts.shots[0]}</p> : texts.shots[shot] ? <p className="say"><span>Say</span>{texts.shots[shot]}</p> : null)}
             {!allIn && <p className="act">{actions[shot]}</p>}
-            <p className="tip">{cameraTip(camera, facing)}</p>
+            {!recording && <p className="tip">{cameraTip(camera, facing)}</p>}
           </div>
           <button type="button" className="sb-glass sb-round" aria-label={facing === 'front' ? 'Flip to back camera' : 'Flip to front camera'} disabled={recording} onClick={() => void flip()}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M4 9a8 8 0 0 1 14-3l2 2" /><path d="M20 4v4h-4" /><path d="M20 15a8 8 0 0 1-14 3l-2-2" /><path d="M4 20v-4h4" /></svg>
@@ -252,6 +258,7 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
             </div>
             <button type="button" className="sb-glass sb-redo" disabled={recording || !clips.length} onClick={redo}>Redo</button>
           </div>
+          {allIn && <div className="sb-styles" role="group" aria-label="Text style">{TEXT_STYLES.map((t) => <button key={t.key} type="button" className={t.key === style ? 'on' : ''} aria-pressed={t.key === style} onClick={() => pickStyle(t.key)}>{t.name}</button>)}</div>}
           {allIn ? <button type="button" className="sb-btn" disabled={recording} onClick={() => void make()}>Make my video</button> : <p className="sb-glass sb-status quiet">Film all 3 shots first</p>}
         </div>
       </div>
@@ -274,6 +281,7 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
         <div className="sb-head"><h1 className="sb-h1">Your video <b>is ready</b></h1></div>
         <div className="sb-mid top"><div className="sb-cam"><video src={result.url} controls playsInline loop preload="auto" onLoadedMetadata={(e) => { try { e.currentTarget.currentTime = 0.05 } catch { /* the first frame is only a preview */ } }} /></div></div>
         <div className="sb-foot">
+          <div className="sb-styles light" role="group" aria-label="Text style: tap one to make the video again in that look">{TEXT_STYLES.map((t) => <button key={t.key} type="button" className={t.key === style ? 'on' : ''} aria-pressed={t.key === style} onClick={() => { if (t.key === style) return; pickStyle(t.key); if (result) URL.revokeObjectURL(result.url); setResult(null); setSaved(false); void make(t.key) }}>{t.name}</button>)}</div>
           <button type="button" className="sb-btn" style={{ fontSize: 16 }} onClick={() => void save()}>{saved ? 'Saved ✓ · save again' : 'Save for TikTok, Instagram and other apps'}</button>
           <button type="button" className="sb-quiet" onClick={() => onDone(video)}>{saved ? 'Done' : 'Not now'}</button>
         </div>
