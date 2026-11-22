@@ -10,7 +10,7 @@
 // change name (they are Pro). basic_monthly is the Basic plan.
 import type { BitTier } from './bits/shared'
 import { BIT_CAPS } from './bits/plans'
-import { KIT_CAPS, TOAST_CAPS } from './entitlements'
+import { KIT_CAPS, SHOP_VIDEO_CAPS, TOAST_CAPS } from './entitlements'
 
 /** Prices changed Nov 5 2026: Basic $7.99 → $19.99. Pro unchanged. Lookup
  *  keys never change. Nov 6 2026 (Candy): pay to create, never to use. Only
@@ -70,8 +70,10 @@ export const STRIPE_DESCRIPTIONS: Record<PaidPlan, string> = {
 /** What each plan gives, in the same words on every surface (Nov 6 2026,
  *  Candy: one plan for everything, no per-product lists). */
 export const PLAN_SUMMARY: Record<'free' | PaidPlan, string[]> = {
-  free: [`${BIT_CAPS.free} free bits to start`, 'Your first realtor kit', 'Your first toast', 'Marked “— shutap.com”'],
-  basic: [`${BIT_CAPS.basic} bits a day, with rewrites`, `${KIT_CAPS.basic} realtor kits a month`, `${TOAST_CAPS.basic} toast a month`, 'No watermark'],
+  // Nov 21 2026 (Candy): the small-business video leads each plan. Its videos never carry a mark;
+  // the mark line is about bits, kits and toasts.
+  free: [`Your first ${SHOP_VIDEO_CAPS.free} small-business videos`, `${BIT_CAPS.free} free bits to start`, 'Your first realtor kit', 'Your first toast', 'Bits, kits and toasts marked “— shutap.com”'],
+  basic: [`${SHOP_VIDEO_CAPS.basic} new small-business video every day`, `${BIT_CAPS.basic} bits a day, with rewrites`, `${KIT_CAPS.basic} realtor kits a month`, `${TOAST_CAPS.basic} toast a month`, 'No watermark'],
   pro: ['Unlimited bits, kits and toasts', 'No watermark', 'The Mirror'],
 }
 export const PLAN_LINES: Record<PaidPlan, string[]> = { basic: PLAN_SUMMARY.basic, pro: PLAN_SUMMARY.pro }
