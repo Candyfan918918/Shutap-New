@@ -4,6 +4,8 @@ import { ContentPage } from "@/components/seo/ContentPage";
 import { SITE_URL } from "@/lib/site";
 import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 import { FAQ_ITEMS as QA } from "@/lib/seo/faq";
+import { SB_FAQ } from "@/lib/shops/page-copy";
+import { useSmallBusinessOpen } from "@/hooks/use-smallbusiness-open";
 
 const PATH = "/faq";
 const URL = `${SITE_URL}/faq`;
@@ -57,13 +59,24 @@ export const Route = createFileRoute("/faq")({
       breadcrumbScript([{ name: "FAQ", path: "/faq" }]),
     ],
   }),
-  component: () => (
+  component: FaqPage,
+});
+
+/** Shutap for small business (Nov 21 2026): its questions are added only for
+ *  someone who can open it (launched, or an admin while it is hidden). The
+ *  full list is on /smallbusiness. */
+const SB_ASKED = ["What is Shutap for small business?", "How much does it cost?", "Will it get me more views?", "Does Shutap post the video for me?", "Who can see my videos, and how long are they kept?"];
+const SB_QA = SB_FAQ.filter((x) => SB_ASKED.includes(x.q)).map((x) => ({ heading: `Small business: ${x.q}`, body: x.a }));
+
+function FaqPage() {
+  const sbOpen = useSmallBusinessOpen();
+  return (
     <ContentPage
       breadcrumbs={[{ name: "FAQ", path: "/faq" }]}
       h1="Shutap FAQ"
       capsule={CAPSULE}
-      sections={QA}
-      others={OTHERS}
+      sections={sbOpen ? [...QA, ...SB_QA] : QA}
+      others={sbOpen ? [{ href: "/smallbusiness", label: "Small business videos" }, ...OTHERS] : OTHERS}
     />
-  ),
-});
+  );
+}

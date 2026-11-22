@@ -101,7 +101,7 @@ function recognizer(): Recognizer | null {
   try { return new R() as Recognizer } catch { return null }
 }
 
-export function SmallBusinessFlow() {
+export function SmallBusinessFlow({ onStep }: { /** told which screen is showing ('desk' for the computer screen), so the page can show its information only under the first one */ onStep?: (at: string) => void } = {}) {
   // a computer gets the send-to-your-phone screen (admins may carry on)
   const [desk, setDesk] = useState<'unknown' | 'desk' | 'phone'>('unknown')
   const [admin, setAdmin] = useState(false)
@@ -139,6 +139,7 @@ export function SmallBusinessFlow() {
   const rec = useRef<Recognizer | null>(null)
 
   const step = d.step
+  useEffect(() => { onStep?.(desk === 'desk' ? 'desk' : desk === 'unknown' ? 'welcome' : step) }, [desk, step, onStep])
   const go = (s: Step) => { setNote(null); setD((x) => ({ ...x, step: s })); ev('sb_step', { step: s }) }
   const patch = (p: Partial<Draft>) => setD((x) => ({ ...x, ...p }))
 
@@ -439,7 +440,7 @@ export function SmallBusinessFlow() {
               <p className="sb-eyebrow">SAY IT FUNNIER</p>
               <h1 className="sb-h1" style={{ marginBottom: 26 }}>The <b>creative team</b> your small business doesn’t have.</h1>
               <button type="button" className="sb-btn" style={{ alignSelf: 'stretch' }} onClick={() => go('type')}>Make my first video</button>
-              <p className="sb-note" style={{ marginTop: 16 }}>First 3 videos free</p>
+              <p className="sb-note" style={{ marginTop: 16 }}>First 3 videos free · <a href="#how" className="sb-link" onClick={() => ev('sb_how_link')}>how it works</a></p>
             </div>
           </div>
         ) : step === 'type' ? (
