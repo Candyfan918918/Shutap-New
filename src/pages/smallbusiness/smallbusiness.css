@@ -213,3 +213,16 @@ textarea.sb-input { font-size: 20px; line-height: 1.4; border-radius: 24px; padd
 .sb-waitsteps li.on::before { background: var(--rose); animation: sb-breathe 1.1s ease-in-out infinite; }
 .sb-waitsteps li.done { color: var(--muted); }
 .sb-waitsteps li.done::before { background: var(--rose); }
+/* Sign in: the owner's business on a card, then the same white sheet as the first screen. */
+.sb-si-top { flex: 1; min-height: 108px; display: flex; align-items: center; justify-content: center; padding: 8px 0 20px; }
+.sb-si-biz { width: 100%; display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 24px; padding: 14px 16px; box-shadow: 0 10px 30px rgba(142, 16, 67, .10); }
+.sb-si-biz .pic { width: 48px; height: 48px; border-radius: 999px; background: var(--tint); color: var(--rose); display: grid; place-items: center; font: 700 20px var(--sora); flex-shrink: 0; }
+.sb-si-biz .who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; text-align: left; }
+.sb-si-biz .who b { font: 700 17px/1.25 var(--sora); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-si-biz .who span { font-size: 13.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-si-biz .ok { width: 26px; height: 26px; border-radius: 999px; background: var(--rose); display: grid; place-items: center; flex-shrink: 0; }
+.sb-si-sheet { padding-top: 28px; }
+.sb-si-sheet .sb-h1 { font-size: 27px; margin-bottom: 22px; }
+.sb-si-in { align-self: stretch; display: flex; flex-direction: column; gap: 14px; text-align: left; }
+.sb-si-trust { list-style: none; margin: 18px 0 14px; padding: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 18px; }
+.sb-si-trust li { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--wine); }
