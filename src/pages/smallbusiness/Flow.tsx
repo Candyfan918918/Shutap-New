@@ -524,7 +524,7 @@ export function SmallBusinessFlow({ onStep }: { /** told which screen is showing
           </div>
         ) : step === 'signin' ? (
           <div className="sb-screen">
-            <div className="sb-head"><h1 className="sb-h1">Save <b>your business</b></h1><p className="sb-sub">So your videos and your week are here tomorrow.</p></div>
+            <div className="sb-head"><h1 className="sb-h1">Sign in <b>free</b></h1><p className="sb-sub">It saves your business, so your skits and videos are here tomorrow.</p><ul className="sb-free"><li>Free to sign in</li><li>No card</li><li>First 3 videos free</li></ul></div>
             <div className="sb-mid"><SignInButtons where="smallbusiness" onBefore={() => rememberReturnTo('/smallbusiness')} onSignedIn={() => go('funny')} /><SignInLegal /></div>
           </div>
         ) : step === 'funny' ? (
