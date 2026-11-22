@@ -628,3 +628,6 @@
 .shp-home .x-sbp-l .x-btn{align-self:stretch}
 .shp-home .x-pains{grid-template-columns:1fr}
 .shp-home .x-toph{font-size:40px}}
+/* Videos inside a drawn phone screen fill that screen at every width. The
+ * narrow-screen size for a bare video in a phone frame must not reach them. */
+.shp-home .x-dev .x-lp .x-fr video,.shp-home .x-dev .x-lp.x-rc video,.shp-home .x-dev .x-lp .x-lcam video{position:absolute;inset:0;width:100%;height:100%;border-radius:30px;object-fit:cover;object-position:top}
