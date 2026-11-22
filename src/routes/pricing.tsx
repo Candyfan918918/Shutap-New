@@ -1,3 +1,6 @@
+import { useSmallBusinessOpen } from '@/hooks/use-smallbusiness-open'
+import { SHOP_VIDEO_CAPS } from '@/lib/entitlements'
+import { KEEP_DAYS } from '@/lib/shops/shop'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ogImageMeta } from '@/lib/seo/meta'
 import { SITE_URL } from '@/lib/site'
@@ -97,6 +100,7 @@ function PlanCard({ plan }: { plan: 'free' | 'basic' | 'pro' }) {
 }
 
 function PricingPage() {
+  const sbOpen = useSmallBusinessOpen()
   return (
     <div className="fd">
       <div className="fd-col" style={{ maxWidth: 'var(--page-max)', boxSizing: 'border-box', padding: '36px var(--page-pad) 64px', gap: 22 }}>
@@ -112,6 +116,14 @@ function PricingPage() {
           <PlanCard plan="basic" />
           <PlanCard plan="pro" />
         </div>
+
+        {/* Shutap for small business (Nov 21 2026): shown only to someone who can open it (launched, or an admin while it is hidden). The same Free and Basic accounts; Pro is not offered for it yet. */}
+        {sbOpen && (
+          <section className="fd-post" style={{ padding: '16px 20px', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+            <span style={{ fontSize: 15.5 }}><b>Shutap for small business.</b> <span className="fd-muted">Free: your first {SHOP_VIDEO_CAPS.free} videos. Basic {usd(BASIC)}/month: {SHOP_VIDEO_CAPS.basic} new video every day for one business, on the same Basic plan as everything else. Each video is kept {KEEP_DAYS} days to download again.</span></span>
+            <Link to="/smallbusiness" className="fd-btn ghost">make a video</Link>
+          </section>
+        )}
 
         <section className="fd-post" style={{ padding: '16px 20px', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
           <span style={{ fontSize: 15.5 }}><b>Just need one?</b> <span className="fd-muted">{ONE_TIME_LINE}</span></span>

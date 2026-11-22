@@ -1,3 +1,4 @@
+import { useSmallBusinessOpen } from '@/hooks/use-smallbusiness-open'
 import { createFileRoute } from '@tanstack/react-router'
 import { ogImageMeta } from "@/lib/seo/meta";
 import { DocLayout } from '@/components/site/DocLayout'
@@ -27,11 +28,14 @@ export const Route = createFileRoute('/privacy')({
 })
 
 function PrivacyPage() {
+  // Shutap for small business is described only to someone who can open it
+  // (launched, or an admin while it is hidden); the date moves with it.
+  const sbOpen = useSmallBusinessOpen()
   return (
     <DocLayout
       active="/privacy"
       title="Privacy Policy"
-      subline="Last updated: November 16, 2026 · Controller: Shutap"
+      subline={`Last updated: ${sbOpen ? 'November 21, 2026' : 'November 16, 2026'} · Controller: Shutap`}
     >
       <h3>1. The short version</h3>
       <p>
@@ -231,6 +235,40 @@ function PrivacyPage() {
         PostHog analytics cookies and browser storage to measure use and record session replays.
         You can block or clear cookies in your browser settings.
       </p>
+
+      {sbOpen && (
+        <>
+          <h3>Shutap for small business</h3>
+          <ul>
+            <li>
+              <b>Your business:</b> we keep what you tell us about it: its name, city, address,
+              website, logo, the things you say your videos can mention, and your choices (the kind
+              of funny, video length, who is on camera, your code word offer). If you look your
+              business up, its name and city are sent to Google to find the listing, and the
+              listing&rsquo;s details and a few of its public reviews are read once to suggest what
+              your videos can mention. If you give a website, we fetch its icon to use as your logo.
+            </li>
+            <li>
+              <b>What happened today:</b> what you type or say is saved as you gave it, with the
+              skits written from it. If you use the microphone, your phone&rsquo;s own speech-to-text
+              (from Apple or Google) turns your voice into text; Shutap receives the text, not the
+              recording. The text is sent to the AI providers that write the skits.
+            </li>
+            <li>
+              <b>Your clips and videos:</b> the three clips you film stay on your phone; your phone
+              puts them together. Only the finished video is uploaded, to private storage, so you
+              can download it again from My creations. It is kept for 30 days and then deleted
+              automatically, and you can delete it sooner. Only you are given a link to it. Our
+              staff do not watch your videos, they are never published by us, and they are never
+              used to train AI models.
+            </li>
+            <li>
+              <b>Reminder email:</b> sent to your sign-up address only while you have
+              &ldquo;Remind me tomorrow&rdquo; turned on.
+            </li>
+          </ul>
+        </>
+      )}
 
       <h3>14. Changes and contact</h3>
       <p>

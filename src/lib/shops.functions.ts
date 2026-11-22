@@ -116,7 +116,7 @@ export const findMyShop = createServerFn({ method: 'POST' })
 
 /** What the "Is this your shop?" screen shows for the picked place. */
 export type PickedShop = { place_id: string; name: string; address: string; kind: string | null; website: string | null; summary: string | null }
-export type PickShopResult = { ok: true; shop: PickedShop } | { ok: false; reason: 'off' | 'none' | 'unavailable' | 'slow_down' }
+export type PickShopResult = { ok: true; shop: PickedShop; /** things the listing and its reviews name, for the owner to keep or remove */ suggested: string[] } | { ok: false; reason: 'off' | 'none' | 'unavailable' | 'slow_down' }
 
 /** Read the shop the owner picked from the list. Review text is not returned
  *  to the browser and not stored; a later slice reads it on the server to
@@ -133,8 +133,12 @@ export const pickMyShop = createServerFn({ method: 'POST' })
     const r = await shopDetails(data.place_id)
     await trackLookup(admin, who, { kind: 'details', found: r.ok ? 1 : 0, reason: r.ok ? null : r.reason })
     if (!r.ok) return { ok: false, reason: r.reason === 'none' || r.reason === 'bad_input' ? 'none' : 'unavailable' }
-    const { place_id, name, address, kind, website, summary } = r.shop
-    return { ok: true, shop: { place_id, name, address, kind, website, summary } }
+    const { place_id, name, address, kind, website, summary, reviews } = r.shop
+    // "Your videos can mention": suggested from the listing and its reviews
+    // (read here only, never sent to the browser or stored as text)
+    const { suggestKnownFor } = await import('./shops/skit.server')
+    const suggested = await suggestKnownFor({ kind, summary, reviews })
+    return { ok: true, shop: { place_id, name, address, kind, website, summary }, suggested }
   })
 
 /** One short "your videos can mention" line. */
@@ -146,6 +150,8 @@ export const ShopIn = z.object({
   city: z.string().trim().min(1).max(80),
   country: z.enum(COUNTRY_KEYS),
   address: z.string().trim().max(200).nullable(),
+  /** what the listing calls the place ("Japanese restaurant") */
+  kind: z.string().trim().max(80).nullable().optional(),
   website: z.string().trim().max(300).nullable(),
   business_type: z.enum(BUSINESS_TYPE_KEYS),
   known_for: z.array(Chip).max(12),
@@ -167,6 +173,7 @@ export type Shop = {
   city: string
   country: Country
   address: string | null
+  kind: string | null
   website: string | null
   business_type: BusinessType
   known_for: string[]
@@ -184,13 +191,13 @@ export type Shop = {
 
 function shopFromRow(r: any): Shop {
   return {
-    id: r.id, place_id: r.place_id ?? null, name: r.name, city: r.city, country: r.country, address: r.address ?? null, website: r.website ?? null,
+    id: r.id, place_id: r.place_id ?? null, name: r.name, city: r.city, country: r.country, address: r.address ?? null, kind: typeof r.kind === 'string' && r.kind ? r.kind : null, website: r.website ?? null,
     business_type: r.business_type, known_for: Array.isArray(r.known_for) ? r.known_for.filter((x: unknown) => typeof x === 'string') : [],
     voice: r.voice, length: r.length, camera: r.camera, offer: r.offer, offer_text: r.offer_text ?? '', remind: !!r.remind, logo: typeof r.logo === 'string' && r.logo ? r.logo : null, logo_from: r.logo_from === 'upload' || r.logo_from === 'website' ? r.logo_from : null, created_at: r.created_at,
   }
 }
 
-const SHOP_COLS = 'id, place_id, name, city, country, address, website, business_type, known_for, voice, length, camera, offer, offer_text, remind, logo, logo_from, created_at'
+const SHOP_COLS = 'id, place_id, name, city, country, address, kind, website, business_type, known_for, voice, length, camera, offer, offer_text, remind, logo, logo_from, created_at'
 
 /** The same line twice (any case) is kept once, in the order given. */
 function uniqueChips(chips: string[]): string[] {
@@ -219,7 +226,7 @@ export const saveMyShop = createServerFn({ method: 'POST' })
     const admin = await adminDb()
     const s = data.shop
     const row = {
-      user_id: userId, place_id: s.place_id, name: s.name, city: s.city, country: s.country, address: s.address || null, website: s.website || null,
+      user_id: userId, place_id: s.place_id, name: s.name, city: s.city, country: s.country, address: s.address || null, kind: s.place_id ? s.kind || null : null, website: s.website || null,
       business_type: s.business_type, known_for: uniqueChips(s.known_for), voice: s.voice, length: s.length, camera: s.camera,
       offer: s.offer, offer_text: s.offer === 'none' ? '' : s.offer_text, updated_at: new Date().toISOString(),
     }
@@ -310,7 +317,7 @@ async function myShopRow(admin: any, userId: string): Promise<(SkitShop & { id: 
   const { data } = await admin.from('shops').select(SHOP_COLS).eq('user_id', userId).maybeSingle()
   if (!data) return null
   const s = shopFromRow(data)
-  return { id: s.id, name: s.name, city: s.city, country: s.country, business_type: s.business_type, known_for: s.known_for, voice: s.voice, length: s.length, camera: s.camera, offer: s.offer, offer_text: s.offer_text }
+  return { id: s.id, name: s.name, city: s.city, country: s.country, business_type: s.business_type, kind: s.kind, known_for: s.known_for, voice: s.voice, length: s.length, camera: s.camera, offer: s.offer, offer_text: s.offer_text }
 }
 
 async function usageOf(admin: any, userId: string): Promise<ShopUsage> {
@@ -725,4 +732,47 @@ export const deleteMyVideo = createServerFn({ method: 'POST' })
     if (up.error) return { ok: false }
     await track(admin, userId, 'shop_video_deleted', { video_id: data.video_id, by: 'owner' })
     return { ok: true }
+  })
+
+/* ───────────────────────── Your week (Nov 21 2026) ─────────────────────────
+   The goal is 3 videos a week; 5 earns the badge. A video counts once the
+   owner saved it to post (Shutap cannot see a post, so the count trusts the
+   save). The code-word counter is the owner's own tally: they tap +1 when a
+   customer says it. */
+export type MyWeek = { posted: number; goalMet: boolean; badge: boolean; toGoal: number; toBadge: number; code_says: number; remind: boolean; has_code: boolean }
+
+async function weekOf(admin: any, userId: string): Promise<MyWeek | null> {
+  const { today } = await import('./bits/tier.server')
+  const { weekStart, weekStatus } = await import('./shops/shop')
+  const { data: shop } = await admin.from('shops').select('remind, code_says, offer').eq('user_id', userId).maybeSingle()
+  if (!shop) return null
+  const { count } = await admin.from('shop_videos').select('id', { count: 'exact', head: true }).eq('user_id', userId).eq('saved', true).gte('day', weekStart(today().day))
+  return { ...weekStatus(count ?? 0), code_says: Number(shop.code_says ?? 0), remind: !!shop.remind, has_code: shop.offer !== 'none' }
+}
+
+export const getMyWeek = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({}).parse(d ?? {}))
+  .handler(async ({ context }): Promise<{ ok: boolean; week: MyWeek | null }> => {
+    if (isAnon(context) || !(await shopsOpen(context))) return { ok: false, week: null }
+    const { userId } = context as { userId: string }
+    const week = await weekOf(await adminDb(), userId)
+    return { ok: !!week, week }
+  })
+
+/** A customer said the code word (+1), or the owner tapped by mistake (-1). */
+export const countCodeWord = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ by: z.union([z.literal(1), z.literal(-1)]) }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: boolean; code_says: number }> => {
+    if (isAnon(context) || !(await shopsOpen(context))) return { ok: false, code_says: 0 }
+    const { userId } = context as { userId: string }
+    const admin = await adminDb()
+    const { data: shop } = await admin.from('shops').select('code_says').eq('user_id', userId).maybeSingle()
+    if (!shop) return { ok: false, code_says: 0 }
+    const next = Math.max(0, Math.min(100000, Number(shop.code_says ?? 0) + data.by))
+    const { error } = await admin.from('shops').update({ code_says: next }).eq('user_id', userId)
+    if (error) return { ok: false, code_says: Number(shop.code_says ?? 0) }
+    await track(admin, userId, 'shop_code_said', { by: data.by, total: next })
+    return { ok: true, code_says: next }
   })

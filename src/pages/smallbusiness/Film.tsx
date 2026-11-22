@@ -216,7 +216,7 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
   if (phase === 'ask' || phase === 'help') {
     return (
       <div className="sb-screen">
-        <div className="sb-head"><h1 className="sb-h1">Turn on <b>camera and mic</b></h1><p className="sb-sub">{phase === 'help' ? 'Your camera or mic is off. Turn them on here, then try again.' : 'Your phone will ask twice. Tap Allow both times.'}</p></div>
+        <div className="sb-head">{phase === 'help' ? <><h1 className="sb-h1">Your camera <b>is off</b></h1><p className="sb-sub">Your skit is saved. Turn the camera and mic on, then try again.</p></> : <><h1 className="sb-h1">Turn on <b>camera and mic</b></h1><p className="sb-sub">Your phone will ask twice. Tap Allow both times.</p></>}</div>
         <div className="sb-mid">
           {phase === 'ask' ? (
             <>

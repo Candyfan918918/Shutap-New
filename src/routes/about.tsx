@@ -1,3 +1,4 @@
+import { useSmallBusinessOpen } from '@/hooks/use-smallbusiness-open'
 import { createFileRoute } from "@tanstack/react-router";
 import { ogImageMeta } from "@/lib/seo/meta";
 import { ContentPage } from "@/components/seo/ContentPage";
@@ -120,14 +121,28 @@ export const Route = createFileRoute("/about")({
       breadcrumbScript([{ name: "About", path: PATH }]),
     ],
   }),
-  component: () => (
+  component: AboutPage,
+});
+
+/** Shutap for small business (Nov 21 2026): shown only to someone who can
+ *  open it (launched, or an admin while it is hidden), after the toasts. */
+const SB_SECTION = {
+  heading: "Small business: your day, funnier",
+  body: "Say one thing that happened at your business today, or tap “Surprise me”. Shutap drafts three short skits about your own business; you pick one, change any line, and film three short clips on your phone with the line to say on screen. Your phone puts them together into one vertical video with the words on it and your business’s name at the end, ready to save and post. Free covers your first 3 videos; Basic is 1 new video every day. It works on a phone, not on a computer.",
+};
+
+function AboutPage() {
+  const sbOpen = useSmallBusinessOpen();
+  const at = SECTIONS.findIndex((x) => x.heading.startsWith("Toasts"));
+  const sections = sbOpen ? [...SECTIONS.slice(0, at + 1), SB_SECTION, ...SECTIONS.slice(at + 1)] : SECTIONS;
+  return (
     <ContentPage
       breadcrumbs={[{ name: "About", path: PATH }]}
       h1="About Shutap, the humor amplifier"
       capsule={CAPSULE}
-      sections={SECTIONS}
+      sections={sections}
       whoDoesWhat
       others={OTHERS}
     />
-  ),
-});
+  );
+}

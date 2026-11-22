@@ -19,6 +19,7 @@ import mirrorTrialEndingHtml from './designs/mirror-trial-ending.html?raw'
 import newFollowerHtml from './designs/new-follower.html?raw'
 import enterpriseReceivedHtml from './designs/enterprise-received.html?raw'
 import dailyIdeaHtml from './designs/daily-idea.html?raw'
+import sbReminderHtml from './designs/sb-reminder.html?raw'
 
 import type { EmailClass, IdentityId } from './identities'
 
@@ -44,6 +45,7 @@ export type TemplateId =
   | 'new_follower'
   | 'enterprise_received'
   | 'daily_idea'
+  | 'sb_reminder'
 
 export type TemplateVars = {
   alias?: string
@@ -342,6 +344,28 @@ ${v.tag_plain ? `\nTag: ${v.tag_plain}\n` : ''}
 Now make it yours. Swap in what happened to you, and Shutap builds your version with the video.
 
 Make it yours: ${v.cta_url ?? 'https://shutap.com/bits?utm_source=hello_shutap&utm_medium=email&utm_campaign=daily_idea'}
+
+Say it funnier,
+Candy Fan
+Founder, Shutap · hello@shutap.com`,
+  },
+  // Shutap for small business (Nov 21 2026): the reminder an owner asked for
+  // with the "Remind me tomorrow" switch. Sent only while that switch is on.
+  sb_reminder: {
+    id: 'sb_reminder',
+    identity: 'hello',
+    emailClass: 'nontransactional',
+    subject: (v) => `Anything fun happen at ${v.business_plain ?? 'your business'} today?`,
+    preview: () => 'One sentence is enough. Three skits come back.',
+    cta: 'Make today’s video',
+    htmlDesign: sbReminderHtml,
+    buildBodyText: (v) => `Anything fun happen at ${v.business_plain ?? 'your business'} today?
+
+A funny customer, a weird order, the thing everyone asked for. Say it in one sentence and get three skits about your own business to film on your phone.
+
+Make today's video: ${v.cta_url ?? 'https://shutap.com/smallbusiness'}
+
+You asked for this reminder in Shutap for small business. Turn it off any time under "Your week".
 
 Say it funnier,
 Candy Fan
