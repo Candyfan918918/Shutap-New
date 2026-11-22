@@ -16,7 +16,7 @@ import { HOOK_WORD_CAP, checkLine, checkSet, checkSkit, parseSkits, textWordCap,
 import { SKIT_CAMERAS, SKIT_JUDGE_PROMPT, SKIT_PROMPT, SKIT_TOUCH_PROMPT, SKIT_VOICES, SOURCE_DAY, SOURCE_SHOP, SOURCE_SHOP_2, SOURCE_TODAY } from './prompts.server'
 
 /** What the writer needs to know about the shop. */
-export type SkitShop = { name: string; city: string; country: Country; business_type: BusinessType; known_for: string[]; voice: Voice; length: Length; camera: Camera; offer: Offer; offer_text: string }
+export type SkitShop = { name: string; city: string; country: Country; business_type: BusinessType; /** what its own listing calls it ("Japanese restaurant"), when the owner picked it from Google */ kind?: string | null; known_for: string[]; voice: Voice; length: Length; camera: Camera; offer: Offer; offer_text: string }
 /** What the owner said today. `day` is as typed. */
 /** `topics` is what people are talking about today (news, politics, trends),
  *  from the site's own daily list; the writer never recalls news by itself. */
@@ -64,7 +64,9 @@ export function contextFor(shop: SkitShop, ask: Pick<SkitAsk, 'day' | 'promote'>
 
 export function promptFor(shop: SkitShop, ask: SkitAsk, standard: TasteLine[] = standardLines(4)): string {
   const hasDay = !!ask.day.trim()
-  const vars = { BUSINESS: businessName(shop.business_type), COUNTRY: countryName(shop.country) }
+  // the listing's own word for the place wins over the big button the owner tapped
+  const kind = (shop.kind ?? '').trim().toLowerCase()
+  const vars = { BUSINESS: kind && kind !== businessName(shop.business_type) ? `${kind} (the owner filed it under "${businessName(shop.business_type)}"; write for a ${kind})` : businessName(shop.business_type), COUNTRY: countryName(shop.country) }
   const sources = (hasDay ? [SOURCE_DAY, SOURCE_TODAY, SOURCE_SHOP] : [SOURCE_TODAY, SOURCE_SHOP, SOURCE_SHOP_2]).map((s) => fill(s, vars)).join('\n')
   return fill(SKIT_PROMPT, {
     NAME: shop.name, CITY: shop.city, ...vars,
@@ -216,4 +218,23 @@ export async function touchSkitLine(shop: SkitShop, skit: Skit, key: Exclude<Lin
     out.push(line)
   }
   return out.length ? out.slice(0, 3) : null
+}
+
+/** "Your videos can mention": a few short things the business's own listing
+ *  and reviews name (a dish, a drink, the line on weekends). Read on the
+ *  server only; every suggestion is checked to be in that text, and the
+ *  owner removes what is wrong before anything is saved. Never throws. */
+export async function suggestKnownFor(d: { kind: string | null; summary: string | null; reviews: string[] }): Promise<string[]> {
+  const source = [d.kind ?? '', d.summary ?? '', ...d.reviews].filter(Boolean).join('\n').slice(0, 4000)
+  if (source.length < 40) return []
+  try {
+    const model = skitWriterModels()[1]!
+    const res = await callAgent({
+      model, temperature: 0, maxTokens: 500, timeoutMs: 6000,
+      messages: [{ role: 'user', content: `Below is a business's listing and a few customer reviews. List up to 8 things this business is known for that a short funny video could mention: a dish, a drink, a service, a thing customers keep saying, a quirk of the place. Each is 1 to 4 plain words taken from the text. Nothing that is not in the text. No opinions ("great food"), no names of people, no prices, nothing negative about the business.\n\nTEXT:\n${source}\n\nReturn only JSON: {"items":["…"]}` }],
+    })
+    if (res.error) return []
+    const { groundedChips } = await import('./known')
+    return groundedChips((tryParseJson(res.text) as { items?: unknown } | null)?.items, source)
+  } catch { return [] }
 }

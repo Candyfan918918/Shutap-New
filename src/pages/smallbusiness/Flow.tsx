@@ -201,7 +201,9 @@ export function SmallBusinessFlow() {
     setBusy(null)
     ev('sb_shop_picked', { details: !!r?.ok })
     const s = r?.ok ? r.shop : { ...m, website: null }
-    patch({ place_id: s.place_id, name: s.name, address: s.address, kind: s.kind, website: d.website || s.website || '' })
+    // what the listing and its reviews mention goes in as a start; the owner removes what is wrong
+    const known = [...d.known_for, ...(r?.ok ? r.suggested : [])].filter((k, i, a) => a.findIndex((x) => x.toLowerCase() === k.toLowerCase()) === i).slice(0, 12)
+    patch({ place_id: s.place_id, name: s.name, address: s.address, kind: s.kind, website: d.website || s.website || '', known_for: known })
     go('confirm')
   }
 
@@ -216,7 +218,7 @@ export function SmallBusinessFlow() {
   async function save() {
     if (!d.business_type || !d.country) return
     setBusy('Saving your business…')
-    const r = await saveMyShop({ data: { shop: { place_id: d.place_id, name: d.name.trim(), city: d.city.trim(), country: d.country, address: d.address, website: d.website.trim() || null, business_type: d.business_type, known_for: d.known_for, voice: d.voice, length: d.length, camera: d.camera, offer: d.offer, offer_text: d.offer_text.trim(), logo: d.logo } } }).catch(() => null)
+    const r = await saveMyShop({ data: { shop: { place_id: d.place_id, name: d.name.trim(), city: d.city.trim(), country: d.country, address: d.address, kind: d.kind, website: d.website.trim() || null, business_type: d.business_type, known_for: d.known_for, voice: d.voice, length: d.length, camera: d.camera, offer: d.offer, offer_text: d.offer_text.trim(), logo: d.logo } } }).catch(() => null)
     setBusy(null)
     if (!r?.ok) { setNote(r?.reason === 'sign_in' ? 'Please sign in first.' : 'That didn’t save. Try again.'); if (r?.reason === 'sign_in') go('signin'); return }
     setShop(r.shop)
@@ -233,7 +235,7 @@ export function SmallBusinessFlow() {
    *  business?". */
   function editBusiness() {
     if (!shop) return
-    setD((x) => ({ ...x, business_type: shop.business_type, name: shop.name, city: shop.city, country: shop.country, website: shop.website ?? '', place_id: shop.place_id, address: shop.address, kind: null, known_for: shop.known_for, voice: shop.voice, length: shop.length, camera: shop.camera, offer: shop.offer, offer_text: shop.offer_text, logo: null }))
+    setD((x) => ({ ...x, business_type: shop.business_type, name: shop.name, city: shop.city, country: shop.country, website: shop.website ?? '', place_id: shop.place_id, address: shop.address, kind: shop.kind, known_for: shop.known_for, voice: shop.voice, length: shop.length, camera: shop.camera, offer: shop.offer, offer_text: shop.offer_text, logo: null }))
     ev('sb_edit_business')
     go('confirm')
   }
@@ -431,6 +433,7 @@ export function SmallBusinessFlow() {
             <div className="sb-mid">
               <div className="sb-card" style={{ cursor: 'default' }}><b style={{ fontSize: 19 }}>{d.name}</b><span>{[d.kind, d.address ?? d.city].filter(Boolean).join(' · ')}</span></div>
               <p className="sb-small">Your videos can mention</p>
+              {d.place_id && d.known_for.length > 0 && <p className="sb-note" style={{ textAlign: 'left', margin: 0 }}>From your Google listing. Tap any that are wrong to remove them.</p>}
               <div className="sb-pills">
                 {d.known_for.map((k) => <button key={k} type="button" className="sb-pill" style={{ minHeight: 40, fontSize: 14 }} aria-label={`Remove ${k}`} onClick={() => patch({ known_for: d.known_for.filter((x) => x !== k) })}>{k}<span aria-hidden style={{ color: '#8a8490', fontSize: 17 }}>×</span></button>)}
                 {!d.known_for.length && <p className="sb-note" style={{ textAlign: 'left' }}>What are you known for? A best seller, a regular joke, the thing every customer says.</p>}
