@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { coverCrop, fitText, lineAt, shotLengths, shotSeconds, wrapLines } from './layout'
+import { coverCrop, fitText, lineAt, shotLengths, shotSeconds, wrapLines , endCardColors, logoColor } from './layout'
 
 const perChar = (px: number) => (s: string) => s.length * px
 
@@ -37,4 +37,17 @@ test('a clip is cropped to fill the tall frame', () => {
   assert.deepEqual(coverCrop(1920, 1080), { sx: (1920 - 607.5) / 2, sy: 0, sw: 607.5, sh: 1080 })
   assert.deepEqual(coverCrop(720, 1280), { sx: 0, sy: 0, sw: 720, sh: 1280 })
   assert.deepEqual(coverCrop(720, 1600), { sx: 0, sy: 160, sw: 720, sh: 1280 })
+})
+
+test('the end card takes the colour the logo is mostly made of', () => {
+  const px = (r: number, g: number, b: number, a = 255, n = 1) => Array.from({ length: n }, () => [r, g, b, a]).flat()
+  // a dark green badge with a white letter on a see-through corner
+  assert.deepEqual(logoColor([...px(46, 94, 62, 255, 60), ...px(255, 255, 255, 255, 20), ...px(0, 0, 0, 0, 30)]), [46, 94, 62])
+  // black and white only: its dark tone
+  assert.deepEqual(logoColor([...px(20, 20, 20, 255, 40), ...px(250, 250, 250, 255, 40)]), [20, 20, 20])
+  // all white or empty: nothing to take
+  assert.equal(logoColor([...px(255, 255, 255, 255, 40), ...px(0, 0, 0, 0, 40)]), null)
+  assert.equal(endCardColors(null).top, '#c2185b')
+  assert.equal(endCardColors([46, 94, 62]).ink, '#ffffff')
+  assert.equal(endCardColors([250, 220, 80]).ink, '#1d1a22')
 })

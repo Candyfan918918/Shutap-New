@@ -9,7 +9,7 @@
 //
 // When the phone cannot do it (no canvas recording), `canCompose()` says so
 // before anything starts and the screen offers the three clips instead.
-import { END_CARD_SECONDS, VIDEO_FPS, VIDEO_H, VIDEO_W, coverCrop, fitText, lineAt } from './layout'
+import { END_CARD_SECONDS, VIDEO_FPS, VIDEO_H, VIDEO_W, coverCrop, endCardColors, fitText, lineAt, logoColor } from './layout'
 import { textStyle, type TextStyle, type TextStyleKey } from './styles'
 
 export type VideoTexts = {
@@ -149,33 +149,65 @@ function drawMark(ctx: CanvasRenderingContext2D) {
 const PLAIN: TextStyle = { key: 'classic', name: '', family: 'Sora', weight: 800, sizes: [72, 62, 54, 46, 40], lineHeight: 1.14, upper: false, color: '#ffffff' }
 const SMALL: TextStyle = { key: 'classic', name: '', family: 'Sora', weight: 600, sizes: [34, 30, 26], lineHeight: 1.3, upper: false, color: 'rgba(255, 255, 255, 0.88)' }
 
-/** The end card: the business's logo in a white circle when it has one, its
- *  name, where it is, and the code word line in the look the owner picked. */
-function drawEndCard(ctx: CanvasRenderingContext2D, texts: VideoTexts, st: TextStyle, logo: CanvasImageSource | null, logoSize: { w: number; h: number }) {
+type EndLook = ReturnType<typeof endCardColors>
+
+/** The end card, in the business's own colour: its logo in a white circle,
+ *  its name, where it is, and the code word line in the look the owner
+ *  picked. With no logo (or a colourless one) the card is Shutap rose. */
+function drawEndCard(ctx: CanvasRenderingContext2D, texts: VideoTexts, st: TextStyle, logo: CanvasImageSource | null, logoSize: { w: number; h: number }, look: EndLook, full: boolean) {
   const g = ctx.createLinearGradient(0, 0, 0, VIDEO_H)
-  g.addColorStop(0, '#c2185b')
-  g.addColorStop(1, '#8e1043')
+  g.addColorStop(0, look.top)
+  g.addColorStop(1, look.bottom)
   ctx.fillStyle = g
   ctx.fillRect(0, 0, VIDEO_W, VIDEO_H)
   const hasCode = !!texts.code
   let nameY = VIDEO_H * (hasCode ? 0.36 : 0.46)
   if (logo && logoSize.w && logoSize.h) {
-    const R = 112
-    const cy = VIDEO_H * (hasCode ? 0.2 : 0.28)
+    const R = 124
+    const cy = VIDEO_H * (hasCode ? 0.22 : 0.3)
     ctx.save()
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.22)'; ctx.shadowBlur = 36; ctx.shadowOffsetY = 12
     ctx.beginPath(); ctx.arc(VIDEO_W / 2, cy, R, 0, Math.PI * 2); ctx.closePath()
     ctx.fillStyle = '#ffffff'; ctx.fill()
+    ctx.restore()
+    ctx.save()
+    // an icon that fills its own square (most website icons) fills the circle,
+    // inside a white ring; a logo with see-through edges sits whole on white
+    const r = full ? R - 10 : R
+    ctx.beginPath(); ctx.arc(VIDEO_W / 2, cy, r, 0, Math.PI * 2); ctx.closePath()
     ctx.clip()
-    // the whole logo inside the circle, never cropped
-    const side = R * 2 * 0.74
-    const k = Math.min(side / logoSize.w, side / logoSize.h)
+    const side = full ? r * 2 : R * 2 * 0.66
+    const k = full ? Math.max(side / logoSize.w, side / logoSize.h) : Math.min(side / logoSize.w, side / logoSize.h)
+    ctx.imageSmoothingEnabled = k < 3
+    ctx.imageSmoothingQuality = 'high'
     ctx.drawImage(logo, VIDEO_W / 2 - (logoSize.w * k) / 2, cy - (logoSize.h * k) / 2, logoSize.w * k, logoSize.h * k)
     ctx.restore()
-    nameY = cy + R + 110
+    nameY = cy + R + 120
   }
-  drawWords(ctx, texts.name.slice(0, 60), nameY, PLAIN)
-  if (texts.place) drawWords(ctx, texts.place.slice(0, 90), nameY + 130, SMALL)
-  if (hasCode) drawWords(ctx, texts.code, VIDEO_H * 0.74, st)
+  drawWords(ctx, texts.name.slice(0, 60), nameY, { ...PLAIN, color: look.ink })
+  if (texts.place) {
+    // a thin rule, then where it is
+    ctx.fillStyle = look.soft
+    ctx.fillRect(VIDEO_W / 2 - 36, nameY + 74, 72, 4)
+    drawWords(ctx, texts.place.slice(0, 90), nameY + 140, { ...SMALL, color: look.soft })
+  }
+  // on the business's colour the look keeps its shape, but a coloured shadow turns neutral
+  if (hasCode) drawWords(ctx, texts.code, VIDEO_H * 0.78, st.shadow ? { ...st, shadow: { ...st.shadow, color: 'rgba(0, 0, 0, 0.45)' } } : st)
+}
+
+/** The colour the logo is mostly made of, and whether it fills its square, read from a small copy of it. */
+function colorOf(img: HTMLImageElement): { color: [number, number, number] | null; full: boolean } {
+  try {
+    const c = document.createElement('canvas')
+    c.width = 48; c.height = 48
+    const x = c.getContext('2d', { willReadFrequently: true })
+    if (!x) return { color: null, full: false }
+    x.drawImage(img, 0, 0, 48, 48)
+    const d = x.getImageData(0, 0, 48, 48).data
+    // all four corners solid and not white: the picture fills its square
+    const solid = [[1, 1], [46, 1], [1, 46], [46, 46]].every(([px, py]) => { const i = (py! * 48 + px!) * 4; return d[i + 3]! > 200 && Math.min(d[i]!, d[i + 1]!, d[i + 2]!) < 233 })
+    return { color: logoColor(d), full: solid }
+  } catch { return { color: null, full: false } }
 }
 
 async function loadLogo(src: string | null): Promise<{ img: HTMLImageElement; w: number; h: number } | null> {
@@ -234,6 +266,8 @@ async function composeOnce(opts: { clips: Blob[]; texts: VideoTexts; canvas: HTM
   await readyFont(st)
   await (document as any).fonts?.load?.('800 60px Sora').catch(() => {})
   const logo = await loadLogo(texts.logo)
+  const seen = logo ? colorOf(logo.img) : { color: null, full: false }
+  const look = endCardColors(seen.color)
   ctx.fillStyle = '#1d1a22'
   ctx.fillRect(0, 0, VIDEO_W, VIDEO_H)
 
@@ -338,7 +372,7 @@ async function composeOnce(opts: { clips: Blob[]; texts: VideoTexts; canvas: HTM
     const endStart = performance.now()
     await new Promise<void>((resolve) => {
       const tick = () => {
-        drawEndCard(ctx, texts, st, logo?.img ?? null, { w: logo?.w ?? 0, h: logo?.h ?? 0 })
+        drawEndCard(ctx, texts, st, logo?.img ?? null, { w: logo?.w ?? 0, h: logo?.h ?? 0 }, look, seen.full)
         if (texts.marked) drawMark(ctx)
         nudge()
         const t = (performance.now() - endStart) / 1000

@@ -385,7 +385,7 @@ export const writeMySkits = createServerFn({ method: 'POST' })
       skits: result.skits, prompt_version: SKIT_PROMPT_VERSION, tier: usage.tier,
     }).select(SET_COLS).single()
     if (error || !row) { console.error('[shops] skit set insert failed', error?.message); return { ok: false, reason: 'failed' } }
-    await track(admin, userId, 'shop_skits_written', { set_id: row.id, again: !!data.again, has_day: !!dayText, has_promote: !!data.promote, idea: !!data.idea, ms: result.ms, standard: result.standard, topics: topics.length, tier: usage.tier, voice: shop.voice, length: shop.length, camera: shop.camera, business_type: shop.business_type, model: [...new Set(result.pick.from.map((f) => result.candidates[f]?.model))].join(' + '), judge: result.pick.judge, clean: result.pick.clean, drafts: result.candidates.map((c) => `${c.model}:${c.checks.length ? 'broke ' + c.checks.length : 'clean'}`).join(', ').slice(0, 200) })
+    await track(admin, userId, 'shop_skits_written', { set_id: row.id, again: !!data.again, has_day: !!dayText, has_promote: !!data.promote, idea: !!data.idea, ms: result.ms, standard: result.standard, topics: topics.length, tier: usage.tier, voice: shop.voice, length: shop.length, camera: shop.camera, business_type: shop.business_type, model: [...new Set(result.pick.from.map((f) => result.candidates[f]?.model))].join(' + '), judge: result.pick.judge, clean: result.pick.clean, drafts: result.candidates.map((c) => `${c.model}:${c.checks.length ? 'broke ' + c.checks.length : 'clean'}`).join(', ').slice(0, 200), lost: result.lost.join('; ').slice(0, 200) })
     return { ok: true, set: setFromRow(row), usage: { ...usage, sets_today: usage.sets_today + 1 } }
   })
 

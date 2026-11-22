@@ -90,13 +90,33 @@ export type SkitDraft = { skits: Skit[]; model: string; ms: number; checks: Skit
  *  skits came from; `judge` is null when there was nothing to choose between
  *  or the judge did not answer (then the first writer's clean set is shown). */
 export type SkitPick = { skits: Skit[]; from: number[]; judge: string | null; why: string | null; clean: number }
-export type SkitRun = { candidates: SkitDraft[]; winner: number; ms: number; standard: 'jokenet' | 'static'; pick: SkitPick | null }
-export type SkitResult = { skits: Skit[]; candidates: SkitDraft[]; winner: number; ms: number; standard: 'jokenet' | 'static'; pick: SkitPick }
+export type SkitRun = { candidates: SkitDraft[]; winner: number; ms: number; standard: 'jokenet' | 'static'; pick: SkitPick | null; /** writers that gave nothing usable, and why */ lost: string[] }
+export type SkitResult = { skits: Skit[]; candidates: SkitDraft[]; winner: number; ms: number; standard: 'jokenet' | 'static'; pick: SkitPick; lost: string[] }
 
-async function writeOnce(model: string, prompt: string, timeoutMs: number): Promise<{ raw: unknown; ms: number } | null> {
+/** Who writes the skits. The first is the site's main writer. The second is
+ *  a strong model from another family (SKIT_SECOND_MODEL to change it), not
+ *  the cheap backup the bits race with: on Nov 21 2026 the cheap one wrote
+ *  every skit the founder saw. */
+export function skitWriterModels(): string[] {
+  const first = bitWriterModel()
+  const wanted = (process.env['SKIT_SECOND_MODEL'] ?? '').trim() || 'google/gemini-3-flash-preview'
+  const second = wanted === first ? backupWriterModel() : wanted
+  return [first, second]
+}
+/** The judge is never one of the writers: it would pick its own draft. */
+function skitJudgeModel(writers: string[]): string {
+  const j = bitJudgeModel()
+  if (!writers.includes(j)) return j
+  return ['openai/gpt-5-mini', 'google/gemini-2.5-flash'].find((m) => !writers.includes(m) && m.split('/')[0] !== j.split('/')[0]) ?? 'openai/gpt-5-mini'
+}
+
+async function writeOnce(model: string, prompt: string, timeoutMs: number): Promise<{ raw: unknown; ms: number } | { error: string }> {
   const t0 = Date.now()
-  const res = await callAgent({ model, temperature: 1.0, maxTokens: 2400, timeoutMs, messages: [{ role: 'user', content: prompt }], reasoningEffort: /^openai\/gpt-5/.test(model) ? 'minimal' : undefined })
-  if (res.error) { console.warn('[skit] gateway error', { model, error: res.error }); return null }
+  const thinks = /^openai\/(gpt-5|o[1-9])/i.test(model)
+  // a reasoning model spends part of its answer thinking: it gets more room,
+  // or the three skits come back cut off and cannot be read
+  const res = await callAgent({ model, temperature: 1.0, maxTokens: thinks ? 6000 : 3000, timeoutMs, messages: [{ role: 'user', content: prompt }], reasoningEffort: thinks ? 'low' : undefined })
+  if (res.error) { console.warn('[skit] gateway error', { model, error: res.error }); return { error: String(res.error).slice(0, 80) } }
   return { raw: tryParseJson(res.text), ms: Date.now() - t0 }
 }
 
@@ -106,7 +126,7 @@ async function writeOnce(model: string, prompt: string, timeoutMs: number): Prom
  *  shown a skit that broke a rule. */
 export async function writeSkits(shop: SkitShop, ask: SkitAsk): Promise<SkitResult | null> {
   const r = await writeSkitsLab(shop, ask)
-  return r.winner < 0 || !r.pick ? null : { skits: r.pick.skits, candidates: r.candidates, winner: r.winner, ms: r.ms, standard: r.standard, pick: r.pick }
+  return r.winner < 0 || !r.pick ? null : { skits: r.pick.skits, candidates: r.candidates, winner: r.winner, ms: r.ms, standard: r.standard, pick: r.pick, lost: r.lost }
 }
 
 /** The same run with nothing hidden: every candidate and what the checks
@@ -116,16 +136,17 @@ export async function writeSkitsLab(shop: SkitShop, ask: SkitAsk): Promise<SkitR
   const standard = await standardFor(shop, ask)
   const prompt = promptFor(shop, ask, standard.lines)
   const ctx = contextFor(shop, ask)
-  const models = [bitWriterModel(), backupWriterModel()]
+  const models = skitWriterModels()
+  const lost: string[] = []
   const candidates: SkitDraft[] = []
   let feedback = ''
   for (let round = 0; round < 2; round++) {
     const results = await Promise.all(models.map((m) => writeOnce(m, prompt + feedback, BIT_BUDGET.write())))
     const fails: string[] = []
     results.forEach((r, i) => {
-      if (!r) return
+      if ('error' in r) { lost.push(`${models[i]}: ${r.error}`); return }
       const skits = parseSkits(r.raw)
-      if (!skits) { console.warn('[skit] unparseable', { model: models[i] }); return }
+      if (!skits) { console.warn('[skit] unparseable', { model: models[i] }); lost.push(`${models[i]}: unreadable`); return }
       const checks = [...checkSet(skits, ctx), ...skits.flatMap((s) => checkSkit(s, ctx).map((c) => ({ ...c, where: `"${s.title}" ${c.where}` })))]
       candidates.push({ skits, model: models[i]!, ms: r.ms, checks })
       for (const c of checks) fails.push(`- ${c.where}: ${c.rule}${c.line ? ` — "${c.line.slice(0, 140)}"` : ''}`)
@@ -136,21 +157,20 @@ export async function writeSkitsLab(shop: SkitShop, ask: SkitAsk): Promise<SkitR
     if (!fails.length) break
     feedback = `\n\nYOUR LAST ATTEMPT BROKE THESE RULES. Fix every one; everything else may stay:\n${[...new Set(fails)].slice(0, 12).join('\n')}`
   }
-  const pick = await pickSkits(shop, ask, candidates, ctx)
+  const pick = await pickSkits(shop, ask, candidates, ctx, skitJudgeModel(models))
   const winner = pick ? (pick.from.every((f) => f === pick.from[0]) ? pick.from[0]! : candidates.findIndex((c) => !c.checks.length)) : -1
-  return { candidates, winner, ms: Date.now() - t0, standard: standard.from, pick }
+  return { candidates, winner, ms: Date.now() - t0, standard: standard.from, pick, lost }
 }
 
 /** Choose what the owner sees from the clean sets. One clean set: that one.
  *  More: the judge picks the funnier skit for each place; the mix is shown
  *  only if it passes the set checks, else the judge's best whole set. */
-async function pickSkits(shop: SkitShop, ask: SkitAsk, candidates: SkitDraft[], ctx: SkitContext): Promise<SkitPick | null> {
+async function pickSkits(shop: SkitShop, ask: SkitAsk, candidates: SkitDraft[], ctx: SkitContext, model: string): Promise<SkitPick | null> {
   const clean = candidates.map((c, i) => ({ c, i })).filter((x) => !x.c.checks.length && x.c.skits.length === 3)
   if (!clean.length) return null
   const first = clean[0]!
   const plain: SkitPick = { skits: first.c.skits, from: [first.i, first.i, first.i], judge: null, why: null, clean: clean.length }
   if (clean.length < 2) return plain
-  const model = bitJudgeModel()
   const drafts = clean.map((x, n) => `DRAFT ${n + 1}\n` + x.c.skits.map((k, p) => `  place ${p + 1}: hook "${k.hook}" | 1 "${k.shots[0]?.text}" | 2 "${k.shots[1]?.text}" | 3 "${k.shots[2]?.text}"`).join('\n')).join('\n\n')
   const res = await callAgent({
     model, temperature: 0, maxTokens: 1200, timeoutMs: BIT_BUDGET.judge(), reasoningEffort: /^openai\/(gpt-5|o[1-9])/i.test(model) ? 'low' : undefined,
