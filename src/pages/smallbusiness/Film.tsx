@@ -252,7 +252,8 @@ export function Film({ setId, title, actions, texts, camera, length, onDone, onB
           </button>
           <div className="sb-glass sb-brief">
             <p className="n">{allIn ? 'All 3 shots are in' : `Shot ${shot + 1} of 3`}</p>
-            {!allIn && (shot === 0 && texts.hook ? <p className="say"><span>Say</span>{texts.hook} {texts.shots[0]}</p> : texts.shots[shot] ? <p className="say"><span>Say</span>{texts.shots[shot]}</p> : null)}
+            {/* the teleprompter: every word that will be on the video for this shot, so what is said and what is shown are the same. Shot 1 has the hook; the last shot ends with the code word line. */}
+            {!allIn && <p className="say"><span>Say</span>{[shot === 0 ? texts.hook : '', texts.shots[shot] ?? '', shot === 2 ? texts.code : ''].filter(Boolean).join(' ')}</p>}
             {!allIn && <p className="act">{actions[shot]}</p>}
             {!recording && <p className="tip">{cameraTip(camera, facing)}</p>}
           </div>

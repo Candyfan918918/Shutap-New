@@ -380,7 +380,7 @@ export function SmallBusinessFlow() {
             <div className="sb-hero"><RisingIcons variant="hero" /></div>
             <div className="sb-sheet">
               <p className="sb-eyebrow">SAY IT FUNNIER</p>
-              <h1 className="sb-h1" style={{ marginBottom: 26 }}>The <b>creative team</b> your shop doesn’t have.</h1>
+              <h1 className="sb-h1" style={{ marginBottom: 26 }}>The <b>creative team</b> your small business doesn’t have.</h1>
               <button type="button" className="sb-btn" style={{ alignSelf: 'stretch' }} onClick={() => go('type')}>Make my first video</button>
               <p className="sb-note" style={{ marginTop: 16 }}>First 3 videos free</p>
             </div>
@@ -542,8 +542,8 @@ export function SmallBusinessFlow() {
               place: shop?.address ?? shop?.city ?? '',
               code: lines.find((l) => l.key === 'code')?.text ?? '',
               logo: shop?.logo ?? null,
-              // Free's videos carry the shutap.com mark, like every free download
-              marked: !usage || usage.tier === 'free',
+              // no Shutap mark on any plan's video (Candy, Nov 21 2026): it is the owner's video
+              marked: false,
             }}
             camera={shop?.camera ?? d.camera}
             length={shop?.length ?? d.length}
