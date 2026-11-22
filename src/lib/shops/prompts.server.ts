@@ -4,7 +4,14 @@
 // invents a fact about the business. Same bones as the realtor kit and the
 // toasts: two writers, checks before anyone sees a line.
 // SKIT_PROMPT_VERSION is stamped on every set; bump on any edit.
-export const SKIT_PROMPT_VERSION = 'skit-0.5'
+export const SKIT_PROMPT_VERSION = 'skit-0.6'
+// 0.6 (Nov 21 2026, Candy's second phone run: "make it funnier"): both drafts
+// came from the cheapest model (the first writer's answer never arrived, so
+// there was nothing to judge), and one skit copied the example in these
+// rules word for word (matcha, decaf, 4pm). The writers are now the main
+// writer and a strong second from another family, with room to answer; the
+// rules carry no ready-made café line to copy; a skit is a small scene with
+// a point of view, not three captions.
 // 0.5 (Nov 21 2026, Candy's first phone run: "the joke is not funny at all"):
 // the set she saw came from the backup writer alone with nothing ranking it,
 // its third lines were labels, not turns ("It is a green tea coffee"), and
@@ -51,8 +58,10 @@ export const SKIT_RULES = `HARD RULES (every skit, every line):
 - FILMABLE BY THIS SHOP TODAY: three shots, each one single action a normal person can do in their own shop with a phone, in under ten seconds, with no props they would need to buy and no editing tricks. No dialogue to memorize: the text on screen does the talking. Never ask them to film a real customer.
 - THE TEXT IS THE JOKE, NEVER A DESCRIPTION OF THE PICTURE. The viewer can already see the shot; text that says what the camera shows is dead weight. The text adds what the picture cannot: a time stamp, something somebody said (in quotation marks), what the owner is thinking, a label that makes the plain picture mean something else. Each shot's text must be funny or tense with the picture covered up.
 - ON-SCREEN TEXT is read in two seconds: at most {{TEXT_WORDS}} words per shot, the hook at most 12. Plain words, the turn word last. No emojis, no hashtags. US English unless the country says otherwise.
-- THE THREE SHOTS ARE ONE JOKE: shot 1 sets it up, shot 2 makes it worse, shot 3 turns it. SHOT 3 IS THE LAUGH: a reversal, an admission or a consequence the viewer did not see coming, never a summary, a label or a nice thought ("It is a green tea coffee" and "It is a beautiful mess" are labels, not turns). Test: if a stranger could guess shot 3 from shots 1 and 2, it is not a joke yet; write a different one.
-- SPECIFIC BEATS GENERAL: a number, a time of day, the exact thing somebody said. "A customer was confused" is nothing; "\"Is the matcha decaf?\" Sir, it is 4pm" is a skit. The hook is on screen first and makes a stranger stop scrolling without giving the turn away.
+- THE THREE SHOTS ARE ONE JOKE: shot 1 sets it up, shot 2 makes it worse, shot 3 turns it. SHOT 3 IS THE LAUGH: a reversal, an admission or a consequence the viewer did not see coming, never a summary, a label or a nice thought (a line that only names or sums up what was shown is a label, not a turn). Test: if a stranger could guess shot 3 from shots 1 and 2, it is not a joke yet; write a different one.
+- SPECIFIC BEATS GENERAL: a number, a time of day, the exact words somebody said. "A customer was confused" is nothing. Build each skit on one concrete, slightly absurd detail of THIS kind of business and push it one step past reasonable.
+- A SKIT HAS A POINT OF VIEW: the shop wants something small and reasonable (to close on time, to sell the thing, to be understood) and the world will not let it. Shot 2 is the shop trying harder. Shot 3 is the shop giving up, giving in or winning in a way nobody asked for. Three captions about the same topic are not a skit.
+- NEVER REUSE A LINE OR A SITUATION QUOTED IN THESE RULES. They show the shape, not the content.
 - THE CODE WORD is one to three plain words lifted from the skit's own turn, something a customer could say at the counter without embarrassment. It is an inside joke for people who watched: never the offer itself, never a word from THE OWNER'S OFFER, never "free", "discount" or "deal".
 - THE CAPTION is under 100 characters, one more small joke, no hashtags.`
 
