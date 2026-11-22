@@ -143,7 +143,26 @@ export function SmallBusinessFlow() {
   const patch = (p: Partial<Draft>) => setD((x) => ({ ...x, ...p }))
 
   // the draft comes back after a sign-in round trip, and is saved as it changes
-  useEffect(() => { setD(readDraft()); setLoaded(true) }, [])
+  useEffect(() => {
+    let draft = readDraft()
+    // from a guide or funniest page (Nov 21 2026): ?name= and ?city= come in
+    // already typed; the owner starts at the kind of business
+    try {
+      const q = new URLSearchParams(window.location.search)
+      const name = (q.get('name') ?? '').trim().slice(0, 120)
+      const city = (q.get('city') ?? '').trim().slice(0, 80)
+      if (name || city) {
+        const early: Step[] = ['welcome', 'type', 'where', 'which', 'confirm']
+        draft = { ...draft, ...(name ? { name, place_id: null, address: null, kind: null } : {}), ...(city ? { city } : {}), step: early.includes(draft.step) ? 'type' : draft.step }
+        ev('sb_prefilled', { name: !!name, city: !!city })
+        try { localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)) } catch { /* noop */ }
+        q.delete('name'); q.delete('city')
+        const rest = q.toString()
+        window.history.replaceState(window.history.state, '', window.location.pathname + (rest ? `?${rest}` : '') + window.location.hash)
+      }
+    } catch { /* a prefilled name is a convenience */ }
+    setD(draft); setLoaded(true)
+  }, [])
   useEffect(() => { if (loaded) { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(d)) } catch { /* noop */ } } }, [d, loaded])
 
   // a signed-in owner: their business, and today's skits if they have any
@@ -397,7 +416,7 @@ export function SmallBusinessFlow() {
   const lit = PROGRESS[step]
   const free = !usage || usage.tier === 'free'
 
-  if (desk === 'desk') return <DeskGate admin={admin} onContinue={() => setDesk('phone')} />
+  if (desk === 'desk') return <DeskGate admin={admin} name={d.name} city={d.city} onContinue={() => setDesk('phone')} />
 
   return (
     <div className="sb" data-ph-private>

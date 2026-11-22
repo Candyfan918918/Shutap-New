@@ -9,12 +9,16 @@ import { RisingIcons } from './RisingIcons'
 
 const PHONE_URL = 'https://shutap.com/smallbusiness?utm_source=desktop&utm_medium=qr'
 
-export function DeskGate({ admin, onContinue }: { admin: boolean; onContinue: () => void }) {
+export function DeskGate({ admin, onContinue, name = '', city = '' }: { admin: boolean; onContinue: () => void; name?: string; city?: string }) {
   const ref = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
-    void trackEvent('sb_desk_view', { product: 'smallbusiness' })
-    if (ref.current) QRCode.toCanvas(ref.current, PHONE_URL, { width: 196, margin: 1, color: { dark: '#1d1a22', light: '#ffffff' } }).catch(() => {})
-  }, [])
+    // carry the business name and city typed on a guide page over to the phone
+    let url = PHONE_URL
+    if (name) url += `&name=${encodeURIComponent(name)}`
+    if (city) url += `&city=${encodeURIComponent(city)}`
+    if (ref.current) QRCode.toCanvas(ref.current, url, { width: 196, margin: 1, color: { dark: '#1d1a22', light: '#ffffff' } }).catch(() => {})
+  }, [name, city])
+  useEffect(() => { void trackEvent('sb_desk_view', { product: 'smallbusiness' }) }, [])
   return (
     <div className="sb sb-desk" data-ph-private>
       <div className="sb-desk-in">

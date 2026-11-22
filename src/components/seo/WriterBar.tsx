@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import '@/pages/home/bit/bit.css'
 
-export function WriterBar({ page, label, realtor = false, toast = false }: { page: string; label: string; realtor?: boolean; toast?: boolean }) {
+export function WriterBar({ page, label, realtor = false, toast = false, smallbusiness = false }: { page: string; label: string; realtor?: boolean; toast?: boolean; smallbusiness?: boolean }) {
   const [on, setOn] = useState(false)
   useEffect(() => {
     // The writer mounts a beat after this bar, so look it up on each check
@@ -32,13 +32,13 @@ export function WriterBar({ page, label, realtor = false, toast = false }: { pag
       .then((m) => m.trackEvent('seo_cta_clicked', { page, position: 'sticky', kind: 'anchor' }))
       .catch(() => {})
     document.getElementById('bit-write')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    window.setTimeout(() => (document.querySelector('#bit-write input.rl-input, #bit-story, .bt-lline [contenteditable]') as HTMLElement | null)?.focus(), 500)
+    window.setTimeout(() => (document.querySelector('#bit-write input.sbe-input, #bit-write input.rl-input, #bit-story, .bt-lline [contenteditable]') as HTMLElement | null)?.focus(), 500)
   }
   return (
     <div className={`bt-sticky${on ? ' on' : ''}`} aria-hidden={!on}>
       <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
       <button type="button" onClick={go}>
-        {toast ? 'write my toast ↑' : realtor ? 'paste the listing ↑' : 'say it funnier ↑'}
+        {smallbusiness ? 'make my video ↑' : toast ? 'write my toast ↑' : realtor ? 'paste the listing ↑' : 'say it funnier ↑'}
       </button>
     </div>
   )
