@@ -4,7 +4,7 @@ import { DocLayout } from "@/components/site/DocLayout";
 import { SITE_URL } from "@/lib/site";
 
 const URL = `${SITE_URL}/legal`;
-const TITLE = "Legal & Policies — Shutap, the Humor Amplifier"
+const TITLE = "Legal & Policies — Shutap"
 const DESCRIPTION =
   "Shutap's terms, privacy policy, house rules, AI disclosure, disclaimer, crisis help and contact, in one place."
 

@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Post enough to learn what works",
-      body: "Pew found the most popular creators post several times a week, and the typical account with a million or more followers has made 777 posts. You don't need that many, but one video a month won't tell you anything. Retell the same story with a different opening, post both, compare the curves. If blank pages slow you down, Shutap, the humor amplifier, gives you a first draft of the bit from what happened: hook, setup, tags, button. Treat it as something to push against. Cut what isn't you, rewrite the rest, and the joke stays yours.",
+      body: "Pew found the most popular creators post several times a week, and the typical account with a million or more followers has made 777 posts. You don't need that many, but one video a month won't tell you anything. Retell the same story with a different opening, post both, compare the curves. If blank pages slow you down, Shutap gives you a first draft of the bit from what happened: hook, setup, tags, button. Treat it as something to push against. Cut what isn't you, rewrite the rest, and the joke stays yours.",
     },
   ],
   faq: [

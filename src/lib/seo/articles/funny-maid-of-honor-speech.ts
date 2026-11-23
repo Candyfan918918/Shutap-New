@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Draft the funny middle, then make it yours",
-      body: "Most people know the story they want to tell and get stuck on where the laugh is. Write it out the way you'd tell it to a friend, names left off, and look for the object or the moment where it went sideways. Shutap, the humor amplifier, can give you a first draft to push against: the button on this page opens it set for a family audience, storyteller voice and a low wild setting. Cut what doesn't sound like you, rewrite the rest, and write the sincere ending yourself.",
+      body: "Most people know the story they want to tell and get stuck on where the laugh is. Write it out the way you'd tell it to a friend, names left off, and look for the object or the moment where it went sideways. Shutap can give you a first draft to push against: the button on this page opens it set for a family audience, storyteller voice and a low wild setting. Cut what doesn't sound like you, rewrite the rest, and write the sincere ending yourself.",
     },
   ],
   faq: [

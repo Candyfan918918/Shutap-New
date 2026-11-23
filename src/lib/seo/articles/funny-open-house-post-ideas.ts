@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Write the whole set in one sitting",
-      body: "The easiest way to keep the jokes consistent is to pick one running bit for the house and use it across every post: the two ovens, the porch swing that stays, the closet you keep telling people about. The sign teases it, the story reveals it, the reminder mentions it, and the thank-you calls back to it. If you'd like a draft of the whole set, Shutap for Realtors, from the humor amplifier, writes an open-house kit from the listing link: the invite post, the three-frame story, the A-frame line, the day-before reminder and the thank-you text, in a funny, professional, luxury or young tone, fair-housing checked and using only what the listing says. You keep the lines that sound like you and rewrite the rest.",
+      body: "The easiest way to keep the jokes consistent is to pick one running bit for the house and use it across every post: the two ovens, the porch swing that stays, the closet you keep telling people about. The sign teases it, the story reveals it, the reminder mentions it, and the thank-you calls back to it. If you'd like a draft of the whole set, Shutap for Realtors writes an open-house kit from the listing link: the invite post, the three-frame story, the A-frame line, the day-before reminder and the thank-you text, in a funny, professional, luxury or young tone, fair-housing checked and using only what the listing says. You keep the lines that sound like you and rewrite the rest.",
     },
   ],
   techniques: [

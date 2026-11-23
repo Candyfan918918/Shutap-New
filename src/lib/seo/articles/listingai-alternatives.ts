@@ -39,7 +39,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap for Realtors: the lines you say on camera",
-      body: "Shutap for Realtors, from Shutap the humor amplifier, does the job the photo-video tools skip. You paste the listing link or the listing text, check the facts it read back, add the one thing a buyer notices first and pick one tone: professional, funny, luxury or young. The kit holds the walkthrough to shoot, the voiceover, hooks, the open-house kit, posts for just listed, price improvement, pending and sold, and the straight MLS-ready copy. Must-say and never-say words, a fair-housing check on every line, and every number from the listing. Shoot mode turns your phone into a teleprompter; Shutap never opens the camera.",
+      body: "Shutap for Realtors does the job the photo-video tools skip. You paste the listing link or the listing text, check the facts it read back, add the one thing a buyer notices first and pick one tone: professional, funny, luxury or young. The kit holds the walkthrough to shoot, the voiceover, hooks, the open-house kit, posts for just listed, price improvement, pending and sold, and the straight MLS-ready copy. Must-say and never-say words, a fair-housing check on every line, and every number from the listing. Shoot mode turns your phone into a teleprompter; Shutap never opens the camera.",
     },
     {
       heading: "One listing, start to finish: the split-level on Alder Court",

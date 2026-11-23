@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Write the whole launch week in one sitting",
-      body: "Jokes stay consistent when you write them together. Pick the running bit (the lemon tree, the two ovens, the sunroom you keep visiting), then plant it in the tease, name it in the announcement, show it in the carousel and call back to it in the video. If you'd like a draft to work from, Shutap for Realtors, from Shutap the humor amplifier, starts from the listing link or the listing text and gives you the walkthrough to shoot, the voiceover, three hooks, the open-house kit, the just listed, price improvement, pending and sold posts, and the straight MLS-ready copy, in a professional, funny, luxury or young tone. Every line is fair-housing checked and uses only what the listing says. You keep the lines that sound like you and rewrite the rest.",
+      body: "Jokes stay consistent when you write them together. Pick the running bit (the lemon tree, the two ovens, the sunroom you keep visiting), then plant it in the tease, name it in the announcement, show it in the carousel and call back to it in the video. If you'd like a draft to work from, Shutap for Realtors starts from the listing link or the listing text and gives you the walkthrough to shoot, the voiceover, three hooks, the open-house kit, the just listed, price improvement, pending and sold posts, and the straight MLS-ready copy, in a professional, funny, luxury or young tone. Every line is fair-housing checked and uses only what the listing says. You keep the lines that sound like you and rewrite the rest.",
     },
   ],
   techniques: [

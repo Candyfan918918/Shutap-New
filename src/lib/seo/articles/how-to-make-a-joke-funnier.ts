@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Using Shutap on one stubborn line",
-      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, uses this same five-line notebook. In Shutap Bits you write the hook, setup, two tags and button in your own words. When one line won't get funnier, tap funnier on that line only and you get three other ways to say it, built from the lines you wrote, with your version listed first. Lock the lines that are done so nothing touches them. You pick, cut and rewrite, and the bit stays yours. Then you can post it as a five-second video or rehearse it on the teleprompter.",
+      body: "Shutap uses this same five-line notebook. In Shutap Bits you write the hook, setup, two tags and button in your own words. When one line won't get funnier, tap funnier on that line only and you get three other ways to say it, built from the lines you wrote, with your version listed first. Lock the lines that are done so nothing touches them. You pick, cut and rewrite, and the bit stays yours. Then you can post it as a five-second video or rehearse it on the teleprompter.",
     },
   ],
   techniques: [

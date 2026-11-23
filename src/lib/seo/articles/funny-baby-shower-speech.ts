@@ -39,7 +39,7 @@ const guide: Guide = {
     },
     {
       heading: "Getting from the story to the lines",
-      body: "Write the story the way you'd text it to a friend, then find the one detail that's weirdly specific, like the flour or the column name. That detail is your opening line. If you'd like a draft around it, Shutap Toasts, from Shutap the humor amplifier, keeps the stories you type word for word and builds the toast around them: the greeting, the stories, the thanks and glasses up. It flags lines only part of the room will get and gives you a PDF with pauses marked, cue cards and a phone prompter. Names stay on your device, and the first toast is free. Keep what sounds like you, rewrite the rest, and write the line to the baby yourself.",
+      body: "Write the story the way you'd text it to a friend, then find the one detail that's weirdly specific, like the flour or the column name. That detail is your opening line. If you'd like a draft around it, Shutap Toasts keeps the stories you type word for word and builds the toast around them: the greeting, the stories, the thanks and glasses up. It flags lines only part of the room will get and gives you a PDF with pauses marked, cue cards and a phone prompter. Names stay on your device, and the first toast is free. Keep what sounds like you, rewrite the rest, and write the line to the baby yourself.",
     },
   ],
   faq: [

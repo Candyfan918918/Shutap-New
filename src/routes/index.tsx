@@ -10,7 +10,7 @@ import { SITE_URL } from '@/lib/site'
 // and ask ChatGPT with (make a joke funnier, funny toast, best man speech,
 // listing video script), brand first, banned words never. ChatGPT visits to
 // the homepage fell from 25 a week to 2 after the Oct 29 repositioning.
-const HOME_TITLE = "Shutap Humor Amplifier Lab · Make your jokes, toasts and speeches funnier"
+const HOME_TITLE = "Shutap · Make your jokes, toasts and speeches funnier"
 const HOME_DESCRIPTION =
   "Say it funnier. Turn your own story into a stand-up bit, write a funny toast or best man speech in your words, or turn a real estate listing into a video script and posts. Your words stay yours."
 const HOME_OG_DESCRIPTION = HOME_DESCRIPTION
@@ -37,12 +37,12 @@ export const Route = createFileRoute('/')({
     meta: [
       { title },
       { name: "description", content: description },
-      { property: "og:title", content: sb ? "Shutap for small business" : "Shutap Humor Amplifier Lab" },
+      { property: "og:title", content: sb ? "Shutap for small business" : "Shutap · Say it funnier" },
       { property: "og:description", content: sb ? SB_DESCRIPTION : HOME_OG_DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: HOME_URL },
       ...ogImageMeta(),
-      { name: "twitter:title", content: sb ? "Shutap for small business" : "Shutap Humor Amplifier Lab" },
+      { name: "twitter:title", content: sb ? "Shutap for small business" : "Shutap · Say it funnier" },
       { name: "twitter:description", content: description },
     ],
     links: [

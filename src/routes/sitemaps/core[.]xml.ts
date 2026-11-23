@@ -9,9 +9,10 @@ const newest = (dates: (string | undefined)[]) => dates.filter(Boolean).sort().a
 
 /** Sitewide reposition to "the humor amplifier" (PRs #105–#122), then Oct 30: audience is everyone, no "generator" anywhere: every page's
  *  header, CTA and copy changed that day, so no lastmod is older than this. */
-const REPOSITIONED = "2026-10-30";
-/** Nov 6 2026: site description rewritten ("Shutap Humor Amplifier Lab helps everyone say it funnier"). */
-const REWRITTEN = "2026-11-06";
+const REPOSITIONED = "2026-11-22";
+/** Nov 22 2026: "the humor amplifier" taken out of titles, descriptions and guides (small business leads).
+ *  Nov 6 2026: site description rewritten ("Shutap Humor Amplifier Lab helps everyone say it funnier"). */
+const REWRITTEN = "2026-11-22";
 const fresh = (d: string | undefined) => newest([d, REPOSITIONED]);
 
 /**

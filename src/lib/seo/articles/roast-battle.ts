@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "What loses the room",
-      body: "Jokes about bodies, health, identity or family tragedy usually get a gasp, then silence, and the judges notice. The roast lands when the target can laugh too, which is why battles work best between comics who know each other. Aim at what they chose: the act, the outfit, the side hustle, the ego. To get a first draft, Shutap, the humor amplifier, can help: write up one real night your opponent bombed or one choice they made, pick the roast voice, and push against what comes back. Cut most of it. The lines you keep should sound like you.",
+      body: "Jokes about bodies, health, identity or family tragedy usually get a gasp, then silence, and the judges notice. The roast lands when the target can laugh too, which is why battles work best between comics who know each other. Aim at what they chose: the act, the outfit, the side hustle, the ego. To get a first draft, Shutap can help: write up one real night your opponent bombed or one choice they made, pick the roast voice, and push against what comes back. Cut most of it. The lines you keep should sound like you.",
     },
   ],
   faq: [

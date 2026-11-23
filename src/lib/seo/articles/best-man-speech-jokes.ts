@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Fill in the templates from your own stories",
-      body: "The templates work only when the blank holds something true and specific: a real object, a real number, a habit his friends would recognize immediately. Write down ten small facts about your groom before you start. Then match facts to slots. If you have the facts but can't find the shape, Shutap, the humor amplifier, can draft lines from what you type, set for a family audience and a storyteller voice. Treat the draft as raw material: keep the lines that sound like you and rewrite the rest, so the speech stays yours.",
+      body: "The templates work only when the blank holds something true and specific: a real object, a real number, a habit his friends would recognize immediately. Write down ten small facts about your groom before you start. Then match facts to slots. If you have the facts but can't find the shape, Shutap can draft lines from what you type, set for a family audience and a storyteller voice. Treat the draft as raw material: keep the lines that sound like you and rewrite the rest, so the speech stays yours.",
     },
   ],
   faq: [

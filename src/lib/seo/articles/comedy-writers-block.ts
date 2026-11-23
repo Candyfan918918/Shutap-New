@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Make the drill small enough to keep",
-      body: "The drill only works if you do it again. McGibbon writes that he first set aside an hour and a half every few days, felt bad when he missed it, and switched to half an hour once a week, later an hour. Start smaller than you think you need: one drill, one bit, one day a week. If you keep bits in the five-line shape, Shutap, the humor amplifier, cuts what you typed into a hook, setup, two tags and a button, keeping your words word for word. Leave a line empty and the AI copilot drafts it, marked so you can change it or delete it. Tap funnier on the flattest line for three other ways to say it, yours first, and lock the lines that already work.",
+      body: "The drill only works if you do it again. McGibbon writes that he first set aside an hour and a half every few days, felt bad when he missed it, and switched to half an hour once a week, later an hour. Start smaller than you think you need: one drill, one bit, one day a week. If you keep bits in the five-line shape, Shutap cuts what you typed into a hook, setup, two tags and a button, keeping your words word for word. Leave a line empty and the AI copilot drafts it, marked so you can change it or delete it. Tap funnier on the flattest line for three other ways to say it, yours first, and lock the lines that already work.",
     },
   ],
   techniques: [

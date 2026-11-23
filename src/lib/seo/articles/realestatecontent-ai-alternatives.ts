@@ -35,7 +35,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap for Realtors: the words you say on camera",
-      body: "Shutap for Realtors, from Shutap the humor amplifier, does a narrower job than the all-in-ones. You paste the listing link or the listing text and pick one tone: professional, funny, luxury or young. The kit is the walkthrough to shoot (a line per shot, with 15- and 60-second cuts), the voiceover timed to the cut, three hooks, the open-house kit, posts for just listed, price improvement, pending and sold, and the straight MLS-ready copy. Roast the house, roast the neighborhood and mention the price are switches. Every line is fair-housing checked, every number is on the listing, and shoot mode puts big text on the phone you read from. It never schedules or posts for you.",
+      body: "Shutap for Realtors does a narrower job than the all-in-ones. You paste the listing link or the listing text and pick one tone: professional, funny, luxury or young. The kit is the walkthrough to shoot (a line per shot, with 15- and 60-second cuts), the voiceover timed to the cut, three hooks, the open-house kit, posts for just listed, price improvement, pending and sold, and the straight MLS-ready copy. Roast the house, roast the neighborhood and mention the price are switches. Every line is fair-housing checked, every number is on the listing, and shoot mode puts big text on the phone you read from. It never schedules or posts for you.",
     },
     {
       heading: "One listing, worked through: the 1952 bungalow",

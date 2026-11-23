@@ -23,7 +23,7 @@ export interface PollOption {
 // kit, so the question is what people would actually use. The earlier polls
 // keep their rows and votes under their own keys for the admin page.
 export const POLL = {
-  title: 'The humor amplifier: what would you actually use?',
+  title: 'What would you actually use?',
   description: 'every bit comes with a 5-second video and the stand-up, sketch and skit formats. tell us straight. sign in to vote and see the split.',
   privacy: 'your vote is linked to your account, never shown publicly. we may email you about your answer.',
   options: [

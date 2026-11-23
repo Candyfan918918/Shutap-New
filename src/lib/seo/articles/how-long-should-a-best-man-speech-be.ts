@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Build yours from your own stories",
-      body: "Shutap, the humor amplifier, has a best man page in Shutap Toasts. You type your own stories about the groom: the first is required, a second and third are recommended. Shutap builds the speech around them in your words, with the greeting, the stories, the thanks and glasses up, and it never makes up a story. It flags lines only part of the room will get, which is most of what a cut list is for. You get a PDF with pauses marked, cue cards and a phone prompter that works without Wi-Fi. Names stay on your device. The first toast is free with a shutap.com watermark, then $12.99 one time. You pick what stays.",
+      body: "Shutap has a best man page in Shutap Toasts. You type your own stories about the groom: the first is required, a second and third are recommended. Shutap builds the speech around them in your words, with the greeting, the stories, the thanks and glasses up, and it never makes up a story. It flags lines only part of the room will get, which is most of what a cut list is for. You get a PDF with pauses marked, cue cards and a phone prompter that works without Wi-Fi. Names stay on your device. The first toast is free with a shutap.com watermark, then $12.99 one time. You pick what stays.",
     },
   ],
   faq: [

@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "How to practice it",
-      body: "Take one annoying thing from today and write it as a complaint, with all the caps and exclamation marks you want. Then rewrite it as a calm report three times, shorter each time, until it sounds like a sentence a tired hotel clerk would say. Read the last version aloud without smiling. If it still makes you laugh, keep it. To get a first pass to argue with, write the story into Shutap, the humor amplifier, pick the dry voice and get a draft of the bit with a hook, setup, tags and a button. Cut what doesn't sound like you, rewrite the rest, and the line you keep is yours.",
+      body: "Take one annoying thing from today and write it as a complaint, with all the caps and exclamation marks you want. Then rewrite it as a calm report three times, shorter each time, until it sounds like a sentence a tired hotel clerk would say. Read the last version aloud without smiling. If it still makes you laugh, keep it. To get a first pass to argue with, write the story into Shutap, pick the dry voice and get a draft of the bit with a hook, setup, tags and a button. Cut what doesn't sound like you, rewrite the rest, and the line you keep is yours.",
     },
   ],
   faq: [

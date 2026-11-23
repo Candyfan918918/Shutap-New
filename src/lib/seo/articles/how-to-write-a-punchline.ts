@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Working one punchline at a time in Shutap",
-      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, lays your story out as a hook, setup, two tags and a button, in your words. When one punchline won't land, tap funnier on that line and you get three other ways to say it, with yours listed first. Pick one, rewrite it or ignore all three, then lock the lines that are done so nothing changes them by accident. The bit stays yours. From there you can run it as stand-up on the teleprompter, turn it into a five-second video, or lay it out as a sketch page or a skit.",
+      body: "Shutap lays your story out as a hook, setup, two tags and a button, in your words. When one punchline won't land, tap funnier on that line and you get three other ways to say it, with yours listed first. Pick one, rewrite it or ignore all three, then lock the lines that are done so nothing changes them by accident. The bit stays yours. From there you can run it as stand-up on the teleprompter, turn it into a five-second video, or lay it out as a sketch page or a skit.",
     },
   ],
   techniques: [

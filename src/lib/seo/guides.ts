@@ -449,7 +449,7 @@ const BASE_GUIDES: Guide[] = [
   {
     slug: "how-shutap-is-built",
     kind: "guide",
-    title: "How Shutap Is Built: The Humor Amplifier You Steer | Shutap",
+    title: "How Shutap Is Built: You Steer Every Line | Shutap",
     h1: "How Shutap is built",
     description:
       "How Shutap Bits works: you tell the story, Shutap cuts it into a bit in your words, and the engine underneath drafts only the lines your story didn't cover, or runs when you ask: funnier on one line, or a rewrite on Basic and Pro.",
@@ -543,7 +543,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Beyond the bit",
-        body: "Around the humor amplifier, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
+        body: "Around the writing, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
       },
       {
         heading: "Which should you use",
@@ -637,7 +637,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "What Shutap adds around the tool",
-        body: "Shutap pairs the humor amplifier with a daily what-to-post idea, The funniest (a series that teaches the techniques of funny people), and an in-house joke dataset the Shutap team writes, selects and rates, never from users. To our knowledge, no other joke tool pairs all of these.",
+        body: "Shutap pairs the writing with a daily what-to-post idea, The funniest (a series that teaches the techniques of funny people), and an in-house joke dataset the Shutap team writes, selects and rates, never from users. To our knowledge, no other joke tool pairs all of these.",
       },
       {
         heading: "Which should you pick",
@@ -681,7 +681,7 @@ const BASE_GUIDES: Guide[] = [
       },
       {
         heading: "Beyond the bit",
-        body: "Around the humor amplifier, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
+        body: "Around the writing, Shutap gives you a daily idea of what to post, with a hook, a short bit and a tag drawn from what is trending, and a series called The funniest, which breaks down the techniques of funny people with original example lines you can try. Both sit on an in-house dataset the Shutap team writes, selects and rates, pairing everyday situations with jokes, tagged by technique, voice and how wild.",
       },
       {
         heading: "Who should use which",

@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Where Shutap fits",
-      body: "Shutap is the humor amplifier, from the Shutap Humor Amplifier Lab. In Shutap Bits you tell what happened in your own words, and Shutap cuts it into a hook, setup, two tags and a button, keeping your words word for word. Any line your story didn't cover is drafted by the AI copilot and marked, so you can change it, keep it or delete it. Tap funnier on a line that isn't landing and you get three other ways to say it, yours first; lock the lines that are done. Then post it as a 5-second video, or lay out your bit as a sketch page and a skit shot list where you play both parts. The shop's stories stay yours.",
+      body: "Shutap helps you say it funnier. In Shutap Bits you tell what happened in your own words, and Shutap cuts it into a hook, setup, two tags and a button, keeping your words word for word. Any line your story didn't cover is drafted by the AI copilot and marked, so you can change it, keep it or delete it. Tap funnier on a line that isn't landing and you get three other ways to say it, yours first; lock the lines that are done. Then post it as a 5-second video, or lay out your bit as a sketch page and a skit shot list where you play both parts. The shop's stories stay yours.",
     },
   ],
   techniques: [

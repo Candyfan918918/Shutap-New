@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Turn the exchange that worked into a written bit",
-      body: "The best crowd work often becomes material. If the long-drive exchange kills three weeks running, it's a bit, and it belongs in your notebook with the blank filled in. Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, works on that page. In Shutap Bits you type what happened in your own words and it cuts the story into a hook, setup, two tags and a button, keeping your lines word for word. Tap funnier on a tag that only got a chuckle for three other ways to say it, yours first, lock the lines that are done, then run it on the teleprompter. The room still writes the setup. The picking and the exit line stay yours.",
+      body: "The best crowd work often becomes material. If the long-drive exchange kills three weeks running, it's a bit, and it belongs in your notebook with the blank filled in. Shutap works on that page. In Shutap Bits you type what happened in your own words and it cuts the story into a hook, setup, two tags and a button, keeping your lines word for word. Tap funnier on a tag that only got a chuckle for three other ways to say it, yours first, lock the lines that are done, then run it on the teleprompter. The room still writes the setup. The picking and the exit line stay yours.",
     },
   ],
   techniques: [

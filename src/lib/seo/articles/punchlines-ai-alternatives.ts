@@ -35,7 +35,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap: when the material is your own story",
-      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, starts where most of these don't: with something that actually happened to you. You tell the story and it's cut into a hook, a setup, two tags and a button, with your lines kept word for word. A line your story didn't cover gets an AI draft, marked as one, to change or keep. Tap funnier on any line for three other ways to say it, yours listed first, and lock what's done. The bit then runs as a five-second video, stand-up on a teleprompter, a sketch page or a skit. Three bits are free.",
+      body: "Shutap starts where most of these don't: with something that actually happened to you. You tell the story and it's cut into a hook, a setup, two tags and a button, with your lines kept word for word. A line your story didn't cover gets an AI draft, marked as one, to change or keep. Tap funnier on any line for three other ways to say it, yours listed first, and lock what's done. The bit then runs as a five-second video, stand-up on a teleprompter, a sketch page or a skit. Three bits are free.",
     },
     {
       heading: "Pick by what you start with",

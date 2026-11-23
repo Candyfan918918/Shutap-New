@@ -12,7 +12,7 @@ import '@/components/feed/feed.css'
 const PATH = '/pricing'
 const BASIC = PLANS.basic.amount
 
-const TITLE = `Pricing — Shutap, the Humor Amplifier, plans from ${usd(BASIC)}/mo`
+const TITLE = `Pricing — Shutap plans from ${usd(BASIC)}/mo`
 const DESCRIPTION = `Free: your first ${SHOP_VIDEO_CAPS.free} small-business videos, 3 bits, your first realtor kit and your first toast. Basic ${usd(BASIC)}/month: ${SHOP_VIDEO_CAPS.basic} new small-business video every day, 3 bits a day with rewrites, 20 kits and 1 toast a month, no watermark. One kit or toast: ${usd(KIT_ONCE.amount)}. Downloads and copies always unlimited.`
 
 const QA = [
@@ -44,7 +44,7 @@ export const Route = createFileRoute('/pricing')({
           '@context': 'https://schema.org',
           '@type': 'Product',
           name: 'Shutap',
-          description: 'The humor amplifier: funny videos about your small business filmed on your phone, bits, realtor kits and toasts.',
+          description: 'Funny videos about your small business filmed on your phone, bits, realtor kits and toasts.',
           brand: { '@type': 'Brand', name: 'Shutap' },
           url: SITE_URL,
           offers: [

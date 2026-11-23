@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Writing the whole run of posts at once",
-      body: "Eric Simon, who makes The Broke Agent, told GAAR he's careful with what he posts and when, so nothing points to a specific deal before it should. Planning the posts together helps with that, and it lets one running bit carry from listing to keys: if the porch swing starred in launch week, it gets the last word at closing. If you'd like a draft to push against, Shutap for Realtors, from Shutap the humor amplifier, starts from the listing link or listing text and returns the walkthrough to shoot, the voiceover, three hooks, the open-house kit, the just listed, price improvement, pending and sold posts, and the straight MLS-ready copy in one tone. Every line is fair-housing checked and nothing is made up. You keep what sounds like you and rewrite the rest.",
+      body: "Eric Simon, who makes The Broke Agent, told GAAR he's careful with what he posts and when, so nothing points to a specific deal before it should. Planning the posts together helps with that, and it lets one running bit carry from listing to keys: if the porch swing starred in launch week, it gets the last word at closing. If you'd like a draft to push against, Shutap for Realtors starts from the listing link or listing text and returns the walkthrough to shoot, the voiceover, three hooks, the open-house kit, the just listed, price improvement, pending and sold posts, and the straight MLS-ready copy in one tone. Every line is fair-housing checked and nothing is made up. You keep what sounds like you and rewrite the rest.",
     },
   ],
   techniques: [

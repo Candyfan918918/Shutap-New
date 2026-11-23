@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Glasses up, and building it from your stories",
-      body: "End with a callback to your story and one plain wish. Template: \"So raise a glass to [names], and to [callback object].\" Example: \"To Sam and Rachel, and to the closet. May it never be big enough.\" If you have the stories but not the shape, Shutap Toasts, from the humor amplifier, takes the stories you type in your own words and builds the speech around them: greeting, the stories, the thanks, glasses up. It flags lines only part of the room will get, and you get a PDF with the pauses marked, cue cards, and a phone prompter that works without Wi-Fi. Names stay on your device, and the first toast is free. You choose every line.",
+      body: "End with a callback to your story and one plain wish. Template: \"So raise a glass to [names], and to [callback object].\" Example: \"To Sam and Rachel, and to the closet. May it never be big enough.\" If you have the stories but not the shape, Shutap Toasts takes the stories you type in your own words and builds the speech around them: greeting, the stories, the thanks, glasses up. It flags lines only part of the room will get, and you get a PDF with the pauses marked, cue cards, and a phone prompter that works without Wi-Fi. Names stay on your device, and the first toast is free. You choose every line.",
     },
   ],
   techniques: [

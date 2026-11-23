@@ -35,7 +35,7 @@ const guide: Guide = {
     },
     {
       heading: "Saying it on camera: Shutap for Realtors",
-      body: "Here's the gap most stacks leave open: the agent who wants to stand in the kitchen and talk, in their own voice, without sounding like a brochure. Shutap for Realtors, from Shutap the humor amplifier, is built for that job. You paste the listing link or the listing text, check the facts it reads back and pick one tone: professional, funny, luxury or young. The kit holds the walkthrough to shoot, the voiceover, hooks, the open-house kit, posts for just listed, price improvement, pending and sold, and the straight MLS-ready copy. Must-say and never-say words, a fair-housing check on every line, every number from the listing, and shoot mode turns your phone into a teleprompter. Shutap never opens the camera.",
+      body: "Here's the gap most stacks leave open: the agent who wants to stand in the kitchen and talk, in their own voice, without sounding like a brochure. Shutap for Realtors is built for that job. You paste the listing link or the listing text, check the facts it reads back and pick one tone: professional, funny, luxury or young. The kit holds the walkthrough to shoot, the voiceover, hooks, the open-house kit, posts for just listed, price improvement, pending and sold, and the straight MLS-ready copy. Must-say and never-say words, a fair-housing check on every line, every number from the listing, and shoot mode turns your phone into a teleprompter. Shutap never opens the camera.",
     },
     {
       heading: "One listing through the whole stack: the bungalow on Wren Street",

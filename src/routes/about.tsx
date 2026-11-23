@@ -10,10 +10,10 @@ const TITLE = "About Shutap — Story-Based Jokes, Toasts & Listing Scripts";
 const DESCRIPTION =
   "Meet Shutap: turn your stories into jokes, toasts and listing scripts. Learn how its products work, what makes its approach different and who makes it.";
 const CAPSULE =
-  "Shutap is a humor amplifier on demand. It helps people say it funnier on the occasions that matter, with three products: Bits for funnier short videos, filming and acting, Kits for realtors, and Toasts for special occasions. You bring what you want to say; Shutap makes it funnier; you decide what stays. Your stories and words stay yours.";
+  "Shutap helps people say it funnier on the occasions that matter, with three products: Bits for funnier short videos, filming and acting, Kits for realtors, and Toasts for special occasions. You bring what you want to say; Shutap makes it funnier; you decide what stays. Your stories and words stay yours.";
 const SECTIONS = [
   {
-    heading: "What Shutap is: a humor amplifier, on demand",
+    heading: "What Shutap is",
     body: "People who use humor well get listened to. Shutap amplifies the humor you already have, when you need it: a post, a listing, a toast. Bits are for funnier short videos, filming and acting, Kits are for realtors, and Toasts are for weddings, holidays, birthdays and every other occasion with a glass raised. Enterprise brings it to company presentations. Shutap works from your material; you decide what stays. Stay funny, stay human.",
   },
   {
@@ -114,7 +114,7 @@ export const Route = createFileRoute("/about")({
             name: "Shutap",
             url: SITE_URL,
             slogan: "Say it funnier.",
-            description: "A humor amplifier on demand. Products: Shutap Bits (funnier short videos, filming and acting), Shutap for Realtors (listing kits), Shutap Toasts (special occasions).",
+            description: "Shutap helps people say it funnier. Products: Shutap Bits (funnier short videos, filming and acting), Shutap for Realtors (listing kits), Shutap Toasts (special occasions).",
           },
         }),
       },
@@ -138,7 +138,7 @@ function AboutPage() {
   return (
     <ContentPage
       breadcrumbs={[{ name: "About", path: PATH }]}
-      h1="About Shutap, the humor amplifier"
+      h1="About Shutap"
       capsule={CAPSULE}
       sections={sections}
       whoDoesWhat

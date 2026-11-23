@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Test it out loud, then fix the quiet line",
-      body: "Carrane's other rule is to try material on people before trusting it: friends, a class, a coach. Tell the five lines to someone over coffee and watch where they react. If they laugh at the polo shirt and not at the hallway, the first tag is too long. If the button gets a groan, the math might be arriving too slowly. Rewrite only the line that went quiet. Shutap, the humor amplifier, uses the same five lines: tell the story your way in Shutap Bits and it cuts your words, word for word, into a hook, setup, two tags and a button. Tap funnier on the line that isn't landing for three other ways to say it, yours listed first, and lock the ones that are done. The story and the choices stay yours.",
+      body: "Carrane's other rule is to try material on people before trusting it: friends, a class, a coach. Tell the five lines to someone over coffee and watch where they react. If they laugh at the polo shirt and not at the hallway, the first tag is too long. If the button gets a groan, the math might be arriving too slowly. Rewrite only the line that went quiet. Shutap uses the same five lines: tell the story your way in Shutap Bits and it cuts your words, word for word, into a hook, setup, two tags and a button. Tap funnier on the line that isn't landing for three other ways to say it, yours listed first, and lock the ones that are done. The story and the choices stay yours.",
     },
   ],
   techniques: [

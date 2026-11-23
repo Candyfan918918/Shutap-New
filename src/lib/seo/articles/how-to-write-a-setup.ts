@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Writing the setup in Shutap",
-      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, cuts your story into the bit's five lines (hook, setup, two tags and a button) and keeps your lines word for word. A line your story didn't cover gets an AI draft, marked as one, for you to change or keep. When the setup keeps giving the ending away, tap funnier on that one line and you get three other ways to say it, with yours listed first. Take one, rewrite it, or ignore all three, and lock the lines you're happy with so nothing touches them. The bit stays yours. Then run it as stand-up on the teleprompter, turn it into a five-second video, or lay it out as a sketch page or a skit.",
+      body: "Shutap cuts your story into the bit's five lines (hook, setup, two tags and a button) and keeps your lines word for word. A line your story didn't cover gets an AI draft, marked as one, for you to change or keep. When the setup keeps giving the ending away, tap funnier on that one line and you get three other ways to say it, with yours listed first. Take one, rewrite it, or ignore all three, and lock the lines you're happy with so nothing touches them. The bit stays yours. Then run it as stand-up on the teleprompter, turn it into a five-second video, or lay it out as a sketch page or a skit.",
     },
   ],
   techniques: [

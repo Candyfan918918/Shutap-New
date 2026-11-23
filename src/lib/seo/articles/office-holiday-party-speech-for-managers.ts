@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Building it from your own notes",
-      body: "Before you write a sentence, list three things the team did this year, one habit of yours people joke about, and the teams you want to thank. That list is the speech. If you want help turning it into one, Shutap Toasts has an office holiday party page: you type the team's stories in your own words, and Shutap, the humor amplifier, builds the toast around them, with the greeting, the stories, the thanks and glasses up. It never makes up a story or a win, and it flags lines only part of the room will get. You get a PDF with the pauses marked, cue cards and a phone prompter that works without Wi-Fi. Names stay on your device. Your first toast is free, and you pick every line.",
+      body: "Before you write a sentence, list three things the team did this year, one habit of yours people joke about, and the teams you want to thank. That list is the speech. If you want help turning it into one, Shutap Toasts has an office holiday party page: you type the team's stories in your own words, and Shutap builds the toast around them, with the greeting, the stories, the thanks and glasses up. It never makes up a story or a win, and it flags lines only part of the room will get. You get a PDF with the pauses marked, cue cards and a phone prompter that works without Wi-Fi. Names stay on your device. Your first toast is free, and you pick every line.",
     },
   ],
   techniques: [

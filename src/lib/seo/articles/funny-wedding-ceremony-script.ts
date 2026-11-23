@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Write the story section from what happened",
-      body: "The story section is the hardest part to make funny, and it's built from what the couple tells you. Write their meeting story out plainly first, names left off, then look for the object, the number and the moment one of them got it wrong. Shutap, the humor amplifier, can draft a version to push against: the button on this page opens it set for a family audience, storyteller voice, two minutes and a low wild setting. Keep what sounds like you, rewrite what doesn't, and check the final story with the couple.",
+      body: "The story section is the hardest part to make funny, and it's built from what the couple tells you. Write their meeting story out plainly first, names left off, then look for the object, the number and the moment one of them got it wrong. Shutap can draft a version to push against: the button on this page opens it set for a family audience, storyteller voice, two minutes and a low wild setting. Keep what sounds like you, rewrite what doesn't, and check the final story with the couple.",
     },
   ],
   faq: [

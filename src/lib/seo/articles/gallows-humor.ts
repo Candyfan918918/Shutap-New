@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Try it on your own bad week",
-      body: "Take the worst thing that happened to you this month and write three versions of your reaction: one that grades it like a restaurant, one that worries about a trivial detail, one that asks for a perk. Say each out loud in a flat voice and keep the one you'd actually say. If you want more options to push against, Shutap, the humor amplifier, takes what happened and drafts a bit in your voice, with deadpan or dry delivery and a heat setting you control. You pick the lines, cut the rest and rewrite them so the joke stays yours.",
+      body: "Take the worst thing that happened to you this month and write three versions of your reaction: one that grades it like a restaurant, one that worries about a trivial detail, one that asks for a perk. Say each out loud in a flat voice and keep the one you'd actually say. If you want more options to push against, Shutap takes what happened and drafts a bit in your voice, with deadpan or dry delivery and a heat setting you control. You pick the lines, cut the rest and rewrite them so the joke stays yours.",
     },
   ],
   faq: [
