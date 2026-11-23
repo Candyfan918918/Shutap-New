@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Keep each bit sharp before it goes in the set",
-      body: "Your five is only as good as its weakest bit, so work on bits one at a time before you order them. Shutap Bits, from the Shutap Humor Amplifier Lab, uses the same five-line shape this page does. Tell a bit your way and Shutap, the humor amplifier, cuts your words, word for word, into a hook, a setup, two tags and a button, and drafts only the lines you leave empty, marked so you can change or delete them. Tap funnier on the line that's going quiet for three other ways to say it, yours listed first, lock the lines that are done, and practice on the teleprompter with delivery cues. The bits stay in My creations. The order, the cuts and the set are yours to decide.",
+      body: "Your five is only as good as its weakest bit, so work on bits one at a time before you order them. Shutap Bits, from the Shutap Humor Amplifier Lab, uses the same five-line shape this page does. Tell a bit your way and Shutap cuts your words, word for word, into a hook, a setup, two tags and a button, and drafts only the lines you leave empty, marked so you can change or delete them. Tap funnier on the line that's going quiet for three other ways to say it, yours listed first, lock the lines that are done, and practice on the teleprompter with delivery cues. The bits stay in My creations. The order, the cuts and the set are yours to decide.",
     },
   ],
   techniques: [

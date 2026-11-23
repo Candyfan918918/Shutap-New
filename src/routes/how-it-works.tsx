@@ -9,7 +9,7 @@ import { breadcrumbScript } from "@/lib/seo/breadcrumbs";
 const PATH = "/how-it-works";
 const TITLE = "How Shutap works — make a joke, toast or listing video script funnier";
 const DESCRIPTION =
-  "How the Shutap Humor Amplifier Lab helps you say it funnier: turn your story into a stand-up bit, write a funny toast in your own words, or turn a listing into a video script and posts.";
+  "How Shutap helps you say it funnier: turn your story into a stand-up bit, write a funny toast in your own words, or turn a listing into a video script and posts.";
 const CAPSULE =
   "You bring what you want to say: your bit, a listing link, your stories about the person. Shutap helps make it funnier, and you decide what stays. Here is how each one works.";
 const STEPS = [
@@ -92,7 +92,7 @@ function HowItWorksPage() {
   return (
     <ContentPage
       breadcrumbs={[{ name: "How it works", path: PATH }]}
-      h1="How the Shutap Humor Amplifier Lab works"
+      h1="How Shutap works"
       capsule={CAPSULE}
       sections={sections}
       others={OTHERS}

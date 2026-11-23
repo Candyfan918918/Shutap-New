@@ -47,7 +47,7 @@ const guide: Guide = {
     },
     {
       heading: "Where Shutap for Realtors fits",
-      body: "Shutap for Realtors, from Shutap the humor amplifier, splits the job on purpose. Paste the listing link (an MLS portal page or your brokerage page) or the listing text, check the facts it reads back, and pick a tone: professional, funny, luxury or young. The kit's MLS-ready copy stays straight, every fact and no jokes, while the funny goes into the walkthrough to shoot, the voiceover, the hooks, the open-house kit and the posts from just listed to sold. Every line gets a fair-housing check, nothing is added beyond the listing, and you set must-say and never-say words. You pick the lines and cut anything that isn't your voice. Your first kit is free, marked \"— shutap.com\"; one kit is $12.99; Basic is $19.99 a month for 20 kits; Pro is $49.99 for unlimited.",
+      body: "Shutap for Realtors splits the job on purpose. Paste the listing link (an MLS portal page or your brokerage page) or the listing text, check the facts it reads back, and pick a tone: professional, funny, luxury or young. The kit's MLS-ready copy stays straight, every fact and no jokes, while the funny goes into the walkthrough to shoot, the voiceover, the hooks, the open-house kit and the posts from just listed to sold. Every line gets a fair-housing check, nothing is added beyond the listing, and you set must-say and never-say words. You pick the lines and cut anything that isn't your voice. Your first kit is free, marked \"— shutap.com\"; one kit is $12.99; Basic is $19.99 a month for 20 kits; Pro is $49.99 for unlimited.",
     },
   ],
   faq: [

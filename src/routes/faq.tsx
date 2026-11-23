@@ -9,11 +9,11 @@ import { useSmallBusinessOpen } from "@/hooks/use-smallbusiness-open";
 
 const PATH = "/faq";
 const URL = `${SITE_URL}/faq`;
-const TITLE = "Shutap FAQ — the humor amplifier for jokes, toasts and listing videos";
+const TITLE = "Shutap FAQ — funny small-business videos, toasts, listing videos and bits";
 const DESCRIPTION =
-  "Answers about Shutap, the humor amplifier: is it free, stand-up, sketch and skit, TikTok, who owns the bits, privacy and pricing.";
+  "Answers about Shutap: is it free, stand-up, sketch and skit, TikTok, who owns the bits, privacy and pricing.";
 const CAPSULE =
-  "Everything people ask about Shutap, the humor amplifier: tell it your way and get the bit, AI fills only the gaps, for TikTok, Reels, YouTube Shorts and the stage.";
+  "Everything people ask about Shutap: tell it your way and get the bit, AI fills only the gaps, for TikTok, Reels, YouTube Shorts and the stage.";
 
 
 

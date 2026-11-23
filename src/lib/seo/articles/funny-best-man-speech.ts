@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Find the funny version of your story",
-      body: "If you know the story but can't find the laugh in it, write it out the way you'd tell it at the bar, with names left off. Then look for the object, the number and the moment where expectation and reality split. Shutap, the humor amplifier, can give you a draft to push against: the button on this page opens it set for a family audience, storyteller voice, two minutes and a low wild setting. Keep the lines that sound like you, rewrite the ones that don't, and write the sincere part yourself. It's your friend and your speech.",
+      body: "If you know the story but can't find the laugh in it, write it out the way you'd tell it at the bar, with names left off. Then look for the object, the number and the moment where expectation and reality split. Shutap can give you a draft to push against: the button on this page opens it set for a family audience, storyteller voice, two minutes and a low wild setting. Keep the lines that sound like you, rewrite the ones that don't, and write the sincere part yourself. It's your friend and your speech.",
     },
   ],
   faq: [

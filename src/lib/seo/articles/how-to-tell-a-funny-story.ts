@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Test it on two people, then trim",
-      body: "Stories get funny through retelling. Tell it to one friend and watch where their face changes, then tell it to another and cut whatever got no reaction both times. By the third telling you'll know which detail carries it. Writing it down first helps too, since a written version shows you the warm-up you didn't notice you were doing. If you want to see your own story with a tighter opening and a cleaner last line, Shutap, the humor amplifier, takes what happened and amplifies it into a hook, setup, tags and a button. Treat that as options: keep what sounds like you, rewrite the rest, and tell it your way.",
+      body: "Stories get funny through retelling. Tell it to one friend and watch where their face changes, then tell it to another and cut whatever got no reaction both times. By the third telling you'll know which detail carries it. Writing it down first helps too, since a written version shows you the warm-up you didn't notice you were doing. If you want to see your own story with a tighter opening and a cleaner last line, Shutap takes what happened and amplifies it into a hook, setup, tags and a button. Treat that as options: keep what sounds like you, rewrite the rest, and tell it your way.",
     },
   ],
   techniques: [

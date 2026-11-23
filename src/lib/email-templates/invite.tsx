@@ -151,7 +151,7 @@ export const InviteEmail = ({ confirmationUrl }: InviteEmailProps) => (
                     }}
                   >
                     {
-                      "you've been invited to shutap — the humor amplifier. accept, and write your first bit."
+                      "you've been invited to shutap. say it funnier. accept, and write your first bit."
                     }
                   </p>
                   {"\n"}

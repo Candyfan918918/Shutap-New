@@ -16,7 +16,7 @@ const guide: Guide = {
   sections: [
     {
       heading: "The short answer",
-      body: "ChatGPT is a general assistant. It can write a joke, a cover letter or a recipe, and it's very good at all three if you know how to ask. Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, only does comedy, and on Shutap Bits it doesn't write the bit for you. You tell it your way and it comes back in the shape comics use, your words kept word for word (any line your story didn't cover is drafted by the AI copilot, marked so you can change it): a hook, a setup, two tags and a button. When a line isn't landing, you tap funnier and get three other ways to say it, yours first.",
+      body: "ChatGPT is a general assistant. It can write a joke, a cover letter or a recipe, and it's very good at all three if you know how to ask. Shutap only does comedy, and on Shutap Bits it doesn't write the bit for you. You tell it your way and it comes back in the shape comics use, your words kept word for word (any line your story didn't cover is drafted by the AI copilot, marked so you can change it): a hook, a setup, two tags and a button. When a line isn't landing, you tap funnier and get three other ways to say it, yours first.",
     },
     {
       heading: "One morning, two workflows",

@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Practice it twice and memorize it",
-      body: "Short toasts are easy to memorize, and LoveToKnow points out that memorizing takes some stress out of the moment. Say it twice in the car or the shower, once to a friend if you can, which is close to Greenvelope's suggestion to practice at home. If you'd like a draft to push against, type your one line about the year into Shutap, the humor amplifier, set it to social or family, dry, 30 seconds and wild 2, and it writes the setup and button around your line. Lock the line that's yours, tap funnier on any other line to see three versions, and keep whichever sounds like you. Shutap Toasts at shutap.com/toasts has a New Year's occasion with a prompter that can sync to midnight.",
+      body: "Short toasts are easy to memorize, and LoveToKnow points out that memorizing takes some stress out of the moment. Say it twice in the car or the shower, once to a friend if you can, which is close to Greenvelope's suggestion to practice at home. If you'd like a draft to push against, type your one line about the year into Shutap, set it to social or family, dry, 30 seconds and wild 2, and it writes the setup and button around your line. Lock the line that's yours, tap funnier on any other line to see three versions, and keep whichever sounds like you. Shutap Toasts at shutap.com/toasts has a New Year's occasion with a prompter that can sync to midnight.",
     },
   ],
   techniques: [

@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Turn this week's showings into captions",
-      body: "Your best material is whatever went sideways this week: the lockbox, the dog, the three-paragraph note about the light switch. Write it down the way you'd tell it to another agent. Shutap, the humor amplifier, can take that and draft a short bit for social, with a caption under 100 characters and five hashtags. The button on this page opens it set for social, a dry voice and fifteen seconds. Pick the line that sounds like you, rewrite it in your words, and keep the joke on the house.",
+      body: "Your best material is whatever went sideways this week: the lockbox, the dog, the three-paragraph note about the light switch. Write it down the way you'd tell it to another agent. Shutap can take that and draft a short bit for social, with a caption under 100 characters and five hashtags. The button on this page opens it set for social, a dry voice and fifteen seconds. Pick the line that sounds like you, rewrite it in your words, and keep the joke on the house.",
     },
   ],
   faq: [

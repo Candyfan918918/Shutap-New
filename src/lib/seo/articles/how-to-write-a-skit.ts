@@ -52,7 +52,7 @@ const guide: Guide = {
     },
     {
       heading: "Rewrite, then read it with a timer",
-      body: "First drafts of skits usually carry a line that explains the joke, a character who's only there to say \"what?\", and a beat that goes sideways instead of bigger. Cut all three, then read the page aloud with a timer and to one blunt friend. If you started from a bit, Shutap, the humor amplifier, can lay your own five lines out as a sketch page with delivery cues like (beat) or (hushed), and as a skit shot list you play both parts of. The layouts add no new jokes. Tap funnier on any line you want options for, keep yours if it's better, and lock what's done.",
+      body: "First drafts of skits usually carry a line that explains the joke, a character who's only there to say \"what?\", and a beat that goes sideways instead of bigger. Cut all three, then read the page aloud with a timer and to one blunt friend. If you started from a bit, Shutap can lay your own five lines out as a sketch page with delivery cues like (beat) or (hushed), and as a skit shot list you play both parts of. The layouts add no new jokes. Tap funnier on any line you want options for, keep yours if it's better, and lock what's done.",
     },
   ],
   faq: [

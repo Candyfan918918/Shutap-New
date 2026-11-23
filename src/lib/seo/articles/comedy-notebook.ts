@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "From notebook to stage: when a bit graduates",
-      body: "A bit leaves the working pile when it gets the same laugh in the same place on two different nights, in front of strangers. Copy it then to a set list page, with its running time and the line that gets the biggest laugh, so you can build a five later without flipping through drafts. Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, uses the same five-line page. In Shutap Bits it cuts what you tell it into a hook, setup, two tags and a button, keeping your words word for word. It drafts only the lines your story left out, marked so you can change or delete them. Tap funnier on a line that died for three other ways to say it, yours listed first, lock what works and rehearse on the teleprompter. The notebook, the marks and the calls stay yours.",
+      body: "A bit leaves the working pile when it gets the same laugh in the same place on two different nights, in front of strangers. Copy it then to a set list page, with its running time and the line that gets the biggest laugh, so you can build a five later without flipping through drafts. Shutap uses the same five-line page. In Shutap Bits it cuts what you tell it into a hook, setup, two tags and a button, keeping your words word for word. It drafts only the lines your story left out, marked so you can change or delete them. Tap funnier on a line that died for three other ways to say it, yours listed first, lock what works and rehearse on the teleprompter. The notebook, the marks and the calls stay yours.",
     },
   ],
   techniques: [

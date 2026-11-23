@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Build yours from your own stories",
-      body: "Shutap, the humor amplifier, has a maid of honor page in Shutap Toasts. You type your own stories about your friendship: the first is required, a second and third are recommended. Shutap builds the speech around them in your words, with the greeting, the stories, the thanks and glasses up. It never makes up a story, and it flags lines only part of the room will get, like a nickname from your dorm. You get a PDF with the pauses marked, cue cards and a phone prompter that works without Wi-Fi. Names stay on your device. The first toast is free, with a shutap.com watermark, then $12.99 one time. Every line is yours to keep, cut or rewrite.",
+      body: "Shutap has a maid of honor page in Shutap Toasts. You type your own stories about your friendship: the first is required, a second and third are recommended. Shutap builds the speech around them in your words, with the greeting, the stories, the thanks and glasses up. It never makes up a story, and it flags lines only part of the room will get, like a nickname from your dorm. You get a PDF with the pauses marked, cue cards and a phone prompter that works without Wi-Fi. Names stay on your device. The first toast is free, with a shutap.com watermark, then $12.99 one time. Every line is yours to keep, cut or rewrite.",
     },
   ],
   faq: [

@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Doing the same thing in Shutap",
-      body: "Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, is built around this exact workflow. In Shutap Bits you tell it your way and it's cut into a hook, setup, two tags and a button, your words kept word for word. Any line your story didn't cover is drafted by the AI copilot and marked as an AI draft, so you can change, keep or delete it. Tap funnier on the one line that isn't landing and you get three other ways to say it, built from the rest of your bit, with yours first; nothing changes until you pick. Lock a line when it's done so later passes skip it. Then rehearse it on the teleprompter with delivery cues, or lay it out as a sketch page or a skit.",
+      body: "Shutap is built around this exact workflow. In Shutap Bits you tell it your way and it's cut into a hook, setup, two tags and a button, your words kept word for word. Any line your story didn't cover is drafted by the AI copilot and marked as an AI draft, so you can change, keep or delete it. Tap funnier on the one line that isn't landing and you get three other ways to say it, built from the rest of your bit, with yours first; nothing changes until you pick. Lock a line when it's done so later passes skip it. Then rehearse it on the teleprompter with delivery cues, or lay it out as a sketch page or a skit.",
     },
   ],
   faq: [

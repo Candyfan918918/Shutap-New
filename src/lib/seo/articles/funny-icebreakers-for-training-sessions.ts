@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Write a fresh opener from today's room",
-      body: "Stock icebreakers work. A line about this room, this week, works better. Before the session, jot one true detail: the projector that needs a specific cable, the course title that's eleven words long, the fact that the session got rescheduled three times. Turn that into your opener. \"This session has been rescheduled three times, so if you're here, you're the survivors.\" If you want options to push against, write your opener into Shutap, the humor amplifier, set the audience to work and the voice to dry, then tap funnier on it. It offers three other ways to say your own detail. You pick one, cut it to a sentence and say it your way.",
+      body: "Stock icebreakers work. A line about this room, this week, works better. Before the session, jot one true detail: the projector that needs a specific cable, the course title that's eleven words long, the fact that the session got rescheduled three times. Turn that into your opener. \"This session has been rescheduled three times, so if you're here, you're the survivors.\" If you want options to push against, write your opener into Shutap, set the audience to work and the voice to dry, then tap funnier on it. It offers three other ways to say your own detail. You pick one, cut it to a sentence and say it your way.",
     },
   ],
   techniques: [

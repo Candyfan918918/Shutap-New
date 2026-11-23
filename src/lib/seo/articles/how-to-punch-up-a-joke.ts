@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Doing the pass in Shutap",
-      body: "If you keep your bits in this five-line shape, Shutap, the humor amplifier, cuts what you typed into a hook, setup, two tags and a button, keeping your words word for word. A line your story didn't cover, like the empty second tag above, is drafted by the AI copilot and marked so you can change it, keep it or delete it. Tap funnier on the line that's still soft and you get three other ways to say it, yours first, and nothing changes until you pick. Lock the lines that already land, then rehearse it on the teleprompter with delivery cues, or turn it into a 5-second video. The premise, the air fryer and the last word all stay your call.",
+      body: "If you keep your bits in this five-line shape, Shutap cuts what you typed into a hook, setup, two tags and a button, keeping your words word for word. A line your story didn't cover, like the empty second tag above, is drafted by the AI copilot and marked so you can change it, keep it or delete it. Tap funnier on the line that's still soft and you get three other ways to say it, yours first, and nothing changes until you pick. Lock the lines that already land, then rehearse it on the teleprompter with delivery cues, or turn it into a 5-second video. The premise, the air fryer and the last word all stay your call.",
     },
   ],
   techniques: [

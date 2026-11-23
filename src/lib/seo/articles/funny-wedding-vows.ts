@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Start from what actually happened",
-      body: "The best vow material is already in your life: the first apartment, the road trip that went wrong, the argument about the thermostat. Write down five small true things about how you live together, then turn each into a promise. Shutap, the humor amplifier, can help find the funny angle in one of those moments. The button on this page opens it set for a family audience, storyteller voice, sixty seconds and a low wild setting. Use it as something to react to. The promises have to be yours, in your words.",
+      body: "The best vow material is already in your life: the first apartment, the road trip that went wrong, the argument about the thermostat. Write down five small true things about how you live together, then turn each into a promise. Shutap can help find the funny angle in one of those moments. The button on this page opens it set for a family audience, storyteller voice, sixty seconds and a low wild setting. Use it as something to react to. The promises have to be yours, in your words.",
     },
   ],
   faq: [

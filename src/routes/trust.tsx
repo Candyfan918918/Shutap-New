@@ -5,11 +5,11 @@ import { SITE_URL } from "@/lib/site";
 
 const PATH = "/trust";
 const TITLE =
-  "Trust & Privacy — Shutap Humor Amplifier Lab";
+  "Trust & Privacy — Shutap";
 const DESCRIPTION =
   "How Shutap keeps the jokes on the situation and your stories private: private until you post, names removed from anything you post publicly, never used by Shutap to train AI, reporting and takedowns.";
 const CAPSULE =
-  "Shutap Humor Amplifier Lab helps everyone say it funnier, and the jokes come from your real stories, listings and memories. So privacy is built in: your work stays private to you, toast names never leave your browser, nothing is public unless you post it, names and details come out of anything you post to a room, and Shutap never uses your stories to train AI or puts them in the joke dataset.";
+  "Shutap helps everyone say it funnier, and the jokes come from your real stories, listings and memories. So privacy is built in: your work stays private to you, toast names never leave your browser, nothing is public unless you post it, names and details come out of anything you post to a room, and Shutap never uses your stories to train AI or puts them in the joke dataset.";
 const SECTIONS = [
   { heading: "Your name, your choice", body: "Your profile starts with the name and picture from your sign-in, or a name made from your email address. You can change both in your profile; new posts use your current name." },
   { heading: "Your words as you wrote them, names removed when you post", body: "Your own bits, toasts and realtor kits are saved as you typed them, so they come back exactly as written. When you post to a room, or comment, Shutap uses automated checks and an AI model to remove names, addresses, places, phone numbers and emails from what is posted. It can miss things, so leave out details you don't want public." },

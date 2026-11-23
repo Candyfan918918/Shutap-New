@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Test the fix one change at a time",
-      body: "Run the rewrite in the same slot of your next set, at the same speed, so the only thing that changed is the words. Change five lines at once and you won't know which fix did it. Mark the recording again. GOLD Comedy's Emma Tattenbaum-Fine suggests picking one specific point of improvement before your next set, which works line by line too: one target per night. Give it two or three more tries before you cut it; one dead room can be the room. Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, works on that same page: Shutap Bits cuts your story into a hook, setup, two tags and a button, in your words. Tap funnier on the line that died for three other ways to say it, yours first, then lock what works and run it on the teleprompter. The picking and the rewrite stay yours.",
+      body: "Run the rewrite in the same slot of your next set, at the same speed, so the only thing that changed is the words. Change five lines at once and you won't know which fix did it. Mark the recording again. GOLD Comedy's Emma Tattenbaum-Fine suggests picking one specific point of improvement before your next set, which works line by line too: one target per night. Give it two or three more tries before you cut it; one dead room can be the room. Shutap works on that same page: Shutap Bits cuts your story into a hook, setup, two tags and a button, in your words. Tap funnier on the line that died for three other ways to say it, yours first, then lock what works and run it on the teleprompter. The picking and the rewrite stay yours.",
     },
   ],
   techniques: [

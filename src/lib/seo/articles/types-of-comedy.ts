@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Which type of comedy to try first",
-      body: "Start from what you already do. If you tell stories at dinner, try stand-up built on observational or cringe material. If you do voices, write sketch or character pieces. If you post short videos, parody formats and surreal bits travel well, since the copied format is recognizable at a glance. Write one real thing that happened to you three ways, as farce, as cringe and as parody, and keep the one you can say without forcing it. Shutap, the humor amplifier, can draft your story as a stand-up bit for the teleprompter, a skit laid out as a scene, or a sketch on a screenplay page. The story and the final cut stay yours.",
+      body: "Start from what you already do. If you tell stories at dinner, try stand-up built on observational or cringe material. If you do voices, write sketch or character pieces. If you post short videos, parody formats and surreal bits travel well, since the copied format is recognizable at a glance. Write one real thing that happened to you three ways, as farce, as cringe and as parody, and keep the one you can say without forcing it. Shutap can draft your story as a stand-up bit for the teleprompter, a skit laid out as a scene, or a sketch on a screenplay page. The story and the final cut stay yours.",
     },
   ],
   techniques: [

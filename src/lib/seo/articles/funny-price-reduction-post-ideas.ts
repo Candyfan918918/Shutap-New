@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Write the new price posts in one go",
-      body: "The running bit from launch week can come back here, which makes the price post feel planned rather than panicked. If the fig tree was the star in week one, it's the star again: \"The fig tree has seen the new price and approves.\" If you want a draft to push against, Shutap for Realtors, from Shutap the humor amplifier, starts from the listing link or listing text and returns the walkthrough, voiceover, hooks, open-house kit, the just listed, price improvement, pending and sold posts, and the straight MLS-ready copy in a professional, funny, luxury or young tone. Every line is fair-housing checked and uses only numbers on the listing. You keep what sounds like you and rewrite the rest.",
+      body: "The running bit from launch week can come back here, which makes the price post feel planned rather than panicked. If the fig tree was the star in week one, it's the star again: \"The fig tree has seen the new price and approves.\" If you want a draft to push against, Shutap for Realtors starts from the listing link or listing text and returns the walkthrough, voiceover, hooks, open-house kit, the just listed, price improvement, pending and sold posts, and the straight MLS-ready copy in a professional, funny, luxury or young tone. Every line is fair-housing checked and uses only numbers on the listing. You keep what sounds like you and rewrite the rest.",
     },
   ],
   techniques: [

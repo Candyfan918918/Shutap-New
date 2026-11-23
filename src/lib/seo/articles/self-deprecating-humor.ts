@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Write your own, then make each line funnier",
-      body: "Start from one real bad decision from this week and tell it plainly, the way you'd tell a friend. Shutap, the humor amplifier from the Shutap Humor Amplifier Lab, cuts that story into a hook, a setup, two tags and a button, and keeps your lines word for word. A line your story didn't cover gets an AI draft, marked as one, for you to keep or change. Tap funnier on a line that's still a label instead of a picture and you get three other ways to say it, yours listed first; lock the lines that are done. Then rehearse it on the stand-up teleprompter with delivery cues, or post it as a 5-second video.",
+      body: "Start from one real bad decision from this week and tell it plainly, the way you'd tell a friend. Shutap cuts that story into a hook, a setup, two tags and a button, and keeps your lines word for word. A line your story didn't cover gets an AI draft, marked as one, for you to keep or change. Tap funnier on a line that's still a label instead of a picture and you get three other ways to say it, yours listed first; lock the lines that are done. Then rehearse it on the stand-up teleprompter with delivery cues, or post it as a 5-second video.",
     },
   ],
   faq: [

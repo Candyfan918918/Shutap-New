@@ -51,7 +51,7 @@ const guide: Guide = {
     },
     {
       heading: "Run it once, then cut",
-      body: "Read the page aloud with someone playing Pat. Skillshare's beginner target is one location, two people, one game and no more than two minutes, and it suggests aiming for a laugh about every 15 seconds. Mark any line with no laugh near it and cut it or make it a reaction instead. If you keep your bits in the notebook's five lines, Shutap, the humor amplifier, can lay your own lines out as a sketch page and a skit shot list with delivery cues like (beat). The words stay yours. From there you find the game, cast the second character and rewrite it as a scene, the way this page did.",
+      body: "Read the page aloud with someone playing Pat. Skillshare's beginner target is one location, two people, one game and no more than two minutes, and it suggests aiming for a laugh about every 15 seconds. Mark any line with no laugh near it and cut it or make it a reaction instead. If you keep your bits in the notebook's five lines, Shutap can lay your own lines out as a sketch page and a skit shot list with delivery cues like (beat). The words stay yours. From there you find the game, cast the second character and rewrite it as a scene, the way this page did.",
     },
   ],
   techniques: [

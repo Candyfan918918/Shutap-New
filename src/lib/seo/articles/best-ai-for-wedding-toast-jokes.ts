@@ -28,7 +28,7 @@ const guide: Guide = {
     },
     {
       heading: "Shutap for the funny middle",
-      body: "Shutap, the humor amplifier, does a narrower job that fits the middle of a toast. You type one story, set the audience to family, pick the storyteller voice, a length of 60 seconds or 2 minutes, and keep the heat low, around 2. It drafts that story as a short run with a hook, setup, tags and a closing line. It won't write your whole speech, and it shouldn't. It gives you a draft of the stretch where the room laughs, which you then rewrite, trim and stitch between your own opening and your own sincere ending.",
+      body: "Shutap does a narrower job that fits the middle of a toast. You type one story, set the audience to family, pick the storyteller voice, a length of 60 seconds or 2 minutes, and keep the heat low, around 2. It drafts that story as a short run with a hook, setup, tags and a closing line. It won't write your whole speech, and it shouldn't. It gives you a draft of the stretch where the room laughs, which you then rewrite, trim and stitch between your own opening and your own sincere ending.",
     },
     {
       heading: "A worked example",

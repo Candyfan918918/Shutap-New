@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Finding next week's three minutes",
-      body: "Material comes from the week you just had: the coworker who reply-alls \"thanks!\" to the whole company, the gym that plays the same four songs, the date who brought a printed agenda. Write the story down the night it happens, while you still remember the exact words. If you're stuck turning it into a bit, Shutap, the humor amplifier, takes a story you type and gives you a rough draft with a hook, setup, tags and a button, set for a live audience. Use it as something to argue with. Cut what doesn't sound like you, rewrite the rest, and the version you take to the mic is yours.",
+      body: "Material comes from the week you just had: the coworker who reply-alls \"thanks!\" to the whole company, the gym that plays the same four songs, the date who brought a printed agenda. Write the story down the night it happens, while you still remember the exact words. If you're stuck turning it into a bit, Shutap takes a story you type and gives you a rough draft with a hook, setup, tags and a button, set for a live audience. Use it as something to argue with. Cut what doesn't sound like you, rewrite the rest, and the version you take to the mic is yours.",
     },
   ],
   faq: [

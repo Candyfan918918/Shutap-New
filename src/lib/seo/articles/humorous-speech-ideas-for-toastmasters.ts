@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Find the funny version of your story",
-      body: "Most people have the story and get stuck on the lines. Write it out plainly, the way you'd tell it to a friend over coffee, then look for the object, the number and the moment where things went sideways. Shutap, the humor amplifier, can draft one beat of it for a live audience in a storyteller voice. You get a hook, setup, tags and a button to react to. Keep the lines that sound like you, rewrite the rest, and build the full speech yourself, because the contest rules say it has to be yours.",
+      body: "Most people have the story and get stuck on the lines. Write it out plainly, the way you'd tell it to a friend over coffee, then look for the object, the number and the moment where things went sideways. Shutap can draft one beat of it for a live audience in a storyteller voice. You get a hook, setup, tags and a button to react to. Keep the lines that sound like you, rewrite the rest, and build the full speech yourself, because the contest rules say it has to be yours.",
     },
   ],
   faq: [

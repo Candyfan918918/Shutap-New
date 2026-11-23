@@ -48,7 +48,7 @@ const guide: Guide = {
     },
     {
       heading: "Keep it steady from post to post",
-      body: "Online, people follow a voice more than a topic. If one video is a gentle storytime and the next is a brutal roast, a new viewer can't tell what they're signing up for. Keep the narrator and the attitude steady, and change the situations. Recurring details help, like a coworker you always call the same nickname or a running list. If you use Shutap, the humor amplifier, to draft a bit from what happened, treat the draft as something to argue with: cut what doesn't sound like you, rewrite the rest in your own words, and keep the jokes yours.",
+      body: "Online, people follow a voice more than a topic. If one video is a gentle storytime and the next is a brutal roast, a new viewer can't tell what they're signing up for. Keep the narrator and the attitude steady, and change the situations. Recurring details help, like a coworker you always call the same nickname or a running list. If you use Shutap to draft a bit from what happened, treat the draft as something to argue with: cut what doesn't sound like you, rewrite the rest in your own words, and keep the jokes yours.",
     },
   ],
   techniques: [

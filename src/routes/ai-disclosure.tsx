@@ -5,7 +5,7 @@ import { DocLayout } from '@/components/site/DocLayout'
 import { SITE_URL } from '@/lib/site'
 
 const URL = `${SITE_URL}/ai-disclosure`
-const TITLE = "AI Disclosure — How Shutap Uses AI | Shutap Humor Amplifier Lab"
+const TITLE = "AI Disclosure — How Shutap Uses AI | Shutap"
 const DESCRIPTION =
   "Shutap uses AI (Google Gemini and OpenAI models, through the Lovable AI Gateway): on Bits to cut your story into lines, draft only the lines your story didn't cover, and offer other ways to say a line when you tap funnier; for realtor kits and toasts, to draft from your material. Nobody at Shutap reads what you make, and none of it is used to train AI. AI can be wrong; you decide what to use."
 
