@@ -143,13 +143,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           url: "https://shutap.com",
           image: "https://shutap.com/og/shutap-og-v4.png",
           description:
-            "Shutap Humor Amplifier Lab helps everyone say it funnier, for any occasion, in any format. You bring what you want to say; Shutap drafts it funnier; you decide what stays. Your stories and words stay yours. Your work stays private unless you post it, names are removed from anything posted, and Shutap never uses your content to train AI. Entertainment, not advice. 18+.",
+            "Shutap makes funny videos for small businesses. Say one thing that happened today, pick one of three funny skits about your own business, and film it shot by shot on your phone. Shutap also helps with funny toasts, real estate listing videos and stand-up bits. You decide what stays, and your words and videos stay yours. Shutap never uses your content to train AI. Entertainment, not advice. 18+.",
           offers: {
             "@type": "Offer",
             price: "0",
             priceCurrency: "USD",
             description:
-              "Free to use. Basic is $19.99/month; Pro is $49.99/month.",
+              "Free to start: your first 3 small-business videos are free. Basic is $19.99/month.",
           },
         }),
       },
