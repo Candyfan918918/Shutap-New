@@ -1,6 +1,6 @@
 {
  "site": "https://shutap.com/",
- "pulledAt": "2026-11-22T21:05:42.821Z",
+ "pulledAt": "2026-11-23T01:10:53.277Z",
  "queries": [
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -68,20 +68,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1791504000000)/",
-   "Impressions": 1,
-   "Query": "relationship vents"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 4,
    "Clicks": 0,
    "Date": "/Date(1791504000000)/",
    "Impressions": 1,
    "Query": "shutpacket ai"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1791504000000)/",
+   "Impressions": 1,
+   "Query": "relationship vents"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -104,15 +104,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
-   "Clicks": 0,
-   "Date": "/Date(1792108800000)/",
-   "Impressions": 1,
-   "Query": "shutpacket ai"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1792108800000)/",
@@ -127,6 +118,15 @@
    "Date": "/Date(1792108800000)/",
    "Impressions": 1,
    "Query": "+bit joke"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 4,
+   "Clicks": 0,
+   "Date": "/Date(1792108800000)/",
+   "Impressions": 1,
+   "Query": "shutpacket ai"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -176,15 +176,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 2,
-   "Query": "a roast line"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
@@ -207,7 +198,7 @@
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 2,
-   "Query": "give me a roast line"
+   "Query": "a roast line"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -221,6 +212,24 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 2,
+   "Query": "give me a roast line"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "sense of hunoir"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
@@ -230,20 +239,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
+   "AvgImpressionPosition": 4,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "define deadpan comedy"
+   "Query": "comedy comes in three times"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
+   "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "reddit deadpan absurd"
+   "Query": "roastplugh"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -266,47 +275,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
+   "AvgImpressionPosition": 5,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "comedy comes in three times"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 2,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "humor types slapstick deadpan satire roast dark comedy definitions"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "types of humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "funny email sign offs for work thank you"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "humor types"
+   "Query": "deadpan yorkshire humour"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -338,20 +311,29 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
+   "AvgImpressionPosition": 5,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "roastplugh"
+   "Query": "reddit deadpan absurd"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
+   "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "what kind of humor is the opposite of dry humor"
+   "Query": "humor types slapstick deadpan satire roast dark comedy definitions"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "types of humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -369,16 +351,7 @@
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "sense of hunoir"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 1,
-   "Query": "what is a good rost line"
+   "Query": "funny email sign offs for work thank you"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -392,11 +365,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
+   "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "deadpan yorkshire humour"
+   "Query": "humor types"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -415,6 +388,33 @@
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
    "Query": "\"low4n\" \"ia\" \"roast\""
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "define deadpan comedy"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "what kind of humor is the opposite of dry humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 1,
+   "Query": "what is a good rost line"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -509,15 +509,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 3,
-   "Query": "what does it mean to say something in a deadpan way"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
@@ -536,20 +527,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
+   "AvgImpressionPosition": 5,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
-   "Impressions": 2,
-   "Query": "what does deadpan mean"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 2,
-   "Query": "dead pan humour"
+   "Impressions": 3,
+   "Query": "what does it mean to say something in a deadpan way"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -563,29 +545,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
+   "AvgImpressionPosition": 4,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
    "Impressions": 2,
-   "Query": "deadpan look meaning"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 2,
-   "Query": "rule of three fools exprecion"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 2,
-   "Query": "deadpan comedy meaning"
+   "Query": "what is a deadpan humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -599,11 +563,29 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
+   "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
    "Impressions": 2,
-   "Query": "what is a deadpan humor"
+   "Query": "dead pan humour"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 2,
+   "Query": "what does deadpan mean"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 2,
+   "Query": "rule of three fools exprecion"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -617,11 +599,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
+   "AvgImpressionPosition": 6,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
    "Impressions": 2,
-   "Query": "rule of three sets examples"
+   "Query": "deadpan look meaning"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -635,6 +617,24 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 2,
+   "Query": "deadpan comedy meaning"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 2,
+   "Query": "rule of three sets examples"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
@@ -644,317 +644,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "what does deadpan mean?"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "whats deadpan expression"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "types of humor acts"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "how does joke work"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "funny email signoffs at work"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "how to write a comedic twist scene rule of three"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "types of humor and examples4"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "what does it mean to deadpan"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "the rule of three techiniques example war"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "what is a joke?"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "northern irish humour self depre"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "whats a dead pan personality"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "define deadpan domestic comedy"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "define dead-pan joke"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "is deadpan a metaphor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "what is a deadpan realtionship"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "rule of three trico"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "what is cold pan humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "what doss dry humor mean definition"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "what is the word that comes after joke"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "funny email sign offs for coworkers"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "open mic night tips for first-timers reviews"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "what doea deadpan mean?"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "rule of three fools"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "the deadpan deodorant applauds skullcap"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "funny email sign offs to boss at work"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "what means dry humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "examples of self depreciating jokes during speech"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "whatis a deadpan"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "it's repeated use of compositions rule of three"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "stephen allott rule of three"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "rule of 3 for fun and funny"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 7,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
    "Impressions": 1,
    "Query": "deadpan mesns"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 1,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "jokeicreators"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "how to win a roast battle"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -986,6 +680,24 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "define dead-pan joke"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "open mic night tips for first-timers reviews"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 5,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
@@ -999,16 +711,16 @@
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
    "Impressions": 1,
-   "Query": "+deadpan examples"
+   "Query": "rule of three fools"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
+   "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
    "Impressions": 1,
-   "Query": "+dry sence of humour"
+   "Query": "examples of self depreciating jokes during speech"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1017,16 +729,7 @@
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
    "Impressions": 1,
-   "Query": "what does deadpan humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "rule of three fools idiom"
+   "Query": "what is a joke?"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1035,16 +738,7 @@
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
    "Impressions": 1,
-   "Query": "what is joke setup where answer is what"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 1,
-   "Query": "rule of thirds comedy"
+   "Query": "how to win a roast battle"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1085,6 +779,213 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "what does it mean to deadpan"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "the rule of three techiniques example war"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "what doss dry humor mean definition"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "what is the word that comes after joke"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "what means dry humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "it's repeated use of compositions rule of three"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "types of humor and examples4"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "rule of three trico"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "what is cold pan humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "northern irish humour self depre"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "what does deadpan mean?"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "whats deadpan expression"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "types of humor acts"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "whats a dead pan personality"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "how does joke work"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "funny email signoffs at work"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "define deadpan domestic comedy"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "is deadpan a metaphor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 4,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "what is a deadpan realtionship"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 4,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "stephen allott rule of three"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "rule of 3 for fun and funny"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 1,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "jokeicreators"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "funny email sign offs for coworkers"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 5,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
@@ -1108,6 +1009,105 @@
    "Date": "/Date(1793318400000)/",
    "Impressions": 1,
    "Query": "examples of self-deprecating humour in mister bean"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "whatis a deadpan"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "how to write a comedic twist scene rule of three"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "what doea deadpan mean?"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "the deadpan deodorant applauds skullcap"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "funny email sign offs to boss at work"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "what does deadpan humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "rule of three fools idiom"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "what is joke setup where answer is what"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "rule of thirds comedy"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "+deadpan examples"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 1,
+   "Query": "+dry sence of humour"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1224,7 +1224,7 @@
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 4,
-   "Query": "what does deadpan humour mean"
+   "Query": "what is deadpan humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1233,7 +1233,7 @@
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 4,
-   "Query": "what is deadpan humor"
+   "Query": "what does deadpan humour mean"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1301,15 +1301,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "what does deadpan humor mean"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 6,
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
@@ -1328,11 +1319,29 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 1,
+   "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 1,
-   "Query": "roast battle comedy format rules"
+   "Query": "what does deadpan humor mean"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "what does deadpan men"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "dry humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1341,34 +1350,16 @@
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 1,
-   "Query": "funny baby shower speeches"
+   "Query": "definition of a joke"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
+   "AvgImpressionPosition": 5,
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 1,
-   "Query": "guess what roast battle"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "how to roast people in roast battles"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "10 types of comedy"
+   "Query": "deadpan archness meaning"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1400,11 +1391,56 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 1,
+   "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 1,
-   "Query": "acting as a cutting boardacting as a cutting board, calm expression, deadpan face,"
+   "Query": "types of humour lios like"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "definition of deadpan for kids"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "let's do a roasting battle"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "dead pan webcam"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "define deadpan slang"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 4,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "what are the parts of a joke called"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1454,11 +1490,29 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
+   "AvgImpressionPosition": 1,
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 1,
-   "Query": "dry humor"
+   "Query": "roast battle comedy format rules"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "funny baby shower speeches"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "guess what roast battle"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1472,60 +1526,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "what are the parts of a joke called"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "deadpan setup"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "let's do a roasting battle"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "dead pan webcam"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "define deadpan slang"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "other forms of humor besides dry humor?"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
@@ -1535,74 +1535,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "what does deadpan men"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "deadpan archness meaning"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 1,
-   "Query": "definition of a joke"
+   "Query": "10 types of comedy"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
+   "AvgImpressionPosition": 1,
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 1,
-   "Query": "what dies deadpan"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "deadpoan"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "what id deadpan"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "types of humour lios like"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793923200000)/",
-   "Impressions": 1,
-   "Query": "definition of deadpan for kids"
+   "Query": "acting as a cutting boardacting as a cutting board, calm expression, deadpan face,"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1625,6 +1571,60 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "how to roast people in roast battles"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "what id deadpan"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "deadpan setup"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "other forms of humor besides dry humor?"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "what dies deadpan"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1793923200000)/",
+   "Impressions": 1,
+   "Query": "deadpoan"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 5,
    "Clicks": 1,
    "Date": "/Date(1794528000000)/",
@@ -1638,7 +1638,7 @@
    "Clicks": 1,
    "Date": "/Date(1794528000000)/",
    "Impressions": 2,
-   "Query": "example rule of three joke"
+   "Query": "funniest tech billionaire?"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1647,16 +1647,7 @@
    "Clicks": 1,
    "Date": "/Date(1794528000000)/",
    "Impressions": 2,
-   "Query": "funniest tech billionaire?"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
-   "Clicks": 1,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "rule of thirds in comedy"
+   "Query": "example rule of three joke"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1666,6 +1657,15 @@
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
    "Query": "examples of deadpan comedy"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 1,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "rule of thirds in comedy"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1778,20 +1778,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 3,
-   "Query": "wanna do a rost battle?"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
    "Impressions": 3,
    "Query": "what is a roast battle"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 3,
+   "Query": "wanna do a rost battle?"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1823,42 +1823,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 2,
-   "Query": "what is deadpan in text"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 2,
-   "Query": "what us roast baby battle"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 2,
-   "Query": "what is roast battle"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 2,
-   "Query": "deadpan expression meaning"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 6,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
@@ -1877,11 +1841,29 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
+   "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
    "Impressions": 2,
-   "Query": "rost battle"
+   "Query": "deadpan expression meaning"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 2,
+   "Query": "what is deadpan in text"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 2,
+   "Query": "what is roast battle"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1895,6 +1877,15 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 2,
+   "Query": "what us roast baby battle"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 7,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
@@ -1904,47 +1895,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "what does deadpan mena"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "lets hav a roast battle"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 1,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "how to be a roast battle"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 6,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "three times rule comedy"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "deadpan sketch idea"
+   "Impressions": 2,
+   "Query": "rost battle"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1958,11 +1913,74 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "telling a funny story"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 5,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
-   "Query": "rule of thress comedy"
+   "Query": "deadpan style of humour meaning in telugu"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "deadpan with slight emotions"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 4,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "dead pan loom"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "difference between parody and farce comedy subgenres"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "do a roast battle"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 4,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "was ist deadpan humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "deadpan expression meaning humor why"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -1976,20 +1994,47 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "telling a funny story"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
    "Query": "is ten min speech ok for best man"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "deadpan face audition"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "roast batells to win"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "can you look at someone deadpan with a widened grin"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "what does deadpan mena"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2030,92 +2075,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "can you look at someone deadpan with a widened grin"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "deadpan face audition"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "roast batells to win"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "deadpan style of humour meaning in telugu"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "difference between parody and farce comedy subgenres"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "do a roast battle"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "how to host a roast battle for amien?"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "was ist deadpan humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 6,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
-   "Query": "deadpan expression meaning humor why"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "what's deadpan"
+   "Query": "deadan humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2129,20 +2093,29 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
+   "AvgImpressionPosition": 3,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
-   "Query": "deadpan with slight emotions"
+   "Query": "callback humor flirten beispiele"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
+   "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
-   "Query": "dead pan loom"
+   "Query": "lets hav a roast battle"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 1,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "how to be a roast battle"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2151,7 +2124,61 @@
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
-   "Query": "deadan humor"
+   "Query": "three times rule comedy"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "rule of thress comedy"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "deadpan sketch idea"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "how to host a roast battle for amien?"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "what's deadpan"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "what are roasting battles"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1794528000000)/",
+   "Impressions": 1,
+   "Query": "deadpan face"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2179,33 +2206,6 @@
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
    "Query": "can we have a roast battle"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "what are roasting battles"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "deadpan face"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1794528000000)/",
-   "Impressions": 1,
-   "Query": "callback humor flirten beispiele"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2354,11 +2354,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
+   "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 3,
-   "Query": "deadpan comedy"
+   "Query": "roast battle lines  exstream"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2372,11 +2372,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
+   "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 3,
-   "Query": "roast battle lines  exstream"
+   "Query": "deadpan comedy"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 2,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 3,
+   "Query": "make a roast battle annaou cement"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2390,11 +2399,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 2,
+   "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
-   "Impressions": 3,
-   "Query": "make a roast battle annaou cement"
+   "Impressions": 2,
+   "Query": "what is deadpan"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2412,16 +2421,16 @@
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 2,
-   "Query": "what is deadpan"
+   "Query": "deadpan look meaning"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
+   "AvgImpressionPosition": 6,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 2,
-   "Query": "deadpan look meaning"
+   "Query": "deadpan meaning slang"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2444,20 +2453,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 2,
-   "Query": "lets have a roast battle"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 2,
    "Query": "deadpanny"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 2,
+   "Query": "how long should your nea speech be"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2471,11 +2480,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
+   "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 2,
-   "Query": "deadpan meaning slang"
+   "Query": "lets have a roast battle"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2498,24 +2507,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 2,
-   "Query": "how long should your nea speech be"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 1,
-   "Query": "dead pan means"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 5,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
@@ -2534,38 +2525,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 2,
+   "AvgImpressionPosition": 5,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 1,
-   "Query": "how to do deadpan delivery"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 1,
-   "Query": "what is a deadpen"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 2,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 1,
-   "Query": "millennial slang deadpan humor examples adulting financially struggling"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 2,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 1,
-   "Query": "let’s have a roast battle"
+   "Query": "dead pan means"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2574,34 +2538,7 @@
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 1,
-   "Query": "term deadpan narration depicts specific"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 1,
-   "Query": "definition or examples of rule of three"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 1,
-   "Query": "what is being deadpan"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 1,
-   "Query": "what does deadpan mean google search"
+   "Query": "dead pen  humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2624,6 +2561,24 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "can a face be deadpan?"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "definition or examples of rule of three"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
    "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
@@ -2642,11 +2597,38 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
+   "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 1,
-   "Query": "deadpan look"
+   "Query": "let’s have a roast battle"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "what is a deadpen"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "what is being deadpan"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 2,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "millennial slang deadpan humor examples adulting financially struggling"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2655,25 +2637,7 @@
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 1,
-   "Query": "can a face be deadpan?"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 1,
-   "Query": "explain deadpan to my little sister"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
-   "AvgImpressionPosition": 10,
-   "Clicks": 0,
-   "Date": "/Date(1795132800000)/",
-   "Impressions": 1,
-   "Query": "what is a deadpan look"
+   "Query": "what does deadpan mean google search"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2682,25 +2646,25 @@
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 1,
-   "Query": "dead pen  humor"
+   "Query": "term deadpan narration depicts specific"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
+   "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 1,
-   "Query": "roast battle 1v1 what should i do"
+   "Query": "what words describe different humor styles?"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 1,
+   "AvgImpressionPosition": 2,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 1,
-   "Query": "shutpapium"
+   "Query": "how to do deadpan delivery"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2714,11 +2678,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 5,
+   "AvgImpressionPosition": 9,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 1,
-   "Query": "three lines comedy"
+   "Query": "deadpan look"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 3,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "explain deadpan to my little sister"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2741,11 +2714,38 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 9,
+   "AvgImpressionPosition": 10,
    "Clicks": 0,
    "Date": "/Date(1795132800000)/",
    "Impressions": 1,
-   "Query": "what words describe different humor styles?"
+   "Query": "what is a deadpan look"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "roast battle 1v1 what should i do"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 1,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "shutpapium"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "three lines comedy"
   }
  ],
  "pages": [
@@ -2923,20 +2923,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
-   "Clicks": 0,
-   "Date": "/Date(1792713600000)/",
-   "Impressions": 11,
-   "Query": "https://shutap.com/guides/roast-lines"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 7,
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 11,
    "Query": "https://shutap.com/guides/funny-email-sign-offs"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1792713600000)/",
+   "Impressions": 11,
+   "Query": "https://shutap.com/guides/roast-lines"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2972,7 +2972,7 @@
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "https://shutap.com/funniest/poet"
+   "Query": "https://shutap.com/guides/sense-of-humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -2981,7 +2981,7 @@
    "Clicks": 0,
    "Date": "/Date(1792713600000)/",
    "Impressions": 1,
-   "Query": "https://shutap.com/guides/sense-of-humor"
+   "Query": "https://shutap.com/funniest/poet"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -3058,15 +3058,6 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
-   "Clicks": 0,
-   "Date": "/Date(1793318400000)/",
-   "Impressions": 6,
-   "Query": "https://shutap.com/guides/self-deprecating-humor"
-  },
-  {
-   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
-   "AvgClickPosition": -1,
    "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
@@ -3085,11 +3076,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
+   "AvgImpressionPosition": 7,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
-   "Impressions": 5,
-   "Query": "https://shutap.com/guides/dry-humor"
+   "Impressions": 6,
+   "Query": "https://shutap.com/guides/self-deprecating-humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -3103,11 +3094,20 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 3,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1793318400000)/",
+   "Impressions": 5,
+   "Query": "https://shutap.com/guides/dry-humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
    "Impressions": 1,
-   "Query": "https://shutap.com/guides/roast-battle"
+   "Query": "https://shutap.com/guides/ai-roast-generator"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -3121,11 +3121,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
+   "AvgImpressionPosition": 3,
    "Clicks": 0,
    "Date": "/Date(1793318400000)/",
    "Impressions": 1,
-   "Query": "https://shutap.com/guides/ai-roast-generator"
+   "Query": "https://shutap.com/guides/roast-battle"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -3202,11 +3202,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 6,
+   "AvgImpressionPosition": 4,
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 2,
-   "Query": "https://shutap.com/guides/callback-humor"
+   "Query": "https://shutap.com/guides/self-deprecating-humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -3220,11 +3220,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 4,
+   "AvgImpressionPosition": 6,
    "Clicks": 0,
    "Date": "/Date(1793923200000)/",
    "Impressions": 2,
-   "Query": "https://shutap.com/guides/self-deprecating-humor"
+   "Query": "https://shutap.com/guides/callback-humor"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -3346,11 +3346,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 8,
+   "AvgImpressionPosition": 7,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
-   "Query": "https://shutap.com/guides/how-to-tell-a-funny-story"
+   "Query": "https://shutap.com/guides/thanksgiving-toast-for-coworkers"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -3364,11 +3364,11 @@
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
    "AvgClickPosition": -1,
-   "AvgImpressionPosition": 7,
+   "AvgImpressionPosition": 8,
    "Clicks": 0,
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
-   "Query": "https://shutap.com/guides/thanksgiving-toast-for-coworkers"
+   "Query": "https://shutap.com/guides/how-to-tell-a-funny-story"
   },
   {
    "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
@@ -3387,6 +3387,141 @@
    "Date": "/Date(1794528000000)/",
    "Impressions": 1,
    "Query": "https://shutap.com/guides/topic/toasts-and-speeches"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 1,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 147,
+   "Query": "https://shutap.com/guides/roast-battle"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 5,
+   "Clicks": 1,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 51,
+   "Query": "https://shutap.com/guides/rule-of-three"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 1,
+   "Clicks": 1,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/guides/thanksgiving-toast-for-coworkers"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 435,
+   "Query": "https://shutap.com/guides/deadpan-humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 12,
+   "Query": "https://shutap.com/guides/types-of-humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 2,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 4,
+   "Query": "https://shutap.com/guides/callback-humor"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 8,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 4,
+   "Query": "https://shutap.com/guides/types-of-comedy"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 3,
+   "Query": "https://shutap.com/guides/topic/humor-techniques"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 10,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 3,
+   "Query": "https://shutap.com/funniest/late-night-host"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 1,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 2,
+   "Query": "https://shutap.com/"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 2,
+   "Query": "https://shutap.com/guides/how-long-should-a-best-man-speech-be"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 2,
+   "Query": "https://shutap.com/guides/how-to-make-a-story-funnier"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 7,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/guides/roast-lines"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 6,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/guides/slapstick-comedy"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": 9,
+   "Clicks": 0,
+   "Date": "/Date(1795132800000)/",
+   "Impressions": 1,
+   "Query": "https://shutap.com/funniest/realtor"
   }
  ]
 }
