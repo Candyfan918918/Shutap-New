@@ -1,14 +1,14 @@
 {
  "property": "sc-domain:shutap.com",
- "startDate": "2026-10-26",
- "endDate": "2026-11-23",
- "pulledAt": "2026-11-25T23:40:08.909Z",
+ "startDate": "2026-10-27",
+ "endDate": "2026-11-24",
+ "pulledAt": "2026-11-26T23:53:27.948Z",
  "striking": [
   {
    "query": "punchlines.ai",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 33,
+   "impressions": 31,
    "ctr": 0,
    "position": 10.7
   },
@@ -37,12 +37,20 @@
    "position": 14.8
   },
   {
-   "query": "shutap",
-   "page": "https://shutap.com/ai-joke-generator",
+   "query": "who was the funniest president",
+   "page": "https://shutap.com/funniest/us-president",
    "clicks": 0,
    "impressions": 6,
    "ctr": 0,
-   "position": 7
+   "position": 8.3
+  },
+  {
+   "query": "funniest people in the world",
+   "page": "https://shutap.com/funniest",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 13.2
   },
   {
    "query": "funniest person in the world",
@@ -53,20 +61,28 @@
    "position": 16.8
   },
   {
-   "query": "who was the funniest president",
+   "query": "funniest us presidents",
    "page": "https://shutap.com/funniest/us-president",
    "clicks": 0,
    "impressions": 4,
    "ctr": 0,
-   "position": 9
+   "position": 7.5
   },
   {
-   "query": "funniest people in the world",
-   "page": "https://shutap.com/funniest",
+   "query": "witscript ai",
+   "page": "https://shutap.com/guides/shutap-vs-witscript",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 8.8
+  },
+  {
+   "query": "funny pov",
+   "page": "https://shutap.com/guides/funny-pov-ideas",
    "clicks": 0,
    "impressions": 3,
    "ctr": 0,
-   "position": 16.3
+   "position": 6.7
   },
   {
    "query": "how to turn a story into a bit",
@@ -85,14 +101,6 @@
    "position": 11.3
   },
   {
-   "query": "witscript ai",
-   "page": "https://shutap.com/guides/shutap-vs-witscript",
-   "clicks": 0,
-   "impressions": 3,
-   "ctr": 0,
-   "position": 9
-  },
-  {
    "query": "funniest us president",
    "page": "https://shutap.com/funniest/us-president",
    "clicks": 0,
@@ -101,20 +109,12 @@
    "position": 5
   },
   {
-   "query": "funniest us presidents",
-   "page": "https://shutap.com/funniest/us-president",
-   "clicks": 0,
-   "impressions": 2,
-   "ctr": 0,
-   "position": 11
-  },
-  {
-   "query": "funny pov",
+   "query": "pov funny",
    "page": "https://shutap.com/guides/funny-pov-ideas",
    "clicks": 0,
    "impressions": 2,
    "ctr": 0,
-   "position": 5.5
+   "position": 10
   },
   {
    "query": "short funny wedding ceremony script",
@@ -138,7 +138,7 @@
    "clicks": 0,
    "impressions": 2,
    "ctr": 0,
-   "position": 16.5
+   "position": 8
   },
   {
    "query": "best man speech brother to brother",
@@ -221,14 +221,6 @@
    "position": 8
   },
   {
-   "query": "pov funny",
-   "page": "https://shutap.com/guides/funny-pov-ideas",
-   "clicks": 0,
-   "impressions": 1,
-   "ctr": 0,
-   "position": 11
-  },
-  {
    "query": "punch line",
    "page": "https://shutap.com/guides/how-to-write-a-punchline",
    "clicks": 0,
@@ -261,6 +253,14 @@
    "position": 5
   },
   {
+   "query": "thanksgiving toast funny",
+   "page": "https://shutap.com/toasts/thanksgiving",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 15
+  },
+  {
    "query": "travisodowd.thecomputerwiki.com",
    "page": "https://shutap.com/funniest/tech-founder",
    "clicks": 0,
@@ -291,29 +291,37 @@
    "impressions": 1,
    "ctr": 0,
    "position": 11
+  },
+  {
+   "query": "witscript",
+   "page": "https://shutap.com/guides/ai-joke-generators-compared",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
   }
  ],
  "pages": [
   {
    "page": "https://shutap.com/",
-   "clicks": 37,
-   "impressions": 199,
-   "ctr": 0.1859,
-   "position": 4
+   "clicks": 33,
+   "impressions": 193,
+   "ctr": 0.171,
+   "position": 4.1
   },
   {
    "page": "https://shutap.com/faq",
    "clicks": 2,
-   "impressions": 109,
-   "ctr": 0.0183,
+   "impressions": 111,
+   "ctr": 0.018,
    "position": 1.9
   },
   {
    "page": "https://shutap.com/business",
    "clicks": 1,
-   "impressions": 107,
-   "ctr": 0.0093,
-   "position": 3.1
+   "impressions": 102,
+   "ctr": 0.0098,
+   "position": 2.9
   },
   {
    "page": "https://shutap.com/funniest/author",
@@ -325,16 +333,16 @@
   {
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 1,
-   "impressions": 172,
+   "impressions": 171,
    "ctr": 0.0058,
-   "position": 25.5
+   "position": 25.3
   },
   {
    "page": "https://shutap.com/guides/funny-pov-ideas",
    "clicks": 1,
-   "impressions": 64,
-   "ctr": 0.0156,
-   "position": 5.9
+   "impressions": 78,
+   "ctr": 0.0128,
+   "position": 5.8
   },
   {
    "page": "https://shutap.com/guides/funny-price-reduction-post-ideas",
@@ -353,9 +361,9 @@
   {
    "page": "https://shutap.com/about",
    "clicks": 0,
-   "impressions": 149,
+   "impressions": 143,
    "ctr": 0,
-   "position": 2.3
+   "position": 2.2
   },
   {
    "page": "https://shutap.com/ai-disclosure",
@@ -367,9 +375,9 @@
   {
    "page": "https://shutap.com/ai-joke-generator",
    "clicks": 0,
-   "impressions": 10,
+   "impressions": 2,
    "ctr": 0,
-   "position": 31.7
+   "position": 46.5
   },
   {
    "page": "https://shutap.com/bits",
@@ -381,9 +389,9 @@
   {
    "page": "https://shutap.com/funniest",
    "clicks": 0,
-   "impressions": 12,
+   "impressions": 14,
    "ctr": 0,
-   "position": 14.5
+   "position": 13.6
   },
   {
    "page": "https://shutap.com/funniest/astronaut",
@@ -402,9 +410,9 @@
   {
    "page": "https://shutap.com/funniest/billionaire",
    "clicks": 0,
-   "impressions": 9,
+   "impressions": 10,
    "ctr": 0,
-   "position": 3.2
+   "position": 3.9
   },
   {
    "page": "https://shutap.com/funniest/ceo",
@@ -498,6 +506,13 @@
    "position": 10.5
   },
   {
+   "page": "https://shutap.com/funniest/roast-comedian",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 61.5
+  },
+  {
    "page": "https://shutap.com/funniest/saint",
    "clicks": 0,
    "impressions": 3,
@@ -528,9 +543,9 @@
   {
    "page": "https://shutap.com/funniest/us-president",
    "clicks": 0,
-   "impressions": 39,
+   "impressions": 45,
    "ctr": 0,
-   "position": 10.1
+   "position": 9.6
   },
   {
    "page": "https://shutap.com/funniest/us-vice-president",
@@ -551,14 +566,14 @@
    "clicks": 0,
    "impressions": 23,
    "ctr": 0,
-   "position": 10.4
+   "position": 7.1
   },
   {
    "page": "https://shutap.com/guides/ai-joke-tools-compared",
    "clicks": 0,
-   "impressions": 48,
+   "impressions": 51,
    "ctr": 0,
-   "position": 13.4
+   "position": 14.4
   },
   {
    "page": "https://shutap.com/guides/ai-roast-tools-compared",
@@ -570,16 +585,16 @@
   {
    "page": "https://shutap.com/guides/ai-to-make-a-joke-funnier",
    "clicks": 0,
-   "impressions": 13,
+   "impressions": 16,
    "ctr": 0,
-   "position": 13.7
+   "position": 12.7
   },
   {
    "page": "https://shutap.com/guides/best-ai-writing-tool-for-humor",
    "clicks": 0,
-   "impressions": 2,
+   "impressions": 3,
    "ctr": 0,
-   "position": 10.5
+   "position": 7.7
   },
   {
    "page": "https://shutap.com/guides/best-man-speech-for-brother",
@@ -619,9 +634,9 @@
   {
    "page": "https://shutap.com/guides/comedy-teleprompter",
    "clicks": 0,
-   "impressions": 16,
+   "impressions": 15,
    "ctr": 0,
-   "position": 5.9
+   "position": 6.3
   },
   {
    "page": "https://shutap.com/guides/comedy-writers-block",
@@ -668,9 +683,9 @@
   {
    "page": "https://shutap.com/guides/funny-for-business",
    "clicks": 0,
-   "impressions": 53,
+   "impressions": 56,
    "ctr": 0,
-   "position": 3.6
+   "position": 3.4
   },
   {
    "page": "https://shutap.com/guides/funny-icebreakers-for-training-sessions",
@@ -752,7 +767,7 @@
   {
    "page": "https://shutap.com/guides/how-shutap-is-built",
    "clicks": 0,
-   "impressions": 78,
+   "impressions": 76,
    "ctr": 0,
    "position": 1.9
   },
@@ -764,11 +779,18 @@
    "position": 19.9
   },
   {
+   "page": "https://shutap.com/guides/how-to-make-funny-listing-videos",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 9
+  },
+  {
    "page": "https://shutap.com/guides/how-to-punch-up-a-joke",
    "clicks": 0,
-   "impressions": 6,
+   "impressions": 9,
    "ctr": 0,
-   "position": 6.7
+   "position": 10.8
   },
   {
    "page": "https://shutap.com/guides/how-to-turn-a-bit-into-a-sketch",
@@ -783,6 +805,13 @@
    "impressions": 5,
    "ctr": 0,
    "position": 10.6
+  },
+  {
+   "page": "https://shutap.com/guides/how-to-write-a-funny-listing-description",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 12
   },
   {
    "page": "https://shutap.com/guides/how-to-write-a-punchline",
@@ -878,9 +907,9 @@
   {
    "page": "https://shutap.com/guides/self-deprecating-humor",
    "clicks": 0,
-   "impressions": 28,
+   "impressions": 27,
    "ctr": 0,
-   "position": 44.5
+   "position": 42.9
   },
   {
    "page": "https://shutap.com/guides/shutap-vs-chatgpt-for-jokes",
@@ -899,7 +928,7 @@
   {
    "page": "https://shutap.com/guides/shutap-vs-claude-for-jokes",
    "clicks": 0,
-   "impressions": 8,
+   "impressions": 9,
    "ctr": 0,
    "position": 1.6
   },
@@ -913,9 +942,9 @@
   {
    "page": "https://shutap.com/guides/shutap-vs-witscript",
    "clicks": 0,
-   "impressions": 8,
+   "impressions": 9,
    "ctr": 0,
-   "position": 9.3
+   "position": 8
   },
   {
    "page": "https://shutap.com/guides/slapstick-comedy",
@@ -927,9 +956,9 @@
   {
    "page": "https://shutap.com/guides/stand-up-comedy",
    "clicks": 0,
-   "impressions": 4,
+   "impressions": 5,
    "ctr": 0,
-   "position": 13.5
+   "position": 12.2
   },
   {
    "page": "https://shutap.com/guides/storytime-script-generator",
@@ -983,9 +1012,9 @@
   {
    "page": "https://shutap.com/guides/topic/roasts",
    "clicks": 0,
-   "impressions": 159,
+   "impressions": 145,
    "ctr": 0,
-   "position": 9.9
+   "position": 10
   },
   {
    "page": "https://shutap.com/guides/topic/shutap-vs-other-tools",
@@ -997,16 +1026,16 @@
   {
    "page": "https://shutap.com/guides/topic/types-of-humor",
    "clicks": 0,
-   "impressions": 10,
+   "impressions": 6,
    "ctr": 0,
-   "position": 36
+   "position": 24.2
   },
   {
    "page": "https://shutap.com/guides/topic/using-shutap",
    "clicks": 0,
-   "impressions": 9,
+   "impressions": 8,
    "ctr": 0,
-   "position": 1.7
+   "position": 1.8
   },
   {
    "page": "https://shutap.com/guides/turn-a-bad-experience-into-comedy",
@@ -1018,9 +1047,9 @@
   {
    "page": "https://shutap.com/guides/types-of-humor",
    "clicks": 0,
-   "impressions": 46,
+   "impressions": 51,
    "ctr": 0,
-   "position": 8.1
+   "position": 7.6
   },
   {
    "page": "https://shutap.com/guides/what-is-a-joke",
@@ -1032,14 +1061,14 @@
   {
    "page": "https://shutap.com/guides/witscript-alternative",
    "clicks": 0,
-   "impressions": 24,
+   "impressions": 27,
    "ctr": 0,
-   "position": 11.8
+   "position": 11.1
   },
   {
    "page": "https://shutap.com/how-it-works",
    "clicks": 0,
-   "impressions": 101,
+   "impressions": 103,
    "ctr": 0,
    "position": 2.2
   },
@@ -1074,9 +1103,9 @@
   {
    "page": "https://shutap.com/smallbusiness",
    "clicks": 0,
-   "impressions": 5,
+   "impressions": 8,
    "ctr": 0,
-   "position": 1.8
+   "position": 1.9
   },
   {
    "page": "https://shutap.com/story/relationships/a-muslim-girl-in-a-very-traditional-family-7807b4",
@@ -1109,9 +1138,9 @@
   {
    "page": "https://shutap.com/toasts/thanksgiving",
    "clicks": 0,
-   "impressions": 16,
+   "impressions": 19,
    "ctr": 0,
-   "position": 56.3
+   "position": 50.2
   },
   {
    "page": "https://shutap.com/trust",
@@ -1125,10 +1154,10 @@
   {
    "query": "shutap",
    "page": "https://shutap.com/",
-   "clicks": 36,
-   "impressions": 153,
-   "ctr": 0.2353,
-   "position": 3.1
+   "clicks": 32,
+   "impressions": 146,
+   "ctr": 0.2192,
+   "position": 3.2
   },
   {
    "query": "funny pov ideas",
@@ -1142,8 +1171,8 @@
    "query": "shutap",
    "page": "https://shutap.com/faq",
    "clicks": 1,
-   "impressions": 88,
-   "ctr": 0.0114,
+   "impressions": 90,
+   "ctr": 0.0111,
    "position": 1.6
   },
   {
@@ -1299,14 +1328,6 @@
    "position": 28
   },
   {
-   "query": "deadpan jokes",
-   "page": "https://shutap.com/guides/topic/types-of-humor",
-   "clicks": 0,
-   "impressions": 2,
-   "ctr": 0,
-   "position": 69.5
-  },
-  {
    "query": "define joke",
    "page": "https://shutap.com/guides/what-is-a-joke",
    "clicks": 0,
@@ -1350,9 +1371,9 @@
    "query": "funniest people in the world",
    "page": "https://shutap.com/funniest",
    "clicks": 0,
-   "impressions": 3,
+   "impressions": 5,
    "ctr": 0,
-   "position": 16.3
+   "position": 13.2
   },
   {
    "query": "funniest person in the world",
@@ -1369,6 +1390,14 @@
    "impressions": 1,
    "ctr": 0,
    "position": 8
+  },
+  {
+   "query": "funniest pov memes",
+   "page": "https://shutap.com/guides/funny-pov-ideas",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
   },
   {
    "query": "funniest presidents",
@@ -1398,9 +1427,9 @@
    "query": "funniest us presidents",
    "page": "https://shutap.com/funniest/us-president",
    "clicks": 0,
-   "impressions": 2,
+   "impressions": 4,
    "ctr": 0,
-   "position": 11
+   "position": 7.5
   },
   {
    "query": "funny best man speech openers",
@@ -1430,9 +1459,17 @@
    "query": "funny pov",
    "page": "https://shutap.com/guides/funny-pov-ideas",
    "clicks": 0,
-   "impressions": 2,
+   "impressions": 3,
    "ctr": 0,
-   "position": 5.5
+   "position": 6.7
+  },
+  {
+   "query": "funny povs",
+   "page": "https://shutap.com/guides/funny-pov-ideas",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 3
   },
   {
    "query": "funny us presidents",
@@ -1481,14 +1518,6 @@
    "impressions": 1,
    "ctr": 0,
    "position": 3
-  },
-  {
-   "query": "how big are they?",
-   "page": "https://shutap.com/business",
-   "clicks": 0,
-   "impressions": 1,
-   "ctr": 0,
-   "position": 1
   },
   {
    "query": "how long best man speech",
@@ -1603,20 +1632,20 @@
    "position": 72
   },
   {
+   "query": "in italiano",
+   "page": "https://shutap.com/",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
    "query": "joke ai generator",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
    "impressions": 1,
    "ctr": 0,
    "position": 63
-  },
-  {
-   "query": "joke creation on topic by ai",
-   "page": "https://shutap.com/ai-joke-generator",
-   "clicks": 0,
-   "impressions": 2,
-   "ctr": 0,
-   "position": 91
   },
   {
    "query": "joke creation on topic by ai",
@@ -1726,9 +1755,9 @@
    "query": "pov funny",
    "page": "https://shutap.com/guides/funny-pov-ideas",
    "clicks": 0,
-   "impressions": 1,
+   "impressions": 2,
    "ctr": 0,
-   "position": 11
+   "position": 10
   },
   {
    "query": "pov ideas funny",
@@ -1750,15 +1779,15 @@
    "query": "punchline generator",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 13,
+   "impressions": 12,
    "ctr": 0,
-   "position": 80.4
+   "position": 80.2
   },
   {
    "query": "punchlines.ai",
    "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
-   "impressions": 33,
+   "impressions": 31,
    "ctr": 0,
    "position": 10.7
   },
@@ -1801,6 +1830,14 @@
    "impressions": 1,
    "ctr": 0,
    "position": 89
+  },
+  {
+   "query": "roast comedians",
+   "page": "https://shutap.com/funniest/roast-comedian",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 39
   },
   {
    "query": "roast website",
@@ -1902,9 +1939,9 @@
    "query": "shutap",
    "page": "https://shutap.com/about",
    "clicks": 0,
-   "impressions": 127,
+   "impressions": 120,
    "ctr": 0,
-   "position": 2
+   "position": 1.9
   },
   {
    "query": "shutap",
@@ -1913,14 +1950,6 @@
    "impressions": 8,
    "ctr": 0,
    "position": 2
-  },
-  {
-   "query": "shutap",
-   "page": "https://shutap.com/ai-joke-generator",
-   "clicks": 0,
-   "impressions": 6,
-   "ctr": 0,
-   "position": 7
   },
   {
    "query": "shutap",
@@ -1934,31 +1963,23 @@
    "query": "shutap",
    "page": "https://shutap.com/business",
    "clicks": 0,
-   "impressions": 94,
+   "impressions": 90,
    "ctr": 0,
-   "position": 2.5
-  },
-  {
-   "query": "shutap",
-   "page": "https://shutap.com/guides/comedy-teleprompter",
-   "clicks": 0,
-   "impressions": 1,
-   "ctr": 0,
-   "position": 1
+   "position": 2.2
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/guides/funny-for-business",
    "clicks": 0,
-   "impressions": 48,
+   "impressions": 51,
    "ctr": 0,
-   "position": 2.4
+   "position": 2.2
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/guides/how-shutap-is-built",
    "clicks": 0,
-   "impressions": 70,
+   "impressions": 68,
    "ctr": 0,
    "position": 1.6
   },
@@ -1974,17 +1995,9 @@
    "query": "shutap",
    "page": "https://shutap.com/guides/shutap-vs-claude-for-jokes",
    "clicks": 0,
-   "impressions": 8,
+   "impressions": 9,
    "ctr": 0,
    "position": 1.6
-  },
-  {
-   "query": "shutap",
-   "page": "https://shutap.com/guides/shutap-vs-witscript",
-   "clicks": 0,
-   "impressions": 1,
-   "ctr": 0,
-   "position": 1
   },
   {
    "query": "shutap",
@@ -1998,15 +2011,15 @@
    "query": "shutap",
    "page": "https://shutap.com/guides/topic/using-shutap",
    "clicks": 0,
-   "impressions": 9,
+   "impressions": 8,
    "ctr": 0,
-   "position": 1.7
+   "position": 1.8
   },
   {
    "query": "shutap",
    "page": "https://shutap.com/how-it-works",
    "clicks": 0,
-   "impressions": 94,
+   "impressions": 96,
    "ctr": 0,
    "position": 1.9
   },
@@ -2030,9 +2043,9 @@
    "query": "shutap",
    "page": "https://shutap.com/smallbusiness",
    "clicks": 0,
-   "impressions": 5,
+   "impressions": 8,
    "ctr": 0,
-   "position": 1.8
+   "position": 1.9
   },
   {
    "query": "shutap",
@@ -2107,6 +2120,14 @@
    "position": 58
   },
   {
+   "query": "thanksgiving toast funny",
+   "page": "https://shutap.com/toasts/thanksgiving",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 15
+  },
+  {
    "query": "travisodowd.thecomputerwiki.com",
    "page": "https://shutap.com/funniest/tech-founder",
    "clicks": 0,
@@ -2150,9 +2171,9 @@
    "query": "who was the funniest president",
    "page": "https://shutap.com/funniest/us-president",
    "clicks": 0,
-   "impressions": 4,
+   "impressions": 6,
    "ctr": 0,
-   "position": 9
+   "position": 8.3
   },
   {
    "query": "who was the funniest us president",
@@ -2172,19 +2193,11 @@
   },
   {
    "query": "witscript",
-   "page": "https://shutap.com/guides/ai-comedy-writing-tools",
+   "page": "https://shutap.com/guides/ai-joke-generators-compared",
    "clicks": 0,
    "impressions": 1,
    "ctr": 0,
-   "position": 77
-  },
-  {
-   "query": "witscript",
-   "page": "https://shutap.com/guides/ai-joke-generators-compared",
-   "clicks": 0,
-   "impressions": 2,
-   "ctr": 0,
-   "position": 29
+   "position": 8
   },
   {
    "query": "witscript",
@@ -2192,7 +2205,7 @@
    "clicks": 0,
    "impressions": 2,
    "ctr": 0,
-   "position": 16.5
+   "position": 8
   },
   {
    "query": "witscript ai",
@@ -2206,9 +2219,9 @@
    "query": "witscript ai",
    "page": "https://shutap.com/guides/shutap-vs-witscript",
    "clicks": 0,
-   "impressions": 3,
+   "impressions": 4,
    "ctr": 0,
-   "position": 9
+   "position": 8.8
   },
   {
    "query": "witscript ai",
