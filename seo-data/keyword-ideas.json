@@ -1,6 +1,6 @@
 {
  "source": "Bing Webmaster GetRelatedKeywords (US, last ~30 days)",
- "pulledAt": "2026-11-26T23:55:22.387Z",
+ "pulledAt": "2026-11-27T23:31:56.351Z",
  "seeds": 154,
  "ideas": [
   {
@@ -1714,15 +1714,15 @@
    "seed": "funny social media posts for business"
   },
   {
-   "query": "how to factory reset computer",
-   "impressions": 4255,
-   "broadImpressions": 4359,
-   "seed": "how to punch up a joke"
-  },
-  {
    "query": "how to draw a turkey",
    "impressions": 4255,
    "broadImpressions": 6242,
+   "seed": "how to punch up a joke"
+  },
+  {
+   "query": "how to factory reset computer",
+   "impressions": 4255,
+   "broadImpressions": 4359,
    "seed": "how to punch up a joke"
   },
   {
@@ -2830,12 +2830,6 @@
    "seed": "character comedy"
   },
   {
-   "query": "herb butter roast turkey recipe",
-   "impressions": 1925,
-   "broadImpressions": 1925,
-   "seed": "roast jokes"
-  },
-  {
    "query": "dea login",
    "impressions": 1916,
    "broadImpressions": 2173,
@@ -3460,12 +3454,6 @@
    "seed": "funny tiktok ideas"
   },
   {
-   "query": "pork roast recipes",
-   "impressions": 1454,
-   "broadImpressions": 2485,
-   "seed": "roast jokes"
-  },
-  {
    "query": "rate my teacher",
    "impressions": 1454,
    "broadImpressions": 1545,
@@ -3538,15 +3526,15 @@
    "seed": "joke structure"
   },
   {
-   "query": "how many characters is this",
-   "impressions": 1382,
-   "broadImpressions": 1382,
-   "seed": "is this joke funny"
-  },
-  {
    "query": "what brand is this",
    "impressions": 1382,
    "broadImpressions": 1436,
+   "seed": "is this joke funny"
+  },
+  {
+   "query": "how many characters is this",
+   "impressions": 1382,
+   "broadImpressions": 1382,
    "seed": "is this joke funny"
   },
   {
@@ -3946,13 +3934,13 @@
    "seed": "help with a punchline"
   },
   {
-   "query": "get help with file explorer in windows 11 what is your purpose",
+   "query": "get help with file explorer in windows 11 tell me a story",
    "impressions": 1221,
    "broadImpressions": 1221,
    "seed": "help with a punchline"
   },
   {
-   "query": "get help with file explorer in windows 11 tell me a story",
+   "query": "get help with file explorer in windows 11 what is your purpose",
    "impressions": 1221,
    "broadImpressions": 1221,
    "seed": "help with a punchline"
@@ -4406,6 +4394,12 @@
    "impressions": 1087,
    "broadImpressions": 1087,
    "seed": "how to make a joke funnier"
+  },
+  {
+   "query": "ina garten’s perfect roast chicken",
+   "impressions": 1084,
+   "broadImpressions": 1084,
+   "seed": "roast jokes"
   },
   {
    "query": "how to make a zip file",
@@ -5344,6 +5338,12 @@
    "seed": "best ai writing tool for humor"
   },
   {
+   "query": "mom's best pot roast recipe",
+   "impressions": 838,
+   "broadImpressions": 838,
+   "seed": "roast jokes"
+  },
+  {
    "query": "dea application",
    "impressions": 838,
    "broadImpressions": 1349,
@@ -6274,12 +6274,6 @@
    "seed": "is this joke funny"
   },
   {
-   "query": "bottom round roast recipe",
-   "impressions": 689,
-   "broadImpressions": 1316,
-   "seed": "roast jokes"
-  },
-  {
    "query": "luigi character",
    "impressions": 688,
    "broadImpressions": 688,
@@ -6520,15 +6514,15 @@
    "seed": "ai to make my joke funnier"
   },
   {
-   "query": "how old is this computer",
-   "impressions": 650,
-   "broadImpressions": 779,
-   "seed": "is this joke funny"
-  },
-  {
    "query": "what is this browser",
    "impressions": 650,
    "broadImpressions": 698,
+   "seed": "is this joke funny"
+  },
+  {
+   "query": "how old is this computer",
+   "impressions": 650,
+   "broadImpressions": 779,
    "seed": "is this joke funny"
   },
   {
@@ -7006,6 +7000,12 @@
    "seed": "how to get customers from tiktok"
   },
   {
+   "query": "beef chuck roast",
+   "impressions": 587,
+   "broadImpressions": 2691,
+   "seed": "roast jokes"
+  },
+  {
    "query": "main character",
    "impressions": 587,
    "broadImpressions": 3725,
@@ -7438,15 +7438,15 @@
    "seed": "ai to make my joke funnier"
   },
   {
-   "query": "rare character from stranger things",
-   "impressions": 541,
-   "broadImpressions": 635,
-   "seed": "character comedy"
-  },
-  {
    "query": "roblox character identification",
    "impressions": 541,
    "broadImpressions": 541,
+   "seed": "character comedy"
+  },
+  {
+   "query": "rare character from stranger things",
+   "impressions": 541,
+   "broadImpressions": 635,
    "seed": "character comedy"
   },
   {
@@ -7558,15 +7558,15 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "onedrive for business download",
-   "impressions": 531,
-   "broadImpressions": 531,
-   "seed": "funny social media posts for business"
-  },
-  {
    "query": "t mobile for business",
    "impressions": 531,
    "broadImpressions": 1834,
+   "seed": "funny social media posts for business"
+  },
+  {
+   "query": "onedrive for business download",
+   "impressions": 531,
+   "broadImpressions": 531,
    "seed": "funny social media posts for business"
   },
   {
@@ -8176,15 +8176,15 @@
    "seed": "how to make a joke funnier"
   },
   {
-   "query": "comedy club",
-   "impressions": 473,
-   "broadImpressions": 13879,
-   "seed": "comedy writing"
-  },
-  {
    "query": "comedy zone",
    "impressions": 473,
    "broadImpressions": 1299,
+   "seed": "comedy writing"
+  },
+  {
+   "query": "comedy club",
+   "impressions": 473,
+   "broadImpressions": 13879,
    "seed": "comedy writing"
   },
   {
@@ -8332,13 +8332,13 @@
    "seed": "rate my joke"
   },
   {
-   "query": "rate my professor lone star",
+   "query": "rate my professor usf",
    "impressions": 457,
    "broadImpressions": 457,
    "seed": "rate my joke"
   },
   {
-   "query": "rate my professor usf",
+   "query": "rate my professor lone star",
    "impressions": 457,
    "broadImpressions": 457,
    "seed": "rate my joke"
@@ -8594,12 +8594,6 @@
    "impressions": 434,
    "broadImpressions": 434,
    "seed": "how to make a joke funnier"
-  },
-  {
-   "query": "beef roast",
-   "impressions": 433,
-   "broadImpressions": 4539,
-   "seed": "roast jokes"
   },
   {
    "query": "persuasive topics",
@@ -9196,13 +9190,13 @@
    "seed": "best ai writing tool for humor"
   },
   {
-   "query": "rate my professor uw madison",
+   "query": "rate my professor fiu",
    "impressions": 391,
    "broadImpressions": 391,
    "seed": "rate my joke"
   },
   {
-   "query": "rate my professor fiu",
+   "query": "rate my professor uw madison",
    "impressions": 391,
    "broadImpressions": 391,
    "seed": "rate my joke"
@@ -9808,13 +9802,13 @@
    "seed": "funny christmas card messages"
   },
   {
-   "query": "what type of computer is this",
+   "query": "what song is this google",
    "impressions": 348,
    "broadImpressions": 348,
    "seed": "is this joke funny"
   },
   {
-   "query": "what song is this google",
+   "query": "what type of computer is this",
    "impressions": 348,
    "broadImpressions": 348,
    "seed": "is this joke funny"
@@ -10192,13 +10186,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to make a video game",
+   "query": "how to make a redstone repeater",
    "impressions": 328,
    "broadImpressions": 328,
    "seed": "how to make a joke funnier"
   },
   {
-   "query": "how to make a redstone repeater",
+   "query": "how to make a video game",
    "impressions": 328,
    "broadImpressions": 328,
    "seed": "how to make a joke funnier"
@@ -10342,15 +10336,15 @@
    "seed": "is this joke funny"
   },
   {
-   "query": "short jokes",
-   "impressions": 321,
-   "broadImpressions": 744,
-   "seed": "joke structure"
-  },
-  {
    "query": "don't even joke lad",
    "impressions": 321,
    "broadImpressions": 383,
+   "seed": "joke structure"
+  },
+  {
+   "query": "short jokes",
+   "impressions": 321,
+   "broadImpressions": 744,
    "seed": "joke structure"
   },
   {
@@ -10576,15 +10570,15 @@
    "seed": "how to write sketch comedy"
   },
   {
-   "query": "how to become a radiologist",
-   "impressions": 310,
-   "broadImpressions": 330,
-   "seed": "how to become a punch up writer"
-  },
-  {
    "query": "how to become a substitute teacher",
    "impressions": 310,
    "broadImpressions": 310,
+   "seed": "how to become a punch up writer"
+  },
+  {
+   "query": "how to become a radiologist",
+   "impressions": 310,
+   "broadImpressions": 330,
    "seed": "how to become a punch up writer"
   },
   {
@@ -11236,15 +11230,15 @@
    "seed": "how to write a joke"
   },
   {
-   "query": "good comedy movies",
-   "impressions": 276,
-   "broadImpressions": 416,
-   "seed": "comedy writing"
-  },
-  {
    "query": "comedy on state",
    "impressions": 276,
    "broadImpressions": 298,
+   "seed": "comedy writing"
+  },
+  {
+   "query": "good comedy movies",
+   "impressions": 276,
+   "broadImpressions": 416,
    "seed": "comedy writing"
   },
   {
@@ -11422,13 +11416,13 @@
    "seed": "social media content plan"
   },
   {
-   "query": "what is a dry drunk personality",
+   "query": "dry drunk definition",
    "impressions": 265,
    "broadImpressions": 265,
    "seed": "dry humor"
   },
   {
-   "query": "dry drunk definition",
+   "query": "what is a dry drunk personality",
    "impressions": 265,
    "broadImpressions": 265,
    "seed": "dry humor"
@@ -11506,15 +11500,15 @@
    "seed": "best ai writing tool for humor"
   },
   {
-   "query": "character a",
-   "impressions": 261,
-   "broadImpressions": 324,
-   "seed": "character comedy"
-  },
-  {
    "query": "anime character illustration",
    "impressions": 261,
    "broadImpressions": 521,
+   "seed": "character comedy"
+  },
+  {
+   "query": "character a",
+   "impressions": 261,
+   "broadImpressions": 324,
    "seed": "character comedy"
   },
   {
@@ -11630,12 +11624,6 @@
    "impressions": 256,
    "broadImpressions": 438,
    "seed": "storytime ideas"
-  },
-  {
-   "query": "dry water",
-   "impressions": 256,
-   "broadImpressions": 256,
-   "seed": "dry humor"
   },
   {
    "query": "best man holiday",
@@ -12640,15 +12628,15 @@
    "seed": "comedy writing"
   },
   {
-   "query": "x social media",
-   "impressions": 216,
-   "broadImpressions": 262,
-   "seed": "social media content plan"
-  },
-  {
    "query": "benefits of social media",
    "impressions": 216,
    "broadImpressions": 227,
+   "seed": "social media content plan"
+  },
+  {
+   "query": "x social media",
+   "impressions": 216,
+   "broadImpressions": 262,
    "seed": "social media content plan"
   },
   {
@@ -12682,15 +12670,15 @@
    "seed": "how to make a story funnier"
   },
   {
-   "query": "social media sites",
-   "impressions": 215,
-   "broadImpressions": 239,
-   "seed": "social media content plan"
-  },
-  {
    "query": "social media jobs",
    "impressions": 215,
    "broadImpressions": 234,
+   "seed": "social media content plan"
+  },
+  {
+   "query": "social media sites",
+   "impressions": 215,
+   "broadImpressions": 239,
    "seed": "social media content plan"
   },
   {
@@ -12698,12 +12686,6 @@
    "impressions": 214,
    "broadImpressions": 404,
    "seed": "humor writing"
-  },
-  {
-   "query": "how to sketch",
-   "impressions": 213,
-   "broadImpressions": 761,
-   "seed": "sketch comedy"
   },
   {
    "query": "turkey sketch",
@@ -12721,6 +12703,12 @@
    "query": "cat sketch",
    "impressions": 213,
    "broadImpressions": 213,
+   "seed": "sketch comedy"
+  },
+  {
+   "query": "how to sketch",
+   "impressions": 213,
+   "broadImpressions": 761,
    "seed": "sketch comedy"
   },
   {
@@ -12766,25 +12754,25 @@
    "seed": "rate my joke"
   },
   {
-   "query": "does vitamin c help with colds",
-   "impressions": 211,
-   "broadImpressions": 211,
-   "seed": "help with a punchline"
-  },
-  {
    "query": "does honey help with memory",
    "impressions": 211,
    "broadImpressions": 211,
    "seed": "help with a punchline"
   },
   {
-   "query": "how to become a physician assistant",
+   "query": "does vitamin c help with colds",
+   "impressions": 211,
+   "broadImpressions": 211,
+   "seed": "help with a punchline"
+  },
+  {
+   "query": "how to become a private investigator",
    "impressions": 211,
    "broadImpressions": 211,
    "seed": "how to become a punch up writer"
   },
   {
-   "query": "how to become a private investigator",
+   "query": "how to become a physician assistant",
    "impressions": 211,
    "broadImpressions": 211,
    "seed": "how to become a punch up writer"
@@ -12862,13 +12850,13 @@
    "seed": "best ai writing tool for humor"
   },
   {
-   "query": "rate my professor.com",
+   "query": "rate my professor'",
    "impressions": 208,
    "broadImpressions": 208,
    "seed": "rate my joke"
   },
   {
-   "query": "rate my professor'",
+   "query": "rate my professor.com",
    "impressions": 208,
    "broadImpressions": 208,
    "seed": "rate my joke"
@@ -12976,13 +12964,13 @@
    "seed": "open mic tips"
   },
   {
-   "query": "how to turn a screenshot into a pdf",
+   "query": "how to turn a pdf into a jpg",
    "impressions": 205,
    "broadImpressions": 205,
    "seed": "how to turn a bit into a sketch"
   },
   {
-   "query": "how to turn a pdf into a jpg",
+   "query": "how to turn a screenshot into a pdf",
    "impressions": 205,
    "broadImpressions": 205,
    "seed": "how to turn a bit into a sketch"
@@ -13210,13 +13198,13 @@
    "seed": "open mic tips"
   },
   {
-   "query": "rule of 72 calculator",
+   "query": "cube rule of food",
    "impressions": 197,
    "broadImpressions": 197,
    "seed": "rule of three comedy"
   },
   {
-   "query": "cube rule of food",
+   "query": "rule of 72 calculator",
    "impressions": 197,
    "broadImpressions": 197,
    "seed": "rule of three comedy"
@@ -13270,13 +13258,13 @@
    "seed": "help with a punchline"
   },
   {
-   "query": "how to become a model",
+   "query": "how to become a realtor",
    "impressions": 197,
    "broadImpressions": 197,
    "seed": "how to become a punch up writer"
   },
   {
-   "query": "how to become a realtor",
+   "query": "how to become a model",
    "impressions": 197,
    "broadImpressions": 197,
    "seed": "how to become a punch up writer"
@@ -13438,13 +13426,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to start page numbers on page 2",
+   "query": "how to start a meeting in teams",
    "impressions": 192,
    "broadImpressions": 192,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start a meeting in teams",
+   "query": "how to start page numbers on page 2",
    "impressions": 192,
    "broadImpressions": 192,
    "seed": "how to start stand up comedy"
@@ -13672,13 +13660,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to become a financial advisor",
+   "query": "how to become a social worker",
    "impressions": 185,
    "broadImpressions": 185,
    "seed": "how to become a punch up writer"
   },
   {
-   "query": "how to become a social worker",
+   "query": "how to become a financial advisor",
    "impressions": 185,
    "broadImpressions": 185,
    "seed": "how to become a punch up writer"
@@ -14188,15 +14176,15 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to start a trust",
-   "impressions": 170,
-   "broadImpressions": 170,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start a conversation",
    "impressions": 170,
    "broadImpressions": 282,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start a trust",
+   "impressions": 170,
+   "broadImpressions": 170,
    "seed": "how to start stand up comedy"
   },
   {
@@ -14794,15 +14782,15 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "federal rule of civil procedure 37",
-   "impressions": 156,
-   "broadImpressions": 156,
-   "seed": "rule of three comedy"
-  },
-  {
    "query": "first rule of fight club",
    "impressions": 156,
    "broadImpressions": 184,
+   "seed": "rule of three comedy"
+  },
+  {
+   "query": "federal rule of civil procedure 37",
+   "impressions": 156,
+   "broadImpressions": 156,
    "seed": "rule of three comedy"
   },
   {
@@ -15070,15 +15058,15 @@
    "seed": "social media content plan"
   },
   {
-   "query": "insurance for business",
-   "impressions": 151,
-   "broadImpressions": 213,
-   "seed": "funny social media posts for business"
-  },
-  {
    "query": "quickbooks for business",
    "impressions": 151,
    "broadImpressions": 180,
+   "seed": "funny social media posts for business"
+  },
+  {
+   "query": "insurance for business",
+   "impressions": 151,
+   "broadImpressions": 213,
    "seed": "funny social media posts for business"
   },
   {
@@ -15136,13 +15124,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "rule of law meaning",
+   "query": "descartes' rule of signs example",
    "impressions": 149,
    "broadImpressions": 149,
    "seed": "rule of three comedy"
   },
   {
-   "query": "descartes' rule of signs example",
+   "query": "rule of law meaning",
    "impressions": 149,
    "broadImpressions": 149,
    "seed": "rule of three comedy"
@@ -15172,27 +15160,27 @@
    "seed": "rate my joke"
   },
   {
-   "query": "does magnesium help with constipation",
-   "impressions": 149,
-   "broadImpressions": 149,
-   "seed": "help with a punchline"
-  },
-  {
    "query": "does ibuprofen help with headaches",
    "impressions": 149,
    "broadImpressions": 149,
    "seed": "help with a punchline"
   },
   {
-   "query": "best joke of the day",
-   "impressions": 148,
-   "broadImpressions": 212,
-   "seed": "joke structure"
+   "query": "does magnesium help with constipation",
+   "impressions": 149,
+   "broadImpressions": 149,
+   "seed": "help with a punchline"
   },
   {
    "query": "knock knock joke",
    "impressions": 148,
    "broadImpressions": 148,
+   "seed": "joke structure"
+  },
+  {
+   "query": "best joke of the day",
+   "impressions": 148,
+   "broadImpressions": 212,
    "seed": "joke structure"
   },
   {
@@ -15436,13 +15424,13 @@
    "seed": "humor writing"
   },
   {
-   "query": "business checking account for small business",
+   "query": "pos systems for small business",
    "impressions": 144,
    "broadImpressions": 144,
    "seed": "funny content ideas for small business"
   },
   {
-   "query": "pos systems for small business",
+   "query": "business checking account for small business",
    "impressions": 144,
    "broadImpressions": 144,
    "seed": "funny content ideas for small business"
@@ -15700,15 +15688,15 @@
    "seed": "help with a punchline"
   },
   {
-   "query": "how to become a sonographer",
-   "impressions": 138,
-   "broadImpressions": 152,
-   "seed": "how to become a punch up writer"
-  },
-  {
    "query": "how to become a nutritionist",
    "impressions": 138,
    "broadImpressions": 138,
+   "seed": "how to become a punch up writer"
+  },
+  {
+   "query": "how to become a sonographer",
+   "impressions": 138,
+   "broadImpressions": 152,
    "seed": "how to become a punch up writer"
   },
   {
@@ -15760,25 +15748,25 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to test teams camera",
-   "impressions": 136,
-   "broadImpressions": 136,
-   "seed": "how to test jokes"
-  },
-  {
    "query": "free covid test",
    "impressions": 136,
    "broadImpressions": 498,
    "seed": "how to test jokes"
   },
   {
-   "query": "gab social media",
+   "query": "how to test teams camera",
+   "impressions": 136,
+   "broadImpressions": 136,
+   "seed": "how to test jokes"
+  },
+  {
+   "query": "soci - social media management... solved",
    "impressions": 136,
    "broadImpressions": 136,
    "seed": "social media content plan"
   },
   {
-   "query": "soci - social media management... solved",
+   "query": "gab social media",
    "impressions": 136,
    "broadImpressions": 136,
    "seed": "social media content plan"
@@ -15850,13 +15838,13 @@
    "seed": "comedy punch up service"
   },
   {
-   "query": "how to become a midwife",
+   "query": "how to become a mortician",
    "impressions": 134,
    "broadImpressions": 134,
    "seed": "how to become a punch up writer"
   },
   {
-   "query": "how to become a mortician",
+   "query": "how to become a midwife",
    "impressions": 134,
    "broadImpressions": 134,
    "seed": "how to become a punch up writer"
@@ -16324,15 +16312,15 @@
    "seed": "help with a punchline"
   },
   {
-   "query": "social media images",
-   "impressions": 125,
-   "broadImpressions": 125,
-   "seed": "social media content plan"
-  },
-  {
    "query": "social media post",
    "impressions": 125,
    "broadImpressions": 658,
+   "seed": "social media content plan"
+  },
+  {
+   "query": "social media images",
+   "impressions": 125,
+   "broadImpressions": 125,
    "seed": "social media content plan"
   },
   {
@@ -16960,15 +16948,15 @@
    "seed": "funny hooks for comedy videos"
   },
   {
-   "query": "social media synonym",
-   "impressions": 112,
-   "broadImpressions": 112,
-   "seed": "social media content plan"
-  },
-  {
    "query": "social media influencers",
    "impressions": 112,
    "broadImpressions": 115,
+   "seed": "social media content plan"
+  },
+  {
+   "query": "social media synonym",
+   "impressions": 112,
+   "broadImpressions": 112,
    "seed": "social media content plan"
   },
   {
@@ -17230,15 +17218,15 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to make a business",
-   "impressions": 107,
-   "broadImpressions": 663,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start a non profit",
    "impressions": 107,
    "broadImpressions": 107,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to make a business",
+   "impressions": 107,
+   "broadImpressions": 663,
    "seed": "how to start stand up comedy"
   },
   {
@@ -17254,15 +17242,15 @@
    "seed": "listing video"
   },
   {
-   "query": "homes for sale in nevada",
-   "impressions": 107,
-   "broadImpressions": 107,
-   "seed": "chatgpt for real estate listings"
-  },
-  {
    "query": "runaway bay tx",
    "impressions": 107,
    "broadImpressions": 128,
+   "seed": "chatgpt for real estate listings"
+  },
+  {
+   "query": "homes for sale in nevada",
+   "impressions": 107,
+   "broadImpressions": 107,
    "seed": "chatgpt for real estate listings"
   },
   {
@@ -17470,13 +17458,13 @@
    "seed": "sketch comedy"
   },
   {
-   "query": "how to become a welder",
+   "query": "how to become a dermatologist",
    "impressions": 104,
    "broadImpressions": 104,
    "seed": "how to become a punch up writer"
   },
   {
-   "query": "how to become a dermatologist",
+   "query": "how to become a welder",
    "impressions": 104,
    "broadImpressions": 104,
    "seed": "how to become a punch up writer"
@@ -17524,15 +17512,15 @@
    "seed": "office holiday party speech"
   },
   {
-   "query": "christmas wish",
-   "impressions": 103,
-   "broadImpressions": 9774,
-   "seed": "funny christmas card messages"
-  },
-  {
    "query": "what to write in a christmas card",
    "impressions": 103,
    "broadImpressions": 103,
+   "seed": "funny christmas card messages"
+  },
+  {
+   "query": "christmas wish",
+   "impressions": 103,
+   "broadImpressions": 9774,
    "seed": "funny christmas card messages"
   },
   {
@@ -17716,15 +17704,15 @@
    "seed": "how to become a punch up writer"
   },
   {
-   "query": "social media campaign",
-   "impressions": 100,
-   "broadImpressions": 185,
-   "seed": "social media content plan"
-  },
-  {
    "query": "ai social media",
    "impressions": 100,
    "broadImpressions": 100,
+   "seed": "social media content plan"
+  },
+  {
+   "query": "social media campaign",
+   "impressions": 100,
+   "broadImpressions": 185,
    "seed": "social media content plan"
   },
   {
@@ -17752,6 +17740,12 @@
    "seed": "funny secret santa ideas"
   },
   {
+   "query": "best ai 3d model generator",
+   "impressions": 99,
+   "broadImpressions": 99,
+   "seed": "best ai writing tool for humor"
+  },
+  {
    "query": "best ai porn generators",
    "impressions": 99,
    "broadImpressions": 99,
@@ -17759,12 +17753,6 @@
   },
   {
    "query": "best ai porn site",
-   "impressions": 99,
-   "broadImpressions": 99,
-   "seed": "best ai writing tool for humor"
-  },
-  {
-   "query": "best ai 3d model generator",
    "impressions": 99,
    "broadImpressions": 99,
    "seed": "best ai writing tool for humor"
@@ -17812,13 +17800,13 @@
    "seed": "what to say when a joke bombs"
   },
   {
-   "query": "how to know if a source is credible",
+   "query": "how to know if a source is peer reviewed",
    "impressions": 98,
    "broadImpressions": 98,
    "seed": "how to know if a joke is funny"
   },
   {
-   "query": "how to know if a source is peer reviewed",
+   "query": "how to know if a source is credible",
    "impressions": 98,
    "broadImpressions": 98,
    "seed": "how to know if a joke is funny"
@@ -17932,13 +17920,13 @@
    "seed": "game of the scene"
   },
   {
-   "query": "how to tell if a pokemon card is fake",
+   "query": "how to tell if you have a fever",
    "impressions": 95,
    "broadImpressions": 95,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if you have a fever",
+   "query": "how to tell if a pokemon card is fake",
    "impressions": 95,
    "broadImpressions": 95,
    "seed": "how to tell a story"
@@ -18082,15 +18070,15 @@
    "seed": "storytime ideas"
   },
   {
-   "query": "how to start running",
-   "impressions": 92,
-   "broadImpressions": 232,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start a non profit organization",
    "impressions": 92,
    "broadImpressions": 92,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start running",
+   "impressions": 92,
+   "broadImpressions": 232,
    "seed": "how to start stand up comedy"
   },
   {
@@ -18100,13 +18088,13 @@
    "seed": "best ai writing tool for humor"
   },
   {
-   "query": "humanizer ai to human",
+   "query": "ai to human free",
    "impressions": 92,
    "broadImpressions": 92,
    "seed": "ai to make my joke funnier"
   },
   {
-   "query": "ai to human free",
+   "query": "humanizer ai to human",
    "impressions": 92,
    "broadImpressions": 92,
    "seed": "ai to make my joke funnier"
@@ -18178,13 +18166,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "joke of the day daily",
+   "query": "joke in spanish",
    "impressions": 90,
    "broadImpressions": 90,
    "seed": "joke structure"
   },
   {
-   "query": "joke in spanish",
+   "query": "joke of the day daily",
    "impressions": 90,
    "broadImpressions": 90,
    "seed": "joke structure"
@@ -18256,13 +18244,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "how to tell if you have lice",
+   "query": "how to tell if iphone is charging when dead",
    "impressions": 89,
    "broadImpressions": 89,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell if iphone is charging when dead",
+   "query": "how to tell if you have lice",
    "impressions": 89,
    "broadImpressions": 89,
    "seed": "how to tell a story"
@@ -18550,13 +18538,13 @@
    "seed": "social media content plan"
   },
   {
-   "query": "why are my hands and feet always cold",
+   "query": "why are my eyes watering so much",
    "impressions": 85,
    "broadImpressions": 85,
    "seed": "why are my tiktok views low"
   },
   {
-   "query": "why are my eyes watering so much",
+   "query": "why are my hands and feet always cold",
    "impressions": 85,
    "broadImpressions": 85,
    "seed": "why are my tiktok views low"
@@ -18664,13 +18652,13 @@
    "seed": "how to write sketch comedy"
   },
   {
-   "query": "how to test my internet speed",
+   "query": "how to test for sibo",
    "impressions": 83,
    "broadImpressions": 83,
    "seed": "how to test jokes"
   },
   {
-   "query": "how to test for sibo",
+   "query": "how to test my internet speed",
    "impressions": 83,
    "broadImpressions": 83,
    "seed": "how to test jokes"
@@ -18688,7 +18676,7 @@
    "seed": "humor in social media marketing"
   },
   {
-   "query": "why are my monitors not being detected",
+   "query": "why are my teeth sensitive all of a sudden",
    "impressions": 83,
    "broadImpressions": 83,
    "seed": "why are my tiktok views low"
@@ -18700,7 +18688,7 @@
    "seed": "why are my tiktok views low"
   },
   {
-   "query": "why are my teeth sensitive all of a sudden",
+   "query": "why are my monitors not being detected",
    "impressions": 83,
    "broadImpressions": 83,
    "seed": "why are my tiktok views low"
@@ -18730,12 +18718,6 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to start a book club",
-   "impressions": 82,
-   "broadImpressions": 82,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start clipping and make money",
    "impressions": 82,
    "broadImpressions": 82,
@@ -18743,6 +18725,12 @@
   },
   {
    "query": "how to start a crochet chain",
+   "impressions": 82,
+   "broadImpressions": 82,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "how to start a book club",
    "impressions": 82,
    "broadImpressions": 82,
    "seed": "how to start stand up comedy"
@@ -18856,13 +18844,13 @@
    "seed": "best ai for humor writing"
   },
   {
-   "query": "sixpence character",
+   "query": "blackbird character",
    "impressions": 81,
    "broadImpressions": 81,
    "seed": "character comedy"
   },
   {
-   "query": "blackbird character",
+   "query": "sixpence character",
    "impressions": 81,
    "broadImpressions": 81,
    "seed": "character comedy"
@@ -18916,13 +18904,13 @@
    "seed": "how to write sketch comedy"
   },
   {
-   "query": "game of the year 2018",
+   "query": "game of the year 2026 vote",
    "impressions": 80,
    "broadImpressions": 80,
    "seed": "game of the scene"
   },
   {
-   "query": "game of the year 2026 vote",
+   "query": "game of the year 2018",
    "impressions": 80,
    "broadImpressions": 80,
    "seed": "game of the scene"
@@ -19120,15 +19108,15 @@
    "seed": "funny content ideas for small business"
   },
   {
-   "query": "stand up comedy events near me this weekend",
-   "impressions": 77,
-   "broadImpressions": 77,
-   "seed": "stand up comedy tips"
-  },
-  {
    "query": "upcoming stand up comedy shows",
    "impressions": 77,
    "broadImpressions": 127,
+   "seed": "stand up comedy tips"
+  },
+  {
+   "query": "stand up comedy events near me this weekend",
+   "impressions": 77,
+   "broadImpressions": 77,
    "seed": "stand up comedy tips"
   },
   {
@@ -19168,13 +19156,13 @@
    "seed": "humorous speech ideas"
   },
   {
-   "query": "georg listing",
+   "query": "first multiple listing service georgia",
    "impressions": 77,
    "broadImpressions": 77,
    "seed": "listing video"
   },
   {
-   "query": "first multiple listing service georgia",
+   "query": "georg listing",
    "impressions": 77,
    "broadImpressions": 77,
    "seed": "listing video"
@@ -19228,13 +19216,13 @@
    "seed": "how to test jokes"
   },
   {
-   "query": "niche social media apps",
+   "query": "social media ads",
    "impressions": 77,
    "broadImpressions": 77,
    "seed": "social media content plan"
   },
   {
-   "query": "social media ads",
+   "query": "niche social media apps",
    "impressions": 77,
    "broadImpressions": 77,
    "seed": "social media content plan"
@@ -19252,15 +19240,15 @@
    "seed": "open mic tips"
   },
   {
-   "query": "fail videos",
-   "impressions": 76,
-   "broadImpressions": 170,
-   "seed": "funny video ideas"
-  },
-  {
    "query": "youtube shorts videos funny",
    "impressions": 76,
    "broadImpressions": 87,
+   "seed": "funny video ideas"
+  },
+  {
+   "query": "fail videos",
+   "impressions": 76,
+   "broadImpressions": 170,
    "seed": "funny video ideas"
   },
   {
@@ -19348,13 +19336,13 @@
    "seed": "funny linkedin post"
   },
   {
-   "query": "woohoo storytime",
+   "query": "kidtime storytime youtube",
    "impressions": 74,
    "broadImpressions": 74,
    "seed": "storytime ideas"
   },
   {
-   "query": "kidtime storytime youtube",
+   "query": "woohoo storytime",
    "impressions": 74,
    "broadImpressions": 74,
    "seed": "storytime ideas"
@@ -19370,6 +19358,12 @@
    "impressions": 74,
    "broadImpressions": 74,
    "seed": "how to tell a story"
+  },
+  {
+   "query": "dry brining turkey",
+   "impressions": 74,
+   "broadImpressions": 74,
+   "seed": "dry humor"
   },
   {
    "query": "corny joke",
@@ -19480,13 +19474,13 @@
    "seed": "best ai writing tool for humor"
   },
   {
-   "query": "funny ai memes",
+   "query": "ai funny images",
    "impressions": 73,
    "broadImpressions": 73,
    "seed": "ai funny listing description"
   },
   {
-   "query": "ai funny images",
+   "query": "funny ai memes",
    "impressions": 73,
    "broadImpressions": 73,
    "seed": "ai funny listing description"
@@ -19636,6 +19630,12 @@
    "seed": "how to be funny"
   },
   {
+   "query": "roast definition",
+   "impressions": 71,
+   "broadImpressions": 94,
+   "seed": "roast jokes"
+  },
+  {
    "query": "how to tell if a wall is load bearing",
    "impressions": 71,
    "broadImpressions": 71,
@@ -19666,25 +19666,25 @@
    "seed": "ai funny listing description"
   },
   {
-   "query": "how to test for asbestos",
-   "impressions": 71,
-   "broadImpressions": 71,
-   "seed": "how to test jokes"
-  },
-  {
    "query": "how to test electrical on well pressure switch",
    "impressions": 71,
    "broadImpressions": 71,
    "seed": "how to test jokes"
   },
   {
-   "query": "how to become a game warden",
+   "query": "how to test for asbestos",
+   "impressions": 71,
+   "broadImpressions": 71,
+   "seed": "how to test jokes"
+  },
+  {
+   "query": "how to become a coroner",
    "impressions": 71,
    "broadImpressions": 71,
    "seed": "how to become a punch up writer"
   },
   {
-   "query": "how to become a coroner",
+   "query": "how to become a game warden",
    "impressions": 71,
    "broadImpressions": 71,
    "seed": "how to become a punch up writer"
@@ -19870,15 +19870,15 @@
    "seed": "what to say when a joke bombs"
   },
   {
-   "query": "how to become a better writer",
-   "impressions": 68,
-   "broadImpressions": 68,
-   "seed": "how to become a punch up writer"
-  },
-  {
    "query": "how to become a vet",
    "impressions": 68,
    "broadImpressions": 222,
+   "seed": "how to become a punch up writer"
+  },
+  {
+   "query": "how to become a better writer",
+   "impressions": 68,
+   "broadImpressions": 68,
    "seed": "how to become a punch up writer"
   },
   {
@@ -20026,15 +20026,15 @@
    "seed": "how to drive traffic from tiktok"
   },
   {
-   "query": "funniest videos on youtube",
-   "impressions": 65,
-   "broadImpressions": 74,
-   "seed": "funny video ideas"
-  },
-  {
    "query": "youtube shorts funny videos",
    "impressions": 65,
    "broadImpressions": 71,
+   "seed": "funny video ideas"
+  },
+  {
+   "query": "funniest videos on youtube",
+   "impressions": 65,
+   "broadImpressions": 74,
    "seed": "funny video ideas"
   },
   {
@@ -20146,13 +20146,13 @@
    "seed": "how to drive traffic from tiktok"
   },
   {
-   "query": "why are my eyes red",
+   "query": "why are my download speeds so slow",
    "impressions": 64,
    "broadImpressions": 64,
    "seed": "why are my tiktok views low"
   },
   {
-   "query": "why are my download speeds so slow",
+   "query": "why are my eyes red",
    "impressions": 64,
    "broadImpressions": 64,
    "seed": "why are my tiktok views low"
@@ -20368,15 +20368,15 @@
    "seed": "how to know if a joke is funny"
   },
   {
-   "query": "get help with file explorer in windows 11a yt",
-   "impressions": 61,
-   "broadImpressions": 61,
-   "seed": "help with a punchline"
-  },
-  {
    "query": "help with math",
    "impressions": 61,
    "broadImpressions": 79,
+   "seed": "help with a punchline"
+  },
+  {
+   "query": "get help with file explorer in windows 11a yt",
+   "impressions": 61,
+   "broadImpressions": 61,
    "seed": "help with a punchline"
   },
   {
@@ -20416,6 +20416,12 @@
    "seed": "listing video"
   },
   {
+   "query": "ai to talk to",
+   "impressions": 60,
+   "broadImpressions": 60,
+   "seed": "ai to make my joke funnier"
+  },
+  {
    "query": "ai to png converter",
    "impressions": 60,
    "broadImpressions": 60,
@@ -20423,12 +20429,6 @@
   },
   {
    "query": "best ai to create images",
-   "impressions": 60,
-   "broadImpressions": 60,
-   "seed": "ai to make my joke funnier"
-  },
-  {
-   "query": "ai to talk to",
    "impressions": 60,
    "broadImpressions": 60,
    "seed": "ai to make my joke funnier"
@@ -20464,13 +20464,13 @@
    "seed": "how to drive traffic from tiktok"
   },
   {
-   "query": "why are my armpits itchy",
+   "query": "why are my headphones not working",
    "impressions": 60,
    "broadImpressions": 60,
    "seed": "why are my tiktok views low"
   },
   {
-   "query": "why are my headphones not working",
+   "query": "why are my armpits itchy",
    "impressions": 60,
    "broadImpressions": 60,
    "seed": "why are my tiktok views low"
@@ -20536,13 +20536,13 @@
    "seed": "recurring character sketch"
   },
   {
-   "query": "how to know if you have food poisoning",
+   "query": "how to know if you have a fever",
    "impressions": 59,
    "broadImpressions": 59,
    "seed": "how to know if a joke is funny"
   },
   {
-   "query": "how to know if you have a fever",
+   "query": "how to know if you have food poisoning",
    "impressions": 59,
    "broadImpressions": 59,
    "seed": "how to know if a joke is funny"
@@ -20608,13 +20608,13 @@
    "seed": "game of the scene"
   },
   {
-   "query": "how to turn a pdf into a link",
+   "query": "how to turn a pdf into a jpeg",
    "impressions": 58,
    "broadImpressions": 58,
    "seed": "how to turn a bit into a sketch"
   },
   {
-   "query": "how to turn a pdf into a jpeg",
+   "query": "how to turn a pdf into a link",
    "impressions": 58,
    "broadImpressions": 58,
    "seed": "how to turn a bit into a sketch"
@@ -20626,15 +20626,15 @@
    "seed": "help with a punchline"
   },
   {
-   "query": "what is social media definition",
-   "impressions": 58,
-   "broadImpressions": 58,
-   "seed": "social media content plan"
-  },
-  {
    "query": "social media pictures",
    "impressions": 58,
    "broadImpressions": 65,
+   "seed": "social media content plan"
+  },
+  {
+   "query": "what is social media definition",
+   "impressions": 58,
+   "broadImpressions": 58,
    "seed": "social media content plan"
   },
   {
@@ -20656,15 +20656,15 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "ai tools for teachers",
-   "impressions": 57,
-   "broadImpressions": 58,
-   "seed": "ai tools for real estate agents"
-  },
-  {
    "query": "free ai tools for writing",
    "impressions": 57,
    "broadImpressions": 57,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "ai tools for teachers",
+   "impressions": 57,
+   "broadImpressions": 58,
    "seed": "ai tools for real estate agents"
   },
   {
@@ -20764,13 +20764,13 @@
    "seed": "how to test jokes"
   },
   {
-   "query": "how to be a lawyer",
+   "query": "how to be a good student",
    "impressions": 54,
    "broadImpressions": 54,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a good student",
+   "query": "how to be a lawyer",
    "impressions": 54,
    "broadImpressions": 54,
    "seed": "how to be funny"
@@ -20818,13 +20818,13 @@
    "seed": "how to test jokes"
   },
   {
-   "query": "how to become a better person",
+   "query": "how to be a redhead",
    "impressions": 53,
    "broadImpressions": 53,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a redhead",
+   "query": "how to become a better person",
    "impressions": 53,
    "broadImpressions": 53,
    "seed": "how to be funny"
@@ -20872,15 +20872,15 @@
    "seed": "how to fix a joke that bombed"
   },
   {
-   "query": "ai to humanize",
-   "impressions": 53,
-   "broadImpressions": 98,
-   "seed": "ai to make my joke funnier"
-  },
-  {
    "query": "ai to rewrite text",
    "impressions": 53,
    "broadImpressions": 210,
+   "seed": "ai to make my joke funnier"
+  },
+  {
+   "query": "ai to humanize",
+   "impressions": 53,
+   "broadImpressions": 98,
    "seed": "ai to make my joke funnier"
   },
   {
@@ -20974,13 +20974,13 @@
    "seed": "funny secret santa ideas"
   },
   {
-   "query": "best ai for image editing",
+   "query": "best ai for powerpoint presentations",
    "impressions": 52,
    "broadImpressions": 52,
    "seed": "best ai for humor writing"
   },
   {
-   "query": "best ai for powerpoint presentations",
+   "query": "best ai for image editing",
    "impressions": 52,
    "broadImpressions": 52,
    "seed": "best ai for humor writing"
@@ -21124,15 +21124,15 @@
    "seed": "joke structure"
   },
   {
-   "query": "starting your own business",
-   "impressions": 50,
-   "broadImpressions": 105,
-   "seed": "how to start stand up comedy"
-  },
-  {
    "query": "how to start youtube channel",
    "impressions": 50,
    "broadImpressions": 53,
+   "seed": "how to start stand up comedy"
+  },
+  {
+   "query": "starting your own business",
+   "impressions": 50,
+   "broadImpressions": 105,
    "seed": "how to start stand up comedy"
   },
   {
@@ -21184,13 +21184,13 @@
    "seed": "funny work stories"
   },
   {
-   "query": "how to fix a running toilet tank",
+   "query": "how to fix a squishy",
    "impressions": 49,
    "broadImpressions": 49,
    "seed": "how to fix a joke that bombed"
   },
   {
-   "query": "how to fix a squishy",
+   "query": "how to fix a running toilet tank",
    "impressions": 49,
    "broadImpressions": 49,
    "seed": "how to fix a joke that bombed"
@@ -21394,15 +21394,15 @@
    "seed": "ai tools for real estate agents"
   },
   {
-   "query": "ai best",
-   "impressions": 46,
-   "broadImpressions": 66,
-   "seed": "best ai writing tool for humor"
-  },
-  {
    "query": "best ai sex",
    "impressions": 46,
    "broadImpressions": 57,
+   "seed": "best ai writing tool for humor"
+  },
+  {
+   "query": "ai best",
+   "impressions": 46,
+   "broadImpressions": 66,
    "seed": "best ai writing tool for humor"
   },
   {
@@ -21424,13 +21424,13 @@
    "seed": "recurring character sketch"
   },
   {
-   "query": "how to test eggs for freshness",
+   "query": "how to test for rsv",
    "impressions": 46,
    "broadImpressions": 46,
    "seed": "how to test jokes"
   },
   {
-   "query": "how to test for rsv",
+   "query": "how to test eggs for freshness",
    "impressions": 46,
    "broadImpressions": 46,
    "seed": "how to test jokes"
@@ -21544,13 +21544,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "christmas joke",
+   "query": "friday joke",
    "impressions": 44,
    "broadImpressions": 44,
    "seed": "joke structure"
   },
   {
-   "query": "friday joke",
+   "query": "christmas joke",
    "impressions": 44,
    "broadImpressions": 44,
    "seed": "joke structure"
@@ -21562,15 +21562,15 @@
    "seed": "how to get more views on tiktok"
   },
   {
-   "query": "tic to",
-   "impressions": 44,
-   "broadImpressions": 44,
-   "seed": "tiktok watch time"
-  },
-  {
    "query": "tiktok watch online",
    "impressions": 44,
    "broadImpressions": 123,
+   "seed": "tiktok watch time"
+  },
+  {
+   "query": "tic to",
+   "impressions": 44,
+   "broadImpressions": 44,
    "seed": "tiktok watch time"
   },
   {
@@ -21754,15 +21754,15 @@
    "seed": "funny linkedin post"
   },
   {
-   "query": "humor vs humour",
-   "impressions": 42,
-   "broadImpressions": 42,
-   "seed": "humor writing"
-  },
-  {
    "query": "british humor",
    "impressions": 42,
    "broadImpressions": 98,
+   "seed": "humor writing"
+  },
+  {
+   "query": "humor vs humour",
+   "impressions": 42,
+   "broadImpressions": 42,
    "seed": "humor writing"
   },
   {
@@ -21880,27 +21880,27 @@
    "seed": "game of the scene"
   },
   {
-   "query": "vote for game of the year",
-   "impressions": 40,
-   "broadImpressions": 40,
-   "seed": "game of the scene"
-  },
-  {
    "query": "game of the year 2013",
    "impressions": 40,
    "broadImpressions": 40,
    "seed": "game of the scene"
   },
   {
-   "query": "can xyosted testosterone help with weight loss",
+   "query": "vote for game of the year",
    "impressions": 40,
    "broadImpressions": 40,
-   "seed": "help with a punchline"
+   "seed": "game of the scene"
   },
   {
    "query": "vitamins that help with focus",
    "impressions": 40,
    "broadImpressions": 102,
+   "seed": "help with a punchline"
+  },
+  {
+   "query": "can xyosted testosterone help with weight loss",
+   "impressions": 40,
+   "broadImpressions": 40,
    "seed": "help with a punchline"
   },
   {
@@ -21922,13 +21922,13 @@
    "seed": "humor in social media marketing"
   },
   {
-   "query": "how to be a vtuber",
+   "query": "how to be a doctor",
    "impressions": 39,
    "broadImpressions": 39,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a doctor",
+   "query": "how to be a vtuber",
    "impressions": 39,
    "broadImpressions": 39,
    "seed": "how to be funny"
@@ -22006,15 +22006,15 @@
    "seed": "help with a punchline"
   },
   {
-   "query": "linkedin text formatter free",
-   "impressions": 38,
-   "broadImpressions": 38,
-   "seed": "funny linkedin post"
-  },
-  {
    "query": "linkedin font",
    "impressions": 38,
    "broadImpressions": 93,
+   "seed": "funny linkedin post"
+  },
+  {
+   "query": "linkedin text formatter free",
+   "impressions": 38,
+   "broadImpressions": 38,
    "seed": "funny linkedin post"
   },
   {
@@ -22030,15 +22030,15 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to get more points",
-   "impressions": 37,
-   "broadImpressions": 215,
-   "seed": "how to get more views on tiktok"
-  },
-  {
    "query": "how to get more viewers on twitch",
    "impressions": 37,
    "broadImpressions": 37,
+   "seed": "how to get more views on tiktok"
+  },
+  {
+   "query": "how to get more points",
+   "impressions": 37,
+   "broadImpressions": 215,
    "seed": "how to get more views on tiktok"
   },
   {
@@ -22126,13 +22126,13 @@
    "seed": "sketch comedy"
   },
   {
-   "query": "game of the year 2016",
+   "query": "what game won game of the year 2026",
    "impressions": 36,
    "broadImpressions": 36,
    "seed": "game of the scene"
   },
   {
-   "query": "what game won game of the year 2026",
+   "query": "game of the year 2016",
    "impressions": 36,
    "broadImpressions": 36,
    "seed": "game of the scene"
@@ -22180,13 +22180,13 @@
    "seed": "how to fix a joke that bombed"
   },
   {
-   "query": "best ai for image creation",
+   "query": "best ai for video editing",
    "impressions": 35,
    "broadImpressions": 35,
    "seed": "best ai for humor writing"
   },
   {
-   "query": "best ai for video editing",
+   "query": "best ai for image creation",
    "impressions": 35,
    "broadImpressions": 35,
    "seed": "best ai for humor writing"
@@ -22240,13 +22240,13 @@
    "seed": "funny videos for small business"
   },
   {
-   "query": "how to be a gentleman",
+   "query": "how to be sigma",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be sigma",
+   "query": "how to be a gentleman",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "how to be funny"
@@ -22276,13 +22276,13 @@
    "seed": "joke structure"
   },
   {
-   "query": "how to start a foundation",
+   "query": "how to start email",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "how to start email",
+   "query": "how to start a foundation",
    "impressions": 34,
    "broadImpressions": 34,
    "seed": "how to start stand up comedy"
@@ -22516,13 +22516,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be creative",
+   "query": "how to be skinny",
    "impressions": 31,
    "broadImpressions": 31,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be skinny",
+   "query": "how to be creative",
    "impressions": 31,
    "broadImpressions": 31,
    "seed": "how to be funny"
@@ -22582,13 +22582,13 @@
    "seed": "listing video"
   },
   {
-   "query": "best ai tools for research",
+   "query": "best ai tools for students",
    "impressions": 31,
    "broadImpressions": 31,
    "seed": "ai tools for real estate agents"
   },
   {
-   "query": "best ai tools for students",
+   "query": "best ai tools for research",
    "impressions": 31,
    "broadImpressions": 31,
    "seed": "ai tools for real estate agents"
@@ -22630,12 +22630,6 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "dad joke thanksgiving",
-   "impressions": 30,
-   "broadImpressions": 30,
-   "seed": "joke structure"
-  },
-  {
    "query": "math joke",
    "impressions": 30,
    "broadImpressions": 30,
@@ -22643,6 +22637,12 @@
   },
   {
    "query": "national farm joke day",
+   "impressions": 30,
+   "broadImpressions": 30,
+   "seed": "joke structure"
+  },
+  {
+   "query": "dad joke thanksgiving",
    "impressions": 30,
    "broadImpressions": 30,
    "seed": "joke structure"
@@ -22750,13 +22750,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "takaba wifi joke",
+   "query": "joke over head meme",
    "impressions": 29,
    "broadImpressions": 29,
    "seed": "joke structure"
   },
   {
-   "query": "joke over head meme",
+   "query": "takaba wifi joke",
    "impressions": 29,
    "broadImpressions": 29,
    "seed": "joke structure"
@@ -22846,12 +22846,6 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be an entrepreneur",
-   "impressions": 28,
-   "broadImpressions": 28,
-   "seed": "how to be funny"
-  },
-  {
    "query": "how to be yourself",
    "impressions": 28,
    "broadImpressions": 28,
@@ -22865,6 +22859,12 @@
   },
   {
    "query": "how to be sexy",
+   "impressions": 28,
+   "broadImpressions": 28,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be an entrepreneur",
    "impressions": 28,
    "broadImpressions": 28,
    "seed": "how to be funny"
@@ -22930,13 +22930,13 @@
    "seed": "ai tools for real estate agents"
   },
   {
-   "query": "gravenhurst real estate listings",
+   "query": "houston area real estate listings in champions golf course area",
    "impressions": 27,
    "broadImpressions": 27,
    "seed": "chatgpt for real estate listings"
   },
   {
-   "query": "houston area real estate listings in champions golf course area",
+   "query": "gravenhurst real estate listings",
    "impressions": 27,
    "broadImpressions": 27,
    "seed": "chatgpt for real estate listings"
@@ -22978,13 +22978,13 @@
    "seed": "why are my tiktok views low"
   },
   {
-   "query": "how to be a good listener",
+   "query": "how to be normal",
    "impressions": 26,
    "broadImpressions": 26,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be normal",
+   "query": "how to be a good listener",
    "impressions": 26,
    "broadImpressions": 26,
    "seed": "how to be funny"
@@ -23002,13 +23002,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "how to fix a row in excel",
+   "query": "how to fix a clogged sink",
    "impressions": 26,
    "broadImpressions": 26,
    "seed": "how to fix a joke that bombed"
   },
   {
-   "query": "how to fix a clogged sink",
+   "query": "how to fix a row in excel",
    "impressions": 26,
    "broadImpressions": 26,
    "seed": "how to fix a joke that bombed"
@@ -23032,25 +23032,25 @@
    "seed": "ai to make my joke funnier"
   },
   {
-   "query": "snl sketch",
-   "impressions": 26,
-   "broadImpressions": 463,
-   "seed": "sketch comedy"
-  },
-  {
    "query": "grinch sketch",
    "impressions": 26,
    "broadImpressions": 26,
    "seed": "sketch comedy"
   },
   {
-   "query": "did gta 5 win game of the year",
+   "query": "snl sketch",
+   "impressions": 26,
+   "broadImpressions": 463,
+   "seed": "sketch comedy"
+  },
+  {
+   "query": "2025 game of the year nominees",
    "impressions": 26,
    "broadImpressions": 26,
    "seed": "game of the scene"
   },
   {
-   "query": "2025 game of the year nominees",
+   "query": "did gta 5 win game of the year",
    "impressions": 26,
    "broadImpressions": 26,
    "seed": "game of the scene"
@@ -23086,13 +23086,13 @@
    "seed": "stand up comedy tips"
   },
   {
-   "query": "how do you call",
+   "query": "how to tell the difference between a goat and a screaming goat in mc",
    "impressions": 25,
    "broadImpressions": 25,
    "seed": "how to tell a story"
   },
   {
-   "query": "how to tell the difference between a goat and a screaming goat in mc",
+   "query": "how do you call",
    "impressions": 25,
    "broadImpressions": 25,
    "seed": "how to tell a story"
@@ -23122,12 +23122,6 @@
    "seed": "ai to make my joke funnier"
   },
   {
-   "query": "all game of the year winners",
-   "impressions": 25,
-   "broadImpressions": 25,
-   "seed": "game of the scene"
-  },
-  {
    "query": "game of the year award",
    "impressions": 25,
    "broadImpressions": 25,
@@ -23140,19 +23134,25 @@
    "seed": "game of the scene"
   },
   {
+   "query": "all game of the year winners",
+   "impressions": 25,
+   "broadImpressions": 25,
+   "seed": "game of the scene"
+  },
+  {
    "query": "what is smm",
    "impressions": 25,
    "broadImpressions": 25,
    "seed": "humor in social media marketing"
   },
   {
-   "query": "how to be a model",
+   "query": "how to be perfect",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be perfect",
+   "query": "how to be a model",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "how to be funny"
@@ -23182,13 +23182,13 @@
    "seed": "how to start stand up comedy"
   },
   {
-   "query": "medicare rule of 8s",
+   "query": "federal rule of appellate procedure 4",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "rule of three comedy"
   },
   {
-   "query": "federal rule of appellate procedure 4",
+   "query": "medicare rule of 8s",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "rule of three comedy"
@@ -23230,13 +23230,13 @@
    "seed": "how to fix a joke that bombed"
   },
   {
-   "query": "best ai for code",
+   "query": "best ai for research paper writing",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "best ai for humor writing"
   },
   {
-   "query": "best ai for research paper writing",
+   "query": "best ai for code",
    "impressions": 24,
    "broadImpressions": 24,
    "seed": "best ai for humor writing"
@@ -23308,15 +23308,15 @@
    "seed": "tiktok watch time"
   },
   {
-   "query": "ai tools for coding",
-   "impressions": 23,
-   "broadImpressions": 41,
-   "seed": "ai tools for real estate agents"
-  },
-  {
    "query": "ai tools for business",
    "impressions": 23,
    "broadImpressions": 32,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "ai tools for coding",
+   "impressions": 23,
+   "broadImpressions": 41,
    "seed": "ai tools for real estate agents"
   },
   {
@@ -23392,13 +23392,13 @@
    "seed": "ai to make my joke funnier"
   },
   {
-   "query": "game of the year 2025 nominees",
+   "query": "game of the year 2024 nominees",
    "impressions": 22,
    "broadImpressions": 22,
    "seed": "game of the scene"
   },
   {
-   "query": "game of the year 2024 nominees",
+   "query": "game of the year 2025 nominees",
    "impressions": 22,
    "broadImpressions": 22,
    "seed": "game of the scene"
@@ -23416,27 +23416,27 @@
    "seed": "how to test jokes"
   },
   {
-   "query": "adult humor",
-   "impressions": 22,
-   "broadImpressions": 22,
-   "seed": "humor writing"
-  },
-  {
    "query": "piker press humor stories",
    "impressions": 22,
    "broadImpressions": 22,
    "seed": "humor writing"
   },
   {
-   "query": "social media accounts",
+   "query": "adult humor",
    "impressions": 22,
-   "broadImpressions": 89,
-   "seed": "social media content plan"
+   "broadImpressions": 22,
+   "seed": "humor writing"
   },
   {
    "query": "social media society",
    "impressions": 22,
    "broadImpressions": 22,
+   "seed": "social media content plan"
+  },
+  {
+   "query": "social media accounts",
+   "impressions": 22,
+   "broadImpressions": 89,
    "seed": "social media content plan"
   },
   {
@@ -23506,15 +23506,15 @@
    "seed": "game of the scene"
   },
   {
-   "query": "how to test mic",
-   "impressions": 21,
-   "broadImpressions": 32,
-   "seed": "how to test jokes"
-  },
-  {
    "query": "how to test for chlamydia",
    "impressions": 21,
    "broadImpressions": 21,
+   "seed": "how to test jokes"
+  },
+  {
+   "query": "how to test mic",
+   "impressions": 21,
+   "broadImpressions": 32,
    "seed": "how to test jokes"
   },
   {
@@ -23560,13 +23560,13 @@
    "seed": "funny video ideas"
   },
   {
-   "query": "dad joke about thanksgiving",
+   "query": "funniest thanksgiving joke ever",
    "impressions": 20,
    "broadImpressions": 20,
    "seed": "joke structure"
   },
   {
-   "query": "funniest thanksgiving joke ever",
+   "query": "dad joke about thanksgiving",
    "impressions": 20,
    "broadImpressions": 20,
    "seed": "joke structure"
@@ -23722,6 +23722,12 @@
    "seed": "funny christmas card messages"
   },
   {
+   "query": "how to vote for game of the year",
+   "impressions": 19,
+   "broadImpressions": 19,
+   "seed": "game of the scene"
+  },
+  {
    "query": "2023 game of the year nominees",
    "impressions": 19,
    "broadImpressions": 19,
@@ -23729,12 +23735,6 @@
   },
   {
    "query": "game of the years",
-   "impressions": 19,
-   "broadImpressions": 19,
-   "seed": "game of the scene"
-  },
-  {
-   "query": "how to vote for game of the year",
    "impressions": 19,
    "broadImpressions": 19,
    "seed": "game of the scene"
@@ -23836,13 +23836,13 @@
    "seed": "best ai for humor writing"
   },
   {
-   "query": "borderlands game of the year edition",
+   "query": "game of the year 2026 nominees list",
    "impressions": 18,
    "broadImpressions": 18,
    "seed": "game of the scene"
   },
   {
-   "query": "game of the year 2026 nominees list",
+   "query": "borderlands game of the year edition",
    "impressions": 18,
    "broadImpressions": 18,
    "seed": "game of the scene"
@@ -23860,13 +23860,13 @@
    "seed": "how to know if a joke is funny"
   },
   {
-   "query": "how to know if you have tonsil stones",
+   "query": "how to know if i have pneumonia",
    "impressions": 18,
    "broadImpressions": 18,
    "seed": "how to know if a joke is funny"
   },
   {
-   "query": "how to know if i have pneumonia",
+   "query": "how to know if you have tonsil stones",
    "impressions": 18,
    "broadImpressions": 18,
    "seed": "how to know if a joke is funny"
@@ -23908,15 +23908,15 @@
    "seed": "why are my tiktok views low"
   },
   {
-   "query": "how to be a clipper",
-   "impressions": 17,
-   "broadImpressions": 17,
-   "seed": "how to be funny"
-  },
-  {
    "query": "how to be good",
    "impressions": 17,
    "broadImpressions": 152,
+   "seed": "how to be funny"
+  },
+  {
+   "query": "how to be a clipper",
+   "impressions": 17,
+   "broadImpressions": 17,
    "seed": "how to be funny"
   },
   {
@@ -23980,13 +23980,13 @@
    "seed": "ai to make my joke funnier"
   },
   {
-   "query": "what won game of the year 2026",
+   "query": "game awards game of the year",
    "impressions": 17,
    "broadImpressions": 17,
    "seed": "game of the scene"
   },
   {
-   "query": "game awards game of the year",
+   "query": "what won game of the year 2026",
    "impressions": 17,
    "broadImpressions": 17,
    "seed": "game of the scene"
@@ -24082,13 +24082,7 @@
    "seed": "sketch comedy"
   },
   {
-   "query": "2013 game of the year",
-   "impressions": 16,
-   "broadImpressions": 16,
-   "seed": "game of the scene"
-  },
-  {
-   "query": "2019 game of the year",
+   "query": "game of the century",
    "impressions": 16,
    "broadImpressions": 16,
    "seed": "game of the scene"
@@ -24100,7 +24094,13 @@
    "seed": "game of the scene"
   },
   {
-   "query": "game of the century",
+   "query": "2019 game of the year",
+   "impressions": 16,
+   "broadImpressions": 16,
+   "seed": "game of the scene"
+  },
+  {
+   "query": "2013 game of the year",
    "impressions": 16,
    "broadImpressions": 16,
    "seed": "game of the scene"
@@ -24244,13 +24244,13 @@
    "seed": "rule of three comedy"
   },
   {
-   "query": "secret santa ideas for women",
+   "query": "cheap secret santa gifts",
    "impressions": 14,
    "broadImpressions": 14,
    "seed": "funny secret santa ideas"
   },
   {
-   "query": "cheap secret santa gifts",
+   "query": "secret santa ideas for women",
    "impressions": 14,
    "broadImpressions": 14,
    "seed": "funny secret santa ideas"
@@ -24262,12 +24262,6 @@
    "seed": "open house script"
   },
   {
-   "query": "best ai tools for developers",
-   "impressions": 14,
-   "broadImpressions": 14,
-   "seed": "ai tools for real estate agents"
-  },
-  {
    "query": "ai tools for studying",
    "impressions": 14,
    "broadImpressions": 15,
@@ -24275,6 +24269,12 @@
   },
   {
    "query": "free ai tools for video creation",
+   "impressions": 14,
+   "broadImpressions": 14,
+   "seed": "ai tools for real estate agents"
+  },
+  {
+   "query": "best ai tools for developers",
    "impressions": 14,
    "broadImpressions": 14,
    "seed": "ai tools for real estate agents"
@@ -24322,13 +24322,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "youtube comedy videos",
+   "query": "stand up comedy events near me today",
    "impressions": 13,
    "broadImpressions": 13,
    "seed": "stand up comedy tips"
   },
   {
-   "query": "stand up comedy events near me today",
+   "query": "youtube comedy videos",
    "impressions": 13,
    "broadImpressions": 13,
    "seed": "stand up comedy tips"
@@ -24370,18 +24370,6 @@
    "seed": "ai funny listing description"
   },
   {
-   "query": "2021 game of the year",
-   "impressions": 13,
-   "broadImpressions": 13,
-   "seed": "game of the scene"
-  },
-  {
-   "query": "did rdr2 win game of the year",
-   "impressions": 13,
-   "broadImpressions": 13,
-   "seed": "game of the scene"
-  },
-  {
    "query": "what is the game of the year 2026",
    "impressions": 13,
    "broadImpressions": 13,
@@ -24400,6 +24388,18 @@
    "seed": "game of the scene"
   },
   {
+   "query": "did rdr2 win game of the year",
+   "impressions": 13,
+   "broadImpressions": 13,
+   "seed": "game of the scene"
+  },
+  {
+   "query": "2021 game of the year",
+   "impressions": 13,
+   "broadImpressions": 13,
+   "seed": "game of the scene"
+  },
+  {
    "query": "make a joke",
    "impressions": 13,
    "broadImpressions": 13,
@@ -24412,6 +24412,12 @@
    "seed": "how to test jokes"
   },
   {
+   "query": "how to know if you have hemorrhoids",
+   "impressions": 13,
+   "broadImpressions": 13,
+   "seed": "how to know if a joke is funny"
+  },
+  {
    "query": "how to know if someone blocked me on whatsapp",
    "impressions": 13,
    "broadImpressions": 13,
@@ -24419,12 +24425,6 @@
   },
   {
    "query": "how to know if you have low blood sugar",
-   "impressions": 13,
-   "broadImpressions": 13,
-   "seed": "how to know if a joke is funny"
-  },
-  {
-   "query": "how to know if you have hemorrhoids",
    "impressions": 13,
    "broadImpressions": 13,
    "seed": "how to know if a joke is funny"
@@ -24448,15 +24448,15 @@
    "seed": "funny content ideas for small business"
   },
   {
-   "query": "low budget vigina",
-   "impressions": 13,
-   "broadImpressions": 18,
-   "seed": "low budget video ideas"
-  },
-  {
    "query": "low budget vagina song",
    "impressions": 13,
    "broadImpressions": 13,
+   "seed": "low budget video ideas"
+  },
+  {
+   "query": "low budget vigina",
+   "impressions": 13,
+   "broadImpressions": 18,
    "seed": "low budget video ideas"
   },
   {
@@ -24526,13 +24526,13 @@
    "seed": "best ai for humor writing"
   },
   {
-   "query": "best ai for clipping videos",
+   "query": "best ai for academic research",
    "impressions": 12,
    "broadImpressions": 12,
    "seed": "best ai for humor writing"
   },
   {
-   "query": "best ai for academic research",
+   "query": "best ai for clipping videos",
    "impressions": 12,
    "broadImpressions": 12,
    "seed": "best ai for humor writing"
@@ -24562,25 +24562,25 @@
    "seed": "how to know if a joke is funny"
   },
   {
-   "query": "funny home videos",
-   "impressions": 12,
-   "broadImpressions": 12,
-   "seed": "funny hooks for comedy videos"
-  },
-  {
    "query": "comedy videos youtube",
    "impressions": 12,
    "broadImpressions": 12,
    "seed": "funny hooks for comedy videos"
   },
   {
-   "query": "government funding for small business",
+   "query": "funny home videos",
+   "impressions": 12,
+   "broadImpressions": 12,
+   "seed": "funny hooks for comedy videos"
+  },
+  {
+   "query": "office phones for small business",
    "impressions": 12,
    "broadImpressions": 12,
    "seed": "funny content ideas for small business"
   },
   {
-   "query": "cyber insurance for small business",
+   "query": "government funding for small business",
    "impressions": 12,
    "broadImpressions": 12,
    "seed": "funny content ideas for small business"
@@ -24592,7 +24592,7 @@
    "seed": "funny content ideas for small business"
   },
   {
-   "query": "office phones for small business",
+   "query": "cyber insurance for small business",
    "impressions": 12,
    "broadImpressions": 12,
    "seed": "funny content ideas for small business"
@@ -24646,13 +24646,13 @@
    "seed": "game of the scene"
   },
   {
-   "query": "game of the year 2023 nominees",
+   "query": "where to watch got",
    "impressions": 11,
    "broadImpressions": 11,
    "seed": "game of the scene"
   },
   {
-   "query": "where to watch got",
+   "query": "game of the year 2023 nominees",
    "impressions": 11,
    "broadImpressions": 11,
    "seed": "game of the scene"
@@ -24850,6 +24850,12 @@
    "seed": "ai tools for real estate agents"
   },
   {
+   "query": "how to fix a slow internet connection",
+   "impressions": 8,
+   "broadImpressions": 8,
+   "seed": "how to fix a joke that bombed"
+  },
+  {
    "query": "how to fix a bricked smartphone",
    "impressions": 8,
    "broadImpressions": 8,
@@ -24857,12 +24863,6 @@
   },
   {
    "query": "how to fix a slow macbook",
-   "impressions": 8,
-   "broadImpressions": 8,
-   "seed": "how to fix a joke that bombed"
-  },
-  {
-   "query": "how to fix a slow internet connection",
    "impressions": 8,
    "broadImpressions": 8,
    "seed": "how to fix a joke that bombed"
@@ -24892,15 +24892,15 @@
    "seed": "funny content ideas"
   },
   {
-   "query": "low budget v",
-   "impressions": 8,
-   "broadImpressions": 22,
-   "seed": "low budget video ideas"
-  },
-  {
    "query": "low budget virginia",
    "impressions": 8,
    "broadImpressions": 8,
+   "seed": "low budget video ideas"
+  },
+  {
+   "query": "low budget v",
+   "impressions": 8,
+   "broadImpressions": 22,
    "seed": "low budget video ideas"
   },
   {
@@ -24910,13 +24910,13 @@
    "seed": "how to be funny"
   },
   {
-   "query": "how to be a ceo",
+   "query": "how to be nonchalant at school",
    "impressions": 7,
    "broadImpressions": 7,
    "seed": "how to be funny"
   },
   {
-   "query": "how to be nonchalant at school",
+   "query": "how to be a ceo",
    "impressions": 7,
    "broadImpressions": 7,
    "seed": "how to be funny"
@@ -24970,27 +24970,27 @@
    "seed": "ai to make my joke funnier"
   },
   {
-   "query": "game of the year website",
-   "impressions": 7,
-   "broadImpressions": 7,
-   "seed": "game of the scene"
-  },
-  {
    "query": "the game of the year",
    "impressions": 7,
    "broadImpressions": 23,
    "seed": "game of the scene"
   },
   {
-   "query": "digital marketing basics",
+   "query": "game of the year website",
    "impressions": 7,
    "broadImpressions": 7,
-   "seed": "humor in social media marketing"
+   "seed": "game of the scene"
   },
   {
    "query": "digital market",
    "impressions": 7,
    "broadImpressions": 19,
+   "seed": "humor in social media marketing"
+  },
+  {
+   "query": "digital marketing basics",
+   "impressions": 7,
+   "broadImpressions": 7,
    "seed": "humor in social media marketing"
   },
   {
@@ -25042,13 +25042,13 @@
    "seed": "how to know if a joke is funny"
   },
   {
-   "query": "low budget vagina amanda song",
+   "query": "low budget virgina amanda",
    "impressions": 6,
    "broadImpressions": 6,
    "seed": "low budget video ideas"
   },
   {
-   "query": "low budget virgina amanda",
+   "query": "low budget vagina amanda song",
    "impressions": 6,
    "broadImpressions": 6,
    "seed": "low budget video ideas"
@@ -25216,13 +25216,13 @@
    "seed": "how to know if a joke is funny"
   },
   {
-   "query": "post linkedin",
+   "query": "linkedin post downloader",
    "impressions": 3,
    "broadImpressions": 3,
    "seed": "funny linkedin post"
   },
   {
-   "query": "linkedin post downloader",
+   "query": "post linkedin",
    "impressions": 3,
    "broadImpressions": 3,
    "seed": "funny linkedin post"
